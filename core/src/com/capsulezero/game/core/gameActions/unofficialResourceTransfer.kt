@@ -25,7 +25,7 @@ class unofficialResourceTransfer(targetState: GameState, targetCharacter: String
                 tgtPlace = tgtPlace,
                 amount = amount,
                 action = "unofficialResourceTransfer"
-            )/*spread rumor*/.also { tgtState.informations[it.generateName()] = it; it.publicity = 1 }
+            )/*spread rumor in the responsible party*/.also { tgtState.informations[it.generateName()] = it; it.publicity[tgtState.places[tgtPlace]!!.responsibleParty] = 1 }
         }
         else{
             println("Not enough resources: $tgtPlace, ${tgtState.places[tgtPlace]!!.resources["water"]}")

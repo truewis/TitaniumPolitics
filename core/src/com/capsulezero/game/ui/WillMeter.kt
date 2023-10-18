@@ -16,7 +16,7 @@ class WillMeter (gameState: GameState) : Table(defaultSkin) {
         add(b)
         add(l)
 
-        gameState.updateUI+={y->setValue(y.characters[gameState.playerAgent]!!.will)}
+        gameState.updateUI+={y->setValue(y.getMutuality(gameState.playerAgent, gameState.playerAgent).toInt())}
     }
     fun setValue(value:Int) {
         l.setText(value.toString().padStart(2, '0'))

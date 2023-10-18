@@ -85,8 +85,8 @@ class GameEngine(val gameState: GameState) {
         ageInformation()
         spreadPublicInfo()
 
-        println("Time: ${gameState.time}")
-        println("My approval:${gameState.characters[gameState.playerAgent]!!.approval}")
+        //println("Time: ${gameState.time}")
+        //println("My approval:${gameState.characters[gameState.playerAgent]!!.approval}")
         gameState.updateUI.forEach { it(gameState) }
     }
 
@@ -102,84 +102,105 @@ class GameEngine(val gameState: GameState) {
     }
 
     private fun spreadPublicInfo() {
-        //spread public information.
-        gameState.informations.filter { it.value.publicity != 0 }.values.forEach {
-            it.publicity += 1
-            if (it.publicity > 100)
-                it.publicity = 100
+        //spread information within each party, if known.
+        gameState.informations.values.forEach { information ->
+            information.publicity.forEach {if(it.value>0)information.publicity[it.key] = it.value+1
+            if(it.value>100)information.publicity[it.key] = 100}
+
+
         }
 
-        //incompatible information fight each other
-        gameState.informations.forEach { a ->
-            gameState.informations.forEach { b ->
-                if (a.value.compatibility(b.value) == 0.0)//If the two information are incompatible
-                {
-                    val aStrength =
-                        if(a.value.author=="")5000 /*rumor has fixed strength*/else
-                        a.value.credibility * (gameState.characters[a.value.author]!!.approval + gameState.characters.filter { it.key in a.value.supporters }.values.sumOf { it.approval } / 2/*supporter penalty*/)
-                    val bStrength =
-                        if(b.value.author=="")5000 /*rumor has fixed strength*/else
-                        b.value.credibility * (gameState.characters[b.value.author]!!.approval + gameState.characters.filter { it.key in b.value.supporters }.values.sumOf { it.approval } / 2/*supporter penalty*/)
-                    if (aStrength > bStrength) {
-                        b.value.publicity -= 1
-                        if (gameState.characters[b.value.author] != null)
-                            gameState.characters[b.value.author]!!.approval -= 1
-                        b.value.supporters.forEach {
-                            gameState.characters[it]!!.approval -= 1
+        gameState.parties.forEach {party->
+            //incompatible information fight each other
+            val l = gameState.informations.filter { it.value.publicity[party.key] != 0 }.toList()
+            if(l.count()>1) {
+                for (i in 0 until l.count() - 1)
+                    for(j in i until l.count()) {
+                        val a = l[i].second
+                        val b = l[j].second
+
+                        if (a.compatibility(b) == 0.0)//If the two information are incompatible
+                        {
+                            val aStrength =
+                                if (a.author == "") 5000 /*rumor has fixed strength*/ else
+                                    a.credibility * (party.value.individualMutuality(a.author) + a.supporters.sumOf { party.value.individualMutuality(it) } / 2/*supporter penalty*/)
+                            val bStrength =
+                                if (b.author == "") 5000 /*rumor has fixed strength*/ else
+                                    b.credibility * (party.value.individualMutuality(b.author) + b.supporters.sumOf { party.value.individualMutuality(it) } / 2/*supporter penalty*/)
+                            if (aStrength > bStrength) {
+                                //Fight within each party
+                                a.publicity.keys.forEach {
+                                    b.publicity[it] = (b.publicity[it] ?: 1) - 1
+                                }
+                                if (gameState.characters[b.author] != null)
+                                    //Characters in this party has decreased mutuality toward b.author and b.supporters, amount proportional to the party size
+                                    party.value.members.forEach { gameState.setMutuality(it, b.author, -1.0)
+                                        b.supporters.forEach { supporter -> gameState.setMutuality(it, supporter, -1.0) }
+                                    }
+
+
+                            }
+
                         }
                     }
 
-                }
+
             }
 
+            //TODO: similar information merge into one. Do we really need this feature?
+
+            //TODO: bad news affect the approval. casualty, stolen resource, low water ration oxygen, high wealth, crimes
+            gameState.informations.filter { it.value.type == "casualty" }.forEach {
+                var factor = 1.0
+                if (it.value.author == "") factor = 2.0//rumors affect the approval negatively.
+                //Casualty is cannot be everywhere, it should be localized to a party.
+    //            if(it.value.tgtPlace == "everywhere")
+    //            {
+    //                gameState.characters.keys.forEach{char->
+    //                    if(!char.trait.contains("robot"))
+    //                        party.value.members.forEach { member->gameState.characters[member]!!.mutuality[char.name] = gameState.characters[member]!!.mutuality[char.name]!! - it.value.amount * (it.value.publicity[party.key] ?:0) / 1000 * factor}
+    //                }
+    //            }else
+                    //If the casualty is in a specific place, approval of the responsible party drops.
+                gameState.setPartyMutuality(party.key, gameState.places[it.value.tgtPlace]!!.responsibleParty , -it.value.amount * (it.value.publicity[party.key] ?:0) / 1000 * factor)
+
+                //TODO: If casualty is in our party, mutuality of the responsible party drops even more.
+                //TODO: if our party is responsible, integrity drops.
+            }
+            gameState.informations.filter { it.value.type == "action" && it.value.action == "unofficialResourceTransfer" }
+                .forEach {
+                    var factor = 1
+                    if (it.value.author == "") factor = 2//rumors affect the approval negatively.
+
+                    //party loses mutuality toward the responsible party. TODO: consider affecting the individual mutuality toward the perpetrator.
+                    gameState.setPartyMutuality(party.key, gameState.places[it.value.tgtPlace]!!.responsibleParty , -log(it.value.amount.toDouble(), 2.0
+                    ) * (it.value.publicity[party.key] ?:0) / 100 * factor)
+                }
+            //The fact that resource is low itself does not affect the mutuality.--------------------------------------------------------------------
+//            gameState.informations.filter { it.value.type == "resources" && it.value.tgtPlace== "everywhere" && it.value.tgtResource in listOf("water", "oxygen", "ration") }
+//                .forEach {
+//                    var factor = 1
+//                    if (it.value.author == "") factor = 2//rumors affect the approval negatively.
+//                    var consumption = when(it.value.tgtResource){
+//                        "water"->4
+//                        "ration"->2
+//                        "oxygen"->1
+//                        else -> 0
+//                    }
+//                    if(it.value.amount==0)//If the resource is empty, approval of everyone except the robots drops at the maximum rate.
+//                        gameState.characters.values.forEach{char->
+//                            if(!char.trait.contains("robot"))
+//                                char.approval-= consumption  * factor * 1
+//                        }
+//                    else//If the resource is less than 12 hours worth left, approval of everyone except the robots drops at the rate INVERSELY proportional to the amount of resource left.
+//                        gameState.characters.values.forEach{char->
+//                        if(!char.trait.contains("robot"))
+//                            char.approval-= min(consumption  * factor * gameState.pop / it.value.amount, consumption  * factor)
+//                    }
+//
+//                }
+            //-----------------------------------------------------------------------------------------------------------------------------------------
         }
-
-        //TODO: similar information merge into one. Do we really need this feature?
-
-        //TODO: bad news affect the approval. casualty, stolen resource, low water ration oxygen, high wealth, crimes
-        gameState.informations.filter { it.value.type == "casualty" }.forEach {
-            var factor = 1
-            if (it.value.author == "") factor = 2//rumors affect the approval negatively.
-            if(it.value.tgtPlace == "everywhere")//If the casualty is everywhere, approval of everyone except the robots drops.
-            {
-                gameState.characters.values.forEach{char->
-                    if(!char.trait.contains("robot"))
-                    char.approval-= it.value.amount * it.value.publicity / 1000 * factor
-                }
-            }else
-                //If the casualty is in a specific place, approval of the responsible division drops. TODO: is this a good idea?
-            gameState.characters.values.find { char -> char.division == gameState.places[it.value.tgtPlace]!!.division }!!.approval -= it.value.amount * it.value.publicity / 1000 * factor
-        }
-        gameState.informations.filter { it.value.type == "action" && it.value.action == "unofficialResourceTransfer" }
-            .forEach {
-                var factor = 1
-                if (it.value.author == "") factor = 2//rumors affect the approval negatively.
-                gameState.characters.values.find { char -> char.division == gameState.places[it.value.tgtPlace]!!.division }!!.approval -= (log(
-                    it.value.amount.toDouble(), 2.0
-                ) * it.value.publicity / 100 * factor).toInt()//approval drop is proportional to the log(amount of resource stolen).
-            }
-        gameState.informations.filter { it.value.type == "resources" && it.value.tgtPlace== "everywhere" && it.value.tgtResource in listOf("water", "oxygen", "ration") }
-            .forEach {
-                var factor = 1
-                if (it.value.author == "") factor = 2//rumors affect the approval negatively.
-                var consumption = when(it.value.tgtResource){
-                    "water"->4
-                    "ration"->2
-                    "oxygen"->1
-                    else -> 0
-                }
-                if(it.value.amount==0)//If the resource is empty, approval of everyone except the robots drops. TODO: approval drops when the resource is low.
-                    gameState.characters.values.forEach{char->
-                        if(!char.trait.contains("robot"))
-                            char.approval-= consumption  * factor * 1
-                    }
-                else
-                    gameState.characters.values.forEach{char->
-                    if(!char.trait.contains("robot"))
-                        char.approval-= min(consumption  * factor * gameState.pop / it.value.amount, consumption  * factor)
-                }
-
-            }
 
     }
 
@@ -289,7 +310,7 @@ class GameEngine(val gameState: GameState) {
             gameState.recyclableWater += gameState.pop / 24 //No water is lost.
         }
         //TODO: adjust consumption rate when resource is low?
-        //TODO: affect approval as the consumption rate drops
+        //does not affect approval when resource is low.
 
         else {
             val death = gameState.pop / 100 +1
@@ -302,7 +323,7 @@ class GameEngine(val gameState: GameState) {
                 tgtPlace = "everywhere",
                 amount = death
             ).also { /*spread rumor*/
-                val cpy = Information(it); tgtState.informations[cpy.generateName()] = cpy; cpy.publicity = 5
+                val cpy = Information(it); tgtState.informations[cpy.generateName()] = cpy; //cpy.publicity = 5
             }
         }
         if(gameState.marketOxygen<gameState.pop/4)
@@ -320,7 +341,7 @@ class GameEngine(val gameState: GameState) {
                 tgtPlace = "everywhere",
                 amount = death
             ).also { /*spread rumor*/
-                val cpy = Information(it); tgtState.informations[cpy.generateName()] = cpy; cpy.publicity = 5
+                val cpy = Information(it); tgtState.informations[cpy.generateName()] = cpy; //cpy.publicity = 5
             }
         }
         if(gameState.marketRation<gameState.pop/2)
@@ -338,7 +359,7 @@ class GameEngine(val gameState: GameState) {
                 tgtPlace = "everywhere",
                 amount = death
             ).also { /*spread rumor*/
-                val cpy = Information(it); tgtState.informations[cpy.generateName()] = cpy; cpy.publicity = 5
+                val cpy = Information(it); tgtState.informations[cpy.generateName()] = cpy; //cpy.publicity = 5
             }
         }
 
@@ -355,12 +376,12 @@ class GameEngine(val gameState: GameState) {
             tgtPlace = tgtPlace.name,
             amount = death
         )/*store dummy info*/.also { tgtPlace.accidentInformations[it.generateName()] = it }.also { /*spread rumor*/
-            val cpy = Information(it); tgtState.informations[cpy.generateName()] = cpy; cpy.publicity = 5
+            val cpy = Information(it); tgtState.informations[cpy.generateName()] = cpy; cpy.publicity[tgtPlace.responsibleParty] = 5
         }
             .also { /*copy this information to the responsible character.*/
                 val cpy = Information(it); cpy.author =
-                    gameState.characters.values.find { it.division == tgtPlace.division }!!.name; tgtState.informations[cpy.generateName()] =
-                    cpy; cpy.publicity = 0
+                    gameState.parties[tgtPlace.responsibleParty]!!.leader; tgtState.informations[cpy.generateName()] =
+                    cpy; cpy.publicity[tgtPlace.responsibleParty] = 0
             }
 
         //Generate resource loss.
@@ -373,12 +394,12 @@ class GameEngine(val gameState: GameState) {
             amount = death,
             tgtResource = "water"
         )/*store dummy info*/.also { tgtPlace.accidentInformations[it.generateName()] = it }.also { /*spread rumor*/
-            val cpy = Information(it); tgtState.informations[cpy.generateName()] = cpy; cpy.publicity = 5
+            val cpy = Information(it); tgtState.informations[cpy.generateName()] = cpy; cpy.publicity[tgtPlace.responsibleParty] = 5
         }
             .also { /*copy this information to the responsible character.*/
                 val cpy = Information(it); cpy.author =
-                    gameState.characters.values.find { it.division == tgtPlace.division }!!.name; tgtState.informations[cpy.generateName()] =
-                    cpy; cpy.publicity = 0
+                    gameState.parties[tgtPlace.responsibleParty]!!.leader; tgtState.informations[cpy.generateName()] =
+                    cpy; cpy.publicity[tgtPlace.responsibleParty] = 0
             }
 
         //Generate apparatus damage.
@@ -402,12 +423,12 @@ class GameEngine(val gameState: GameState) {
                     amount = death,
                     tgtApparatus = app.name
                 )/*store dummy info*/.also { tgtPlace.accidentInformations[it.generateName()] = it }.also { /*spread rumor*/
-                    val cpy = Information(it); tgtState.informations[cpy.generateName()] = cpy; cpy.publicity = 5
+                    val cpy = Information(it); tgtState.informations[cpy.generateName()] = cpy; cpy.publicity[tgtPlace.responsibleParty] = 5
                 }
                     .also { /*copy this information to the responsible character.*/
                         val cpy = Information(it); cpy.author =
-                            gameState.characters.values.find { it.division == tgtPlace.division }!!.name; tgtState.informations[cpy.generateName()] =
-                            cpy; cpy.publicity = 0
+                            gameState.parties[tgtPlace.responsibleParty]!!.leader; tgtState.informations[cpy.generateName()] =
+                            cpy; cpy.publicity[tgtPlace.responsibleParty] = 0
                     }
             }
         }
@@ -426,12 +447,12 @@ class GameEngine(val gameState: GameState) {
             tgtPlace = tgtPlace.name,
             amount = death
         ).also { tgtPlace.accidentInformations[it.generateName()] = it }.also { /*spread rumor*/
-            val cpy = Information(it); tgtState.informations[cpy.generateName()] = cpy; cpy.publicity = 75
+            val cpy = Information(it); tgtState.informations[cpy.generateName()] = cpy; cpy.publicity[tgtPlace.responsibleParty] = 75
         }
-            .also { /*copy this information to the responsible character.*/
-                val cpy = Information(it); cpy.author =
-                    gameState.characters.values.find { it.division == tgtPlace.division }!!.name; tgtState.informations[cpy.generateName()] =
-                    cpy; cpy.publicity = 0
+            .also { information -> /*copy this information to the responsible character.*/
+                val cpy = Information(information); cpy.author =
+                    gameState.parties[tgtPlace.responsibleParty]!!.leader; tgtState.informations[cpy.generateName()] =
+                    cpy; cpy.publicity[tgtPlace.responsibleParty] = 0
             }
 
         //Generate resource loss.
@@ -444,12 +465,12 @@ class GameEngine(val gameState: GameState) {
             amount = death,
             tgtResource = "water"
         ).also { tgtPlace.accidentInformations[it.generateName()] = it }.also { /*spread rumor*/
-            val cpy = Information(it); tgtState.informations[cpy.generateName()] = cpy; cpy.publicity = 75
+            val cpy = Information(it); tgtState.informations[cpy.generateName()] = cpy; cpy.publicity[tgtPlace.responsibleParty] = 75
         }
             .also { /*copy this information to the responsible character.*/
                 val cpy = Information(it); cpy.author =
-                    gameState.characters.values.find { it.division == tgtPlace.division }!!.name; tgtState.informations[cpy.generateName()] =
-                    cpy; cpy.publicity = 0
+                    gameState.parties[tgtPlace.responsibleParty]!!.leader; tgtState.informations[cpy.generateName()] =
+                    cpy; cpy.publicity[tgtPlace.responsibleParty] = 0
             }
 
         //Generate apparatus damage.
@@ -470,15 +491,14 @@ class GameEngine(val gameState: GameState) {
                     tgtState.time,
                     "damagedApparatus",
                     tgtPlace = tgtPlace.name,
-                    amount = death,
                     tgtApparatus = app.name
                 )/*store dummy info*/.also { tgtPlace.accidentInformations[it.generateName()] = it }.also { /*spread rumor*/
-                    val cpy = Information(it); tgtState.informations[cpy.generateName()] = cpy; cpy.publicity = 75
+                    val cpy = Information(it); tgtState.informations[cpy.generateName()] = cpy; cpy.publicity[tgtPlace.responsibleParty] = 75
                 }
                     .also { /*copy this information to the responsible character.*/
                         val cpy = Information(it); cpy.author =
-                            gameState.characters.values.find { it.division == tgtPlace.division }!!.name; tgtState.informations[cpy.generateName()] =
-                            cpy; cpy.publicity = 0
+                            gameState.parties[tgtPlace.responsibleParty]!!.leader; tgtState.informations[cpy.generateName()] =
+                            cpy; cpy.publicity[tgtPlace.responsibleParty] = 0
                     }
             }
         }
@@ -638,7 +658,7 @@ class GameEngine(val gameState: GameState) {
             if (place != "home" && gameState.places[place]!!.characters.count() > 1)
                 actions.add("talk")
             if (gameState.places[place]!!.isAccidentScene) {
-                if(gameState.characters[character]!!.division== gameState.places[place]!!.division)//Only the division leader can clear the accident scene.
+                if(gameState.characters[character]!!.division== gameState.places[place]!!.responsibleParty)//Only the division leader can clear the accident scene.
                     actions.add("clearAccidentScene")
                 actions.add("investigateAccidentScene")
             }
@@ -671,7 +691,7 @@ class GameEngine(val gameState: GameState) {
             if (place == "mainControlRoom" || place == "market" || place == "squareNorth" || place == "squareSouth") {
                 actions.add("infoAnnounce")
             }
-            if ((gameState.places[place]!!.division == gameState.characters[character]!!.division) && gameState.places[place]!!.division != "") {
+            if ((gameState.places[place]!!.responsibleParty == gameState.characters[character]!!.division) && gameState.places[place]!!.responsibleParty != "") {
                 actions.add("unofficialResourceTransfer")//can only steal from their own division.
                 actions.add("officialResourceTransfer")//can only move resources from their own division.
             }

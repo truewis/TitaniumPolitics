@@ -12,7 +12,7 @@ class command(targetState: GameState, targetCharacter: String, targetPlace: Stri
     val command:Command = Command("","",0)
     override fun chooseParams() {
         who = GameEngine.acquire(tgtState.ongoingConferences.filter {it.value.currentCharacters.contains(tgtCharacter)}.flatMap { it.value.currentCharacters })
-        command.place = GameEngine.acquire(tgtState.places.filter { it.value.division==tgtState.characters[who]!!.division }.keys.toList())
+        command.place = GameEngine.acquire(tgtState.places.filter { it.value.responsibleParty==tgtState.characters[who]!!.division }.keys.toList())
         command.action = GameEngine.acquire(listOf("investigateAccidentScene","clearAccidentScene"))
         command.amount = 0
     }

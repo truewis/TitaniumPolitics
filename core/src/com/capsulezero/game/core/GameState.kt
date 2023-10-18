@@ -37,12 +37,17 @@ class GameState {
 
     @Transient
     var updateUI = arrayListOf<(GameState)->Unit>()
-    var _alertLevel = 0;
+    var _alertLevel = 0
     var places = hashMapOf<String, Place>()
     var characters = hashMapOf<String, Character>()
     var nonPlayerAgents = hashMapOf<String, NonPlayerAgent>()
     var playerAgent = ""
     var log = Log()
+    var parties = hashMapOf<String, Party>()
+    @Serializable
+    private var _mutuality = hashMapOf<String, HashMap<String, Double>>()
+    @Serializable
+    private var _partyMutuality = hashMapOf<String, HashMap<String, Double>>()
     var scheduledMeetings = hashMapOf<String, Meeting>()
     var scheduledConferences = hashMapOf<String, Meeting>()
     var ongoingMeetings = hashMapOf<String, Meeting>()
@@ -56,6 +61,36 @@ class GameState {
     var marketOxygen = 0
     var marketRation = 0
 
+    fun getMutuality(a:String, b:String): Double{
+        if(!_mutuality.containsKey(a))
+            _mutuality[a] = hashMapOf()
+        if(!_mutuality[a]!!.containsKey(b))
+            _mutuality[a]!![b] = 50.0
+        return _mutuality[a]!![b]!!
+    }
+    fun setMutuality(a:String, b:String, delta:Double)
+    {
+        if(!_mutuality.containsKey(a))
+            _mutuality[a] = hashMapOf()
+        _mutuality[a]!![b] = getMutuality(a,b)+delta
+        if(getMutuality(a,b)>100)setMutuality(a,b,100.0)
+        if(getMutuality(a,b)<0)setMutuality(a,b,0.0)
+    }
+    fun getPartyMutuality(a:String, b:String): Double{
+        if(!_partyMutuality.containsKey(a))
+            _partyMutuality[a] = hashMapOf()
+        if(!_partyMutuality[a]!!.containsKey(b))
+            _partyMutuality[a]!![b] = 50.0
+        return _partyMutuality[a]!![b]!!
+    }
+    fun setPartyMutuality(a:String, b:String, delta:Double)
+    {
+        if(!_partyMutuality.containsKey(a))
+            _partyMutuality[a] = hashMapOf()
+        _partyMutuality[a]!![b] = getPartyMutuality(a,b)+delta
+        if(getPartyMutuality(a,b)>100)setPartyMutuality(a,b,100.0)
+        if(getPartyMutuality(a,b)<0)setPartyMutuality(a,b,0.0)
+    }
     fun injectDependency(){
         log.injectParent(this)
         places.forEach { it.value.injectParent(this) }

@@ -132,7 +132,7 @@ class NonPlayerAgent {
             //----------------------------------------------------------------------------------Move to the meeting
         }
         //If an accident happened in the place of my control, investigate and clear it.
-        gameState.places.values.filter { it.division == gameState.characters[character]!!.division }.forEach { place1 ->
+        gameState.places.values.filter { it.responsibleParty == gameState.characters[character]!!.division }.forEach { place1 ->
             if (place1.isAccidentScene) {
                 if (place != place1.name) {
                     move(gameState, character, place).also {
@@ -154,7 +154,7 @@ class NonPlayerAgent {
                 if (res != "") {
                     //Find a place within my division with maximum res.
                     val resplace =
-                        gameState.places.values.filter { it.division != "" && it.division == gameState.characters[character]!!.division }
+                        gameState.places.values.filter { it.responsibleParty != "" && it.responsibleParty == gameState.characters[character]!!.division }
                             .maxByOrNull { it.resources[res] ?: 0 }
                             ?: return@fe
                     if (place != resplace.name) {

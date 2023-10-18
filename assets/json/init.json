@@ -27,239 +27,110 @@
         "workaholic",
         "emotionless"
       ],
-      "mutuality": {
-        "interiorMinister": 50,
-        "safetyMinister": 50,
-        "infraMinister": 50,
-        "miningMinister": 50,
-        "eduMinister": 50,
-        "industryMinister": 50,
-        "welfareMinister": 50,
-        "hhh": 50,
-        "iii": 50,
-        "Rui": 50,
-        "ctrler": 100,
-        "observer": 100
-      },
       "resources": {
         "water": 10,
         "ration": 10
       },
       "health": 80,
-      "will": 80,
-      "approval": 90,
-      "home": "hanger",
-      "division": ""
+      "home": "hanger"
     },
     "interiorMinister": {
       "name": "interiorMinister",
       "trait": [
         "workaholic",
-        "emotionless"
+        "emotionless",
+        "interiorMinister"
       ],
-      "mutuality": {
-        "oldie": 50,
-        "safetyMinister": 50,
-        "infraMinister": 50,
-        "miningMinister": 50,
-        "eduMinister": 50,
-        "industryMinister": 50,
-        "welfareMinister": 50,
-        "hhh": 50,
-        "iii": 50,
-        "Rui": 50,
-        "ctrler": 100,
-        "observer": 100
-      },
       "resources": {
         "water": 10,
         "ration": 10
       },
       "health": 80,
-      "will": 80,
-      "approval": 90,
-      "home": "mainControlRoom",
-      "division": "interior"
+      "home": "mainControlRoom"
     },
     "safetyMinister": {
       "name": "safetyMinister",
       "trait": [
         "workaholic",
-        "emotionless"
+        "emotionless",
+        "safetyMinister"
       ],
-      "mutuality": {
-        "interiorMinister": 50,
-        "oldie": 50,
-        "infraMinister": 50,
-        "miningMinister": 50,
-        "eduMinister": 50,
-        "industryMinister": 50,
-        "welfareMinister": 50,
-        "hhh": 50,
-        "iii": 50,
-        "Rui": 50,
-        "ctrler": 100,
-        "observer": 100
-      },
       "resources": {
         "water": 10,
         "ration": 10
       },
       "health": 80,
-      "will": 80,
-      "approval": 90,
-      "home": "mainControlRoom",
-      "division": "safety"
+      "home": "mainControlRoom"
     },
     "infraMinister": {
       "name": "infraMinister",
       "trait": [
         "workaholic",
-        "emotionless"
+        "emotionless",
+        "infraMinister"
       ],
-      "mutuality": {
-        "interiorMinister": 50,
-        "safetyMinister": 50,
-        "oldie": 50,
-        "miningMinister": 50,
-        "eduMinister": 50,
-        "industryMinister": 50,
-        "welfareMinister": 50,
-        "hhh": 50,
-        "iii": 50,
-        "Rui": 50,
-        "ctrler": 100,
-        "observer": 100
-      },
       "resources": {
         "water": 10,
         "ration": 10
       },
       "health": 80,
-      "will": 80,
-      "approval": 90,
-      "home": "mainControlRoom",
-      "division": "infrastructure"
+      "home": "mainControlRoom"
     },
     "miningMinister": {
       "name": "miningMinister",
       "trait": [
         "workaholic",
-        "emotionless"
+        "emotionless",
+        "miningMinister"
       ],
-      "mutuality": {
-        "interiorMinister": 50,
-        "safetyMinister": 50,
-        "infraMinister": 50,
-        "oldie": 50,
-        "eduMinister": 50,
-        "industryMinister": 50,
-        "welfareMinister": 50,
-        "hhh": 50,
-        "iii": 50,
-        "Rui": 50,
-        "ctrler": 100,
-        "observer": 100
-      },
       "resources": {
         "water": 10,
         "ration": 10
       },
       "health": 80,
-      "will": 80,
-      "approval": 90,
-      "home": "mainControlRoom",
-      "division": "mining"
+      "home": "mainControlRoom"
     },
     "eduMinister": {
       "name": "eduMinister",
       "trait": [
         "workaholic",
-        "emotionless"
+        "emotionless",
+        "eduMinister"
       ],
-      "mutuality": {
-        "interiorMinister": 50,
-        "safetyMinister": 50,
-        "infraMinister": 50,
-        "miningMinister": 50,
-        "oldie": 50,
-        "industryMinister": 50,
-        "welfareMinister": 50,
-        "hhh": 50,
-        "iii": 50,
-        "Rui": 50,
-        "ctrler": 100,
-        "observer": 100
-      },
       "resources": {
         "water": 10,
         "ration": 10
       },
       "health": 80,
-      "will": 80,
-      "approval": 90,
-      "home": "mainControlRoom",
-      "division": "education"
+      "home": "mainControlRoom"
     },
     "industryMinister": {
       "name": "industryMinister",
       "trait": [
         "workaholic",
-        "emotionless"
+        "emotionless",
+        "industryMinister"
       ],
-      "mutuality": {
-        "interiorMinister": 50,
-        "safetyMinister": 50,
-        "infraMinister": 50,
-        "miningMinister": 50,
-        "eduMinister": 50,
-        "oldie": 50,
-        "welfareMinister": 50,
-        "hhh": 50,
-        "iii": 50,
-        "Rui": 50,
-        "ctrler": 100,
-        "observer": 100
-      },
       "resources": {
         "water": 10,
         "ration": 10
       },
       "health": 80,
-      "will": 80,
-      "approval": 90,
-      "home": "mainControlRoom",
-      "division": "industry"
+      "home": "mainControlRoom"
     },
     "welfareMinister": {
       "name": "welfareMinister",
       "trait": [
         "workaholic",
-        "emotionless"
+        "emotionless",
+        "welfareMinister"
       ],
-      "mutuality": {
-        "interiorMinister": 50,
-        "safetyMinister": 50,
-        "infraMinister": 50,
-        "miningMinister": 50,
-        "eduMinister": 50,
-        "industryMinister": 50,
-        "oldie": 50,
-        "hhh": 50,
-        "iii": 50,
-        "Rui": 50,
-        "ctrler": 100,
-        "observer": 100
-      },
       "resources": {
         "water": 10,
         "ration": 10
       },
       "health": 80,
-      "will": 80,
-      "approval": 90,
-      "home": "mainControlRoom",
-      "division": "welfare"
+      "home": "mainControlRoom"
     },
     "hhh": {
       "name": "hhh",
@@ -267,27 +138,11 @@
         "workaholic",
         "emotionless"
       ],
-      "mutuality": {
-        "interiorMinister": 50,
-        "safetyMinister": 50,
-        "infraMinister": 50,
-        "miningMinister": 50,
-        "eduMinister": 50,
-        "industryMinister": 50,
-        "welfareMinister": 50,
-        "oldie": 50,
-        "iii": 50,
-        "Rui": 50,
-        "ctrler": 100,
-        "observer": 100
-      },
       "resources": {
         "water": 10,
         "ration": 10
       },
       "health": 80,
-      "will": 80,
-      "approval": 90,
       "home": "mainControlRoom"
     },
     "iii": {
@@ -296,27 +151,11 @@
         "workaholic",
         "emotionless"
       ],
-      "mutuality": {
-        "interiorMinister": 50,
-        "safetyMinister": 50,
-        "infraMinister": 50,
-        "miningMinister": 50,
-        "eduMinister": 50,
-        "industryMinister": 50,
-        "welfareMinister": 50,
-        "hhh": 50,
-        "oldie": 50,
-        "Rui": 50,
-        "ctrler": 100,
-        "observer": 100
-      },
       "resources": {
         "water": 10,
         "ration": 10
       },
       "health": 80,
-      "will": 80,
-      "approval": 90,
       "home": "mainControlRoom"
     },
     "Rui": {
@@ -325,27 +164,11 @@
         "workaholic",
         "emotionless"
       ],
-      "mutuality": {
-        "interiorMinister": 50,
-        "safetyMinister": 50,
-        "infraMinister": 50,
-        "miningMinister": 50,
-        "eduMinister": 50,
-        "industryMinister": 50,
-        "welfareMinister": 50,
-        "hhh": 50,
-        "iii": 50,
-        "oldie": 50,
-        "ctrler": 100,
-        "observer": 100
-      },
       "resources": {
         "water": 10,
         "ration": 10
       },
       "health": 80,
-      "will": 80,
-      "approval": 90,
       "home": "hanger"
     },
     "ctrler": {
@@ -353,26 +176,10 @@
       "trait": [
         "robot"
       ],
-      "mutuality": {
-        "interiorMinister": 100,
-        "safetyMinister": 100,
-        "infraMinister": 100,
-        "miningMinister": 100,
-        "eduMinister": 100,
-        "industryMinister": 100,
-        "welfareMinister": 100,
-        "hhh": 100,
-        "iii": 100,
-        "Rui": 100,
-        "oldie": 100,
-        "observer": 100
-      },
       "resources": {
         "water": 100
       },
       "health": 100,
-      "will": 100,
-      "approval": 90,
       "home": "mainControlRoom"
     },
     "observer": {
@@ -380,26 +187,10 @@
       "trait": [
         "robot"
       ],
-      "mutuality": {
-        "interiorMinister": 100,
-        "safetyMinister": 100,
-        "infraMinister": 100,
-        "miningMinister": 100,
-        "eduMinister": 100,
-        "industryMinister": 100,
-        "welfareMinister": 100,
-        "hhh": 100,
-        "iii": 100,
-        "Rui": 100,
-        "oldie": 100,
-        "ctrler": 100
-      },
       "resources": {
         "water": 100
       },
       "health": 100,
-      "will": 100,
-      "approval": 90,
       "home": "observatory"
     }
   },
@@ -451,7 +242,7 @@
       "characters": [
         "ctrler"
       ],
-      "division": "interior",
+      "responsibleParty": "interior",
       "workHoursStart": 0,
       "workHoursEnd": 24
     },
@@ -504,7 +295,7 @@
         }],
       "characters": [
       ],
-      "division": "welfare",
+      "responsibleParty": "welfare",
       "workHoursStart": 0,
       "workHoursEnd": 24
     },
@@ -556,7 +347,7 @@
         }],
       "characters": [
       ],
-      "division": "welfare",
+      "responsibleParty": "welfare",
       "workHoursStart": 0,
       "workHoursEnd": 24
     },
@@ -617,7 +408,7 @@
         }],
       "characters": [
       ],
-      "division": "mining",
+      "responsibleParty": "mining",
       "workHoursStart": 9,
       "workHoursEnd": 17
     },
@@ -678,7 +469,7 @@
         }],
       "characters": [
       ],
-      "division": "mining",
+      "responsibleParty": "mining",
       "workHoursStart": 9,
       "workHoursEnd": 17
     },
@@ -706,7 +497,7 @@
       "characters": [
         "observer"
       ],
-      "division": "infrastructure",
+      "responsibleParty": "infrastructure",
       "workHoursStart": 0,
       "workHoursEnd": 24
     },
@@ -759,7 +550,7 @@
       ],
       "characters": [
       ],
-      "division": "infrastructure",
+      "responsibleParty": "infrastructure",
       "workHoursStart": 9,
       "workHoursEnd": 17
     },
@@ -784,7 +575,7 @@
       ],
       "characters": [
       ],
-      "division": "interior",
+      "responsibleParty": "interior",
       "workHoursStart": 9,
       "workHoursEnd": 17
     },
@@ -838,7 +629,7 @@
       ],
       "characters": [
       ],
-      "division": "infrastructure",
+      "responsibleParty": "infrastructure",
       "workHoursStart": 9,
       "workHoursEnd": 17
     },
@@ -913,7 +704,7 @@
       ],
       "characters": [
       ],
-      "division": "infrastructure",
+      "responsibleParty": "infrastructure",
       "workHoursStart": 0,
       "workHoursEnd": 24
     },
@@ -980,7 +771,7 @@
       ],
       "characters": [
       ],
-      "division": "infrastructure",
+      "responsibleParty": "infrastructure",
       "workHoursStart": 0,
       "workHoursEnd": 24
     },
@@ -1047,7 +838,7 @@
       ],
       "characters": [
       ],
-      "division": "infrastructure",
+      "responsibleParty": "infrastructure",
       "workHoursStart": 0,
       "workHoursEnd": 24
     },
@@ -1121,7 +912,7 @@
       ],
       "characters": [
       ],
-      "division": "infrastructure",
+      "responsibleParty": "infrastructure",
       "workHoursStart": 0,
       "workHoursEnd": 24
     },
@@ -1196,7 +987,7 @@
       ],
       "characters": [
       ],
-      "division": "infrastructure",
+      "responsibleParty": "infrastructure",
       "workHoursStart": 0,
       "workHoursEnd": 24
     },
@@ -1272,7 +1063,7 @@
       ],
       "characters": [
       ],
-      "division": "infrastructure",
+      "responsibleParty": "infrastructure",
       "workHoursStart": 0,
       "workHoursEnd": 24
     },
@@ -1322,7 +1113,7 @@
       ],
       "characters": [
       ],
-      "division": "education",
+      "responsibleParty": "education",
       "workHoursStart": 9,
       "workHoursEnd": 17
     },
@@ -1370,7 +1161,7 @@
       ],
       "characters": [
       ],
-      "division": "education",
+      "responsibleParty": "education",
       "workHoursStart": 9,
       "workHoursEnd": 17
     },
@@ -1432,7 +1223,7 @@
       ],
       "characters": [
       ],
-      "division": "industry",
+      "responsibleParty": "industry",
       "workHoursStart": 9,
       "workHoursEnd": 17
     },
@@ -1481,7 +1272,7 @@
       ],
       "characters": [
       ],
-      "division": "safety",
+      "responsibleParty": "safety",
       "workHoursStart": 0,
       "workHoursEnd": 24
     },
@@ -1529,7 +1320,7 @@
       ],
       "characters": [
       ],
-      "division": "safety",
+      "responsibleParty": "safety",
       "workHoursStart": 0,
       "workHoursEnd": 24
     },
@@ -1603,7 +1394,7 @@
       ],
       "characters": [
       ],
-      "division": "interior",
+      "responsibleParty": "interior",
       "workHoursStart": 9,
       "workHoursEnd": 17
     },
@@ -1680,7 +1471,7 @@
       ],
       "characters": [
       ],
-      "division": "interior",
+      "responsibleParty": "interior",
       "workHoursStart": 9,
       "workHoursEnd": 17
     },
@@ -1754,7 +1545,7 @@
       ],
       "characters": [
       ],
-      "division": "interior",
+      "responsibleParty": "interior",
       "workHoursStart": 9,
       "workHoursEnd": 17
     },
@@ -1806,7 +1597,7 @@
       ],
       "characters": [
       ],
-      "division": "infrastructure",
+      "responsibleParty": "infrastructure",
       "workHoursStart": 9,
       "workHoursEnd": 17
     },
@@ -1815,6 +1606,28 @@
       "characters": [
         "oldie", "interiorMinister", "safetyMinister", "infraMinister", "miningMinister","eduMinister","industryMinister","welfareMinister","hhh","iii","Rui"
       ]
+    }
+  },
+  "parties": {
+    "interior": {
+      "anonymousMembers": 30,
+      "members": ["interiorMinister"]
+    },
+    "mining": {
+      "anonymousMembers": 2000,
+      "members": ["miningMinister"]
+    },
+    "education": {
+      "anonymousMembers": 50,
+      "members": ["eduMinister"]
+    },
+    "industry": {
+      "anonymousMembers": 800,
+      "members": ["industryMinister"]
+    },
+    "safety": {
+      "anonymousMembers": 50,
+      "members": ["safetyMinister"]
     }
   },
   "scheduledConferences":{

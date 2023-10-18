@@ -34,7 +34,7 @@ class Place : GameStateElement(){
     var workHoursEnd=0
     var apparatuses = hashSetOf<Apparatus>()
     var characters = hashSetOf<String>()
-    var division = "" //Determines who is responsible for the place.
+    var responsibleParty = "" //Determines which party is responsible for the place.
     var isAccidentScene = false //If true, the place is closed and no one can enter. Can be cleared by clearAccidentScene.
     var accidentInformations = hashMapOf<String, Information>()//Information about the last accident. Non empty only when isAccidentScene is true.
     override fun injectParent(gameState: GameState) {

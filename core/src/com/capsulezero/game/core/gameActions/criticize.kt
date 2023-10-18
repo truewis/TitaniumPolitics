@@ -14,7 +14,7 @@ class criticize(targetState: GameState, targetCharacter: String, targetPlace: St
     }
     override fun execute() {
         //TODO: chat
-        tgtState.characters[who]!!.mutuality[tgtCharacter] = tgtState.characters[who]!!.mutuality[tgtCharacter]!! - 5
+        tgtState.setMutuality(tgtCharacter, who, -5.0)
         tgtState.characters[tgtCharacter]!!.frozen++
     }
 

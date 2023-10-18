@@ -16,7 +16,7 @@ class examine(targetState: GameState, targetCharacter: String, targetPlace: Stri
         when(what){
             "HR" -> {
                 //Acquire HR information is not planned.
-                println("HR: ${tgtState.places[tgtPlace]!!.currentWorker}/${tgtState.places[tgtPlace]!!.plannedWorker}, ${tgtState.places[tgtPlace]!!.workHoursStart}-${tgtState.places[tgtPlace]!!.workHoursEnd}, ${tgtState.places[tgtPlace]!!.division}")
+                println("HR: ${tgtState.places[tgtPlace]!!.currentWorker}/${tgtState.places[tgtPlace]!!.plannedWorker}, ${tgtState.places[tgtPlace]!!.workHoursStart}-${tgtState.places[tgtPlace]!!.workHoursEnd}, ${tgtState.places[tgtPlace]!!.responsibleParty}")
             }
             "apparatus" -> {
                 println("Apparatus: ${tgtState.places[tgtPlace]!!.apparatuses}")

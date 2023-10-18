@@ -16,7 +16,7 @@ class ApprovalMeter (gameState: GameState) : Table(defaultSkin) {
         add(b)
         add(l)
 
-        gameState.updateUI+={y-> setValue(y.characters[gameState.playerAgent]!!.approval) }
+        gameState.updateUI+={y-> setValue(0/* characters[gameState.playerAgent]!!.approval*/) }
     }
     fun setValue(value:Int) {
         l.setText(value.toString().padStart(2, '0'))
