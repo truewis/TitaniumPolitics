@@ -6,21 +6,26 @@ import java.lang.Thread.sleep
 import kotlin.math.log
 import kotlin.math.min
 import kotlin.random.Random
+import kotlin.system.exitProcess
 
 class GameEngine(val gameState: GameState) {
     val random = Random(System.currentTimeMillis())
+
     fun startGame() {
+        gameState.updateUI.forEach { it(gameState) }//Update UI
 
         while (true) {
             gameState.characters.values.forEach {
-                if (it.frozen > 0) {
-                    it.frozen--
-                    if (!it.trait.contains("robot"))
-                        it.health--
-                }
-                while (it.frozen == 0) {
-                    performAction(it)
-                    //if the action took any amount of time, exit the loop.
+                if(it.alive) {
+                    if (it.frozen > 0) {
+                        it.frozen--
+                        if (!it.trait.contains("robot"))
+                            it.health--
+                    }
+                    while (it.frozen == 0) {
+                        performAction(it)
+                        //if the action took any amount of time, exit the loop.
+                    }
                 }
             }
             progression()
@@ -34,7 +39,7 @@ class GameEngine(val gameState: GameState) {
             this.gameState, gameState.places.values.find { it.characters.contains(char.name) }!!.name,
             char.name
         )
-        if (char.name == "mechanic") {
+        if (char.name == gameState.playerAgent) {
             do {
                 actionName = acquire(
                     actionList
@@ -81,7 +86,8 @@ class GameEngine(val gameState: GameState) {
         spreadPublicInfo()
 
         println("Time: ${gameState.time}")
-        println("My approval:${gameState.characters["mechanic"]!!.approval}")
+        println("My approval:${gameState.characters[gameState.playerAgent]!!.approval}")
+        gameState.updateUI.forEach { it(gameState) }
     }
 
     // information does not affect the approval after some time.
@@ -162,7 +168,7 @@ class GameEngine(val gameState: GameState) {
                     "oxygen"->1
                     else -> 0
                 }
-                if(it.value.amount==0)//If the resource is empty, approval of everyone except the robots drops.
+                if(it.value.amount==0)//If the resource is empty, approval of everyone except the robots drops. TODO: approval drops when the resource is low.
                     gameState.characters.values.forEach{char->
                         if(!char.trait.contains("robot"))
                             char.approval-= consumption  * factor * 1
@@ -479,14 +485,29 @@ class GameEngine(val gameState: GameState) {
     }
 
 
+
     //TODO: Check for win/lose/interrupt conditions
     fun conditionCheck() {
         gameState.characters.forEach { entry ->
             if (entry.value.health <= 0) {
                 println("${entry.value.name} died.")
-                //gameState.pop -= 1
-                //TODO: kill a character.
+                //TODO: Do we need to gameState.pop -= 1
+                entry.value.alive = false
             }
+        }
+        val l = gameState.characters.filter {it.value.alive && !it.value.trait.contains("robot")}
+        if(!l.contains(gameState.playerAgent)) {
+
+            println("You died. Game over.")
+            gameState.dump()
+            exitProcess(0)
+
+        }
+        else if (l.size == 1)
+        {
+            println("You are the last survivor.")
+            gameState.dump()
+            exitProcess(0)
         }
 
         if (gameState.time % 720 == 0) { //Every 15 days, reset the budget.
@@ -567,7 +588,7 @@ class GameEngine(val gameState: GameState) {
         fun availableActions(gameState: GameState, place: String, character: String): ArrayList<String> {
             val actions = arrayListOf<String>()
             if (gameState.ongoingMeetings.any { it.value.currentCharacters.contains(character) }) {
-                if (character == "mechanic") {
+                if (character == gameState.playerAgent) {
                     println("You are in a meeting.")
                     println("Attendees: ${gameState.ongoingMeetings.filter { it.value.currentCharacters.contains(character) }.values.first().currentCharacters}")
                 }
@@ -583,7 +604,7 @@ class GameEngine(val gameState: GameState) {
                 return actions
             }
             if (gameState.ongoingConferences.any { it.value.currentCharacters.contains(character) }) {
-                if (character == "mechanic") {
+                if (character == gameState.playerAgent) {
                     println("You are in a conference.")
                     println(
                         "Attendees: ${
@@ -633,7 +654,7 @@ class GameEngine(val gameState: GameState) {
                 actions.add("home")
             }
             if (place == "mainControlRoom") {
-                if (character == "mechanic") {
+                if (gameState.characters[character]!!.trait.contains("mechanic")) {
                     val availableConferences =
                         gameState.scheduledConferences.filter { it.value.time + 2 > gameState.time && gameState.time + 2 > it.value.time }
                             .filter { !gameState.ongoingMeetings.containsKey(it.key) }
@@ -669,14 +690,14 @@ class GameEngine(val gameState: GameState) {
                         entry.value.characters.contains(character) && !entry.value.currentCharacters.contains(character) && entry.value.place == place
                     }
                 }
-                if (character == "mechanic") {
+                if (gameState.characters[character]!!.trait.contains("mechanic")) {
                     when (subject) {
                         "talk" -> println("Someone wants to talk to you.")//TODO: have no idea what this is doing.
                     }
                 }
                 actions.add("joinMeeting")
             }
-            if (character == "mechanic" && place != "home") {actions.add("repair")}
+            if (gameState.characters[character]!!.trait.contains("mechanic") && place != "home") {actions.add("repair")}//TODO: Not only the mechanic can repair.
             return actions
         }
     }

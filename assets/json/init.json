@@ -5,6 +5,7 @@
   "marketRation": 20000,
   "marketWater": 40000,
     "marketOxygen": 10000,
+  "playerAgent": "Rui",
   "nonPlayerAgents": {
     "interiorMinister": {},
     "safetyMinister": {},
@@ -15,13 +16,13 @@
     "welfareMinister": {},
     "hhh": {},
     "iii": {},
-    "kkk": {},
+    "oldie": {},
     "ctrler": {},
     "observer": {}
   },
   "characters": {
-    "mechanic": {
-      "name": "mechanic",
+    "oldie": {
+      "name": "oldie",
       "trait": [
         "workaholic",
         "emotionless"
@@ -36,7 +37,7 @@
         "welfareMinister": 50,
         "hhh": 50,
         "iii": 50,
-        "kkk": 50,
+        "Rui": 50,
         "ctrler": 100,
         "observer": 100
       },
@@ -57,7 +58,7 @@
         "emotionless"
       ],
       "mutuality": {
-        "mechanic": 50,
+        "oldie": 50,
         "safetyMinister": 50,
         "infraMinister": 50,
         "miningMinister": 50,
@@ -66,7 +67,7 @@
         "welfareMinister": 50,
         "hhh": 50,
         "iii": 50,
-        "kkk": 50,
+        "Rui": 50,
         "ctrler": 100,
         "observer": 100
       },
@@ -88,7 +89,7 @@
       ],
       "mutuality": {
         "interiorMinister": 50,
-        "mechanic": 50,
+        "oldie": 50,
         "infraMinister": 50,
         "miningMinister": 50,
         "eduMinister": 50,
@@ -96,7 +97,7 @@
         "welfareMinister": 50,
         "hhh": 50,
         "iii": 50,
-        "kkk": 50,
+        "Rui": 50,
         "ctrler": 100,
         "observer": 100
       },
@@ -119,14 +120,14 @@
       "mutuality": {
         "interiorMinister": 50,
         "safetyMinister": 50,
-        "mechanic": 50,
+        "oldie": 50,
         "miningMinister": 50,
         "eduMinister": 50,
         "industryMinister": 50,
         "welfareMinister": 50,
         "hhh": 50,
         "iii": 50,
-        "kkk": 50,
+        "Rui": 50,
         "ctrler": 100,
         "observer": 100
       },
@@ -150,13 +151,13 @@
         "interiorMinister": 50,
         "safetyMinister": 50,
         "infraMinister": 50,
-        "mechanic": 50,
+        "oldie": 50,
         "eduMinister": 50,
         "industryMinister": 50,
         "welfareMinister": 50,
         "hhh": 50,
         "iii": 50,
-        "kkk": 50,
+        "Rui": 50,
         "ctrler": 100,
         "observer": 100
       },
@@ -181,12 +182,12 @@
         "safetyMinister": 50,
         "infraMinister": 50,
         "miningMinister": 50,
-        "mechanic": 50,
+        "oldie": 50,
         "industryMinister": 50,
         "welfareMinister": 50,
         "hhh": 50,
         "iii": 50,
-        "kkk": 50,
+        "Rui": 50,
         "ctrler": 100,
         "observer": 100
       },
@@ -212,11 +213,11 @@
         "infraMinister": 50,
         "miningMinister": 50,
         "eduMinister": 50,
-        "mechanic": 50,
+        "oldie": 50,
         "welfareMinister": 50,
         "hhh": 50,
         "iii": 50,
-        "kkk": 50,
+        "Rui": 50,
         "ctrler": 100,
         "observer": 100
       },
@@ -243,10 +244,10 @@
         "miningMinister": 50,
         "eduMinister": 50,
         "industryMinister": 50,
-        "mechanic": 50,
+        "oldie": 50,
         "hhh": 50,
         "iii": 50,
-        "kkk": 50,
+        "Rui": 50,
         "ctrler": 100,
         "observer": 100
       },
@@ -274,9 +275,9 @@
         "eduMinister": 50,
         "industryMinister": 50,
         "welfareMinister": 50,
-        "mechanic": 50,
+        "oldie": 50,
         "iii": 50,
-        "kkk": 50,
+        "Rui": 50,
         "ctrler": 100,
         "observer": 100
       },
@@ -304,8 +305,8 @@
         "industryMinister": 50,
         "welfareMinister": 50,
         "hhh": 50,
-        "mechanic": 50,
-        "kkk": 50,
+        "oldie": 50,
+        "Rui": 50,
         "ctrler": 100,
         "observer": 100
       },
@@ -318,8 +319,8 @@
       "approval": 90,
       "home": "mainControlRoom"
     },
-    "kkk": {
-      "name": "kkk",
+    "Rui": {
+      "name": "Rui",
       "trait": [
         "workaholic",
         "emotionless"
@@ -334,7 +335,7 @@
         "welfareMinister": 50,
         "hhh": 50,
         "iii": 50,
-        "mechanic": 50,
+        "oldie": 50,
         "ctrler": 100,
         "observer": 100
       },
@@ -345,7 +346,7 @@
       "health": 80,
       "will": 80,
       "approval": 90,
-      "home": "mainControlRoom"
+      "home": "hanger"
     },
     "ctrler": {
       "name": "ctrler",
@@ -362,8 +363,8 @@
         "welfareMinister": 100,
         "hhh": 100,
         "iii": 100,
-        "kkk": 100,
-        "mechanic": 100,
+        "Rui": 100,
+        "oldie": 100,
         "observer": 100
       },
       "resources": {
@@ -389,8 +390,8 @@
         "welfareMinister": 100,
         "hhh": 100,
         "iii": 100,
-        "kkk": 100,
-        "mechanic": 100,
+        "Rui": 100,
+        "oldie": 100,
         "ctrler": 100
       },
       "resources": {
@@ -1812,7 +1813,7 @@
     "home": {
       "name": "home",
       "characters": [
-        "mechanic", "interiorMinister", "safetyMinister", "infraMinister", "miningMinister","eduMinister","industryMinister","welfareMinister","hhh","iii","kkk"
+        "oldie", "interiorMinister", "safetyMinister", "infraMinister", "miningMinister","eduMinister","industryMinister","welfareMinister","hhh","iii","Rui"
       ]
     }
   },
@@ -1820,61 +1821,61 @@
     "repeatingBudgetProposal-18": {
       "time": 18,
       "subject": "budgetProposal",
-      "characters": ["mechanic", "interiorMinister", "safetyMinister", "infraMinister", "miningMinister","eduMinister","industryMinister","welfareMinister"],
+      "characters": ["oldie", "interiorMinister", "safetyMinister", "infraMinister", "miningMinister","eduMinister","industryMinister","welfareMinister"],
       "place": "mainControlRoom"
     },
     "repeatingBudgetProposal-738": {
       "time": 738,
       "subject": "budgetProposal",
-      "characters": ["mechanic", "interiorMinister", "safetyMinister", "infraMinister", "miningMinister","eduMinister","industryMinister","welfareMinister"],
+      "characters": ["oldie", "interiorMinister", "safetyMinister", "infraMinister", "miningMinister","eduMinister","industryMinister","welfareMinister"],
       "place": "mainControlRoom"
     },
     "repeatingBudgetProposal-1458": {
       "time": 1458,
       "subject": "budgetProposal",
-      "characters": ["mechanic", "interiorMinister", "safetyMinister", "infraMinister", "miningMinister","eduMinister","industryMinister","welfareMinister"],
+      "characters": ["oldie", "interiorMinister", "safetyMinister", "infraMinister", "miningMinister","eduMinister","industryMinister","welfareMinister"],
       "place": "mainControlRoom"
     },
     "repeatingBudgetProposal-2178": {
       "time": 2178,
       "subject": "budgetProposal",
-      "characters": ["mechanic", "interiorMinister", "safetyMinister", "infraMinister", "miningMinister","eduMinister","industryMinister","welfareMinister"],
+      "characters": ["oldie", "interiorMinister", "safetyMinister", "infraMinister", "miningMinister","eduMinister","industryMinister","welfareMinister"],
       "place": "mainControlRoom"
     },
     "repeatingBudgetProposal-2898": {
       "time": 2898,
       "subject": "budgetProposal",
-      "characters": ["mechanic", "interiorMinister", "safetyMinister", "infraMinister", "miningMinister","eduMinister","industryMinister","welfareMinister"],
+      "characters": ["oldie", "interiorMinister", "safetyMinister", "infraMinister", "miningMinister","eduMinister","industryMinister","welfareMinister"],
       "place": "mainControlRoom"
     },
     "repeatingBudgetResolution-162": {
       "time": 162,
       "subject": "budgetResolution",
-      "characters": ["mechanic", "ctrler","observer"],
+      "characters": ["oldie", "ctrler","observer"],
       "place": "mainControlRoom"
     },
     "repeatingBudgetResolution-882": {
       "time": 882,
       "subject": "budgetResolution",
-      "characters": ["mechanic", "ctrler","observer"],
+      "characters": ["oldie", "ctrler","observer"],
       "place": "mainControlRoom"
     },
     "repeatingBudgetResolution-1602": {
       "time": 1602,
       "subject": "budgetResolution",
-      "characters": ["mechanic", "ctrler","observer"],
+      "characters": ["oldie", "ctrler","observer"],
       "place": "mainControlRoom"
     },
     "repeatingBudgetResolution-2322": {
       "time": 2322,
       "subject": "budgetResolution",
-      "characters": ["mechanic", "ctrler","observer"],
+      "characters": ["oldie", "ctrler","observer"],
       "place": "mainControlRoom"
     },
     "repeatingBudgetResolution-3042": {
       "time": 3042,
       "subject": "budgetResolution",
-      "characters": ["mechanic", "ctrler","observer"],
+      "characters": ["oldie", "ctrler","observer"],
       "place": "mainControlRoom"
     }
   }

@@ -1,0 +1,158 @@
+{
+  "mainControlRoom": {
+    "image": "data/mainControlRoom.jpeg",
+    "desc": "Fore frame of the hexagonal frame.",
+    "ind": "capsuleMapIndForeFrame",
+    "light": [0,0,0.4,0.2]
+  },
+  "home": {
+    "image": "data/testimage.png",
+    "ind": "capsuleMapIndStarboardAftPlane",
+    "light": [0,0,0,0.4]
+  },
+  "hospitalWest": {
+    "image": "data/testimage.png",
+    "ind": "capsuleMapIndPortAftPlane",
+    "light": [0,0,0,0.4]
+  },
+  "hospitalEast": {
+    "image": "data/testimage.png",
+    "desc": "Fore plane supported by the arm.",
+    "ind": "capsuleMapIndForePlane",
+    "light": [0,0,0,0.4]
+  },
+  "redMine": {
+    "image": "data/redMine.jpeg",
+    "desc": "Port-Aft frame of the hexagonal frame.",
+    "ind": "capsuleMapIndPortAftFrame",
+    "light": [0,0,0,0.4]
+  },
+  "blackMine": {
+    "image": "data/blackMine.jpeg",
+    "desc": "Port-Fore frame of the hexagonal frame.",
+    "ind": "capsuleMapIndPortForeFrame",
+    "light": [0,0,0,0.4]
+  },
+  "observatory": {
+    "image": "data/testimage.png",
+    "desc": "Aft frame of the hexagonal frame.",
+    "ind": "capsuleMapIndAftFrame",
+    "light": [0,0,0,0.4]
+  },
+  "hanger": {
+    "image": "data/hanger.jpeg",
+    "desc": "Center of the hexagonal frame.",
+    "ind": "capsuleMapIndCenter",
+    "light": [0,0,0,0.4]
+  },
+  "auxHanger": {
+    "image": "data/testimage.png",
+    "desc": "Starboard-Aft frame of the hexagonal frame.",
+    "ind": "capsuleMapIndStarboardAftFrame",
+    "light": [0,0,0,0.4]
+  },
+
+  "cemetery": {
+    "image": "data/testimage.png",
+    "desc": "Starboard-Fore frame of the hexagonal frame.",
+    "ind": "capsuleMapIndStarboardForeFrame",
+    "light": [0,0,0,0.4]
+  },
+  "rocketry": {
+    "image": "data/testimage.png",
+    "desc": "Fore arm of the station.",
+    "ind": "capsuleMapIndForeArm",
+    "light": [0,0,0,0.4]
+  },
+  "tankArray": {
+    "image": "data/tankArray.jpeg",
+    "desc": "Starboard-Aft arm of the station.",
+    "ind": "capsuleMapIndStarboardAftArm",
+    "light": [0,0,0,0.4]
+  },
+  "recycleCenterNorth": {
+    "image": "data/testimage.png",
+    "desc": "Starboard-Fore arm of the station.",
+    "ind": "capsuleMapIndStarboardForeArm",
+    "light": [0,0,0,0.4]
+  },
+  "recycleCenterSouth": {
+    "image": "data/testimage.png",
+    "desc": "Starboard-Fore arm of the station.",
+    "ind": "capsuleMapIndStarboardForeArm",
+    "light": [0,0,0,0.4]
+  },
+  "electrolysisStationSouth": {
+    "image": "data/testimage.png",
+    "desc": "Starboard-Fore arm of the station.",
+    "ind": "capsuleMapIndStarboardForeArm",
+    "light": [0,0,0,0.4]
+  },
+  "electrolysisStationNorth": {
+    "image": "data/testimage.png",
+    "desc": "Starboard-Fore arm of the station.",
+    "ind": "capsuleMapIndStarboardForeArm",
+    "light": [0,0,0,0.4]
+  },
+  "reservoirNorth": {
+    "image": "data/reservoir.jpeg",
+    "desc": "Starboard-Fore arm of the station.",
+    "ind": "capsuleMapIndStarboardForeArm",
+    "light": [0,0,0,0.4]
+  },
+  "reservoirSouth": {
+    "image": "data/reservoir.jpeg",
+    "desc": "Starboard-Fore arm of the station.",
+    "ind": "capsuleMapIndStarboardForeArm",
+    "light": [0,0,0,0.4]
+  },
+  "miningSchool": {
+    "image": "data/testimage.png",
+    "desc": "Starboard-Fore arm of the station.",
+    "ind": "capsuleMapIndStarboardForeArm",
+    "light": [0,0,0,0.4]
+  },
+  "techSchool": {
+    "image": "data/testimage.png",
+    "desc": "Starboard-Fore arm of the station.",
+    "ind": "capsuleMapIndStarboardForeArm",
+    "light": [0,0,0,0.4]
+  },
+  "farm": {
+    "image": "data/farm.jpeg",
+    "desc": "Starboard-Fore arm of the station.",
+    "ind": "capsuleMapIndStarboardForeArm",
+    "light": [0,0,0,0.4]
+  },
+  "rescueStationNorth": {
+    "image": "data/testimage.png",
+    "desc": "Starboard-Fore arm of the station.",
+    "ind": "capsuleMapIndStarboardForeArm",
+    "light": [0,0,0,0.4]
+  },
+  "rescueStationSouth": {
+    "image": "data/testimage.png",
+    "desc": "Starboard-Fore arm of the station.",
+    "ind": "capsuleMapIndStarboardForeArm",
+    "light": [0,0,0,0.4]
+  },
+  "market": {
+    "image": "data/market.jpeg",
+    "desc": "Starboard-Fore arm of the station.",
+    "ind": "capsuleMapIndStarboardForeArm",
+    "light": [0,0,0,0.4]
+  },
+  "squareNorth": {
+    "image": "data/squareNorth.jpeg",
+    "desc": "Starboard-Fore arm of the station.",
+    "ind": "capsuleMapIndStarboardForeArm",
+    "light": [0,0,0,0.4]
+  },
+  "squareSouth": {
+    "image": "data/squareSouth.jpeg",
+    "desc": "Starboard-Fore arm of the station.",
+    "ind": "capsuleMapIndStarboardForeArm",
+    "light": [0,0,0,0.4]
+  }
+
+}

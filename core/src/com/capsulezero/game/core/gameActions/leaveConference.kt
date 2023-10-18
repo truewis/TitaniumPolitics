@@ -10,7 +10,7 @@ class leaveConference(targetState: GameState, targetCharacter: String, targetPla
     override fun execute() {
         val meetingName = tgtState.ongoingConferences.filter { it.value.characters.contains(tgtCharacter) }.keys.first()
         tgtState.ongoingConferences[meetingName]!!.currentCharacters.remove(tgtCharacter)
-        if(tgtState.ongoingConferences[meetingName]!!.currentCharacters.count()==0 || tgtCharacter=="mechanic") {
+        if(tgtState.ongoingConferences[meetingName]!!.currentCharacters.count()==0 || tgtState.characters[tgtCharacter]!!.trait.contains("mechanic")) {
             tgtState.ongoingConferences.remove(meetingName)//End the meeting if it has no participants, or if the mechanic leaves
 
         }

@@ -10,11 +10,10 @@ class budgetResolution(targetState: GameState, targetCharacter: String, targetPl
     override fun isValid(): Boolean =
         tgtState.ongoingConferences.filter { it.value.subject == "budgetProposal" }.values.first().currentCharacters.containsAll(
             listOf(
-                "mechanic",
                 "observer",
                 "ctrler"
             )
-        )
+        )&& tgtState.ongoingConferences.filter { it.value.subject == "budgetProposal" }.values.first().currentCharacters.any { tgtState.characters[it]!!.trait.contains("mechanic") }
 
     override fun execute() {
         tgtState.isBudgetResolved = true

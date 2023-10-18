@@ -9,6 +9,7 @@ object DesktopLauncher {
     fun main(arg: Array<String>) {
         val config = Lwjgl3ApplicationConfiguration()
         config.setForegroundFPS(60)
+        config.setWindowedMode(800, 800)
         config.setTitle("CapsuleZero")
         Lwjgl3Application(EntryClass(), config)
     }

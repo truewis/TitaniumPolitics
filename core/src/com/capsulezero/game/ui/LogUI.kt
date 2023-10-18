@@ -1,4 +1,4 @@
-package com.capsulezero.game
+package com.capsulezero.game.ui
 
 import com.badlogic.gdx.scenes.scene2d.InputEvent
 import com.badlogic.gdx.scenes.scene2d.Touchable

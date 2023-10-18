@@ -1,6 +1,12 @@
 package com.capsulezero.game.core
+import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
+import java.io.File
+import java.text.SimpleDateFormat
+import java.util.*
 
 @Serializable
 class GameState {
@@ -28,10 +34,14 @@ class GameState {
         }
     @Transient
     var popChanged = arrayListOf<(Int, Int)->Unit>()
+
+    @Transient
+    var updateUI = arrayListOf<(GameState)->Unit>()
     var _alertLevel = 0;
     var places = hashMapOf<String, Place>()
     var characters = hashMapOf<String, Character>()
     var nonPlayerAgents = hashMapOf<String, NonPlayerAgent>()
+    var playerAgent = ""
     var log = Log()
     var scheduledMeetings = hashMapOf<String, Meeting>()
     var scheduledConferences = hashMapOf<String, Meeting>()
@@ -49,6 +59,26 @@ class GameState {
     fun injectDependency(){
         log.injectParent(this)
         places.forEach { it.value.injectParent(this) }
+    }
+
+
+    @OptIn(ExperimentalSerializationApi::class)
+    fun dump()
+    {
+
+        val prettyJson = Json { // this returns the JsonBuilder
+            prettyPrint = true
+            // optional: specify indent
+            prettyPrintIndent = " "
+        }
+
+        val file = File("save${Calendar.getInstance().time.toString("YYYYMMdd_HHmmss")}.json")
+        file.writeText(prettyJson.encodeToString(this))
+        println("Save File Dumped.")
+    }
+    private fun Date.toString(format: String, locale: Locale = Locale.getDefault()): String {
+        val formatter = SimpleDateFormat(format, locale)
+        return formatter.format(this)
     }
 
 

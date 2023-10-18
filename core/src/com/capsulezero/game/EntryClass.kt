@@ -10,6 +10,7 @@ import com.badlogic.gdx.utils.ObjectMap
 import com.badlogic.gdx.utils.ScreenUtils
 import com.capsulezero.game.core.GameEngine
 import com.capsulezero.game.core.GameState
+import com.capsulezero.game.ui.CapsuleStage
 import kotlinx.serialization.json.Json
 import ktx.scene2d.Scene2DSkin
 import kotlin.concurrent.thread
