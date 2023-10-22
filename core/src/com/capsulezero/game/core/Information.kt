@@ -8,7 +8,7 @@ import kotlin.math.min
 class Information(//If there is no author, it is a rumor.
     var author: String = "", var creationTime: Int = 0, var type: String = "", var tgtTime: Int = 0,
     var tgtPlace: String = "", var tgtApparatus: String = "", var tgtCharacter: String = "",
-    var tgtResource: String = "", var amount: Int = 0, var action: String = ""
+    var tgtResource: String = "", var amount: Int = 0, var action: String = "", var tgtParty: String = "", var auxParty: String = ""
 ) {
     constructor(info: Information) : this(info.author, info.creationTime, info.type, info.tgtTime, info.tgtPlace, info.tgtApparatus, info.tgtCharacter, info.tgtResource, info.amount, info.action)
 

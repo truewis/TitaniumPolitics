@@ -14,6 +14,7 @@ class criticize(targetState: GameState, targetCharacter: String, targetPlace: St
     }
     override fun execute() {
         //TODO: chat
+        if (tgtCharacter == who) {println("You criticize yourself.");return}
         tgtState.setMutuality(tgtCharacter, who, -5.0)
         tgtState.characters[tgtCharacter]!!.frozen++
     }

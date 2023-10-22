@@ -18,7 +18,7 @@ class CapsuleStage(val gameState: GameState) : Stage(FitViewport(800.0F, 800.0F)
     var background = Image()
     //val inputEnabled = ArrayList<(Boolean)->Unit>() Unused
     val logBox = LogUI(gameState)
-    val hud = HeadUpInterface(gameState)
+    var hud : HeadUpInterface
     val rootStack = Stack()
     val assetManager = AssetManager()
 
@@ -29,6 +29,8 @@ class CapsuleStage(val gameState: GameState) : Stage(FitViewport(800.0F, 800.0F)
 
         ReadOnlyJsons.mapJson.forEach {
         assetManager.load( it.value.jsonObject["image"]!!.jsonPrimitive.content, Texture::class.java)
+        assetManager.load( "data/dev/capsuleDevBoxCheck.png", Texture::class.java)
+        assetManager.load( "data/dev/capsuleDevBox.png", Texture::class.java)
         println(it.value.jsonObject["image"]!!.jsonPrimitive.content)
         }
         assetManager.finishLoading()
@@ -39,7 +41,10 @@ class CapsuleStage(val gameState: GameState) : Stage(FitViewport(800.0F, 800.0F)
         addActor(logBox)
         logBox.setFillParent(true)
         addActor(rootStack)
+        hud = HeadUpInterface(gameState)
         addActor(hud)
+        println(hud.stage)
+        println(hud.todoBox.stage)
         hud.setFillParent(true)
         gameState.updateUI.add {
             roomChanged(it.places.values.find { it.characters.contains(gameState.playerAgent) }!!.name)

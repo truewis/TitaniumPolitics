@@ -8,7 +8,9 @@ class sleep(targetState: GameState, targetCharacter: String, targetPlace: String
 ) {
 
     override fun execute() {
-        tgtState.characters[tgtCharacter]!!.health+=100
+        println("$tgtCharacter slept.")
+
+        tgtState.characters[tgtCharacter]!!.health+=50
         tgtState.characters[tgtCharacter]!!.frozen+=8
     }
 

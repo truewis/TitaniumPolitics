@@ -16,7 +16,7 @@ class talk(targetState: GameState, targetCharacter: String, targetPlace: String)
         if(tgtState.characters[who]!!.frozen>1) println("Warning: $who is already busy.")
     }
     override fun execute() {
-        tgtState.ongoingMeetings["meeting-$tgtPlace-$tgtCharacter-${tgtState.time}"] = Meeting(tgtState.time, tgtPlace, hashSetOf(who, tgtCharacter), tgtPlace)
+        tgtState.ongoingMeetings["meeting-$tgtPlace-$tgtCharacter-${tgtState.time}"] = Meeting(tgtState.time, tgtPlace, scheduledCharacters = hashSetOf(who, tgtCharacter), tgtPlace)
         tgtState.ongoingMeetings["meeting-$tgtPlace-$tgtCharacter-${tgtState.time}"]!!.currentCharacters.add(tgtCharacter)
         tgtState.characters[tgtCharacter]!!.frozen++
     }

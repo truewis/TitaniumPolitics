@@ -12,9 +12,13 @@ class eat(targetState: GameState, targetCharacter: String, targetPlace: String) 
             tgtState.characters[tgtCharacter]!!.resources["ration"] = tgtState.characters[tgtCharacter]!!.resources["ration"]!! - 1
             tgtState.characters[tgtCharacter]!!.resources["water"] = tgtState.characters[tgtCharacter]!!.resources["water"]!! - 1
             tgtState.setMutuality(tgtCharacter, tgtCharacter, 10.0)//Increase will.
-            tgtState.characters[tgtCharacter]!!.health+=10
+            tgtState.characters[tgtCharacter]!!.hunger-=50
+            tgtState.characters[tgtCharacter]!!.thirst-=50
             tgtState.characters[tgtCharacter]!!.frozen++
+            println("$tgtCharacter ate a ration and drank some water.")
         }
+        else
+            println("$tgtCharacter tried to eat, but there is nothing to eat.")
     }
 
 }

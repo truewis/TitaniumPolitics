@@ -1,21 +1,20 @@
 {
   "_time": 12,
-  "_pop": 10341,
   "_alertLevel": 0,
-  "marketRation": 20000,
-  "marketWater": 40000,
-    "marketOxygen": 10000,
   "playerAgent": "Rui",
   "nonPlayerAgents": {
-    "interiorMinister": {},
-    "safetyMinister": {},
-    "infraMinister": {},
-    "miningMinister": {},
-    "eduMinister": {},
-    "industryMinister": {},
-    "welfareMinister": {},
+    "charlie": {},
+    "seefy": {},
+    "infy": {},
+    "mini": {},
+    "eddy": {},
+    "inddy": {},
+    "welly": {},
     "hhh": {},
     "iii": {},
+    "friend1": {},
+    "friend2": {},
+    "friend3": {},
     "oldie": {},
     "ctrler": {},
     "observer": {}
@@ -25,7 +24,10 @@
       "name": "oldie",
       "trait": [
         "workaholic",
-        "emotionless"
+        "emotionless",
+        "mechanic",
+        "technician",
+        "old"
       ],
       "resources": {
         "water": 10,
@@ -34,8 +36,8 @@
       "health": 80,
       "home": "hanger"
     },
-    "interiorMinister": {
-      "name": "interiorMinister",
+    "charlie": {
+      "name": "charlie",
       "trait": [
         "workaholic",
         "emotionless",
@@ -48,8 +50,8 @@
       "health": 80,
       "home": "mainControlRoom"
     },
-    "safetyMinister": {
-      "name": "safetyMinister",
+    "seefy": {
+      "name": "seefy",
       "trait": [
         "workaholic",
         "emotionless",
@@ -62,8 +64,8 @@
       "health": 80,
       "home": "mainControlRoom"
     },
-    "infraMinister": {
-      "name": "infraMinister",
+    "infy": {
+      "name": "infy",
       "trait": [
         "workaholic",
         "emotionless",
@@ -76,8 +78,8 @@
       "health": 80,
       "home": "mainControlRoom"
     },
-    "miningMinister": {
-      "name": "miningMinister",
+    "mini": {
+      "name": "mini",
       "trait": [
         "workaholic",
         "emotionless",
@@ -90,8 +92,8 @@
       "health": 80,
       "home": "mainControlRoom"
     },
-    "eduMinister": {
-      "name": "eduMinister",
+    "eddy": {
+      "name": "eddy",
       "trait": [
         "workaholic",
         "emotionless",
@@ -104,8 +106,8 @@
       "health": 80,
       "home": "mainControlRoom"
     },
-    "industryMinister": {
-      "name": "industryMinister",
+    "inddy": {
+      "name": "inddy",
       "trait": [
         "workaholic",
         "emotionless",
@@ -118,8 +120,8 @@
       "health": 80,
       "home": "mainControlRoom"
     },
-    "welfareMinister": {
-      "name": "welfareMinister",
+    "welly": {
+      "name": "welly",
       "trait": [
         "workaholic",
         "emotionless",
@@ -162,7 +164,50 @@
       "name": "Rui",
       "trait": [
         "workaholic",
-        "emotionless"
+        "emotionless",
+        "technician"
+      ],
+      "resources": {
+        "water": 10,
+        "ration": 10
+      },
+      "health": 80,
+      "home": "hanger"
+    },
+    "friend1": {
+      "name": "friend1",
+      "trait": [
+        "workaholic",
+        "emotionless",
+        "technician"
+      ],
+      "resources": {
+        "water": 10,
+        "ration": 10
+      },
+      "health": 80,
+      "home": "hanger"
+    },
+    "friend2": {
+      "name": "friend2",
+      "trait": [
+        "workaholic",
+        "emotionless",
+        "technician"
+      ],
+      "resources": {
+        "water": 10,
+        "ration": 10
+      },
+      "health": 80,
+      "home": "hanger"
+    },
+    "friend3": {
+      "name": "friend3",
+      "trait": [
+        "workaholic",
+        "emotionless",
+        "technician"
       ],
       "resources": {
         "water": 10,
@@ -365,7 +410,7 @@
         "observatory",
         "rescueStationNorth"
       ],
-      "plannedWorker": 320,
+      "plannedWorker": 480,
       "apparatuses": [{
         "name": "metalShaft",
         "durability": 95,
@@ -373,7 +418,9 @@
         "idealWorker": 160,
         "currentWorker": 0,
         "idealProduction": {
-            "metal": 100
+            "lightMetal": 100,
+          "heavyMetal": 20,
+          "rareMetal": 1
         }
       },{
         "name": "liquidShaft",
@@ -382,9 +429,19 @@
         "idealWorker": 160,
         "currentWorker": 0,
         "idealProduction": {
-          "water": 100
+          "organics": 100
         }
       },
+        {
+          "name": "glassShaft",
+          "durability": 95,
+          "baseDanger": 10e-4,
+          "idealWorker": 160,
+          "currentWorker": 0,
+          "idealProduction": {
+            "glass": 80
+          }
+        },
         {
           "name": "oxygenStorage",
           "durability": 95,
@@ -418,7 +475,7 @@
         "oxygen": 50,
         "water": 15000,
         "ration": 50,
-        "metal": 100,
+        "lightMetal": 100,
         "component": 50
       },
       "connectedPlaces": [
@@ -426,7 +483,7 @@
         "hanger",
         "rescueStationSouth"
       ],
-      "plannedWorker": 320,
+      "plannedWorker": 480,
       "apparatuses": [{
         "name": "metalShaft",
         "durability": 95,
@@ -434,7 +491,9 @@
         "idealWorker": 160,
         "currentWorker": 0,
         "idealProduction": {
-          "metal": 100
+          "lightMetal": 60,
+          "heavyMetal": 40,
+          "rareMetal": 1
         }
       },{
         "name": "liquidShaft",
@@ -443,9 +502,21 @@
         "idealWorker": 160,
         "currentWorker": 0,
         "idealProduction": {
-          "water": 100
+          "organics": 80,
+          "hydrogen": 20,
+          "water": 20
         }
       },
+        {
+          "name": "glassShaft",
+          "durability": 95,
+          "baseDanger": 10e-4,
+          "idealWorker": 160,
+          "currentWorker": 0,
+          "idealProduction": {
+            "glass": 80
+          }
+        },
         {
           "name": "oxygenStorage",
           "durability": 95,
@@ -504,7 +575,7 @@
     "auxHanger": {
       "name": "auxHanger",
       "resources": {
-        "metal": 50,
+        "lightMetal": 50,
         "component": 100,
         "water": 15000
       },
@@ -582,7 +653,7 @@
     "rocketry": {
       "name": "rocketry",
       "resources": {
-        "metal": 50,
+        "lightMetal": 50,
         "component": 100,
         "water": 15000
       },
@@ -636,7 +707,7 @@
     "tankArray": {
       "name": "tankArray",
       "resources": {
-        "metal": 50,
+        "lightMetal": 50,
         "component": 100,
         "water": 0
       },
@@ -711,7 +782,7 @@
     "recycleCenterNorth": {
       "name": "recycleCenterNorth",
       "resources": {
-        "metal": 50,
+        "lightMetal": 50,
         "component": 100,
         "water": 0
       },
@@ -754,6 +825,9 @@
           "baseDanger": 6e-4,
           "idealWorker": 5,
           "currentWorker": 0,
+          "idealAbsorption": {
+            "water": 100
+          },
           "idealProduction": {
             "water": 100
           }
@@ -764,6 +838,9 @@
           "baseDanger": 6e-4,
           "idealWorker": 5,
           "currentWorker": 0,
+          "idealAbsorption": {
+            "water": 100
+          },
           "idealProduction": {
             "water": 100
           }
@@ -778,7 +855,7 @@
     "recycleCenterSouth": {
       "name": "recycleCenterSouth",
       "resources": {
-        "metal": 50,
+        "lightMetal": 50,
         "component": 100,
         "water": 0
       },
@@ -821,6 +898,9 @@
           "baseDanger": 6e-4,
           "idealWorker": 5,
           "currentWorker": 0,
+          "idealAbsorption": {
+            "water": 100
+          },
           "idealProduction": {
             "water": 100
           }
@@ -831,9 +911,32 @@
           "baseDanger": 6e-4,
           "idealWorker": 5,
           "currentWorker": 0,
+          "idealAbsorption": {
+            "water": 100
+          },
           "idealProduction": {
             "water": 100
           }
+        },
+        {
+          "name": "co2Recycle",
+          "durability": 95,
+          "baseDanger": 6e-4,
+          "idealWorker": 5,
+          "currentWorker": 0,
+          "idealAbsorption": {
+            "co2": 100
+          },
+          "idealConsumption": {
+
+            "hydrogen": 8
+          },
+          "idealDistribution": {
+            "oxygen": 70
+          },
+            "idealProduction": {
+                "organics": 38
+            }
         }
       ],
       "characters": [
@@ -845,7 +948,7 @@
     "electrolysisStationSouth": {
       "name": "electrolysisStationSouth",
       "resources": {
-        "metal": 50,
+        "lightMetal": 50,
         "component": 100,
         "water": 15000,
         "oxygen": 0
@@ -920,7 +1023,7 @@
       "name": "reservoirNorth",
       "resources": {
         "water": 300000,
-        "metal": 50,
+        "lightMetal": 50,
         "component": 100
       },
       "connectedPlaces": [
@@ -994,7 +1097,7 @@
     "reservoirSouth": {
       "name": "reservoirSouth",
       "resources": {
-        "metal": 50,
+        "lightMetal": 50,
         "component": 100,
         "water": 15000
       },
@@ -1552,7 +1655,7 @@
     "hanger": {
       "name": "hanger",
       "resources": {
-        "metal": 100,
+        "lightMetal": 100,
         "component": 200,
         "water": 15000
       },
@@ -1604,92 +1707,128 @@
     "home": {
       "name": "home",
       "characters": [
-        "oldie", "interiorMinister", "safetyMinister", "infraMinister", "miningMinister","eduMinister","industryMinister","welfareMinister","hhh","iii","Rui"
+        "oldie", "charlie", "seefy", "infy", "mini","eddy","inddy","welly","hhh","iii","Rui"
       ]
     }
   },
   "parties": {
+    "cabinet": {
+      "name": "cabinet",
+        "anonymousMembers": 0,
+      "leader": "oldie",
+        "members": ["oldie", "charlie", "seefy", "infy", "mini","eddy","inddy","welly"],
+        "commands": ["investigateAccidentScene", "clearAccidentScene"]
+    },
     "interior": {
+      "name": "interior",
       "anonymousMembers": 30,
-      "members": ["interiorMinister"]
+      "leader": "charlie",
+      "members": ["charlie"],
+      "commands": ["investigateAccidentScene", "clearAccidentScene"]
     },
     "mining": {
+      "name": "mining",
       "anonymousMembers": 2000,
-      "members": ["miningMinister"]
+      "leader": "mini",
+      "members": ["mini"]
     },
     "education": {
+      "name": "education",
       "anonymousMembers": 50,
-      "members": ["eduMinister"]
+        "leader": "eddy",
+      "members": ["eddy"]
     },
     "industry": {
+        "name": "industry",
       "anonymousMembers": 800,
-      "members": ["industryMinister"]
+        "leader": "inddy",
+      "members": ["inddy"]
     },
     "safety": {
+        "name": "safety",
+      "anonymousMembers": 400,
+        "leader": "seefy",
+      "members": ["seefy"]
+    },
+    "welfare": {
+        "name": "welfare",
+      "anonymousMembers": 80,
+        "leader": "welly",
+      "members": ["welly"]
+    },
+    "infrastructure": {
+        "name": "infrastructure",
       "anonymousMembers": 50,
-      "members": ["safetyMinister"]
+        "leader": "infy",
+      "members": ["infy", "Rui", "friend1", "friend2", "friend3"],
+        "commands": ["investigateAccidentScene", "clearAccidentScene", "repair"]
     }
   },
   "scheduledConferences":{
     "repeatingBudgetProposal-18": {
       "time": 18,
       "subject": "budgetProposal",
-      "characters": ["oldie", "interiorMinister", "safetyMinister", "infraMinister", "miningMinister","eduMinister","industryMinister","welfareMinister"],
+      "scheduledCharacters": ["oldie", "charlie", "seefy", "infy", "mini","eddy","inddy","welly"],
       "place": "mainControlRoom"
     },
     "repeatingBudgetProposal-738": {
       "time": 738,
       "subject": "budgetProposal",
-      "characters": ["oldie", "interiorMinister", "safetyMinister", "infraMinister", "miningMinister","eduMinister","industryMinister","welfareMinister"],
+      "scheduledCharacters": ["oldie", "charlie", "seefy", "infy", "mini","eddy","inddy","welly"],
       "place": "mainControlRoom"
     },
     "repeatingBudgetProposal-1458": {
       "time": 1458,
       "subject": "budgetProposal",
-      "characters": ["oldie", "interiorMinister", "safetyMinister", "infraMinister", "miningMinister","eduMinister","industryMinister","welfareMinister"],
+      "scheduledCharacters": ["oldie", "charlie", "seefy", "infy", "mini","eddy","inddy","welly"],
       "place": "mainControlRoom"
     },
     "repeatingBudgetProposal-2178": {
       "time": 2178,
       "subject": "budgetProposal",
-      "characters": ["oldie", "interiorMinister", "safetyMinister", "infraMinister", "miningMinister","eduMinister","industryMinister","welfareMinister"],
+      "scheduledCharacters": ["oldie", "charlie", "seefy", "infy", "mini","eddy","inddy","welly"],
       "place": "mainControlRoom"
     },
     "repeatingBudgetProposal-2898": {
       "time": 2898,
       "subject": "budgetProposal",
-      "characters": ["oldie", "interiorMinister", "safetyMinister", "infraMinister", "miningMinister","eduMinister","industryMinister","welfareMinister"],
+      "scheduledCharacters": ["oldie", "charlie", "seefy", "infy", "mini","eddy","inddy","welly"],
       "place": "mainControlRoom"
     },
     "repeatingBudgetResolution-162": {
       "time": 162,
       "subject": "budgetResolution",
-      "characters": ["oldie", "ctrler","observer"],
+      "scheduledCharacters": ["oldie", "ctrler","observer"],
       "place": "mainControlRoom"
     },
     "repeatingBudgetResolution-882": {
       "time": 882,
       "subject": "budgetResolution",
-      "characters": ["oldie", "ctrler","observer"],
+      "scheduledCharacters": ["oldie", "ctrler","observer"],
       "place": "mainControlRoom"
     },
     "repeatingBudgetResolution-1602": {
       "time": 1602,
       "subject": "budgetResolution",
-      "characters": ["oldie", "ctrler","observer"],
+      "scheduledCharacters": ["oldie", "ctrler","observer"],
       "place": "mainControlRoom"
     },
     "repeatingBudgetResolution-2322": {
       "time": 2322,
       "subject": "budgetResolution",
-      "characters": ["oldie", "ctrler","observer"],
+      "scheduledCharacters": ["oldie", "ctrler","observer"],
       "place": "mainControlRoom"
     },
     "repeatingBudgetResolution-3042": {
       "time": 3042,
       "subject": "budgetResolution",
-      "characters": ["oldie", "ctrler","observer"],
+      "scheduledCharacters": ["oldie", "ctrler","observer"],
       "place": "mainControlRoom"
     }
+  },
+  "marketResources": {
+    "water": 300000,
+    "ration": 100000,
+    "oxygen": 100000
   }
 }

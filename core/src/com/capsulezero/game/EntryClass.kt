@@ -10,16 +10,18 @@ import com.badlogic.gdx.utils.ObjectMap
 import com.badlogic.gdx.utils.ScreenUtils
 import com.capsulezero.game.core.GameEngine
 import com.capsulezero.game.core.GameState
+import com.capsulezero.game.core.Quests
 import com.capsulezero.game.ui.CapsuleStage
 import kotlinx.serialization.json.Json
 import ktx.scene2d.Scene2DSkin
 import kotlin.concurrent.thread
 
 class EntryClass : ApplicationAdapter() {
-    var stage: CapsuleStage? = null
-    var newGame: GameState? = null
+    lateinit var stage: CapsuleStage
+    lateinit var newGame: GameState
     lateinit var skin : Skin
     override fun create() {
+
         val gen = FreeTypeFontGenerator(Gdx.files.internal("data/DungGeunMo.ttf"))
         val parameter = FreeTypeFontGenerator.FreeTypeFontParameter()
         parameter.size = 16
@@ -37,27 +39,31 @@ class EntryClass : ApplicationAdapter() {
         newGame = Json.decodeFromString(
                 GameState.serializer(),
         Gdx.files.internal("json/init.json").readString()
-        ).also { it.injectDependency() }
-        stage = CapsuleStage(newGame!!)
-        Gdx.input.inputProcessor = stage
+        ).also { it.injectDependency()
+            stage = CapsuleStage(it)
+            Gdx.input.inputProcessor = stage
+            it.initialize()
+        }
+
+
         thread(start = true){
-            val engine = GameEngine(newGame!!)
+            val engine = GameEngine(newGame)
             engine.startGame()
         }
     }
 
     override fun render() {
         ScreenUtils.clear(0f, 0f, 0f, 1f)
-        stage!!.act(Gdx.graphics.deltaTime)
-        stage!!.draw()
+        stage.act(Gdx.graphics.deltaTime)
+        stage.draw()
     }
 
     override fun dispose() {
-        stage!!.dispose()
+        stage.dispose()
     }
 
     override fun resize(width: Int, height: Int) {
-        stage!!.viewport.update(width, height, true)
+        stage.viewport.update(width, height, true)
     }
     companion object {
 

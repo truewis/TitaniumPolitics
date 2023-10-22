@@ -11,9 +11,13 @@ class command(targetState: GameState, targetCharacter: String, targetPlace: Stri
     var who = ""
     val command:Command = Command("","",0)
     override fun chooseParams() {
-        who = GameEngine.acquire(tgtState.ongoingConferences.filter {it.value.currentCharacters.contains(tgtCharacter)}.flatMap { it.value.currentCharacters })
-        command.place = GameEngine.acquire(tgtState.places.filter { it.value.responsibleParty==tgtState.characters[who]!!.division }.keys.toList())
-        command.action = GameEngine.acquire(listOf("investigateAccidentScene","clearAccidentScene"))
+
+        val currentConf = tgtState.ongoingConferences.filter {it.value.currentCharacters.contains(tgtCharacter)}.values.first()
+        if(tgtCharacter!=tgtState.parties[currentConf.involvedParty]!!.leader)
+            println("Warning: Only the leader of the party can issue commands. $tgtCharacter is not the leader of ${currentConf.involvedParty}")
+        who = GameEngine.acquire(currentConf.currentCharacters.toList())
+        command.place = GameEngine.acquire(tgtState.places.filter { currentConf.involvedParty!="" && it.value.responsibleParty==currentConf.involvedParty }.keys.toList())
+        command.action = GameEngine.acquire(tgtState.parties[currentConf.involvedParty]!!.commands.toList())
         command.amount = 0
     }
     override fun execute() {

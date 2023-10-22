@@ -1,4 +1,5 @@
 package com.capsulezero.game.core
+import com.capsulezero.game.quests.Quest1
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
@@ -24,14 +25,14 @@ class GameState {
         get() = _time/48
     @Transient
     var timeChanged = arrayListOf<(Int, Int)->Unit>()
-    private var _pop = 0
-    var pop: Int
-        get() = _pop
-        set(value) {
-            val old = _pop
-            _pop = value
-            popChanged.forEach { it(old, _pop) }
+    val pop: Int
+        get() = parties.values.sumOf{it.members.size+it.anonymousMembers}
+    val pickRandomParty: Party
+        get(){
+        //random party picker
+            return parties.values.random()
         }
+
     @Transient
     var popChanged = arrayListOf<(Int, Int)->Unit>()
 
@@ -56,10 +57,18 @@ class GameState {
     var isBudgetProposed = false
     var isBudgetResolved = false
     var informations = hashMapOf<String, Information>()
-    var marketWater = 0
-    var recyclableWater = 0
-    var marketOxygen = 0
-    var marketRation = 0
+    var floatingResources = hashMapOf<String, Int>()
+    var marketResources = hashMapOf<String, Int>()
+    var todo = Quests()
+
+    fun initialize(){
+        characters.forEach {char->
+            if (places.none { it.value.characters.contains(char.key) })
+                places["home"]!!.characters.add(char.key)
+        }
+        injectDependency()
+        todo.add(Quest1())
+    }
 
     fun getMutuality(a:String, b:String): Double{
         if(!_mutuality.containsKey(a))
@@ -73,8 +82,8 @@ class GameState {
         if(!_mutuality.containsKey(a))
             _mutuality[a] = hashMapOf()
         _mutuality[a]!![b] = getMutuality(a,b)+delta
-        if(getMutuality(a,b)>100)setMutuality(a,b,100.0)
-        if(getMutuality(a,b)<0)setMutuality(a,b,0.0)
+        if(getMutuality(a,b)>100)_mutuality[a]!![b] = 100.0
+        if(getMutuality(a,b)<0)_mutuality[a]!![b] = 0.0
     }
     fun getPartyMutuality(a:String, b:String): Double{
         if(!_partyMutuality.containsKey(a))
@@ -88,12 +97,14 @@ class GameState {
         if(!_partyMutuality.containsKey(a))
             _partyMutuality[a] = hashMapOf()
         _partyMutuality[a]!![b] = getPartyMutuality(a,b)+delta
-        if(getPartyMutuality(a,b)>100)setPartyMutuality(a,b,100.0)
-        if(getPartyMutuality(a,b)<0)setPartyMutuality(a,b,0.0)
+        if(getPartyMutuality(a,b)>100)_partyMutuality[a]!![b] = 100.0
+        if(getPartyMutuality(a,b)<0)_partyMutuality[a]!![b] = 0.0
     }
     fun injectDependency(){
         log.injectParent(this)
         places.forEach { it.value.injectParent(this) }
+        parties.forEach { it.value.injectParent(this) }
+        todo.injectParent(this)
     }
 
 
@@ -103,6 +114,7 @@ class GameState {
 
         val prettyJson = Json { // this returns the JsonBuilder
             prettyPrint = true
+            allowSpecialFloatingPointValues = true
             // optional: specify indent
             prettyPrintIndent = " "
         }

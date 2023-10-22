@@ -6,7 +6,15 @@ import kotlinx.serialization.Serializable
 class Apparatus {
     var name = ""
     var durability = 0
+        set(value) {
+            field = when {
+                value > 100 -> 100
+                value < 0 -> 0
+                else -> value
+            }
+        }
     var baseDanger = .0
+    var idealAbsorption = hashMapOf<String, Int>()
     var idealProduction = hashMapOf<String, Int>()
     var idealConsumption = hashMapOf<String, Int>()
     var idealDistribution = hashMapOf<String, Int>() //Converts resources into market resources.
@@ -28,6 +36,19 @@ class Apparatus {
     val currentConsumption: Map<String, Int> get(){
         val result = hashMapOf<String, Int>()
         idealConsumption.forEach {
+            if(idealWorker==0)return result//No production if no worker.
+            if(durability==0) return result//No production if broken.
+            if(currentWorker<=idealWorker)
+                result[it.key] = it.value * currentWorker/idealWorker
+            else
+                result[it.key] = it.value+it.value*(currentWorker-idealWorker)/idealWorker/2 //Labor efficiency drops to 50% if overcrowded.
+
+        }
+        return result
+    }
+    val currentAbsorption: Map<String, Int> get(){
+        val result = hashMapOf<String, Int>()
+        idealAbsorption.forEach {
             if(idealWorker==0)return result//No production if no worker.
             if(durability==0) return result//No production if broken.
             if(currentWorker<=idealWorker)

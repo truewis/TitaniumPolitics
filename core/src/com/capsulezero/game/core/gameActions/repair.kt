@@ -16,6 +16,8 @@ class repair(targetState: GameState, targetCharacter: String, targetPlace: Strin
                 it.durability += amount
                 tgtState.characters[tgtCharacter]!!.frozen++
             }
+            else
+                println("$tgtCharacter tried to repair $it, but it's already too good.")
         }
 
 

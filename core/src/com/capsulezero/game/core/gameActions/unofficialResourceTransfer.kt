@@ -1,6 +1,7 @@
 package com.capsulezero.game.core.gameActions
 
 import com.capsulezero.game.core.GameAction
+import com.capsulezero.game.core.GameEngine
 import com.capsulezero.game.core.GameState
 import com.capsulezero.game.core.Information
 
@@ -8,16 +9,20 @@ class unofficialResourceTransfer(targetState: GameState, targetCharacter: String
     targetPlace
 ) {
     var amount = 10
+    var what = ""
+    override fun chooseParams() {
+        what = GameEngine.acquire(tgtState.places[tgtPlace]!!.resources.keys.toList())
+    }
     override fun execute() {
 
         if(
-        tgtState.places[tgtPlace]!!.resources["water"]!!>=amount
+            (tgtState.places[tgtPlace]!!.resources[what]?:0)>=amount
         ) {
-            tgtState.places[tgtPlace]!!.resources["water"] = tgtState.places[tgtPlace]!!.resources["water"]!! - amount
-            tgtState.characters[tgtCharacter]!!.resources["water"] =
-                tgtState.characters[tgtCharacter]!!.resources["water"]!! + amount
+            tgtState.places[tgtPlace]!!.resources[what] = tgtState.places[tgtPlace]!!.resources[what]!! - amount
+            tgtState.characters[tgtCharacter]!!.resources[what] =
+                tgtState.characters[tgtCharacter]!!.resources[what]!! + amount
             tgtState.characters[tgtCharacter]!!.frozen++
-            //Spread rumor
+            //Spread rumor TODO: only when someone sees it
             Information(
                 "",
                 tgtState.time,

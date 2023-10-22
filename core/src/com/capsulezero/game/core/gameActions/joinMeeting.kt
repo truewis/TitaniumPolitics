@@ -9,7 +9,7 @@ class joinMeeting(targetState: GameState, targetCharacter: String, targetPlace: 
 ) {
     var meetingName = ""
     override fun chooseParams() {
-        meetingName = GameEngine.acquire(tgtState.ongoingMeetings.filter { it.value.characters.contains(tgtCharacter) && it.value.place==tgtPlace}.keys.toList())
+        meetingName = GameEngine.acquire(tgtState.ongoingMeetings.filter { it.value.scheduledCharacters.contains(tgtCharacter) && it.value.place==tgtPlace}.keys.toList())
     }
 
     override fun execute() {

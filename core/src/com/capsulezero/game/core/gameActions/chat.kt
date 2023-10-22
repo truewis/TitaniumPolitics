@@ -14,6 +14,7 @@ class chat(targetState: GameState, targetCharacter: String, targetPlace: String)
     }
     override fun execute() {
         //TODO: chat
+        if (tgtCharacter == who){ println("You chat with yourself.");return}
         tgtState.characters[tgtCharacter]!!.frozen++
     }
 

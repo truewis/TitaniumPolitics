@@ -11,9 +11,12 @@ class unofficialCommand(targetState: GameState, targetCharacter: String, targetP
     var who = ""
     val command:Command = Command("","",0)
     override fun chooseParams() {
-        who = GameEngine.acquire(tgtState.ongoingConferences.filter {it.value.currentCharacters.contains(tgtCharacter)}.flatMap { it.value.currentCharacters })
-        command.place = GameEngine.acquire(tgtState.places.filter { it.value.responsibleParty==tgtState.characters[tgtCharacter]!!.division }.keys.toList())
-        command.action = GameEngine.acquire(listOf("investigateAccidentScene","clearAccidentScene"))
+
+
+        who = GameEngine.acquire(tgtState.parties.filter { it.value.leader==tgtCharacter }.values.flatMap { it.members })
+        val party = tgtState.parties.values.first { it.leader == tgtCharacter && it.members.contains(who)}.name
+        command.place = GameEngine.acquire(tgtState.places.filter { it.value.responsibleParty==party }.keys.toList())
+        command.action = GameEngine.acquire(tgtState.parties[party]!!.commands.toList())
         command.amount = 0
     }
     override fun execute() {

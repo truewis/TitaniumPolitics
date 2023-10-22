@@ -14,7 +14,8 @@ class praise(targetState: GameState, targetCharacter: String, targetPlace: Strin
     }
     override fun execute() {
         //TODO: praise
-        tgtState.setMutuality(tgtCharacter, who, 5.0)
+        if (tgtCharacter == who){ println("You praise yourself.");return}
+        tgtState.setMutuality(tgtCharacter, who, 2.0)
         tgtState.characters[tgtCharacter]!!.frozen++
     }
 
