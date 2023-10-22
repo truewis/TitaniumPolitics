@@ -393,7 +393,7 @@ class GameEngine(val gameState: GameState) {
                     amount = death,
                     auxParty = this.name
                 ).also { /*spread rumor*/
-                    val cpy = Information(it); tgtState.informations[cpy.generateName()] = cpy; //cpy.publicity = 5
+                    val cpy = Information(it); tgtState.informations[cpy.generateName()] = cpy //cpy.publicity = 5
                 }
             }
         }
@@ -417,7 +417,7 @@ class GameEngine(val gameState: GameState) {
                     amount = death,
                     auxParty = this.name
                 ).also { /*spread rumor*/
-                    val cpy = Information(it); tgtState.informations[cpy.generateName()] = cpy; //cpy.publicity = 5
+                    val cpy = Information(it); tgtState.informations[cpy.generateName()] = cpy //cpy.publicity = 5
                 }
             }
         }
@@ -441,7 +441,7 @@ class GameEngine(val gameState: GameState) {
                     amount = death,
                     auxParty = this.name
                 ).also { /*spread rumor*/
-                    val cpy = Information(it); tgtState.informations[cpy.generateName()] = cpy; //cpy.publicity = 5
+                    val cpy = Information(it); tgtState.informations[cpy.generateName()] = cpy //cpy.publicity = 5
                 }
             }
         }

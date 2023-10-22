@@ -91,7 +91,7 @@ class NonPlayerAgent {
             else
                 when (command!!.action) {
                     "investigateAccidentScene" -> {
-                        command = null;
+                        command = null
                         //execute if in the list, otherwise wait.
                         return if(GameEngine.availableActions(gameState, place = place, character = character).contains("investigateAccidentScene"))
                             investigateAccidentScene(gameState, character, place)
@@ -99,14 +99,14 @@ class NonPlayerAgent {
                     }
 
                     "clearAccidentScene" -> {
-                        command = null;
+                        command = null
                         //execute if in the list, otherwise wait.
                         return if(GameEngine.availableActions(gameState, place = place, character = character).contains("clearAccidentScene"))
                             clearAccidentScene(gameState, character, place)
                         else wait(gameState, character, place)
                     }
                     "repair" -> {
-                        command = null;
+                        command = null
                         //execute if in the list, otherwise wait.
                         return if(GameEngine.availableActions(gameState, place = place, character = character).contains("repair"))
                             repair(gameState, character, place)
@@ -114,7 +114,7 @@ class NonPlayerAgent {
                     }
                     else -> {
                         println("Warning: Unspecified command $command")
-                        command = null;
+                        command = null
                         return wait(gameState, character, place)
                     }
                 }
