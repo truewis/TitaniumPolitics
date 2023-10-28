@@ -12,6 +12,8 @@ import java.util.*
 @Serializable
 class GameState {
     private var _time = 0
+
+    var idlePop = 0
     var time: Int
         get() = _time
         set(value) {
@@ -26,7 +28,7 @@ class GameState {
     @Transient
     var timeChanged = arrayListOf<(Int, Int)->Unit>()
     val pop: Int
-        get() = parties.values.sumOf{it.members.size+it.anonymousMembers}
+        get() = parties.values.sumOf{it.members.size+it.anonymousMembers}+idlePop
     val pickRandomParty: Party
         get(){
         //random party picker
@@ -62,11 +64,11 @@ class GameState {
     var todo = Quests()
 
     fun initialize(){
+        injectDependency()
         characters.forEach {char->
             if (places.none { it.value.characters.contains(char.key) })
                 places["home"]!!.characters.add(char.key)
         }
-        injectDependency()
         todo.add(Quest1())
     }
 
@@ -103,6 +105,7 @@ class GameState {
     fun injectDependency(){
         log.injectParent(this)
         places.forEach { it.value.injectParent(this) }
+        characters.forEach { it.value.injectParent(this) }
         parties.forEach { it.value.injectParent(this) }
         todo.injectParent(this)
     }

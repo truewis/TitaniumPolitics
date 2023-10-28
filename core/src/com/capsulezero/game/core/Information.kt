@@ -6,12 +6,18 @@ import kotlin.math.min
 
 @Serializable
 class Information(//If there is no author, it is a rumor.
+    var name :String = "",
     var author: String = "", var creationTime: Int = 0, var type: String = "", var tgtTime: Int = 0,
     var tgtPlace: String = "", var tgtApparatus: String = "", var tgtCharacter: String = "",
     var tgtResource: String = "", var amount: Int = 0, var action: String = "", var tgtParty: String = "", var auxParty: String = ""
 ) {
-    constructor(info: Information) : this(info.author, info.creationTime, info.type, info.tgtTime, info.tgtPlace, info.tgtApparatus, info.tgtCharacter, info.tgtResource, info.amount, info.action)
+    constructor(author: String, creationTime: Int, type: String, tgtTime: Int, tgtPlace: String, tgtApparatus: String, tgtCharacter: String, tgtResource: String, amount: Int, action: String) : this("", author, creationTime, type, tgtTime, tgtPlace, tgtApparatus, tgtCharacter, tgtResource, amount, action, "", "")
+    constructor(info: Information) : this(info.name, info.author, info.creationTime, info.type, info.tgtTime, info.tgtPlace, info.tgtApparatus, info.tgtCharacter, info.tgtResource, info.amount, info.action)
 
+    init {
+        if (name == "")
+            generateName()
+    }
     var publicity = hashMapOf<String, Int>()//Number of people knowing this info in the party.
     var credibility: Int = 0
     var life: Int = 100//How long this information will last.
@@ -50,6 +56,8 @@ class Information(//If there is no author, it is a rumor.
     return 1.0
     }
     fun generateName():String{
-        return "$author-$type-$creationTime-$tgtTime-$tgtPlace-$tgtApparatus-$tgtCharacter-$tgtResource-$amount-$action"
+        val name = "$author-$type-$creationTime-$tgtTime-$tgtPlace-$tgtApparatus-$tgtCharacter-$tgtResource-$amount-$action-${Math.random().toString().substring(8)}"
+        this.name = name
+        return name
     }
 }

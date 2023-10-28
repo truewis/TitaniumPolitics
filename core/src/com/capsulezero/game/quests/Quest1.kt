@@ -2,7 +2,7 @@ package com.capsulezero.game.quests
 
 import com.capsulezero.game.core.Quests
 
-class Quest1:Quests.QuestObject("Quest1", 240) {
+class Quest1:Quests.QuestObject("Be a minister", 240) {
     //Mechanic picks a new infrastructure minister. Quest is completed if the player has the most mutuality with the mechanic among all people in the infrastructure party.
     override val isCompleted: Boolean
         get() {

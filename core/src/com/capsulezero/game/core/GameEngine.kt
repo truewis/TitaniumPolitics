@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input
 import java.lang.Thread.sleep
 import kotlin.math.log
+import kotlin.math.max
 import kotlin.math.min
 import kotlin.random.Random
 import kotlin.system.exitProcess
@@ -34,6 +35,8 @@ class GameEngine(val gameState: GameState) {
                 }
             }
             progression()
+            if(gameState.time % 48 == 0)//Every day
+                partySizeAdjust()
         }
     }
 
@@ -83,7 +86,8 @@ class GameEngine(val gameState: GameState) {
 
     fun progression() {
         gameState.time += 1
-        populationRedistribute()
+        distributePopulation()
+        distributeResources()
         calculateMutuality()
         workAppratuses()
         conditionCheck()
@@ -96,6 +100,7 @@ class GameEngine(val gameState: GameState) {
         gameState.updateUI.forEach { it(gameState) }
     }
 
+    //TODO: Normalization of mutuality is not implemented yet.
     private fun calculateMutuality() {
         gameState.parties.keys.forEach{a->
             gameState.parties.keys.forEach{b->
@@ -119,6 +124,14 @@ class GameEngine(val gameState: GameState) {
                 gameState.parties.forEach {gameState.setPartyMutuality(a, it.key, (gameState.getPartyMutuality(b, it.key)-50) * (gameState.getPartyMutuality(a,b)-50)/2500)}
                 //Party mutualities are correlated; if a is friendly to b, a is also friendly to b's friends and hostile to b's enemies. If a is hostile to b, a is also hostile to b's friends and friendly to b's enemies.
 
+            }
+        }
+
+        //Individual mutualities are correlated with their parties.
+        gameState.characters.forEach {char->
+            gameState.parties.forEach {party->
+                if(party.value.members.contains(char.key))
+                    gameState.parties.forEach {gameState.setMutuality(char.key, it.key, (gameState.getPartyMutuality(party.key, it.key)-50)/50)}
             }
         }
     }
@@ -171,7 +184,7 @@ class GameEngine(val gameState: GameState) {
                             if (aStrength < bStrength) {
                                 //The party information might affect individual information if the party information is stronger. The inverse is not true.
                                 a.publicity.keys.forEach {
-                                    b.publicity[it] = (b.publicity[it] ?: 1) - 1
+                                    b.publicity[it] = max((b.publicity[it] ?: 1) - 1, 0)//Publicity of the weaker information drops. The minimum is 0.
                                 }
                                 if (gameState.characters[b.author] != null)
                                 //This character has decreased mutuality toward b.author and b.supporters.
@@ -206,7 +219,7 @@ class GameEngine(val gameState: GameState) {
                             if (aStrength > bStrength) {
                                 //Fight within each party
                                 a.publicity.keys.forEach {
-                                    b.publicity[it] = (b.publicity[it] ?: 1) - 1
+                                    b.publicity[it] = max((b.publicity[it] ?: 1) - 1, 0)//Publicity of the weaker information drops. The minimum is 0.
                                 }
                                 if (gameState.characters[b.author] != null)
                                     //This party has decreased party mutuality toward b.author and b.supporters parties. Maybe amount proportional to the party size?
@@ -277,36 +290,87 @@ class GameEngine(val gameState: GameState) {
 
     }
 
-    fun populationRedistribute() {
-        var idlePop = gameState.pop
-        gameState.places.values.forEach {
-            if (it.workHoursStart < gameState.hour && it.workHoursEnd > gameState.hour) {
-                if (it.isAccidentScene) return@forEach //If there is an accident, no one works until it is resolved.
-                val idealWorker = it.apparatuses.sumOf { apparatus -> apparatus.idealWorker }
-                if (it.plannedWorker > it.resources["water"]!!)//out of budget. Shut down the facility until the water is back.
+    //Party size is adjusted every day.
+    //Each department is also its own party. At this time, the head of the party is the head of the department.
+    //In this case, the number of people in the party is equal to the number of employees in the department. As the number of employees decreases, more unnamed people leave the party, and as the number of employees increases, more unnamed people come in.
+    //However, if the total number of people at the station is insufficient, unnamed people may not come in, and fewer people than the target number may come to work.
+    fun partySizeAdjust(){
+        gameState.parties.values.filter { it.type=="division" }.forEach{
+            val targetSize = gameState.places.values.filter {place->place.responsibleParty==it.name}.sumOf {place->place.plannedWorker}
+            if(it.size<targetSize)
+            {
+                if(gameState.idlePop>=targetSize-it.size) {
+                    //unnamed people join the party.
+                    val tmp = targetSize - it.size
+                    it.anonymousMembers += tmp
+                    gameState.idlePop -= tmp
+                }
+                else
                 {
-                    it.apparatuses.forEach { apparatus -> apparatus.currentWorker = 0 }
+                    //unnamed people join the party.
+                    it.anonymousMembers += gameState.idlePop
+                    gameState.idlePop = 0
+                }
+            }
+            else if(it.size>targetSize)
+            {
+                //unnamed people leave the party.
+                val tmp = it.size - targetSize
+                it.anonymousMembers -= tmp
+                gameState.idlePop += tmp
+                if(it.anonymousMembers<0) it.anonymousMembers=0
+            }
+        }
+
+    }
+
+    //Workers are assigned to apparatuses. If there is not enough workers, some apparatuses are not worked.
+    fun distributePopulation() {
+        val popsDivision = hashMapOf<String, Int>()
+        gameState.parties.values.filter { it.type=="division" }.forEach{
+            popsDivision[it.name] = it.size//TODO: named members should also go to work and tracked here,
+        }
+        gameState.places.values.forEach { place ->
+            if (place.workHoursStart < gameState.hour && place.workHoursEnd > gameState.hour) {
+                if (place.isAccidentScene) return@forEach //If there is an accident, no one works until it is resolved.
+                val idealWorker = place.apparatuses.sumOf { apparatus -> apparatus.idealWorker }
+                if (place.plannedWorker > place.resources["water"]!!)//out of budget. Shut down the facility until the water is back.
+                {
+                    place.apparatuses.forEach { apparatus -> apparatus.currentWorker = 0 }
                     return@forEach
                 }
-                if (idlePop > it.plannedWorker) {
-                    it.apparatuses.forEach lambda@{ apparatus ->
+                if (popsDivision[place.responsibleParty]!! >= place.plannedWorker) {
+                    place.apparatuses.forEach lambda@{ apparatus ->
                         if (idealWorker == 0) return@lambda
                         apparatus.currentWorker =
-                            it.plannedWorker * apparatus.idealWorker / idealWorker//Distribute workers according to ideal worker
-                        idlePop -= apparatus.currentWorker
+                            place.plannedWorker * apparatus.idealWorker / idealWorker//Distribute workers according to ideal worker
+                        popsDivision[place.responsibleParty] = popsDivision[place.responsibleParty]!! - apparatus.currentWorker
                     }
                 } else {
-                    val tmpPop = idlePop
-                    it.apparatuses.forEach lambda@{ apparatus ->
+                    //If there is not enough workers, the lack of workers is distributed to apparatuses.
+                    place.apparatuses.forEach lambda@{ apparatus ->
                         if (idealWorker == 0) return@lambda
                         apparatus.currentWorker =
-                            tmpPop * apparatus.idealWorker / idealWorker//Distribute workers according to ideal worker
-                        idlePop -= apparatus.currentWorker
+                            popsDivision[place.responsibleParty]!! * apparatus.idealWorker / idealWorker//Distribute workers according to ideal worker
+                        popsDivision[place.responsibleParty] = popsDivision[place.responsibleParty]!! - apparatus.currentWorker
                     }
                 }
 
             } else
-                it.apparatuses.forEach { apparatus -> apparatus.currentWorker = 0 }
+                //If it is not work hours, no one works.
+                place.apparatuses.forEach { apparatus -> apparatus.currentWorker = 0 }
+        }
+    }
+
+    fun distributeResources(){
+
+        //Some resources are scheduled to be distributed to other places. Other resources are distributed manually.
+        //Distribute energy. Each energy storage value slowly moves to the average of all energy storage values.
+        val energyDistributionSpeed = 1
+        val energyStorage = gameState.places.values.filter { place -> place.apparatuses.any { it.name == "energyStorage" } }.sumOf { it.resources["energy"] ?:0 }
+        val energyStorageCount = gameState.places.values.sumOf { place -> place.apparatuses.filter { it.name == "energyStorage" }.size }
+        gameState.places.values.filter { place -> place.apparatuses.any { it.name == "energyStorage" } }.forEach { place ->
+            place.resources["energy"] = (place.resources["energy"] ?:0) + (energyStorage / energyStorageCount * place.apparatuses.filter { it.name == "energyStorage" }.size - (place.resources["energy"]?:0)) * energyDistributionSpeed / 100 //TODO: make sure that the energy is not lost during integer division.
         }
     }
 
@@ -325,14 +389,15 @@ class GameEngine(val gameState: GameState) {
                 }
                 if(isShortOfResources(apparatus, place = entry.value)!="")
                     return@app //If there is not enough resources, no one works.
-                if(isShortOfAbsorbableResources(apparatus, place = entry.value)!="")
+                if(isShortOfAbsorbableResources(apparatus, place = entry.value, gameState)!="")
                     return@app //If there is not enough resources, no one works.
                 //-----------------------------------------------------------------------------------------------------
                 apparatus.currentProduction.forEach {
                     entry.value.resources[it.key] = (entry.value.resources[it.key]?:0) + it.value
                 }
-                val waterConsumption = apparatus.currentWorker
-                entry.value.resources["water"] = (entry.value.resources["water"]?:0) - waterConsumption //Distribute water to workers.
+                val waterConsumption = min(apparatus.currentWorker, (entry.value.resources["water"]?:0))
+                entry.value.resources["water"] = (entry.value.resources["water"]?:0) - waterConsumption//Distribute water to workers. TODO: if there is not enough water, workers should grunt.
+
                 gameState.marketResources["water"]=(gameState.marketResources["water"]?:0)+waterConsumption
                 apparatus.currentConsumption.forEach {
                     entry.value.resources[it.key] = (entry.value.resources[it.key]?:0) - it.value
@@ -386,9 +451,9 @@ class GameEngine(val gameState: GameState) {
                 causeDeaths(death)
                 println("Casualties: at most $death, due to dehydration. Pop left: ${gameState.pop}")
                 Information(
-                    "",
-                    tgtState.time,
-                    "casualty",
+                    author = "",
+                    creationTime = tgtState.time,
+                    type = "casualty",
                     tgtPlace = "everywhere",
                     amount = death,
                     auxParty = this.name
@@ -410,9 +475,9 @@ class GameEngine(val gameState: GameState) {
                 causeDeaths(death)
                 println("Casualties: at most $death, due to suffocation. Pop left: ${gameState.pop}")
                 Information(
-                    "",
-                    tgtState.time,
-                    "casualty",
+                    author = "",
+                    creationTime = tgtState.time,
+                    type = "casualty",
                     tgtPlace = "everywhere",
                     amount = death,
                     auxParty = this.name
@@ -434,9 +499,9 @@ class GameEngine(val gameState: GameState) {
                 causeDeaths(death)
                 println("Casualties: at most $death, due to starvation. Pop left: ${gameState.pop}")
                 Information(
-                    "",
-                    tgtState.time,
-                    "casualty",
+                    author = "",
+                    creationTime = tgtState.time,
+                    type = "casualty",
                     tgtPlace = "everywhere",
                     amount = death,
                     auxParty = this.name
@@ -453,9 +518,9 @@ class GameEngine(val gameState: GameState) {
         val death = tgtPlace.currentWorker / 100 + 1 //TODO: what about injuries?
         tgtState.parties[tgtPlace.responsibleParty]!!.causeDeaths(death)//TODO: we are assuming that all deaths are from the responsible party.
         Information(
-            "",
-            tgtState.time,
-            "casualty",
+            author = "",
+            creationTime = tgtState.time,
+            type = "casualty",
             tgtPlace = tgtPlace.name,
             auxParty = tgtPlace.responsibleParty,
             amount = death
@@ -471,9 +536,9 @@ class GameEngine(val gameState: GameState) {
         //Generate resource loss.
         tgtPlace.resources["water"] = tgtPlace.resources["water"]!! - 50
         Information(
-            "",
-            tgtState.time,
-            "lostResource",
+            author = "",
+            creationTime =tgtState.time,
+            type = "lostResource",
             tgtPlace = tgtPlace.name,
             amount = death,
             tgtResource = "water"
@@ -496,18 +561,18 @@ class GameEngine(val gameState: GameState) {
                 if (app.name in listOf("waterStorage", "oxygenStorage", "lightMetalStorage", "componentStorage", "rationStorage")) {
                     //TODO: resources should be stored in storages, not in places.
                     val resourceName = app.name.substring(0, app.name.length - 7)
-                    tgtPlace.resources[resourceName] = tgtPlace.resources[resourceName]!!*tgtPlace.maxResources[resourceName]!!/tmp[resourceName]!!
+                    tgtPlace.resources[resourceName] = (tgtPlace.resources[resourceName]?:0)*(tgtPlace.maxResources[resourceName]?:0)/tmp[resourceName]!!
                     //For example, unbroken storage number 8->7 then lose 1/8 of the resource.
                     //TODO: generate information about the resource loss.
                 }
 
                     Information(
-                    "",
-                    tgtState.time,
-                    "damagedApparatus",
-                    tgtPlace = tgtPlace.name,
-                    amount = death,
-                    tgtApparatus = app.name
+                        author = "",
+                        creationTime =tgtState.time,
+                        type = "damagedApparatus",
+                        tgtPlace = tgtPlace.name,
+                        amount = death,
+                        tgtApparatus = app.name
                 )/*store dummy info*/.also { tgtPlace.accidentInformations[it.generateName()] = it }.also { /*spread rumor*/
                     val cpy = Information(it); tgtState.informations[cpy.generateName()] = cpy; cpy.publicity[tgtPlace.responsibleParty] = 5
                 }
@@ -527,9 +592,9 @@ class GameEngine(val gameState: GameState) {
         val death = tgtPlace.currentWorker / 5 + 1 //TODO: what about injuries?
         tgtState.parties[tgtPlace.responsibleParty]!!.causeDeaths(death)
         Information(
-            "",
-            tgtState.time,
-            "casualty",
+            author = "",
+            creationTime = tgtState.time,
+            type = "casualty",
             tgtPlace = tgtPlace.name,
             auxParty = tgtPlace.responsibleParty,
             amount = death
@@ -545,9 +610,9 @@ class GameEngine(val gameState: GameState) {
         //Generate resource loss.
         tgtPlace.resources["water"] = tgtPlace.resources["water"]!! - 50
         Information(
-            "",
-            tgtState.time,
-            "lostResource",
+            author = "",
+            creationTime = tgtState.time,
+            type = "lostResource",
             tgtPlace = tgtPlace.name,
             amount = death,
             tgtResource = "water"
@@ -575,9 +640,9 @@ class GameEngine(val gameState: GameState) {
                 }
 
                 Information(
-                    "",
-                    tgtState.time,
-                    "damagedApparatus",
+                    author = "",
+                    creationTime = tgtState.time,
+                    type = "damagedApparatus",
                     tgtPlace = tgtPlace.name,
                     tgtApparatus = app.name
                 )/*store dummy info*/.also { tgtPlace.accidentInformations[it.generateName()] = it }.also { /*spread rumor*/
@@ -597,7 +662,7 @@ class GameEngine(val gameState: GameState) {
     //TODO: Check for win/lose/interrupt conditions
     fun conditionCheck() {
         gameState.characters.forEach { entry ->
-            if (entry.value.health <= 0) {
+            if (entry.value.alive && entry.value.health <= 0) {
                 println("${entry.value.name} died.")
                 //TODO: Do we need to gameState.pop -= 1
                 entry.value.alive = false
@@ -624,9 +689,9 @@ class GameEngine(val gameState: GameState) {
         }
         if (gameState.time % 48 == 0) { //Every day, inform the infrastructure minister about total resource.
             val infraName = gameState.parties.values.find { it.name=="infrastructure" }!!.leader
-            Information(infraName, gameState.time, tgtTime = gameState.time, type = "resource", tgtResource = "water", tgtPlace = "everywhere", amount = gameState.places.values.sumOf { it.resources["water"]?:0 }).also { it.knownTo.add(infraName);gameState.informations[it.generateName()] = it }
-            Information(infraName, gameState.time, tgtTime = gameState.time, type = "resource", tgtResource = "oxygen", tgtPlace = "everywhere", amount = gameState.places.values.sumOf { it.resources["oxygen"]?:0 }).also { it.knownTo.add(infraName);gameState.informations[it.generateName()] = it }
-            Information(infraName, gameState.time, tgtTime = gameState.time, type = "resource", tgtResource = "ration", tgtPlace = "everywhere", amount = gameState.places.values.sumOf { it.resources["ration"]?:0 }).also { it.knownTo.add(infraName);gameState.informations[it.generateName()] = it }
+            Information(infraName, creationTime = gameState.time, tgtTime = gameState.time, type = "resource", tgtResource = "water", tgtPlace = "everywhere", amount = gameState.places.values.sumOf { it.resources["water"]?:0 }).also { it.knownTo.add(infraName);gameState.informations[it.generateName()] = it }
+            Information(infraName, creationTime = gameState.time, tgtTime = gameState.time, type = "resource", tgtResource = "oxygen", tgtPlace = "everywhere", amount = gameState.places.values.sumOf { it.resources["oxygen"]?:0 }).also { it.knownTo.add(infraName);gameState.informations[it.generateName()] = it }
+            Information(infraName, creationTime = gameState.time, tgtTime = gameState.time, type = "resource", tgtResource = "ration", tgtPlace = "everywhere", amount = gameState.places.values.sumOf { it.resources["ration"]?:0 }).also { it.knownTo.add(infraName);gameState.informations[it.generateName()] = it }
 
         }
 
@@ -650,10 +715,10 @@ class GameEngine(val gameState: GameState) {
             return ""
 
         }
-        fun isShortOfAbsorbableResources(app: Apparatus, place: Place):String
+        fun isShortOfAbsorbableResources(app: Apparatus, place: Place, gameState: GameState):String
         {
             app.currentAbsorption.forEach {
-                if((place.resources[it.key]?:0)<it.value)
+                if((gameState.floatingResources[it.key]?:0)<it.value)
                     return it.key //If the resource is less than a unit time worth of consumption, return the resource name.
             }
             //Distribution does not consume resource.

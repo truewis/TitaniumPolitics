@@ -1,6 +1,7 @@
 package com.capsulezero.game.core
 
 import kotlinx.serialization.Serializable
+import java.util.*
 
 @Serializable
 class Place : GameStateElement(){
@@ -11,20 +12,23 @@ class Place : GameStateElement(){
     val currentWorker :Int get() = apparatuses.sumOf { it.currentWorker }
     val maxResources: HashMap<String, Int> get() {
         val result = hashMapOf<String, Int>()
-        result["water"]=0
-        result["oxygen"]=0
-        result["metal"]=0
-        result["component"]=0
-        result["ration"]=0
         apparatuses.forEach {
             if(it.durability!=0)
             when(it.name)
             {
-                "waterStorage" -> result["water"] = result["water"]!! + 30000
-                "oxygenStorage" -> result["oxygen"] = result["oxygen"]!! + 3000
-                "metalStorage" -> result["metal"] = result["metal"]!! + 30000
-                "componentStorage" -> result["component"] = result["component"]!! + 30000
-                "rationStorage" -> result["ration"] = result["ration"]!! + 30000
+                "waterStorage" -> result["water"] = (result["water"]?:0) + 30000
+                "oxygenStorage" -> result["oxygen"] = (result["oxygen"]?:0) + 3000
+                "metalStorage" -> result["metal"] = (result["metal"]?:0) + 30000
+                "componentStorage" -> result["component"] = (result["component"]?:0) + 30000
+                "rationStorage" -> result["ration"] = (result["ration"]?:0) + 30000
+                else->//concatenate string
+                {
+                    if(it.name.contains("Storage"))
+                    {
+                        val resource = it.name.substringBefore("Storage").lowercase(Locale.getDefault())
+                        result[resource] = (result[resource]?:0) + 30000
+                    }
+                }
             }
         }
         return result

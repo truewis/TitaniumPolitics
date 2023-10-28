@@ -23,7 +23,7 @@ class examine(targetState: GameState, targetCharacter: String, targetPlace: Stri
 
                 //Acquire apparatus information.
                 tgtState.places[tgtPlace]!!.apparatuses.forEach { entry ->
-                    Information(tgtCharacter, tgtState.time, "apparatusDurability", tgtState.time, tgtPlace = tgtPlace, tgtApparatus = entry.name, amount = entry.durability ).also {it.knownTo.add(tgtCharacter);it.credibility=100;tgtState.informations[it.generateName()] = it }
+                    Information(author = tgtCharacter, creationTime = tgtState.time, type = "apparatusDurability", tgtTime = tgtState.time, tgtPlace = tgtPlace, tgtApparatus = entry.name, amount = entry.durability ).also {it.knownTo.add(tgtCharacter);it.credibility=100;tgtState.informations[it.generateName()] = it }
 
                 }
             }
@@ -32,7 +32,7 @@ class examine(targetState: GameState, targetCharacter: String, targetPlace: Stri
                     println("Resources: ${tgtState.characters[tgtCharacter]!!.resources}")
                     //Acquire resources information of this character.
                     tgtState.characters[tgtCharacter]!!.resources.forEach { entry ->
-                        Information(tgtCharacter, tgtState.time, "resources", tgtState.time, tgtCharacter = tgtCharacter, tgtResource = entry.key, amount = entry.value ).also {it.knownTo.add(tgtCharacter);it.credibility=100;tgtState.informations[it.generateName()] = it }
+                        Information(author = tgtCharacter, creationTime = tgtState.time, type = "resources", tgtTime = tgtState.time, tgtCharacter = tgtCharacter, tgtResource = entry.key, amount = entry.value ).also {it.knownTo.add(tgtCharacter);it.credibility=100;tgtState.informations[it.generateName()] = it }
 
                     }
                 }
@@ -40,7 +40,7 @@ class examine(targetState: GameState, targetCharacter: String, targetPlace: Stri
                     println("Resources: ${tgtState.places[tgtPlace]!!.resources}")
                     //Acquire resources information of this place.
                     tgtState.places[tgtPlace]!!.resources.forEach { entry ->
-                        Information(tgtCharacter, tgtState.time, "resources", tgtState.time, tgtPlace = tgtPlace, tgtResource = entry.key, amount = entry.value ).also {it.knownTo.add(tgtCharacter);it.credibility=100;tgtState.informations[it.generateName()] = it }
+                        Information(author = tgtCharacter, creationTime = tgtState.time, type = "resources", tgtTime = tgtState.time, tgtPlace = tgtPlace, tgtResource = entry.key, amount = entry.value ).also {it.knownTo.add(tgtCharacter);it.credibility=100;tgtState.informations[it.generateName()] = it }
 
                     }
 

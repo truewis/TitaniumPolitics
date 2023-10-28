@@ -18,15 +18,15 @@ class unofficialResourceTransfer(targetState: GameState, targetCharacter: String
         if(
             (tgtState.places[tgtPlace]!!.resources[what]?:0)>=amount
         ) {
-            tgtState.places[tgtPlace]!!.resources[what] = tgtState.places[tgtPlace]!!.resources[what]!! - amount
+            tgtState.places[tgtPlace]!!.resources[what] = (tgtState.places[tgtPlace]!!.resources[what]?:0) - amount
             tgtState.characters[tgtCharacter]!!.resources[what] =
-                tgtState.characters[tgtCharacter]!!.resources[what]!! + amount
+                (tgtState.characters[tgtCharacter]!!.resources[what]?:0) + amount
             tgtState.characters[tgtCharacter]!!.frozen++
             //Spread rumor TODO: only when someone sees it
             Information(
-                "",
-                tgtState.time,
-                "action",
+                author = "",
+                creationTime = tgtState.time,
+                type = "action",
                 tgtPlace = tgtPlace,
                 amount = amount,
                 action = "unofficialResourceTransfer"

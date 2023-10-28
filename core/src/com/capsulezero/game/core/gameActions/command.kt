@@ -9,6 +9,7 @@ class command(targetState: GameState, targetCharacter: String, targetPlace: Stri
     targetPlace
 ) {
     var who = ""
+
     val command:Command = Command("","",0)
     override fun chooseParams() {
 
@@ -21,7 +22,7 @@ class command(targetState: GameState, targetCharacter: String, targetPlace: Stri
         command.amount = 0
     }
     override fun execute() {
-        tgtState.nonPlayerAgents[who]!!.command = command
+        tgtState.nonPlayerAgents[who]!!.commands.add(command)
         tgtState.characters[tgtCharacter]!!.frozen++
     }
 

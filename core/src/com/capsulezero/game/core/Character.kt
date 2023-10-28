@@ -3,7 +3,7 @@ package com.capsulezero.game.core
 import kotlinx.serialization.Serializable
 
 @Serializable
-class Character {
+class Character: GameStateElement() {
     var name = ""
     var alive = true
     var trait = hashSetOf<String>()
@@ -34,5 +34,6 @@ class Character {
     var scheduledMeetings = hashSetOf<Meeting>()
     var home = ""
     var frozen = 0
+    val place = parent.places.values.first{it.characters.contains(name)}
 
 }

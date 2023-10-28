@@ -20,7 +20,7 @@ class unofficialCommand(targetState: GameState, targetCharacter: String, targetP
         command.amount = 0
     }
     override fun execute() {
-        tgtState.nonPlayerAgents[who]!!.command = command
+        tgtState.nonPlayerAgents[who]!!.commands.add(command)
         tgtState.characters[tgtCharacter]!!.frozen++
     }
 

@@ -5,9 +5,12 @@ import kotlinx.serialization.Serializable
 class Party: GameStateElement() {
     var name = ""
     var leader = ""
+    var type = ""
     var members = hashSetOf<String>()
     var commands = hashSetOf<String>()
     var anonymousMembers  = 0
+    val size: Int
+        get() = members.size+anonymousMembers
     fun individualMutuality(name:String) = 0//TODO: implement this.
     var resources = hashMapOf<String, Int>()
     val integrity: Int

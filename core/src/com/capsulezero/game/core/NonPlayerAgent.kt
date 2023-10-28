@@ -7,9 +7,95 @@ import kotlin.math.min
 @Serializable
 class NonPlayerAgent {
     //TODO: implement pathfinding. For now, just teleport to the place
-    var command: Command? = null
+    var commands = arrayListOf<Command>()
     fun chooseAction(gameState: GameState, character: String, place: String): GameAction {
+        //If there is almost no food or water, stop all activities and try to get some. ----------------------------------------------------------------------------
+        if((gameState.characters[character]!!.resources["ration"] ?:0) <= (gameState.characters[character]!!.reliants.size+1) || (gameState.characters[character]!!.resources["water"] ?:0) <= (gameState.characters[character]!!.reliants.size+1)) {
+            val wantedResource = if((gameState.characters[character]!!.resources["ration"] ?:0) <=(gameState.characters[character]!!.reliants.size+1)) "ration" else "water"
+            if(gameState.characters[character]!!.trait.contains("thief"))
+            {
+                //Find a place within my division with maximum res.
+                val resplace =
+                    gameState.places.values.filter {
+                        it.responsibleParty != "" && gameState.parties[it.responsibleParty]!!.members.contains(
+                            character
+                        )
+                    }
+                        .maxByOrNull { it.resources["ration"] ?: 0 }
+                        ?: gameState.places.values.filter {
+                            it.responsibleParty != "" && gameState.parties[it.responsibleParty]!!.members.contains(
+                                character
+                            )
+                        }
+                            .maxByOrNull { it.resources["water"] ?: 0 }
+                        ?: return wait(gameState, character, place)
+                if (place != resplace.name) {
+                    move(gameState, character, place).also {
+                        it.placeTo = resplace.name
+                        return it
+                    }
+                } else {
+                    unofficialResourceTransfer(gameState, character, place).also {
+                        if ((gameState.characters[character]!!.resources["ration"] ?: 0) == 0) {
+                            it.what = "ration"
+                            it.amount = min(
+                                (resplace.resources["ration"] ?: 0) / 2,
+                                (gameState.characters[character]!!.reliants.size + 1) * 7
+                            )
+                        } else {
+                            it.what = "water"
+                            it.amount = min(
+                                (resplace.resources["water"] ?: 0) / 2,
+                                (gameState.characters[character]!!.reliants.size + 1) * 7
+                            )
+                        }
+                        println("$character is stealing ration from ${resplace.name}: ${it.amount}")
+                        return it
+                    }
+                }
+            }
+            else if (gameState.characters[character]!!.trait.contains("bargainer")){
+                //Try to trade for resources
+                //Select a character to trade with, based on the information known to the character.
+                val tradeCharacter: String
+                val info = gameState.informations.values.filter { it.type=="resource" && it.tgtCharacter!="" && it.tgtCharacter!=character && it.tgtResource == wantedResource&&it.amount>10 && it.knownTo.contains(character) }
+                tradeCharacter = if(info.isNotEmpty()) {//If there is a character with the resource
+                    info.random().tgtCharacter
+                } else
+                    gameState.characters.keys.filter { it!=character }.random()
 
+                //Move to the place of the character
+                val tradePlace = gameState.places.values.find { it.characters.contains(character) }!!.name
+                if(tradePlace == "home")
+                    return wait(gameState, character, place)//Wait for the character to leave home.
+                if(place!=tradePlace)
+                {
+                    move(gameState, character, place).also { move ->
+                        move.placeTo = gameState.places.values.find { it.characters.contains(character) }!!.name
+
+                        return move
+                    }
+                }
+                else
+                {
+                    //Trade for the resource
+                    trade(gameState, character, place).also { trade ->
+                        trade.who = tradeCharacter
+                        trade.item2 = wantedResource
+                        trade.amount2 = gameState.characters[tradeCharacter]!!.reliants.size+1
+                        //Give away unwanted resources
+                        trade.item = gameState.characters[character]!!.resources.keys.filter { it!=wantedResource }.random()
+                        trade.amount = gameState.characters[character]!!.resources[trade.item]?:0
+                        //Give away information they want
+                        trade.info = gameState.informations.values.filter { it.tgtCharacter==tradeCharacter && it.knownTo.contains(character) }.random()
+                        //Give away actions they want
+
+                        return trade
+                    }
+                }
+            }
+        }
+        //------------------------------------------------------------------------------------------------------------------------------------------------
 
         when (place) {//Choose action by place
             "home" -> {
@@ -85,39 +171,48 @@ class NonPlayerAgent {
             return wait(gameState, character, place)
         }
         //If there is a command, execute it.
-        if (command != null) {
-            if (place != command!!.place)
-                return move(gameState, character, place).also { it.placeTo = command!!.place }
-            else
-                when (command!!.action) {
+        if (commands.isNotEmpty()) {
+            val command = commands.first()
+            if (place != command.place)
+                return move(gameState, character, place).also { it.placeTo = command.place }
+            else {
+                commands.removeAt(0)
+                when (command.action) {
                     "investigateAccidentScene" -> {
-                        command = null
+
                         //execute if in the list, otherwise wait.
-                        return if(GameEngine.availableActions(gameState, place = place, character = character).contains("investigateAccidentScene"))
+                        return if (GameEngine.availableActions(gameState, place = place, character = character)
+                                .contains("investigateAccidentScene")
+                        )
                             investigateAccidentScene(gameState, character, place)
                         else wait(gameState, character, place)
                     }
 
                     "clearAccidentScene" -> {
-                        command = null
                         //execute if in the list, otherwise wait.
-                        return if(GameEngine.availableActions(gameState, place = place, character = character).contains("clearAccidentScene"))
+                        return if (GameEngine.availableActions(gameState, place = place, character = character)
+                                .contains("clearAccidentScene")
+                        )
                             clearAccidentScene(gameState, character, place)
                         else wait(gameState, character, place)
                     }
+
                     "repair" -> {
-                        command = null
                         //execute if in the list, otherwise wait.
-                        return if(GameEngine.availableActions(gameState, place = place, character = character).contains("repair"))
+                        return if (GameEngine.availableActions(gameState, place = place, character = character)
+                                .contains("repair")
+                        )
                             repair(gameState, character, place)
                         else wait(gameState, character, place)
                     }
+
                     else -> {
                         println("Warning: Unspecified command $command")
-                        command = null
                         return wait(gameState, character, place)
                     }
                 }
+
+            }
         }
         if (gameState.ongoingConferences.any {
                 it.value.scheduledCharacters.contains(character) && !it.value.currentCharacters.contains(
@@ -263,7 +358,7 @@ class NonPlayerAgent {
         }
 
         //If I am short of resources, steal resources from a place within my division.
-        if(gameState.characters[character]!!.resources["water"]!!<(gameState.characters[character]!!.reliants.size+1)*7)//If less than week worth of ration left
+        if((gameState.characters[character]!!.resources["water"]?:0)<(gameState.characters[character]!!.reliants.size+1)*7)//If less than week worth of ration left
         {
             //Find a place within my division with maximum res.
             val resplace =
