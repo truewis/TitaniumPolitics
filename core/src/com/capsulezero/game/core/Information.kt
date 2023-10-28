@@ -11,7 +11,6 @@ class Information(//If there is no author, it is a rumor.
     var tgtPlace: String = "", var tgtApparatus: String = "", var tgtCharacter: String = "",
     var tgtResource: String = "", var amount: Int = 0, var action: String = "", var tgtParty: String = "", var auxParty: String = ""
 ) {
-    constructor(author: String, creationTime: Int, type: String, tgtTime: Int, tgtPlace: String, tgtApparatus: String, tgtCharacter: String, tgtResource: String, amount: Int, action: String) : this("", author, creationTime, type, tgtTime, tgtPlace, tgtApparatus, tgtCharacter, tgtResource, amount, action, "", "")
     constructor(info: Information) : this(info.name, info.author, info.creationTime, info.type, info.tgtTime, info.tgtPlace, info.tgtApparatus, info.tgtCharacter, info.tgtResource, info.amount, info.action)
 
     init {
