@@ -4,6 +4,7 @@ import com.capsulezero.game.core.GameAction
 import com.capsulezero.game.core.GameEngine
 import com.capsulezero.game.core.GameState
 
+@Deprecated("Use infoShare instead")
 class praise(targetState: GameState, targetCharacter: String, targetPlace: String) : GameAction(targetState, targetCharacter,
     targetPlace
 ) {

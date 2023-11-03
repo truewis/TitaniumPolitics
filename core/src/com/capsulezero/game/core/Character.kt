@@ -34,6 +34,8 @@ class Character: GameStateElement() {
     var scheduledMeetings = hashSetOf<Meeting>()
     var home = ""
     var frozen = 0
-    val place = parent.places.values.first{it.characters.contains(name)}
+
+    val place
+    get() = parent.places.values.first{it.characters.contains(name)}
 
 }

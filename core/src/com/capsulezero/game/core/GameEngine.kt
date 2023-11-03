@@ -778,45 +778,59 @@ class GameEngine(val gameState: GameState) {
         fun availableActions(gameState: GameState, place: String, character: String): ArrayList<String> {
             val actions = arrayListOf<String>()
             if (gameState.ongoingMeetings.any { it.value.currentCharacters.contains(character) }) {
+                val meeting = gameState.ongoingMeetings.filter {
+                    it.value.currentCharacters.contains(
+                        character
+                    )
+                }.values.first()
                 if (character == gameState.playerAgent) {
                     println("You are in a meeting.")
-                    println("Attendees: ${gameState.ongoingMeetings.filter { it.value.currentCharacters.contains(character) }.values.first().currentCharacters}")
+                    println("Attendees: ${meeting.currentCharacters}")
                 }
                 actions.add("chat")
-                actions.add("trade")
-                actions.add("unofficialCommand")
-                actions.add("unofficialInfoShare")
-                actions.add("unofficialInfoRequest")
+                //Trade is allowed only if there are exactly two people in the meeting.
+                //InfoShare is allowed only if there are more than two people in the meeting.
+                if(meeting.currentCharacters.count()==2)
+                    actions.add("trade")
+                else
+                    actions.add("infoShare")
+
+                if(gameState.parties.values.any { it.leader == character && it.members.containsAll(meeting.currentCharacters) })//Only the leader of a party can command.
+                { actions.add("unofficialCommand")
+                    if(meeting.currentCharacters.count()>=3)
+                        actions.add("infoRequest")
+                }
                 actions.add("appointMeeting")
                 actions.add("wait")
                 actions.add("leaveMeeting")
                 return actions
             }
             if (gameState.ongoingConferences.any { it.value.currentCharacters.contains(character) }) {
+                val conf = gameState.ongoingConferences.filter {
+                    it.value.currentCharacters.contains(
+                        character
+                    )
+                }.values.first()
                 if (character == gameState.playerAgent) {
                     println("You are in a conference.")
                     println(
                         "Attendees: ${
-                            gameState.ongoingConferences.filter {
-                                it.value.currentCharacters.contains(
-                                    character
-                                )
-                            }.values.first().currentCharacters
+                            conf.currentCharacters
                         }"
                     )
                 }
-                val subject = gameState.ongoingConferences.firstNotNullOf { entry ->
-                    entry.value.subject.takeIf {
-                        entry.value.currentCharacters.contains(character)
-                    }
-                }
+                //You cannot trade in a conference.
+                val subject = conf.subject
                 when (subject) {
                     "budgetProposal" -> if (!gameState.isBudgetProposed) actions.add("budgetProposal")
                     "budgetResolution" -> if (!gameState.isBudgetResolved) actions.add("budgetResolution")
                 }
-                actions.add("command")
+                //Command is allowed only if the character is the division leader.
+                if (gameState.parties[conf.involvedParty]?.leader == character){
+                    actions.add("command")
+                    actions.add("infoRequest")
+                }
                 actions.add("infoShare")
-                actions.add("infoRequest")
                 actions.add("appointMeeting")
                 actions.add("wait")
                 actions.add("leaveConference")

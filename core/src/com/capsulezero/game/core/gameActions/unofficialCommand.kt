@@ -13,10 +13,12 @@ class unofficialCommand(targetState: GameState, targetCharacter: String, targetP
     override fun chooseParams() {
 
 
-        who = GameEngine.acquire(tgtState.parties.filter { it.value.leader==tgtCharacter }.values.flatMap { it.members })
-        val party = tgtState.parties.values.first { it.leader == tgtCharacter && it.members.contains(who)}.name
-        command.place = GameEngine.acquire(tgtState.places.filter { it.value.responsibleParty==party }.keys.toList())
-        command.action = GameEngine.acquire(tgtState.parties[party]!!.commands.toList())
+        val currentConf = tgtState.ongoingConferences.filter {it.value.currentCharacters.contains(tgtCharacter)}.values.first()
+        if(tgtCharacter!=tgtState.parties[currentConf.involvedParty]!!.leader)
+            println("Warning: Only the leader of the party can issue commands. $tgtCharacter is not the leader of ${currentConf.involvedParty}")
+        who = GameEngine.acquire(currentConf.currentCharacters.toList())
+        command.place = GameEngine.acquire(tgtState.places.filter { currentConf.involvedParty!="" && it.value.responsibleParty==currentConf.involvedParty }.keys.toList())
+        command.action = GameEngine.acquire(tgtState.parties[currentConf.involvedParty]!!.commands.toList())
         command.amount = 0
     }
     override fun execute() {

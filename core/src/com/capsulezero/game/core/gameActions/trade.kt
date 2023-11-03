@@ -20,11 +20,13 @@ class trade(targetState: GameState, targetCharacter: String, targetPlace: String
     var info2 : Information? = null
     override fun chooseParams() {
         who =
-            GameEngine.acquire(tgtState.ongoingMeetings.filter {it.value.currentCharacters.contains(tgtCharacter)}.flatMap { it.value.currentCharacters })
+            tgtState.ongoingMeetings.filter {it.value.currentCharacters.contains(tgtCharacter)}.flatMap { it.value.currentCharacters }.first {it!=tgtCharacter}//Trade can happen only when there is exactly one other character in the meeting.
+
         println("What do you want to trade?")
         val type = GameEngine.acquire(listOf("resource", "information", "action"))
         when (type){
             "resource"->{
+                //TODO: Can only request information that you know the existence.
                 item = GameEngine.acquire(tgtState.characters[tgtCharacter]!!.resources.keys.toList())
                 amount = GameEngine.acquire(arrayListOf("1","2","3","4","5","6","7","8","9","10")).toInt()
             }
@@ -38,13 +40,15 @@ class trade(targetState: GameState, targetCharacter: String, targetPlace: String
                 action = Command(where, name, 0)
             }
             "information"->{
-                info = tgtState.informations[GameEngine.acquire(tgtState.informations.filter { it.value.knownTo.contains(tgtCharacter) }.map { it.key })]
+                info = tgtState.informations[GameEngine.acquire(tgtState.informations.filter { it.value.knownTo.contains(tgtCharacter) }.map { it.key })] //You can give information that opponent has no clue about.
             }
         }
-        println("What do you want to trade it for?")//TODO: the list of available stuff should not be visible by default.
+        println("What do you want to trade it for?")
         val type2 = GameEngine.acquire(listOf("resource", "information", "action"))
         when (type2){
             "resource"->{
+                //TODO: Can only request information that you know the existence.
+
                 item2 = GameEngine.acquire(tgtState.characters[who]!!.resources.keys.toList())
                 amount2 = GameEngine.acquire(arrayListOf("1","2","3","4","5","6","7","8","9","10")).toInt()
             }
@@ -58,15 +62,11 @@ class trade(targetState: GameState, targetCharacter: String, targetPlace: String
                 action2 = Command(where, name, 0)
             }
             "information"->{
-                info2 = tgtState.informations[GameEngine.acquire(tgtState.informations.filter { it.value.knownTo.contains(who) }.map { it.key })]
+                info2 = tgtState.informations[GameEngine.acquire(tgtState.informations.filter { it.value.knownTo.contains(who) and it.value.knowExistence.contains(tgtCharacter) }.map { it.key })] //You can only request information that you know the existence.
             }
         }
     }
     override fun execute() {
-
-            //TODO: trade
-        if (tgtCharacter == who) {println("You trade with yourself.")
-            return}
 
         val value = itemValue(who, item)+(action?.let { actionValue(who, it) } ?:.0)+ (info?.let { infoValue(who, it) }?:.0)//Value is calculated based on how the opponent values the item, not how the tgtCharacter values it.
         val value2 = itemValue(who, item2)+(action2?.let {actionValue(who, it)} ?:.0)+ (info2?.let { infoValue(who, it) } ?:.0)
@@ -99,11 +99,12 @@ class trade(targetState: GameState, targetCharacter: String, targetPlace: String
         }
         else{
             println("$who refuses to trade with $tgtCharacter.")
+            //TODO: this should come with consequences.
         }
 
 
     }
-
+//TODO: value may be affected by power dynamics.
     fun itemValue(char:String, item:String):Double{
         return when(item){
             //Value of ration and water is based on the current need of the character.

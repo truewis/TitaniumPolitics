@@ -18,22 +18,26 @@ class infoShare(targetState: GameState, targetCharacter: String, targetPlace: St
             GameEngine.acquire(tgtState.informations.filter { it.value.knownTo.contains(tgtCharacter) }.map { it.key })
 
         //To all participants of the meeting/conference
-        who =
-            (tgtState.ongoingMeetings.filter {it.value.currentCharacters.contains(tgtCharacter)}.flatMap { it.value.currentCharacters }+tgtState.ongoingConferences.filter {it.value.currentCharacters.contains(tgtCharacter)}.flatMap { it.value.currentCharacters }).toHashSet()
         application = GameEngine.acquire(listOf("praise", "criticize", "respond"))
     }
     override fun execute() {
+        who =
+            (tgtState.ongoingMeetings.filter {it.value.currentCharacters.contains(tgtCharacter)}.flatMap { it.value.currentCharacters }+tgtState.ongoingConferences.filter {it.value.currentCharacters.contains(tgtCharacter)}.flatMap { it.value.currentCharacters }).toHashSet()
+
+
         tgtState.informations[what]!!.knownTo+=who
 
-        if(application == "praise"){
-            tgtState.setMutuality(tgtCharacter, tgtState.informations[what]!!.tgtCharacter, 2.0)
-        }
-        else if(application == "criticize"){
-            tgtState.setMutuality(tgtCharacter, tgtState.informations[what]!!.tgtCharacter, -5.0)
-        }
-        else if(application == "respond"){
-            //responseTo = tgtState.informations[what]
-           //TODO: response to a previous information given in the meeting, or a rumor
+        when (application) {
+            "praise" -> {
+                tgtState.setMutuality(tgtCharacter, tgtState.informations[what]!!.tgtCharacter, 2.0)
+            }
+            "criticize" -> {
+                tgtState.setMutuality(tgtCharacter, tgtState.informations[what]!!.tgtCharacter, -5.0)
+            }
+            "respond" -> {
+                //responseTo = tgtState.informations[what]
+                //TODO: response to a previous information given in the meeting, or a rumor
+            }
         }
 
         tgtState.characters[tgtCharacter]!!.frozen++

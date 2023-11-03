@@ -3,6 +3,7 @@ package com.capsulezero.game.core.gameActions
 import com.capsulezero.game.core.GameAction
 import com.capsulezero.game.core.GameEngine
 import com.capsulezero.game.core.GameState
+import kotlin.math.min
 
 class infoAnnounce(targetState: GameState, targetCharacter: String, targetPlace: String) : GameAction(targetState, targetCharacter,
     targetPlace
@@ -17,7 +18,8 @@ class infoAnnounce(targetState: GameState, targetCharacter: String, targetPlace:
     }
     override fun execute() {
         tgtState.informations[what]!!.knownTo+=who
-        //tgtState.informations[what]!!.publicity = min(tgtState.informations[what]!!.publicity+30, 100)//TODO: Increase publicity in the announced party
+        val party =  tgtState.places[tgtPlace]!!.responsibleParty
+        tgtState.informations[what]!!.publicity[party] = min((tgtState.informations[what]!!.publicity[party]?:0)+30, 100)//TODO: match unit of publicity to number of people in the party
         tgtState.characters[tgtCharacter]!!.frozen++
     }
 

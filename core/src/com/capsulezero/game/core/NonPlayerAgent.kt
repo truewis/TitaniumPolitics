@@ -77,7 +77,7 @@ class NonPlayerAgent {
                     }
                 }
                 else
-                {
+                {//TODO: start a conversation first
                     //Trade for the resource
                     trade(gameState, character, place).also { trade ->
                         trade.who = tradeCharacter
