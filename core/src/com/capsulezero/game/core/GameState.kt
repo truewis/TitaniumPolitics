@@ -107,6 +107,7 @@ class GameState {
         places.forEach { it.value.injectParent(this) }
         characters.forEach { it.value.injectParent(this) }
         parties.forEach { it.value.injectParent(this) }
+        nonPlayerAgents.forEach { it.value.injectParent(this) }
         todo.injectParent(this)
     }
 

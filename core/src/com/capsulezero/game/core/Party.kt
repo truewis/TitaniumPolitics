@@ -11,7 +11,9 @@ class Party: GameStateElement() {
     var anonymousMembers  = 0
     val size: Int
         get() = members.size+anonymousMembers
-    fun individualMutuality(name:String) = 0//TODO: implement this.
+    //This is average person to person mutuality of all members.
+    fun individualMutuality(name:String) : Double = members.sumOf { parent.getMutuality(it, name)} / members.size
+
     var resources = hashMapOf<String, Int>()
     val integrity: Int
         get() = 0

@@ -22,15 +22,20 @@ class unofficialResourceTransfer(targetState: GameState, targetCharacter: String
             tgtState.characters[tgtCharacter]!!.resources[what] =
                 (tgtState.characters[tgtCharacter]!!.resources[what]?:0) + amount
             tgtState.characters[tgtCharacter]!!.frozen++
-            //Spread rumor TODO: only when someone sees it
-            Information(
-                author = "",
-                creationTime = tgtState.time,
-                type = "action",
-                tgtPlace = tgtPlace,
-                amount = amount,
-                action = "unofficialResourceTransfer"
-            )/*spread rumor in the responsible party*/.also { tgtState.informations[it.generateName()] = it; it.publicity[tgtState.places[tgtPlace]!!.responsibleParty] = 1 }
+            //Spread rumor only when someone sees it
+            if (tgtState.places[tgtPlace]!!.currentWorker!=0) {
+                Information(
+                    author = "",
+                    creationTime = tgtState.time,
+                    type = "action",
+                    tgtPlace = tgtPlace,
+                    amount = amount,
+                    action = "unofficialResourceTransfer"
+                )/*spread rumor in the responsible party*/.also {
+                    tgtState.informations[it.generateName()] =
+                        it; it.publicity[tgtState.places[tgtPlace]!!.responsibleParty] = 1
+                }
+            }
         }
         else{
             println("Not enough resources: $tgtPlace, ${tgtState.places[tgtPlace]!!.resources["water"]}")

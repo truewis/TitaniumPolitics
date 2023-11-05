@@ -12,7 +12,7 @@ class talk(targetState: GameState, targetCharacter: String, targetPlace: String)
     var who = ""
     override fun chooseParams() {
         who =
-            GameEngine.acquire(tgtState.places[tgtPlace]!!.characters.toList())
+            GameEngine.acquire(tgtState.places[tgtPlace]!!.characters.filter { it!=tgtCharacter }.toList())
         if(tgtState.characters[who]!!.frozen>1) println("Warning: $who is already busy.")
     }
     override fun execute() {

@@ -4,27 +4,89 @@
   "idlePop": 1000,
   "playerAgent": "Rui",
   "nonPlayerAgents": {
-    "charlie": {},
-    "seefy": {},
-    "infy": {},
-    "mini": {},
-    "eddy": {},
-    "inddy": {},
-    "welly": {},
-    "hhh": {},
-    "iii": {},
-    "friend1": {},
-    "friend2": {},
-    "friend3": {},
-    "mini1": {},
-    "mini2": {},
-    "doci1": {},
-    "doci2": {},
-    "selli1": {},
-    "selli2": {},
-    "oldie": {},
-    "ctrler": {},
-    "observer": {}
+    "charlie": {
+      "character": "charlie"
+    },
+    "seefy": {
+        "character": "seefy"
+
+    },
+    "infy": {
+        "character": "infy"
+
+    },
+    "mini":  {
+        "character": "mini"
+
+    },
+    "eddy": {
+        "character": "eddy"
+
+    },
+    "inddy": {
+        "character": "inddy"
+
+    },
+    "welly": {
+        "character": "welly"
+
+    },
+    "hhh": {
+        "character": "hhh"
+
+    },
+    "iii": {
+        "character": "iii"
+
+    },
+    "friend1": {
+        "character": "friend1"
+
+    },
+    "friend2": {
+        "character": "friend2"
+
+    },
+    "friend3": {
+        "character": "friend3"
+
+    },
+    "mini1": {
+        "character": "mini1"
+
+    },
+    "mini2": {
+        "character": "mini2"
+
+    },
+    "doci1": {
+        "character": "doci1"
+
+    },
+    "doci2": {
+        "character": "doci2"
+
+    },
+    "selli1": {
+        "character": "selli1"
+
+    },
+    "selli2": {
+        "character": "selli2"
+
+    },
+    "oldie": {
+        "character": "oldie"
+
+    },
+    "ctrler": {
+        "character": "ctrler"
+
+    },
+    "observer": {
+        "character": "observer"
+
+    }
   },
   "characters": {
     "oldie": {

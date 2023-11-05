@@ -18,6 +18,7 @@ class trade(targetState: GameState, targetCharacter: String, targetPlace: String
     var action2 : Command? = null
     var info : Information? = null
     var info2 : Information? = null
+    var onNextTurn : (Boolean)->Unit = {} //This is called when the trade is accepted or rejected.
     override fun chooseParams() {
         who =
             tgtState.ongoingMeetings.filter {it.value.currentCharacters.contains(tgtCharacter)}.flatMap { it.value.currentCharacters }.first {it!=tgtCharacter}//Trade can happen only when there is exactly one other character in the meeting.

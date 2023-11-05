@@ -63,11 +63,7 @@ class GameEngine(val gameState: GameState) {
 
 
         } else {
-            action = gameState.nonPlayerAgents[char.name]?.chooseAction(
-                gameState,
-                char.name,
-                gameState.places.values.find { it.characters.contains(char.name) }!!.name
-            ) ?: throw Exception("Non player character ${char.name} does not have a nonPlayerAgent.")
+            action = gameState.nonPlayerAgents[char.name]?.chooseAction() ?: throw Exception("Non player character ${char.name} does not have a nonPlayerAgent.")
             if (action.javaClass.simpleName !in actionList)
                 println(
                     "Warning: Non player character ${char.name} is performing ${action.javaClass.simpleName} at ${
@@ -168,14 +164,14 @@ class GameEngine(val gameState: GameState) {
                         if (a.compatibility(b) == 0.0)//If the two information are incompatible
                         {
                             val aStrength =
-                                if (a.author == "") 5000 /*rumor has fixed strength*/ else
+                                if (a.author == "") 5000.0 /*rumor has fixed strength*/ else
                                     a.credibility * (party.value.individualMutuality(a.author) + a.supporters.sumOf {
                                         party.value.individualMutuality(
                                             it
                                         )
                                     } / 2/*supporter penalty*/)
                             val bStrength =
-                                if (b.author == "") 5000 /*rumor has fixed strength*/ else
+                                if (b.author == "") 5000.0 /*rumor has fixed strength*/ else
                                     b.credibility * (party.value.individualMutuality(b.author) + b.supporters.sumOf {
                                         party.value.individualMutuality(
                                             it
@@ -211,10 +207,10 @@ class GameEngine(val gameState: GameState) {
                         if (a.compatibility(b) == 0.0)//If the two information are incompatible
                         {
                             val aStrength =
-                                if (a.author == "") 5000 /*rumor has fixed strength*/ else
+                                if (a.author == "") 5000.0 /*rumor has fixed strength*/ else
                                     a.credibility * (party.value.individualMutuality(a.author) + a.supporters.sumOf { party.value.individualMutuality(it) } / 2/*supporter penalty*/)
                             val bStrength =
-                                if (b.author == "") 5000 /*rumor has fixed strength*/ else
+                                if (b.author == "") 5000.0 /*rumor has fixed strength*/ else
                                     b.credibility * (party.value.individualMutuality(b.author) + b.supporters.sumOf { party.value.individualMutuality(it) } / 2/*supporter penalty*/)
                             if (aStrength > bStrength) {
                                 //Fight within each party
