@@ -18,7 +18,7 @@ class trade(targetState: GameState, targetCharacter: String, targetPlace: String
     var action2 : Command? = null
     var info : Information? = null
     var info2 : Information? = null
-    var onNextTurn : (Boolean)->Unit = {} //This is called when the trade is accepted or rejected.
+    var onFinished : (Boolean)->Unit = {} //This is called when the trade is accepted or rejected.
     override fun chooseParams() {
         who =
             tgtState.ongoingMeetings.filter {it.value.currentCharacters.contains(tgtCharacter)}.flatMap { it.value.currentCharacters }.first {it!=tgtCharacter}//Trade can happen only when there is exactly one other character in the meeting.
@@ -68,13 +68,25 @@ class trade(targetState: GameState, targetCharacter: String, targetPlace: String
         }
     }
     override fun execute() {
+        var success= false
+        val value = tgtState.nonPlayerAgents[who]!!.itemValue(item)+(action?.let { tgtState.nonPlayerAgents[who]!!.actionValue(it) } ?:.0)+ (info?.let { tgtState.nonPlayerAgents[who]!!.infoValue(it) }?:.0)//Value is calculated based on how the opponent values the item, not how the tgtCharacter values it.
+        val value2 = tgtState.nonPlayerAgents[who]!!.itemValue(item2)+(action2?.let {tgtState.nonPlayerAgents[who]!!.actionValue(it)} ?:.0)+ (info2?.let { tgtState.nonPlayerAgents[who]!!.infoValue(it) } ?:.0)
+        val valuea = tgtState.nonPlayerAgents[tgtCharacter]!!.itemValue(item)+(action?.let { tgtState.nonPlayerAgents[tgtCharacter]!!.actionValue(it) } ?:.0)+ (info?.let { tgtState.nonPlayerAgents[tgtCharacter]!!.infoValue(it) }?:.0)
+        val valuea2 = tgtState.nonPlayerAgents[tgtCharacter]!!.itemValue(item2)+(action2?.let {tgtState.nonPlayerAgents[tgtCharacter]!!.actionValue(it)} ?:.0)+ (info2?.let { tgtState.nonPlayerAgents[tgtCharacter]!!.infoValue(it) } ?:.0)
+        success = if(tgtState.nonPlayerAgents.keys.contains(who)) {
+            value>=value2
+        } else//If player, acquires the decision from the player.
+        {
+            println("$tgtCharacter offers $item x $amount for $item2 x $amount2,\n and $action for $action2,\n and $info for $info2.")
+            println("Do $who accept the trade?")
+            GameEngine.acquire(listOf("yes", "no"))=="yes"
+        }
 
-        val value = itemValue(who, item)+(action?.let { actionValue(who, it) } ?:.0)+ (info?.let { infoValue(who, it) }?:.0)//Value is calculated based on how the opponent values the item, not how the tgtCharacter values it.
-        val value2 = itemValue(who, item2)+(action2?.let {actionValue(who, it)} ?:.0)+ (info2?.let { infoValue(who, it) } ?:.0)
-        if(value>=value2) {
+        if(success) {
             if(item!=""){
                 if(tgtState.characters[tgtCharacter]!!.resources[item]!!<amount){
                     println("You don't have enough $item to trade.")
+                    onFinished(false)
                     return
                 }
                 tgtState.characters[tgtCharacter]!!.resources[item] = (tgtState.characters[tgtCharacter]!!.resources[item] ?: 0) - amount
@@ -83,6 +95,7 @@ class trade(targetState: GameState, targetCharacter: String, targetPlace: String
             if (item2 != "") {
                 if(tgtState.characters[who]!!.resources[item2]!!<amount){
                     println("They don't have enough $item2 to trade.")
+                    onFinished(false)
                     return
                 }
                 tgtState.characters[who]!!.resources[item2] = (tgtState.characters[who]!!.resources[item2] ?: 0) - amount2
@@ -94,73 +107,19 @@ class trade(targetState: GameState, targetCharacter: String, targetPlace: String
             info2?.let{ tgtState.informations[it.name]!!.knownTo.add(tgtCharacter)}
             //Increase mutualities of each character with the other. Value is proportional to the value of the traded item.
             tgtState.setMutuality(who, tgtCharacter, value+value2)
-            tgtState.setMutuality(tgtCharacter, who, value+value2)
-            //tgtState.characters[tgtCharacter]!!.frozen++ TODO: trading does not take time right now, but it should
+            tgtState.setMutuality(tgtCharacter, who, valuea+valuea2)
+
             println("$who trades with $tgtCharacter.")
+            onFinished(true)
         }
         else{
             println("$who refuses to trade with $tgtCharacter.")
+            onFinished(false)
             //TODO: this should come with consequences.
         }
-
-
-    }
-//TODO: value may be affected by power dynamics.
-    fun itemValue(char:String, item:String):Double{
-        return when(item){
-            //Value of ration and water is based on the current need of the character.
-            "ration"->5.0*(tgtState.characters[char]!!.reliants.size+1.0) / ((tgtState.characters[char]!!.resources["ration"]?:0)+1.0)
-            "water"->(tgtState.characters[char]!!.reliants.size+1.0) / ((tgtState.characters[char]!!.resources["water"]?:0)+1.0)
-            "hydrogen"->1.0
-            "organics"->5.0
-            "lightMetal"->1.0
-            "heavyMetal"->1.0
-            "rareMetal"->5.0
-            "silicon"->1.0
-            "plastic"->10.0
-            "glass"->1.0
-            "ceramic"->1.0
-            "diamond"->3.0
-            "helium"->1.0
-            "glassClothes"->1.0
-            "cottonClothes"->10.0
-
-            else->0.0
-        }
+        tgtState.characters[tgtCharacter]!!.frozen++
 
     }
-    fun actionValue(char:String, action:Command):Double{
-        //TODO: the value of the action should be calculated based on the expected outcome.
-        //TODO: Action to remove rivals is more valuable.
-        //TODO: Action to acquire resources is more valuable.
 
-        //Action to repair the character's apparatus is more valuable.
-        if(action.action=="repair" && tgtState.parties[tgtState.places[action.place]!!.responsibleParty]?.members?.contains(char)==true)
-        {
-            val urgency = 100.0 - tgtState.places[action.place]!!.apparatuses.sumOf { it.durability } / tgtState.places[action.place]!!.apparatuses.size
-            return urgency
-        }
-
-        return 1.0
-    }
-    fun infoValue(char:String, info:Information):Double{
-        //Known information is less valuable.
-        if(info.knownTo.contains(char))
-            return 0.0
-        //Information about the character itself is more valuable.
-        if(info.tgtCharacter==char)
-            return 2.0
-        //Information about the character's party is more valuable.
-        if(tgtState.parties[info.tgtParty]?.members?.contains(char) == true)
-            return 2.0
-        //Information about valuable resource is more valuable.
-        if(info.type=="resource")
-            return itemValue(char, info.tgtResource) * info.amount
-        //UnofficialTransfer is more valuable if it is not known to the other character.
-        if(info.type=="action" && info.action=="unofficialResourceTransfer" && !info.knownTo.contains(char))
-            return 10.0
-
-        return 1.0
-    }
 
 }

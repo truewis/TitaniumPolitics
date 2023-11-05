@@ -438,15 +438,14 @@ class NonPlayerAgent(val character: String) : GameStateElement() {
                                 it.tgtCharacter == tradeCharacter && it.knownTo.contains(character)
                             }.random()
                             //Give away actions they want
-                            trade.onNextTurn = {
+                            trade.onFinished = {
                                 if (it)//Trade accepted
                                     routines.removeAt(0)//Remove the current routine.
                                 else
                                     routines[0].variables["desperation"] =
                                         ((routines[0].variables["desperation"]?.toInt()
                                             ?: 0) + 1).toString() //Increase desperation and try again.
-                            }//TODO: implement onNextTurn callback
-                            routines.removeAt(0)//Remove the current routine.//TODO: remove this line after implementing the above line.
+                            }
                             return trade
                         }
                     }
@@ -457,6 +456,7 @@ class NonPlayerAgent(val character: String) : GameStateElement() {
         return wait(parent, character, place)
 
     }
+
 
     private fun whenIdle() {
         //When work hours, work
@@ -472,5 +472,67 @@ class NonPlayerAgent(val character: String) : GameStateElement() {
     @Serializable
     class Routine(val name: String, val priority: Int) {
         val variables: HashMap<String, String> = hashMapOf()
+    }
+
+
+
+
+
+    //TODO: value may be affected by power dynamics.
+    fun itemValue(item:String):Double{
+        return when(item){
+            //Value of ration and water is based on the current need of the character.
+            "ration"->5.0*(parent.characters[character]!!.reliants.size+1.0) / ((parent.characters[character]!!.resources["ration"]?:0)+1.0)
+            "water"->(parent.characters[character]!!.reliants.size+1.0) / ((parent.characters[character]!!.resources["water"]?:0)+1.0)
+            "hydrogen"->1.0
+            "organics"->5.0
+            "lightMetal"->1.0
+            "heavyMetal"->1.0
+            "rareMetal"->5.0
+            "silicon"->1.0
+            "plastic"->10.0
+            "glass"->1.0
+            "ceramic"->1.0
+            "diamond"->3.0
+            "helium"->1.0
+            "glassClothes"->1.0
+            "cottonClothes"->10.0
+
+            else->0.0
+        }
+
+    }
+    fun actionValue(action:Command):Double{
+        //TODO: the value of the action should be calculated based on the expected outcome.
+        //TODO: Action to remove rivals is more valuable.
+        //TODO: Action to acquire resources is more valuable.
+
+        //Action to repair the character's apparatus is more valuable.
+        if(action.action=="repair" && parent.parties[parent.places[action.place]!!.responsibleParty]?.members?.contains(character)==true)
+        {
+            val urgency = 100.0 - parent.places[action.place]!!.apparatuses.sumOf { it.durability } / parent.places[action.place]!!.apparatuses.size
+            return urgency
+        }
+
+        return 1.0
+    }
+    fun infoValue(info:Information):Double{
+        //Known information is less valuable.
+        if(info.knownTo.contains(character))
+            return 0.0
+        //Information about the character itself is more valuable.
+        if(info.tgtCharacter==character)
+            return 2.0
+        //Information about the character's party is more valuable.
+        if(parent.parties[info.tgtParty]?.members?.contains(character) == true)
+            return 2.0
+        //Information about valuable resource is more valuable.
+        if(info.type=="resource")
+            return itemValue(info.tgtResource) * info.amount
+        //UnofficialTransfer is more valuable if it is not known to the other character.
+        if(info.type=="action" && info.action=="unofficialResourceTransfer" && !info.knownTo.contains(character))
+            return 10.0
+
+        return 1.0
     }
 }
