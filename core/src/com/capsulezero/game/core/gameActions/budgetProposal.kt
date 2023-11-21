@@ -14,6 +14,7 @@ class budgetProposal(targetState: GameState, targetCharacter: String, targetPlac
         }
     override fun isValid():Boolean = tgtState.ongoingConferences.filter { it.value.subject=="budgetProposal" }.values.first().currentCharacters.count()==8//TODO: cancel if not fully attended
     override fun execute() {
+        //TODO: vote on the budget proposal
 
         println("Budget proposal executed.")
         tgtState.isBudgetProposed = true

@@ -2337,14 +2337,30 @@
       "anonymousMembers": 0,
       "leader": "ctrler",
       "members": ["oldie", "ctrler", "observer"],
-      "commands": ["investigateAccidentScene", "clearAccidentScene"]
+      "commands": ["investigateAccidentScene", "clearAccidentScene"],
+        "home": "mainControlRoom"
+    },
+    "ctrler": {
+      "name": "ctrler",
+      "anonymousMembers": 0,
+      "leader": "ctrler",
+      "members": ["ctrler"],
+      "home": "mainControlRoom"
+    },
+    "observer": {
+        "name": "observer",
+        "anonymousMembers": 0,
+        "leader": "observer",
+      "members": ["observer"],
+        "home": "observatory"
     },
     "cabinet": {
       "name": "cabinet",
         "anonymousMembers": 0,
       "leader": "oldie",
         "members": ["oldie", "charlie", "seefy", "infy", "mini","eddy","inddy","welly"],
-        "commands": ["investigateAccidentScene", "clearAccidentScene"]
+        "commands": ["investigateAccidentScene", "clearAccidentScene"],
+      "home": "mainControlRoom"
     },
     "interior": {
       "name": "interior",
@@ -2352,42 +2368,48 @@
       "anonymousMembers": 650,
       "leader": "charlie",
       "members": ["charlie", "selli1", "selli2"],
-      "commands": ["investigateAccidentScene", "clearAccidentScene"]
+      "commands": ["investigateAccidentScene", "clearAccidentScene"],
+        "home": "mainControlRoom"
     },
     "mining": {
       "name": "mining",
       "type": "division",
       "anonymousMembers": 2000,
       "leader": "mini",
-      "members": ["mini", "mini1", "mini2"]
+      "members": ["mini", "mini1", "mini2"],
+      "home": "redMine"
     },
     "education": {
       "name": "education",
       "type": "division",
       "anonymousMembers": 50,
         "leader": "eddy",
-      "members": ["eddy"]
+      "members": ["eddy"],
+      "home": "miningSchool"
     },
     "industry": {
         "name": "industry",
       "type": "division",
       "anonymousMembers": 800,
         "leader": "inddy",
-      "members": ["inddy"]
+      "members": ["inddy"],
+        "home": "farm"
     },
     "safety": {
         "name": "safety",
       "type": "division",
       "anonymousMembers": 400,
         "leader": "seefy",
-      "members": ["seefy"]
+      "members": ["seefy"],
+        "home": "rescueStationNorth"
     },
     "welfare": {
         "name": "welfare",
       "type": "division",
       "anonymousMembers": 120,
         "leader": "welly",
-      "members": ["welly", "doci1", "doci2"]
+      "members": ["welly", "doci1", "doci2"],
+        "home": "hospitalEast"
     },
     "infrastructure": {
         "name": "infrastructure",
@@ -2395,7 +2417,8 @@
       "anonymousMembers": 500,
         "leader": "infy",
       "members": ["infy", "Rui", "friend1", "friend2", "friend3"],
-        "commands": ["investigateAccidentScene", "clearAccidentScene", "repair"]
+        "commands": ["investigateAccidentScene", "clearAccidentScene", "repair"],
+        "home": "hanger"
     }
   },
   "scheduledConferences":{

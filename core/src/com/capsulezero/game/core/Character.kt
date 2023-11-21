@@ -38,4 +38,6 @@ class Character: GameStateElement() {
     val place
     get() = parent.places.values.first{it.characters.contains(name)}
 
+    val history =  hashMapOf<Int, String>()
+
 }

@@ -6,11 +6,13 @@ class Party: GameStateElement() {
     var name = ""
     var leader = ""
     var type = ""
+    var home = "" //The place where the party is based.
     var members = hashSetOf<String>()
     var commands = hashSetOf<String>()
     var anonymousMembers  = 0
     val size: Int
         get() = members.size+anonymousMembers
+
     //This is average person to person mutuality of all members.
     fun individualMutuality(name:String) : Double = members.sumOf { parent.getMutuality(it, name)} / members.size
 

@@ -36,7 +36,10 @@ class GameEngine(val gameState: GameState) {
             }
             progression()
             if(gameState.time % 48 == 0)//Every day
+            {
                 partySizeAdjust()
+                scheduleDailyConferences()
+            }
         }
     }
 
@@ -76,6 +79,7 @@ class GameEngine(val gameState: GameState) {
                 )
 
         }
+        char.history[gameState.time] = action.javaClass.simpleName
         action.execute()
 
     }
@@ -128,6 +132,24 @@ class GameEngine(val gameState: GameState) {
             gameState.parties.forEach {party->
                 if(party.value.members.contains(char.key))
                     gameState.parties.forEach {gameState.setMutuality(char.key, it.key, (gameState.getPartyMutuality(party.key, it.key)-50)/50)}
+            }
+        }
+
+        //If there are meetings where some characters are missing, all the characters in the meeting lose mutuality toward the missing characters.
+        gameState.ongoingConferences.forEach {conference->
+            conference.value.scheduledCharacters.forEach {char->
+                if(!conference.value.currentCharacters.contains(char))
+                    conference.value.currentCharacters.forEach {char2->
+                        gameState.setMutuality(char, char2, -1.0)
+                    }
+            }
+        }
+        gameState.ongoingMeetings.forEach {meeting->
+            meeting.value.scheduledCharacters.forEach {char->
+                if(!meeting.value.currentCharacters.contains(char))
+                    meeting.value.currentCharacters.forEach {char2->
+                        gameState.setMutuality(char, char2, -.5)
+                    }
             }
         }
     }
@@ -319,6 +341,14 @@ class GameEngine(val gameState: GameState) {
         }
 
     }
+    //Each division has a conference every day. The conference is attended by the head of the division and the members of the division.
+    fun scheduleDailyConferences(){
+        gameState.parties.values.filter { it.type=="division" }.forEach{
+            val conference = Meeting(gameState.time+18 /*9 in the morning*/, "${it.name} daily conference", place = it.home, scheduledCharacters = it.members)
+
+            gameState.scheduledConferences["conference-${it.home}-${it.name}-${gameState.time}"] = conference
+        }
+    }
 
     //Workers are assigned to apparatuses. If there is not enough workers, some apparatuses are not worked.
     fun distributePopulation() {
@@ -359,7 +389,6 @@ class GameEngine(val gameState: GameState) {
     }
 
     fun distributeResources(){
-
         //Some resources are scheduled to be distributed to other places. Other resources are distributed manually.
         //Distribute energy. Each energy storage value slowly moves to the average of all energy storage values.
         val energyDistributionSpeed = 1
@@ -381,7 +410,6 @@ class GameEngine(val gameState: GameState) {
                 apparatus.currentProduction.forEach {
                     if((entry.value.resources[it.key]?:0)+it.value>(entry.value.maxResources[it.key]?:0))
                         return@app //If the resource is full, no one works.
-
                 }
                 if(isShortOfResources(apparatus, place = entry.value)!="")
                     return@app //If there is not enough resources, no one works.
@@ -878,16 +906,16 @@ class GameEngine(val gameState: GameState) {
                     .filter { it.value.scheduledCharacters.contains(character) }
             if (availableMeetings.isNotEmpty())
                 actions.add("startMeeting")
-            val ongoingMeetings = gameState.ongoingMeetings.filter {
+            val meetingsToJoin = gameState.ongoingMeetings.filter {
                 it.value.scheduledCharacters.contains(character) && !it.value.currentCharacters.contains(character) && it.value.place == place
             }
-            if (ongoingMeetings.isNotEmpty()) {
+            if (meetingsToJoin.isNotEmpty()) {
                 val subject = gameState.ongoingMeetings.firstNotNullOf { entry ->
                     entry.value.subject.takeIf {
                         entry.value.scheduledCharacters.contains(character) && !entry.value.currentCharacters.contains(character) && entry.value.place == place
                     }
                 }
-                if (gameState.characters[character]!!.trait.contains("mechanic")) {
+                if (gameState.playerAgent == character) {
                     when (subject) {
                         "talk" -> println("Someone wants to talk to you.")//TODO: have no idea what this is doing.
                     }

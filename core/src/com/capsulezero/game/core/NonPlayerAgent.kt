@@ -51,7 +51,23 @@ class NonPlayerAgent(val character: String) : GameStateElement() {
                 return wait(parent, character, place)
         }
         routines.sortByDescending { it.priority }
-        when (routines[0].name) {//Execute action by the current routine
+        //Leave meeting or conference if the routine was changed.
+        if (routines[0].name != "attendMeeting" && parent.ongoingMeetings.any {
+                it.value.currentCharacters.contains(
+                    character
+                )
+            }) {
+            return leaveMeeting(parent, character, place)
+        }
+        if (routines[0].name != "attendConference" && parent.ongoingConferences.any {
+                it.value.currentCharacters.contains(
+                    character
+                )
+            }) {
+            return leaveConference(parent, character, place)
+        }
+        //Execute action by the current routine
+        when (routines[0].name) {
             "rest" -> {
                 if (place != "home") {
                     routines.add(Routine("move", routines[0].priority + 10).also {
@@ -64,7 +80,7 @@ class NonPlayerAgent(val character: String) : GameStateElement() {
                 when (parent.characters[character]!!.health) {
                     in 0..40 -> return sleep(parent, character, place)
                     else ->
-                        if (parent.hour in 9..17) {
+                        if (parent.hour in 8..18) {//Preparation for work takes 1 hour. Normal work hours are 9-17.
                             routines.removeAt(0)//Remove the current routine.
                             routines.add(Routine("work", 0))
                             return executeRoutine()
@@ -78,8 +94,28 @@ class NonPlayerAgent(val character: String) : GameStateElement() {
                 if (place == routines[0].variables["movePlace"]) {
                     routines.removeAt(0)//Remove the current routine.
                     return executeRoutine()
-                } else
-                    return move(parent, character, place).also { it.placeTo = routines[0].variables["movePlace"]!! }
+                } else {
+
+                    if (routines[0].variables["movePlace"]=="home")
+                    {
+                        if (place != parent.characters[character]!!.home) {
+                            return move(parent, character, place).also { it.placeTo = parent.characters[character]!!.home }//If player is far from the home, go outside the home.
+                        }
+                        else
+                        {
+                            return home(parent, character, place)//If player is outside the home, go inside.
+                        }
+                    }
+                    else
+                    {
+                        if(place == "home")//If the character is at home, go outside.
+                            return move(parent, character, place).also { it.placeTo = parent.characters[character]!!.home }
+                        return move(parent, character, place).also { it.placeTo = routines[0].variables["movePlace"]!! }
+                    }
+
+                    //TODO: implement pathfinding. For now, just teleport to the place
+                }
+
             }
 
             "steal" -> {
@@ -147,25 +183,9 @@ class NonPlayerAgent(val character: String) : GameStateElement() {
                             }
                     }
                 }
-                //If in a conference or a meeting, wait for it to end.
-                if (parent.ongoingConferences.any {
-                        it.value.scheduledCharacters.contains(character) && it.value.currentCharacters.contains(
-                            character
-                        )
-                    })//If in a conference
-                {
-                    return wait(parent, character, place)
-                }
-                if (parent.ongoingMeetings.any {
-                        it.value.scheduledCharacters.contains(character) && it.value.currentCharacters.contains(
-                            character
-                        )
-                    })//If in a meeting
-                {
-                    return wait(parent, character, place)
-                }
+
                 //If work hours are over, rest. Also, if the character is too hungry, thirsty, or sick, rest.
-                if (parent.hour !in 9..17) {
+                if (parent.hour !in 8..18) {
                     routines.removeAt(0)//Remove the current routine.
                     routines.add(Routine("rest", 0))
                     return executeRoutine()
@@ -198,18 +218,21 @@ class NonPlayerAgent(val character: String) : GameStateElement() {
                         )
                     })//If missed a conference
                 {
-                    val conferencePlace = parent.ongoingConferences.filter {
+                    val conference = parent.ongoingConferences.filter {
                         it.value.scheduledCharacters.contains(character) && !it.value.currentCharacters.contains(
                             character
                         )
-                    }.values.first().place
+                    }.values.first()
                     //----------------------------------------------------------------------------------Move to the conference
-                    if (place != conferencePlace) {
+                    if (place != conference.place) {
                         routines.add(Routine("move", routines[0].priority + 10).also {
-                            it.variables["movePlace"] = conferencePlace
+                            it.variables["movePlace"] = conference.place
                         })//Add a move routine with higher priority.
-                        executeRoutine()
-                    } else
+                        return executeRoutine()
+                    } else {
+                        routines.add(Routine("attendConference", routines[0].priority + 10).also {
+                            it.intVariables["time"] = conference.time
+                        })//Add a routine with higher priority.
                         joinConference(parent, character, place).also {
                             it.meetingName = parent.ongoingConferences.filter {
                                 it.value.scheduledCharacters.contains(character) && !it.value.currentCharacters.contains(
@@ -218,9 +241,10 @@ class NonPlayerAgent(val character: String) : GameStateElement() {
                             }.keys.first()
                             return it
                         }
+                    }
                     //----------------------------------------------------------------------------------Move to the conference
                 }
-                if (parent.scheduledConferences.any { it.value.scheduledCharacters.contains(character) && it.value.time - parent.time in -1..3 })//If a conference is soon
+                 if  (parent.scheduledConferences.any { it.value.scheduledCharacters.contains(character) && it.value.time - parent.time in -1..3 })//If a conference is soon
                 {
                     val conf = parent.scheduledConferences.filter {
                         it.value.scheduledCharacters.contains(character) && it.value.time - parent.time in -1..3
@@ -230,10 +254,13 @@ class NonPlayerAgent(val character: String) : GameStateElement() {
                         routines.add(Routine("move", routines[0].priority + 10).also {
                             it.variables["movePlace"] = conf.place
                         })//Add a move routine with higher priority.
-                        executeRoutine()
+                        return executeRoutine()
                     } else {
                         //if this character is the leader, start the conference.
                         if (parent.parties[conf.involvedParty]!!.leader == character) {
+                            routines.add(Routine("attendConference", routines[0].priority + 10).also {
+                                it.intVariables["time"] = conf.time
+                            })//Add a routine with higher priority.
                             startConference(parent, character, place).also { action ->
                                 action.meetingName =
                                     parent.scheduledConferences.keys.first { parent.scheduledConferences[it] == conf }
@@ -257,17 +284,20 @@ class NonPlayerAgent(val character: String) : GameStateElement() {
                         )
                     }) {
                     //----------------------------------------------------------------------------------Move to the meeting
-                    val meetingPlace = parent.ongoingMeetings.filter {
+                    val meeting = parent.ongoingMeetings.filter {
                         it.value.scheduledCharacters.contains(character) && !it.value.currentCharacters.contains(
                             character
                         )
-                    }.values.first().place
-                    if (place != meetingPlace) {
+                    }.values.first()
+                    if (place != meeting.place) {
                         routines.add(Routine("move", routines[0].priority + 10).also {
-                            it.variables["movePlace"] = meetingPlace
+                            it.variables["movePlace"] = meeting.place
                         })//Add a move routine with higher priority.
-                        executeRoutine()
-                    } else
+                        return executeRoutine()
+                    } else {
+                        routines.add(Routine("attendMeeting", routines[0].priority + 10).also {
+                            it.intVariables["time"] = meeting.time
+                        })//Add a routine with higher priority.
                         joinMeeting(parent, character, place).also {
                             it.meetingName = parent.ongoingMeetings.filter {
                                 it.value.scheduledCharacters.contains(character) && !it.value.currentCharacters.contains(
@@ -276,6 +306,7 @@ class NonPlayerAgent(val character: String) : GameStateElement() {
                             }.keys.first()
                             return it
                         }
+                    }
                     //----------------------------------------------------------------------------------Move to the meeting
                 }
                 if (parent.scheduledMeetings.any { it.value.scheduledCharacters.contains(character) && it.value.time - parent.time in -1..3 })//If a meeting is soon
@@ -288,8 +319,11 @@ class NonPlayerAgent(val character: String) : GameStateElement() {
                         routines.add(Routine("move", routines[0].priority + 10).also {
                             it.variables["movePlace"] = meeting.place
                         })//Add a move routine with higher priority.
-                        executeRoutine()
+                        return executeRoutine()
                     } else //If there is no meeting yet, create one. Concurrent meetings do not happen, as the meeting is created immediately only if there is no meeting in the place.
+                        routines.add(Routine("attendMeeting", routines[0].priority + 10).also {
+                            it.intVariables["time"] = meeting.time
+                        })//Add a routine with higher priority.
                         startMeeting(parent, character, place).also { action ->
                             action.meetingName =
                                 parent.scheduledMeetings.filter { it.value == meeting }.keys.first()
@@ -319,7 +353,7 @@ class NonPlayerAgent(val character: String) : GameStateElement() {
                                     ).also {
                                         it.variables["movePlace"] = resplace.name
                                     })//Add a move routine with higher priority.
-                                executeRoutine()
+                                return executeRoutine()
                             } else {
                                 officialResourceTransfer(parent, character, place).also {
                                     it.what = res
@@ -332,24 +366,21 @@ class NonPlayerAgent(val character: String) : GameStateElement() {
                     }
 
                 }
-                //If the character is at workplace, wait.
-                if ((parent.places[place]!!.responsibleParty != "" && parent.parties[parent.places[place]!!.responsibleParty]!!.members.contains(
-                        character
-                    ))
-                ) {
+                //If there is nothing above to do, move to a place that is the home of one of the parties of the character.
+                //If already at home, wait.
+                if (parent.parties.values.any {party->party.home== place && party.members.contains(character) })
+                {
                     return wait(parent, character, place)
                 } else
-                //Move to a random place such that the responsible party is one of the parties of the character.
+                //Move to a place that is the home of one of the parties of the character.
                 {
-                    return try {
+                    try {
                         routines.add(Routine("move", routines[0].priority + 10).also {
-                            it.variables["movePlace"] = parent.places.values.filter {
-                                it.responsibleParty != "" && parent.parties[it.responsibleParty]!!.members.contains(
-                                    character
-                                )
+                            it.variables["movePlace"] = parent.places.values.filter {place->
+                                parent.parties.values.any {party->party.home== place.name && party.members.contains(character) }
                             }.random().name
                         })//Add a move routine with higher priority.
-                        executeRoutine()
+                        return executeRoutine()
 
                     } catch (e: Exception) {
                         println("Warning: No place to commute found for $character.")
@@ -357,6 +388,71 @@ class NonPlayerAgent(val character: String) : GameStateElement() {
                     }
 
                 }
+            }
+            "attendMeeting" ->{
+                //If the meeting is over, leave the routine.
+                if(parent.ongoingMeetings.none { it.value.currentCharacters.contains(character) })
+                {
+                    routines.removeAt(0)//Remove the current routine.
+                    return executeRoutine()
+                }
+                //If an hour has passed since the meeting started, leave the meeting. TODO: what if the meeting has started late?
+                if(routines[0].intVariables["time"]!!+1<=parent.time)
+                {
+                    routines.removeAt(0)//Remove the current routine.
+                    return executeRoutine()
+                }
+                return wait(parent, character, place)
+                //TODO: do something in the meeting. Leave the meeting if nothing to do.
+            }
+            "attendConference" ->{
+
+                //If the conference is over, leave the routine.
+                if(parent.ongoingConferences.none { it.value.currentCharacters.contains(character) })
+                {
+                    routines.removeAt(0)//Remove the current routine.
+                    return executeRoutine()
+                }
+                val conf = parent.ongoingConferences.filter { it.value.currentCharacters.contains(character) }.values.first()
+                //If an hour has passed since the meeting started, leave the meeting. TODO: what if the meeting has started late?
+                if(routines[0].intVariables["time"]!!+2<=parent.time)
+                {
+                    routines.removeAt(0)//Remove the current routine.
+                    return executeRoutine()
+                }
+                when (conf.subject){
+                    "budgetProposal"->{
+                        //If leader, propose budget
+                        if(parent.parties[conf.involvedParty]!!.leader==character)
+                        {
+                            if(!parent.isBudgetProposed)
+                            {
+                                return budgetProposal(parent, character, place)
+                            }
+                            else //If budget is proposed, leave the conference.
+                            {
+                                routines.removeAt(0)//Remove the current routine.
+                                return executeRoutine()
+                            }
+                        }
+                        else
+                        {
+                            //If not leader, wait for the budget to be proposed.
+                            if(!parent.isBudgetProposed)
+                            {
+                                return wait(parent, character, place)
+                            }
+                            else
+                            {
+                                routines.removeAt(0)//Remove the current routine.
+                                return executeRoutine()
+                            }
+                        }
+                    }
+                }
+                return wait(parent, character, place)
+                //TODO: do something in the meeting. Leave the meeting if nothing to do.
+
             }
 
             "findCharacter" -> {
@@ -460,7 +556,7 @@ class NonPlayerAgent(val character: String) : GameStateElement() {
 
     private fun whenIdle() {
         //When work hours, work
-        if (parent.hour in 9..17) {
+        if (parent.hour in 8..18) {
             routines.add(Routine("work", 0))
             return
         }
@@ -472,6 +568,7 @@ class NonPlayerAgent(val character: String) : GameStateElement() {
     @Serializable
     class Routine(val name: String, val priority: Int) {
         val variables: HashMap<String, String> = hashMapOf()
+        val intVariables: HashMap<String, Int> = hashMapOf()
     }
 
 
