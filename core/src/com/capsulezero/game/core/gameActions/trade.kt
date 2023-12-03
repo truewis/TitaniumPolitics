@@ -74,7 +74,7 @@ class trade(targetState: GameState, targetCharacter: String, targetPlace: String
         val valuea = tgtState.characters[tgtCharacter]!!.itemValue(item)+(action?.let { tgtState.characters[tgtCharacter]!!.actionValue(it) } ?:.0)+ (info?.let { tgtState.characters[tgtCharacter]!!.infoValue(it) }?:.0)
         val valuea2 = tgtState.characters[tgtCharacter]!!.itemValue(item2)+(action2?.let {tgtState.characters[tgtCharacter]!!.actionValue(it)} ?:.0)+ (info2?.let { tgtState.characters[tgtCharacter]!!.infoValue(it) } ?:.0)
         success = if(tgtState.nonPlayerAgents.keys.contains(who)) {
-            value>=value2
+            tgtState.nonPlayerAgents[who]!!.decideTrade(tgtCharacter, value, value2, valuea, valuea2)
         } else//If player, acquires the decision from the player.
         {
             println("$tgtCharacter offers $item x $amount for $item2 x $amount2,\n and $action for $action2,\n and $info for $info2.")

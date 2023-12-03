@@ -20,6 +20,7 @@ class command(targetState: GameState, targetCharacter: String, targetPlace: Stri
         command.place = GameEngine.acquire(tgtState.places.filter { currentConf.involvedParty!="" && it.value.responsibleParty==currentConf.involvedParty }.keys.toList())
         command.action = GameEngine.acquire(tgtState.parties[currentConf.involvedParty]!!.commands.toList())
         command.amount = 0
+        command.issuedParty = currentConf.involvedParty
     }
     override fun execute() {
         tgtState.nonPlayerAgents[who]!!.commands.add(command)

@@ -6,7 +6,7 @@ import kotlin.math.min
 
 @Serializable
 class NonPlayerAgent(val character: String) : GameStateElement() {
-    //TODO: implement pathfinding. For now, just teleport to the place
+
     var commands = arrayListOf<Command>()
     private var routines = arrayListOf<Routine>()//Routines are sorted by priority. 0th element is the current routine.
     val place
@@ -32,11 +32,11 @@ class NonPlayerAgent(val character: String) : GameStateElement() {
             if (parent.characters[character]!!.trait.contains("thief")) {
                 //Find a place within my division with maximum res.
                 if(routines.none{it.name=="steal"})
-                    routines.add(Routine("steal", 100).also { it.variables["stealResource"] = wantedResource })//Add a routine, priority higher than work.
+                    routines.add(Routine("steal", 1000).also { it.variables["stealResource"] = wantedResource })//Add a routine, priority higher than work.
 
             } else if (parent.characters[character]!!.trait.contains("bargainer")) {
                 if(routines.none{it.name=="steal"})
-                    routines.add(Routine("buy", 100).also { it.variables["wantedResource"] = wantedResource })//Add a routine, priority higher than work.
+                    routines.add(Routine("buy", 1000).also { it.variables["wantedResource"] = wantedResource })//Add a routine, priority higher than work.
             }
         }
 
@@ -198,6 +198,11 @@ class NonPlayerAgent(val character: String) : GameStateElement() {
                 }
                 //If there is a command, execute it.
                 if (commands.isNotEmpty()) {
+                    //If the party integrity is low, do not execute the command.
+                    if ((parent.parties[commands[0].issuedParty]!!.integrity) < 50.0) {
+                        commands.removeAt(0)
+                        return executeRoutine()
+                    }
                     val command = commands.first()
                     if (place != command.place)
                         return move(parent, character, place).also { it.placeTo = command.place }
@@ -366,6 +371,26 @@ class NonPlayerAgent(val character: String) : GameStateElement() {
                     }
 
                 }
+                //Corruption for power: If the character is the leader of a party, and a party member is short of resources, steal resources from workplace to party member's home
+                if (parent.parties.values.any { it.leader == character }) {
+                    val party = parent.parties.values.find { it.leader == character }!!
+                    val rationThreshold = 10;//TODO: threshold change depending on member's trait and need
+                    val waterThreshold = 10;
+                    val member = party.members.find { (parent.characters[it]!!.resources["ration"]
+                        ?: 0) <= rationThreshold*(parent.characters[it]!!.reliants.size + 1)||(parent.characters[it]!!.resources["water"]
+                        ?: 0) <= waterThreshold*(parent.characters[it]!!.reliants.size + 1) }
+                    if (member != null) {
+                        //The resource to steal is what the member is short of, either ration or water.
+                        val wantedResource = if ((parent.characters[character]!!.resources["ration"]
+                                ?: 0) <= rationThreshold*(parent.characters[character]!!.reliants.size + 1)
+                        ) "ration" else "water"
+                        routines.add(Routine("steal", routines[0].priority+10).also { it.variables["stealResource"] = wantedResource; it.variables["stealFor"] = member })//Add a routine, priority higher than work.
+                        return executeRoutine()
+                    }
+                }
+
+
+
                 //If there is nothing above to do, move to a place that is the home of one of the parties of the character.
                 //If already at home, wait.
                 if (parent.parties.values.any {party->party.home== place && party.members.contains(character) })
@@ -660,6 +685,11 @@ class NonPlayerAgent(val character: String) : GameStateElement() {
         else
         //When not work hours, rest
             routines.add(Routine("rest", 0))
+    }
+
+    fun decideTrade(who: String, value: Double /*value of the items I am giving away*/, value2: Double/*value of the items I will receive*/, valuea: Double, valuea2: Double): Boolean {
+        val friendlinessFactor = 0.5;//TODO: this should be determined by the character's trait. More friendly characters are more likely to accept the trade which benefits the other character.
+        return value >= value2 + (parent.getMutuality(character, who)-50) * (valuea - valuea2) * friendlinessFactor / 100
     }
 
     @Serializable
