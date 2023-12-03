@@ -18,7 +18,7 @@ class infoShare(targetState: GameState, targetCharacter: String, targetPlace: St
             GameEngine.acquire(tgtState.informations.filter { it.value.knownTo.contains(tgtCharacter) }.map { it.key })
 
         //To all participants of the meeting/conference
-        application = GameEngine.acquire(listOf("praise", "criticize", "respond"))
+        application = GameEngine.acquire(listOf("praise", "criticize", "respond", "report"))
     }
     override fun execute() {
         who =

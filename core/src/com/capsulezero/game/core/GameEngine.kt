@@ -80,6 +80,16 @@ class GameEngine(val gameState: GameState) {
 
         }
         char.history[gameState.time] = action.javaClass.simpleName
+        val place = gameState.places.values.find {
+            it.characters.contains(
+                char.name
+            )
+        }!!.name
+        //Add information to the character so that they can report back.
+        Information("", char.name, creationTime = gameState.time, type = "action", tgtTime = gameState.time, tgtPlace = place, tgtCharacter = char.name, action = action.javaClass.simpleName).also {
+            it.name = it.generateName()
+            gameState.informations[it.name] = it
+        }
         action.execute()
 
     }
@@ -341,12 +351,20 @@ class GameEngine(val gameState: GameState) {
         }
 
     }
-    //Each division has a conference every day. The conference is attended by the head of the division and the members of the division.
-    fun scheduleDailyConferences(){
-        gameState.parties.values.filter { it.type=="division" }.forEach{
-            val conference = Meeting(gameState.time+18 /*9 in the morning*/, "${it.name} daily conference", place = it.home, scheduledCharacters = it.members)
 
-            gameState.scheduledConferences["conference-${it.home}-${it.name}-${gameState.time}"] = conference
+    fun scheduleDailyConferences(){
+        //Each division has a conference every day. The conference is attended by the head of the division and the members of the division.
+        gameState.parties.values.filter { it.type=="division" }.forEach{ party ->
+            val conference = Meeting(gameState.time+18 /*9 in the morning*/, "divisionDailyConference", place = party.home, scheduledCharacters = party.members).also { it.involvedParty = party.name }
+
+            gameState.scheduledConferences["conference-${party.home}-${party.name}-${gameState.time}"] = conference
+        }
+
+        //If some of the division leaders are not assigned, a conference is scheduled to assign them.
+        gameState.parties.filter { it.value.type=="division" && it.value.leader=="" }.forEach{ stringPartyEntry ->
+            val conference = Meeting(gameState.time+18 /*9 in the morning*/, "leaderAssignment", place = stringPartyEntry.value.home, scheduledCharacters = stringPartyEntry.value.members).also { it.auxSubject = stringPartyEntry.value.name }
+
+            gameState.scheduledConferences["conference-${stringPartyEntry.value.home}-${stringPartyEntry.value.name}-${gameState.time}"] = conference
         }
     }
 
@@ -845,9 +863,11 @@ class GameEngine(val gameState: GameState) {
                 }
                 //You cannot trade in a conference.
                 val subject = conf.subject
+                if(gameState.characters[character]!!.trait.contains("mechanic"))//Only the mechanic can do below actions.
                 when (subject) {
                     "budgetProposal" -> if (!gameState.isBudgetProposed) actions.add("budgetProposal")
                     "budgetResolution" -> if (!gameState.isBudgetResolved) actions.add("budgetResolution")
+                    "leaderAssignment" -> if (gameState.parties[conf.auxSubject]!!.leader == "") actions.add("leaderAssignment")
                 }
                 //Command is allowed only if the character is the division leader.
                 if (gameState.parties[conf.involvedParty]?.leader == character){
@@ -917,7 +937,7 @@ class GameEngine(val gameState: GameState) {
                 }
                 if (gameState.playerAgent == character) {
                     when (subject) {
-                        "talk" -> println("Someone wants to talk to you.")//TODO: have no idea what this is doing.
+                        "talk" -> println("Someone wants to talk to you.")//TODO: there must be a way to know NPC's intention to talk
                     }
                 }
                 actions.add("joinMeeting")

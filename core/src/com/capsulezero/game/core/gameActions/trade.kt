@@ -69,10 +69,10 @@ class trade(targetState: GameState, targetCharacter: String, targetPlace: String
     }
     override fun execute() {
         var success= false
-        val value = tgtState.nonPlayerAgents[who]!!.itemValue(item)+(action?.let { tgtState.nonPlayerAgents[who]!!.actionValue(it) } ?:.0)+ (info?.let { tgtState.nonPlayerAgents[who]!!.infoValue(it) }?:.0)//Value is calculated based on how the opponent values the item, not how the tgtCharacter values it.
-        val value2 = tgtState.nonPlayerAgents[who]!!.itemValue(item2)+(action2?.let {tgtState.nonPlayerAgents[who]!!.actionValue(it)} ?:.0)+ (info2?.let { tgtState.nonPlayerAgents[who]!!.infoValue(it) } ?:.0)
-        val valuea = tgtState.nonPlayerAgents[tgtCharacter]!!.itemValue(item)+(action?.let { tgtState.nonPlayerAgents[tgtCharacter]!!.actionValue(it) } ?:.0)+ (info?.let { tgtState.nonPlayerAgents[tgtCharacter]!!.infoValue(it) }?:.0)
-        val valuea2 = tgtState.nonPlayerAgents[tgtCharacter]!!.itemValue(item2)+(action2?.let {tgtState.nonPlayerAgents[tgtCharacter]!!.actionValue(it)} ?:.0)+ (info2?.let { tgtState.nonPlayerAgents[tgtCharacter]!!.infoValue(it) } ?:.0)
+        val value = tgtState.characters[who]!!.itemValue(item)+(action?.let { tgtState.characters[who]!!.actionValue(it) } ?:.0)+ (info?.let { tgtState.characters[who]!!.infoValue(it) }?:.0)//Value is calculated based on how the opponent values the item, not how the tgtCharacter values it.
+        val value2 = tgtState.characters[who]!!.itemValue(item2)+(action2?.let {tgtState.characters[who]!!.actionValue(it)} ?:.0)+ (info2?.let { tgtState.characters[who]!!.infoValue(it) } ?:.0)
+        val valuea = tgtState.characters[tgtCharacter]!!.itemValue(item)+(action?.let { tgtState.characters[tgtCharacter]!!.actionValue(it) } ?:.0)+ (info?.let { tgtState.characters[tgtCharacter]!!.infoValue(it) }?:.0)
+        val valuea2 = tgtState.characters[tgtCharacter]!!.itemValue(item2)+(action2?.let {tgtState.characters[tgtCharacter]!!.actionValue(it)} ?:.0)+ (info2?.let { tgtState.characters[tgtCharacter]!!.infoValue(it) } ?:.0)
         success = if(tgtState.nonPlayerAgents.keys.contains(who)) {
             value>=value2
         } else//If player, acquires the decision from the player.

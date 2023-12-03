@@ -17,8 +17,8 @@ class Party: GameStateElement() {
     fun individualMutuality(name:String) : Double = members.sumOf { parent.getMutuality(it, name)} / members.size
 
     var resources = hashMapOf<String, Int>()
-    val integrity: Int
-        get() = 0
+    val integrity: Double
+        get() = parent.getPartyMutuality(this.name, this.name)
     fun causeDeaths(num:Int){
         if(anonymousMembers>=num)
         anonymousMembers-=num
@@ -26,7 +26,7 @@ class Party: GameStateElement() {
         {
             //kill members
             for (i in 0..<num - anonymousMembers)
-                if(members.filter { parent.characters[it]!!.alive }.count()>num - anonymousMembers)
+                if(members.count { parent.characters[it]!!.alive } >num - anonymousMembers)
                 members.filter { parent.characters[it]!!.alive }.random().let { parent.characters[it]!!.alive = false }//kill num - anonymousMembers members
                 else
                     members.filter { parent.characters[it]!!.alive }.forEach { parent.characters[it]!!.alive = false}//kill all members

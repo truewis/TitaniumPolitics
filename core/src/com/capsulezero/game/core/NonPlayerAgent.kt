@@ -449,6 +449,103 @@ class NonPlayerAgent(val character: String) : GameStateElement() {
                             }
                         }
                     }
+                    "leaderAssignment"->{
+                        //If leader, assign leader
+                        if(parent.parties[conf.involvedParty]!!.leader==character)
+                        {
+                            if(parent.parties[conf.auxSubject]!!.leader=="")//If the subject party does not have a leader yet, assign a leader.
+                            {
+                                return leaderAssignment(parent, character, place).also { it.targetParty = conf.auxSubject
+                                    //First option: Assign the leader of the subject party to the character with the highest mutuality.
+                                    it.who = parent.parties[conf.auxSubject]!!.members.maxByOrNull { parent.getMutuality(it, character) }!!
+                                    //TODO: Second option: Assign the leader of the subject party to the character with the highest support within the party.
+
+                                }
+                            }
+                            else //If leader is assigned, leave the conference.
+                            {
+                                routines.removeAt(0)//Remove the current routine.
+                                return executeRoutine()
+                            }
+                        }
+                        else
+                        {
+                            //If not leader, wait for the leader to be assigned.
+                            if(parent.parties[conf.auxSubject]!!.leader=="")
+                            {
+                                return wait(parent, character, place)
+                            }
+                            else
+                            {
+                                routines.removeAt(0)//Remove the current routine.
+                                return executeRoutine()
+                            }
+                        }
+                    }
+                    "divisionDailyConference"->{
+                        //If division leader, share information about the division.
+                        //Also, praise or criticize the division members.
+                        if(parent.parties[conf.involvedParty]!!.leader==character){
+                            //Share information about the division, if the information is not known to all division members.
+                            parent.informations.filter { it.value.tgtParty==conf.involvedParty && it.value.knownTo.contains(character) && !it.value.knownTo.containsAll(conf.currentCharacters) && it.value.tgtTime in parent.time/48..parent.time/48+47 }.forEach {
+                                infoShare(parent, character, place).also { action->
+                                    action.what = it.key
+                                    return action
+                                }//TODO: do not share all information. Share only the information that the leader wants to share.
+                            }
+                            //Praise or criticize the division members.
+                            parent.parties[conf.involvedParty]!!.members.forEach { member->
+                                if(member!=character)
+                                {
+                                    //praise if the mutuality is high, criticize if the mutuality is low.
+                                    val mutuality = parent.getMutuality(character, member)
+                                    if(mutuality>80)
+                                    {
+                                        infoShare(parent, character, place).also { action->
+                                            //just take random information for now. TODO: take the information that is most useful for praising.
+                                            action.what = parent.informations.values.filter { it.tgtCharacter==member && it.knownTo.contains(character) }.random().name
+                                            action.what = "praise"
+                                            action.who = hashSetOf(member)
+                                            return action
+                                        }
+                                    }
+                                    else if(mutuality<20)
+                                    {
+                                        infoShare(parent, character, place).also { action->
+                                            //just take random information for now. TODO: take the information that is most useful for criticizing.
+                                            action.what = parent.informations.values.filter { it.tgtCharacter==member && it.knownTo.contains(character) }.random().name
+                                            action.application = "criticize"
+                                            action.who = hashSetOf(member)
+                                            return action
+                                        }
+                                    }
+                                }//TODO: there must be a cooldown, stored in party class.
+                            }
+                            //TODO: If it is not covered above, if the division is short of resources, share the information about the resource shortage.
+                            //Criticize the common enemies of the division. It is determined by the party with the low mutuality with the division.
+                            val enemyParty = parent.parties.values.filter { it.name!=conf.involvedParty }.minByOrNull { parent.getPartyMutuality(it.name, conf.involvedParty) }!!.name
+                            //Criticize the leader
+                            infoShare(parent, character, place).also { action->
+                                action.what = "criticize"
+                                action.who = hashSetOf(parent.parties[enemyParty]!!.leader)
+                                return action
+                            }
+                            //Criticize the common enemy. It is determined by average individual mutuality.
+                            val enemy = parent.characters.maxByOrNull { ch-> parent.parties[conf.involvedParty]!!.members.sumOf { mem->parent.getMutuality(mem, ch.key) } }
+                            //TODO: request information about the commands issued today.
+                        }
+                                                //If not division leader, Share information about what happened in the division today.
+                        if(parent.parties[conf.involvedParty]!!.leader!=character)
+                        {
+                            parent.informations.filter { it.value.tgtParty==conf.involvedParty && it.value.knownTo.contains(character) &&it.value.type=="action" && it.value.tgtTime in parent.time/48..parent.time/48+47 }.forEach {
+                                infoShare(parent, character, place).also { action->
+                                    action.what = it.key
+                                    return action
+                                }
+                            }
+                        }
+
+                    }
                 }
                 return wait(parent, character, place)
                 //TODO: do something in the meeting. Leave the meeting if nothing to do.
@@ -575,61 +672,5 @@ class NonPlayerAgent(val character: String) : GameStateElement() {
 
 
 
-    //TODO: value may be affected by power dynamics.
-    fun itemValue(item:String):Double{
-        return when(item){
-            //Value of ration and water is based on the current need of the character.
-            "ration"->5.0*(parent.characters[character]!!.reliants.size+1.0) / ((parent.characters[character]!!.resources["ration"]?:0)+1.0)
-            "water"->(parent.characters[character]!!.reliants.size+1.0) / ((parent.characters[character]!!.resources["water"]?:0)+1.0)
-            "hydrogen"->1.0
-            "organics"->5.0
-            "lightMetal"->1.0
-            "heavyMetal"->1.0
-            "rareMetal"->5.0
-            "silicon"->1.0
-            "plastic"->10.0
-            "glass"->1.0
-            "ceramic"->1.0
-            "diamond"->3.0
-            "helium"->1.0
-            "glassClothes"->1.0
-            "cottonClothes"->10.0
 
-            else->0.0
-        }
-
-    }
-    fun actionValue(action:Command):Double{
-        //TODO: the value of the action should be calculated based on the expected outcome.
-        //TODO: Action to remove rivals is more valuable.
-        //TODO: Action to acquire resources is more valuable.
-
-        //Action to repair the character's apparatus is more valuable.
-        if(action.action=="repair" && parent.parties[parent.places[action.place]!!.responsibleParty]?.members?.contains(character)==true)
-        {
-            val urgency = 100.0 - parent.places[action.place]!!.apparatuses.sumOf { it.durability } / parent.places[action.place]!!.apparatuses.size
-            return urgency
-        }
-
-        return 1.0
-    }
-    fun infoValue(info:Information):Double{
-        //Known information is less valuable.
-        if(info.knownTo.contains(character))
-            return 0.0
-        //Information about the character itself is more valuable.
-        if(info.tgtCharacter==character)
-            return 2.0
-        //Information about the character's party is more valuable.
-        if(parent.parties[info.tgtParty]?.members?.contains(character) == true)
-            return 2.0
-        //Information about valuable resource is more valuable.
-        if(info.type=="resource")
-            return itemValue(info.tgtResource) * info.amount
-        //UnofficialTransfer is more valuable if it is not known to the other character.
-        if(info.type=="action" && info.action=="unofficialResourceTransfer" && !info.knownTo.contains(character))
-            return 10.0
-
-        return 1.0
-    }
 }
