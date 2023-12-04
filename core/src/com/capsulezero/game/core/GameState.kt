@@ -55,7 +55,7 @@ class GameState {
     var scheduledConferences = hashMapOf<String, Meeting>()
     var ongoingMeetings = hashMapOf<String, Meeting>()
     var ongoingConferences = hashMapOf<String, Meeting>()
-    var budget = hashMapOf<String, Int>()
+    var budget = hashMapOf<String, Int>()//Party name to budget
     var isBudgetProposed = false
     var isBudgetResolved = false
     var informations = hashMapOf<String, Information>()

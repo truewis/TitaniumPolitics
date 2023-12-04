@@ -14,8 +14,7 @@ class infoShare(targetState: GameState, targetCharacter: String, targetPlace: St
     var responseTo: Information? = null //if application is respond
     override fun chooseParams() {
         //TODO: ability to fabricate information
-        what =
-            GameEngine.acquire(tgtState.informations.filter { it.value.knownTo.contains(tgtCharacter) }.map { it.key })
+        what = GameEngine.acquire(tgtState.informations.filter { it.value.knownTo.contains(tgtCharacter) }.map { it.key })
 
         //To all participants of the meeting/conference
         application = GameEngine.acquire(listOf("praise", "criticize", "respond", "report"))

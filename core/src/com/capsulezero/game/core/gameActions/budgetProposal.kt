@@ -10,7 +10,7 @@ class budgetProposal(targetState: GameState, targetCharacter: String, targetPlac
 
     override fun chooseParams() {
         //TODO: set up the budget proposal
-        tgtState.places.forEach { if(it.key=="home")return@forEach else budget[it.key] = it.value.plannedWorker*(it.value.workHoursEnd-it.value.workHoursStart)*15 }
+        tgtState.places.forEach { if(it.key=="home" || it.value.responsibleParty=="")return@forEach else budget[it.value.responsibleParty] = (budget[it.value.responsibleParty]?:0)+ it.value.plannedWorker*(it.value.workHoursEnd-it.value.workHoursStart)*15 }
         }
     override fun isValid():Boolean = tgtState.ongoingConferences.filter { it.value.subject=="budgetProposal" }.values.first().currentCharacters.count()==8//TODO: cancel if not fully attended
     override fun execute() {

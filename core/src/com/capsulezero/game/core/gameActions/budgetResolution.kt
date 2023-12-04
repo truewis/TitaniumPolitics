@@ -24,8 +24,10 @@ class budgetResolution(targetState: GameState, targetCharacter: String, targetPl
             //Distribute resources according to the budget plan.
             places["reservoirNorth"]!!.resources["water"] =
                 places["reservoirNorth"]!!.resources["water"]!! - budget.values.sum()
+
             budget.forEach {
-                places[it.key]!!.resources["water"] = places[it.key]!!.resources["water"]!! + it.value
+                val guildHall = parties[it.key]!!.home;
+                places[guildHall]!!.resources["water"] = (places[guildHall]!!.resources["water"]?:0) + it.value
             }
         }
 

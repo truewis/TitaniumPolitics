@@ -1,6 +1,7 @@
 package com.capsulezero.game.core
 
 import kotlinx.serialization.Serializable
+
 @Serializable
 class Party: GameStateElement() {
     var name = ""
@@ -8,6 +9,7 @@ class Party: GameStateElement() {
     var type = ""
     var home = "" //The place where the party is based.
     var members = hashSetOf<String>()
+    var isDailySalaryPaid = hashMapOf<String, Boolean>()
     var commands = hashSetOf<String>()
     var anonymousMembers  = 0
     val size: Int

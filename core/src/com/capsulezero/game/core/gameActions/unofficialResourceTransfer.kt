@@ -33,7 +33,8 @@ class unofficialResourceTransfer(targetState: GameState, targetCharacter: String
                     action = "unofficialResourceTransfer"
                 )/*spread rumor in the responsible party*/.also {
                     tgtState.informations[it.generateName()] =
-                        it; it.publicity[tgtState.places[tgtPlace]!!.responsibleParty] = 1
+                        it; 
+                    it.publicity[tgtState.places[tgtPlace]!!.responsibleParty] = 1
                 }
             }
         }
