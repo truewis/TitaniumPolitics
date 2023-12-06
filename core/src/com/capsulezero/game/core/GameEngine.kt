@@ -1,7 +1,9 @@
 package com.capsulezero.game.core
 
 import com.badlogic.gdx.Gdx
-import java.lang.Thread.sleep
+import kotlinx.coroutines.runBlocking
+import kotlin.coroutines.resume
+import kotlin.coroutines.suspendCoroutine
 import kotlin.math.log
 import kotlin.math.max
 import kotlin.math.min
@@ -797,21 +799,31 @@ class GameEngine(val gameState: GameState) {
             return choices[min(acquire("Action"), choices.size-1)]
 
         }
-        inline fun <reified T> acquire(dataType: String): T {
+        inline fun <reified T> acquire(dataType: String): T = runBlocking {
             var wanted: T? = null
-            Gdx.app.postRunnable { acquireDataType = dataType }
-            acquire = {x->try{wanted = x as T} catch (e: Exception){
-                println("Acquire failed.")
-                println("Wanted type: ${T::class}")
-                println("Acquired type: ${x::class}")
-                throw e
-            }
-            }
-            while (wanted == null) {
-                sleep(50)
-            }
-            return wanted as T
 
+            // Use coroutine to suspend until the acquisition is complete
+            suspendCoroutine { continuation ->
+                Gdx.app.postRunnable {
+                    acquireDataType = dataType
+                    acquire = { x ->
+                        try {
+                            wanted = x as T
+                            // Resume the coroutine to signal completion
+                            acquireDataType = ""
+                            continuation.resume(Unit)
+                        } catch (e: Exception) {
+                            println("Acquire failed.")
+                            println("Wanted type: ${T::class}")
+                            println("Acquired type: ${x::class}")
+                            throw e
+                        }
+                    }
+                }
+            }
+
+            // Return the acquired value
+            return@runBlocking wanted as T
         }
 
         fun availableActions(gameState: GameState, place: String, character: String): ArrayList<String> {
