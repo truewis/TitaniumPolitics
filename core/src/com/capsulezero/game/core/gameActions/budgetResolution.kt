@@ -25,9 +25,13 @@ class budgetResolution(targetState: GameState, targetCharacter: String, targetPl
             places["reservoirNorth"]!!.resources["water"] =
                 places["reservoirNorth"]!!.resources["water"]!! - budget.values.sum()
 
+            places["farm"]!!.resources["ration"] =
+                places["farm"]!!.resources["ration"]!! - budget.values.sum()
+
             budget.forEach {
                 val guildHall = parties[it.key]!!.home;
                 places[guildHall]!!.resources["water"] = (places[guildHall]!!.resources["water"]?:0) + it.value
+                places[guildHall]!!.resources["ration"] = (places[guildHall]!!.resources["ration"]?:0) + it.value
             }
         }
 

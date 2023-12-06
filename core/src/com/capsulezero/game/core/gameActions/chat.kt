@@ -13,10 +13,10 @@ class chat(targetState: GameState, targetCharacter: String, targetPlace: String)
         //get hints on the information the opponent character has.
         //Also give hints on the information this character has.
         var count = 0
-        tgtState.informations.filter { it.value.knownTo.contains(tgtCharacter) }.map { it.key }.forEach { tgtState.informations[it]!!.knowExistence.addAll(who);count++}
+        tgtState.informations.filter { it.value.knownTo.contains(tgtCharacter) }.map { it.key }.forEach { tgtState.informations[it]!!.letKnowExistence(who);count++}
 
         who.forEach {
-            tgtState.informations.filter { info->info.value.knownTo.contains(it) }.map { it.key }.forEach { tgtState.informations[it]!!.knowExistence.add(tgtCharacter);count++}
+            tgtState.informations.filter { info->info.value.knownTo.contains(it) }.map { it.key }.forEach { tgtState.informations[it]!!.letKnowExistence(tgtCharacter);count++}
         }
 
         val factor = .1

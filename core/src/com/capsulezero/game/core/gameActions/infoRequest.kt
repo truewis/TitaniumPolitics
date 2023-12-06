@@ -12,15 +12,16 @@ class infoRequest(targetState: GameState, targetCharacter: String, targetPlace: 
     var what = ""
     override fun chooseParams() {
         //TODO: ability to fabricate information
+        //Request information that this character only knows the existence.
         what =
-            GameEngine.acquire(tgtState.informations.filter { it.value.knowExistence.contains(tgtCharacter) }.map { it.key })
+            GameEngine.acquire(tgtState.informations.filter { it.value.doesKnowExistence(tgtCharacter) && !it.value.knownTo.contains(tgtCharacter) }.map { it.key })
 
     }
     override fun execute() {
         who =
             (tgtState.ongoingMeetings.filter {it.value.currentCharacters.contains(tgtCharacter)}.flatMap { it.value.currentCharacters }+tgtState.ongoingConferences.filter {it.value.currentCharacters.contains(tgtCharacter)}.flatMap { it.value.currentCharacters }).toHashSet()
         val party = tgtState.parties.values.find { it.members.containsAll(who+tgtCharacter) }!!.name
-        if(!tgtState.informations.filter { it.value.knowExistence.contains(tgtCharacter) }.map { it.key }.contains(what))
+        if(!tgtState.informations.filter { it.value.doesKnowExistence(tgtCharacter) }.map { it.key }.contains(what))
             println("Warning: $tgtCharacter requested information $what that they don't know the existence.")
         else {
             //If someone knows about the information, then everyone in the meeting/conference knows about it.

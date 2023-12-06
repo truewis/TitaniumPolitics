@@ -63,7 +63,7 @@ class trade(targetState: GameState, targetCharacter: String, targetPlace: String
                 action2 = Command(where, name, 0)
             }
             "information"->{
-                info2 = tgtState.informations[GameEngine.acquire(tgtState.informations.filter { it.value.knownTo.contains(who) and it.value.knowExistence.contains(tgtCharacter) }.map { it.key })] //You can only request information that you know the existence.
+                info2 = tgtState.informations[GameEngine.acquire(tgtState.informations.filter { it.value.knownTo.contains(who) and it.value.doesKnowExistence(tgtCharacter) and !it.value.knownTo.contains(tgtCharacter) }.map { it.key })] //You can only request information that you know the existence, but not the content.
             }
         }
     }

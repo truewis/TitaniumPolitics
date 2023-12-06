@@ -1,5 +1,6 @@
 package com.capsulezero.game.ui
 
+import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton
@@ -16,7 +17,8 @@ class WillMeter (gameState: GameState) : Table(defaultSkin) {
         add(b)
         add(l)
 
-        gameState.updateUI+={y->setValue(y.getMutuality(gameState.playerAgent, gameState.playerAgent).toInt())}
+        gameState.updateUI+={y->
+            Gdx.app.postRunnable {setValue(y.getMutuality(gameState.playerAgent, gameState.playerAgent).toInt())}}
     }
     fun setValue(value:Int) {
         l.setText(value.toString().padStart(2, '0'))

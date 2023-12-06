@@ -1,5 +1,6 @@
 package com.capsulezero.game.ui
 
+import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton
@@ -16,7 +17,8 @@ class Clock (gameState: GameState) : Table(defaultSkin) {
         add(b)
         add(l)
 
-        gameState.timeChanged+={ _, y->l.setText(formatTime(y))}
+        gameState.timeChanged+={ _, y->
+            Gdx.app.postRunnable {l.setText(formatTime(y))}}
     }
     companion object{
         fun formatTime(time:Int):String{

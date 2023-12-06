@@ -1,5 +1,6 @@
 package com.capsulezero.game.ui
 
+import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton
@@ -16,7 +17,8 @@ class HealthMeter (gameState: GameState) : Table(defaultSkin) {
         add(b)
         add(l)
 
-        gameState.updateUI+={y->setValue(y.characters[gameState.playerAgent]!!.health)}
+        gameState.updateUI+={y->
+            Gdx.app.postRunnable {setValue(y.characters[gameState.playerAgent]!!.health)}}
     }
     fun setValue(value:Int) {
         l.setText(value.toString().padStart(2, '0'))

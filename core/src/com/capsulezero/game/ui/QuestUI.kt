@@ -1,5 +1,6 @@
 package com.capsulezero.game.ui
 
+import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.scenes.scene2d.ui.*
@@ -24,10 +25,10 @@ class QuestUI(skin: Skin?, var gameState: GameState) : Table(skin) {
         docList.grow()
 
         add(docScr).grow()
-        gameState.todo.newItemAdded += { refreshList(); }
-        gameState.todo.expired += { refreshList(); }
-        gameState.todo.completed += { refreshList(); }
-        gameState.timeChanged += { _, _ -> refreshList(); }
+        gameState.todo.newItemAdded += { Gdx.app.postRunnable {refreshList();} }
+        gameState.todo.expired += { Gdx.app.postRunnable {refreshList();} }
+        gameState.todo.completed += { Gdx.app.postRunnable {refreshList();} }
+        gameState.timeChanged += { _, _ ->Gdx.app.postRunnable { refreshList();} }
     }
 
 

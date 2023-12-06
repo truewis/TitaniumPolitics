@@ -1,7 +1,6 @@
 package com.capsulezero.game.core
 
 import com.badlogic.gdx.Gdx
-import com.badlogic.gdx.Input
 import java.lang.Thread.sleep
 import kotlin.math.log
 import kotlin.math.max
@@ -757,6 +756,8 @@ class GameEngine(val gameState: GameState) {
     }
 
     companion object {
+        var acquire : (Any)->Unit = {}
+        var acquireDataType: String = ""//This variable is read from the UI thread.
         fun isShortOfResources(app: Apparatus, place: Place):String
         {
             app.currentConsumption.forEach {
@@ -793,45 +794,24 @@ class GameEngine(val gameState: GameState) {
         }
         fun acquire(choices: List<String>): String {
             println(choices)
-            while (true) {
-                if (Gdx.input.isKeyPressed(Input.Keys.NUM_1)) {
-                    sleep(500)
-                    return choices[0]
-                }
-                if (Gdx.input.isKeyPressed(Input.Keys.NUM_2)) {
-                    sleep(500)
-                    return choices[min(1, choices.size - 1)]
-                }
-                if (Gdx.input.isKeyPressed(Input.Keys.NUM_3)) {
-                    sleep(500)
-                    return choices[min(2, choices.size - 1)]
-                }
-                if (Gdx.input.isKeyPressed(Input.Keys.NUM_4)) {
-                    sleep(500)
-                    return choices[min(3, choices.size - 1)]
-                }
-                if (Gdx.input.isKeyPressed(Input.Keys.NUM_5)) {
-                    sleep(500)
-                    return choices[min(4, choices.size - 1)]
-                }
-                if (Gdx.input.isKeyPressed(Input.Keys.NUM_6)) {
-                    sleep(500)
-                    return choices[min(5, choices.size - 1)]
-                }
-                if (Gdx.input.isKeyPressed(Input.Keys.NUM_7)) {
-                    sleep(500)
-                    return choices[min(6, choices.size - 1)]
-                }
-                if (Gdx.input.isKeyPressed(Input.Keys.NUM_8)) {
-                    sleep(500)
-                    return choices[min(7, choices.size - 1)]
-                }
-                if (Gdx.input.isKeyPressed(Input.Keys.NUM_9)) {
-                    sleep(500)
-                    return choices[min(8, choices.size - 1)]
-                }
+            return choices[min(acquire("Action"), choices.size-1)]
+
+        }
+        inline fun <reified T> acquire(dataType: String): T {
+            var wanted: T? = null
+            Gdx.app.postRunnable { acquireDataType = dataType }
+            acquire = {x->try{wanted = x as T} catch (e: Exception){
+                println("Acquire failed.")
+                println("Wanted type: ${T::class}")
+                println("Acquired type: ${x::class}")
+                throw e
+            }
+            }
+            while (wanted == null) {
                 sleep(50)
             }
+            return wanted as T
+
         }
 
         fun availableActions(gameState: GameState, place: String, character: String): ArrayList<String> {

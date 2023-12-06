@@ -1,5 +1,7 @@
 package com.capsulezero.game.ui
 
+import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.Input
 import com.badlogic.gdx.scenes.scene2d.InputEvent
 import com.badlogic.gdx.scenes.scene2d.Touchable
 import com.badlogic.gdx.scenes.scene2d.actions.Actions
@@ -9,12 +11,13 @@ import com.badlogic.gdx.scenes.scene2d.ui.Stack
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.badlogic.gdx.utils.Align
+import com.capsulezero.game.core.GameEngine
 import com.capsulezero.game.core.GameState
 import com.rafaskoberg.gdx.typinglabel.TypingAdapter
 import com.rafaskoberg.gdx.typinglabel.TypingLabel
 import ktx.scene2d.Scene2DSkin.defaultSkin
 
-class LogUI (gameState: GameState) : Table(defaultSkin) {
+class LogUI (val gameState: GameState) : Table(defaultSkin) {
     val stk = Stack()
     // Displays current log item.
     val currentTextDisplay = TypingLabel("", skin, "consoleWhite")
@@ -34,18 +37,20 @@ class LogUI (gameState: GameState) : Table(defaultSkin) {
     init {
         add(stk).grow()
         gameState.log.newItemAdded+={it, time, line->
-            if(!isPlaying)
-            {
-                isPlaying = true
-                appendText(it)
-                currentLineNumber = line
-                //(stage as CapsuleStage).setInputEnable("log", false)
-            }
-            else
-            {
-                logQueue.add(it)
-                logTimeQueue.add(time)
-                logLineNumberQueue.add(line)
+            Gdx.app.postRunnable {
+                if(!isPlaying)
+                {
+                    isPlaying = true
+                    appendText(it)
+                    currentLineNumber = line
+                    //(stage as CapsuleStage).setInputEnable("log", false)
+                }
+                else
+                {
+                    logQueue.add(it)
+                    logTimeQueue.add(time)
+                    logLineNumberQueue.add(line)
+                }
             }
         }
         row()
@@ -117,5 +122,41 @@ class LogUI (gameState: GameState) : Table(defaultSkin) {
 
         currentTextDisplay.setText("[#006600FF]"+it)
         currentTextDisplay.restart()
+    }
+
+    override fun act(delta: Float) {
+        super.act(delta)
+        if(GameEngine.acquireDataType=="Action") {
+            var choice = -1
+            if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_1)) {
+                choice = 0
+            }
+            if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_2)) {
+                choice = 1
+            }
+            if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_3)) {
+                choice = 2
+            }
+            if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_4)) {
+                choice = 3
+            }
+            if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_5)) {
+                choice = 4
+            }
+            if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_6)) {
+                choice = 5
+            }
+            if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_7)) {
+                choice = 6
+            }
+            if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_8)) {
+                choice = 7
+            }
+            if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_9)) {
+                choice = 8
+            }
+            if(choice!=-1)
+            GameEngine.acquire(choice)
+        }
     }
 }
