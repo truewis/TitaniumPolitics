@@ -758,8 +758,9 @@ class GameEngine(val gameState: GameState) {
     }
 
     companion object {
-        var acquire : (Any)->Unit = {}
-        var acquireDataType: String = ""//This variable is read from the UI thread.
+        var acquireCallback : (Any)->Unit = {}
+        var acquireEvent =  arrayListOf<(AcquireParams)->Unit>()
+        public class AcquireParams(val type: String, val variables: HashMap<String, Any>)
         fun isShortOfResources(app: Apparatus, place: Place):String
         {
             app.currentConsumption.forEach {
@@ -796,31 +797,32 @@ class GameEngine(val gameState: GameState) {
         }
         fun acquire(choices: List<String>): String {
             println(choices)
-            return choices[min(acquire("Action"), choices.size-1)]
+            return choices[min(acquire("Action", hashMapOf()), choices.size-1)]
 
         }
-        inline fun <reified T> acquire(dataType: String): T = runBlocking {
+        inline fun <reified T> acquire(dataType: String, params: HashMap<String, Any>): T = runBlocking {
             var wanted: T? = null
 
             // Use coroutine to suspend until the acquisition is complete
             suspendCoroutine { continuation ->
                 Gdx.app.postRunnable {
-                    acquireDataType = dataType
-                    acquire = { x ->
+                    acquireEvent.forEach { it(AcquireParams(dataType, params)) }
+                    acquireCallback = { x ->
                         try {
                             wanted = x as T
-                            // Resume the coroutine to signal completion
-                            acquireDataType = ""
-                            continuation.resume(Unit)
                         } catch (e: Exception) {
                             println("Acquire failed.")
                             println("Wanted type: ${T::class}")
                             println("Acquired type: ${x::class}")
                             throw e
                         }
+                        // Resume the coroutine to signal completion
+                        acquireCallback = {}
+                        continuation.resume(Unit)
                     }
                 }
             }
+
 
             // Return the acquired value
             return@runBlocking wanted as T

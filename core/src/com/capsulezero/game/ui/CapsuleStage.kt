@@ -13,6 +13,7 @@ import com.capsulezero.game.core.GameState
 import com.capsulezero.game.core.ReadOnlyJsons
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
+import ktx.scene2d.Scene2DSkin
 
 class CapsuleStage(val gameState: GameState) : Stage(FitViewport(800.0F, 800.0F)) {
     var background = Image()
@@ -21,6 +22,8 @@ class CapsuleStage(val gameState: GameState) : Stage(FitViewport(800.0F, 800.0F)
     var hud : HeadUpInterface
     val rootStack = Stack()
     val assetManager = AssetManager()
+    val tradeBox: TradeUI
+    val commandBox : CommandUI
 
     init {
         val resolver = InternalFileHandleResolver()
@@ -43,9 +46,15 @@ class CapsuleStage(val gameState: GameState) : Stage(FitViewport(800.0F, 800.0F)
         addActor(rootStack)
         hud = HeadUpInterface(gameState)
         addActor(hud)
-        println(hud.stage)
-        println(hud.todoBox.stage)
         hud.setFillParent(true)
+
+        tradeBox = TradeUI(Scene2DSkin.defaultSkin, gameState)
+        commandBox = CommandUI(Scene2DSkin.defaultSkin, gameState)
+        addActor(tradeBox)
+        tradeBox.setFillParent(true)
+        addActor(commandBox)
+        commandBox.setFillParent(true)
+
         gameState.updateUI.add {
             roomChanged(it.places.values.find { it.characters.contains(gameState.playerAgent) }!!.name)
         }

@@ -34,6 +34,7 @@ class LogUI (val gameState: GameState) : Table(defaultSkin) {
     var maxDisplayLine = 40
     // Called and cleared when the ctnuButton is pressed.
     var ctnuCallback : ()->Unit = {}
+    var isInputEnabled = false
     init {
         add(stk).grow()
         gameState.log.newItemAdded+={it, time, line->
@@ -107,6 +108,12 @@ class LogUI (val gameState: GameState) : Table(defaultSkin) {
                 ctnuButton.isVisible = false
             }
         })
+        GameEngine.acquireEvent+={
+            if(it.type=="Action")
+            {
+                isInputEnabled = true
+            }
+        }
         appendText("Welcome to Capsule Zero")
     }
     fun appendText(it: String){
@@ -126,7 +133,7 @@ class LogUI (val gameState: GameState) : Table(defaultSkin) {
 
     override fun act(delta: Float) {
         super.act(delta)
-        if(GameEngine.acquireDataType=="Action") {
+        if(isInputEnabled) {
             var choice = -1
             if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_1)) {
                 choice = 0
@@ -155,8 +162,10 @@ class LogUI (val gameState: GameState) : Table(defaultSkin) {
             if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_9)) {
                 choice = 8
             }
-            if(choice!=-1)
-            GameEngine.acquire(choice)
+            if(choice!=-1) {
+                GameEngine.acquireCallback(choice)
+                isInputEnabled = false
+            }
         }
     }
 }

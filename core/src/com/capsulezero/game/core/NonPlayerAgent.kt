@@ -649,13 +649,11 @@ class NonPlayerAgent(val character: String) : GameStateElement() {
 
                         trade(parent, character, place).also { trade ->
                             trade.who = tradeCharacter
-                            trade.item2 = routines[0].variables["wantedResource"]!!
-                            trade.amount2 = parent.characters[tradeCharacter]!!.reliants.size + 1
+                            trade.item2[routines[0].variables["wantedResource"]!!] = parent.characters[tradeCharacter]!!.reliants.size + 1
                             //Give away unwanted resources
-                            trade.item =
-                                parent.characters[character]!!.resources.keys.filter { it != routines[0].variables["wantedResource"]!! }
-                                    .random()
-                            trade.amount = parent.characters[character]!!.resources[trade.item] ?: 0
+                            val res = parent.characters[character]!!.resources.keys.filter { it != routines[0].variables["wantedResource"]!! }
+                                .random()
+                            trade.item [res] = parent.characters[character]!!.resources[res] ?: 0
                             //Give away information they want
                             trade.info = parent.informations.values.filter {
                                 it.tgtCharacter == tradeCharacter && it.knownTo.contains(character)
