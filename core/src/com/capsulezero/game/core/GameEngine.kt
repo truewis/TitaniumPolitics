@@ -1,6 +1,7 @@
 package com.capsulezero.game.core
 
 import com.badlogic.gdx.Gdx
+import com.capsulezero.game.ui.LogUI
 import kotlinx.coroutines.runBlocking
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
@@ -46,24 +47,24 @@ class GameEngine(val gameState: GameState) {
 
     fun performAction(char: Character) {
         var action: GameAction
-        var actionName: String
         val actionList = availableActions(
             this.gameState, gameState.places.values.find { it.characters.contains(char.name) }!!.name,
             char.name
         )
         if (char.name == gameState.playerAgent) {
             do {
-                actionName = acquire(
-                    actionList
-                )
-                action = Class.forName("com.capsulezero.game.core.gameActions.$actionName")
-                    .getDeclaredConstructor(GameState::class.java, String::class.java, String::class.java).newInstance(
-                        gameState,
-                        char.name,
-                        gameState.places.values.find { it.characters.contains(char.name) }!!.name
-                    ) as GameAction
-                action.chooseParams()
-            } while (!action.isValid())
+                action = acquire("Action", hashMapOf("actionList" to actionList))
+                if(action.isValid())
+                    break
+                else
+                    println("Invalid action: ${action.javaClass.simpleName} by ${char.name} at ${
+                        gameState.places.values.find {
+                            it.characters.contains(
+                                char.name
+                            )
+                        }!!.name
+                    }")
+            } while (true)
 
 
         } else {
@@ -795,10 +796,18 @@ class GameEngine(val gameState: GameState) {
             return ""
 
         }
-        fun acquire(choices: List<String>): String {
-            println(choices)
-            return choices[min(acquire("Action", hashMapOf()), choices.size-1)]
-
+        fun acquire(choices: List<String>): String = runBlocking {
+            val logUI = LogUI.instance
+            logUI.appendText("Acquire: ${choices.toString().replace("[", "").replace("]", "")}")
+            logUI.numberMode = true
+            logUI.isInputEnabled = true
+            var wanted = -1
+            suspendCoroutine { continuation ->
+                Gdx.app.postRunnable {
+                    logUI.numberModeCallback = { x -> wanted = x; logUI.numberMode = false; continuation.resume(Unit)}
+                }
+            }
+            return@runBlocking choices[wanted]
         }
         inline fun <reified T> acquire(dataType: String, params: HashMap<String, Any>): T = runBlocking {
             var wanted: T? = null

@@ -11,15 +11,13 @@ import com.badlogic.gdx.scenes.scene2d.ui.Stack
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.badlogic.gdx.utils.Align
-import com.capsulezero.game.core.GameAction
 import com.capsulezero.game.core.GameEngine
 import com.capsulezero.game.core.GameState
 import com.rafaskoberg.gdx.typinglabel.TypingAdapter
 import com.rafaskoberg.gdx.typinglabel.TypingLabel
 import ktx.scene2d.Scene2DSkin.defaultSkin
-import kotlin.concurrent.thread
 
-class LogUI (val gameState: GameState) : Table(defaultSkin) {
+class LocationUI (val gameState: GameState) : Table(defaultSkin) {
     val stk = Stack()
     // Displays current log item.
     val currentTextDisplay = TypingLabel("", skin, "consoleWhite")
@@ -33,15 +31,11 @@ class LogUI (val gameState: GameState) : Table(defaultSkin) {
     val logTimeQueue = ArrayList<Int>()
     val logLineNumberQueue = ArrayList<Int>()
     var currentLineNumber  = -1
-    var maxDisplayLine = 20
+    var maxDisplayLine = 40
     // Called and cleared when the ctnuButton is pressed.
     var ctnuCallback : ()->Unit = {}
     var isInputEnabled = false
-    var playerActionList = ArrayList<String>()//Temporary solution for player action. Unnecessary if all the actions has the corresponding UI.
-    var numberMode = false
-    var numberModeCallback : (Int)->Unit = {}
     init {
-        instance = this
         add(stk).grow()
         gameState.log.newItemAdded+={it, time, line->
             Gdx.app.postRunnable {
@@ -67,8 +61,8 @@ class LogUI (val gameState: GameState) : Table(defaultSkin) {
         t.row()
         t.add(currentTextDisplay).growX().fillY()
         oldTextDisplay.setAlignment(Align.bottomLeft)
-        currentTextDisplay.setFontScale(1f)
-        oldTextDisplay.setFontScale(1f)
+        currentTextDisplay.setFontScale(2f)
+        oldTextDisplay.setFontScale(2f)
         currentTextDisplay.touchable = Touchable.disabled
         oldTextDisplay.touchable = Touchable.disabled
         currentTextDisplay.typingListener = object : TypingAdapter() {// Sense TypingLabel animation end and play next log in queue.
@@ -121,14 +115,6 @@ class LogUI (val gameState: GameState) : Table(defaultSkin) {
             }
         }
         appendText("Welcome to Capsule Zero")
-        GameEngine.acquireEvent+={//Print the action list. This is unnecessary if tall the action has the corresponding UI.
-            if(it.type=="Action")
-            {
-                appendText((it.variables["actionList"] as ArrayList<String>).toString().replace("[", "").replace("]", ""))
-                playerActionList = it.variables["actionList"] as ArrayList<String>
-                isInputEnabled = true
-            }
-        }
     }
     fun appendText(it: String){
         val oldText = oldTextDisplay.text.split('\n')
@@ -141,7 +127,8 @@ class LogUI (val gameState: GameState) : Table(defaultSkin) {
         displayedOldText += "\n"+currentTextDisplay.text
         oldTextDisplay.setText("[#006600FF]"+displayedOldText)
 
-        currentTextDisplay.restart(it)
+        currentTextDisplay.setText("[#006600FF]"+it)
+        currentTextDisplay.restart()
     }
 
     override fun act(delta: Float) {
@@ -176,34 +163,9 @@ class LogUI (val gameState: GameState) : Table(defaultSkin) {
                 choice = 8
             }
             if(choice!=-1) {
-                if(numberMode)numberModeCallback(choice)
-                else
-                when (playerActionList[choice])
-                {
-                    "trade"-> {
-                        (stage as CapsuleStage).tradeBox.open()
-                    }
-                    "command"-> {
-                        (stage as CapsuleStage).commandBox.open()
-                    }
-                    else->{
-                        val action = Class.forName("com.capsulezero.game.core.gameActions."+playerActionList[choice])
-                            .getDeclaredConstructor(GameState::class.java, String::class.java, String::class.java).newInstance(
-                                gameState,
-                                gameState.playerAgent,
-                                gameState.places.values.find { it.characters.contains(gameState.playerAgent) }!!.name
-                            ) as GameAction
-                        thread(start = true) {
-                            action.chooseParams()
-                            GameEngine.acquireCallback(action)
-                        }
-                    }
-                }
+                GameEngine.acquireCallback(choice)
                 isInputEnabled = false
             }
         }
-    }
-    companion object {
-        lateinit var instance: LogUI
     }
 }

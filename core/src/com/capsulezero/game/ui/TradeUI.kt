@@ -7,7 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.*
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.capsulezero.game.core.GameEngine
 import com.capsulezero.game.core.GameState
-import com.capsulezero.game.core.TradeParams
+import com.capsulezero.game.core.gameActions.trade
 import ktx.scene2d.*
 
 class TradeUI(skin: Skin?, var gameState: GameState) : Table(skin) {
@@ -17,6 +17,7 @@ class TradeUI(skin: Skin?, var gameState: GameState) : Table(skin) {
     private var isOpen = false;
     val submitButton = TextButton("지시", skin)
     val cancelButton = TextButton("취소", skin)
+    var trade : trade = trade(gameState, "", "")
     init {
         titleLabel = Label("거래", skin, "trnsprtConsole")
         titleLabel.setFontScale(2f)
@@ -35,20 +36,41 @@ class TradeUI(skin: Skin?, var gameState: GameState) : Table(skin) {
         debug = true
         isVisible = false
         GameEngine.acquireEvent+={
-            if(it.type=="Trade")
-            {
-                refreshList(it.variables["items1"] as HashMap<String, Int>, it.variables["items2"] as HashMap<String, Int>, it.variables["info1"] as HashSet<String>, it.variables["info2"] as HashSet<String>)
-            }
+            if(it.type=="Action")
             submitButton.addListener(object : ClickListener() {
                 override fun clicked(event: InputEvent?, x: Float, y: Float) {
                     super.clicked(event, x, y)
-                    GameEngine.acquireCallback(TradeParams(HashMap(), HashMap(), HashSet(), HashSet()))
+                    GameEngine.acquireCallback(trade)
                     isVisible = false
                 }
             })
         }
 
 
+    }
+    fun open() {
+
+        with(gameState) {
+            val who =
+                ongoingMeetings.filter {it.value.currentCharacters.contains(playerAgent)}.flatMap { it.value.currentCharacters }.first {it!=playerAgent}
+            trade = trade(gameState, playerAgent, characters[playerAgent]!!.place.name).apply { this.who = who }
+            isVisible = true
+            refreshList(characters[playerAgent]!!.resources,
+                characters[who]!!.resources,
+                informations.filter {
+                    it.value.knownTo.contains(playerAgent) and !it.value.doesKnowExistence(
+                        playerAgent
+                    )
+                }
+                    .map { it.key }.toHashSet(),
+                informations.filter {
+                    it.value.knownTo.contains(who) and it.value.doesKnowExistence(playerAgent) and !it.value.knownTo.contains(
+                        playerAgent
+                    )
+                }.map { it.key }.toHashSet()
+            )
+
+        }
     }
 
 
@@ -63,7 +85,14 @@ class TradeUI(skin: Skin?, var gameState: GameState) : Table(skin) {
                     it.growX()
                     setFontScale(2f)
                 }
-                textField { text = "0" }
+                textField { text = "0" }.also { it2 ->
+                    it2.addListener(object : ClickListener() {
+                        override fun clicked(event: InputEvent?, x: Float, y: Float) {
+                            super.clicked(event, x, y)
+                            trade.item[tobj.key] = it2.text.toInt()
+                        }
+                    })
+                }
                 label("has: "+tobj.value.toString(), "trnsprtConsole") {
                     setFontScale(2f)
                 }
@@ -93,7 +122,14 @@ class TradeUI(skin: Skin?, var gameState: GameState) : Table(skin) {
                     it.growX()
                     setFontScale(2f)
                 }
-                textField { text = "0" }
+                textField { text = "0" }.also { it2 ->
+                    it2.addListener(object : ClickListener() {
+                        override fun clicked(event: InputEvent?, x: Float, y: Float) {
+                            super.clicked(event, x, y)
+                            trade.item2[tobj.key] = it2.text.toInt()
+                        }
+                    })
+                }
                 label("has: "+tobj.value.toString(), "trnsprtConsole") {
                     setFontScale(2f)
                 }
@@ -116,7 +152,7 @@ class TradeUI(skin: Skin?, var gameState: GameState) : Table(skin) {
             docList2.addActor(t)
         }
         //refresh the layout
-        
+
         isVisible = true
 
     }

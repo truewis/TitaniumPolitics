@@ -53,5 +53,9 @@ class CommandUI(skin: Skin?, var gameState: GameState) : Table(skin) {
 
     }
 
+    fun open() {
+        isVisible = true
+    }
+
 
 }

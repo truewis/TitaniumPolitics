@@ -103,7 +103,7 @@ class trade(targetState: GameState, targetCharacter: String, targetPlace: String
                 }
             }
             if (item2.isNotEmpty()) {
-                if(item2.any{ (tgtState.characters[who]!!.resources[it.key] ?: 0) < item[it.key]!! }){
+                if(item2.any{ (tgtState.characters[who]!!.resources[it.key] ?: 0) < item2[it.key]!! }){
                     println("They don't have enough $item2 to trade.")
                     onFinished(false)
                     return
