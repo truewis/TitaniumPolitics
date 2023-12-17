@@ -1,17 +1,12 @@
 package com.capsulezero.game.core.gameActions
 
-import com.capsulezero.game.core.GameAction
-import com.capsulezero.game.core.GameState
-
-class home(targetState: GameState, targetCharacter: String, targetPlace: String) : GameAction(targetState, targetCharacter,
-    targetPlace
-) {
+class home(override val tgtCharacter: String, override val tgtPlace: String) : GameAction() {
 
     override fun execute() {
 
-        tgtState.places[tgtPlace]!!.characters.remove(tgtCharacter)
-        tgtState.places["home"]!!.characters.add(tgtCharacter)
-        tgtState.characters[tgtCharacter]!!.frozen++
+        parent.places[tgtPlace]!!.characters.remove(tgtCharacter)
+        parent.places["home"]!!.characters.add(tgtCharacter)
+        parent.characters[tgtCharacter]!!.frozen++
     }
 
 }

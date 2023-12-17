@@ -1,24 +1,20 @@
 package com.capsulezero.game.core.gameActions
 
-import com.capsulezero.game.core.GameAction
 import com.capsulezero.game.core.GameEngine
-import com.capsulezero.game.core.GameState
 import com.capsulezero.game.core.Meeting
 
 //Talk is considered as a on-the-fly meeting.
-class talk(targetState: GameState, targetCharacter: String, targetPlace: String) : GameAction(targetState, targetCharacter,
-    targetPlace
-) {
+class talk(override val tgtCharacter: String, override val tgtPlace: String) : GameAction() {
     var who = ""
     override fun chooseParams() {
         who =
-            GameEngine.acquire(tgtState.places[tgtPlace]!!.characters.filter { it!=tgtCharacter }.toList())
-        if(tgtState.characters[who]!!.frozen>1) println("Warning: $who is already busy.")
+            GameEngine.acquire(parent.places[tgtPlace]!!.characters.filter { it!=tgtCharacter }.toList())
+        if(parent.characters[who]!!.frozen>1) println("Warning: $who is already busy.")
     }
     override fun execute() {
-        tgtState.ongoingMeetings["meeting-$tgtPlace-$tgtCharacter-${tgtState.time}"] = Meeting(tgtState.time, tgtPlace, scheduledCharacters = hashSetOf(who, tgtCharacter), tgtPlace)
-        tgtState.ongoingMeetings["meeting-$tgtPlace-$tgtCharacter-${tgtState.time}"]!!.currentCharacters.add(tgtCharacter)
-        tgtState.characters[tgtCharacter]!!.frozen++
+        parent.ongoingMeetings["meeting-$tgtPlace-$tgtCharacter-${parent.time}"] = Meeting(parent.time, tgtPlace, scheduledCharacters = hashSetOf(who, tgtCharacter), tgtPlace)
+        parent.ongoingMeetings["meeting-$tgtPlace-$tgtCharacter-${parent.time}"]!!.currentCharacters.add(tgtCharacter)
+        parent.characters[tgtCharacter]!!.frozen++
     }
 
 }

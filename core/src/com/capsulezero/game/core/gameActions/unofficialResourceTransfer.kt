@@ -1,45 +1,41 @@
 package com.capsulezero.game.core.gameActions
 
-import com.capsulezero.game.core.GameAction
 import com.capsulezero.game.core.GameEngine
-import com.capsulezero.game.core.GameState
 import com.capsulezero.game.core.Information
 
-class unofficialResourceTransfer(targetState: GameState, targetCharacter: String, targetPlace: String) : GameAction(targetState, targetCharacter,
-    targetPlace
-) {
+class unofficialResourceTransfer(override val tgtCharacter: String, override val tgtPlace: String) : GameAction() {
     var amount = 10
     var what = ""
     override fun chooseParams() {
-        what = GameEngine.acquire(tgtState.places[tgtPlace]!!.resources.keys.toList())
+        what = GameEngine.acquire(parent.places[tgtPlace]!!.resources.keys.toList())
     }
     override fun execute() {
 
         if(
-            (tgtState.places[tgtPlace]!!.resources[what]?:0)>=amount
+            (parent.places[tgtPlace]!!.resources[what]?:0)>=amount
         ) {
-            tgtState.places[tgtPlace]!!.resources[what] = (tgtState.places[tgtPlace]!!.resources[what]?:0) - amount
-            tgtState.characters[tgtCharacter]!!.resources[what] =
-                (tgtState.characters[tgtCharacter]!!.resources[what]?:0) + amount
-            tgtState.characters[tgtCharacter]!!.frozen++
+            parent.places[tgtPlace]!!.resources[what] = (parent.places[tgtPlace]!!.resources[what]?:0) - amount
+            parent.characters[tgtCharacter]!!.resources[what] =
+                (parent.characters[tgtCharacter]!!.resources[what]?:0) + amount
+            parent.characters[tgtCharacter]!!.frozen++
             //Spread rumor only when someone sees it
-            if (tgtState.places[tgtPlace]!!.currentWorker!=0) {
+            if (parent.places[tgtPlace]!!.currentWorker!=0) {
                 Information(
                     author = "",
-                    creationTime = tgtState.time,
+                    creationTime = parent.time,
                     type = "action",
                     tgtPlace = tgtPlace,
                     amount = amount,
                     action = "unofficialResourceTransfer"
                 )/*spread rumor in the responsible party*/.also {
-                    tgtState.informations[it.generateName()] =
+                    parent.informations[it.generateName()] =
                         it; 
-                    it.publicity[tgtState.places[tgtPlace]!!.responsibleParty] = 1
+                    it.publicity[parent.places[tgtPlace]!!.responsibleParty] = 1
                 }
             }
         }
         else{
-            println("Not enough resources: $tgtPlace, ${tgtState.places[tgtPlace]!!.resources["water"]}")
+            println("Not enough resources: $tgtPlace, ${parent.places[tgtPlace]!!.resources["water"]}")
         }
 
     }

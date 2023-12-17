@@ -1,16 +1,11 @@
 package com.capsulezero.game.core.gameActions
 
-import com.capsulezero.game.core.GameAction
-import com.capsulezero.game.core.GameState
-
-class clearAccidentScene(targetState: GameState, targetCharacter: String, targetPlace: String) : GameAction(targetState, targetCharacter,
-    targetPlace
-) {
+class clearAccidentScene(override val tgtCharacter: String, override val tgtPlace: String) : GameAction() {
 
     override fun execute() {
-        tgtState.places[tgtPlace]!!.isAccidentScene = false
-        tgtState.places[tgtPlace]!!.accidentInformations.clear()//Remove all accident information from the place.
-        tgtState.characters[tgtCharacter]!!.frozen+=3
+        parent.places[tgtPlace]!!.isAccidentScene = false
+        parent.places[tgtPlace]!!.accidentInformations.clear()//Remove all accident information from the place.
+        parent.characters[tgtCharacter]!!.frozen+=3
     }
 
 }

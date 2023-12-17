@@ -13,7 +13,7 @@ class Clock (gameState: GameState) : Table(defaultSkin) {
     init {
         l = Label(formatTime(gameState.time), defaultSkin, "console")
         l.setFontScale(2f)
-        val b = TextButton("시간", defaultSkin)
+        val b = TextButton("TIME", defaultSkin)
         add(b)
         add(l)
 

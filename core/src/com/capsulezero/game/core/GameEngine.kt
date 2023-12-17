@@ -1,6 +1,7 @@
 package com.capsulezero.game.core
 
 import com.badlogic.gdx.Gdx
+import com.capsulezero.game.core.gameActions.GameAction
 import com.capsulezero.game.ui.LogUI
 import kotlinx.coroutines.runBlocking
 import kotlin.coroutines.resume
@@ -54,6 +55,7 @@ class GameEngine(val gameState: GameState) {
         if (char.name == gameState.playerAgent) {
             do {
                 action = acquire("Action", hashMapOf("actionList" to actionList))
+                action.injectParent(gameState)
                 if(action.isValid())
                     break
                 else
@@ -69,6 +71,7 @@ class GameEngine(val gameState: GameState) {
 
         } else {
             action = gameState.nonPlayerAgents[char.name]?.chooseAction() ?: throw Exception("Non player character ${char.name} does not have a nonPlayerAgent.")
+            action.injectParent(gameState)
             if (action.javaClass.simpleName !in actionList)
                 println(
                     "Warning: Non player character ${char.name} is performing ${action.javaClass.simpleName} at ${
@@ -78,6 +81,16 @@ class GameEngine(val gameState: GameState) {
                             )
                         }!!.name
                     }, time=${gameState.time}, which is not in the action list. This may be a bug."
+                )
+            if (!action.isValid())
+                println(
+                    "Warning: Non player character ${char.name} is performing ${action.javaClass.simpleName} at ${
+                        gameState.places.values.find {
+                            it.characters.contains(
+                                char.name
+                            )
+                        }!!.name
+                    }, time=${gameState.time}, which is not valid. This may be a bug."
                 )
 
         }
@@ -884,11 +897,14 @@ class GameEngine(val gameState: GameState) {
                 //You cannot trade in a conference.
                 val subject = conf.subject
                 if(character == gameState.parties[conf.involvedParty]!!.leader)//Only the leader can do below actions.
-                when (subject) {
-                    "budgetProposal" -> if (!gameState.isBudgetProposed) actions.add("budgetProposal")
-                    "budgetResolution" -> if (!gameState.isBudgetResolved) actions.add("budgetResolution")
-                    "leaderAssignment" -> if (gameState.parties[conf.auxSubject]!!.leader == "") actions.add("leaderAssignment")
+                {
+                    when (subject) {
+                        "budgetProposal" -> if (!gameState.isBudgetProposed) actions.add("budgetProposal")
+                        "budgetResolution" -> if (!gameState.isBudgetResolved) actions.add("budgetResolution")
+                        "leaderAssignment" -> if (gameState.parties[conf.auxSubject]!!.leader == "") actions.add("leaderAssignment")
 
+                    }
+                    actions.add("resign") //Only leaders can resign right now.
                 }
                 //When not the leader, you can only do below actions.
                 when (subject) {

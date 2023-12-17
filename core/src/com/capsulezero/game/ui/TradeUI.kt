@@ -17,7 +17,7 @@ class TradeUI(skin: Skin?, var gameState: GameState) : Table(skin) {
     private var isOpen = false;
     val submitButton = TextButton("지시", skin)
     val cancelButton = TextButton("취소", skin)
-    var trade : trade = trade(gameState, "", "")
+    var trade : trade = trade("", "")
     init {
         titleLabel = Label("거래", skin, "trnsprtConsole")
         titleLabel.setFontScale(2f)
@@ -53,7 +53,7 @@ class TradeUI(skin: Skin?, var gameState: GameState) : Table(skin) {
         with(gameState) {
             val who =
                 ongoingMeetings.filter {it.value.currentCharacters.contains(playerAgent)}.flatMap { it.value.currentCharacters }.first {it!=playerAgent}
-            trade = trade(gameState, playerAgent, characters[playerAgent]!!.place.name).apply { this.who = who }
+            trade = trade(playerAgent, characters[playerAgent]!!.place.name).apply { this.who = who }
             isVisible = true
             refreshList(characters[playerAgent]!!.resources,
                 characters[who]!!.resources,

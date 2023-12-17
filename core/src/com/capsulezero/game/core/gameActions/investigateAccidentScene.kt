@@ -1,16 +1,11 @@
 package com.capsulezero.game.core.gameActions
 
-import com.capsulezero.game.core.GameAction
-import com.capsulezero.game.core.GameState
-
-class investigateAccidentScene(targetState: GameState, targetCharacter: String, targetPlace: String) : GameAction(targetState, targetCharacter,
-    targetPlace
-) {
+class investigateAccidentScene(override val tgtCharacter: String, override val tgtPlace: String) : GameAction() {
 
     override fun execute() {
-        if(tgtState.places[tgtPlace]!!.isAccidentScene)
-            tgtState.places[tgtPlace]!!.accidentInformations.forEach { entry -> entry.value.also { it.author = tgtCharacter;it.knownTo.add(tgtCharacter);it.credibility=100;tgtState.informations[it.generateName()] = it }}//Add all accident information to the character.
-        tgtState.characters[tgtCharacter]!!.frozen+=3
+        if(parent.places[tgtPlace]!!.isAccidentScene)
+            parent.places[tgtPlace]!!.accidentInformations.forEach { entry -> entry.value.also { it.author = tgtCharacter;it.knownTo.add(tgtCharacter);it.credibility=100;parent.informations[it.generateName()] = it }}//Add all accident information to the character.
+        parent.characters[tgtCharacter]!!.frozen+=3
     }
 
 }

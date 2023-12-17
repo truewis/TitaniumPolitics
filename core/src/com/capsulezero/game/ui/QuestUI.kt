@@ -17,7 +17,7 @@ class QuestUI(skin: Skin?, var gameState: GameState) : Table(skin) {
     private var isOpen = false;
 
     init {
-        titleLabel = Label("일정:", skin, "trnsprtConsole")
+        titleLabel = Label("Quest:", skin, "trnsprtConsole")
         titleLabel.setFontScale(2f)
         add(titleLabel).growX()
         row()

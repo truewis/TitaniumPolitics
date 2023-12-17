@@ -6,6 +6,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.capsulezero.game.core.Command
 import com.capsulezero.game.core.GameEngine
 import com.capsulezero.game.core.GameState
+import com.capsulezero.game.core.gameActions.GameAction
 
 class CommandUI(skin: Skin?, var gameState: GameState) : Table(skin) {
     var titleLabel: Label
@@ -33,14 +34,22 @@ class CommandUI(skin: Skin?, var gameState: GameState) : Table(skin) {
             if(it.type=="Command")
             {
                 refresh(it.variables["issuedBy"] as String, it.variables["issuedTo"] as String, it.variables["party"] as String)
+                val who = it.variables["issuedTo"] as String
+                submitButton.clearListeners()
+                submitButton.addListener(object : ClickListener() {
+                    override fun clicked(event: InputEvent?, x: Float, y: Float) {
+                        super.clicked(event, x, y)
+                        val action = Class.forName("com.capsulezero.game.core.gameActions.${actionDropDown.selected}")
+                            .getDeclaredConstructor(String::class.java, String::class.java).newInstance(
+                                who,
+                                gameState.places.values.find { it.characters.contains(who) }!!.name
+                            ) as GameAction
+                        GameEngine.acquireCallback(Command(placeDropDown.selected, action).also { command -> command.executeTime = timeSelection.value.toInt(); command.issuedParty = it.variables["party"] as String })
+                        isVisible = false
+                    }
+                })
             }
-            submitButton.addListener(object : ClickListener() {
-                override fun clicked(event: InputEvent?, x: Float, y: Float) {
-                    super.clicked(event, x, y)
-                    GameEngine.acquireCallback(Command(placeDropDown.selected, actionDropDown.selected, 0).also { command -> command.executeTime = timeSelection.value.toInt(); command.issuedParty = it.variables["party"] as String })
-                    isVisible = false
-                }
-            })
+
         }
     }
 

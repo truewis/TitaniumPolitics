@@ -11,9 +11,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.Stack
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.badlogic.gdx.utils.Align
-import com.capsulezero.game.core.GameAction
 import com.capsulezero.game.core.GameEngine
 import com.capsulezero.game.core.GameState
+import com.capsulezero.game.core.gameActions.GameAction
 import com.rafaskoberg.gdx.typinglabel.TypingAdapter
 import com.rafaskoberg.gdx.typinglabel.TypingLabel
 import ktx.scene2d.Scene2DSkin.defaultSkin
@@ -188,8 +188,7 @@ class LogUI (val gameState: GameState) : Table(defaultSkin) {
                     }
                     else->{
                         val action = Class.forName("com.capsulezero.game.core.gameActions."+playerActionList[choice])
-                            .getDeclaredConstructor(GameState::class.java, String::class.java, String::class.java).newInstance(
-                                gameState,
+                            .getDeclaredConstructor(String::class.java, String::class.java).newInstance(
                                 gameState.playerAgent,
                                 gameState.places.values.find { it.characters.contains(gameState.playerAgent) }!!.name
                             ) as GameAction

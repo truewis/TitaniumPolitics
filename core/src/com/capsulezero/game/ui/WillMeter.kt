@@ -13,7 +13,7 @@ class WillMeter (gameState: GameState) : Table(defaultSkin) {
     init {
         l = Label("", defaultSkin, "trnsprtConsole")
         l.setFontScale(2f)
-        val b = TextButton("의지", defaultSkin)
+        val b = TextButton("WILL", defaultSkin)
         add(b)
         add(l)
 

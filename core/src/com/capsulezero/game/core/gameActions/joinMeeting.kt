@@ -1,20 +1,16 @@
 package com.capsulezero.game.core.gameActions
 
-import com.capsulezero.game.core.GameAction
 import com.capsulezero.game.core.GameEngine
-import com.capsulezero.game.core.GameState
 
-class joinMeeting(targetState: GameState, targetCharacter: String, targetPlace: String) : GameAction(targetState, targetCharacter,
-    targetPlace
-) {
+class joinMeeting(override val tgtCharacter: String, override val tgtPlace: String) : GameAction() {
     var meetingName = ""
     override fun chooseParams() {
-        meetingName = GameEngine.acquire(tgtState.ongoingMeetings.filter { it.value.scheduledCharacters.contains(tgtCharacter) && it.value.place==tgtPlace}.keys.toList())
+        meetingName = GameEngine.acquire(parent.ongoingMeetings.filter { it.value.scheduledCharacters.contains(tgtCharacter) && it.value.place==tgtPlace}.keys.toList())
     }
 
     override fun execute() {
-        tgtState.ongoingMeetings[meetingName]!!.currentCharacters.add(tgtCharacter)
-        tgtState.characters[tgtCharacter]!!.frozen++
+        parent.ongoingMeetings[meetingName]!!.currentCharacters.add(tgtCharacter)
+        parent.characters[tgtCharacter]!!.frozen++
     }
 
 }

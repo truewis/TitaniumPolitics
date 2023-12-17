@@ -13,7 +13,7 @@ class HealthMeter (gameState: GameState) : Table(defaultSkin) {
     init {
         l = Label("", defaultSkin, "trnsprtConsole")
         l.setFontScale(2f)
-        val b = TextButton("체력", defaultSkin)
+        val b = TextButton("HP", defaultSkin)
         add(b)
         add(l)
 

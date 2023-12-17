@@ -8,6 +8,7 @@ class Character: GameStateElement() {
     var alive = true
     var trait = hashSetOf<String>()
     var resources = hashMapOf<String, Int>()
+    var commands = arrayListOf<Command>()//Commands issued by other characters.
     var health = 0
         set(value) {
             field = if(value<100) value else 100//Max health is 100.
@@ -70,7 +71,7 @@ class Character: GameStateElement() {
         //TODO: Action to acquire resources is more valuable.
 
         //Action to repair the character's apparatus is more valuable.
-        if(action.action=="repair" && parent.parties[parent.places[action.place]!!.responsibleParty]?.members?.contains(name)==true)
+        if(action.action.javaClass.simpleName=="repair" && parent.parties[parent.places[action.place]!!.responsibleParty]?.members?.contains(name)==true)
         {
             val urgency = 100.0 - parent.places[action.place]!!.apparatuses.sumOf { it.durability } / parent.places[action.place]!!.apparatuses.size
             return urgency

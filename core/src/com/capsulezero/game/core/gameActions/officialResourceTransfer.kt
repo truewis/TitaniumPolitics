@@ -1,32 +1,28 @@
 package com.capsulezero.game.core.gameActions
 
-import com.capsulezero.game.core.GameAction
 import com.capsulezero.game.core.GameEngine
-import com.capsulezero.game.core.GameState
 
-class officialResourceTransfer(targetState: GameState, targetCharacter: String, targetPlace: String) : GameAction(targetState, targetCharacter,
-    targetPlace
-) {
+class officialResourceTransfer(override val tgtCharacter: String, override val tgtPlace: String) : GameAction() {
     var toWhere = ""
     var what = ""
     var amount = 10
     override fun chooseParams() {
-        toWhere = GameEngine.acquire(tgtState.places.keys.toList())
-        what = GameEngine.acquire(tgtState.places[tgtPlace]!!.resources.keys.toList())
+        toWhere = GameEngine.acquire(parent.places.keys.toList())
+        what = GameEngine.acquire(parent.places[tgtPlace]!!.resources.keys.toList())
     }
     override fun execute() {
 
         if(
-            (tgtState.places[tgtPlace]!!.resources[what]?:0)>=amount
+            (parent.places[tgtPlace]!!.resources[what]?:0)>=amount
         ) {
-            tgtState.places[tgtPlace]!!.resources[what] = (tgtState.places[tgtPlace]!!.resources[what]?:0) - amount
-            tgtState.places[toWhere]!!.resources[what] =
-                (tgtState.places[toWhere]!!.resources[what]?:0) + amount
-            tgtState.characters[tgtCharacter]!!.frozen++
+            parent.places[tgtPlace]!!.resources[what] = (parent.places[tgtPlace]!!.resources[what]?:0) - amount
+            parent.places[toWhere]!!.resources[what] =
+                (parent.places[toWhere]!!.resources[what]?:0) + amount
+            parent.characters[tgtCharacter]!!.frozen++
 
         }
         else{
-            println("Not enough resources: $tgtPlace, $what, ${tgtState.places[tgtPlace]!!.resources[what]}")
+            println("Not enough resources: $tgtPlace, $what, ${parent.places[tgtPlace]!!.resources[what]}")
         }
 
     }

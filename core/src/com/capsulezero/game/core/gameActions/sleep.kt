@@ -1,19 +1,14 @@
 package com.capsulezero.game.core.gameActions
 
-import com.capsulezero.game.core.GameAction
-import com.capsulezero.game.core.GameState
-
-class sleep(targetState: GameState, targetCharacter: String, targetPlace: String) : GameAction(targetState, targetCharacter,
-    targetPlace
-) {
+class sleep(override val tgtCharacter: String, override val tgtPlace: String) : GameAction() {
 
     override fun execute() {
         println("$tgtCharacter slept.")
-        if (tgtState.characters[tgtCharacter]!!.trait.contains("old"))
-            tgtState.characters[tgtCharacter]!!.health+=40
+        if (parent.characters[tgtCharacter]!!.trait.contains("old"))
+            parent.characters[tgtCharacter]!!.health+=40
         else
-            tgtState.characters[tgtCharacter]!!.health+=50
-        tgtState.characters[tgtCharacter]!!.frozen+=8
+            parent.characters[tgtCharacter]!!.health+=50
+        parent.characters[tgtCharacter]!!.frozen+=8
     }
 
 }

@@ -1,24 +1,18 @@
 package com.capsulezero.game.core.gameActions
 
-import com.capsulezero.game.core.GameAction
-import com.capsulezero.game.core.GameState
-
-class budgetResolution(targetState: GameState, targetCharacter: String, targetPlace: String) : GameAction(
-    targetState, targetCharacter,
-    targetPlace
-) {
+class budgetResolution(override val tgtCharacter: String, override val tgtPlace: String) : GameAction() {
     override fun isValid(): Boolean =
-        tgtState.ongoingConferences.filter { it.value.subject == "budgetProposal" }.values.first().currentCharacters.containsAll(
+        parent.ongoingConferences.filter { it.value.subject == "budgetProposal" }.values.first().currentCharacters.containsAll(
             listOf(
                 "observer",
                 "ctrler"
             )
-        )&& tgtState.ongoingConferences.filter { it.value.subject == "budgetProposal" }.values.first().currentCharacters.any { tgtState.characters[it]!!.trait.contains("mechanic") }
+        )&& parent.ongoingConferences.filter { it.value.subject == "budgetProposal" }.values.first().currentCharacters.any { parent.characters[it]!!.trait.contains("mechanic") }
 
     override fun execute() {
-        tgtState.isBudgetResolved = true
+        parent.isBudgetResolved = true
 
-        with(tgtState) {
+        with(parent) {
             //Now, take the time of all characters present.
             ongoingConferences.filter { it.value.subject == "budgetProposal" }.values.first().currentCharacters.forEach { characters[it]!!.frozen++ }
             //Distribute resources according to the budget plan.

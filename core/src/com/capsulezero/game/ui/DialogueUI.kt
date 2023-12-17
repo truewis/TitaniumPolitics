@@ -1,7 +1,5 @@
 package com.capsulezero.game.ui
 
-import com.badlogic.gdx.Gdx
-import com.badlogic.gdx.Input
 import com.badlogic.gdx.scenes.scene2d.InputEvent
 import com.badlogic.gdx.scenes.scene2d.Touchable
 import com.badlogic.gdx.scenes.scene2d.actions.Actions
@@ -11,13 +9,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.Stack
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.badlogic.gdx.utils.Align
-import com.capsulezero.game.core.GameAction
-import com.capsulezero.game.core.GameEngine
 import com.capsulezero.game.core.GameState
 import com.rafaskoberg.gdx.typinglabel.TypingAdapter
 import com.rafaskoberg.gdx.typinglabel.TypingLabel
 import ktx.scene2d.Scene2DSkin.defaultSkin
-import kotlin.concurrent.thread
 
 class DialogueUI (val gameState: GameState) : Table(defaultSkin) {
     val stk = Stack()
