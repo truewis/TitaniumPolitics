@@ -10,7 +10,7 @@ class Party: GameStateElement() {
     var home = "" //The place where the party is based.
     var members = hashSetOf<String>()
     var isDailySalaryPaid = hashMapOf<String, Boolean>()
-    var commands = hashSetOf<String>()
+    var commands = hashSetOf<String>()//The commands that the party can issue. Currently only used in CommandUI.
     var anonymousMembers  = 0
     val size: Int
         get() = members.size+anonymousMembers

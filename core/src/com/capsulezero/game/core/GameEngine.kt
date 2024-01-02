@@ -189,6 +189,7 @@ class GameEngine(val gameState: GameState) {
         removed.forEach { gameState.informations.remove(it) }
     }
 
+    //TODO: optimize this function.
     private fun spreadPublicInfo() {
         //spread information within each party, if known.
         gameState.informations.values.forEach { information ->

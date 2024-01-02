@@ -3,12 +3,17 @@ package com.capsulezero.game.core.gameActions
 class leaveConference(override val tgtCharacter: String, override val tgtPlace: String) : GameAction() {
 
     override fun execute() {
-        val meetingName = parent.ongoingConferences.filter { it.value.scheduledCharacters.contains(tgtCharacter) }.keys.first()
-        parent.ongoingConferences[meetingName]!!.currentCharacters.remove(tgtCharacter)
-        if(parent.ongoingConferences[meetingName]!!.currentCharacters.count()==0 || parent.characters[tgtCharacter]!!.trait.contains("mechanic")) {
-            parent.ongoingConferences.remove(meetingName)//End the meeting if it has no participants, or if the mechanic leaves
+        val meetingKey = parent.ongoingConferences.filter { it.value.currentCharacters.contains(tgtCharacter) }.keys.first()
+        val meeting = parent.ongoingConferences[meetingKey]!!
+        meeting.currentCharacters.remove(tgtCharacter)
+        if(meeting.currentCharacters.isEmpty() || parent.parties[meeting.involvedParty]!!.leader==tgtCharacter)  {
+            parent.ongoingConferences.remove(meetingKey)//End the meeting if it has no participants, or if the leader leaves
 
         }
+    }
+
+    override fun isValid(): Boolean {
+        return parent.ongoingConferences.any { it.value.currentCharacters.contains(tgtCharacter) }
     }
 
 }

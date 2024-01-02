@@ -11,7 +11,7 @@ class Quest1:Quests.QuestObject("Be a minister", 240) {
         super.injectParent(gameState)
         //The current infrastructure minister resigns and the mechanic picks a new one.
         val who = parent.parties["infrastructure"]!!.leader
-        parent.characters[who]!!.commands.add(Command(parent.parties["infrastructure"]!!.home, resign(tgtCharacter = who, tgtPlace = parent.parties["infrastructure"]!!.home)).also { it.executeTime = 48+18; it.issuedParty = "infrastructure" })
+        parent.characters[who]!!.commands.add(Command(parent.parties["infrastructure"]!!.home, resign(tgtCharacter = who, tgtPlace = parent.parties["infrastructure"]!!.home).also { it.injectParent(gameState) }).also { it.executeTime = 48+18; it.issuedParty = "infrastructure" })
 
     }
     override val isCompleted: Boolean

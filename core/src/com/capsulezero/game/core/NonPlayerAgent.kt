@@ -52,20 +52,42 @@ class NonPlayerAgent(val character: String) : GameStateElement() {
         }
         routines.sortByDescending { it.priority }
         //Leave meeting or conference if the routine was changed.
-        if (routines[0].name != "attendMeeting" && parent.ongoingMeetings.any {
+        if (routines.none { it.name=="attendMeeting" }  && parent.ongoingMeetings.any {
                 it.value.currentCharacters.contains(
                     character
                 )
             }) {
             return leaveMeeting(character, place)
         }
-        if (routines[0].name != "attendConference" && parent.ongoingConferences.any {
+        if (routines.none { it.name=="attendConference" } && parent.ongoingConferences.any {
                 it.value.currentCharacters.contains(
                     character
                 )
             }) {
             return leaveConference(character, place)
         }
+        val commands = parent.characters[character]!!.commands
+        //If there is a command that is within the set time window, issued party is trusted enough, and seems to be executable (AvailableActions), start execution routine.
+        //Note that the command may not be valid even if it in AvailableActions list. For example, if the character is already at the place, move command is not valid.
+        //We should not enter executeCommand routine if it is already in the routine list.
+        if(routines.none{it.name=="executeCommand"})
+        {
+            if (commands.any {
+                    it.executeTime in parent.time - 3..parent.time + 3 && parent.parties[it.issuedParty]!!.integrity > 30.0 && GameEngine.availableActions(
+                        parent,
+                        it.place,
+                        character
+                    ).contains(it.action.javaClass.simpleName)
+                }) {
+                routines.add(
+                    Routine(
+                        "executeCommand",
+                        routines[0].priority + 10
+                    )
+                )//Add the routine with higher priority.
+            }
+        }
+
         //Execute action by the current routine
         when (routines[0].name) {
             "rest" -> {
@@ -88,6 +110,35 @@ class NonPlayerAgent(val character: String) : GameStateElement() {
                             return wait(character, place)
                         }
                 }
+            }
+
+            "executeCommand" -> {
+                //The condition should be same with the executeCommand entry condition.
+                val executableCommands = parent.characters[character]!!.commands.filter { it.executeTime in parent.time - 3..parent.time + 3 && parent.parties[it.issuedParty]!!.integrity > 30.0 && GameEngine.availableActions(parent, it.place, character).contains(it.action.javaClass.simpleName) }
+                if (executableCommands.isEmpty()) {
+                    routines.removeAt(0)//Remove the current routine.
+                    return executeRoutine()
+                }
+                println("$character is executing the command from ${executableCommands}.")
+                executableCommands.forEach { command ->
+                        if (place == command.place) {
+                            if (command.action.isValid()) {
+                                println("$character: The command ${command.action} is valid. Executing...")
+                                commands.remove(command)//Execute the command.
+                                return command.action
+                            }
+                        }
+                    //Check other executable commands.
+                }
+                executableCommands.forEach { command ->
+                    if (place != command.place) {
+                        routines.add(Routine("move", routines[0].priority + 10).also {
+                            it.variables["movePlace"] = command.place
+                        })//Add a move routine with higher priority.
+                        return executeRoutine()
+                    }
+                }
+
             }
 
             "move" -> {
@@ -117,6 +168,8 @@ class NonPlayerAgent(val character: String) : GameStateElement() {
                 }
 
             }
+
+
 
             "steal" -> {
                 val resplace =
@@ -190,22 +243,6 @@ class NonPlayerAgent(val character: String) : GameStateElement() {
                     routines.removeAt(0)//Remove the current routine.
                     routines.add(Routine("rest", 50)) //Rest with higher priority.
                     return executeRoutine()
-                }
-                val commands = parent.characters[character]!!.commands
-                //If there is a command, execute it.
-                if (commands.isNotEmpty()) {
-                    if ((parent.parties[commands.first().issuedParty]!!.integrity) < 30.0) {
-                        commands.removeAt(0)//Ignore the command if the party is not trusted.
-                        println("$character is ignoring the command from ${commands.first().issuedParty} because the party is not trusted.")
-                        return executeRoutine()
-                    }
-                    if (place != commands.first().place)
-                        return move(character, place).also { it.placeTo = commands.first().place }
-                    if (commands.first().action.isValid())
-                    {
-                        val command = commands.removeAt(0)//Execute the command.
-                        return command.action
-                    }
                 }
                 if (parent.ongoingConferences.any {
                         it.value.scheduledCharacters.contains(character) && !it.value.currentCharacters.contains(
@@ -431,8 +468,8 @@ class NonPlayerAgent(val character: String) : GameStateElement() {
                     return executeRoutine()
                 }
                 val conf = parent.ongoingConferences.filter { it.value.currentCharacters.contains(character) }.values.first()
-                //If an hour has passed since the meeting started, leave the meeting. TODO: what if the meeting has started late?
-                if(routines[0].intVariables["time"]!!+2<=parent.time)
+                //If two hours has passed since the meeting started, leave the meeting. TODO: what if the meeting has started late?
+                if(routines[0].intVariables["time"]!!+4<=parent.time)
                 {
                     routines.removeAt(0)//Remove the current routine.
                     return executeRoutine()

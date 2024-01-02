@@ -12,4 +12,8 @@ class leaveMeeting(override val tgtCharacter: String, override val tgtPlace: Str
         }
     }
 
+    override fun isValid(): Boolean {
+        return parent.ongoingMeetings.any { it.value.currentCharacters.contains(tgtCharacter) }
+    }
+
 }

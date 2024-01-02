@@ -13,11 +13,11 @@ class salary(override val tgtCharacter: String, override val tgtPlace: String) :
         val party = parent.parties.values.find { it.members.containsAll(who+tgtCharacter) }!!
         val guildHall = party.home
         if(party.isDailySalaryPaid.keys.none { it==tgtCharacter  }){
-            println("Warning: $tgtCharacter is not eligible to be paid from $party.")
+            println("Warning: $tgtCharacter is not eligible to be paid from ${party.name}.")
             return
         }
         if(party.isDailySalaryPaid[tgtCharacter]==true){
-            println("Warning: $tgtCharacter has already been paid from $party today.")
+            println("Warning: $tgtCharacter has already been paid from ${party.name} today.")
             return
         }
         if(
@@ -31,7 +31,7 @@ class salary(override val tgtCharacter: String, override val tgtPlace: String) :
             parent.characters[tgtCharacter]!!.resources[what2] =
                 (parent.characters[tgtCharacter]!!.resources[what2]?:0) + amount
             party.isDailySalaryPaid[tgtCharacter]=true
-            println( "$tgtCharacter is paid $amount $what1 and $amount $what2 from $party.")
+            println( "$tgtCharacter is paid $amount $what1 and $amount $what2 from $${party.name}.")
             parent.characters[tgtCharacter]!!.frozen++
 
         }

@@ -16,7 +16,20 @@ class resign(override val tgtCharacter: String, override val tgtPlace: String) :
         parent.parties[party]!!.members.remove(tgtCharacter)
         parent.parties[party]!!.leader = ""
         println("$tgtCharacter resigns from $party.")
-
+        //If member of cabinet, also leave the cabinet
+        if(parent.parties["cabinet"]!!.members.contains(tgtCharacter))
+        {
+            parent.parties["cabinet"]!!.members.remove(tgtCharacter)
+            println("$tgtCharacter resigns from cabinet.")
+        }
+        //Should immediately leave the party meeting if it is ongoing
+        if(parent.ongoingConferences.any {it.value.currentCharacters.contains(tgtCharacter) && it.value.involvedParty==party})
+        {
+            leaveConference(tgtCharacter, tgtPlace).also{
+                it.injectParent(parent)
+                it.execute()
+            }
+        }
 
     }
 
