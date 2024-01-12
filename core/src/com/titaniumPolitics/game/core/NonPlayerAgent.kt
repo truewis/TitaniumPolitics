@@ -8,15 +8,15 @@ import kotlin.math.min
 class NonPlayerAgent(val character: String) : GameStateElement() {
 
 
-    private var routines = arrayListOf<Routine>()//Routines are sorted by priority. 0th element is the current routine.
+    private var routines = arrayListOf<Routine>()//Routines are sorted by priority. The first element is the current routine.
     val place
     get() = parent.places.values.find { it.characters.contains(character) }!!.name
 
     fun chooseAction(): GameAction {
         //1. High priority routine change
-        //---------------------------------------------------------------------------------------------------------
+
         selectRoutine()
-        //2. Execute action according to the current routine.--------------------------------------------------------------------------------------------------------
+        //2. Execute action according to the current routine. This includes switching routines.
         return executeRoutine()
     }
 

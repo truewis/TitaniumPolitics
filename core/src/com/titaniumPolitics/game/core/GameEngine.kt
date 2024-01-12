@@ -12,12 +12,18 @@ import kotlin.math.min
 import kotlin.random.Random
 import kotlin.system.exitProcess
 
+/*
+* GameEngine is a loop that runs the game. Each loop is a turn. Each turn, each character performs an action.
+*
+*
+* */
 class GameEngine(val gameState: GameState) {
     val random = Random(System.currentTimeMillis())
 
     fun startGame() {
         gameState.updateUI.forEach { it(gameState) }//Update UI
 
+        //Main loop
         while (true) {
             gameState.characters.values.forEach {
                 if(it.alive) {
@@ -108,6 +114,7 @@ class GameEngine(val gameState: GameState) {
 
     }
 
+    //This function is called at the end of each turn, after all the characters have performed their actions.
     fun progression() {
         gameState.time += 1
         distributePopulation()
