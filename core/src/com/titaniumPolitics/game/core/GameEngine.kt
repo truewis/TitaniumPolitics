@@ -596,9 +596,9 @@ class GameEngine(val gameState: GameState) {
             val cpy = Information(it); tgtState.informations[cpy.generateName()] = cpy; cpy.publicity[tgtPlace.responsibleParty] = 5
         }
             .also { /*copy this information to the responsible character.*/
-                val cpy = Information(it);
-                cpy.author = gameState.parties[tgtPlace.responsibleParty]!!.leader;
-                tgtState.informations[cpy.generateName()] = cpy;
+                val cpy = Information(it)
+                cpy.author = gameState.parties[tgtPlace.responsibleParty]!!.leader
+                tgtState.informations[cpy.generateName()] = cpy
                 cpy.publicity[tgtPlace.responsibleParty] = 0
             }
 
@@ -615,9 +615,9 @@ class GameEngine(val gameState: GameState) {
             val cpy = Information(it); tgtState.informations[cpy.generateName()] = cpy; cpy.publicity[tgtPlace.responsibleParty] = 5
         }
             .also { /*copy this information to the responsible character.*/
-                val cpy = Information(it);
-                cpy.author = gameState.parties[tgtPlace.responsibleParty]!!.leader;
-                tgtState.informations[cpy.generateName()] = cpy;
+                val cpy = Information(it)
+                cpy.author = gameState.parties[tgtPlace.responsibleParty]!!.leader
+                tgtState.informations[cpy.generateName()] = cpy
                 cpy.publicity[tgtPlace.responsibleParty] = 0
             }
 
@@ -647,11 +647,11 @@ class GameEngine(val gameState: GameState) {
                     val cpy = Information(it); tgtState.informations[cpy.generateName()] = cpy; cpy.publicity[tgtPlace.responsibleParty] = 5
                 }
                     .also { /*copy this information to the responsible character.*/
-                        val cpy = Information(it);
+                        val cpy = Information(it)
                         cpy.author =
-                            gameState.parties[tgtPlace.responsibleParty]!!.leader;
+                            gameState.parties[tgtPlace.responsibleParty]!!.leader
                         tgtState.informations[cpy.generateName()] =
-                            cpy;
+                            cpy
                         cpy.publicity[tgtPlace.responsibleParty] = 0
                     }
             }
@@ -675,11 +675,11 @@ class GameEngine(val gameState: GameState) {
             val cpy = Information(it); tgtState.informations[cpy.generateName()] = cpy; cpy.publicity[tgtPlace.responsibleParty] = 75
         }
             .also { information -> /*copy this information to the responsible character.*/
-                val cpy = Information(information);
+                val cpy = Information(information)
                 cpy.author =
-                    gameState.parties[tgtPlace.responsibleParty]!!.leader;
+                    gameState.parties[tgtPlace.responsibleParty]!!.leader
                 tgtState.informations[cpy.generateName()] =
-                    cpy;
+                    cpy
                 cpy.publicity[tgtPlace.responsibleParty] = 0
             }
 
@@ -696,11 +696,11 @@ class GameEngine(val gameState: GameState) {
             val cpy = Information(it); tgtState.informations[cpy.generateName()] = cpy; cpy.publicity[tgtPlace.responsibleParty] = 75
         }
             .also { /*copy this information to the responsible character.*/
-                val cpy = Information(it);
+                val cpy = Information(it)
                 cpy.author =
-                    gameState.parties[tgtPlace.responsibleParty]!!.leader;
+                    gameState.parties[tgtPlace.responsibleParty]!!.leader
                 tgtState.informations[cpy.generateName()] =
-                    cpy;
+                    cpy
                 cpy.publicity[tgtPlace.responsibleParty] = 0
             }
 
@@ -728,11 +728,11 @@ class GameEngine(val gameState: GameState) {
                     val cpy = Information(it); tgtState.informations[cpy.generateName()] = cpy; cpy.publicity[tgtPlace.responsibleParty] = 75
                 }
                     .also { /*copy this information to the responsible character.*/
-                        val cpy = Information(it);
+                        val cpy = Information(it)
                         cpy.author =
-                            gameState.parties[tgtPlace.responsibleParty]!!.leader;
+                            gameState.parties[tgtPlace.responsibleParty]!!.leader
                         tgtState.informations[cpy.generateName()] =
-                            cpy;
+                            cpy
                         cpy.publicity[tgtPlace.responsibleParty] = 0
                     }
             }
@@ -782,7 +782,7 @@ class GameEngine(val gameState: GameState) {
     companion object {
         var acquireCallback : (Any)->Unit = {}
         var acquireEvent =  arrayListOf<(AcquireParams)->Unit>()
-        public class AcquireParams(val type: String, val variables: HashMap<String, Any>)
+        class AcquireParams(val type: String, val variables: HashMap<String, Any>)
         fun isShortOfResources(app: Apparatus, place: Place):String
         {
             app.currentConsumption.forEach {

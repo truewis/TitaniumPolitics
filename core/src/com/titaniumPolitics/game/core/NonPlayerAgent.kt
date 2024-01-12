@@ -402,8 +402,8 @@ class NonPlayerAgent(val character: String) : GameStateElement() {
                 if (parent.time - (routines[0].intVariables["corruptionTimer"] ?:0)>48)
                 if (parent.parties.values.any { it.leader == character }) {
                     val party = parent.parties.values.find { it.leader == character }!!
-                    val rationThreshold = 10;//TODO: threshold change depending on member's trait and need
-                    val waterThreshold = 10;
+                    val rationThreshold = 10//TODO: threshold change depending on member's trait and need
+                    val waterThreshold = 10
                     val member = party.members.find { (parent.characters[it]!!.resources["ration"]
                         ?: 0) <= rationThreshold*(parent.characters[it]!!.reliants.size + 1)||(parent.characters[it]!!.resources["water"]
                         ?: 0) <= waterThreshold*(parent.characters[it]!!.reliants.size + 1) }
@@ -722,7 +722,7 @@ class NonPlayerAgent(val character: String) : GameStateElement() {
     }
 
     fun decideTrade(who: String, value: Double /*value of the items I am giving away*/, value2: Double/*value of the items I will receive*/, valuea: Double, valuea2: Double): Boolean {
-        val friendlinessFactor = 0.5;//TODO: this should be determined by the character's trait. More friendly characters are more likely to accept the trade which benefits the other character.
+        val friendlinessFactor = 0.5//TODO: this should be determined by the character's trait. More friendly characters are more likely to accept the trade which benefits the other character.
         return value >= value2 + (parent.getMutuality(character, who)-50) * (valuea - valuea2) * friendlinessFactor / 100
     }
 
