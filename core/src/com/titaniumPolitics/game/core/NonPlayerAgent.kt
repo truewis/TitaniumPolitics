@@ -4,19 +4,27 @@ import com.titaniumPolitics.game.core.gameActions.*
 import kotlinx.serialization.Serializable
 import kotlin.math.min
 
+/*
+*  NonPlayerAgent is a character that is not controlled by the player.
+* It has a list of routines, which are executed in order of priority.
+* The first routine is the current routine.
+* When the current routine is finished, the next routine is executed.
+* Routines ultimately return GameAction, which is executed by the GameEngine.
+* This logic is called by GameEngine.chooseAction(), once per character per turn.
+*
+* */
 @Serializable
 class NonPlayerAgent(val character: String) : GameStateElement() {
 
 
-    private var routines = arrayListOf<Routine>()//Routines are sorted by priority. The first element is the current routine.
+    private var routines = arrayListOf<Routine>()//Routines are sorted by priority. The first element is the current routine. All other routines are executed when the current routine is finished.
     val place
     get() = parent.places.values.find { it.characters.contains(character) }!!.name
 
     fun chooseAction(): GameAction {
         //1. High priority routine change
-
         selectRoutine()
-        //2. Execute action according to the current routine. This includes switching routines.
+        //2. Execute action according to the current routine. This includes low priority switching routines.
         return executeRoutine()
     }
 
@@ -43,7 +51,7 @@ class NonPlayerAgent(val character: String) : GameStateElement() {
 
     }
 
-
+    //This is a recursive function. It returns the action to be executed.
     private fun executeRoutine(): GameAction {
         if (routines.isEmpty()) {
             whenIdle()
