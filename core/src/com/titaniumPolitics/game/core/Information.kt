@@ -4,6 +4,11 @@ import kotlinx.serialization.Serializable
 import kotlin.math.max
 import kotlin.math.min
 
+/*
+* Everything agent knows about the world is an information.
+* Information can be true or false. It can be shared with others or sold.
+* Information can be used to make a decision. It can be used to blame or blackmail someone.
+* */
 @Serializable
 class Information(//If there is no author, it is a rumor.
     var name :String = "",

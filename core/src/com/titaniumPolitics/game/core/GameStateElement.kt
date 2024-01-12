@@ -3,7 +3,7 @@ package com.titaniumPolitics.game.core
 import kotlinx.serialization.Transient
 import kotlinx.serialization.json.JsonObject
 
-/**Interface to dependenty inject gameState to its elements*/
+/**Interface to dependent inject gameState to its elements*/
 sealed class GameStateElement {
     @Transient
     lateinit var parent: GameState

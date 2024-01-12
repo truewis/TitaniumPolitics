@@ -2,6 +2,15 @@ package com.titaniumPolitics.game.core
 
 import kotlinx.serialization.Serializable
 
+/* Apparatus is a kind of building that can be used to produce and consume resources.
+* It can also be used to absorb resources from the environment.
+* It can also be used to distribute resources to the market.
+* It belongs to a place.
+* It has a durability. When durability is 0, it is broken. When durability is 100, it is brand new.
+* It has a danger. When danger is 0, it is safe. When danger is 100, it is very dangerous.
+* Accidents may happen when danger is high.
+*
+* */
 @Serializable
 class Apparatus {
     var name = ""
