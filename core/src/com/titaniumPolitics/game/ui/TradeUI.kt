@@ -58,13 +58,11 @@ class TradeUI(skin: Skin?, var gameState: GameState) : Table(skin) {
             refreshList(characters[playerAgent]!!.resources,
                 characters[who]!!.resources,
                 informations.filter {
-                    it.value.knownTo.contains(playerAgent) and !it.value.doesKnowExistence(
-                        playerAgent
-                    )
+                    it.value.knownTo.contains(playerAgent)
                 }
                     .map { it.key }.toHashSet(),
                 informations.filter {
-                    it.value.knownTo.contains(who) and it.value.doesKnowExistence(playerAgent) and !it.value.knownTo.contains(
+                    it.value.knownTo.contains(who) and !it.value.knownTo.contains(
                         playerAgent
                     )
                 }.map { it.key }.toHashSet()

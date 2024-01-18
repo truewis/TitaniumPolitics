@@ -68,8 +68,8 @@ class trade(override val tgtCharacter: String, override val tgtPlace: String) : 
         val tradeParams = GameEngine.acquire<TradeParams>("Trade", hashMapOf(
             "items1" to parent.characters[tgtCharacter]!!.resources,
             "items2" to parent.characters[who]!!.resources,
-            "info1" to parent.informations.filter { it.value.knownTo.contains(tgtCharacter) and !it.value.doesKnowExistence(tgtCharacter) }.map { it.key }.toHashSet(),
-            "info2" to parent.informations.filter { it.value.knownTo.contains(who) and it.value.doesKnowExistence(tgtCharacter) and !it.value.knownTo.contains(tgtCharacter) }.map { it.key }.toHashSet()))
+            "info1" to parent.informations.filter { it.value.knownTo.contains(tgtCharacter) }.map { it.key }.toHashSet(),
+            "info2" to parent.informations.filter { it.value.knownTo.contains(who) and !it.value.knownTo.contains(tgtCharacter) }.map { it.key }.toHashSet()))
         item = tradeParams.items1
         item2 = tradeParams.items2
         info = tradeParams.info1.firstOrNull()?.let { parent.informations[it] }

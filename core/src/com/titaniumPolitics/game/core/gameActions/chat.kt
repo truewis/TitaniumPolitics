@@ -5,14 +5,9 @@ class chat(override val tgtCharacter: String, override val tgtPlace: String) : G
         //TODO: acquire or give whole information to another character by chance.
         val who = parent.ongoingMeetings.filter {it.value.currentCharacters.contains(tgtCharacter)}.flatMap { it.value.currentCharacters }.filter { it != tgtCharacter }.toHashSet()
 
-        //get hints on the information the opponent character has.
-        //Also give hints on the information this character has.
-        var count = 0
-        parent.informations.filter { it.value.knownTo.contains(tgtCharacter) }.map { it.key }.forEach { parent.informations[it]!!.letKnowExistence(who);count++}
 
-        who.forEach {
-            parent.informations.filter { info->info.value.knownTo.contains(it) }.map { it.key }.forEach { parent.informations[it]!!.letKnowExistence(tgtCharacter);count++}
-        }
+        var count = 0
+
 
         val factor = .1
         //Mutualities between this character and all other characters in the meeting/conference increase by the number of information exchanged + 1.
