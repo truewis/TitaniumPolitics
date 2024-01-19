@@ -133,6 +133,7 @@ class GameEngine(val gameState: GameState) {
 
     //TODO: Normalization of mutuality is not implemented yet.
     private fun calculateMutuality() {
+        //Party mutualities are correlated; if a is friendly to b, a is also friendly to b's friends and hostile to b's enemies. If a is hostile to b, a is also hostile to b's friends and friendly to b's enemies.
         gameState.parties.keys.forEach{a->
             gameState.parties.keys.forEach{b->
                 var factora = 0.0
@@ -150,21 +151,26 @@ class GameEngine(val gameState: GameState) {
 
             }
         }
-        gameState.parties.keys.forEach{a->
-            gameState.parties.keys.forEach{b->
-                gameState.parties.forEach {gameState.setPartyMutuality(a, it.key, (gameState.getPartyMutuality(b, it.key)-50) * (gameState.getPartyMutuality(a,b)-50)/2500)}
-                //Party mutualities are correlated; if a is friendly to b, a is also friendly to b's friends and hostile to b's enemies. If a is hostile to b, a is also hostile to b's friends and friendly to b's enemies.
+
+        //Individual mutualities are correlated with their parties, basically the reciprocation of the above.
+        gameState.characters.keys.forEach{a->
+            gameState.characters.keys.forEach{b->
+                var factora = 0.0
+                var factorb = 0.0
+                gameState.parties.filter { it.value.members.contains(a) }.forEach{c->
+                    gameState.parties.filter { it.value.members.contains(b) }.forEach{d->
+                        factora+=gameState.getPartyMutuality(c.key,d.key)-50
+                        factorb+=gameState.getPartyMutuality(d.key,c.key)-50
+                    }
+                }
+                val sizea = gameState.parties.filter { it.value.members.contains(a) }.count()
+                val sizeb = gameState.parties.filter { it.value.members.contains(b) }.count()
+                gameState.setMutuality(a,b,factora/sizea/sizeb)
+                gameState.setMutuality(b,a,factorb/sizea/sizeb)
 
             }
         }
 
-        //Individual mutualities are correlated with their parties.
-        gameState.characters.forEach {char->
-            gameState.parties.forEach {party->
-                if(party.value.members.contains(char.key))
-                    gameState.parties.forEach {gameState.setMutuality(char.key, it.key, (gameState.getPartyMutuality(party.key, it.key)-50)/50)}
-            }
-        }
 
         //If there are meetings where some characters are missing, all the characters in the meeting lose mutuality toward the missing characters.
         gameState.ongoingConferences.forEach {conference->

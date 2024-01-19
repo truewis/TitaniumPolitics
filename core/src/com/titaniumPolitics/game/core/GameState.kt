@@ -73,6 +73,7 @@ class GameState {
     }
 
     fun getMutuality(a:String, b:String): Double{
+        if(!characters.containsKey(a)||!characters.containsKey(b))throw Exception("Getting mutuality $a -> $b invalid.")
         if(!_mutuality.containsKey(a))
             _mutuality[a] = hashMapOf()
         if(!_mutuality[a]!!.containsKey(b))
@@ -81,6 +82,7 @@ class GameState {
     }
     fun setMutuality(a:String, b:String, delta:Double)
     {
+        if(!characters.containsKey(a)||!characters.containsKey(b))throw Exception("Setting mutuality $a -> $b invalid.")
         if(!_mutuality.containsKey(a))
             _mutuality[a] = hashMapOf()
         _mutuality[a]!![b] = getMutuality(a,b)+delta
@@ -88,6 +90,7 @@ class GameState {
         if(getMutuality(a,b)<0)_mutuality[a]!![b] = 0.0
     }
     fun getPartyMutuality(a:String, b:String): Double{
+        if(!parties.containsKey(a)||!parties.containsKey(b))throw Exception("Getting party mutuality $a -> $b invalid.")
         if(!_partyMutuality.containsKey(a))
             _partyMutuality[a] = hashMapOf()
         if(!_partyMutuality[a]!!.containsKey(b))
@@ -96,6 +99,7 @@ class GameState {
     }
     fun setPartyMutuality(a:String, b:String, delta:Double)
     {
+        if(!parties.containsKey(a)||!parties.containsKey(b))throw Exception("Setting party mutuality $a -> $b invalid.")
         if(!_partyMutuality.containsKey(a))
             _partyMutuality[a] = hashMapOf()
         _partyMutuality[a]!![b] = getPartyMutuality(a,b)+delta
