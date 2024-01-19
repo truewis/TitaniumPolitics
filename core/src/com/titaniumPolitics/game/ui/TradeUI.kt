@@ -10,15 +10,18 @@ import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.core.gameActions.trade
 import ktx.scene2d.*
 
-class TradeUI(skin: Skin?, var gameState: GameState) : Table(skin) {
+class TradeUI(skin: Skin?, var gameState: GameState) : Table(skin)
+{
     var titleLabel: Label
     private val docList1 = VerticalGroup()
     private val docList2 = VerticalGroup()
     private var isOpen = false;
     val submitButton = TextButton("지시", skin)
     val cancelButton = TextButton("취소", skin)
-    var trade : trade = trade("", "")
-    init {
+    var trade: trade = trade("", "")
+
+    init
+    {
         titleLabel = Label("거래", skin, "trnsprtConsole")
         titleLabel.setFontScale(2f)
         add(titleLabel).growX()
@@ -35,44 +38,49 @@ class TradeUI(skin: Skin?, var gameState: GameState) : Table(skin) {
         add(cancelButton)
         debug = true
         isVisible = false
-        GameEngine.acquireEvent+={
-            if(it.type=="Action")
-            submitButton.addListener(object : ClickListener() {
-                override fun clicked(event: InputEvent?, x: Float, y: Float) {
-                    super.clicked(event, x, y)
-                    GameEngine.acquireCallback(trade)
-                    isVisible = false
-                }
-            })
+        GameEngine.acquireEvent += {
+            if (it.type == "Action")
+                submitButton.addListener(object : ClickListener()
+                {
+                    override fun clicked(event: InputEvent?, x: Float, y: Float)
+                    {
+                        super.clicked(event, x, y)
+                        GameEngine.acquireCallback(trade)
+                        isVisible = false
+                    }
+                })
         }
 
 
     }
-    fun open() {
+
+    fun open()
+    {
 
         with(gameState) {
             val who =
-                ongoingMeetings.filter {it.value.currentCharacters.contains(playerAgent)}.flatMap { it.value.currentCharacters }.first {it!=playerAgent}
+                    ongoingMeetings.filter { it.value.currentCharacters.contains(playerAgent) }.flatMap { it.value.currentCharacters }.first { it != playerAgent }
             trade = trade(playerAgent, characters[playerAgent]!!.place.name).apply { this.who = who }
             isVisible = true
             refreshList(characters[playerAgent]!!.resources,
-                characters[who]!!.resources,
-                informations.filter {
-                    it.value.knownTo.contains(playerAgent)
-                }
-                    .map { it.key }.toHashSet(),
-                informations.filter {
-                    it.value.knownTo.contains(who) and !it.value.knownTo.contains(
-                        playerAgent
-                    )
-                }.map { it.key }.toHashSet()
+                    characters[who]!!.resources,
+                    informations.filter {
+                        it.value.knownTo.contains(playerAgent)
+                    }
+                            .map { it.key }.toHashSet(),
+                    informations.filter {
+                        it.value.knownTo.contains(who) and !it.value.knownTo.contains(
+                                playerAgent
+                        )
+                    }.map { it.key }.toHashSet()
             )
 
         }
     }
 
 
-    fun refreshList(items1: HashMap<String, Int>, items2: HashMap<String, Int>, info1: HashSet<String>, info2: HashSet<String>) {
+    fun refreshList(items1: HashMap<String, Int>, items2: HashMap<String, Int>, info1: HashSet<String>, info2: HashSet<String>)
+    {
         docList1.clear()
         docList2.clear()
         items1.forEach { tobj ->
@@ -84,14 +92,16 @@ class TradeUI(skin: Skin?, var gameState: GameState) : Table(skin) {
                     setFontScale(2f)
                 }
                 textField { text = "0" }.also { it2 ->
-                    it2.addListener(object : ClickListener() {
-                        override fun clicked(event: InputEvent?, x: Float, y: Float) {
+                    it2.addListener(object : ClickListener()
+                    {
+                        override fun clicked(event: InputEvent?, x: Float, y: Float)
+                        {
                             super.clicked(event, x, y)
                             trade.item[tobj.key] = it2.text.toInt()
                         }
                     })
                 }
-                label("has: "+tobj.value.toString(), "trnsprtConsole") {
+                label("has: " + tobj.value.toString(), "trnsprtConsole") {
                     setFontScale(2f)
                 }
             }
@@ -121,14 +131,16 @@ class TradeUI(skin: Skin?, var gameState: GameState) : Table(skin) {
                     setFontScale(2f)
                 }
                 textField { text = "0" }.also { it2 ->
-                    it2.addListener(object : ClickListener() {
-                        override fun clicked(event: InputEvent?, x: Float, y: Float) {
+                    it2.addListener(object : ClickListener()
+                    {
+                        override fun clicked(event: InputEvent?, x: Float, y: Float)
+                        {
                             super.clicked(event, x, y)
                             trade.item2[tobj.key] = it2.text.toInt()
                         }
                     })
                 }
-                label("has: "+tobj.value.toString(), "trnsprtConsole") {
+                label("has: " + tobj.value.toString(), "trnsprtConsole") {
                     setFontScale(2f)
                 }
             }

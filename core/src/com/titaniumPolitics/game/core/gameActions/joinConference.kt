@@ -2,13 +2,16 @@ package com.titaniumPolitics.game.core.gameActions
 
 import com.titaniumPolitics.game.core.GameEngine
 
-class joinConference(override val tgtCharacter: String, override val tgtPlace: String) : GameAction() {
+class joinConference(override val tgtCharacter: String, override val tgtPlace: String) : GameAction()
+{
     var meetingName = ""
-    override fun chooseParams() {
+    override fun chooseParams()
+    {
         meetingName = GameEngine.acquire(parent.ongoingConferences.filter { it.value.scheduledCharacters.contains(tgtCharacter) }.keys.toList())
     }
 
-    override fun execute() {
+    override fun execute()
+    {
         parent.ongoingConferences[meetingName]!!.currentCharacters.add(tgtCharacter)
         parent.characters[tgtCharacter]!!.frozen++
     }

@@ -4,7 +4,8 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 
 @Serializable
-class Quests : GameStateElement() {
+class Quests : GameStateElement()
+{
     val dataBase = arrayListOf<QuestObject>()
 
     @Transient
@@ -17,27 +18,33 @@ class Quests : GameStateElement() {
     var completed = arrayListOf<(QuestObject) -> Unit>()
 
     //Add an objective with a time limit.
-    fun add(new: String, due: Int) {
+    fun add(new: String, due: Int)
+    {
         add(QuestObject(new, due))
 
     }
 
-    fun add(obj: QuestObject) {
+    fun add(obj: QuestObject)
+    {
         obj.injectParent(parent)
         dataBase.add(obj)
         newItemAdded.forEach { it() }
-        if (obj.due != 0) {
+        if (obj.due != 0)
+        {
             //parent.log.appendLog(CapsuleText.log("log-todo", formatTime(obj.due - parent.time), obj.title))
-        } else {
+        } else
+        {
         }
         //parent.log.appendLog(CapsuleText.log("log-todo-notime", obj.title))
     }
 
-    override fun injectParent(gameState: GameState) {
+    override fun injectParent(gameState: GameState)
+    {
         super.injectParent(gameState)
         gameState.timeChanged += { old, new ->
             dataBase.forEach {
-                if (it.isCompleted) {
+                if (it.isCompleted)
+                {
                     it.completed = new
                     completed.forEach { a -> a(it) }
                 }
@@ -59,14 +66,16 @@ class Quests : GameStateElement() {
      * title is actual sentence, not a key.
      */
     @Serializable
-    open class QuestObject(val title: String, val due: Int) : GameStateElement() {
+    open class QuestObject(val title: String, val due: Int) : GameStateElement()
+    {
         var expired = false
 
         /**
          * Time of completion. 0 when not completed.
          */
         var completed = 0
-            set(value) {
+            set(value)
+            {
                 if (field != 0 && value == 0) throw IllegalArgumentException(this.title)
                 field = value
                 parent.todo.completed.forEach { it(this) }
@@ -76,6 +85,8 @@ class Quests : GameStateElement() {
         open val isCompleted: Boolean
             get() = false
 
-        open fun onExpired() {}
+        open fun onExpired()
+        {
+        }
     }
 }

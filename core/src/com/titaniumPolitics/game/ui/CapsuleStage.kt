@@ -15,26 +15,29 @@ import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
 import ktx.scene2d.Scene2DSkin
 
-class CapsuleStage(val gameState: GameState) : Stage(FitViewport(800.0F, 800.0F)) {
+class CapsuleStage(val gameState: GameState) : Stage(FitViewport(800.0F, 800.0F))
+{
     var background = Image()
+
     //val inputEnabled = ArrayList<(Boolean)->Unit>() Unused
     val logBox = LogUI(gameState)
-    var hud : HeadUpInterface
+    var hud: HeadUpInterface
     val rootStack = Stack()
     val assetManager = AssetManager()
     val tradeBox: TradeUI
-    val commandBox : CommandUI
+    val commandBox: CommandUI
 
-    init {
+    init
+    {
         val resolver = InternalFileHandleResolver()
         assetManager.setLoader(
-            Texture::class.java, TextureLoader(resolver))
+                Texture::class.java, TextureLoader(resolver))
 
         ReadOnlyJsons.mapJson.forEach {
-        assetManager.load( it.value.jsonObject["image"]!!.jsonPrimitive.content, Texture::class.java)
-        assetManager.load( "data/dev/capsuleDevBoxCheck.png", Texture::class.java)
-        assetManager.load( "data/dev/capsuleDevBox.png", Texture::class.java)
-        println(it.value.jsonObject["image"]!!.jsonPrimitive.content)
+            assetManager.load(it.value.jsonObject["image"]!!.jsonPrimitive.content, Texture::class.java)
+            assetManager.load("data/dev/capsuleDevBoxCheck.png", Texture::class.java)
+            assetManager.load("data/dev/capsuleDevBox.png", Texture::class.java)
+            println(it.value.jsonObject["image"]!!.jsonPrimitive.content)
         }
         assetManager.finishLoading()
 
@@ -61,21 +64,17 @@ class CapsuleStage(val gameState: GameState) : Stage(FitViewport(800.0F, 800.0F)
         }
 
     }
-    fun roomChanged(name: String) {
+
+    fun roomChanged(name: String)
+    {
         background.drawable = TextureRegionDrawable(assetManager.get(ReadOnlyJsons.mapJson[name]!!.jsonObject["image"]!!.jsonPrimitive.content, Texture::class.java)!!)
     }
 
-    override fun keyTyped(character: Char): Boolean {
+    override fun keyTyped(character: Char): Boolean
+    {
 
         return super.keyTyped(character)
     }
-
-
-
-
-
-
-
 
 
 }

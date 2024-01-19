@@ -5,9 +5,12 @@ import com.badlogic.gdx.utils.Align
 import com.titaniumPolitics.game.core.GameState
 import ktx.scene2d.Scene2DSkin
 
-class HeadUpInterface (val gameState: GameState) : Table(Scene2DSkin.defaultSkin) {
+class HeadUpInterface(val gameState: GameState) : Table(Scene2DSkin.defaultSkin)
+{
     val todoBox: QuestUI
-    init {
+
+    init
+    {
 
         instance = this
         todoBox = QuestUI(Scene2DSkin.defaultSkin, gameState)
@@ -27,7 +30,8 @@ class HeadUpInterface (val gameState: GameState) : Table(Scene2DSkin.defaultSkin
 
     }
 
-    companion object{
+    companion object
+    {
         //Singleton
         lateinit var instance: HeadUpInterface
     }

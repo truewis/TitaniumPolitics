@@ -11,12 +11,14 @@ import ktx.scene2d.label
 import ktx.scene2d.scene2d
 import ktx.scene2d.table
 
-class QuestUI(skin: Skin?, var gameState: GameState) : Table(skin) {
+class QuestUI(skin: Skin?, var gameState: GameState) : Table(skin)
+{
     var titleLabel: Label
     private val docList = VerticalGroup()
     private var isOpen = false;
 
-    init {
+    init
+    {
         titleLabel = Label("Quest:", skin, "trnsprtConsole")
         titleLabel.setFontScale(2f)
         add(titleLabel).growX()
@@ -25,14 +27,15 @@ class QuestUI(skin: Skin?, var gameState: GameState) : Table(skin) {
         docList.grow()
 
         add(docScr).grow()
-        gameState.todo.newItemAdded += { Gdx.app.postRunnable {refreshList();} }
-        gameState.todo.expired += { Gdx.app.postRunnable {refreshList();} }
-        gameState.todo.completed += { Gdx.app.postRunnable {refreshList();} }
-        gameState.timeChanged += { _, _ ->Gdx.app.postRunnable { refreshList();} }
+        gameState.todo.newItemAdded += { Gdx.app.postRunnable { refreshList(); } }
+        gameState.todo.expired += { Gdx.app.postRunnable { refreshList(); } }
+        gameState.todo.completed += { Gdx.app.postRunnable { refreshList(); } }
+        gameState.timeChanged += { _, _ -> Gdx.app.postRunnable { refreshList(); } }
     }
 
 
-    fun refreshList() {
+    fun refreshList()
+    {
         docList.clear()
         gameState.todo.dataBase.forEach { tobj ->
             if (tobj.due != 0 && tobj.due + 1 < gameState.time) return@forEach
@@ -49,7 +52,8 @@ class QuestUI(skin: Skin?, var gameState: GameState) : Table(skin) {
                     it.growX()
                     setFontScale(2f)
                 }
-                if (tobj.due != 0 && tobj.completed == 0) {
+                if (tobj.due != 0 && tobj.completed == 0)
+                {
                     label(formatTime(tobj.due), "trnsprtConsole") {
                         if (tobj.due < gameState.time) color = Color.RED
                         setFontScale(2f)

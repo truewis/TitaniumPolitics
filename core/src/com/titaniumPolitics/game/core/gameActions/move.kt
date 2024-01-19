@@ -2,16 +2,20 @@ package com.titaniumPolitics.game.core.gameActions
 
 import com.titaniumPolitics.game.core.GameEngine
 
-class move(override val tgtCharacter: String, override val tgtPlace: String) : GameAction() {
+class move(override val tgtCharacter: String, override val tgtPlace: String) : GameAction()
+{
     var placeTo = ""
-    override fun chooseParams() {
-        placeTo = if(tgtPlace=="home")
-            GameEngine.acquire(arrayListOf(parent.characters[tgtCharacter]!!.home)+"cancel")
+    override fun chooseParams()
+    {
+        placeTo = if (tgtPlace == "home")
+            GameEngine.acquire(arrayListOf(parent.characters[tgtCharacter]!!.home) + "cancel")
         else
-            GameEngine.acquire(parent.places[tgtPlace]!!.connectedPlaces+"cancel")
+            GameEngine.acquire(parent.places[tgtPlace]!!.connectedPlaces + "cancel")
     }
-    override fun isValid():Boolean = placeTo != "cancel"
-    override fun execute() {
+
+    override fun isValid(): Boolean = placeTo != "cancel"
+    override fun execute()
+    {
 
         parent.places[tgtPlace]!!.characters.remove(tgtCharacter)
         parent.places[placeTo]!!.characters.add(tgtCharacter)

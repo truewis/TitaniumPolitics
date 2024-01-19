@@ -14,15 +14,26 @@ import kotlinx.serialization.Transient
 *  The server then checks the parameters for validity and then executes the action.
 * */
 @Serializable
-sealed class GameAction() {
+sealed class GameAction()
+{
     abstract val tgtCharacter: String
     abstract val tgtPlace: String
+
     @Transient
     lateinit var parent: GameState
-    fun injectParent(parent: GameState){
+    fun injectParent(parent: GameState)
+    {
         this.parent = parent
     }
-    open fun chooseParams(){}
-    open fun isValid():Boolean{return true}
+
+    open fun chooseParams()
+    {
+    }
+
+    open fun isValid(): Boolean
+    {
+        return true
+    }
+
     abstract fun execute()
 }

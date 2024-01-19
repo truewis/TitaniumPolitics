@@ -9,7 +9,8 @@ import kotlinx.serialization.Serializable
 *  Conferences are meetings that are scheduled to happen regularly, and is run by a specific party.
 * */
 @Serializable
-class Meeting(var time: Int, var subject: String, var scheduledCharacters: HashSet<String>, var place: String, var currentCharacters: HashSet<String> = hashSetOf()) {
-    var involvedParty : String = ""
+class Meeting(var time: Int, var subject: String, var scheduledCharacters: HashSet<String>, var place: String, var currentCharacters: HashSet<String> = hashSetOf())
+{
+    var involvedParty: String = ""
     var auxSubject = ""
 }

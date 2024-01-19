@@ -15,11 +15,13 @@ import kotlinx.serialization.json.Json
 import ktx.scene2d.Scene2DSkin
 import kotlin.concurrent.thread
 
-class EntryClass : ApplicationAdapter() {
+class EntryClass : ApplicationAdapter()
+{
     lateinit var stage: CapsuleStage
     lateinit var newGame: GameState
-    lateinit var skin : Skin
-    override fun create() {
+    lateinit var skin: Skin
+    override fun create()
+    {
 
         val gen = FreeTypeFontGenerator(Gdx.files.internal("data/DungGeunMo.ttf"))
         val parameter = FreeTypeFontGenerator.FreeTypeFontParameter()
@@ -37,34 +39,40 @@ class EntryClass : ApplicationAdapter() {
 
         newGame = Json.decodeFromString(
                 GameState.serializer(),
-        Gdx.files.internal("json/init.json").readString()
-        ).also { it.injectDependency()
+                Gdx.files.internal("json/init.json").readString()
+        ).also {
+            it.injectDependency()
             stage = CapsuleStage(it)
             Gdx.input.inputProcessor = stage
             it.initialize()
         }
 
 
-        thread(start = true){
+        thread(start = true) {
             val engine = GameEngine(newGame)
             engine.startGame()
         }
     }
 
-    override fun render() {
+    override fun render()
+    {
         ScreenUtils.clear(0f, 0f, 0f, 1f)
         stage.act(Gdx.graphics.deltaTime)
         stage.draw()
     }
 
-    override fun dispose() {
+    override fun dispose()
+    {
         stage.dispose()
     }
 
-    override fun resize(width: Int, height: Int) {
+    override fun resize(width: Int, height: Int)
+    {
         stage.viewport.update(width, height, true)
     }
-    companion object {
+
+    companion object
+    {
 
         //--------------------------------------------------------------
         var fontMap = ObjectMap<String, Any>()
