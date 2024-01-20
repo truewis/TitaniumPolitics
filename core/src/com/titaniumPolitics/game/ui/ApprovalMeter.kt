@@ -14,7 +14,7 @@ class ApprovalMeter(gameState: GameState) : Table(defaultSkin)
     {
         l = Label("", defaultSkin, "trnsprtConsole")
         l.setFontScale(2f)
-        val b = TextButton("지지율", defaultSkin)
+        val b = TextButton("Approval", defaultSkin)
         add(b)
         add(l)
 
