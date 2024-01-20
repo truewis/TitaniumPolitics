@@ -233,8 +233,9 @@ class GameEngine(val gameState: GameState)
         }
 
         gameState.parties.forEach { party ->
-            val l = gameState.informations.filter { it.value.publicity[party.key] != 0 }.toList()
+            val l = gameState.informations.filter { (it.value.publicity[party.key] ?: 0) > 0 }.toList()
             //incompatible information within the party and its member fight each other.
+            println(l.count())
 
             for (i in gameState.informations.filter { it.value.knownTo.intersect(party.value.members).isNotEmpty() })
                 for (j in 0 until l.count())
