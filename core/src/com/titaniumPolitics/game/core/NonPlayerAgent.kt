@@ -616,9 +616,9 @@ class NonPlayerAgent(val character: String) : GameStateElement()
                                     return action
                                 }//TODO: do not share all information. Share only the information that the leader wants to share.
                             }
-                            //Praise or criticize the division members.
+                            //Praise or criticize the division members, if there is any relevant information.
                             parent.parties[conf.involvedParty]!!.members.forEach { member ->
-                                if (member != character)
+                                if (member != character && parent.informations.values.any { it.tgtCharacter == member && it.knownTo.contains(character) })
                                 {
                                     //praise if the mutuality is high, criticize if the mutuality is low.
                                     val mutuality = parent.getMutuality(character, member)
