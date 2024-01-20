@@ -223,6 +223,7 @@ class GameEngine(val gameState: GameState)
         //spread information within each party, if known.
         gameState.informations.values.forEach { information ->
             information.publicity.forEach {
+                //Spread information only if the information is known to the party.
                 if (it.value > 0) information.publicity[it.key] = it.value + 1
                 if (it.value > 100) information.publicity[it.key] = 100
             }
@@ -234,7 +235,7 @@ class GameEngine(val gameState: GameState)
             val l = gameState.informations.filter { it.value.publicity[party.key] != 0 }.toList()
             //incompatible information within the party and its member fight each other.
 
-            for (i in gameState.informations.filter { it.value.knownTo.any { char -> party.value.members.contains(char) } })
+            for (i in gameState.informations.filter { it.value.knownTo.intersect(party.value.members).isNotEmpty() })
                 for (j in 0 until l.count())
                 {
                     val a = i.value
@@ -258,14 +259,14 @@ class GameEngine(val gameState: GameState)
                                     } / 2/*supporter penalty*/)
                         if (aStrength < bStrength)
                         {
-                            //The party information might affect individual information if the party information is stronger. The inverse is not true.
+                            //The party information might affect individual information if the party information is stronger. The converse is not true.
                             a.publicity.keys.forEach {
                                 b.publicity[it] = max((b.publicity[it]
                                         ?: 1) - 1, 0)//Publicity of the weaker information drops. The minimum is 0.
                             }
                             if (gameState.characters[b.author] != null)
                             //This character has decreased mutuality toward b.author and b.supporters.
-                                a.knownTo.filter { char -> party.value.members.contains(char) }.forEach {
+                                a.knownTo.intersect(party.value.members).forEach {
                                     gameState.setMutuality(it, b.author, -1.0)
                                     b.supporters.forEach { supporter ->
                                         gameState.setMutuality(
