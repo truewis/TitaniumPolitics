@@ -652,10 +652,13 @@ class GameEngine(val gameState: GameState)
             val cpy = Information(it); tgtState.informations[cpy.generateName()] = cpy; cpy.publicity[tgtPlace.responsibleParty] = 5
         }
                 .also { /*copy this information to the responsible character.*/
-                    val cpy = Information(it)
-                    cpy.author = gameState.parties[tgtPlace.responsibleParty]!!.leader
-                    tgtState.informations[cpy.generateName()] = cpy
-                    cpy.publicity[tgtPlace.responsibleParty] = 0
+                    if (gameState.parties[tgtPlace.responsibleParty]!!.leader != "")
+                    {
+                        val cpy = Information(it)
+                        cpy.author = gameState.parties[tgtPlace.responsibleParty]!!.leader
+                        tgtState.informations[cpy.generateName()] = cpy
+                        cpy.publicity[tgtPlace.responsibleParty] = 0
+                    }
                 }
 
         //Generate resource loss.
@@ -671,10 +674,13 @@ class GameEngine(val gameState: GameState)
             val cpy = Information(it); tgtState.informations[cpy.generateName()] = cpy; cpy.publicity[tgtPlace.responsibleParty] = 5
         }
                 .also { /*copy this information to the responsible character.*/
-                    val cpy = Information(it)
-                    cpy.author = gameState.parties[tgtPlace.responsibleParty]!!.leader
-                    tgtState.informations[cpy.generateName()] = cpy
-                    cpy.publicity[tgtPlace.responsibleParty] = 0
+                    if (gameState.parties[tgtPlace.responsibleParty]!!.leader != "")
+                    {
+                        val cpy = Information(it)
+                        cpy.author = gameState.parties[tgtPlace.responsibleParty]!!.leader
+                        tgtState.informations[cpy.generateName()] = cpy
+                        cpy.publicity[tgtPlace.responsibleParty] = 0
+                    }
                 }
 
         //Generate apparatus damage.
@@ -706,12 +712,15 @@ class GameEngine(val gameState: GameState)
                     val cpy = Information(it); tgtState.informations[cpy.generateName()] = cpy; cpy.publicity[tgtPlace.responsibleParty] = 5
                 }
                         .also { /*copy this information to the responsible character.*/
-                            val cpy = Information(it)
-                            cpy.author =
-                                    gameState.parties[tgtPlace.responsibleParty]!!.leader
-                            tgtState.informations[cpy.generateName()] =
-                                    cpy
-                            cpy.publicity[tgtPlace.responsibleParty] = 0
+                            if (gameState.parties[tgtPlace.responsibleParty]!!.leader != "")
+                            {
+                                val cpy = Information(it)
+                                cpy.author =
+                                        gameState.parties[tgtPlace.responsibleParty]!!.leader
+                                tgtState.informations[cpy.generateName()] =
+                                        cpy
+                                cpy.publicity[tgtPlace.responsibleParty] = 0
+                            }
                         }
             }
         }
@@ -735,12 +744,15 @@ class GameEngine(val gameState: GameState)
             val cpy = Information(it); tgtState.informations[cpy.generateName()] = cpy; cpy.publicity[tgtPlace.responsibleParty] = 75
         }
                 .also { information -> /*copy this information to the responsible character.*/
-                    val cpy = Information(information)
-                    cpy.author =
-                            gameState.parties[tgtPlace.responsibleParty]!!.leader
-                    tgtState.informations[cpy.generateName()] =
-                            cpy
-                    cpy.publicity[tgtPlace.responsibleParty] = 0
+                    if (gameState.parties[tgtPlace.responsibleParty]!!.leader != "")
+                    {
+                        val cpy = Information(information)
+                        cpy.author =
+                                gameState.parties[tgtPlace.responsibleParty]!!.leader
+                        tgtState.informations[cpy.generateName()] =
+                                cpy
+                        cpy.publicity[tgtPlace.responsibleParty] = 0
+                    }
                 }
 
         //Generate resource loss.
@@ -756,12 +768,15 @@ class GameEngine(val gameState: GameState)
             val cpy = Information(it); tgtState.informations[cpy.generateName()] = cpy; cpy.publicity[tgtPlace.responsibleParty] = 75
         }
                 .also { /*copy this information to the responsible character.*/
-                    val cpy = Information(it)
-                    cpy.author =
-                            gameState.parties[tgtPlace.responsibleParty]!!.leader
-                    tgtState.informations[cpy.generateName()] =
-                            cpy
-                    cpy.publicity[tgtPlace.responsibleParty] = 0
+                    if (gameState.parties[tgtPlace.responsibleParty]!!.leader != "")
+                    {
+                        val cpy = Information(it)
+                        cpy.author =
+                                gameState.parties[tgtPlace.responsibleParty]!!.leader
+                        tgtState.informations[cpy.generateName()] =
+                                cpy
+                        cpy.publicity[tgtPlace.responsibleParty] = 0
+                    }
                 }
 
         //Generate apparatus damage.
@@ -790,12 +805,15 @@ class GameEngine(val gameState: GameState)
                     val cpy = Information(it); tgtState.informations[cpy.generateName()] = cpy; cpy.publicity[tgtPlace.responsibleParty] = 75
                 }
                         .also { /*copy this information to the responsible character.*/
-                            val cpy = Information(it)
-                            cpy.author =
-                                    gameState.parties[tgtPlace.responsibleParty]!!.leader
-                            tgtState.informations[cpy.generateName()] =
-                                    cpy
-                            cpy.publicity[tgtPlace.responsibleParty] = 0
+                            if (gameState.parties[tgtPlace.responsibleParty]!!.leader != "")
+                            {
+                                val cpy = Information(it)
+                                cpy.author =
+                                        gameState.parties[tgtPlace.responsibleParty]!!.leader
+                                tgtState.informations[cpy.generateName()] =
+                                        cpy
+                                cpy.publicity[tgtPlace.responsibleParty] = 0
+                            }
                         }
             }
         }
@@ -836,16 +854,18 @@ class GameEngine(val gameState: GameState)
         if (gameState.time % 48 == 0)
         { //Every day, inform the infrastructure minister about total resource.
             val infraName = gameState.parties.values.find { it.name == "infrastructure" }!!.leader
-            Information(infraName, creationTime = gameState.time, tgtTime = gameState.time, type = "resource", tgtResource = "water", tgtPlace = "everywhere", amount = gameState.places.values.sumOf {
-                it.resources["water"] ?: 0
-            }).also { it.knownTo.add(infraName);gameState.informations[it.generateName()] = it }
-            Information(infraName, creationTime = gameState.time, tgtTime = gameState.time, type = "resource", tgtResource = "oxygen", tgtPlace = "everywhere", amount = gameState.places.values.sumOf {
-                it.resources["oxygen"] ?: 0
-            }).also { it.knownTo.add(infraName);gameState.informations[it.generateName()] = it }
-            Information(infraName, creationTime = gameState.time, tgtTime = gameState.time, type = "resource", tgtResource = "ration", tgtPlace = "everywhere", amount = gameState.places.values.sumOf {
-                it.resources["ration"] ?: 0
-            }).also { it.knownTo.add(infraName);gameState.informations[it.generateName()] = it }
-
+            if (infraName != "")
+            {
+                Information(infraName, creationTime = gameState.time, tgtTime = gameState.time, type = "resource", tgtResource = "water", tgtPlace = "everywhere", amount = gameState.places.values.sumOf {
+                    it.resources["water"] ?: 0
+                }).also { it.knownTo.add(infraName);gameState.informations[it.generateName()] = it }
+                Information(infraName, creationTime = gameState.time, tgtTime = gameState.time, type = "resource", tgtResource = "oxygen", tgtPlace = "everywhere", amount = gameState.places.values.sumOf {
+                    it.resources["oxygen"] ?: 0
+                }).also { it.knownTo.add(infraName);gameState.informations[it.generateName()] = it }
+                Information(infraName, creationTime = gameState.time, tgtTime = gameState.time, type = "resource", tgtResource = "ration", tgtPlace = "everywhere", amount = gameState.places.values.sumOf {
+                    it.resources["ration"] ?: 0
+                }).also { it.knownTo.add(infraName);gameState.informations[it.generateName()] = it }
+            }
         }
 
     }
@@ -1021,7 +1041,7 @@ class GameEngine(val gameState: GameState)
                 actions.add("talk")
             if (gameState.places[place]!!.isAccidentScene)
             {
-                if (gameState.places[place]!!.responsibleParty != "" && gameState.parties[gameState.places[place]!!.responsibleParty]!!.members.contains(character))//Only the division leader can clear the accident scene.
+                if (gameState.places[place]!!.responsibleParty != "" && gameState.parties[gameState.places[place]!!.responsibleParty]!!.members.contains(character))//Only the responsible party members can clear the accident scene.
                     actions.add("clearAccidentScene")
                 actions.add("investigateAccidentScene")
             }
@@ -1042,7 +1062,7 @@ class GameEngine(val gameState: GameState)
                     gameState.scheduledConferences.filter { it.value.time + 2 > gameState.time && gameState.time + 2 > it.value.time && it.value.place == place }
                             .filter { !gameState.ongoingMeetings.containsKey(it.key) }
             if (availableConferences.isNotEmpty())
-                if (gameState.parties[availableConferences.values.first().involvedParty]!!.leader == character)//Only the mechanic can do below actions.
+                if (gameState.parties[availableConferences.values.first().involvedParty]!!.leader == character)//Only the party leader can do below actions.
                 {
                     actions.add("startConference")
                 }

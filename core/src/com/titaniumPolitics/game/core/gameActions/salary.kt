@@ -48,7 +48,10 @@ class salary(override val tgtCharacter: String, override val tgtPlace: String) :
             //Party integrity decreases
             parent.setPartyMutuality(party.name, party.name, -1.0)
             //Opinion of the leader of the party decreases
-            parent.setMutuality(tgtCharacter, party.leader, -1.0)
+            if (party.leader != "")
+            {
+                parent.setMutuality(tgtCharacter, party.leader, -1.0)
+            }
             party.isDailySalaryPaid[tgtCharacter] = true//TODO: this is a hack to prevent infinite loop. This is a lie, but who would be able to complain?
         }
 
