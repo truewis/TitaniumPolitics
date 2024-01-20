@@ -177,8 +177,9 @@ class GameEngine(val gameState: GameState)
                         factorb += gameState.getPartyMutuality(d.key, c.key) - 50
                     }
                 }
-                val sizea = gameState.parties.filter { it.value.members.contains(a) }.count()
-                val sizeb = gameState.parties.filter { it.value.members.contains(b) }.count()
+                //Make sure that denominator is not 0.
+                val sizea = gameState.parties.filter { it.value.members.contains(a) }.count() + 1
+                val sizeb = gameState.parties.filter { it.value.members.contains(b) }.count() + 1
                 gameState.setMutuality(a, b, factora / sizea / sizeb)
                 gameState.setMutuality(b, a, factorb / sizea / sizeb)
 
