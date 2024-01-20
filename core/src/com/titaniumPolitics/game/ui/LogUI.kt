@@ -222,6 +222,7 @@ class LogUI(val gameState: GameState) : Table(defaultSkin)
                                             gameState.playerAgent,
                                             gameState.places.values.find { it.characters.contains(gameState.playerAgent) }!!.name
                                     ) as GameAction
+                            action.injectParent(gameState)
                             thread(start = true) {
                                 action.chooseParams()
                                 GameEngine.acquireCallback(action)
