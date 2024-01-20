@@ -647,13 +647,14 @@ class NonPlayerAgent(val character: String) : GameStateElement()
                             //Criticize the common enemies of the division. It is determined by the party with the low mutuality with the division.
                             val enemyParty = parent.parties.values.filter { it.name != conf.involvedParty }.minByOrNull { parent.getPartyMutuality(it.name, conf.involvedParty) }!!.name
                             //Criticize the leader if there is any relevant information.
-                            if (parent.informations.values.any { (it.tgtParty == enemyParty || it.tgtCharacter == parent.parties[enemyParty]!!.leader) && it.knownTo.contains(character) })
-                                infoShare(character, place).also { action ->
-                                    action.what = parent.informations.values.filter { (it.tgtParty == enemyParty || it.tgtCharacter == parent.parties[enemyParty]!!.leader) && it.knownTo.contains(character) }.random().name//TODO: take the information that is most useful for criticizing.
-                                    action.application = "criticize"
-                                    action.who = hashSetOf(parent.parties[enemyParty]!!.leader)
-                                    return action
-                                }
+                            if (parent.parties[enemyParty]!!.leader != "")
+                                if (parent.informations.values.any { (it.tgtParty == enemyParty || it.tgtCharacter == parent.parties[enemyParty]!!.leader) && it.knownTo.contains(character) })
+                                    infoShare(character, place).also { action ->
+                                        action.what = parent.informations.values.filter { (it.tgtParty == enemyParty || it.tgtCharacter == parent.parties[enemyParty]!!.leader) && it.knownTo.contains(character) }.random().name//TODO: take the information that is most useful for criticizing.
+                                        action.application = "criticize"
+                                        action.who = hashSetOf(parent.parties[enemyParty]!!.leader)
+                                        return action
+                                    }
                             //Criticize the common enemy. It is determined by average individual mutuality.
                             val enemy = parent.characters.maxByOrNull { ch -> parent.parties[conf.involvedParty]!!.members.sumOf { mem -> parent.getMutuality(mem, ch.key) } }
                             //TODO: request information about the commands issued today.
