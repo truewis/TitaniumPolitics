@@ -36,15 +36,29 @@ class EntryClass : ApplicationAdapter()
         assetManager.finishLoading()
         skin = assetManager.get("skin/capsuleSkin.json")
         Scene2DSkin.defaultSkin = skin
-
-        newGame = Json.decodeFromString(
-                GameState.serializer(),
-                Gdx.files.internal("json/init.json").readString()
-        ).also {
-            it.injectDependency()
-            stage = CapsuleStage(it)
-            Gdx.input.inputProcessor = stage
-            it.initialize()
+        val savedGamePath = System.getenv("SAVED_GAME")
+        if (savedGamePath == null)
+        {
+            newGame = Json.decodeFromString(
+                    GameState.serializer(),
+                    Gdx.files.internal("json/init.json").readString()
+            ).also {
+                it.injectDependency()
+                stage = CapsuleStage(it)
+                Gdx.input.inputProcessor = stage
+                it.initialize()
+            }
+        } else
+        {
+            newGame = Json.decodeFromString(
+                    GameState.serializer(),
+                    Gdx.files.internal(savedGamePath).readString()
+            ).also {
+                it.injectDependency()
+                stage = CapsuleStage(it)
+                Gdx.input.inputProcessor = stage
+                it.initialize()
+            }
         }
 
 
