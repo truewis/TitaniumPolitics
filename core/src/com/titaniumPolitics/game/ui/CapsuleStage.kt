@@ -31,7 +31,8 @@ class CapsuleStage(val gameState: GameState) : Stage(FitViewport(800.0F, 800.0F)
     {
         val resolver = InternalFileHandleResolver()
         assetManager.setLoader(
-                Texture::class.java, TextureLoader(resolver))
+            Texture::class.java, TextureLoader(resolver)
+        )
 
         ReadOnlyJsons.mapJson.forEach {
             assetManager.load(it.value.jsonObject["image"]!!.jsonPrimitive.content, Texture::class.java)
@@ -53,6 +54,9 @@ class CapsuleStage(val gameState: GameState) : Stage(FitViewport(800.0F, 800.0F)
         hud.setFillParent(true)
 
         tradeBox = TradeUI(Scene2DSkin.defaultSkin, gameState)
+        addActor(ResourceInfoUI(Scene2DSkin.defaultSkin, gameState).also {
+            it.setFillParent(true);it.isVisible = false
+        })
         commandBox = CommandUI(Scene2DSkin.defaultSkin, gameState)
         addActor(tradeBox)
         tradeBox.setFillParent(true)
@@ -67,7 +71,12 @@ class CapsuleStage(val gameState: GameState) : Stage(FitViewport(800.0F, 800.0F)
 
     fun roomChanged(name: String)
     {
-        background.drawable = TextureRegionDrawable(assetManager.get(ReadOnlyJsons.mapJson[name]!!.jsonObject["image"]!!.jsonPrimitive.content, Texture::class.java)!!)
+        background.drawable = TextureRegionDrawable(
+            assetManager.get(
+                ReadOnlyJsons.mapJson[name]!!.jsonObject["image"]!!.jsonPrimitive.content,
+                Texture::class.java
+            )!!
+        )
     }
 
     override fun keyTyped(character: Char): Boolean
