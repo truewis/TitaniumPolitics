@@ -63,8 +63,8 @@ class GameEngine(val gameState: GameState)
     {
         var action: GameAction
         val actionList = availableActions(
-                this.gameState, gameState.places.values.find { it.characters.contains(char.name) }!!.name,
-                char.name
+            this.gameState, gameState.places.values.find { it.characters.contains(char.name) }!!.name,
+            char.name
         )
         if (char.name == gameState.playerAgent)
         {
@@ -75,51 +75,62 @@ class GameEngine(val gameState: GameState)
                 if (action.isValid())
                     break
                 else
-                    println("Invalid action: ${action.javaClass.simpleName} by ${char.name} at ${
-                        gameState.places.values.find {
-                            it.characters.contains(
+                    println(
+                        "Invalid action: ${action.javaClass.simpleName} by ${char.name} at ${
+                            gameState.places.values.find {
+                                it.characters.contains(
                                     char.name
-                            )
-                        }!!.name
-                    }")
+                                )
+                            }!!.name
+                        }"
+                    )
             } while (true)
 
 
         } else
         {
             action = gameState.nonPlayerAgents[char.name]?.chooseAction()
-                    ?: throw Exception("Non player character ${char.name} does not have a nonPlayerAgent.")
+                ?: throw Exception("Non player character ${char.name} does not have a nonPlayerAgent.")
             action.injectParent(gameState)
             if (action.javaClass.simpleName !in actionList)
                 println(
-                        "Warning: Non player character ${char.name} is performing ${action.javaClass.simpleName} at ${
-                            gameState.places.values.find {
-                                it.characters.contains(
-                                        char.name
-                                )
-                            }!!.name
-                        }, time=${gameState.time}, which is not in the action list. This may be a bug."
+                    "Warning: Non player character ${char.name} is performing ${action.javaClass.simpleName} at ${
+                        gameState.places.values.find {
+                            it.characters.contains(
+                                char.name
+                            )
+                        }!!.name
+                    }, time=${gameState.time}, which is not in the action list. This may be a bug."
                 )
             if (!action.isValid())
                 println(
-                        "Warning: Non player character ${char.name} is performing ${action.javaClass.simpleName} at ${
-                            gameState.places.values.find {
-                                it.characters.contains(
-                                        char.name
-                                )
-                            }!!.name
-                        }, time=${gameState.time}, which is not valid. This may be a bug."
+                    "Warning: Non player character ${char.name} is performing ${action.javaClass.simpleName} at ${
+                        gameState.places.values.find {
+                            it.characters.contains(
+                                char.name
+                            )
+                        }!!.name
+                    }, time=${gameState.time}, which is not valid. This may be a bug."
                 )
 
         }
         char.history[gameState.time] = action.javaClass.simpleName
         val place = gameState.places.values.find {
             it.characters.contains(
-                    char.name
+                char.name
             )
         }!!.name
         //Add information to the character so that they can report back.
-        Information("", char.name, creationTime = gameState.time, type = "action", tgtTime = gameState.time, tgtPlace = place, tgtCharacter = char.name, action = action.javaClass.simpleName).also {
+        Information(
+            "",
+            char.name,
+            creationTime = gameState.time,
+            type = "action",
+            tgtTime = gameState.time,
+            tgtPlace = place,
+            tgtCharacter = char.name,
+            action = action.javaClass.simpleName
+        ).also {
             gameState.informations[it.generateName()] = it
         }
         action.execute()
@@ -245,25 +256,27 @@ class GameEngine(val gameState: GameState)
                     if (a.compatibility(b) == 0.0)//If the two information are incompatible
                     {
                         val aStrength =
-                                if (a.author == "") 5000.0 /*rumor has fixed strength*/ else
-                                    a.credibility * (party.value.individualMutuality(a.author) + a.supporters.sumOf {
-                                        party.value.individualMutuality(
-                                                it
-                                        )
-                                    } / 2/*supporter penalty*/)
+                            if (a.author == "") 5000.0 /*rumor has fixed strength*/ else
+                                a.credibility * (party.value.individualMutuality(a.author) + a.supporters.sumOf {
+                                    party.value.individualMutuality(
+                                        it
+                                    )
+                                } / 2/*supporter penalty*/)
                         val bStrength =
-                                if (b.author == "") 5000.0 /*rumor has fixed strength*/ else
-                                    b.credibility * (party.value.individualMutuality(b.author) + b.supporters.sumOf {
-                                        party.value.individualMutuality(
-                                                it
-                                        )
-                                    } / 2/*supporter penalty*/)
+                            if (b.author == "") 5000.0 /*rumor has fixed strength*/ else
+                                b.credibility * (party.value.individualMutuality(b.author) + b.supporters.sumOf {
+                                    party.value.individualMutuality(
+                                        it
+                                    )
+                                } / 2/*supporter penalty*/)
                         if (aStrength < bStrength)
                         {
                             //The party information might affect individual information if the party information is stronger. The converse is not true.
                             a.publicity.keys.forEach {
-                                b.publicity[it] = max((b.publicity[it]
-                                        ?: 1) - 1, 0)//Publicity of the weaker information drops. The minimum is 0.
+                                b.publicity[it] = max(
+                                    (b.publicity[it]
+                                        ?: 1) - 1, 0
+                                )//Publicity of the weaker information drops. The minimum is 0.
                             }
                             if (gameState.characters[b.author] != null)
                             //This character has decreased mutuality toward b.author and b.supporters.
@@ -271,9 +284,9 @@ class GameEngine(val gameState: GameState)
                                     gameState.setMutuality(it, b.author, -1.0)
                                     b.supporters.forEach { supporter ->
                                         gameState.setMutuality(
-                                                it,
-                                                supporter,
-                                                -1.0
+                                            it,
+                                            supporter,
+                                            -1.0
                                         )
                                     }
                                 }
@@ -292,21 +305,37 @@ class GameEngine(val gameState: GameState)
                         if (a.compatibility(b) == 0.0)//If the two information are incompatible
                         {
                             val aStrength =
-                                    if (a.author == "") 5000.0 /*rumor has fixed strength*/ else
-                                        a.credibility * (party.value.individualMutuality(a.author) + a.supporters.sumOf { party.value.individualMutuality(it) } / 2/*supporter penalty*/)
+                                if (a.author == "") 5000.0 /*rumor has fixed strength*/ else
+                                    a.credibility * (party.value.individualMutuality(a.author) + a.supporters.sumOf {
+                                        party.value.individualMutuality(
+                                            it
+                                        )
+                                    } / 2/*supporter penalty*/)
                             val bStrength =
-                                    if (b.author == "") 5000.0 /*rumor has fixed strength*/ else
-                                        b.credibility * (party.value.individualMutuality(b.author) + b.supporters.sumOf { party.value.individualMutuality(it) } / 2/*supporter penalty*/)
+                                if (b.author == "") 5000.0 /*rumor has fixed strength*/ else
+                                    b.credibility * (party.value.individualMutuality(b.author) + b.supporters.sumOf {
+                                        party.value.individualMutuality(
+                                            it
+                                        )
+                                    } / 2/*supporter penalty*/)
                             if (aStrength > bStrength)
                             {
                                 //Fight within each party
                                 a.publicity.keys.forEach {
-                                    b.publicity[it] = max((b.publicity[it]
-                                            ?: 1) - 1, 0)//Publicity of the weaker information drops. The minimum is 0.
+                                    b.publicity[it] = max(
+                                        (b.publicity[it]
+                                            ?: 1) - 1, 0
+                                    )//Publicity of the weaker information drops. The minimum is 0.
                                 }
                                 if (gameState.characters[b.author] != null)
                                 //This party has decreased party mutuality toward b.author and b.supporters parties. Maybe amount proportional to the party size?
-                                    gameState.parties.filter { party2 -> party2.value.members.contains(b.author) or party2.value.members.any { m -> b.supporters.contains(m) } }.forEach {
+                                    gameState.parties.filter { party2 ->
+                                        party2.value.members.contains(b.author) or party2.value.members.any { m ->
+                                            b.supporters.contains(
+                                                m
+                                            )
+                                        }
+                                    }.forEach {
                                         gameState.setPartyMutuality(party.key, it.key, -1.0)
                                     }
                                 //Individual opinions are not directly affected by the party information.
@@ -332,20 +361,27 @@ class GameEngine(val gameState: GameState)
                 {
                     //Do nothing
                 } else
-                    gameState.setPartyMutuality(party.key, gameState.places[it.value.tgtPlace]!!.responsibleParty, -it.value.amount * (it.value.publicity[party.key]
-                            ?: 0) * factor / 1000)
+                    gameState.setPartyMutuality(
+                        party.key,
+                        gameState.places[it.value.tgtPlace]!!.responsibleParty,
+                        -it.value.amount * (it.value.publicity[party.key]
+                            ?: 0) * factor / 1000
+                    )
                 //if our party is responsible, integrity drops.
 
             }
             gameState.informations.filter { it.value.type == "action" && it.value.action == "unofficialResourceTransfer" }
-                    .forEach {
-                        var factor = 1
-                        if (it.value.author == "") factor = 2//rumors affect the approval negatively.
+                .forEach {
+                    var factor = 1
+                    if (it.value.author == "") factor = 2//rumors affect the approval negatively.
 
-                        //party loses mutuality toward the responsible party. TODO: consider affecting the individual mutuality toward the perpetrator.
-                        gameState.setPartyMutuality(party.key, gameState.places[it.value.tgtPlace]!!.responsibleParty, -log(it.value.amount.toDouble() + 1, 2.0
-                        ) * (it.value.publicity[party.key] ?: 0) / 100 * factor)
-                    }
+                    //party loses mutuality toward the responsible party. TODO: consider affecting the individual mutuality toward the perpetrator.
+                    gameState.setPartyMutuality(
+                        party.key, gameState.places[it.value.tgtPlace]!!.responsibleParty, -log(
+                            it.value.amount.toDouble() + 1, 2.0
+                        ) * (it.value.publicity[party.key] ?: 0) / 100 * factor
+                    )
+                }
             //The fact that resource is low itself does not affect the mutuality.--------------------------------------------------------------------
 //            gameState.informations.filter { it.value.type == "resources" && it.value.tgtPlace== "everywhere" && it.value.tgtResource in listOf("water", "oxygen", "ration") }
 //                .forEach {
@@ -381,7 +417,8 @@ class GameEngine(val gameState: GameState)
     fun partySizeAdjust()
     {
         gameState.parties.values.filter { it.type == "division" }.forEach {
-            val targetSize = gameState.places.values.filter { place -> place.responsibleParty == it.name }.sumOf { place -> place.plannedWorker }
+            val targetSize = gameState.places.values.filter { place -> place.responsibleParty == it.name }
+                .sumOf { place -> place.plannedWorker }
             if (it.size < targetSize)
             {
                 if (gameState.idlePop >= targetSize - it.size)
@@ -412,16 +449,27 @@ class GameEngine(val gameState: GameState)
     {
         //Each division has a conference every day. The conference is attended by the head of the division and the members of the division.
         gameState.parties.values.filter { it.type == "division" }.forEach { party ->
-            val conference = Meeting(gameState.time + 18 /*9 in the morning*/, "divisionDailyConference", place = party.home, scheduledCharacters = party.members).also { it.involvedParty = party.name }
+            val conference = Meeting(
+                gameState.time + 18 /*9 in the morning*/,
+                "divisionDailyConference",
+                place = party.home,
+                scheduledCharacters = party.members
+            ).also { it.involvedParty = party.name }
 
             gameState.scheduledConferences["conference-${party.home}-${party.name}-${gameState.time}"] = conference
         }
 
         //If some of the division leaders are not assigned, a conference is scheduled to assign them.
         gameState.parties.filter { it.value.type == "division" && it.value.leader == "" }.forEach { stringPartyEntry ->
-            val conference = Meeting(gameState.time + 18 /*9 in the morning*/, "leaderAssignment", place = stringPartyEntry.value.home, scheduledCharacters = stringPartyEntry.value.members).also { it.auxSubject = stringPartyEntry.value.name }
+            val conference = Meeting(
+                gameState.time + 18 /*9 in the morning*/,
+                "leaderAssignment",
+                place = stringPartyEntry.value.home,
+                scheduledCharacters = stringPartyEntry.value.members
+            ).also { it.auxSubject = stringPartyEntry.value.name }
 
-            gameState.scheduledConferences["conference-${stringPartyEntry.value.home}-${stringPartyEntry.value.name}-${gameState.time}"] = conference
+            gameState.scheduledConferences["conference-${stringPartyEntry.value.home}-${stringPartyEntry.value.name}-${gameState.time}"] =
+                conference
         }
         //Since the party is division, it pays out the salary of the members.
         gameState.parties.values.filter { it.type == "division" }.forEach { party ->
@@ -451,8 +499,9 @@ class GameEngine(val gameState: GameState)
                     place.apparatuses.forEach lambda@{ apparatus ->
                         if (idealWorker == 0) return@lambda
                         apparatus.currentWorker =
-                                place.plannedWorker * apparatus.idealWorker / idealWorker//Distribute workers according to ideal worker
-                        popsDivision[place.responsibleParty] = popsDivision[place.responsibleParty]!! - apparatus.currentWorker
+                            place.plannedWorker * apparatus.idealWorker / idealWorker//Distribute workers according to ideal worker
+                        popsDivision[place.responsibleParty] =
+                            popsDivision[place.responsibleParty]!! - apparatus.currentWorker
                     }
                 } else
                 {
@@ -460,8 +509,9 @@ class GameEngine(val gameState: GameState)
                     place.apparatuses.forEach lambda@{ apparatus ->
                         if (idealWorker == 0) return@lambda
                         apparatus.currentWorker =
-                                popsDivision[place.responsibleParty]!! * apparatus.idealWorker / idealWorker//Distribute workers according to ideal worker
-                        popsDivision[place.responsibleParty] = popsDivision[place.responsibleParty]!! - apparatus.currentWorker
+                            popsDivision[place.responsibleParty]!! * apparatus.idealWorker / idealWorker//Distribute workers according to ideal worker
+                        popsDivision[place.responsibleParty] =
+                            popsDivision[place.responsibleParty]!! - apparatus.currentWorker
                     }
                 }
 
@@ -476,15 +526,18 @@ class GameEngine(val gameState: GameState)
         //Some resources are scheduled to be distributed to other places. Other resources are distributed manually.
         //Distribute energy. Each energy storage value slowly moves to the average of all energy storage values.
         val energyDistributionSpeed = 1
-        val energyStorage = gameState.places.values.filter { place -> place.apparatuses.any { it.name == "energyStorage" } }.sumOf {
-            it.resources["energy"] ?: 0
-        }
-        val energyStorageCount = gameState.places.values.sumOf { place -> place.apparatuses.filter { it.name == "energyStorage" }.size }
-        gameState.places.values.filter { place -> place.apparatuses.any { it.name == "energyStorage" } }.forEach { place ->
-            place.resources["energy"] = (place.resources["energy"]
+        val energyStorage =
+            gameState.places.values.filter { place -> place.apparatuses.any { it.name == "energyStorage" } }.sumOf {
+                it.resources["energy"] ?: 0
+            }
+        val energyStorageCount =
+            gameState.places.values.sumOf { place -> place.apparatuses.filter { it.name == "energyStorage" }.size }
+        gameState.places.values.filter { place -> place.apparatuses.any { it.name == "energyStorage" } }
+            .forEach { place ->
+                place.resources["energy"] = (place.resources["energy"]
                     ?: 0) + (energyStorage / energyStorageCount * place.apparatuses.filter { it.name == "energyStorage" }.size - (place.resources["energy"]
                     ?: 0)) * energyDistributionSpeed / 100 //TODO: make sure that the energy is not lost during integer division.
-        }
+            }
     }
 
     fun workAppratuses()
@@ -510,7 +563,7 @@ class GameEngine(val gameState: GameState)
                 }
                 val waterConsumption = min(apparatus.currentWorker, (entry.value.resources["water"] ?: 0))
                 entry.value.resources["water"] = (entry.value.resources["water"]
-                        ?: 0) - waterConsumption//Distribute water to workers. TODO: if there is not enough water, workers should grunt.
+                    ?: 0) - waterConsumption//Distribute water to workers. TODO: if there is not enough water, workers should grunt.
 
                 gameState.marketResources["water"] = (gameState.marketResources["water"] ?: 0) + waterConsumption
                 apparatus.currentConsumption.forEach {
@@ -538,7 +591,14 @@ class GameEngine(val gameState: GameState)
                     generateAccidents(gameState, entry.value)
 
                 }
-                if (apparatus.name in listOf("waterStorage", "oxygenStorage", "lightMetalStorage", "componentStorage", "rationStorage"))
+                if (apparatus.name in listOf(
+                        "waterStorage",
+                        "oxygenStorage",
+                        "lightMetalStorage",
+                        "componentStorage",
+                        "rationStorage"
+                    )
+                )
                 {
                     apparatus.durability += 1//Storages are repaired if they are worked.
                 }
@@ -551,16 +611,18 @@ class GameEngine(val gameState: GameState)
 
     fun checkMarketResources(tgtState: GameState)
     {
-        gameState.floatingResources.forEach { gameState.floatingResources[it.key] = it.value * 999 / 1000 } //1/1000 of the floating resources is lost
+        gameState.floatingResources.forEach {
+            gameState.floatingResources[it.key] = it.value * 999 / 1000
+        } //1/1000 of the floating resources is lost
 
         if ((gameState.marketResources["water"] ?: 0) < gameState.pop)
             println("Less than 12 hours of water out in the market.")
         if ((gameState.marketResources["water"] ?: 0) > gameState.pop / 24)
         {
             gameState.marketResources["water"] = (gameState.marketResources["water"]
-                    ?: 0) - gameState.pop / 24 //2L/day consumption.
+                ?: 0) - gameState.pop / 24 //2L/day consumption.
             gameState.floatingResources["water"] = (gameState.floatingResources["water"]
-                    ?: 0) + gameState.pop / 24 //No water is lost.
+                ?: 0) + gameState.pop / 24 //No water is lost.
         }
         //TODO: adjust consumption rate when resource is low?
         //does not affect approval when resource is low.
@@ -572,12 +634,12 @@ class GameEngine(val gameState: GameState)
                 causeDeaths(death)
                 println("Casualties: at most $death, due to dehydration. Pop left: ${gameState.pop}")
                 Information(
-                        author = "",
-                        creationTime = tgtState.time,
-                        type = "casualty",
-                        tgtPlace = "everywhere",
-                        amount = death,
-                        auxParty = this.name
+                    author = "",
+                    creationTime = tgtState.time,
+                    type = "casualty",
+                    tgtPlace = "everywhere",
+                    amount = death,
+                    auxParty = this.name
                 ).also { /*spread rumor*/
                     tgtState.informations[it.generateName()] = it //cpy.publicity = 5
                 }
@@ -588,22 +650,23 @@ class GameEngine(val gameState: GameState)
         if ((gameState.marketResources["oxygen"] ?: 0) > gameState.pop / 96)
         {
             gameState.marketResources["oxygen"] =
-                    (gameState.marketResources["oxygen"] ?: 0) - gameState.pop / 96 //0.5kg/day consumption.
+                (gameState.marketResources["oxygen"] ?: 0) - gameState.pop / 96 //0.5kg/day consumption.
             gameState.floatingResources["co2"] = (gameState.floatingResources["co2"]
-                    ?: 0) + gameState.pop / 64 //Oxygen is converted to CO2.
+                ?: 0) + gameState.pop / 64 //Oxygen is converted to CO2.
         } else
         {
-            val death = gameState.pop / 100 + 1//TODO: adjust deaths. Also, productivity starts to drop when oxygen is low.
+            val death =
+                gameState.pop / 100 + 1//TODO: adjust deaths. Also, productivity starts to drop when oxygen is low.
             gameState.pickRandomParty.apply {
                 causeDeaths(death)
                 println("Casualties: at most $death, due to suffocation. Pop left: ${gameState.pop}")
                 Information(
-                        author = "",
-                        creationTime = tgtState.time,
-                        type = "casualty",
-                        tgtPlace = "everywhere",
-                        amount = death,
-                        auxParty = this.name
+                    author = "",
+                    creationTime = tgtState.time,
+                    type = "casualty",
+                    tgtPlace = "everywhere",
+                    amount = death,
+                    auxParty = this.name
                 ).also { /*spread rumor*/
                     tgtState.informations[it.generateName()] = it //it.publicity = 5
                 }
@@ -614,9 +677,9 @@ class GameEngine(val gameState: GameState)
         if ((gameState.marketResources["ration"] ?: 0) > gameState.pop / 48)
         {
             gameState.marketResources["ration"] =
-                    (gameState.marketResources["ration"] ?: 0) - gameState.pop / 48 //1kg/day consumption.
+                (gameState.marketResources["ration"] ?: 0) - gameState.pop / 48 //1kg/day consumption.
             gameState.floatingResources["water"] = (gameState.floatingResources["water"]
-                    ?: 0) + gameState.pop / 96 //Ration is converted to water. In carbohydrate, C:H:O = 1:2:1
+                ?: 0) + gameState.pop / 96 //Ration is converted to water. In carbohydrate, C:H:O = 1:2:1
         } else
         {
             val death = gameState.pop / 100 + 1//TODO: adjust deaths.
@@ -624,12 +687,12 @@ class GameEngine(val gameState: GameState)
                 causeDeaths(death)
                 println("Casualties: at most $death, due to starvation. Pop left: ${gameState.pop}")
                 Information(
-                        author = "",
-                        creationTime = tgtState.time,
-                        type = "casualty",
-                        tgtPlace = "everywhere",
-                        amount = death,
-                        auxParty = this.name
+                    author = "",
+                    creationTime = tgtState.time,
+                    type = "casualty",
+                    tgtPlace = "everywhere",
+                    amount = death,
+                    auxParty = this.name
                 ).also { /*spread rumor*/
                     tgtState.informations[it.generateName()] = it //cpy.publicity = 5
                 }
@@ -644,46 +707,48 @@ class GameEngine(val gameState: GameState)
         val death = tgtPlace.currentWorker / 100 + 1 //TODO: what about injuries?
         tgtState.parties[tgtPlace.responsibleParty]!!.causeDeaths(death)//TODO: we are assuming that all deaths are from the responsible party.
         Information(
-                author = "",
-                creationTime = tgtState.time,
-                type = "casualty",
-                tgtPlace = tgtPlace.name,
-                auxParty = tgtPlace.responsibleParty,
-                amount = death
+            author = "",
+            creationTime = tgtState.time,
+            type = "casualty",
+            tgtPlace = tgtPlace.name,
+            auxParty = tgtPlace.responsibleParty,
+            amount = death
         )/*store dummy info*/.also { tgtPlace.accidentInformations[it.generateName()] = it }.also { /*spread rumor*/
-            val cpy = Information(it); tgtState.informations[cpy.generateName()] = cpy; cpy.publicity[tgtPlace.responsibleParty] = 5
+            val cpy = Information(it); tgtState.informations[cpy.generateName()] =
+                cpy; cpy.publicity[tgtPlace.responsibleParty] = 5
         }
-                .also { /*copy this information to the responsible character.*/
-                    if (gameState.parties[tgtPlace.responsibleParty]!!.leader != "")
-                    {
-                        val cpy = Information(it)
-                        cpy.author = gameState.parties[tgtPlace.responsibleParty]!!.leader
-                        tgtState.informations[cpy.generateName()] = cpy
-                        cpy.publicity[tgtPlace.responsibleParty] = 0
-                    }
+            .also { /*copy this information to the responsible character.*/
+                if (gameState.parties[tgtPlace.responsibleParty]!!.leader != "")
+                {
+                    val cpy = Information(it)
+                    cpy.author = gameState.parties[tgtPlace.responsibleParty]!!.leader
+                    tgtState.informations[cpy.generateName()] = cpy
+                    cpy.publicity[tgtPlace.responsibleParty] = 0
                 }
+            }
 
         //Generate resource loss.
-        tgtPlace.resources["water"] = tgtPlace.resources["water"]!! - 50
+        val loss = min(50, tgtPlace.resources["water"] ?: 0)
+        tgtPlace.resources["water"] = (tgtPlace.resources["water"] ?: 0) - loss
         Information(
-                author = "",
-                creationTime = tgtState.time,
-                type = "lostResource",
-                tgtPlace = tgtPlace.name,
-                amount = death,
-                tgtResource = "water"
+            author = "",
+            creationTime = tgtState.time,
+            type = "lostResource",
+            tgtPlace = tgtPlace.name,
+            resources = hashMapOf("water" to loss)
         )/*store dummy info*/.also { tgtPlace.accidentInformations[it.generateName()] = it }.also { /*spread rumor*/
-            val cpy = Information(it); tgtState.informations[cpy.generateName()] = cpy; cpy.publicity[tgtPlace.responsibleParty] = 5
+            val cpy = Information(it); tgtState.informations[cpy.generateName()] =
+                cpy; cpy.publicity[tgtPlace.responsibleParty] = 5
         }
-                .also { /*copy this information to the responsible character.*/
-                    if (gameState.parties[tgtPlace.responsibleParty]!!.leader != "")
-                    {
-                        val cpy = Information(it)
-                        cpy.author = gameState.parties[tgtPlace.responsibleParty]!!.leader
-                        tgtState.informations[cpy.generateName()] = cpy
-                        cpy.publicity[tgtPlace.responsibleParty] = 0
-                    }
+            .also { /*copy this information to the responsible character.*/
+                if (gameState.parties[tgtPlace.responsibleParty]!!.leader != "")
+                {
+                    val cpy = Information(it)
+                    cpy.author = gameState.parties[tgtPlace.responsibleParty]!!.leader
+                    tgtState.informations[cpy.generateName()] = cpy
+                    cpy.publicity[tgtPlace.responsibleParty] = 0
                 }
+            }
 
         //Generate apparatus damage.
         tgtPlace.apparatuses.forEach { app ->
@@ -693,37 +758,46 @@ class GameEngine(val gameState: GameState)
             {
                 app.durability = 0
                 //If storage durability = 0, lose resources.
-                if (app.name in listOf("waterStorage", "oxygenStorage", "lightMetalStorage", "componentStorage", "rationStorage"))
+                if (app.name in listOf(
+                        "waterStorage",
+                        "oxygenStorage",
+                        "lightMetalStorage",
+                        "componentStorage",
+                        "rationStorage"
+                    )
+                )
                 {
                     //TODO: resources should be stored in storages, not in places.
                     val resourceName = app.name.substring(0, app.name.length - 7)
                     tgtPlace.resources[resourceName] = (tgtPlace.resources[resourceName]
-                            ?: 0) * (tgtPlace.maxResources[resourceName] ?: 0) / tmp[resourceName]!!
+                        ?: 0) * (tgtPlace.maxResources[resourceName] ?: 0) / tmp[resourceName]!!
                     //For example, unbroken storage number 8->7 then lose 1/8 of the resource.
                     //TODO: generate information about the resource loss.
                 }
 
                 Information(
-                        author = "",
-                        creationTime = tgtState.time,
-                        type = "damagedApparatus",
-                        tgtPlace = tgtPlace.name,
-                        amount = death,
-                        tgtApparatus = app.name
-                )/*store dummy info*/.also { tgtPlace.accidentInformations[it.generateName()] = it }.also { /*spread rumor*/
-                    val cpy = Information(it); tgtState.informations[cpy.generateName()] = cpy; cpy.publicity[tgtPlace.responsibleParty] = 5
-                }
-                        .also { /*copy this information to the responsible character.*/
-                            if (gameState.parties[tgtPlace.responsibleParty]!!.leader != "")
-                            {
-                                val cpy = Information(it)
-                                cpy.author =
-                                        gameState.parties[tgtPlace.responsibleParty]!!.leader
-                                tgtState.informations[cpy.generateName()] =
-                                        cpy
-                                cpy.publicity[tgtPlace.responsibleParty] = 0
-                            }
+                    author = "",
+                    creationTime = tgtState.time,
+                    type = "damagedApparatus",
+                    tgtPlace = tgtPlace.name,
+                    amount = death,
+                    tgtApparatus = app.name
+                )/*store dummy info*/.also { tgtPlace.accidentInformations[it.generateName()] = it }
+                    .also { /*spread rumor*/
+                        val cpy = Information(it); tgtState.informations[cpy.generateName()] =
+                            cpy; cpy.publicity[tgtPlace.responsibleParty] = 5
+                    }
+                    .also { /*copy this information to the responsible character.*/
+                        if (gameState.parties[tgtPlace.responsibleParty]!!.leader != "")
+                        {
+                            val cpy = Information(it)
+                            cpy.author =
+                                gameState.parties[tgtPlace.responsibleParty]!!.leader
+                            tgtState.informations[cpy.generateName()] =
+                                cpy
+                            cpy.publicity[tgtPlace.responsibleParty] = 0
                         }
+                    }
             }
         }
 
@@ -736,50 +810,52 @@ class GameEngine(val gameState: GameState)
         val death = tgtPlace.currentWorker / 5 + 1 //TODO: what about injuries?
         tgtState.parties[tgtPlace.responsibleParty]!!.causeDeaths(death)
         Information(
-                author = "",
-                creationTime = tgtState.time,
-                type = "casualty",
-                tgtPlace = tgtPlace.name,
-                auxParty = tgtPlace.responsibleParty,
-                amount = death
+            author = "",
+            creationTime = tgtState.time,
+            type = "casualty",
+            tgtPlace = tgtPlace.name,
+            auxParty = tgtPlace.responsibleParty,
+            amount = death
         ).also { tgtPlace.accidentInformations[it.generateName()] = it }.also { /*spread rumor*/
-            val cpy = Information(it); tgtState.informations[cpy.generateName()] = cpy; cpy.publicity[tgtPlace.responsibleParty] = 75
+            val cpy = Information(it); tgtState.informations[cpy.generateName()] =
+                cpy; cpy.publicity[tgtPlace.responsibleParty] = 75
         }
-                .also { information -> /*copy this information to the responsible character.*/
-                    if (gameState.parties[tgtPlace.responsibleParty]!!.leader != "")
-                    {
-                        val cpy = Information(information)
-                        cpy.author =
-                                gameState.parties[tgtPlace.responsibleParty]!!.leader
-                        tgtState.informations[cpy.generateName()] =
-                                cpy
-                        cpy.publicity[tgtPlace.responsibleParty] = 0
-                    }
+            .also { information -> /*copy this information to the responsible character.*/
+                if (gameState.parties[tgtPlace.responsibleParty]!!.leader != "")
+                {
+                    val cpy = Information(information)
+                    cpy.author =
+                        gameState.parties[tgtPlace.responsibleParty]!!.leader
+                    tgtState.informations[cpy.generateName()] =
+                        cpy
+                    cpy.publicity[tgtPlace.responsibleParty] = 0
                 }
+            }
 
         //Generate resource loss.
-        tgtPlace.resources["water"] = tgtPlace.resources["water"]!! - 50
+        val loss = min(50, tgtPlace.resources["water"] ?: 0)
+        tgtPlace.resources["water"] = (tgtPlace.resources["water"] ?: 0) - loss
         Information(
-                author = "",
-                creationTime = tgtState.time,
-                type = "lostResource",
-                tgtPlace = tgtPlace.name,
-                amount = death,
-                tgtResource = "water"
+            author = "",
+            creationTime = tgtState.time,
+            type = "lostResource",
+            tgtPlace = tgtPlace.name,
+            resources = hashMapOf("water" to loss)
         ).also { tgtPlace.accidentInformations[it.generateName()] = it }.also { /*spread rumor*/
-            val cpy = Information(it); tgtState.informations[cpy.generateName()] = cpy; cpy.publicity[tgtPlace.responsibleParty] = 75
+            val cpy = Information(it); tgtState.informations[cpy.generateName()] =
+                cpy; cpy.publicity[tgtPlace.responsibleParty] = 75
         }
-                .also { /*copy this information to the responsible character.*/
-                    if (gameState.parties[tgtPlace.responsibleParty]!!.leader != "")
-                    {
-                        val cpy = Information(it)
-                        cpy.author =
-                                gameState.parties[tgtPlace.responsibleParty]!!.leader
-                        tgtState.informations[cpy.generateName()] =
-                                cpy
-                        cpy.publicity[tgtPlace.responsibleParty] = 0
-                    }
+            .also { /*copy this information to the responsible character.*/
+                if (gameState.parties[tgtPlace.responsibleParty]!!.leader != "")
+                {
+                    val cpy = Information(it)
+                    cpy.author =
+                        gameState.parties[tgtPlace.responsibleParty]!!.leader
+                    tgtState.informations[cpy.generateName()] =
+                        cpy
+                    cpy.publicity[tgtPlace.responsibleParty] = 0
                 }
+            }
 
         //Generate apparatus damage.
         tgtPlace.apparatuses.forEach { app ->
@@ -789,34 +865,44 @@ class GameEngine(val gameState: GameState)
             {
                 app.durability = 0
                 //If storage durability = 0, lose resources.
-                if (app.name in listOf("waterStorage", "oxygenStorage", "lightMetalStorage", "componentStorage", "rationStorage"))
+                if (app.name in listOf(
+                        "waterStorage",
+                        "oxygenStorage",
+                        "lightMetalStorage",
+                        "componentStorage",
+                        "rationStorage"
+                    )
+                )
                 {
                     val resourceName = app.name.substring(0, app.name.length - 7)
-                    tgtPlace.resources[resourceName] = tgtPlace.resources[resourceName]!! * tgtPlace.maxResources[resourceName]!! / tmp[resourceName]!!
+                    tgtPlace.resources[resourceName] =
+                        tgtPlace.resources[resourceName]!! * tgtPlace.maxResources[resourceName]!! / tmp[resourceName]!!
                     //For example, unbroken storage number 8->7 then lose 1/8 of the resource.
                     //TODO: generate information about the resource loss.
                 }
 
                 Information(
-                        author = "",
-                        creationTime = tgtState.time,
-                        type = "damagedApparatus",
-                        tgtPlace = tgtPlace.name,
-                        tgtApparatus = app.name
-                )/*store dummy info*/.also { tgtPlace.accidentInformations[it.generateName()] = it }.also { /*spread rumor*/
-                    val cpy = Information(it); tgtState.informations[cpy.generateName()] = cpy; cpy.publicity[tgtPlace.responsibleParty] = 75
-                }
-                        .also { /*copy this information to the responsible character.*/
-                            if (gameState.parties[tgtPlace.responsibleParty]!!.leader != "")
-                            {
-                                val cpy = Information(it)
-                                cpy.author =
-                                        gameState.parties[tgtPlace.responsibleParty]!!.leader
-                                tgtState.informations[cpy.generateName()] =
-                                        cpy
-                                cpy.publicity[tgtPlace.responsibleParty] = 0
-                            }
+                    author = "",
+                    creationTime = tgtState.time,
+                    type = "damagedApparatus",
+                    tgtPlace = tgtPlace.name,
+                    tgtApparatus = app.name
+                )/*store dummy info*/.also { tgtPlace.accidentInformations[it.generateName()] = it }
+                    .also { /*spread rumor*/
+                        val cpy = Information(it); tgtState.informations[cpy.generateName()] =
+                            cpy; cpy.publicity[tgtPlace.responsibleParty] = 75
+                    }
+                    .also { /*copy this information to the responsible character.*/
+                        if (gameState.parties[tgtPlace.responsibleParty]!!.leader != "")
+                        {
+                            val cpy = Information(it)
+                            cpy.author =
+                                gameState.parties[tgtPlace.responsibleParty]!!.leader
+                            tgtState.informations[cpy.generateName()] =
+                                cpy
+                            cpy.publicity[tgtPlace.responsibleParty] = 0
                         }
+                    }
             }
         }
     }
@@ -854,20 +940,41 @@ class GameEngine(val gameState: GameState)
             gameState.isBudgetResolved = false
         }
         if (gameState.time % 48 == 0)
-        { //Every day, inform the infrastructure minister about total resource.
-            val infraName = gameState.parties.values.find { it.name == "infrastructure" }!!.leader
-            if (infraName != "")
-            {
-                Information(infraName, creationTime = gameState.time, tgtTime = gameState.time, type = "resource", tgtResource = "water", tgtPlace = "everywhere", amount = gameState.places.values.sumOf {
-                    it.resources["water"] ?: 0
-                }).also { it.knownTo.add(infraName);gameState.informations[it.generateName()] = it }
-                Information(infraName, creationTime = gameState.time, tgtTime = gameState.time, type = "resource", tgtResource = "oxygen", tgtPlace = "everywhere", amount = gameState.places.values.sumOf {
-                    it.resources["oxygen"] ?: 0
-                }).also { it.knownTo.add(infraName);gameState.informations[it.generateName()] = it }
-                Information(infraName, creationTime = gameState.time, tgtTime = gameState.time, type = "resource", tgtResource = "ration", tgtPlace = "everywhere", amount = gameState.places.values.sumOf {
-                    it.resources["ration"] ?: 0
-                }).also { it.knownTo.add(infraName);gameState.informations[it.generateName()] = it }
-            }
+        { //Every day, we used to inform the infrastructure minister about total resource.
+//            val infraName = gameState.parties.values.find { it.name == "infrastructure" }!!.leader
+//            if (infraName != "")
+//            {
+//                Information(
+//                    infraName,
+//                    creationTime = gameState.time,
+//                    tgtTime = gameState.time,
+//                    type = "resource",
+//                    tgtResource = "water",
+//                    tgtPlace = "everywhere",
+//                    amount = gameState.places.values.sumOf {
+//                        it.resources["water"] ?: 0
+//                    }).also { it.knownTo.add(infraName);gameState.informations[it.generateName()] = it }
+//                Information(
+//                    infraName,
+//                    creationTime = gameState.time,
+//                    tgtTime = gameState.time,
+//                    type = "resource",
+//                    tgtResource = "oxygen",
+//                    tgtPlace = "everywhere",
+//                    amount = gameState.places.values.sumOf {
+//                        it.resources["oxygen"] ?: 0
+//                    }).also { it.knownTo.add(infraName);gameState.informations[it.generateName()] = it }
+//                Information(
+//                    infraName,
+//                    creationTime = gameState.time,
+//                    tgtTime = gameState.time,
+//                    type = "resource",
+//                    tgtResource = "ration",
+//                    tgtPlace = "everywhere",
+//                    amount = gameState.places.values.sumOf {
+//                        it.resources["ration"] ?: 0
+//                    }).also { it.knownTo.add(infraName);gameState.informations[it.generateName()] = it }
+//            }
         }
 
     }
@@ -966,7 +1073,7 @@ class GameEngine(val gameState: GameState)
             {
                 val meeting = gameState.ongoingMeetings.filter {
                     it.value.currentCharacters.contains(
-                            character
+                        character
                     )
                 }.values.first()
                 if (character == gameState.playerAgent)
@@ -997,16 +1104,16 @@ class GameEngine(val gameState: GameState)
             {
                 val conf = gameState.ongoingConferences.filter {
                     it.value.currentCharacters.contains(
-                            character
+                        character
                     )
                 }.values.first()
                 if (character == gameState.playerAgent)
                 {
                     println("You are in a conference.")
                     println(
-                            "Attendees: ${
-                                conf.currentCharacters
-                            }"
+                        "Attendees: ${
+                            conf.currentCharacters
+                        }"
                     )
                 }
                 //You cannot trade in a conference.
@@ -1025,7 +1132,9 @@ class GameEngine(val gameState: GameState)
                 //When not the leader, you can only do below actions.
                 when (subject)
                 {
-                    "divisionDailyConference" -> if (gameState.parties[conf.involvedParty]!!.isDailySalaryPaid[character] == false) actions.add("salary")
+                    "divisionDailyConference" -> if (gameState.parties[conf.involvedParty]!!.isDailySalaryPaid[character] == false) actions.add(
+                        "salary"
+                    )
                 }
                 //Command is allowed only if the character is the division leader.
                 if (gameState.parties[conf.involvedParty]?.leader == character)
@@ -1043,7 +1152,10 @@ class GameEngine(val gameState: GameState)
                 actions.add("talk")
             if (gameState.places[place]!!.isAccidentScene)
             {
-                if (gameState.places[place]!!.responsibleParty != "" && gameState.parties[gameState.places[place]!!.responsibleParty]!!.members.contains(character))//Only the responsible party members can clear the accident scene.
+                if (gameState.places[place]!!.responsibleParty != "" && gameState.parties[gameState.places[place]!!.responsibleParty]!!.members.contains(
+                        character
+                    )
+                )//Only the responsible party members can clear the accident scene.
                     actions.add("clearAccidentScene")
                 actions.add("investigateAccidentScene")
             }
@@ -1061,8 +1173,8 @@ class GameEngine(val gameState: GameState)
                 actions.add("home")
             }
             val availableConferences =
-                    gameState.scheduledConferences.filter { it.value.time + 2 > gameState.time && gameState.time + 2 > it.value.time && it.value.place == place }
-                            .filter { !gameState.ongoingMeetings.containsKey(it.key) }
+                gameState.scheduledConferences.filter { it.value.time + 2 > gameState.time && gameState.time + 2 > it.value.time && it.value.place == place }
+                    .filter { !gameState.ongoingMeetings.containsKey(it.key) }
             if (availableConferences.isNotEmpty())
                 if (gameState.parties[availableConferences.values.first().involvedParty]!!.leader == character)//Only the party leader can do below actions.
                 {
@@ -1078,15 +1190,18 @@ class GameEngine(val gameState: GameState)
             {
                 actions.add("infoAnnounce")
             }
-            if (gameState.places[place]!!.responsibleParty != "" && gameState.parties[gameState.places[place]!!.responsibleParty]!!.members.contains(character))
+            if (gameState.places[place]!!.responsibleParty != "" && gameState.parties[gameState.places[place]!!.responsibleParty]!!.members.contains(
+                    character
+                )
+            )
             {
                 actions.add("unofficialResourceTransfer")//can only steal from their own division.
                 actions.add("officialResourceTransfer")//can only move resources from their own division.
             }
             val availableMeetings =
-                    gameState.scheduledMeetings.filter { it.value.time + 2 > gameState.time && gameState.time + 2 > it.value.time && it.value.place == place }
-                            .filter { !gameState.ongoingMeetings.containsKey(it.key) }
-                            .filter { it.value.scheduledCharacters.contains(character) }
+                gameState.scheduledMeetings.filter { it.value.time + 2 > gameState.time && gameState.time + 2 > it.value.time && it.value.place == place }
+                    .filter { !gameState.ongoingMeetings.containsKey(it.key) }
+                    .filter { it.value.scheduledCharacters.contains(character) }
             if (availableMeetings.isNotEmpty())
                 actions.add("startMeeting")
             val meetingsToJoin = gameState.ongoingMeetings.filter {
@@ -1096,7 +1211,9 @@ class GameEngine(val gameState: GameState)
             {
                 val subject = gameState.ongoingMeetings.firstNotNullOf { entry ->
                     entry.value.subject.takeIf {
-                        entry.value.scheduledCharacters.contains(character) && !entry.value.currentCharacters.contains(character) && entry.value.place == place
+                        entry.value.scheduledCharacters.contains(character) && !entry.value.currentCharacters.contains(
+                            character
+                        ) && entry.value.place == place
                     }
                 }
                 if (gameState.playerAgent == character)

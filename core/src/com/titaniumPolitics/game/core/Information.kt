@@ -11,14 +11,37 @@ import kotlin.math.min
 * */
 @Serializable
 class Information(//If there is no author, it is a rumor.
-        var name: String = "",
-        var author: String = "", var creationTime: Int = 0, var type: String = "", var tgtTime: Int = 0,
-        var tgtPlace: String = "", var tgtApparatus: String = "", var tgtCharacter: String = "",
-        var tgtResource: String = "", var amount: Int = 0, var action: String = "", var tgtParty: String = "", var auxParty: String = ""
+    var name: String = "",
+    var author: String = "",
+    var creationTime: Int = 0,
+    var type: String = "",
+    var tgtTime: Int = 0,
+    var tgtPlace: String = "",
+    var tgtApparatus: String = "",
+    var tgtCharacter: String = "",
+    var amount: Int = 0,
+    var action: String = "",
+    var tgtParty: String = "",
+    var auxParty: String = "",
+    var resources: HashMap<String, Int> = hashMapOf<String, Int>()
 )
 {
     //Do not copy the name. It is unique.
-    constructor(info: Information) : this("", info.author, info.creationTime, info.type, info.tgtTime, info.tgtPlace, info.tgtApparatus, info.tgtCharacter, info.tgtResource, info.amount, info.action)
+    constructor(info: Information) : this(
+        "",
+        info.author,
+        info.creationTime,
+        info.type,
+        info.tgtTime,
+        info.tgtPlace,
+        info.tgtApparatus,
+        info.tgtCharacter,
+        info.amount,
+        info.action,
+        info.tgtParty,
+        info.auxParty,
+        info.resources
+    )
 
     init
     {
@@ -78,7 +101,10 @@ class Information(//If there is no author, it is a rumor.
             return this.name
 
         }
-        val name = "$author-$type-$creationTime-$tgtTime-$tgtPlace-$tgtApparatus-$tgtCharacter-$tgtResource-$amount-$action-${Math.random().toString().substring(8)}"
+        val name =
+            "$author-$type-$creationTime-${
+                Math.random().toString().substring(8)
+            }"
         this.name = name
         return name
     }

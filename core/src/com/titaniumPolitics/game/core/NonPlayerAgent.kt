@@ -18,7 +18,8 @@ class NonPlayerAgent(val character: String) : GameStateElement()
 {
 
 
-    private var routines = arrayListOf<Routine>()//Routines are sorted by priority. The first element is the current routine. All other routines are executed when the current routine is finished.
+    private var routines =
+        arrayListOf<Routine>()//Routines are sorted by priority. The first element is the current routine. All other routines are executed when the current routine is finished.
     val place
         get() = parent.places.values.find { it.characters.contains(character) }!!.name
 
@@ -34,23 +35,27 @@ class NonPlayerAgent(val character: String) : GameStateElement()
     {
         //If there is almost no food or water, stop all activities and try to get some. ----------------------------------------------------------------------------
         if ((parent.characters[character]!!.resources["ration"]
-                        ?: 0) <= (parent.characters[character]!!.reliants.size + 1) || (parent.characters[character]!!.resources["water"]
-                        ?: 0) <= (parent.characters[character]!!.reliants.size + 1)
+                ?: 0) <= (parent.characters[character]!!.reliants.size + 1) || (parent.characters[character]!!.resources["water"]
+                ?: 0) <= (parent.characters[character]!!.reliants.size + 1)
         )
         {
             val wantedResource = if ((parent.characters[character]!!.resources["ration"]
-                            ?: 0) <= (parent.characters[character]!!.reliants.size + 1)
+                    ?: 0) <= (parent.characters[character]!!.reliants.size + 1)
             ) "ration" else "water"
             if (parent.characters[character]!!.trait.contains("thief"))
             {
                 //Find a place within my division with maximum res.
                 if (routines.none { it.name == "steal" })
-                    routines.add(Routine("steal", 1000).also { it.variables["stealResource"] = wantedResource })//Add a routine, priority higher than work.
+                    routines.add(Routine("steal", 1000).also {
+                        it.variables["stealResource"] = wantedResource
+                    })//Add a routine, priority higher than work.
 
             } else if (parent.characters[character]!!.trait.contains("bargainer"))
             {
                 if (routines.none { it.name == "steal" })
-                    routines.add(Routine("buy", 1000).also { it.variables["wantedResource"] = wantedResource })//Add a routine, priority higher than work.
+                    routines.add(Routine("buy", 1000).also {
+                        it.variables["wantedResource"] = wantedResource
+                    })//Add a routine, priority higher than work.
             }
         }
 
@@ -69,18 +74,18 @@ class NonPlayerAgent(val character: String) : GameStateElement()
         routines.sortByDescending { it.priority }
         //Leave meeting or conference if the routine was changed.
         if (routines.none { it.name == "attendMeeting" } && parent.ongoingMeetings.any {
-                    it.value.currentCharacters.contains(
-                            character
-                    )
-                })
+                it.value.currentCharacters.contains(
+                    character
+                )
+            })
         {
             return leaveMeeting(character, place)
         }
         if (routines.none { it.name == "attendConference" } && parent.ongoingConferences.any {
-                    it.value.currentCharacters.contains(
-                            character
-                    )
-                })
+                it.value.currentCharacters.contains(
+                    character
+                )
+            })
         {
             return leaveConference(character, place)
         }
@@ -91,18 +96,18 @@ class NonPlayerAgent(val character: String) : GameStateElement()
         if (routines.none { it.name == "executeCommand" })
         {
             if (commands.any {
-                        it.executeTime in parent.time - 3..parent.time + 3 && parent.parties[it.issuedParty]!!.integrity > 30.0 && GameEngine.availableActions(
-                                parent,
-                                it.place,
-                                character
-                        ).contains(it.action.javaClass.simpleName)
-                    })
+                    it.executeTime in parent.time - 3..parent.time + 3 && parent.parties[it.issuedParty]!!.integrity > 30.0 && GameEngine.availableActions(
+                        parent,
+                        it.place,
+                        character
+                    ).contains(it.action.javaClass.simpleName)
+                })
             {
                 routines.add(
-                        Routine(
-                                "executeCommand",
-                                routines[0].priority + 10
-                        )
+                    Routine(
+                        "executeCommand",
+                        routines[0].priority + 10
+                    )
                 )//Add the routine with higher priority.
             }
         }
@@ -140,7 +145,13 @@ class NonPlayerAgent(val character: String) : GameStateElement()
             "executeCommand" ->
             {
                 //The condition should be same with the executeCommand entry condition.
-                val executableCommands = parent.characters[character]!!.commands.filter { it.executeTime in parent.time - 3..parent.time + 3 && parent.parties[it.issuedParty]!!.integrity > 30.0 && GameEngine.availableActions(parent, it.place, character).contains(it.action.javaClass.simpleName) }
+                val executableCommands = parent.characters[character]!!.commands.filter {
+                    it.executeTime in parent.time - 3..parent.time + 3 && parent.parties[it.issuedParty]!!.integrity > 30.0 && GameEngine.availableActions(
+                        parent,
+                        it.place,
+                        character
+                    ).contains(it.action.javaClass.simpleName)
+                }
                 if (executableCommands.isEmpty())
                 {
                     routines.removeAt(0)//Remove the current routine.
@@ -184,7 +195,9 @@ class NonPlayerAgent(val character: String) : GameStateElement()
                     {
                         if (place != parent.characters[character]!!.home)
                         {
-                            return move(character, place).also { it.placeTo = parent.characters[character]!!.home }//If player is far from the home, go outside the home.
+                            return move(character, place).also {
+                                it.placeTo = parent.characters[character]!!.home
+                            }//If player is far from the home, go outside the home.
                         } else
                         {
                             return home(character, place)//If player is outside the home, go inside.
@@ -205,12 +218,12 @@ class NonPlayerAgent(val character: String) : GameStateElement()
             "steal" ->
             {
                 val resplace =
-                        parent.places.values.filter {
-                            it.responsibleParty != "" && parent.parties[it.responsibleParty]!!.members.contains(
-                                    character
-                            )
-                        }
-                                .maxByOrNull { it.resources[routines[0].variables["wantedResource"]] ?: 0 }
+                    parent.places.values.filter {
+                        it.responsibleParty != "" && parent.parties[it.responsibleParty]!!.members.contains(
+                            character
+                        )
+                    }
+                        .maxByOrNull { it.resources[routines[0].variables["wantedResource"]] ?: 0 }
 
                 if (resplace == null)
                 {
@@ -231,8 +244,8 @@ class NonPlayerAgent(val character: String) : GameStateElement()
                         unofficialResourceTransfer(character, place).also {
                             it.what = routines[0].variables["stealResource"]!!
                             it.amount = min(
-                                    (resplace.resources["ration"] ?: 0) / 2,
-                                    (parent.characters[character]!!.reliants.size + 1) * 7
+                                (resplace.resources["ration"] ?: 0) / 2,
+                                (parent.characters[character]!!.reliants.size + 1) * 7
                             )
                             println("$character is stealing ${it.what} from ${resplace.name}: ${it.amount}")
                             routines.removeAt(0)//Remove the current routine.
@@ -251,7 +264,7 @@ class NonPlayerAgent(val character: String) : GameStateElement()
                 //If an accident happened in the place of my control, investigate and clear it.
                 parent.places.values.filter {
                     it.responsibleParty != "" && parent.parties[it.responsibleParty]!!.members.contains(
-                            character
+                        character
                     )
                 }.forEach { place1 ->
                     if (place1.isAccidentScene)
@@ -285,14 +298,14 @@ class NonPlayerAgent(val character: String) : GameStateElement()
                     return executeRoutine()
                 }
                 if (parent.ongoingConferences.any {
-                            it.value.scheduledCharacters.contains(character) && !it.value.currentCharacters.contains(
-                                    character
-                            )
-                        })//If missed a conference
+                        it.value.scheduledCharacters.contains(character) && !it.value.currentCharacters.contains(
+                            character
+                        )
+                    })//If missed a conference
                 {
                     val conference = parent.ongoingConferences.filter {
                         it.value.scheduledCharacters.contains(character) && !it.value.currentCharacters.contains(
-                                character
+                            character
                         )
                     }.values.first()
                     //----------------------------------------------------------------------------------Move to the conference
@@ -310,7 +323,7 @@ class NonPlayerAgent(val character: String) : GameStateElement()
                         joinConference(character, place).also {
                             it.meetingName = parent.ongoingConferences.filter {
                                 it.value.scheduledCharacters.contains(character) && !it.value.currentCharacters.contains(
-                                        character
+                                    character
                                 )
                             }.keys.first()
                             return it
@@ -340,14 +353,14 @@ class NonPlayerAgent(val character: String) : GameStateElement()
                             })//Add a routine with higher priority.
                             startConference(character, place).also { action ->
                                 action.meetingName =
-                                        parent.scheduledConferences.keys.first { parent.scheduledConferences[it] == conf }
+                                    parent.scheduledConferences.keys.first { parent.scheduledConferences[it] == conf }
                                 return action
                             }
                         } else
                         {
                             return wait(
-                                    character,
-                                    place
+                                character,
+                                place
                             )//Wait for the conference to start.
                         }
 
@@ -356,15 +369,15 @@ class NonPlayerAgent(val character: String) : GameStateElement()
                 }
                 //If missed a meeting
                 if (parent.ongoingMeetings.any {
-                            it.value.scheduledCharacters.contains(character) && !it.value.currentCharacters.contains(
-                                    character
-                            )
-                        })
+                        it.value.scheduledCharacters.contains(character) && !it.value.currentCharacters.contains(
+                            character
+                        )
+                    })
                 {
                     //----------------------------------------------------------------------------------Move to the meeting
                     val meeting = parent.ongoingMeetings.filter {
                         it.value.scheduledCharacters.contains(character) && !it.value.currentCharacters.contains(
-                                character
+                            character
                         )
                     }.values.first()
                     if (place != meeting.place)
@@ -381,7 +394,7 @@ class NonPlayerAgent(val character: String) : GameStateElement()
                         joinMeeting(character, place).also {
                             it.meetingName = parent.ongoingMeetings.filter {
                                 it.value.scheduledCharacters.contains(character) && !it.value.currentCharacters.contains(
-                                        character
+                                    character
                                 )
                             }.keys.first()
                             return it
@@ -407,7 +420,7 @@ class NonPlayerAgent(val character: String) : GameStateElement()
                         })//Add a routine with higher priority.
                     startMeeting(character, place).also { action ->
                         action.meetingName =
-                                parent.scheduledMeetings.filter { it.value == meeting }.keys.first()
+                            parent.scheduledMeetings.filter { it.value == meeting }.keys.first()
                         return action
                     }
                     //----------------------------------------------------------------------------------Move to the meeting
@@ -420,22 +433,22 @@ class NonPlayerAgent(val character: String) : GameStateElement()
                         {
                             //Find a place within my division with maximum res.
                             val resplace =
-                                    parent.places.values.filter {
-                                        it.responsibleParty != "" && parent.parties[it.responsibleParty]!!.members.contains(
-                                                character
-                                        )
-                                    }
-                                            .maxByOrNull { it.resources[res] ?: 0 }
-                                            ?: return@fe
+                                parent.places.values.filter {
+                                    it.responsibleParty != "" && parent.parties[it.responsibleParty]!!.members.contains(
+                                        character
+                                    )
+                                }
+                                    .maxByOrNull { it.resources[res] ?: 0 }
+                                    ?: return@fe
                             if (place != resplace.name)
                             {
                                 routines.add(
-                                        Routine(
-                                                "move",
-                                                routines[0].priority + 10
-                                        ).also {
-                                            it.variables["movePlace"] = resplace.name
-                                        })//Add a move routine with higher priority.
+                                    Routine(
+                                        "move",
+                                        routines[0].priority + 10
+                                    ).also {
+                                        it.variables["movePlace"] = resplace.name
+                                    })//Add a move routine with higher priority.
                                 return executeRoutine()
                             } else
                             {
@@ -460,17 +473,23 @@ class NonPlayerAgent(val character: String) : GameStateElement()
                         val waterThreshold = 10
                         val member = party.members.find {
                             (parent.characters[it]!!.resources["ration"]
-                                    ?: 0) <= rationThreshold * (parent.characters[it]!!.reliants.size + 1) || (parent.characters[it]!!.resources["water"]
-                                    ?: 0) <= waterThreshold * (parent.characters[it]!!.reliants.size + 1)
+                                ?: 0) <= rationThreshold * (parent.characters[it]!!.reliants.size + 1) || (parent.characters[it]!!.resources["water"]
+                                ?: 0) <= waterThreshold * (parent.characters[it]!!.reliants.size + 1)
                         }
                         if (member != null)
                         {
                             //The resource to steal is what the member is short of, either ration or water.
                             val wantedResource = if ((parent.characters[character]!!.resources["ration"]
-                                            ?: 0) <= rationThreshold * (parent.characters[character]!!.reliants.size + 1)
+                                    ?: 0) <= rationThreshold * (parent.characters[character]!!.reliants.size + 1)
                             ) "ration" else "water"
                             routines[0].intVariables["corruptionTimer"] = parent.time
-                            routines.add(Routine("steal", routines[0].priority + 10).also { it.variables["stealResource"] = wantedResource; it.variables["stealFor"] = member })//Add a routine, priority higher than work.
+                            routines.add(
+                                Routine(
+                                    "steal",
+                                    routines[0].priority + 10
+                                ).also {
+                                    it.variables["stealResource"] = wantedResource; it.variables["stealFor"] = member
+                                })//Add a routine, priority higher than work.
                             return executeRoutine()
                         }
                     }
@@ -488,7 +507,11 @@ class NonPlayerAgent(val character: String) : GameStateElement()
                     {
                         routines.add(Routine("move", routines[0].priority + 10).also {
                             it.variables["movePlace"] = parent.places.values.filter { place ->
-                                parent.parties.values.any { party -> party.home == place.name && party.members.contains(character) }
+                                parent.parties.values.any { party ->
+                                    party.home == place.name && party.members.contains(
+                                        character
+                                    )
+                                }
                             }.random().name
                         })//Add a move routine with higher priority.
                         return executeRoutine()
@@ -529,7 +552,8 @@ class NonPlayerAgent(val character: String) : GameStateElement()
                     routines.removeAt(0)//Remove the current routine.
                     return executeRoutine()
                 }
-                val conf = parent.ongoingConferences.filter { it.value.currentCharacters.contains(character) }.values.first()
+                val conf =
+                    parent.ongoingConferences.filter { it.value.currentCharacters.contains(character) }.values.first()
                 //If two hours has passed since the meeting started, leave the meeting. TODO: what if the meeting has started late?
                 if (routines[0].intVariables["time"]!! + 4 <= parent.time)
                 {
@@ -575,7 +599,12 @@ class NonPlayerAgent(val character: String) : GameStateElement()
                                 return leaderAssignment(character, place).also {
                                     it.targetParty = conf.auxSubject
                                     //First option: Assign the leader of the subject party to the character with the highest mutuality.
-                                    it.who = parent.parties[conf.auxSubject]!!.members.maxByOrNull { parent.getMutuality(it, character) }!!
+                                    it.who = parent.parties[conf.auxSubject]!!.members.maxByOrNull {
+                                        parent.getMutuality(
+                                            it,
+                                            character
+                                        )
+                                    }!!
                                     //TODO: Second option: Assign the leader of the subject party to the character with the highest support within the party.
 
                                 }
@@ -610,7 +639,11 @@ class NonPlayerAgent(val character: String) : GameStateElement()
                         if (parent.parties[conf.involvedParty]!!.leader == character)
                         {
                             //Share information about the division, if the information is not known to all division members.
-                            parent.informations.filter { it.value.tgtParty == conf.involvedParty && it.value.knownTo.contains(character) && !it.value.knownTo.containsAll(conf.currentCharacters) && it.value.tgtTime in parent.time / 48..parent.time / 48 + 47 }.forEach {
+                            parent.informations.filter {
+                                it.value.tgtParty == conf.involvedParty && it.value.knownTo.contains(
+                                    character
+                                ) && !it.value.knownTo.containsAll(conf.currentCharacters) && it.value.tgtTime in parent.time / 48..parent.time / 48 + 47
+                            }.forEach {
                                 infoShare(character, place).also { action ->
                                     action.what = it.key
                                     return action
@@ -618,7 +651,11 @@ class NonPlayerAgent(val character: String) : GameStateElement()
                             }
                             //Praise or criticize the division members, if there is any relevant information.
                             parent.parties[conf.involvedParty]!!.members.forEach { member ->
-                                if (member != character && parent.informations.values.any { it.tgtCharacter == member && it.knownTo.contains(character) })
+                                if (member != character && parent.informations.values.any {
+                                        it.tgtCharacter == member && it.knownTo.contains(
+                                            character
+                                        )
+                                    })
                                 {
                                     //praise if the mutuality is high, criticize if the mutuality is low.
                                     val mutuality = parent.getMutuality(character, member)
@@ -626,7 +663,9 @@ class NonPlayerAgent(val character: String) : GameStateElement()
                                     {
                                         infoShare(character, place).also { action ->
                                             //just take random information for now. TODO: take the information that is most useful for praising.
-                                            action.what = parent.informations.values.filter { it.tgtCharacter == member && it.knownTo.contains(character) }.random().name
+                                            action.what = parent.informations.values.filter {
+                                                it.tgtCharacter == member && it.knownTo.contains(character)
+                                            }.random().name
                                             action.application = "praise"
                                             action.who = hashSetOf(member)
                                             return action
@@ -635,7 +674,9 @@ class NonPlayerAgent(val character: String) : GameStateElement()
                                     {
                                         infoShare(character, place).also { action ->
                                             //just take random information for now. TODO: take the information that is most useful for criticizing.
-                                            action.what = parent.informations.values.filter { it.tgtCharacter == member && it.knownTo.contains(character) }.random().name
+                                            action.what = parent.informations.values.filter {
+                                                it.tgtCharacter == member && it.knownTo.contains(character)
+                                            }.random().name
                                             action.application = "criticize"
                                             action.who = hashSetOf(member)
                                             return action
@@ -645,24 +686,44 @@ class NonPlayerAgent(val character: String) : GameStateElement()
                             }
                             //TODO: If it is not covered above, if the division is short of resources, share the information about the resource shortage.
                             //Criticize the common enemies of the division. It is determined by the party with the low mutuality with the division.
-                            val enemyParty = parent.parties.values.filter { it.name != conf.involvedParty }.minByOrNull { parent.getPartyMutuality(it.name, conf.involvedParty) }!!.name
+                            val enemyParty = parent.parties.values.filter { it.name != conf.involvedParty }
+                                .minByOrNull { parent.getPartyMutuality(it.name, conf.involvedParty) }!!.name
                             //Criticize the leader if there is any relevant information.
                             if (parent.parties[enemyParty]!!.leader != "")
-                                if (parent.informations.values.any { (it.tgtParty == enemyParty || it.tgtCharacter == parent.parties[enemyParty]!!.leader) && it.knownTo.contains(character) })
+                                if (parent.informations.values.any {
+                                        (it.tgtParty == enemyParty || it.tgtCharacter == parent.parties[enemyParty]!!.leader) && it.knownTo.contains(
+                                            character
+                                        )
+                                    })
                                     infoShare(character, place).also { action ->
-                                        action.what = parent.informations.values.filter { (it.tgtParty == enemyParty || it.tgtCharacter == parent.parties[enemyParty]!!.leader) && it.knownTo.contains(character) }.random().name//TODO: take the information that is most useful for criticizing.
+                                        action.what = parent.informations.values.filter {
+                                            (it.tgtParty == enemyParty || it.tgtCharacter == parent.parties[enemyParty]!!.leader) && it.knownTo.contains(
+                                                character
+                                            )
+                                        }.random().name//TODO: take the information that is most useful for criticizing.
                                         action.application = "criticize"
                                         action.who = hashSetOf(parent.parties[enemyParty]!!.leader)
                                         return action
                                     }
                             //Criticize the common enemy. It is determined by average individual mutuality.
-                            val enemy = parent.characters.maxByOrNull { ch -> parent.parties[conf.involvedParty]!!.members.sumOf { mem -> parent.getMutuality(mem, ch.key) } }
+                            val enemy = parent.characters.maxByOrNull { ch ->
+                                parent.parties[conf.involvedParty]!!.members.sumOf { mem ->
+                                    parent.getMutuality(
+                                        mem,
+                                        ch.key
+                                    )
+                                }
+                            }
                             //TODO: request information about the commands issued today.
                         }
                         //If not division leader, Share information about what happened in the division today.
                         if (parent.parties[conf.involvedParty]!!.leader != character)
                         {
-                            parent.informations.filter { it.value.tgtParty == conf.involvedParty && it.value.knownTo.contains(character) && it.value.type == "action" && it.value.tgtTime in parent.time / 48..parent.time / 48 + 47 }.forEach {
+                            parent.informations.filter {
+                                it.value.tgtParty == conf.involvedParty && it.value.knownTo.contains(
+                                    character
+                                ) && it.value.type == "action" && it.value.tgtTime in parent.time / 48..parent.time / 48 + 47
+                            }.forEach {
                                 infoShare(character, place).also { action ->
                                     action.what = it.key
                                     return action
@@ -693,7 +754,7 @@ class NonPlayerAgent(val character: String) : GameStateElement()
 
                     routines.add(Routine("move", routines[0].priority + 10).also {
                         it.variables["movePlace"] =
-                                parent.places.values.find { it.characters.contains(routines[0].variables["character"]) }!!.name
+                            parent.places.values.find { it.characters.contains(routines[0].variables["character"]) }!!.name
                     })//Add a move routine with higher priority.
                     return executeRoutine()
                 }
@@ -707,8 +768,10 @@ class NonPlayerAgent(val character: String) : GameStateElement()
                 //Select a character to trade with, based on the information known to the character.
                 val tradeCharacter: String
                 val info = parent.informations.values.filter {
-                    it.type == "resource" && it.tgtCharacter != "" && it.tgtCharacter != character && it.tgtResource == routines[0].variables["wantedResource"] && it.amount > 10 && it.knownTo.contains(
-                            character
+                    it.type == "resource" && it.tgtCharacter != "" && it.tgtCharacter != character && it.resources.containsKey(
+                        routines[0].variables["wantedResource"]
+                    ) && it.resources[routines[0].variables["wantedResource"]]!! > 10 && it.knownTo.contains(
+                        character
                     )
                 }
                 tradeCharacter = if (info.isNotEmpty())
@@ -730,21 +793,21 @@ class NonPlayerAgent(val character: String) : GameStateElement()
                     //If the character is in the same place, start a conversation first
 
                     if (parent.ongoingMeetings.none {
-                                it.value.currentCharacters.containsAll(
-                                        listOf(
-                                                character,
-                                                tradeCharacter
-                                        )
+                            it.value.currentCharacters.containsAll(
+                                listOf(
+                                    character,
+                                    tradeCharacter
                                 )
-                            })
+                            )
+                        })
                     {
                         routines.add(
-                                Routine(
-                                        "talkToCharacter",
-                                        routines[0].priority + 10
-                                ).also {
-                                    it.variables["character"] = tradeCharacter
-                                })//Add a move routine with higher priority.
+                            Routine(
+                                "talkToCharacter",
+                                routines[0].priority + 10
+                            ).also {
+                                it.variables["character"] = tradeCharacter
+                            })//Add a move routine with higher priority.
                         return executeRoutine()
                     } else
                     {
@@ -752,9 +815,11 @@ class NonPlayerAgent(val character: String) : GameStateElement()
 
                         trade(character, place).also { trade ->
                             trade.who = tradeCharacter
-                            trade.item2[routines[0].variables["wantedResource"]!!] = parent.characters[tradeCharacter]!!.reliants.size + 1
+                            trade.item2[routines[0].variables["wantedResource"]!!] =
+                                parent.characters[tradeCharacter]!!.reliants.size + 1
                             //Give away unwanted resources
-                            val res = parent.characters[character]!!.resources.keys.filter { it != routines[0].variables["wantedResource"]!! }
+                            val res =
+                                parent.characters[character]!!.resources.keys.filter { it != routines[0].variables["wantedResource"]!! }
                                     .random()
                             trade.item[res] = parent.characters[character]!!.resources[res] ?: 0
                             //Give away information they want
@@ -767,8 +832,8 @@ class NonPlayerAgent(val character: String) : GameStateElement()
                                     routines.removeAt(0)//Remove the current routine.
                                 else
                                     routines[0].variables["desperation"] =
-                                            ((routines[0].variables["desperation"]?.toInt()
-                                                    ?: 0) + 1).toString() //Increase desperation and try again.
+                                        ((routines[0].variables["desperation"]?.toInt()
+                                            ?: 0) + 1).toString() //Increase desperation and try again.
                             }
                             return trade
                         }
@@ -794,10 +859,20 @@ class NonPlayerAgent(val character: String) : GameStateElement()
             routines.add(Routine("rest", 0))
     }
 
-    fun decideTrade(who: String, value: Double /*value of the items I am giving away*/, value2: Double/*value of the items I will receive*/, valuea: Double, valuea2: Double): Boolean
+    fun decideTrade(
+        who: String,
+        value: Double /*value of the items I am giving away*/,
+        value2: Double/*value of the items I will receive*/,
+        valuea: Double,
+        valuea2: Double
+    ): Boolean
     {
-        val friendlinessFactor = 0.5//TODO: this should be determined by the character's trait. More friendly characters are more likely to accept the trade which benefits the other character.
-        return value >= value2 + (parent.getMutuality(character, who) - 50) * (valuea - valuea2) * friendlinessFactor / 100
+        val friendlinessFactor =
+            0.5//TODO: this should be determined by the character's trait. More friendly characters are more likely to accept the trade which benefits the other character.
+        return value >= value2 + (parent.getMutuality(
+            character,
+            who
+        ) - 50) * (valuea - valuea2) * friendlinessFactor / 100
     }
 
     @Serializable

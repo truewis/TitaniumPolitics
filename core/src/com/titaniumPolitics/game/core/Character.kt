@@ -35,7 +35,8 @@ class Character : GameStateElement()
                 else -> value
             }//Max thirst is 100.
         }
-    var reliants = hashSetOf<String>() //Characters that this character is responsible for. If they die, this character will be sad. They consume water and ration every day.
+    var reliants =
+        hashSetOf<String>() //Characters that this character is responsible for. If they die, this character will be sad. They consume water and ration every day.
     val scheduledMeetings: HashMap<String, Meeting>
         get() = parent.scheduledMeetings.filter { it.value.scheduledCharacters.contains(name) } as HashMap<String, Meeting>
     var home = ""
@@ -80,9 +81,13 @@ class Character : GameStateElement()
         //TODO: Action to acquire resources is more valuable.
 
         //Action to repair the character's apparatus is more valuable.
-        if (action.action.javaClass.simpleName == "repair" && parent.parties[parent.places[action.place]!!.responsibleParty]?.members?.contains(name) == true)
+        if (action.action.javaClass.simpleName == "repair" && parent.parties[parent.places[action.place]!!.responsibleParty]?.members?.contains(
+                name
+            ) == true
+        )
         {
-            val urgency = 100.0 - parent.places[action.place]!!.apparatuses.sumOf { it.durability } / parent.places[action.place]!!.apparatuses.size
+            val urgency =
+                100.0 - parent.places[action.place]!!.apparatuses.sumOf { it.durability } / parent.places[action.place]!!.apparatuses.size
             return urgency
         }
 
@@ -102,7 +107,7 @@ class Character : GameStateElement()
             return 2.0
         //Information about valuable resource is more valuable.
         if (info.type == "resource")
-            return itemValue(info.tgtResource) * info.amount
+            return info.resources.keys.sumOf { itemValue(it) * info.resources[it]!! }
         //UnofficialTransfer is more valuable if it is not known to the other character.
         if (info.type == "action" && info.action == "unofficialResourceTransfer" && !info.knownTo.contains(name))
             return 10.0

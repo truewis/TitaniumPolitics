@@ -27,7 +27,17 @@ class examine(override val tgtCharacter: String, override val tgtPlace: String) 
 
                 //Acquire apparatus information.
                 parent.places[tgtPlace]!!.apparatuses.forEach { entry ->
-                    Information(author = tgtCharacter, creationTime = parent.time, type = "apparatusDurability", tgtTime = parent.time, tgtPlace = tgtPlace, tgtApparatus = entry.name, amount = entry.durability).also { it.knownTo.add(tgtCharacter);it.credibility = 100;parent.informations[it.generateName()] = it }
+                    Information(
+                        author = tgtCharacter,
+                        creationTime = parent.time,
+                        type = "apparatusDurability",
+                        tgtTime = parent.time,
+                        tgtPlace = tgtPlace,
+                        tgtApparatus = entry.name,
+                        amount = entry.durability
+                    ).also {
+                        it.knownTo.add(tgtCharacter);it.credibility = 100;parent.informations[it.generateName()] = it
+                    }
 
                 }
             }
@@ -38,17 +48,32 @@ class examine(override val tgtCharacter: String, override val tgtPlace: String) 
                 {//Home is the exception; character's resources are shown instead.
                     println("Resources: ${parent.characters[tgtCharacter]!!.resources}")
                     //Acquire resources information of this character.
-                    parent.characters[tgtCharacter]!!.resources.forEach { entry ->
-                        Information(author = tgtCharacter, creationTime = parent.time, type = "resources", tgtTime = parent.time, tgtCharacter = tgtCharacter, tgtResource = entry.key, amount = entry.value).also { it.knownTo.add(tgtCharacter);it.credibility = 100;parent.informations[it.generateName()] = it }
-
+                    parent.characters[tgtCharacter]!!.resources
+                    Information(
+                        author = tgtCharacter,
+                        creationTime = parent.time,
+                        type = "resources",
+                        tgtTime = parent.time,
+                        tgtCharacter = tgtCharacter,
+                        resources = parent.characters[tgtCharacter]!!.resources
+                    ).also {
+                        it.knownTo.add(tgtCharacter);it.credibility = 100;parent.informations[it.generateName()] = it
                     }
+
                 } else
                 {
                     println("Resources: ${parent.places[tgtPlace]!!.resources}")
                     //Acquire resources information of this place.
-                    parent.places[tgtPlace]!!.resources.forEach { entry ->
-                        Information(author = tgtCharacter, creationTime = parent.time, type = "resources", tgtTime = parent.time, tgtPlace = tgtPlace, tgtResource = entry.key, amount = entry.value).also { it.knownTo.add(tgtCharacter);it.credibility = 100;parent.informations[it.generateName()] = it }
-
+                    Information(
+                        author = tgtCharacter,
+                        creationTime = parent.time,
+                        type = "resources",
+                        tgtTime = parent.time,
+                        tgtPlace = tgtPlace,
+                        resources = parent.places[tgtPlace]!!.resources
+                    ).also {
+                        it.knownTo.add(tgtCharacter);it.credibility = 100;parent.informations[it.generateName()] =
+                        it
                     }
 
                 }
