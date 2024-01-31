@@ -15,7 +15,7 @@ import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
 import ktx.scene2d.Scene2DSkin
 
-class CapsuleStage(val gameState: GameState) : Stage(FitViewport(800.0F, 800.0F))
+class CapsuleStage(val gameState: GameState) : Stage(FitViewport(1920F, 1080F))
 {
     var background = Image()
 
