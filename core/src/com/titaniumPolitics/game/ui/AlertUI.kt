@@ -13,7 +13,7 @@ class AlertUI(var gameState: GameState) : Table(defaultSkin)
 {
     var titleLabel: Label
     private val docList = VerticalGroup()
-    private var isOpen = false;
+    private var isOpen = false
 
     init
     {
