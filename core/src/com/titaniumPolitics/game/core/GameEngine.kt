@@ -876,7 +876,8 @@ class GameEngine(val gameState: GameState)
                 {
                     val resourceName = app.name.substring(0, app.name.length - 7)
                     tgtPlace.resources[resourceName] =
-                        tgtPlace.resources[resourceName]!! * tgtPlace.maxResources[resourceName]!! / tmp[resourceName]!!
+                        (tgtPlace.resources[resourceName]
+                            ?: 0) * tgtPlace.maxResources[resourceName]!! / tmp[resourceName]!!
                     //For example, unbroken storage number 8->7 then lose 1/8 of the resource.
                     //TODO: generate information about the resource loss.
                 }
@@ -1145,7 +1146,7 @@ class GameEngine(val gameState: GameState)
                 actions.add("infoShare")
                 actions.add("appointMeeting")
                 actions.add("wait")
-                actions.add("leaveConference")
+                actions.add("leaveMeeting")
                 return actions
             }
             if (place != "home" && gameState.places[place]!!.characters.count() > 1)

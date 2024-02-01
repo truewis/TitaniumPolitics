@@ -65,6 +65,7 @@ class NonPlayerAgent(val character: String) : GameStateElement()
     //This is a recursive function. It returns the action to be executed.
     private fun executeRoutine(): GameAction
     {
+        val charObject = parent.characters[character]!!//Shortcut
         if (routines.isEmpty())
         {
             whenIdle()
@@ -73,23 +74,15 @@ class NonPlayerAgent(val character: String) : GameStateElement()
         }
         routines.sortByDescending { it.priority }
         //Leave meeting or conference if the routine was changed.
-        if (routines.none { it.name == "attendMeeting" } && parent.ongoingMeetings.any {
-                it.value.currentCharacters.contains(
-                    character
-                )
-            })
+        if (routines.none { it.name == "attendMeeting" } && charObject.currentMeeting != null)
         {
             return leaveMeeting(character, place)
         }
-        if (routines.none { it.name == "attendConference" } && parent.ongoingConferences.any {
-                it.value.currentCharacters.contains(
-                    character
-                )
-            })
+        if (routines.none { it.name == "attendConference" } && charObject.currentMeeting != null)
         {
-            return leaveConference(character, place)
+            return leaveMeeting(character, place)
         }
-        val commands = parent.characters[character]!!.commands
+        val commands = charObject.commands
         //If there is a command that is within the set time window, issued party is trusted enough, and seems to be executable (AvailableActions), start execution routine.
         //Note that the command may not be valid even if it in AvailableActions list. For example, if the character is already at the place, move command is not valid.
         //We should not enter executeCommand routine if it is already in the routine list.
@@ -124,9 +117,9 @@ class NonPlayerAgent(val character: String) : GameStateElement()
                     })//Add a move routine with higher priority.
                     return executeRoutine()
                 }
-                if (parent.characters[character]!!.hunger > 50 || parent.characters[character]!!.thirst > 50)
+                if (charObject.hunger > 50 || charObject.thirst > 50)
                     return eat(character, place)
-                when (parent.characters[character]!!.health)
+                when (charObject.health)
                 {
                     in 0..40 -> return sleep(character, place)
                     else ->
@@ -145,7 +138,7 @@ class NonPlayerAgent(val character: String) : GameStateElement()
             "executeCommand" ->
             {
                 //The condition should be same with the executeCommand entry condition.
-                val executableCommands = parent.characters[character]!!.commands.filter {
+                val executableCommands = charObject.commands.filter {
                     it.executeTime in parent.time - 3..parent.time + 3 && parent.parties[it.issuedParty]!!.integrity > 30.0 && GameEngine.availableActions(
                         parent,
                         it.place,
@@ -193,10 +186,10 @@ class NonPlayerAgent(val character: String) : GameStateElement()
 
                     if (routines[0].variables["movePlace"] == "home")
                     {
-                        if (place != parent.characters[character]!!.home)
+                        if (place != charObject.home)
                         {
                             return move(character, place).also {
-                                it.placeTo = parent.characters[character]!!.home
+                                it.placeTo = charObject.home
                             }//If player is far from the home, go outside the home.
                         } else
                         {
@@ -205,7 +198,7 @@ class NonPlayerAgent(val character: String) : GameStateElement()
                     } else
                     {
                         if (place == "home")//If the character is at home, go outside.
-                            return move(character, place).also { it.placeTo = parent.characters[character]!!.home }
+                            return move(character, place).also { it.placeTo = charObject.home }
                         return move(character, place).also { it.placeTo = routines[0].variables["movePlace"]!! }
                     }
 
@@ -245,7 +238,7 @@ class NonPlayerAgent(val character: String) : GameStateElement()
                             it.what = routines[0].variables["stealResource"]!!
                             it.amount = min(
                                 (resplace.resources["ration"] ?: 0) / 2,
-                                (parent.characters[character]!!.reliants.size + 1) * 7
+                                (charObject.reliants.size + 1) * 7
                             )
                             println("$character is stealing ${it.what} from ${resplace.name}: ${it.amount}")
                             routines.removeAt(0)//Remove the current routine.
@@ -291,7 +284,7 @@ class NonPlayerAgent(val character: String) : GameStateElement()
                     routines.add(Routine("rest", 0))
                     return executeRoutine()
                 }
-                if (parent.characters[character]!!.health < 30 || parent.characters[character]!!.hunger > 80 || parent.characters[character]!!.thirst > 60)
+                if (charObject.health < 30 || charObject.hunger > 80 || charObject.thirst > 60)
                 {
                     routines.removeAt(0)//Remove the current routine.
                     routines.add(Routine("rest", 50)) //Rest with higher priority.
@@ -479,8 +472,8 @@ class NonPlayerAgent(val character: String) : GameStateElement()
                         if (member != null)
                         {
                             //The resource to steal is what the member is short of, either ration or water.
-                            val wantedResource = if ((parent.characters[character]!!.resources["ration"]
-                                    ?: 0) <= rationThreshold * (parent.characters[character]!!.reliants.size + 1)
+                            val wantedResource = if ((charObject.resources["ration"]
+                                    ?: 0) <= rationThreshold * (charObject.reliants.size + 1)
                             ) "ration" else "water"
                             routines[0].intVariables["corruptionTimer"] = parent.time
                             routines.add(
@@ -528,7 +521,7 @@ class NonPlayerAgent(val character: String) : GameStateElement()
             "attendMeeting" ->
             {
                 //If the meeting is over, leave the routine.
-                if (parent.ongoingMeetings.none { it.value.currentCharacters.contains(character) })
+                if (charObject.currentMeeting == null)
                 {
                     routines.removeAt(0)//Remove the current routine.
                     return executeRoutine()
@@ -547,13 +540,13 @@ class NonPlayerAgent(val character: String) : GameStateElement()
             {
 
                 //If the conference is over, leave the routine.
-                if (parent.ongoingConferences.none { it.value.currentCharacters.contains(character) })
+                if (charObject.currentMeeting == null)
                 {
                     routines.removeAt(0)//Remove the current routine.
                     return executeRoutine()
                 }
                 val conf =
-                    parent.ongoingConferences.filter { it.value.currentCharacters.contains(character) }.values.first()
+                    charObject.currentMeeting!!
                 //If two hours has passed since the meeting started, leave the meeting. TODO: what if the meeting has started late?
                 if (routines[0].intVariables["time"]!! + 4 <= parent.time)
                 {
@@ -819,9 +812,9 @@ class NonPlayerAgent(val character: String) : GameStateElement()
                                 parent.characters[tradeCharacter]!!.reliants.size + 1
                             //Give away unwanted resources
                             val res =
-                                parent.characters[character]!!.resources.keys.filter { it != routines[0].variables["wantedResource"]!! }
+                                charObject.resources.keys.filter { it != routines[0].variables["wantedResource"]!! }
                                     .random()
-                            trade.item[res] = parent.characters[character]!!.resources[res] ?: 0
+                            trade.item[res] = charObject.resources[res] ?: 0
                             //Give away information they want
                             trade.info = parent.informations.values.filter {
                                 it.tgtCharacter == tradeCharacter && it.knownTo.contains(character)

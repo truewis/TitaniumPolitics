@@ -45,6 +45,10 @@ class Character : GameStateElement()
     val place
         get() = parent.places.values.first { it.characters.contains(name) }
 
+    val currentMeeting
+        get() = parent.ongoingMeetings.values.firstOrNull { it.currentCharacters.contains(name) }
+            ?: parent.ongoingConferences.values.firstOrNull { it.currentCharacters.contains(name) }
+
     val history = hashMapOf<Int, String>()
 
     //TODO: value may be affected by power dynamics.
