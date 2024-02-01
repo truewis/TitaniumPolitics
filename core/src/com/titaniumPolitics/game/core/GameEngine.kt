@@ -1146,7 +1146,7 @@ class GameEngine(val gameState: GameState)
                 actions.add("infoShare")
                 actions.add("appointMeeting")
                 actions.add("wait")
-                actions.add("leaveConference")
+                actions.add("leaveMeeting")
                 return actions
             }
             if (place != "home" && gameState.places[place]!!.characters.count() > 1)

@@ -5,19 +5,22 @@ class leaveMeeting(override val tgtCharacter: String, override val tgtPlace: Str
 
     override fun execute()
     {
-        val meetingName = parent.ongoingMeetings.filter { it.value.currentCharacters.contains(tgtCharacter) }.keys.first()
-        parent.ongoingMeetings[meetingName]!!.currentCharacters.remove(tgtCharacter)
-        if (parent.ongoingMeetings[meetingName]!!.currentCharacters.count() <= 1)
+        val meeting = parent.characters[tgtCharacter]!!.currentMeeting!!
+        val meetingName = parent.ongoingMeetings.filter { it.value == meeting }.keys.firstOrNull()
+            ?: parent.ongoingConferences.filter { it.value == meeting }.keys.first()
+        meeting.currentCharacters.remove(tgtCharacter)
+        if (meeting.currentCharacters.count() <= 1)
         {
             println("Ending meeting $meetingName")
-            parent.ongoingMeetings.remove(meetingName//End the meeting if it has less than 2 participants
+            parent.ongoingMeetings.remove(
+                meetingName//End the meeting if it has less than 2 participants
             )
         }
     }
 
     override fun isValid(): Boolean
     {
-        return parent.ongoingMeetings.any { it.value.currentCharacters.contains(tgtCharacter) }
+        return parent.characters[tgtCharacter]!!.currentMeeting != null
     }
 
 }
