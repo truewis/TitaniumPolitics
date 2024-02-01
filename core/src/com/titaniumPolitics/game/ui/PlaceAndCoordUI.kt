@@ -3,24 +3,29 @@ package com.titaniumPolitics.game.ui
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.Table
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton
 import com.titaniumPolitics.game.core.GameState
 import ktx.scene2d.Scene2DSkin.defaultSkin
 
-class Clock(gameState: GameState) : Table(defaultSkin)
+class PlaceAndCoordUI(gameState: GameState) : Table(defaultSkin)
 {
     var l: Label
+    var c: Label
 
     init
     {
         l = Label(formatTime(gameState.time), defaultSkin, "console")
-        l.setFontScale(2f)
-        val b = TextButton("TIME", defaultSkin)
-        add(b)
+        l.setFontScale(1f)
+        c = Label(formatTime(gameState.time), defaultSkin, "console")
+        c.setFontScale(1f)
         add(l)
+        row()
+        add(c)
 
-        gameState.timeChanged += { _, y ->
-            Gdx.app.postRunnable { l.setText(formatTime(y)) }
+        gameState.updateUI += { x ->
+            Gdx.app.postRunnable {
+                l.setText(x.characters[x.playerAgent]!!.place.name)
+                c.setText(x.characters[x.playerAgent]!!.place.name.length.toString())//This is a test. It should be the coordinates of the place.
+            }
         }
     }
 

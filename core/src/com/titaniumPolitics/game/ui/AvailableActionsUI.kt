@@ -7,8 +7,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.*
 import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.ui.ClockUI.Companion.formatTime
 import ktx.scene2d.*
+import ktx.scene2d.Scene2DSkin.defaultSkin
 
-class QuestUI(var gameState: GameState) : Table(Scene2DSkin.defaultSkin)
+class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin)
 {
     var titleLabel: Label
     private val docList = VerticalGroup()
@@ -16,7 +17,7 @@ class QuestUI(var gameState: GameState) : Table(Scene2DSkin.defaultSkin)
 
     init
     {
-        titleLabel = Label("Quest:", skin, "trnsprtConsole")
+        titleLabel = Label("AvailableActions", skin, "trnsprtConsole")
         titleLabel.setFontScale(2f)
         add(titleLabel).growX()
         row()
@@ -39,7 +40,7 @@ class QuestUI(var gameState: GameState) : Table(Scene2DSkin.defaultSkin)
             if (tobj.completed != 0 && tobj.completed + 1 < gameState.time) return@forEach
             val t = scene2d.table {
                 if (tobj.completed != 0) image(
-                    (this@QuestUI.stage as CapsuleStage).assetManager.get(
+                    (this@AvailableActionsUI.stage as CapsuleStage).assetManager.get(
                         "data/dev/capsuleDevBoxCheck.png",
                         Texture::class.java
                     )
@@ -47,7 +48,7 @@ class QuestUI(var gameState: GameState) : Table(Scene2DSkin.defaultSkin)
                     color = Color.GREEN
                     it.size(36f)
                 } else image(
-                    (this@QuestUI.stage as CapsuleStage).assetManager.get(
+                    (this@AvailableActionsUI.stage as CapsuleStage).assetManager.get(
                         "data/dev/capsuleDevBox.png",
                         Texture::class.java
                     )

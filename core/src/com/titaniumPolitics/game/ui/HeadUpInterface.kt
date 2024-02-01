@@ -3,30 +3,42 @@ package com.titaniumPolitics.game.ui
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.utils.Align
 import com.titaniumPolitics.game.core.GameState
-import ktx.scene2d.Scene2DSkin
+import ktx.scene2d.*
 
-class HeadUpInterface(val gameState: GameState) : Table(Scene2DSkin.defaultSkin)
+class HeadUpInterface(val gameState: GameState) : Table(Scene2DSkin.defaultSkin), KTable
 {
-    val todoBox: QuestUI
 
     init
     {
-
+        debug()
         instance = this
-        todoBox = QuestUI(Scene2DSkin.defaultSkin, gameState)
-        val leftSeparator = Table()
-        leftSeparator.add(HealthMeter(gameState)).align(Align.topRight)
-        leftSeparator.add(WillMeter(gameState)).align(Align.topRight)
-        leftSeparator.add(ApprovalMeter(gameState)).align(Align.topRight)
-        leftSeparator.add(Clock(gameState)).align(Align.topRight)
-        leftSeparator.add(QuickSave(gameState)).align(Align.topRight)
+        stack { cell ->
+            cell.grow()
+            table {
+                val leftSeparator = table {
+                    it.fill()
+                    add(AlertUI(this@HeadUpInterface.gameState)).align(Align.bottomLeft).expandY()
+                    row()
+                    add(AssistantUI(this@HeadUpInterface.gameState)).align(Align.bottomLeft)
+                }
 
-        leftSeparator.row()
-        leftSeparator.add(todoBox).colspan(5).growX().align(Align.topLeft)
-        leftSeparator.row()
-        leftSeparator.add().grow()
-        leftSeparator.debug()
-        add(leftSeparator).align(Align.topLeft).grow()
+                val centerSeparator = table {
+                    it.grow()
+
+                }
+                val rightSeparator = table {
+                    it.fill()
+                    add(CharStatusUI(this@HeadUpInterface.gameState)).align(Align.bottomRight).growY().fillX()
+                }
+            }
+            container {
+                align(Align.bottom)
+                addActor(AvailableActionsUI(this@HeadUpInterface.gameState))
+            }
+
+
+        }
+
 
     }
 

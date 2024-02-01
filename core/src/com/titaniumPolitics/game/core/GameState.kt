@@ -29,8 +29,11 @@ class GameState
     val day: Int
         get() = _time / 48
 
+
     @Transient
-    var timeChanged = arrayListOf<(Int, Int) -> Unit>()
+            /*Old time is the time before the change. New time is the time after the change.*/
+    var timeChanged =
+        arrayListOf<(Int, Int) -> Unit>()
     val pop: Int
         get() = parties.values.sumOf { it.members.size + it.anonymousMembers } + idlePop
     val pickRandomParty: Party
