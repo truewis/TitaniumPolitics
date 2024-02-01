@@ -14,7 +14,7 @@ class ClockUI(gameState: GameState) : Table(defaultSkin)
     init
     {
         l = Label(formatTime(gameState.time), defaultSkin, "console")
-        l.setFontScale(2f)
+        l.setFontScale(4f)
         add(l)
 
         gameState.timeChanged += { _, y ->
@@ -29,7 +29,7 @@ class ClockUI(gameState: GameState) : Table(defaultSkin)
             val t1 = time / 48
             val t2 = (time - t1 * 48) / 2
             val t3 = if (time % 2 == 0) "00" else "30"
-            return "${t1}D ${t2.toString().padStart(2, '0')}:${t3}"
+            return "${t2.toString().padStart(2, '0')}:${t3}"
         }
     }
 }

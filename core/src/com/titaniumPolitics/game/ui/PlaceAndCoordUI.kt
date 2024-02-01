@@ -14,12 +14,12 @@ class PlaceAndCoordUI(gameState: GameState) : Table(defaultSkin)
     init
     {
         l = Label(formatTime(gameState.time), defaultSkin, "console")
-        l.setFontScale(1f)
+        l.setFontScale(2f)
         c = Label(formatTime(gameState.time), defaultSkin, "console")
-        c.setFontScale(1f)
-        add(l)
+        c.setFontScale(2f)
+        add(l).growX()
         row()
-        add(c)
+        add(c).growX()
 
         gameState.updateUI += { x ->
             Gdx.app.postRunnable {
