@@ -49,6 +49,7 @@ class CapsuleStage(val gameState: GameState) : Stage(FitViewport(1920F, 1080F))
         addActor(rootStack)
         addActor(logBox)
         logBox.setFillParent(true)
+        logBox.isVisible = false
         hud = HeadUpInterface(gameState)
         addActor(hud)
         hud.setFillParent(true)

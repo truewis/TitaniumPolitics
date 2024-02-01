@@ -35,45 +35,45 @@ class AlertUI(var gameState: GameState) : Table(defaultSkin)
     fun refreshList()
     {
         docList.clear()
-        gameState.todo.dataBase.forEach { tobj ->
-            if (tobj.due != 0 && tobj.due + 1 < gameState.time) return@forEach
-            if (tobj.completed != 0 && tobj.completed + 1 < gameState.time) return@forEach
-            val t = scene2d.table {
-                if (tobj.completed != 0) image(
-                    (this@AlertUI.stage as CapsuleStage).assetManager.get(
-                        "data/dev/capsuleDevBoxCheck.png",
-                        Texture::class.java
-                    )
-                ) {
-                    color = Color.GREEN
-                    it.size(36f)
-                } else image(
-                    (this@AlertUI.stage as CapsuleStage).assetManager.get(
-                        "data/dev/capsuleDevBox.png",
-                        Texture::class.java
-                    )
-                ) {
-                    color = Color.GREEN
-                    it.size(36f)
-                }
-                label(tobj.title, "trnsprtConsole") {
-                    it.growX()
-                    setFontScale(2f)
-                }
-                if (tobj.due != 0 && tobj.completed == 0)
-                {
-                    label(formatTime(tobj.due), "trnsprtConsole") {
-                        if (tobj.due < gameState.time) color = Color.RED
-                        setFontScale(2f)
-                        it.width(150f)
-                    }
-                    val l = Label(formatTime(tobj.due), skin, "trnsprtConsole")
-                    if (tobj.due < gameState.time) l.color = Color.RED
-                    l.setFontScale(2f)
-                }
-            }
-            docList.addActor(t)
-        }
+//        gameState.todo.dataBase.forEach { tobj ->
+//            if (tobj.due != 0 && tobj.due + 1 < gameState.time) return@forEach
+//            if (tobj.completed != 0 && tobj.completed + 1 < gameState.time) return@forEach
+//            val t = scene2d.table {
+//                if (tobj.completed != 0) image(
+//                    (this@AlertUI.stage as CapsuleStage).assetManager.get(
+//                        "data/dev/capsuleDevBoxCheck.png",
+//                        Texture::class.java
+//                    )
+//                ) {
+//                    color = Color.GREEN
+//                    it.size(36f)
+//                } else image(
+//                    (this@AlertUI.stage as CapsuleStage).assetManager.get(
+//                        "data/dev/capsuleDevBox.png",
+//                        Texture::class.java
+//                    )
+//                ) {
+//                    color = Color.GREEN
+//                    it.size(36f)
+//                }
+//                label(tobj.title, "trnsprtConsole") {
+//                    it.growX()
+//                    setFontScale(2f)
+//                }
+//                if (tobj.due != 0 && tobj.completed == 0)
+//                {
+//                    label(formatTime(tobj.due), "trnsprtConsole") {
+//                        if (tobj.due < gameState.time) color = Color.RED
+//                        setFontScale(2f)
+//                        it.width(150f)
+//                    }
+//                    val l = Label(formatTime(tobj.due), skin, "trnsprtConsole")
+//                    if (tobj.due < gameState.time) l.color = Color.RED
+//                    l.setFontScale(2f)
+//                }
+//            }
+//            docList.addActor(t)
+//        }
         isVisible = !docList.children.isEmpty
 
     }

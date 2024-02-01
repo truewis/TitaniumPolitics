@@ -5,27 +5,22 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton
 import com.titaniumPolitics.game.core.GameState
+import ktx.scene2d.KTable
 import ktx.scene2d.Scene2DSkin.defaultSkin
+import ktx.scene2d.image
 
-class CharStatusUI(gameState: GameState) : Table(defaultSkin)
+class CharStatusUI(gameState: GameState) : Table(defaultSkin), KTable
 {
-    var l: Label
 
     init
     {
-        l = Label("", defaultSkin, "trnsprtConsole")
-        l.setFontScale(2f)
-        val b = TextButton("HP", defaultSkin)
-        add(b)
-        add(l)
-
-        gameState.updateUI += { y ->
-            Gdx.app.postRunnable { setValue(y.characters[gameState.playerAgent]!!.health) }
+        add(HealthMeter(gameState)).fill()
+        row()
+        add(WillMeter(gameState)).fill()
+        row()
+        image(defaultSkin.getDrawable("capsuleDevDanger")) {
+            it.size(200f)
         }
     }
 
-    fun setValue(value: Int)
-    {
-        l.setText(value.toString().padStart(2, '0'))
-    }
 }

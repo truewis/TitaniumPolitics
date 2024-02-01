@@ -28,7 +28,7 @@ class HeadUpInterface(val gameState: GameState) : Table(Scene2DSkin.defaultSkin)
                 }
                 val rightSeparator = table {
                     it.fill()
-                    add(CharStatusUI(this@HeadUpInterface.gameState)).align(Align.bottomRight).growY().fillX()
+                    add(CharStatusUI(this@HeadUpInterface.gameState)).align(Align.bottomRight).expandY()
                 }
             }
             container {
