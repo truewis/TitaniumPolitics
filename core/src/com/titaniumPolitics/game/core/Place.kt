@@ -10,6 +10,7 @@ class Place : GameStateElement()
     var resources = hashMapOf<String, Int>()
     var connectedPlaces = arrayListOf<String>()
     var plannedWorker = 0
+    var coordinates = Coordinate3D(0, 0, 0)
     val currentWorker: Int get() = apparatuses.sumOf { it.currentWorker }
     val maxResources: HashMap<String, Int>
         get()
@@ -42,12 +43,16 @@ class Place : GameStateElement()
     var apparatuses = hashSetOf<Apparatus>()
     var characters = hashSetOf<String>()
     var responsibleParty = "" //Determines which party is responsible for the place.
-    var isAccidentScene = false //If true, the place is closed and no one can enter. Can be cleared by clearAccidentScene.
-    var accidentInformations = hashMapOf<String, Information>()//Information about the last accident. Non empty only when isAccidentScene is true.
+    var isAccidentScene =
+        false //If true, the place is closed and no one can enter. Can be cleared by clearAccidentScene.
+    var accidentInformations =
+        hashMapOf<String, Information>()//Information about the last accident. Non empty only when isAccidentScene is true.
+
     override fun injectParent(gameState: GameState)
     {
         super.injectParent(gameState)
-        plannedWorker = apparatuses.sumOf { it.idealWorker }//TODO: this is a temporary solution to set up the planned worker.
+        plannedWorker =
+            apparatuses.sumOf { it.idealWorker }//TODO: this is a temporary solution to set up the planned worker.
         println("Planned worker of $name: $plannedWorker")
     }
 

@@ -36,7 +36,7 @@ class MapUI(val gameState: GameState) : Table(Scene2DSkin.defaultSkin), KTable
                 {
                     override fun clicked(event: com.badlogic.gdx.scenes.scene2d.InputEvent?, x: Float, y: Float)
                     {
-                        isVisible = false
+                        instance.isVisible = false
                     }
                 })
             }

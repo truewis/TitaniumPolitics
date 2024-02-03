@@ -76,6 +76,16 @@ class GameState
     fun initialize()
     {
         injectDependency()
+        //Test Code
+        places.forEach {
+            //Assign random coordinate within some range,
+            it.value.coordinates = Coordinate3D(
+                (Math.random() * 10).toInt(),
+                (Math.random() * 10).toInt(),
+                (Math.random() * 10).toInt()
+            )
+
+        }
         characters.forEach { char ->
             if (places.none { it.value.characters.contains(char.key) })
                 places["home"]!!.characters.add(char.key)
