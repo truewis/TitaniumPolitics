@@ -26,7 +26,7 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin)
         docList.grow()
 
         add(docScr).grow()
-        gameState.timeChanged += { _, _ -> Gdx.app.postRunnable { refreshList(); } }
+        gameState.updateUI += { _ -> Gdx.app.postRunnable { refreshList(); } }
     }
 
 
