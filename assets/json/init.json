@@ -8,84 +8,64 @@
       "character": "charlie"
     },
     "seefy": {
-        "character": "seefy"
-
+      "character": "seefy"
     },
     "infy": {
-        "character": "infy"
-
+      "character": "infy"
     },
-    "mini":  {
-        "character": "mini"
-
+    "mini": {
+      "character": "mini"
     },
     "eddy": {
-        "character": "eddy"
-
+      "character": "eddy"
     },
     "inddy": {
-        "character": "inddy"
-
+      "character": "inddy"
     },
     "welly": {
-        "character": "welly"
-
+      "character": "welly"
     },
     "hhh": {
-        "character": "hhh"
-
+      "character": "hhh"
     },
     "iii": {
-        "character": "iii"
-
+      "character": "iii"
     },
     "friend1": {
-        "character": "friend1"
-
+      "character": "friend1"
     },
     "friend2": {
-        "character": "friend2"
-
+      "character": "friend2"
     },
     "friend3": {
-        "character": "friend3"
-
+      "character": "friend3"
     },
     "mini1": {
-        "character": "mini1"
-
+      "character": "mini1"
     },
     "mini2": {
-        "character": "mini2"
-
+      "character": "mini2"
     },
     "doci1": {
-        "character": "doci1"
-
+      "character": "doci1"
     },
     "doci2": {
-        "character": "doci2"
-
+      "character": "doci2"
     },
     "selli1": {
-        "character": "selli1"
-
+      "character": "selli1"
     },
     "selli2": {
-        "character": "selli2"
-
+      "character": "selli2"
     },
     "oldie": {
-        "character": "oldie"
-
+      "character": "oldie"
     },
     "ctrler": {
-        "character": "ctrler"
-
+      "character": "ctrler"
     },
     "observer": {
-        "character": "observer"
-
+      "character": "observer"
     }
   },
   "characters": {
@@ -424,16 +404,17 @@
         "hospitalWest"
       ],
       "plannedWorker": 32,
-      "apparatuses": [{
-        "name": "wiredCommunicationDevice",
-        "durability": 95,
-        "baseDanger": 2e-4,
-        "idealWorker": 32,
-        "currentWorker": 0,
-        "idealConsumption": {
-          "energy": 1
-        }
-      },
+      "apparatuses": [
+        {
+          "name": "wiredCommunicationDevice",
+          "durability": 95,
+          "baseDanger": 2e-4,
+          "idealWorker": 32,
+          "currentWorker": 0,
+          "idealConsumption": {
+            "energy": 1
+          }
+        },
         {
           "name": "oxygenStorage",
           "durability": 95,
@@ -454,16 +435,14 @@
           "baseDanger": 2e-4,
           "idealWorker": 5,
           "currentWorker": 0
-        }
-      ,
+        },
         {
           "name": "energyStorage",
           "durability": 95,
           "baseDanger": 2e-4,
           "idealWorker": 10,
           "currentWorker": 0
-        }
-      ,
+        },
         {
           "name": "energyStorage",
           "durability": 95,
@@ -492,25 +471,27 @@
         "miningSchool"
       ],
       "plannedWorker": 40,
-      "apparatuses": [{
-        "name": "beds",
-        "durability": 95,
-        "baseDanger": 1e-4,
-        "idealWorker": 20,
-        "currentWorker": 0,
-        "idealConsumption": {
-          "energy": 1
-        }
-      },{
-        "name": "beds",
-        "durability": 95,
-        "baseDanger": 1e-4,
-        "idealWorker": 20,
-        "currentWorker": 0,
-        "idealConsumption": {
-          "energy": 1
-        }
-      },
+      "apparatuses": [
+        {
+          "name": "beds",
+          "durability": 95,
+          "baseDanger": 1e-4,
+          "idealWorker": 20,
+          "currentWorker": 0,
+          "idealConsumption": {
+            "energy": 1
+          }
+        },
+        {
+          "name": "beds",
+          "durability": 95,
+          "baseDanger": 1e-4,
+          "idealWorker": 20,
+          "currentWorker": 0,
+          "idealConsumption": {
+            "energy": 1
+          }
+        },
         {
           "name": "oxygenStorage",
           "durability": 95,
@@ -531,8 +512,14 @@
           "baseDanger": 2e-4,
           "idealWorker": 5,
           "currentWorker": 0
-        }
-      ,
+        },
+        {
+          "name": "energyStorage",
+          "durability": 95,
+          "baseDanger": 2e-4,
+          "idealWorker": 10,
+          "currentWorker": 0
+        },
         {
           "name": "energyStorage",
           "durability": 95,
@@ -540,14 +527,7 @@
           "idealWorker": 10,
           "currentWorker": 0
         }
-      ,
-        {
-          "name": "energyStorage",
-          "durability": 95,
-          "baseDanger": 2e-4,
-          "idealWorker": 10,
-          "currentWorker": 0
-        }],
+      ],
       "characters": [
       ],
       "responsibleParty": "welfare",
@@ -566,25 +546,27 @@
         "blackMine"
       ],
       "plannedWorker": 40,
-      "apparatuses": [{
-        "name": "beds",
-        "durability": 95,
-        "baseDanger": 1e-4,
-        "idealWorker": 20,
-        "currentWorker": 0,
-        "idealConsumption": {
-          "energy": 1
-        }
-      },{
-        "name": "beds",
-        "durability": 95,
-        "baseDanger": 1e-4,
-        "idealWorker": 20,
-        "currentWorker": 0,
-        "idealConsumption": {
-          "energy": 1
-        }
-      },
+      "apparatuses": [
+        {
+          "name": "beds",
+          "durability": 95,
+          "baseDanger": 1e-4,
+          "idealWorker": 20,
+          "currentWorker": 0,
+          "idealConsumption": {
+            "energy": 1
+          }
+        },
+        {
+          "name": "beds",
+          "durability": 95,
+          "baseDanger": 1e-4,
+          "idealWorker": 20,
+          "currentWorker": 0,
+          "idealConsumption": {
+            "energy": 1
+          }
+        },
         {
           "name": "oxygenStorage",
           "durability": 95,
@@ -605,8 +587,14 @@
           "baseDanger": 2e-4,
           "idealWorker": 5,
           "currentWorker": 0
-        }
-      ,
+        },
+        {
+          "name": "energyStorage",
+          "durability": 95,
+          "baseDanger": 2e-4,
+          "idealWorker": 10,
+          "currentWorker": 0
+        },
         {
           "name": "energyStorage",
           "durability": 95,
@@ -614,14 +602,7 @@
           "idealWorker": 10,
           "currentWorker": 0
         }
-      ,
-        {
-          "name": "energyStorage",
-          "durability": 95,
-          "baseDanger": 2e-4,
-          "idealWorker": 10,
-          "currentWorker": 0
-        }],
+      ],
       "characters": [
       ],
       "responsibleParty": "welfare",
@@ -643,33 +624,35 @@
         "rescueStationNorth"
       ],
       "plannedWorker": 480,
-      "apparatuses": [{
-        "name": "metalShaft",
-        "durability": 95,
-        "baseDanger": 8e-4,
-        "idealWorker": 160,
-        "currentWorker": 0,
-        "idealProduction": {
+      "apparatuses": [
+        {
+          "name": "metalShaft",
+          "durability": 95,
+          "baseDanger": 8e-4,
+          "idealWorker": 160,
+          "currentWorker": 0,
+          "idealProduction": {
             "lightMetal": 100,
-          "heavyMetal": 20,
-          "rareMetal": 1
+            "heavyMetal": 20,
+            "rareMetal": 1
+          },
+          "idealConsumption": {
+            "energy": 2
+          }
         },
-        "idealConsumption": {
-          "energy": 2
-        }
-      },{
-        "name": "liquidShaft",
-        "durability": 95,
-        "baseDanger": 10e-4,
-        "idealWorker": 160,
-        "currentWorker": 0,
-        "idealProduction": {
-          "organics": 100
+        {
+          "name": "liquidShaft",
+          "durability": 95,
+          "baseDanger": 10e-4,
+          "idealWorker": 160,
+          "currentWorker": 0,
+          "idealProduction": {
+            "organics": 100
+          },
+          "idealConsumption": {
+            "energy": 2
+          }
         },
-        "idealConsumption": {
-          "energy": 2
-        }
-      },
         {
           "name": "glassShaft",
           "durability": 95,
@@ -725,7 +708,6 @@
           "idealWorker": 10,
           "currentWorker": 0
         }
-
       ],
       "characters": [
       ],
@@ -748,35 +730,37 @@
         "rescueStationSouth"
       ],
       "plannedWorker": 480,
-      "apparatuses": [{
-        "name": "metalShaft",
-        "durability": 95,
-        "baseDanger": 8e-4,
-        "idealWorker": 160,
-        "currentWorker": 0,
-        "idealProduction": {
-          "lightMetal": 60,
-          "heavyMetal": 40,
-          "rareMetal": 1
+      "apparatuses": [
+        {
+          "name": "metalShaft",
+          "durability": 95,
+          "baseDanger": 8e-4,
+          "idealWorker": 160,
+          "currentWorker": 0,
+          "idealProduction": {
+            "lightMetal": 60,
+            "heavyMetal": 40,
+            "rareMetal": 1
+          },
+          "idealConsumption": {
+            "energy": 2
+          }
         },
-        "idealConsumption": {
-          "energy": 2
-        }
-      },{
-        "name": "liquidShaft",
-        "durability": 95,
-        "baseDanger": 10e-4,
-        "idealWorker": 160,
-        "currentWorker": 0,
-        "idealProduction": {
-          "organics": 80,
-          "hydrogen": 20,
-          "water": 20
+        {
+          "name": "liquidShaft",
+          "durability": 95,
+          "baseDanger": 10e-4,
+          "idealWorker": 160,
+          "currentWorker": 0,
+          "idealProduction": {
+            "organics": 80,
+            "hydrogen": 20,
+            "water": 20
+          },
+          "idealConsumption": {
+            "energy": 2
+          }
         },
-        "idealConsumption": {
-          "energy": 2
-        }
-      },
         {
           "name": "glassShaft",
           "durability": 95,
@@ -810,8 +794,21 @@
           "baseDanger": 2e-4,
           "idealWorker": 5,
           "currentWorker": 0
-        }
-      ,
+        },
+        {
+          "name": "energyStorage",
+          "durability": 95,
+          "baseDanger": 2e-4,
+          "idealWorker": 10,
+          "currentWorker": 0
+        },
+        {
+          "name": "energyStorage",
+          "durability": 95,
+          "baseDanger": 2e-4,
+          "idealWorker": 10,
+          "currentWorker": 0
+        },
         {
           "name": "energyStorage",
           "durability": 95,
@@ -819,22 +816,7 @@
           "idealWorker": 10,
           "currentWorker": 0
         }
-      ,
-        {
-          "name": "energyStorage",
-          "durability": 95,
-          "baseDanger": 2e-4,
-          "idealWorker": 10,
-          "currentWorker": 0
-        }
-      ,
-        {
-          "name": "energyStorage",
-          "durability": 95,
-          "baseDanger": 2e-4,
-          "idealWorker": 10,
-          "currentWorker": 0
-        }],
+      ],
       "characters": [
       ],
       "responsibleParty": "mining",
@@ -863,8 +845,7 @@
           "idealConsumption": {
             "energy": 1
           }
-        }
-      ,
+        },
         {
           "name": "energyStorage",
           "durability": 95,
@@ -928,8 +909,7 @@
           "baseDanger": 2e-4,
           "idealWorker": 5,
           "currentWorker": 0
-        }
-      ,
+        },
         {
           "name": "energyStorage",
           "durability": 95,
@@ -1015,8 +995,7 @@
           "baseDanger": 2e-4,
           "idealWorker": 5,
           "currentWorker": 0
-        }
-      ,
+        },
         {
           "name": "energyStorage",
           "durability": 95,
@@ -1114,7 +1093,7 @@
         "water": 0
       },
       "connectedPlaces": [
-        "rescueCenterNorth"
+        "rescueStationNorth"
       ],
       "plannedWorker": 5,
       "apparatuses": [
@@ -1177,8 +1156,7 @@
           "idealProduction": {
             "water": 100
           }
-        }
-      ,
+        },
         {
           "name": "energyStorage",
           "durability": 95,
@@ -1276,17 +1254,15 @@
           },
           "idealConsumption": {
             "energy": 1,
-
             "hydrogen": 8
           },
           "idealDistribution": {
             "oxygen": 70
           },
-            "idealProduction": {
-                "organics": 38
-            }
-        }
-      ,
+          "idealProduction": {
+            "organics": 38
+          }
+        },
         {
           "name": "energyStorage",
           "durability": 95,
@@ -1351,10 +1327,10 @@
           "idealDistribution": {
             "oxygen": 70
           },
-            "idealConsumption": {
-                "water": 70,
-              "energy": 2
-            }
+          "idealConsumption": {
+            "water": 70,
+            "energy": 2
+          }
         },
         {
           "name": "electrolysisArray",
@@ -1369,16 +1345,14 @@
             "water": 70,
             "energy": 2
           }
-        }
-      ,
+        },
         {
           "name": "energyStorage",
           "durability": 95,
           "baseDanger": 2e-4,
           "idealWorker": 10,
           "currentWorker": 0
-        }
-      ,
+        },
         {
           "name": "energyStorage",
           "durability": 95,
@@ -1544,7 +1518,6 @@
       "workHoursStart": 0,
       "workHoursEnd": 24
     },
-
     "miningSchool": {
       "name": "miningSchool",
       "resources": {
@@ -1586,8 +1559,7 @@
           "baseDanger": 2e-4,
           "idealWorker": 5,
           "currentWorker": 0
-        }
-      ,
+        },
         {
           "name": "energyStorage",
           "durability": 95,
@@ -1642,8 +1614,7 @@
           "baseDanger": 2e-4,
           "idealWorker": 5,
           "currentWorker": 0
-        }
-      ,
+        },
         {
           "name": "energyStorage",
           "durability": 95,
@@ -1718,16 +1689,14 @@
           "baseDanger": 2e-4,
           "idealWorker": 5,
           "currentWorker": 0
-        }
-      ,
+        },
         {
           "name": "energyStorage",
           "durability": 95,
           "baseDanger": 2e-4,
           "idealWorker": 10,
           "currentWorker": 0
-        }
-      ,
+        },
         {
           "name": "energyStorage",
           "durability": 95,
@@ -1784,16 +1753,14 @@
           "baseDanger": 6e-4,
           "idealWorker": 5,
           "currentWorker": 0
-        }
-      ,
+        },
         {
           "name": "energyStorage",
           "durability": 95,
           "baseDanger": 2e-4,
           "idealWorker": 10,
           "currentWorker": 0
-        }
-      ,
+        },
         {
           "name": "energyStorage",
           "durability": 95,
@@ -1849,16 +1816,14 @@
           "baseDanger": 6e-4,
           "idealWorker": 5,
           "currentWorker": 0
-        }
-      ,
+        },
         {
           "name": "energyStorage",
           "durability": 95,
           "baseDanger": 2e-4,
           "idealWorker": 10,
           "currentWorker": 0
-        }
-      ,
+        },
         {
           "name": "energyStorage",
           "durability": 95,
@@ -1893,12 +1858,12 @@
           "baseDanger": 1e-4,
           "idealWorker": 100,
           "currentWorker": 0,
-            "idealDistribution": {
-                "ration": 100
-            },
-            "idealConsumption": {
-                "ration": 100
-            }
+          "idealDistribution": {
+            "ration": 100
+          },
+          "idealConsumption": {
+            "ration": 100
+          }
         },
         {
           "name": "exchangePost",
@@ -1939,8 +1904,7 @@
           "baseDanger": 2e-4,
           "idealWorker": 5,
           "currentWorker": 0
-        }
-      ,
+        },
         {
           "name": "energyStorage",
           "durability": 95,
@@ -1955,7 +1919,6 @@
       "workHoursStart": 9,
       "workHoursEnd": 17
     },
-
     "squareNorth": {
       "name": "squareNorth",
       "resources": {
@@ -2150,8 +2113,7 @@
           "baseDanger": 2e-4,
           "idealWorker": 5,
           "currentWorker": 0
-        }
-      ,
+        },
         {
           "name": "energyStorage",
           "durability": 95,
@@ -2208,8 +2170,7 @@
           "baseDanger": 2e-4,
           "idealWorker": 5,
           "currentWorker": 0
-        }
-      ,
+        },
         {
           "name": "energyStorage",
           "durability": 95,
@@ -2287,8 +2248,7 @@
           "baseDanger": 2e-4,
           "idealWorker": 5,
           "currentWorker": 0
-        }
-      ,
+        },
         {
           "name": "energyStorage",
           "durability": 95,
@@ -2327,7 +2287,17 @@
     "home": {
       "name": "home",
       "characters": [
-        "oldie", "charlie", "seefy", "infy", "mini","eddy","inddy","welly","hhh","iii","Rui"
+        "oldie",
+        "charlie",
+        "seefy",
+        "infy",
+        "mini",
+        "eddy",
+        "inddy",
+        "welly",
+        "hhh",
+        "iii",
+        "Rui"
       ]
     }
   },
@@ -2336,30 +2306,53 @@
       "name": "triumvirate",
       "anonymousMembers": 0,
       "leader": "ctrler",
-      "members": ["oldie", "ctrler", "observer"],
-      "commands": ["investigateAccidentScene", "clearAccidentScene"],
-        "home": "mainControlRoom"
+      "members": [
+        "oldie",
+        "ctrler",
+        "observer"
+      ],
+      "commands": [
+        "investigateAccidentScene",
+        "clearAccidentScene"
+      ],
+      "home": "mainControlRoom"
     },
     "ctrler": {
       "name": "ctrler",
       "anonymousMembers": 0,
       "leader": "ctrler",
-      "members": ["ctrler"],
+      "members": [
+        "ctrler"
+      ],
       "home": "mainControlRoom"
     },
     "observer": {
-        "name": "observer",
-        "anonymousMembers": 0,
-        "leader": "observer",
-      "members": ["observer"],
-        "home": "observatory"
+      "name": "observer",
+      "anonymousMembers": 0,
+      "leader": "observer",
+      "members": [
+        "observer"
+      ],
+      "home": "observatory"
     },
     "cabinet": {
       "name": "cabinet",
-        "anonymousMembers": 0,
+      "anonymousMembers": 0,
       "leader": "oldie",
-        "members": ["oldie", "charlie", "seefy", "infy", "mini","eddy","inddy","welly"],
-        "commands": ["investigateAccidentScene", "clearAccidentScene"],
+      "members": [
+        "oldie",
+        "charlie",
+        "seefy",
+        "infy",
+        "mini",
+        "eddy",
+        "inddy",
+        "welly"
+      ],
+      "commands": [
+        "investigateAccidentScene",
+        "clearAccidentScene"
+      ],
       "home": "mainControlRoom"
     },
     "interior": {
@@ -2367,128 +2360,224 @@
       "type": "division",
       "anonymousMembers": 650,
       "leader": "charlie",
-      "members": ["charlie", "selli1", "selli2"],
-      "commands": ["investigateAccidentScene", "clearAccidentScene"],
-        "home": "mainControlRoom"
+      "members": [
+        "charlie",
+        "selli1",
+        "selli2"
+      ],
+      "commands": [
+        "investigateAccidentScene",
+        "clearAccidentScene"
+      ],
+      "home": "mainControlRoom"
     },
     "mining": {
       "name": "mining",
       "type": "division",
       "anonymousMembers": 2000,
       "leader": "mini",
-      "members": ["mini", "mini1", "mini2"],
+      "members": [
+        "mini",
+        "mini1",
+        "mini2"
+      ],
       "home": "redMine"
     },
     "education": {
       "name": "education",
       "type": "division",
       "anonymousMembers": 50,
-        "leader": "eddy",
-      "members": ["eddy"],
+      "leader": "eddy",
+      "members": [
+        "eddy"
+      ],
       "home": "miningSchool"
     },
     "industry": {
-        "name": "industry",
+      "name": "industry",
       "type": "division",
       "anonymousMembers": 800,
-        "leader": "inddy",
-      "members": ["inddy"],
-        "home": "farm"
+      "leader": "inddy",
+      "members": [
+        "inddy"
+      ],
+      "home": "farm"
     },
     "safety": {
-        "name": "safety",
+      "name": "safety",
       "type": "division",
       "anonymousMembers": 400,
-        "leader": "seefy",
-      "members": ["seefy"],
-        "home": "rescueStationNorth"
+      "leader": "seefy",
+      "members": [
+        "seefy"
+      ],
+      "home": "rescueStationNorth"
     },
     "welfare": {
-        "name": "welfare",
+      "name": "welfare",
       "type": "division",
       "anonymousMembers": 120,
-        "leader": "welly",
-      "members": ["welly", "doci1", "doci2"],
-        "home": "hospitalEast"
+      "leader": "welly",
+      "members": [
+        "welly",
+        "doci1",
+        "doci2"
+      ],
+      "home": "hospitalEast"
     },
     "infrastructure": {
-        "name": "infrastructure",
-        "type": "division",
+      "name": "infrastructure",
+      "type": "division",
       "anonymousMembers": 500,
-        "leader": "infy",
-      "members": ["infy", "Rui", "friend1", "friend2", "friend3"],
-        "commands": ["investigateAccidentScene", "clearAccidentScene", "repair"],
-        "home": "hanger"
+      "leader": "infy",
+      "members": [
+        "infy",
+        "Rui",
+        "friend1",
+        "friend2",
+        "friend3"
+      ],
+      "commands": [
+        "investigateAccidentScene",
+        "clearAccidentScene",
+        "repair"
+      ],
+      "home": "hanger"
     }
   },
-  "scheduledConferences":{
+  "scheduledConferences": {
     "repeatingBudgetProposal-18": {
       "time": 18,
       "subject": "budgetProposal",
-      "scheduledCharacters": ["oldie", "charlie", "seefy", "infy", "mini","eddy","inddy","welly"],
+      "scheduledCharacters": [
+        "oldie",
+        "charlie",
+        "seefy",
+        "infy",
+        "mini",
+        "eddy",
+        "inddy",
+        "welly"
+      ],
       "place": "mainControlRoom",
       "involvedParty": "cabinet"
     },
     "repeatingBudgetProposal-738": {
       "time": 738,
       "subject": "budgetProposal",
-      "scheduledCharacters": ["oldie", "charlie", "seefy", "infy", "mini","eddy","inddy","welly"],
+      "scheduledCharacters": [
+        "oldie",
+        "charlie",
+        "seefy",
+        "infy",
+        "mini",
+        "eddy",
+        "inddy",
+        "welly"
+      ],
       "place": "mainControlRoom",
       "involvedParty": "cabinet"
     },
     "repeatingBudgetProposal-1458": {
       "time": 1458,
       "subject": "budgetProposal",
-      "scheduledCharacters": ["oldie", "charlie", "seefy", "infy", "mini","eddy","inddy","welly"],
+      "scheduledCharacters": [
+        "oldie",
+        "charlie",
+        "seefy",
+        "infy",
+        "mini",
+        "eddy",
+        "inddy",
+        "welly"
+      ],
       "place": "mainControlRoom",
       "involvedParty": "cabinet"
     },
     "repeatingBudgetProposal-2178": {
       "time": 2178,
       "subject": "budgetProposal",
-      "scheduledCharacters": ["oldie", "charlie", "seefy", "infy", "mini","eddy","inddy","welly"],
+      "scheduledCharacters": [
+        "oldie",
+        "charlie",
+        "seefy",
+        "infy",
+        "mini",
+        "eddy",
+        "inddy",
+        "welly"
+      ],
       "place": "mainControlRoom",
       "involvedParty": "cabinet"
     },
     "repeatingBudgetProposal-2898": {
       "time": 2898,
       "subject": "budgetProposal",
-      "scheduledCharacters": ["oldie", "charlie", "seefy", "infy", "mini","eddy","inddy","welly"],
+      "scheduledCharacters": [
+        "oldie",
+        "charlie",
+        "seefy",
+        "infy",
+        "mini",
+        "eddy",
+        "inddy",
+        "welly"
+      ],
       "place": "mainControlRoom",
       "involvedParty": "cabinet"
     },
     "repeatingBudgetResolution-162": {
       "time": 162,
       "subject": "budgetResolution",
-      "scheduledCharacters": ["oldie", "ctrler","observer"],
+      "scheduledCharacters": [
+        "oldie",
+        "ctrler",
+        "observer"
+      ],
       "place": "mainControlRoom",
       "involvedParty": "triumvirate"
     },
     "repeatingBudgetResolution-882": {
       "time": 882,
       "subject": "budgetResolution",
-      "scheduledCharacters": ["oldie", "ctrler","observer"],
+      "scheduledCharacters": [
+        "oldie",
+        "ctrler",
+        "observer"
+      ],
       "place": "mainControlRoom",
       "involvedParty": "triumvirate"
     },
     "repeatingBudgetResolution-1602": {
       "time": 1602,
       "subject": "budgetResolution",
-      "scheduledCharacters": ["oldie", "ctrler","observer"],
+      "scheduledCharacters": [
+        "oldie",
+        "ctrler",
+        "observer"
+      ],
       "place": "mainControlRoom",
       "involvedParty": "triumvirate"
     },
     "repeatingBudgetResolution-2322": {
       "time": 2322,
       "subject": "budgetResolution",
-      "scheduledCharacters": ["oldie", "ctrler","observer"],
+      "scheduledCharacters": [
+        "oldie",
+        "ctrler",
+        "observer"
+      ],
       "place": "mainControlRoom",
       "involvedParty": "triumvirate"
     },
     "repeatingBudgetResolution-3042": {
       "time": 3042,
       "subject": "budgetResolution",
-      "scheduledCharacters": ["oldie", "ctrler","observer"],
+      "scheduledCharacters": [
+        "oldie",
+        "ctrler",
+        "observer"
+      ],
       "place": "mainControlRoom",
       "involvedParty": "triumvirate"
     }
