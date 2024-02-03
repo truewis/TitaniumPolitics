@@ -1,12 +1,9 @@
 package com.titaniumPolitics.game.ui
 
 import com.badlogic.gdx.Gdx
-import com.badlogic.gdx.graphics.Color
-import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.scenes.scene2d.ui.*
 import com.titaniumPolitics.game.core.GameEngine
 import com.titaniumPolitics.game.core.GameState
-import com.titaniumPolitics.game.ui.ClockUI.Companion.formatTime
 import ktx.scene2d.*
 import ktx.scene2d.Scene2DSkin.defaultSkin
 
@@ -14,7 +11,6 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin)
 {
     var titleLabel: Label
     private val docList = HorizontalGroup()
-    private var isOpen = false;
 
     init
     {

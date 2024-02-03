@@ -1,7 +1,6 @@
 package com.titaniumPolitics.game.ui.map
 
 import com.badlogic.gdx.scenes.scene2d.ui.Button
-import com.badlogic.gdx.scenes.scene2d.ui.Image
 import com.titaniumPolitics.game.core.GameState
 import ktx.scene2d.Scene2DSkin.defaultSkin
 
@@ -10,7 +9,7 @@ class PlaceMarker(var gameState: GameState, place: String) : Button()
     init
     {
         //Set style of the button to the default skin.
-        style = defaultSkin.get("diamond", Button.ButtonStyle::class.java)
+        style = defaultSkin.get("diamond", ButtonStyle::class.java)
         val start: Pair<Float, Float> = MapUI.convertToScreenCoords(
             gameState.places[place]!!.coordinates.x.toFloat(),
             gameState.places[place]!!.coordinates.y.toFloat()

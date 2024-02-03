@@ -1,12 +1,10 @@
 package com.titaniumPolitics.game.ui.map
 
-import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.Window
 import ktx.scene2d.Scene2DSkin.defaultSkin
 import ktx.scene2d.button
 import ktx.scene2d.label
 import ktx.scene2d.scene2d
-import ktx.scene2d.table
 
 class PlaceMarkerWindowUI : Window("Place Marker", defaultSkin)
 {

@@ -6,10 +6,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.badlogic.gdx.utils.Align
 import com.titaniumPolitics.game.core.GameState
-import com.titaniumPolitics.game.ui.AlertUI
-import com.titaniumPolitics.game.ui.AssistantUI
-import com.titaniumPolitics.game.ui.AvailableActionsUI
-import com.titaniumPolitics.game.ui.CharStatusUI
 import ktx.scene2d.*
 
 class MapUI(val gameState: GameState) : Table(Scene2DSkin.defaultSkin), KTable
@@ -53,7 +49,7 @@ class MapUI(val gameState: GameState) : Table(Scene2DSkin.defaultSkin), KTable
                         override fun clicked(event: com.badlogic.gdx.scenes.scene2d.InputEvent?, x: Float, y: Float)
                         {
                             //Close Map UI
-                            MapUI.instance.isVisible = false
+                            instance.isVisible = false
                         }
                     }
                     )
