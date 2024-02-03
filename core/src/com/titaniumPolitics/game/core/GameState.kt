@@ -78,12 +78,6 @@ class GameState
         injectDependency()
         //Test Code
         places.forEach {
-            //Assign random coordinate within some range,
-            it.value.coordinates = Coordinate3D(
-                (Math.random() * 20).toInt(),
-                (Math.random() * 20).toInt(),
-                (Math.random() * 20).toInt()
-            )
 
         }
         characters.forEach { char ->

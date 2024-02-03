@@ -391,6 +391,11 @@
   "places": {
     "mainControlRoom": {
       "name": "mainControlRoom",
+      "coordinates": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
       "resources": {
         "oxygen": 100,
         "water": 15000,
@@ -460,6 +465,11 @@
     },
     "hospitalWest": {
       "name": "hospitalWest",
+      "coordinates": {
+        "x": -5,
+        "y": 0,
+        "z": 0
+      },
       "resources": {
         "oxygen": 50,
         "water": 15000,
@@ -536,6 +546,11 @@
     },
     "hospitalEast": {
       "name": "hospitalEast",
+      "coordinates": {
+        "x": 10,
+        "y": -5,
+        "z": 0
+      },
       "resources": {
         "oxygen": 50,
         "water": 15000,
@@ -611,6 +626,11 @@
     },
     "redMine": {
       "name": "redMine",
+      "coordinates": {
+        "x": -10,
+        "y": 0,
+        "z": 0
+      },
       "resources": {
         "oxygen": 50,
         "water": 15000,
@@ -717,6 +737,11 @@
     },
     "blackMine": {
       "name": "blackMine",
+      "coordinates": {
+        "x": 10,
+        "y": 0,
+        "z": 0
+      },
       "resources": {
         "oxygen": 50,
         "water": 15000,
@@ -825,6 +850,11 @@
     },
     "observatory": {
       "name": "observatory",
+      "coordinates": {
+        "x": -10,
+        "y": 15,
+        "z": 0
+      },
       "resources": {
         "oxygen": 50,
         "water": 15000
@@ -863,6 +893,11 @@
     },
     "auxHanger": {
       "name": "auxHanger",
+      "coordinates": {
+        "x": -5,
+        "y": 10,
+        "z": 0
+      },
       "resources": {
         "lightMetal": 50,
         "component": 100,
@@ -926,6 +961,11 @@
     },
     "cemetery": {
       "name": "cemetery",
+      "coordinates": {
+        "x": 5,
+        "y": -15,
+        "z": 0
+      },
       "resources": {
         "component": 10,
         "water": 0
@@ -951,6 +991,11 @@
     },
     "rocketry": {
       "name": "rocketry",
+      "coordinates": {
+        "x": 15,
+        "y": 15,
+        "z": 0
+      },
       "resources": {
         "lightMetal": 50,
         "component": 100,
@@ -1012,6 +1057,11 @@
     },
     "tankArray": {
       "name": "tankArray",
+      "coordinates": {
+        "x": -2,
+        "y": 12,
+        "z": 0
+      },
       "resources": {
         "lightMetal": 50,
         "component": 100,
@@ -1087,6 +1137,11 @@
     },
     "recycleCenterNorth": {
       "name": "recycleCenterNorth",
+      "coordinates": {
+        "x": -10,
+        "y": -10,
+        "z": 0
+      },
       "resources": {
         "lightMetal": 50,
         "component": 100,
@@ -1173,6 +1228,11 @@
     },
     "recycleCenterSouth": {
       "name": "recycleCenterSouth",
+      "coordinates": {
+        "x": 13,
+        "y": 13,
+        "z": 0
+      },
       "resources": {
         "lightMetal": 50,
         "component": 100,
@@ -1279,6 +1339,11 @@
     },
     "electrolysisStationSouth": {
       "name": "electrolysisStationSouth",
+      "coordinates": {
+        "x": -8,
+        "y": 12,
+        "z": 0
+      },
       "resources": {
         "lightMetal": 50,
         "component": 100,
@@ -1369,6 +1434,11 @@
     },
     "reservoirNorth": {
       "name": "reservoirNorth",
+      "coordinates": {
+        "x": -2,
+        "y": -10,
+        "z": 0
+      },
       "resources": {
         "water": 300000,
         "lightMetal": 50,
@@ -1444,6 +1514,11 @@
     },
     "reservoirSouth": {
       "name": "reservoirSouth",
+      "coordinates": {
+        "x": 7,
+        "y": 12,
+        "z": 0
+      },
       "resources": {
         "lightMetal": 50,
         "component": 100,
@@ -1520,6 +1595,11 @@
     },
     "miningSchool": {
       "name": "miningSchool",
+      "coordinates": {
+        "x": -7,
+        "y": 3,
+        "z": 0
+      },
       "resources": {
         "oxygen": 50,
         "water": 15000,
@@ -1576,6 +1656,11 @@
     },
     "techSchool": {
       "name": "techSchool",
+      "coordinates": {
+        "x": 7,
+        "y": 3,
+        "z": 0
+      },
       "resources": {
         "oxygen": 50,
         "water": 15000,
@@ -1631,6 +1716,11 @@
     },
     "farm": {
       "name": "farm",
+      "coordinates": {
+        "x": 0,
+        "y": 10,
+        "z": 0
+      },
       "resources": {
         "oxygen": 100,
         "water": 15000,
@@ -1713,6 +1803,11 @@
     },
     "rescueStationNorth": {
       "name": "rescueStationNorth",
+      "coordinates": {
+        "x": -7,
+        "y": -10,
+        "z": 0
+      },
       "resources": {
         "oxygen": 100,
         "water": 15000,
@@ -1777,6 +1872,11 @@
     },
     "rescueStationSouth": {
       "name": "rescueStationSouth",
+      "coordinates": {
+        "x": 15,
+        "y": 5,
+        "z": 0
+      },
       "resources": {
         "oxygen": 100,
         "water": 15000,
@@ -1785,7 +1885,7 @@
       "connectedPlaces": [
         "blackMine",
         "techSchool",
-        "powerPlantWest"
+        "powerPlantEast"
       ],
       "plannedWorker": 50,
       "apparatuses": [
@@ -1840,6 +1940,11 @@
     },
     "market": {
       "name": "market",
+      "coordinates": {
+        "x": 0,
+        "y": -5,
+        "z": 0
+      },
       "resources": {
         "water": 15000,
         "ration": 100
@@ -1921,6 +2026,11 @@
     },
     "squareNorth": {
       "name": "squareNorth",
+      "coordinates": {
+        "x": 7,
+        "y": -5,
+        "z": 0
+      },
       "resources": {
         "water": 15000,
         "ration": 100
@@ -1997,6 +2107,11 @@
     },
     "squareSouth": {
       "name": "squareSouth",
+      "coordinates": {
+        "x": 0,
+        "y": 5,
+        "z": 0
+      },
       "resources": {
         "water": 15000,
         "ration": 100
@@ -2071,6 +2186,11 @@
     },
     "hanger": {
       "name": "hanger",
+      "coordinates": {
+        "x": 5,
+        "y": 0,
+        "z": 0
+      },
       "resources": {
         "lightMetal": 100,
         "component": 200,
@@ -2130,6 +2250,11 @@
     },
     "powerPlantEast": {
       "name": "powerPlantEast",
+      "coordinates": {
+        "x": 20,
+        "y": 10,
+        "z": 0
+      },
       "resources": {
         "lightMetal": 100,
         "component": 200,
@@ -2208,6 +2333,11 @@
     },
     "powerPlantWest": {
       "name": "powerPlantWest",
+      "coordinates": {
+        "x": -15,
+        "y": -5,
+        "z": 0
+      },
       "resources": {
         "lightMetal": 100,
         "component": 200,
@@ -2286,6 +2416,11 @@
     },
     "home": {
       "name": "home",
+      "coordinates": {
+        "x": 20,
+        "y": 20,
+        "z": 0
+      },
       "characters": [
         "oldie",
         "charlie",

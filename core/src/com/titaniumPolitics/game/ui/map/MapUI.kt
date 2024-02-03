@@ -104,9 +104,9 @@ class MapUI(val gameState: GameState) : Table(Scene2DSkin.defaultSkin), KTable
         fun convertToScreenCoords(x: Float, y: Float): Pair<Float, Float>
         {
             val MAX_X = 20
-            val MAX_Y = 20
-            val MIN_X = 0
-            val MIN_Y = 0
+            val MAX_Y = 15
+            val MIN_X = -20
+            val MIN_Y = -15
             val PADDING = 0.1
             return Pair(
                 (Gdx.graphics.width * PADDING + (Gdx.graphics.width * (1 - 2 * PADDING) * (x - MIN_X) / (MAX_X - MIN_X))).toFloat(),
