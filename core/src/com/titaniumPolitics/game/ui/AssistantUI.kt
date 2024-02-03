@@ -45,6 +45,7 @@ class AssistantUI(gameState: GameState) : Table(defaultSkin), KTable
                 {
 
                     //Open Map UI
+                    MapUI.instance.refresh()
                     MapUI.instance.isVisible = true
                 }
             }

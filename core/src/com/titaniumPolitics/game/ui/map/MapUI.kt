@@ -58,7 +58,7 @@ class MapUI(val gameState: GameState) : Table(Scene2DSkin.defaultSkin), KTable
 
     fun refresh()
     {
-        currentConnections.forEach { it.dispose() }
+        currentConnections.forEach { removeActor(it) }
         currentConnections.clear()
         //Draw connections between places
         gameState.places.forEach { (placeName, place) ->
@@ -78,9 +78,7 @@ class MapUI(val gameState: GameState) : Table(Scene2DSkin.defaultSkin), KTable
 
         fun convertToScreenCoords(x: Float, y: Float): Pair<Float, Float>
         {
-            val x = x * 32f
-            val y = y * 32f
-            return Pair(x, y)
+            return Pair(x * 32f, y * 32f)
         }
     }
 
