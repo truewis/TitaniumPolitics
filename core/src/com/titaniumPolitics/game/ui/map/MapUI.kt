@@ -1,5 +1,6 @@
 package com.titaniumPolitics.game.ui.map
 
+import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
@@ -14,50 +15,65 @@ import ktx.scene2d.*
 class MapUI(val gameState: GameState) : Table(Scene2DSkin.defaultSkin), KTable
 {
     val currentConnections = arrayListOf<Connection>()
+    val currentMarkers = arrayListOf<PlaceMarker>()
+    val currentPlaceMarkerWindow = PlaceMarkerWindowUI()
+
 
     init
     {
+        isVisible = false
         instance = this
+
         stack { cell ->
             cell.grow()
-            image("capsuleDevLabel1") {
-                setFillParent(true)
+            table {
+                image("capsuleDevLabel1") {
+                    it.grow()
+                    addListener(object : ClickListener()
+                    {
+                        override fun clicked(event: com.badlogic.gdx.scenes.scene2d.InputEvent?, x: Float, y: Float)
+                        {
+                            //Close Place Marker UI
+                            this@MapUI.currentPlaceMarkerWindow.isVisible = false
+                        }
+                    }
+                    )
+                }
+            }
+            container {
+                align(Align.bottomLeft)
+
+                //This button hase to be identical in appearance to the one in AssistantUI.
+                button {
+                    label("MAP", "console") {
+                        setFontScale(4f)
+                    }
+                    addListener(object : ClickListener()
+                    {
+                        override fun clicked(event: com.badlogic.gdx.scenes.scene2d.InputEvent?, x: Float, y: Float)
+                        {
+                            //Close Map UI
+                            MapUI.instance.isVisible = false
+                        }
+                    }
+                    )
+                }
             }
             //A button to hide this UI on the bottom left of the screen.
-            button {
-                cell.align(Align.bottomLeft)
-                cell.pad(10f)
-                cell.expandY()
-                cell.fill()
-                label("Hide Map") {
-                    setAlignment(Align.center)
-                }
-                addListener(object : ClickListener()
-                {
-                    override fun clicked(event: com.badlogic.gdx.scenes.scene2d.InputEvent?, x: Float, y: Float)
-                    {
-                        instance.isVisible = false
-                    }
-                })
-            }
 
 
         }
-        //Draw connections between places
-        gameState.places.forEach { (placeName, place) ->
-            place.connectedPlaces.forEach { connection ->
-                addActor(Connection(gameState, placeName, connection).also {
-                    it.color = Color.RED
-                    currentConnections.add(it)
-                })
-            }
-        }
+        currentPlaceMarkerWindow.isVisible = false
+        addActor(currentPlaceMarkerWindow)
 
 
     }
 
+
     fun refresh()
     {
+        //CurrentPlaceMarkerWindow is a window that shows up when a place marker is clicked. It should be removed and re-added to the stage to ensure it is on top.
+        removeActor(currentPlaceMarkerWindow)
         currentConnections.forEach { removeActor(it) }
         currentConnections.clear()
         //Draw connections between places
@@ -69,6 +85,15 @@ class MapUI(val gameState: GameState) : Table(Scene2DSkin.defaultSkin), KTable
                 })
             }
         }
+        currentMarkers.forEach { removeActor(it) }
+        currentMarkers.clear()
+        //Draw markers for places
+        gameState.places.forEach { (placeName, _) ->
+            addActor(PlaceMarker(gameState, placeName).also {
+                currentMarkers.add(it)
+            })
+        }
+        addActor(currentPlaceMarkerWindow)
     }
 
     companion object
@@ -78,7 +103,15 @@ class MapUI(val gameState: GameState) : Table(Scene2DSkin.defaultSkin), KTable
 
         fun convertToScreenCoords(x: Float, y: Float): Pair<Float, Float>
         {
-            return Pair(x * 32f, y * 32f)
+            val MAX_X = 20
+            val MAX_Y = 20
+            val MIN_X = 0
+            val MIN_Y = 0
+            val PADDING = 0.1
+            return Pair(
+                (Gdx.graphics.width * PADDING + (Gdx.graphics.width * (1 - 2 * PADDING) * (x - MIN_X) / (MAX_X - MIN_X))).toFloat(),
+                (Gdx.graphics.height * PADDING + (Gdx.graphics.height * (1 - 2 * PADDING) * (y - MIN_Y) / (MAX_Y - MIN_Y))).toFloat()
+            )
         }
     }
 

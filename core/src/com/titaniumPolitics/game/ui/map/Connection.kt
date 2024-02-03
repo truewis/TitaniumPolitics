@@ -24,7 +24,6 @@ class Connection(var gameState: GameState, startPlace: String, endPlace: String)
             gameState.places[endPlace]!!.coordinates.x.toFloat(),
             gameState.places[endPlace]!!.coordinates.y.toFloat()
         )
-        println(start.toString() + end.toString())
         //Set the position of the connection to the start of the line.
         setPosition(start.first, start.second)
         //Set the size of the connection to the length of the line.
