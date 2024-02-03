@@ -3,6 +3,7 @@ package com.titaniumPolitics.game.ui
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.utils.Align
 import com.titaniumPolitics.game.core.GameState
+import com.titaniumPolitics.game.ui.map.MapUI
 import ktx.scene2d.*
 
 class HeadUpInterface(val gameState: GameState) : Table(Scene2DSkin.defaultSkin), KTable
@@ -35,6 +36,7 @@ class HeadUpInterface(val gameState: GameState) : Table(Scene2DSkin.defaultSkin)
                 align(Align.bottom)
                 addActor(AvailableActionsUI(this@HeadUpInterface.gameState))
             }
+            add(MapUI(gameState = this@HeadUpInterface.gameState))
 
 
         }
