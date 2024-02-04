@@ -1,12 +1,17 @@
 package com.titaniumPolitics.game.ui.map
 
 import com.badlogic.gdx.scenes.scene2d.ui.Window
+import com.titaniumPolitics.game.core.GameEngine
+import com.titaniumPolitics.game.core.GameState
+import com.titaniumPolitics.game.core.gameActions.GameAction
+import com.titaniumPolitics.game.core.gameActions.move
 import ktx.scene2d.Scene2DSkin.defaultSkin
 import ktx.scene2d.button
 import ktx.scene2d.label
 import ktx.scene2d.scene2d
+import kotlin.concurrent.thread
 
-class PlaceMarkerWindowUI : Window("Place Marker", defaultSkin)
+class PlaceMarkerWindowUI(var gameState: GameState) : Window("Place Marker", defaultSkin)
 {
     var placeDisplayed = ""
 
@@ -24,6 +29,15 @@ class PlaceMarkerWindowUI : Window("Place Marker", defaultSkin)
                 override fun clicked(event: com.badlogic.gdx.scenes.scene2d.InputEvent?, x: Float, y: Float)
                 {
                     //Move to place.
+                    val action = move(
+                        gameState.playerAgent,
+                        gameState.places.values.find { it.characters.contains(gameState.playerAgent) }!!.name
+                    )
+                    action.placeTo = placeDisplayed
+                    action.injectParent(gameState)
+                    MapUI.instance.isVisible = false
+                    this@PlaceMarkerWindowUI.isVisible = false
+                    GameEngine.acquireCallback(action)
                 }
             })
         }).fill()

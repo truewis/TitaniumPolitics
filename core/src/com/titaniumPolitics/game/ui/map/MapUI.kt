@@ -12,7 +12,7 @@ class MapUI(val gameState: GameState) : Table(Scene2DSkin.defaultSkin), KTable
 {
     val currentConnections = arrayListOf<Connection>()
     val currentMarkers = arrayListOf<PlaceMarker>()
-    val currentPlaceMarkerWindow = PlaceMarkerWindowUI()
+    val currentPlaceMarkerWindow = PlaceMarkerWindowUI(gameState)
 
 
     init

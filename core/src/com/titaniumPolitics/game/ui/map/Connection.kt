@@ -15,7 +15,7 @@ class Connection(var gameState: GameState, startPlace: String, endPlace: String)
     init
     {
         //Fetch default drawable from skin.
-        drawable = defaultSkin.getDrawable("test")
+        drawable = defaultSkin.getDrawable("black")
         val start: Pair<Float, Float> = MapUI.convertToScreenCoords(
             gameState.places[startPlace]!!.coordinates.x.toFloat(),
             gameState.places[startPlace]!!.coordinates.y.toFloat()
