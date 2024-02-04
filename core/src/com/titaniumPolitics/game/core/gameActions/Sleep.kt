@@ -15,7 +15,7 @@ class Sleep(override val tgtCharacter: String, override val tgtPlace: String) : 
 
     override fun isValid(): Boolean
     {
-        return tgtPlace == "home"
+        return tgtPlace == "home_$tgtCharacter"
     }
 
 }

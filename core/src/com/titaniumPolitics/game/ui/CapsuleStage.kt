@@ -74,7 +74,7 @@ class CapsuleStage(val gameState: GameState) : Stage(FitViewport(1920F, 1080F))
     {
         background.drawable = TextureRegionDrawable(
             assetManager.get(
-                ReadOnlyJsons.mapJson[name]!!.jsonObject["image"]!!.jsonPrimitive.content,
+                ReadOnlyJsons.mapJson[if (name.contains("home")) "home" else name]!!.jsonObject["image"]!!.jsonPrimitive.content,
                 Texture::class.java
             )!!
         )

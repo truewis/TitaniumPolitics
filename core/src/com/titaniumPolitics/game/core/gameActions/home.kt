@@ -8,7 +8,7 @@ class home(override val tgtCharacter: String, override val tgtPlace: String) : G
     {
 
         parent.places[tgtPlace]!!.characters.remove(tgtCharacter)
-        parent.places["home"]!!.characters.add(tgtCharacter)
+        parent.places["home_"]!!.characters.add(tgtCharacter)
         parent.characters[tgtCharacter]!!.frozen++
     }
 

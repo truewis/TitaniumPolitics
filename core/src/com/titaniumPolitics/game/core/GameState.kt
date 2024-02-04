@@ -76,13 +76,18 @@ class GameState
     fun initialize()
     {
         injectDependency()
-        //Test Code
-        places.forEach {
-
-        }
         characters.forEach { char ->
+            //Create home for each character.
+            places["home_" + char.key] = Place().apply {
+                name = "home_" + char.key
+                responsibleParty = ""
+                //Connect the new home to the place specified in the character.
+                connectedPlaces.add(this@GameState.characters[char.key]!!.livingBy)
+                characters.add(char.key)
+            }
+            places[this@GameState.characters[char.key]!!.livingBy]!!.connectedPlaces.add("home_" + char.key)
             if (places.none { it.value.characters.contains(char.key) })
-                places["home"]!!.characters.add(char.key)
+                places["home_" + char.key]!!.characters.add(char.key)
         }
         todo.add(Quest1())
     }

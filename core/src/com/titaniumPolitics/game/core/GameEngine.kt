@@ -1169,7 +1169,7 @@ class GameEngine(val gameState: GameState)
                 actions.add("sleep")
                 actions.add("eat")
             }
-            if (place == gameState.characters[character]!!.home)
+            if (place == gameState.characters[character]!!.livingBy)
             {
                 actions.add("home")
             }

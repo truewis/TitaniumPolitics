@@ -74,20 +74,26 @@ class MapUI(val gameState: GameState) : Table(Scene2DSkin.defaultSkin), KTable
         currentConnections.clear()
         //Draw connections between places
         gameState.places.forEach { (placeName, place) ->
-            place.connectedPlaces.forEach { connection ->
-                addActor(Connection(gameState, placeName, connection).also {
-                    it.color = Color.RED
-                    currentConnections.add(it)
-                })
+            if (!placeName.contains("home"))
+            {
+                place.connectedPlaces.forEach { connection ->
+                    addActor(Connection(gameState, placeName, connection).also {
+                        it.color = Color.RED
+                        currentConnections.add(it)
+                    })
+                }
             }
         }
         currentMarkers.forEach { removeActor(it) }
         currentMarkers.clear()
         //Draw markers for places
         gameState.places.forEach { (placeName, _) ->
-            addActor(PlaceMarker(gameState, placeName).also {
-                currentMarkers.add(it)
-            })
+            if (!placeName.contains("home"))
+            {
+                addActor(PlaceMarker(gameState, placeName).also {
+                    currentMarkers.add(it)
+                })
+            }
         }
         addActor(currentPlaceMarkerWindow)
     }

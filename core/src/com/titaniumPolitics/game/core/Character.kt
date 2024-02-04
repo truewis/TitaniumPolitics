@@ -39,7 +39,7 @@ class Character : GameStateElement()
         hashSetOf<String>() //Characters that this character is responsible for. If they die, this character will be sad. They consume water and ration every day.
     val scheduledMeetings: HashMap<String, Meeting>
         get() = parent.scheduledMeetings.filter { it.value.scheduledCharacters.contains(name) } as HashMap<String, Meeting>
-    var home = ""
+    var livingBy = ""
     var frozen = 0
 
     val place

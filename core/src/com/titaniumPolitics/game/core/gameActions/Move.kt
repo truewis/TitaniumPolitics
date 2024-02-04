@@ -7,10 +7,7 @@ class Move(override val tgtCharacter: String, override val tgtPlace: String) : G
     var placeTo = ""
     override fun chooseParams()
     {
-        placeTo = if (tgtPlace == "home")
-            GameEngine.acquire(arrayListOf(parent.characters[tgtCharacter]!!.home) + "cancel")
-        else
-            GameEngine.acquire(parent.places[tgtPlace]!!.connectedPlaces + "cancel")
+        GameEngine.acquire(parent.places[tgtPlace]!!.connectedPlaces + "cancel")
     }
 
     override fun isValid(): Boolean = placeTo != ""

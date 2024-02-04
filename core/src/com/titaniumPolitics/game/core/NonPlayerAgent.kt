@@ -110,10 +110,10 @@ class NonPlayerAgent(val character: String) : GameStateElement()
         {
             "rest" ->
             {
-                if (place != "home")
+                if (place != "home_$character")
                 {
                     routines.add(Routine("move", routines[0].priority + 10).also {
-                        it.variables["movePlace"] = "home"
+                        it.variables["movePlace"] = "home_$character"
                     })//Add a move routine with higher priority.
                     return executeRoutine()
                 }
@@ -184,21 +184,23 @@ class NonPlayerAgent(val character: String) : GameStateElement()
                 } else
                 {
 
-                    if (routines[0].variables["movePlace"] == "home")
+                    if (routines[0].variables["movePlace"] == "home_$character")
                     {
-                        if (place != charObject.home)
+                        if (place != charObject.livingBy)
                         {
                             return Move(character, place).also {
-                                it.placeTo = charObject.home
+                                it.placeTo = charObject.livingBy
                             }//If player is far from the home, go outside the home.
                         } else
                         {
-                            return home(character, place)//If player is outside the home, go inside.
+                            return Move(character, place).also {
+                                it.placeTo = "home_$character"
+                            }//If player is outside the home, go inside.
                         }
                     } else
                     {
                         if (place == "home")//If the character is at home, go outside.
-                            return Move(character, place).also { it.placeTo = charObject.home }
+                            return Move(character, place).also { it.placeTo = charObject.livingBy }
                         return Move(character, place).also { it.placeTo = routines[0].variables["movePlace"]!! }
                     }
 
