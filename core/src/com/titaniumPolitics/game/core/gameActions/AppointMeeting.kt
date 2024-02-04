@@ -3,7 +3,7 @@ package com.titaniumPolitics.game.core.gameActions
 import com.titaniumPolitics.game.core.GameEngine
 import com.titaniumPolitics.game.core.Meeting
 
-class appointMeeting(override val tgtCharacter: String, override val tgtPlace: String) : GameAction()
+class AppointMeeting(override val tgtCharacter: String, override val tgtPlace: String) : GameAction()
 {
     var meetingTime = 0
     var where = ""
@@ -18,8 +18,14 @@ class appointMeeting(override val tgtCharacter: String, override val tgtPlace: S
 
     override fun execute()
     {
-        parent.scheduledMeetings["meeting-${where}-${tgtCharacter}-${meetingTime}"] = Meeting(meetingTime, "subjectTBD", who, where)
+        parent.scheduledMeetings["meeting-${where}-${tgtCharacter}-${meetingTime}"] =
+            Meeting(meetingTime, "subjectTBD", who, where)
         parent.characters[tgtCharacter]!!.frozen++
+    }
+
+    override fun isValid(): Boolean
+    {
+        return parent.characters[tgtCharacter]!!.currentMeeting != null
     }
 
 }

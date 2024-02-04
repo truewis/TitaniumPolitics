@@ -1,6 +1,6 @@
 package com.titaniumPolitics.game.core.gameActions
 
-class repair(override val tgtCharacter: String, override val tgtPlace: String) : GameAction()
+class Repair(override val tgtCharacter: String, override val tgtPlace: String) : GameAction()
 {
     var amount = 30
     override fun execute()
@@ -18,6 +18,11 @@ class repair(override val tgtCharacter: String, override val tgtPlace: String) :
         }
 
 
+    }
+
+    override fun isValid(): Boolean
+    {
+        return parent.places[tgtPlace]!!.apparatuses.isNotEmpty() && parent.characters[tgtCharacter]!!.trait.contains("technician")
     }
 
 }

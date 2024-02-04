@@ -7,7 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.*
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.titaniumPolitics.game.core.GameEngine
 import com.titaniumPolitics.game.core.GameState
-import com.titaniumPolitics.game.core.gameActions.trade
+import com.titaniumPolitics.game.core.gameActions.Trade
 import ktx.scene2d.*
 
 class TradeUI(skin: Skin?, var gameState: GameState) : Table(skin)
@@ -18,7 +18,7 @@ class TradeUI(skin: Skin?, var gameState: GameState) : Table(skin)
     private var isOpen = false;
     val submitButton = TextButton("지시", skin)
     val cancelButton = TextButton("취소", skin)
-    var trade: trade = trade("", "")
+    var trade: Trade = Trade("", "")
 
     init
     {
@@ -59,27 +59,33 @@ class TradeUI(skin: Skin?, var gameState: GameState) : Table(skin)
 
         with(gameState) {
             val who =
-                    ongoingMeetings.filter { it.value.currentCharacters.contains(playerAgent) }.flatMap { it.value.currentCharacters }.first { it != playerAgent }
-            trade = trade(playerAgent, characters[playerAgent]!!.place.name).apply { this.who = who }
+                ongoingMeetings.filter { it.value.currentCharacters.contains(playerAgent) }
+                    .flatMap { it.value.currentCharacters }.first { it != playerAgent }
+            trade = Trade(playerAgent, characters[playerAgent]!!.place.name).apply { this.who = who }
             isVisible = true
             refreshList(characters[playerAgent]!!.resources,
-                    characters[who]!!.resources,
-                    informations.filter {
-                        it.value.knownTo.contains(playerAgent)
-                    }
-                            .map { it.key }.toHashSet(),
-                    informations.filter {
-                        it.value.knownTo.contains(who) and !it.value.knownTo.contains(
-                                playerAgent
-                        )
-                    }.map { it.key }.toHashSet()
+                characters[who]!!.resources,
+                informations.filter {
+                    it.value.knownTo.contains(playerAgent)
+                }
+                    .map { it.key }.toHashSet(),
+                informations.filter {
+                    it.value.knownTo.contains(who) and !it.value.knownTo.contains(
+                        playerAgent
+                    )
+                }.map { it.key }.toHashSet()
             )
 
         }
     }
 
 
-    fun refreshList(items1: HashMap<String, Int>, items2: HashMap<String, Int>, info1: HashSet<String>, info2: HashSet<String>)
+    fun refreshList(
+        items1: HashMap<String, Int>,
+        items2: HashMap<String, Int>,
+        info1: HashSet<String>,
+        info2: HashSet<String>
+    )
     {
         docList1.clear()
         docList2.clear()
@@ -115,7 +121,12 @@ class TradeUI(skin: Skin?, var gameState: GameState) : Table(skin)
                     it.growX()
                     setFontScale(2f)
                 }
-                image((this@TradeUI.stage as CapsuleStage).assetManager.get("data/dev/capsuleDevBoxCheck.png", Texture::class.java)) {
+                image(
+                    (this@TradeUI.stage as CapsuleStage).assetManager.get(
+                        "data/dev/capsuleDevBoxCheck.png",
+                        Texture::class.java
+                    )
+                ) {
                     color = Color.GREEN
                     it.size(36f)
                 }
@@ -154,7 +165,12 @@ class TradeUI(skin: Skin?, var gameState: GameState) : Table(skin)
                     it.growX()
                     setFontScale(2f)
                 }
-                image((this@TradeUI.stage as CapsuleStage).assetManager.get("data/dev/capsuleDevBoxCheck.png", Texture::class.java)) {
+                image(
+                    (this@TradeUI.stage as CapsuleStage).assetManager.get(
+                        "data/dev/capsuleDevBoxCheck.png",
+                        Texture::class.java
+                    )
+                ) {
                     color = Color.GREEN
                     it.size(36f)
                 }

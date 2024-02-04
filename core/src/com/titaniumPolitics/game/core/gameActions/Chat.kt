@@ -1,11 +1,12 @@
 package com.titaniumPolitics.game.core.gameActions
 
-class chat(override val tgtCharacter: String, override val tgtPlace: String) : GameAction()
+class Chat(override val tgtCharacter: String, override val tgtPlace: String) : GameAction()
 {
     override fun execute()
     {
         //TODO: acquire or give whole information to another character by chance.
-        val who = parent.ongoingMeetings.filter { it.value.currentCharacters.contains(tgtCharacter) }.flatMap { it.value.currentCharacters }.filter { it != tgtCharacter }.toHashSet()
+        val who = parent.ongoingMeetings.filter { it.value.currentCharacters.contains(tgtCharacter) }
+            .flatMap { it.value.currentCharacters }.filter { it != tgtCharacter }.toHashSet()
 
 
         var count = 0
@@ -20,6 +21,11 @@ class chat(override val tgtCharacter: String, override val tgtPlace: String) : G
 
         //if (tgtCharacter == who){ println("You chat with yourself.");return}
         parent.characters[tgtCharacter]!!.frozen++
+    }
+
+    override fun isValid(): Boolean
+    {
+        return parent.characters[tgtCharacter]!!.currentMeeting != null
     }
 
 }

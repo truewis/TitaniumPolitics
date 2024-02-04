@@ -1,6 +1,6 @@
 package com.titaniumPolitics.game.core.gameActions
 
-class sleep(override val tgtCharacter: String, override val tgtPlace: String) : GameAction()
+class Sleep(override val tgtCharacter: String, override val tgtPlace: String) : GameAction()
 {
 
     override fun execute()
@@ -11,6 +11,11 @@ class sleep(override val tgtCharacter: String, override val tgtPlace: String) : 
         else
             parent.characters[tgtCharacter]!!.health += 50
         parent.characters[tgtCharacter]!!.frozen += 8
+    }
+
+    override fun isValid(): Boolean
+    {
+        return tgtPlace == "home"
     }
 
 }

@@ -3,7 +3,7 @@ package com.titaniumPolitics.game.core.gameActions
 import com.titaniumPolitics.game.core.GameEngine
 import com.titaniumPolitics.game.core.Information
 
-class examine(override val tgtCharacter: String, override val tgtPlace: String) : GameAction()
+class Examine(override val tgtCharacter: String, override val tgtPlace: String) : GameAction()
 {
     var what = ""
     override fun chooseParams()
@@ -81,6 +81,11 @@ class examine(override val tgtCharacter: String, override val tgtPlace: String) 
             }
         }
         parent.characters[tgtCharacter]!!.frozen += 2
+    }
+
+    override fun isValid(): Boolean
+    {
+        return true
     }
 
 }
