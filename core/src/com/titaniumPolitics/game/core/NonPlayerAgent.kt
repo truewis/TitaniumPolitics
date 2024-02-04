@@ -70,17 +70,17 @@ class NonPlayerAgent(val character: String) : GameStateElement()
         {
             whenIdle()
             if (routines.isEmpty())
-                return wait(character, place)
+                return Wait(character, place)
         }
         routines.sortByDescending { it.priority }
         //Leave meeting or conference if the routine was changed.
         if (routines.none { it.name == "attendMeeting" } && charObject.currentMeeting != null)
         {
-            return leaveMeeting(character, place)
+            return LeaveMeeting(character, place)
         }
         if (routines.none { it.name == "attendConference" } && charObject.currentMeeting != null)
         {
-            return leaveMeeting(character, place)
+            return LeaveMeeting(character, place)
         }
         val commands = charObject.commands
         //If there is a command that is within the set time window, issued party is trusted enough, and seems to be executable (AvailableActions), start execution routine.
@@ -118,10 +118,10 @@ class NonPlayerAgent(val character: String) : GameStateElement()
                     return executeRoutine()
                 }
                 if (charObject.hunger > 50 || charObject.thirst > 50)
-                    return eat(character, place)
+                    return Eat(character, place)
                 when (charObject.health)
                 {
-                    in 0..40 -> return sleep(character, place)
+                    in 0..40 -> return Sleep(character, place)
                     else ->
                         if (parent.hour in 8..18)
                         {//Preparation for work takes 1 hour. Normal work hours are 9-17.
@@ -130,7 +130,7 @@ class NonPlayerAgent(val character: String) : GameStateElement()
                             return executeRoutine()
                         } else
                         {
-                            return wait(character, place)
+                            return Wait(character, place)
                         }
                 }
             }
@@ -188,7 +188,7 @@ class NonPlayerAgent(val character: String) : GameStateElement()
                     {
                         if (place != charObject.home)
                         {
-                            return move(character, place).also {
+                            return Move(character, place).also {
                                 it.placeTo = charObject.home
                             }//If player is far from the home, go outside the home.
                         } else
@@ -198,8 +198,8 @@ class NonPlayerAgent(val character: String) : GameStateElement()
                     } else
                     {
                         if (place == "home")//If the character is at home, go outside.
-                            return move(character, place).also { it.placeTo = charObject.home }
-                        return move(character, place).also { it.placeTo = routines[0].variables["movePlace"]!! }
+                            return Move(character, place).also { it.placeTo = charObject.home }
+                        return Move(character, place).also { it.placeTo = routines[0].variables["movePlace"]!! }
                     }
 
                     //TODO: implement pathfinding. For now, just teleport to the place
@@ -234,7 +234,7 @@ class NonPlayerAgent(val character: String) : GameStateElement()
                     {
                         //Finish stealing
 
-                        unofficialResourceTransfer(character, place).also {
+                        UnofficialResourceTransfer(character, place).also {
                             it.what = routines[0].variables["stealResource"]!!
                             it.amount = min(
                                 (resplace.resources["ration"] ?: 0) / 2,
@@ -271,7 +271,7 @@ class NonPlayerAgent(val character: String) : GameStateElement()
                         } else
                         //TODO: implement investigateAccidentScene. Right now the information is immediately known to the division leader.
 
-                            clearAccidentScene(character, place).also {
+                            ClearAccidentScene(character, place).also {
                                 return it
                             }
                     }
@@ -313,7 +313,7 @@ class NonPlayerAgent(val character: String) : GameStateElement()
                         routines.add(Routine("attendConference", routines[0].priority + 10).also {
                             it.intVariables["time"] = conference.time
                         })//Add a routine with higher priority.
-                        joinConference(character, place).also {
+                        JoinConference(character, place).also {
                             it.meetingName = parent.ongoingConferences.filter {
                                 it.value.scheduledCharacters.contains(character) && !it.value.currentCharacters.contains(
                                     character
@@ -351,7 +351,7 @@ class NonPlayerAgent(val character: String) : GameStateElement()
                             }
                         } else
                         {
-                            return wait(
+                            return Wait(
                                 character,
                                 place
                             )//Wait for the conference to start.
@@ -384,7 +384,7 @@ class NonPlayerAgent(val character: String) : GameStateElement()
                         routines.add(Routine("attendMeeting", routines[0].priority + 10).also {
                             it.intVariables["time"] = meeting.time
                         })//Add a routine with higher priority.
-                        joinMeeting(character, place).also {
+                        JoinMeeting(character, place).also {
                             it.meetingName = parent.ongoingMeetings.filter {
                                 it.value.scheduledCharacters.contains(character) && !it.value.currentCharacters.contains(
                                     character
@@ -411,7 +411,7 @@ class NonPlayerAgent(val character: String) : GameStateElement()
                         routines.add(Routine("attendMeeting", routines[0].priority + 10).also {
                             it.intVariables["time"] = meeting.time
                         })//Add a routine with higher priority.
-                    startMeeting(character, place).also { action ->
+                    StartMeeting(character, place).also { action ->
                         action.meetingName =
                             parent.scheduledMeetings.filter { it.value == meeting }.keys.first()
                         return action
@@ -445,7 +445,7 @@ class NonPlayerAgent(val character: String) : GameStateElement()
                                 return executeRoutine()
                             } else
                             {
-                                officialResourceTransfer(character, place).also {
+                                OfficialResourceTransfer(character, place).also {
                                     it.what = res
                                     it.toWhere = place1.name
                                     it.amount = (resplace.resources[res] ?: 0) / 2
@@ -492,7 +492,7 @@ class NonPlayerAgent(val character: String) : GameStateElement()
                 //If already at home, wait.
                 if (parent.parties.values.any { party -> party.home == place && party.members.contains(character) })
                 {
-                    return wait(character, place)
+                    return Wait(character, place)
                 } else
                 //Move to a place that is the home of one of the parties of the character.
                 {
@@ -512,7 +512,7 @@ class NonPlayerAgent(val character: String) : GameStateElement()
                     } catch (e: Exception)
                     {
                         println("Warning: No place to commute found for $character.")
-                        return wait(character, place)
+                        return Wait(character, place)
                     }
 
                 }
@@ -532,7 +532,7 @@ class NonPlayerAgent(val character: String) : GameStateElement()
                     routines.removeAt(0)//Remove the current routine.
                     return executeRoutine()
                 }
-                return wait(character, place)
+                return Wait(character, place)
                 //TODO: do something in the meeting. Leave the meeting if nothing to do.
             }
 
@@ -562,7 +562,7 @@ class NonPlayerAgent(val character: String) : GameStateElement()
                         {
                             if (!parent.isBudgetProposed)
                             {
-                                return budgetProposal(character, place)
+                                return BudgetProposal(character, place)
                             } else //If budget is proposed, leave the conference.
                             {
                                 routines.removeAt(0)//Remove the current routine.
@@ -573,7 +573,7 @@ class NonPlayerAgent(val character: String) : GameStateElement()
                             //If not leader, wait for the budget to be proposed.
                             if (!parent.isBudgetProposed)
                             {
-                                return wait(character, place)
+                                return Wait(character, place)
                             } else
                             {
                                 routines.removeAt(0)//Remove the current routine.
@@ -589,7 +589,7 @@ class NonPlayerAgent(val character: String) : GameStateElement()
                         {
                             if (parent.parties[conf.auxSubject]!!.leader == "")//If the subject party does not have a leader yet, assign a leader.
                             {
-                                return leaderAssignment(character, place).also {
+                                return LeaderAssignment(character, place).also {
                                     it.targetParty = conf.auxSubject
                                     //First option: Assign the leader of the subject party to the character with the highest mutuality.
                                     it.who = parent.parties[conf.auxSubject]!!.members.maxByOrNull {
@@ -611,7 +611,7 @@ class NonPlayerAgent(val character: String) : GameStateElement()
                             //If not leader, wait for the leader to be assigned.
                             if (parent.parties[conf.auxSubject]!!.leader == "")
                             {
-                                return wait(character, place)
+                                return Wait(character, place)
                             } else
                             {
                                 routines.removeAt(0)//Remove the current routine.
@@ -625,7 +625,7 @@ class NonPlayerAgent(val character: String) : GameStateElement()
                         //Grab the salary if not grabbed yet.
                         if (!parent.parties[conf.involvedParty]!!.isDailySalaryPaid[character]!!)
                         {
-                            return salary(character, place)
+                            return Salary(character, place)
                         }
                         //If division leader, share information about the division.
                         //Also, praise or criticize the division members.
@@ -726,7 +726,7 @@ class NonPlayerAgent(val character: String) : GameStateElement()
 
                     }
                 }
-                return wait(character, place)
+                return Wait(character, place)
                 //TODO: do something in the meeting. Leave the meeting if nothing to do.
 
             }
@@ -743,7 +743,7 @@ class NonPlayerAgent(val character: String) : GameStateElement()
                 //Move to findCharacter if the character is not at home
                 {
                     if (parent.places.values.find { it.characters.contains(routines[0].variables["character"]) }!!.name == "home")
-                        return wait(character, place)
+                        return Wait(character, place)
 
                     routines.add(Routine("move", routines[0].priority + 10).also {
                         it.variables["movePlace"] =
@@ -806,7 +806,7 @@ class NonPlayerAgent(val character: String) : GameStateElement()
                     {
                         //if the character is in the same meeting, trade for the resource
 
-                        trade(character, place).also { trade ->
+                        Trade(character, place).also { trade ->
                             trade.who = tradeCharacter
                             trade.item2[routines[0].variables["wantedResource"]!!] =
                                 parent.characters[tradeCharacter]!!.reliants.size + 1
@@ -835,7 +835,7 @@ class NonPlayerAgent(val character: String) : GameStateElement()
             }
 
         }
-        return wait(character, place)
+        return Wait(character, place)
 
     }
 

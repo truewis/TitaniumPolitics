@@ -2,7 +2,7 @@ package com.titaniumPolitics.game.core.gameActions
 
 import com.titaniumPolitics.game.core.GameEngine
 
-class officialResourceTransfer(override val tgtCharacter: String, override val tgtPlace: String) : GameAction()
+class OfficialResourceTransfer(override val tgtCharacter: String, override val tgtPlace: String) : GameAction()
 {
     var toWhere = ""
     var what = ""
@@ -17,12 +17,12 @@ class officialResourceTransfer(override val tgtCharacter: String, override val t
     {
 
         if (
-                (parent.places[tgtPlace]!!.resources[what] ?: 0) >= amount
+            (parent.places[tgtPlace]!!.resources[what] ?: 0) >= amount
         )
         {
             parent.places[tgtPlace]!!.resources[what] = (parent.places[tgtPlace]!!.resources[what] ?: 0) - amount
             parent.places[toWhere]!!.resources[what] =
-                    (parent.places[toWhere]!!.resources[what] ?: 0) + amount
+                (parent.places[toWhere]!!.resources[what] ?: 0) + amount
             parent.characters[tgtCharacter]!!.frozen++
 
         } else
@@ -30,6 +30,11 @@ class officialResourceTransfer(override val tgtCharacter: String, override val t
             println("Not enough resources: $tgtPlace, $what, ${parent.places[tgtPlace]!!.resources[what]}")
         }
 
+    }
+
+    override fun isValid(): Boolean
+    {
+        return (parent.places[tgtPlace]!!.resources[what] ?: 0) >= amount
     }
 
 }

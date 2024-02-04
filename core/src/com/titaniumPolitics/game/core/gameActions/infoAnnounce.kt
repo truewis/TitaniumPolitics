@@ -11,7 +11,7 @@ class infoAnnounce(override val tgtCharacter: String, override val tgtPlace: Str
     {
         //TODO: ability to fabricate information
         what =
-                GameEngine.acquire(parent.informations.filter { it.value.knownTo.contains(tgtCharacter) }.map { it.key })
+            GameEngine.acquire(parent.informations.filter { it.value.knownTo.contains(tgtCharacter) }.map { it.key })
         who = parent.places[tgtPlace]!!.characters
     }
 
@@ -19,9 +19,16 @@ class infoAnnounce(override val tgtCharacter: String, override val tgtPlace: Str
     {
         parent.informations[what]!!.knownTo += who
         val party = parent.places[tgtPlace]!!.responsibleParty
-        parent.informations[what]!!.publicity[party] = min((parent.informations[what]!!.publicity[party]
-                ?: 0) + 30, 100)//TODO: match unit of publicity to number of people in the party
+        parent.informations[what]!!.publicity[party] = min(
+            (parent.informations[what]!!.publicity[party]
+                ?: 0) + 30, 100
+        )//TODO: match unit of publicity to number of people in the party
         parent.characters[tgtCharacter]!!.frozen++
+    }
+
+    override fun isValid(): Boolean
+    {
+        return listOf("mainControlRoom", "market", "squareNorth", "squareSouth").contains(tgtPlace)
     }
 
 }

@@ -2,7 +2,7 @@ package com.titaniumPolitics.game.core.gameActions
 
 import com.titaniumPolitics.game.core.GameEngine
 
-class move(override val tgtCharacter: String, override val tgtPlace: String) : GameAction()
+class Move(override val tgtCharacter: String, override val tgtPlace: String) : GameAction()
 {
     var placeTo = ""
     override fun chooseParams()
@@ -13,7 +13,7 @@ class move(override val tgtCharacter: String, override val tgtPlace: String) : G
             GameEngine.acquire(parent.places[tgtPlace]!!.connectedPlaces + "cancel")
     }
 
-    override fun isValid(): Boolean = placeTo != "cancel"
+    override fun isValid(): Boolean = placeTo != ""
     override fun execute()
     {
 

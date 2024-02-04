@@ -1,6 +1,6 @@
 package com.titaniumPolitics.game.core.gameActions
 
-class leaveMeeting(override val tgtCharacter: String, override val tgtPlace: String) : GameAction()
+class LeaveMeeting(override val tgtCharacter: String, override val tgtPlace: String) : GameAction()
 {
 
     override fun execute()

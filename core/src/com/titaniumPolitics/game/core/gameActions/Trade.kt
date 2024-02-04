@@ -9,7 +9,7 @@ import com.titaniumPolitics.game.core.TradeParams
 //TODO: because of a no interrupt polity, the trade action should be executed immediately, not after the current action is finished.
 //The player character accepts the trade if the value of the offered item is higher than the value of the requested item.
 //The player cannot affect this decision.
-class trade(override val tgtCharacter: String, override val tgtPlace: String) : GameAction()
+class Trade(override val tgtCharacter: String, override val tgtPlace: String) : GameAction()
 {
     var who = ""
     var item = hashMapOf<String, Int>()
@@ -22,7 +22,9 @@ class trade(override val tgtCharacter: String, override val tgtPlace: String) : 
     override fun chooseParams()
     {
         who =
-                parent.ongoingMeetings.filter { it.value.currentCharacters.contains(tgtCharacter) }.flatMap { it.value.currentCharacters }.first { it != tgtCharacter }//Trade can happen only when there is exactly one other character in the meeting.
+            parent.ongoingMeetings.filter { it.value.currentCharacters.contains(tgtCharacter) }
+                .flatMap { it.value.currentCharacters }
+                .first { it != tgtCharacter }//Trade can happen only when there is exactly one other character in the meeting.
 
 //        println("What do you want to trade?")
 //        val type = GameEngine.acquire(listOf("resource", "information", "action"))
@@ -68,10 +70,17 @@ class trade(override val tgtCharacter: String, override val tgtPlace: String) : 
 //            }
 //        }
         val tradeParams = GameEngine.acquire<TradeParams>("Trade", hashMapOf(
-                "items1" to parent.characters[tgtCharacter]!!.resources,
-                "items2" to parent.characters[who]!!.resources,
-                "info1" to parent.informations.filter { it.value.knownTo.contains(tgtCharacter) }.map { it.key }.toHashSet(),
-                "info2" to parent.informations.filter { it.value.knownTo.contains(who) and !it.value.knownTo.contains(tgtCharacter) }.map { it.key }.toHashSet()))
+            "items1" to parent.characters[tgtCharacter]!!.resources,
+            "items2" to parent.characters[who]!!.resources,
+            "info1" to parent.informations.filter { it.value.knownTo.contains(tgtCharacter) }.map { it.key }
+                .toHashSet(),
+            "info2" to parent.informations.filter {
+                it.value.knownTo.contains(who) and !it.value.knownTo.contains(
+                    tgtCharacter
+                )
+            }.map { it.key }.toHashSet()
+        )
+        )
         item = tradeParams.items1
         item2 = tradeParams.items2
         info = tradeParams.info1.firstOrNull()?.let { parent.informations[it] }
@@ -82,14 +91,23 @@ class trade(override val tgtCharacter: String, override val tgtPlace: String) : 
     override fun execute()
     {
         var success = false
-        val value = item.keys.sumOf { parent.characters[who]!!.itemValue(it) * item[it]!! } + (action?.let { parent.characters[who]!!.actionValue(it) }
-                ?: .0) + (info?.let { parent.characters[who]!!.infoValue(it) }
-                ?: .0)//Value is calculated based on how the opponent values the item, not how the tgtCharacter values it.
-        val value2 = item2.keys.sumOf { parent.characters[who]!!.itemValue(it) * item2[it]!! } + (action2?.let { parent.characters[who]!!.actionValue(it) }
-                ?: .0) + (info2?.let { parent.characters[who]!!.infoValue(it) } ?: .0)
-        val valuea = item.keys.sumOf { parent.characters[tgtCharacter]!!.itemValue(it) * item[it]!! } + (action?.let { parent.characters[tgtCharacter]!!.actionValue(it) }
-                ?: .0) + (info?.let { parent.characters[tgtCharacter]!!.infoValue(it) } ?: .0)
-        val valuea2 = item2.keys.sumOf { parent.characters[tgtCharacter]!!.itemValue(it) * item2[it]!! } + (action2?.let { parent.characters[tgtCharacter]!!.actionValue(it) }
+        val value = item.keys.sumOf { parent.characters[who]!!.itemValue(it) * item[it]!! } + (action?.let {
+            parent.characters[who]!!.actionValue(it)
+        }
+            ?: .0) + (info?.let { parent.characters[who]!!.infoValue(it) }
+            ?: .0)//Value is calculated based on how the opponent values the item, not how the tgtCharacter values it.
+        val value2 = item2.keys.sumOf { parent.characters[who]!!.itemValue(it) * item2[it]!! } + (action2?.let {
+            parent.characters[who]!!.actionValue(it)
+        }
+            ?: .0) + (info2?.let { parent.characters[who]!!.infoValue(it) } ?: .0)
+        val valuea = item.keys.sumOf { parent.characters[tgtCharacter]!!.itemValue(it) * item[it]!! } + (action?.let {
+            parent.characters[tgtCharacter]!!.actionValue(it)
+        }
+            ?: .0) + (info?.let { parent.characters[tgtCharacter]!!.infoValue(it) } ?: .0)
+        val valuea2 =
+            item2.keys.sumOf { parent.characters[tgtCharacter]!!.itemValue(it) * item2[it]!! } + (action2?.let {
+                parent.characters[tgtCharacter]!!.actionValue(it)
+            }
                 ?: .0) + (info2?.let { parent.characters[tgtCharacter]!!.infoValue(it) } ?: .0)
         success = if (parent.nonPlayerAgents.keys.contains(who))
         {
@@ -112,10 +130,11 @@ class trade(override val tgtCharacter: String, override val tgtPlace: String) : 
                     return
                 }
                 item.forEach {
-                    parent.characters[tgtCharacter]!!.resources[it.key] = (parent.characters[tgtCharacter]!!.resources[it.key]
+                    parent.characters[tgtCharacter]!!.resources[it.key] =
+                        (parent.characters[tgtCharacter]!!.resources[it.key]
                             ?: 0) - it.value
                     parent.characters[who]!!.resources[it.key] = (parent.characters[who]!!.resources[it.key]
-                            ?: 0) + it.value
+                        ?: 0) + it.value
                 }
             }
             if (item2.isNotEmpty())
@@ -128,8 +147,9 @@ class trade(override val tgtCharacter: String, override val tgtPlace: String) : 
                 }
                 item2.forEach {
                     parent.characters[who]!!.resources[it.key] = (parent.characters[who]!!.resources[it.key]
-                            ?: 0) - it.value
-                    parent.characters[tgtCharacter]!!.resources[it.key] = (parent.characters[tgtCharacter]!!.resources[it.key]
+                        ?: 0) - it.value
+                    parent.characters[tgtCharacter]!!.resources[it.key] =
+                        (parent.characters[tgtCharacter]!!.resources[it.key]
                             ?: 0) + it.value
                 }
             }

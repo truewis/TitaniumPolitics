@@ -4,7 +4,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 //Called when a character resigns from a party, in a daily party meeting
-class resign(override val tgtCharacter: String, override val tgtPlace: String) : GameAction()
+class Resign(override val tgtCharacter: String, override val tgtPlace: String) : GameAction()
 {
     override fun chooseParams()
     {
@@ -31,7 +31,7 @@ class resign(override val tgtCharacter: String, override val tgtPlace: String) :
         //Should immediately leave the party meeting if it is ongoing
         if (parent.ongoingConferences.any { it.value.currentCharacters.contains(tgtCharacter) && it.value.involvedParty == party })
         {
-            leaveMeeting(tgtCharacter, tgtPlace).also {
+            LeaveMeeting(tgtCharacter, tgtPlace).also {
                 it.injectParent(parent)
                 it.execute()
             }

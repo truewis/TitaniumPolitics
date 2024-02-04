@@ -3,7 +3,7 @@ package com.titaniumPolitics.game.quests
 import com.titaniumPolitics.game.core.Command
 import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.core.Quests
-import com.titaniumPolitics.game.core.gameActions.resign
+import com.titaniumPolitics.game.core.gameActions.Resign
 
 class Quest1 : Quests.QuestObject("Be a minister", 240)
 {
@@ -13,7 +13,12 @@ class Quest1 : Quests.QuestObject("Be a minister", 240)
         super.injectParent(gameState)
         //The current infrastructure minister resigns and the mechanic picks a new one.
         val who = parent.parties["infrastructure"]!!.leader
-        parent.characters[who]!!.commands.add(Command(parent.parties["infrastructure"]!!.home, resign(tgtCharacter = who, tgtPlace = parent.parties["infrastructure"]!!.home).also { it.injectParent(gameState) }).also { it.executeTime = 48 + 18; it.issuedParty = "infrastructure" })
+        parent.characters[who]!!.commands.add(
+            Command(
+                parent.parties["infrastructure"]!!.home,
+                Resign(tgtCharacter = who, tgtPlace = parent.parties["infrastructure"]!!.home).also {
+                    it.injectParent(gameState)
+                }).also { it.executeTime = 48 + 18; it.issuedParty = "infrastructure" })
 
     }
 
@@ -23,7 +28,12 @@ class Quest1 : Quests.QuestObject("Be a minister", 240)
             if (parent.time != due) return false
 
             val mechanic = parent.characters.values.find { it.trait.contains("mechanic") }!!
-            return parent.parties["infrastructure"]!!.members.maxBy { parent.getMutuality(mechanic.name, it) } == parent.playerAgent
+            return parent.parties["infrastructure"]!!.members.maxBy {
+                parent.getMutuality(
+                    mechanic.name,
+                    it
+                )
+            } == parent.playerAgent
 
         }
 }
