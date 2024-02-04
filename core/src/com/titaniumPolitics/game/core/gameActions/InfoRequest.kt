@@ -3,7 +3,7 @@ package com.titaniumPolitics.game.core.gameActions
 import com.titaniumPolitics.game.core.GameEngine
 
 //TODO: party integrity affects the chances. Party integrity is affected.
-class infoRequest(override val tgtCharacter: String, override val tgtPlace: String) : GameAction()
+class InfoRequest(override val tgtCharacter: String, override val tgtPlace: String) : GameAction()
 {
     var who = hashSetOf<String>()
     var what = ""
@@ -20,7 +20,7 @@ class infoRequest(override val tgtCharacter: String, override val tgtPlace: Stri
     {
         who = parent.characters[tgtCharacter]!!.currentMeeting!!.currentCharacters
         val party = parent.parties.values.find { it.members.containsAll(who + tgtCharacter) }!!.name
-
+        //TODO: Ability to request information that does not exist
         //If someone knows about the information, then everyone in the meeting/conference knows about it.
         if (parent.informations[what]!!.knownTo.intersect(who).isNotEmpty())
         {
@@ -32,6 +32,12 @@ class infoRequest(override val tgtCharacter: String, override val tgtPlace: Stri
 
 
         parent.characters[tgtCharacter]!!.frozen++
+    }
+
+    override fun isValid(): Boolean
+    {
+        return parent.characters[tgtCharacter]!!.currentMeeting != null
+
     }
 
 }

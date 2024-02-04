@@ -3,7 +3,7 @@ package com.titaniumPolitics.game.core.gameActions
 import com.titaniumPolitics.game.core.GameEngine
 import kotlin.math.min
 
-class infoAnnounce(override val tgtCharacter: String, override val tgtPlace: String) : GameAction()
+class InfoAnnounce(override val tgtCharacter: String, override val tgtPlace: String) : GameAction()
 {
     var who = hashSetOf<String>()
     var what = ""

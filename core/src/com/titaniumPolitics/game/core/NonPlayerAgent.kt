@@ -344,7 +344,7 @@ class NonPlayerAgent(val character: String) : GameStateElement()
                             routines.add(Routine("attendConference", routines[0].priority + 10).also {
                                 it.intVariables["time"] = conf.time
                             })//Add a routine with higher priority.
-                            startConference(character, place).also { action ->
+                            StartConference(character, place).also { action ->
                                 action.meetingName =
                                     parent.scheduledConferences.keys.first { parent.scheduledConferences[it] == conf }
                                 return action
@@ -637,7 +637,7 @@ class NonPlayerAgent(val character: String) : GameStateElement()
                                     character
                                 ) && !it.value.knownTo.containsAll(conf.currentCharacters) && it.value.tgtTime in parent.time / 48..parent.time / 48 + 47
                             }.forEach {
-                                infoShare(character, place).also { action ->
+                                InfoShare(character, place).also { action ->
                                     action.what = it.key
                                     return action
                                 }//TODO: do not share all information. Share only the information that the leader wants to share.
@@ -654,7 +654,7 @@ class NonPlayerAgent(val character: String) : GameStateElement()
                                     val mutuality = parent.getMutuality(character, member)
                                     if (mutuality > 80)
                                     {
-                                        infoShare(character, place).also { action ->
+                                        InfoShare(character, place).also { action ->
                                             //just take random information for now. TODO: take the information that is most useful for praising.
                                             action.what = parent.informations.values.filter {
                                                 it.tgtCharacter == member && it.knownTo.contains(character)
@@ -665,7 +665,7 @@ class NonPlayerAgent(val character: String) : GameStateElement()
                                         }
                                     } else if (mutuality < 20)
                                     {
-                                        infoShare(character, place).also { action ->
+                                        InfoShare(character, place).also { action ->
                                             //just take random information for now. TODO: take the information that is most useful for criticizing.
                                             action.what = parent.informations.values.filter {
                                                 it.tgtCharacter == member && it.knownTo.contains(character)
@@ -688,7 +688,7 @@ class NonPlayerAgent(val character: String) : GameStateElement()
                                             character
                                         )
                                     })
-                                    infoShare(character, place).also { action ->
+                                    InfoShare(character, place).also { action ->
                                         action.what = parent.informations.values.filter {
                                             (it.tgtParty == enemyParty || it.tgtCharacter == parent.parties[enemyParty]!!.leader) && it.knownTo.contains(
                                                 character
@@ -717,7 +717,7 @@ class NonPlayerAgent(val character: String) : GameStateElement()
                                     character
                                 ) && it.value.type == "action" && it.value.tgtTime in parent.time / 48..parent.time / 48 + 47
                             }.forEach {
-                                infoShare(character, place).also { action ->
+                                InfoShare(character, place).also { action ->
                                     action.what = it.key
                                     return action
                                 }
