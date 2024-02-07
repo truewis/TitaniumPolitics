@@ -78,10 +78,13 @@ class MapUI(val gameState: GameState) : Table(Scene2DSkin.defaultSkin), KTable
             if (!placeName.contains("home"))
             {
                 place.connectedPlaces.forEach { connection ->
-                    addActor(Connection(gameState, placeName, connection).also {
-                        it.color = Color.RED
-                        currentConnections.add(it)
-                    })
+                    if (!connection.contains("home"))
+                    {
+                        addActor(Connection(gameState, placeName, connection).also {
+                            it.color = Color.RED
+                            currentConnections.add(it)
+                        })
+                    }
                 }
             }
         }
