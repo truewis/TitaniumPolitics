@@ -75,12 +75,20 @@ class CapsuleStage(val gameState: GameState) : Stage(FitViewport(1920F, 1080F))
 
     fun roomChanged(name: String)
     {
-        background.drawable = TextureRegionDrawable(
-            assetManager.get(
-                ReadOnlyJsons.mapJson[if (name.contains("home")) "home" else name]!!.jsonObject["image"]!!.jsonPrimitive.content,
-                Texture::class.java
-            )!!
-        )
+        try
+        {
+
+            background.drawable = TextureRegionDrawable(
+                assetManager.get(
+                    ReadOnlyJsons.mapJson[if (name.contains("home")) "home" else name]!!.jsonObject["image"]!!.jsonPrimitive.content,
+                    Texture::class.java
+                )!!
+            )
+
+        } catch (e: Exception)
+        {
+            println("Background Image Error: $e")
+        }
     }
 
     override fun keyTyped(character: Char): Boolean

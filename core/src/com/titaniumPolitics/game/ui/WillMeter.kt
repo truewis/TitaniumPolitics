@@ -1,6 +1,8 @@
 package com.titaniumPolitics.game.ui
 
 import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.graphics.Color
+import com.badlogic.gdx.scenes.scene2d.ui.Image
 import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton
@@ -15,8 +17,9 @@ class WillMeter(gameState: GameState) : Table(defaultSkin)
     {
         l = Label("", defaultSkin, "trnsprtConsole")
         l.setFontScale(2f)
-        val b = TextButton("WILL", defaultSkin)
-        add(b)
+        val b = Image(defaultSkin, "confused-line-icon")
+        b.color = Color.WHITE
+        add(b).size(50f)
         add(l)
 
         gameState.updateUI += { y ->

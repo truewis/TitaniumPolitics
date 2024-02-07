@@ -8,17 +8,26 @@ import com.titaniumPolitics.game.core.GameState
 import ktx.scene2d.KTable
 import ktx.scene2d.Scene2DSkin.defaultSkin
 import ktx.scene2d.image
+import ktx.scene2d.stack
+import ktx.scene2d.table
 
 class CharStatusUI(gameState: GameState) : Table(defaultSkin), KTable
 {
 
     init
     {
-        add(HealthMeter(gameState)).fill()
+        stack {
+            it.fillX()
+            image(defaultSkin.getDrawable("panel"))
+            table {
+                add(HealthMeter(gameState)).fill()
+                row()
+                add(WillMeter(gameState)).fill()
+            }
+
+        }
         row()
-        add(WillMeter(gameState)).fill()
-        row()
-        image(defaultSkin.getDrawable("capsuleDevDanger")) {
+        image(defaultSkin.getDrawable("portrait1")) {
             it.size(200f)
         }
     }
