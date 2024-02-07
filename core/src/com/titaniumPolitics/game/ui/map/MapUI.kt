@@ -41,8 +41,8 @@ class MapUI(val gameState: GameState) : Table(Scene2DSkin.defaultSkin), KTable
 
                 //This button hase to be identical in appearance to the one in AssistantUI.
                 button {
-                    label("MAP", "console") {
-                        setFontScale(4f)
+                    image("map-icon") {
+                        it.size(50f)
                     }
                     addListener(object : ClickListener()
                     {

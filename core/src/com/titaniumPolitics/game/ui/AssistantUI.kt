@@ -4,23 +4,30 @@ import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
+import com.badlogic.gdx.utils.Align
 import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.ui.map.MapUI
-import ktx.scene2d.KTable
+import ktx.scene2d.*
 import ktx.scene2d.Scene2DSkin.defaultSkin
-import ktx.scene2d.button
-import ktx.scene2d.label
-import ktx.scene2d.textButton
 
 class AssistantUI(gameState: GameState) : Table(defaultSkin), KTable
 {
 
     init
     {
-        val calendarLabel = Label("0", defaultSkin).also { it.setFontScale(4f) }
+        val calendarLabel = Label("0", defaultSkin, "trnsprtConsole").also {
+            it.setFontScale(3f)
+            it.setAlignment(Align.center, Align.center)
+        }
         val calendarButton = button {
             it.fill()
-            add(calendarLabel)
+            stack {
+                it.size(50f)
+                it.fill()
+                image("calendar-blank-line-icon") {
+                }
+                add(calendarLabel)
+            }
             addListener(object : ClickListener()
             {
                 override fun clicked(event: com.badlogic.gdx.scenes.scene2d.InputEvent?, x: Float, y: Float)
@@ -36,8 +43,8 @@ class AssistantUI(gameState: GameState) : Table(defaultSkin), KTable
 
         button { cell ->
             cell.fill()
-            label("MAP", "console") {
-                setFontScale(4f)
+            image("map-icon") {
+                it.size(50f)
             }
             addListener(object : ClickListener()
             {
