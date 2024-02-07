@@ -60,7 +60,10 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable
                 return@forEach
             }
             val t = scene2d.button {
-                textTooltip(tobj)
+                textTooltip(tobj, "default") {
+                    this.setFontScale(2f)
+                    it.manager.initialTime = 1f
+                }
                 image("question-mark-circle-outline-icon") {
                     it.size(100f)
 
@@ -132,6 +135,16 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable
                                 }
                             }
                             )
+                        }
+
+                        "Sleep" ->
+                        {
+                            this.setDrawable(defaultSkin, "closed-eye-icon")
+                        }
+
+                        "Repair" ->
+                        {
+                            this.setDrawable(defaultSkin, "hammer-line-icon")
                         }
 
                         "UnofficialResourceTransfer" ->

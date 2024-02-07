@@ -8,20 +8,19 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton
 import com.titaniumPolitics.game.core.GameState
 import ktx.scene2d.Scene2DSkin.defaultSkin
+import ktx.scene2d.progressBar
+import ktx.scene2d.scene2d
 
 class WillMeter(gameState: GameState) : Table(defaultSkin)
 {
-    var l: Label
+    val bar = scene2d.progressBar(0f, 1f, 0.01f, false, "default-horizontal")
 
     init
     {
-        l = Label("", defaultSkin, "trnsprtConsole")
-        l.setFontScale(2f)
         val b = Image(defaultSkin, "confused-line-icon")
         b.color = Color.WHITE
         add(b).size(50f)
-        add(l)
-
+        add(bar).growX()
         gameState.updateUI += { y ->
             Gdx.app.postRunnable { setValue(y.getMutuality(gameState.playerAgent, gameState.playerAgent).toInt()) }
         }
@@ -29,6 +28,7 @@ class WillMeter(gameState: GameState) : Table(defaultSkin)
 
     fun setValue(value: Int)
     {
-        l.setText(value.toString().padStart(2, '0'))
+        bar.value = value.toFloat() / 100
+        bar.updateVisualValue()
     }
 }
