@@ -1082,23 +1082,23 @@ class GameEngine(val gameState: GameState)
                     println("You are in a meeting.")
                     println("Attendees: ${meeting.currentCharacters}")
                 }
-                actions.add("chat")
+                actions.add("Chat")
                 //Trade is allowed only if there are exactly two people in the meeting.
                 //InfoShare is allowed only if there are more than two people in the meeting.
                 if (meeting.currentCharacters.count() == 2)
-                    actions.add("trade")
+                    actions.add("Trade")
                 else
-                    actions.add("infoShare")
+                    actions.add("InfoShare")
 
                 if (gameState.parties.values.any { it.leader == character && it.members.containsAll(meeting.currentCharacters) })//Only the leader of a party can command.
                 {
-                    actions.add("unofficialCommand")
+                    actions.add("UnofficialCommand")
                     if (meeting.currentCharacters.count() >= 3)
-                        actions.add("infoRequest")
+                        actions.add("InfoRequest")
                 }
-                actions.add("appointMeeting")
-                actions.add("wait")
-                actions.add("leaveMeeting")
+                actions.add("AppointMeeting")
+                actions.add("Wait")
+                actions.add("LeaveMeeting")
                 return actions
             }
             if (gameState.ongoingConferences.any { it.value.currentCharacters.contains(character) })
@@ -1123,55 +1123,51 @@ class GameEngine(val gameState: GameState)
                 {
                     when (subject)
                     {
-                        "budgetProposal" -> if (!gameState.isBudgetProposed) actions.add("budgetProposal")
-                        "budgetResolution" -> if (!gameState.isBudgetResolved) actions.add("budgetResolution")
-                        "leaderAssignment" -> if (gameState.parties[conf.auxSubject]!!.leader == "") actions.add("leaderAssignment")
+                        "budgetProposal" -> if (!gameState.isBudgetProposed) actions.add("BudgetProposal")
+                        "budgetResolution" -> if (!gameState.isBudgetResolved) actions.add("BudgetResolution")
+                        "leaderAssignment" -> if (gameState.parties[conf.auxSubject]!!.leader == "") actions.add("LeaderAssignment")
 
                     }
-                    actions.add("resign") //Only leaders can resign right now.
+                    actions.add("Resign") //Only leaders can resign right now.
                 }
                 //When not the leader, you can only do below actions.
                 when (subject)
                 {
                     "divisionDailyConference" -> if (gameState.parties[conf.involvedParty]!!.isDailySalaryPaid[character] == false) actions.add(
-                        "salary"
+                        "Salary"
                     )
                 }
                 //Command is allowed only if the character is the division leader.
                 if (gameState.parties[conf.involvedParty]?.leader == character)
                 {
-                    actions.add("command")
-                    actions.add("infoRequest")
+                    actions.add("Command")
+                    actions.add("InfoRequest")
                 }
-                actions.add("infoShare")
-                actions.add("appointMeeting")
-                actions.add("wait")
-                actions.add("leaveMeeting")
+                actions.add("InfoShare")
+                actions.add("AppointMeeting")
+                actions.add("Wait")
+                actions.add("LeaveMeeting")
                 return actions
             }
-            if (place != "home" && gameState.places[place]!!.characters.count() > 1)
-                actions.add("talk")
+            if (gameState.places[place]!!.characters.count() > 1)
+                actions.add("Talk")
             if (gameState.places[place]!!.isAccidentScene)
             {
                 if (gameState.places[place]!!.responsibleParty != "" && gameState.parties[gameState.places[place]!!.responsibleParty]!!.members.contains(
                         character
                     )
                 )//Only the responsible party members can clear the accident scene.
-                    actions.add("clearAccidentScene")
-                actions.add("investigateAccidentScene")
+                    actions.add("ClearAccidentScene")
+                actions.add("InvestigateAccidentScene")
             }
-            actions.add("move")
-            actions.add("examine")
+            actions.add("Move")
+            actions.add("Examine")
             //actions.add("radio")
-            actions.add("wait")
-            if (place == "home")
+            actions.add("Wait")
+            if (place.contains("home"))
             {
-                actions.add("sleep")
-                actions.add("eat")
-            }
-            if (place == gameState.characters[character]!!.livingBy)
-            {
-                actions.add("home")
+                actions.add("Sleep")
+                actions.add("Eat")
             }
             val availableConferences =
                 gameState.scheduledConferences.filter { it.value.time + 2 > gameState.time && gameState.time + 2 > it.value.time && it.value.place == place }
@@ -1179,32 +1175,32 @@ class GameEngine(val gameState: GameState)
             if (availableConferences.isNotEmpty())
                 if (gameState.parties[availableConferences.values.first().involvedParty]!!.leader == character)//Only the party leader can do below actions.
                 {
-                    actions.add("startConference")
+                    actions.add("StartConference")
                 }
             val ongoingConferences = gameState.ongoingConferences.filter {
                 it.value.scheduledCharacters.contains(character) && !it.value.currentCharacters.contains(character) && it.value.place == place
             }
             if (ongoingConferences.isNotEmpty())
-                actions.add("joinConference")
+                actions.add("JoinConference")
 
             if (place == "mainControlRoom" || place == "market" || place == "squareNorth" || place == "squareSouth")
             {
-                actions.add("infoAnnounce")
+                actions.add("InfoAnnounce")
             }
             if (gameState.places[place]!!.responsibleParty != "" && gameState.parties[gameState.places[place]!!.responsibleParty]!!.members.contains(
                     character
                 )
             )
             {
-                actions.add("unofficialResourceTransfer")//can only steal from their own division.
-                actions.add("officialResourceTransfer")//can only move resources from their own division.
+                actions.add("UnofficialResourceTransfer")//can only steal from their own division.
+                actions.add("OfficialResourceTransfer")//can only move resources from their own division.
             }
             val availableMeetings =
                 gameState.scheduledMeetings.filter { it.value.time + 2 > gameState.time && gameState.time + 2 > it.value.time && it.value.place == place }
                     .filter { !gameState.ongoingMeetings.containsKey(it.key) }
                     .filter { it.value.scheduledCharacters.contains(character) }
             if (availableMeetings.isNotEmpty())
-                actions.add("startMeeting")
+                actions.add("StartMeeting")
             val meetingsToJoin = gameState.ongoingMeetings.filter {
                 it.value.scheduledCharacters.contains(character) && !it.value.currentCharacters.contains(character) && it.value.place == place
             }
@@ -1221,14 +1217,14 @@ class GameEngine(val gameState: GameState)
                 {
                     when (subject)
                     {
-                        "talk" -> println("Someone wants to talk to you.")//TODO: there must be a way to know NPC's intention to talk
+                        "Talk" -> println("Someone wants to talk to you.")//TODO: there must be a way to know NPC's intention to talk
                     }
                 }
-                actions.add("joinMeeting")
+                actions.add("JoinMeeting")
             }
-            if (gameState.characters[character]!!.trait.contains("technician") && place != "home")
+            if (gameState.characters[character]!!.trait.contains("technician") && !place.contains("home"))
             {
-                actions.add("repair")
+                actions.add("Repair")
             }
             return actions
         }

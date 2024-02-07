@@ -68,6 +68,7 @@ class MapUI(val gameState: GameState) : Table(Scene2DSkin.defaultSkin), KTable
 
     fun refresh()
     {
+        //TODO: Home Marker, Current Location Marker
         //CurrentPlaceMarkerWindow is a window that shows up when a place marker is clicked. It should be removed and re-added to the stage to ensure it is on top.
         removeActor(currentPlaceMarkerWindow)
         currentConnections.forEach { removeActor(it) }
