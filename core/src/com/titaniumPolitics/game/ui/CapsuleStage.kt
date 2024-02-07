@@ -26,9 +26,12 @@ class CapsuleStage(val gameState: GameState) : Stage(FitViewport(1920F, 1080F))
     val assetManager = AssetManager()
     val tradeBox: TradeUI
     val commandBox: CommandUI
+    val onMouseClick = ArrayList<(Float, Float) -> Unit>()
+    val onMouseDown = ArrayList<(Float, Float) -> Unit>()
 
     init
     {
+        instance = this
         val resolver = InternalFileHandleResolver()
         assetManager.setLoader(
             Texture::class.java, TextureLoader(resolver)
@@ -84,6 +87,23 @@ class CapsuleStage(val gameState: GameState) : Stage(FitViewport(1920F, 1080F))
     {
 
         return super.keyTyped(character)
+    }
+
+    override fun touchUp(screenX: Int, screenY: Int, pointer: Int, button: Int): Boolean
+    {
+        onMouseClick.forEach { it(screenX.toFloat(), screenY.toFloat()) }
+        return super.touchUp(screenX, screenY, pointer, button)
+    }
+
+    override fun touchDown(screenX: Int, screenY: Int, pointer: Int, button: Int): Boolean
+    {
+        onMouseDown.forEach { it(screenX.toFloat(), screenY.toFloat()) }
+        return super.touchDown(screenX, screenY, pointer, button)
+    }
+
+    companion object
+    {
+        lateinit var instance: CapsuleStage
     }
 
 
