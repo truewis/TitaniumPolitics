@@ -23,6 +23,7 @@ class CapsuleStage(val gameState: GameState) : Stage(FitViewport(1920F, 1080F))
     val logBox = LogUI(gameState)
     var hud: HeadUpInterface
     val rootStack = Stack()
+    val charactersView = CharacterPortraitsUI(gameState)
     val assetManager = AssetManager()
     val commandBox: CommandUI
     val onMouseClick = ArrayList<(Float, Float) -> Unit>()
@@ -46,6 +47,7 @@ class CapsuleStage(val gameState: GameState) : Stage(FitViewport(1920F, 1080F))
 
         rootStack.setFillParent(true)
         rootStack.add(background)
+        rootStack.add(charactersView)
         background.setFillParent(true)
 
         addActor(rootStack)
