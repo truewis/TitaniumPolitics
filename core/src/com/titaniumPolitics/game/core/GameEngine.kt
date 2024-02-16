@@ -131,6 +131,7 @@ class GameEngine(val gameState: GameState)
             tgtCharacter = char.name,
             action = action.javaClass.simpleName
         ).also {
+            it.knownTo.add(char.name)
             gameState.informations[it.generateName()] = it
         }
         action.execute()
