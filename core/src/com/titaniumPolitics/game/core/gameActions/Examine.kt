@@ -44,7 +44,7 @@ class Examine(override val tgtCharacter: String, override val tgtPlace: String) 
 
             "resources" ->
             {
-                if (tgtPlace == "home")
+                if (tgtPlace.contains("home"))
                 {//Home is the exception; character's resources are shown instead.
                     println("Resources: ${parent.characters[tgtCharacter]!!.resources}")
                     //Acquire resources information of this character.

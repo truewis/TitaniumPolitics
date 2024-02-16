@@ -101,7 +101,7 @@ class InformationViewUI : Table(defaultSkin), KTable
                             {
                                 when (information.type)
                                 {
-                                    "resource" ->
+                                    "resources" ->
                                     {
                                         //Open resource window
                                         ResourceInfoUI.instance.isVisible = true

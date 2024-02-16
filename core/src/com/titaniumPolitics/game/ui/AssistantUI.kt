@@ -97,6 +97,7 @@ class AssistantUI(gameState: GameState) : Table(defaultSkin), KTable
     {
         InformationViewUI.instance.isVisible = false
         MapUI.instance.isVisible = false
+        ResourceInfoUI.instance.isVisible = false
     }
 
 

@@ -37,22 +37,24 @@ class ResourceInfoUI : Table(defaultSkin), KTable
     {
         dataTable.clear()
         dataTable.apply {
-            val authorLabel = label("Author: ${information.author}") { setAlignment(Align.center) }
+
+            add(label("Author: ${information.author}") { setAlignment(Align.center) })
             row()
-            val creationTimeLabel = label("Creation Time: ${information.creationTime}") { setAlignment(Align.center) }
+            add(label("Creation Time: ${information.creationTime}") { setAlignment(Align.center) })
+
             row()
-            val typeLabel = label("Type: ${information.type}") { setAlignment(Align.center) }
+            add(label("Type: ${information.type}") { setAlignment(Align.center) })
             row()
-            val tgtTimeLabel = label("Target Time: ${information.tgtTime}") { setAlignment(Align.center) }
+            add(label("Target Time: ${information.tgtTime}") { setAlignment(Align.center) })
             row()
-            val tgtPlaceLabel = label("Target Place: ${information.tgtPlace}") { setAlignment(Align.center) }
+            add(label("Target Place: ${information.tgtPlace}") { setAlignment(Align.center) })
             row()
-            table {
+            add(table {
                 information.resources.forEach { (resourceName, resourceAmount) ->
-                    val resourceLabel = label("$resourceName: $resourceAmount") { setAlignment(Align.center) }
+                    label("$resourceName: $resourceAmount") { setAlignment(Align.center) }
                     row()
                 }
-            }
+            })
         }
 
     }
