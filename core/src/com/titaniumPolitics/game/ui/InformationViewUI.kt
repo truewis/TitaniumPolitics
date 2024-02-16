@@ -31,42 +31,43 @@ class InformationViewUI : Table(defaultSkin), KTable
     {
         informationTable.clear()
         val informationList: List<Information>
+        val knownInfos = gameState.informations.values.filter { it.knownTo.contains(gameState.playerAgent) }
         when (sortBy)
         {
             //All major fields of informations.
             "name" ->
             {
-                informationList = gameState.informations.values.sortedBy { it.name }
+                informationList = knownInfos.sortedBy { it.name }
             }
 
             "tgtPlace" ->
             {
-                informationList = gameState.informations.values.sortedBy { it.tgtPlace }
+                informationList = knownInfos.sortedBy { it.tgtPlace }
             }
 
             "author" ->
             {
-                informationList = gameState.informations.values.sortedBy { it.author }
+                informationList = knownInfos.sortedBy { it.author }
             }
 
             "creationTime" ->
             {
-                informationList = gameState.informations.values.sortedBy { it.creationTime }
+                informationList = knownInfos.sortedBy { it.creationTime }
             }
 
             "type" ->
             {
-                informationList = gameState.informations.values.sortedBy { it.type }
+                informationList = knownInfos.sortedBy { it.type }
             }
 
             "tgtTime" ->
             {
-                informationList = gameState.informations.values.sortedBy { it.tgtTime }
+                informationList = knownInfos.sortedBy { it.tgtTime }
             }
 
             else ->
             {
-                informationList = gameState.informations.values.toList()
+                informationList = knownInfos.toList()
             }
         }
         if (informationList.isNotEmpty())
