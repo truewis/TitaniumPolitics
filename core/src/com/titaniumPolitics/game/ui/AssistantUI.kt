@@ -15,6 +15,25 @@ class AssistantUI(gameState: GameState) : Table(defaultSkin), KTable
 
     init
     {
+        val informationViewButton = button {
+            it.fill()
+            stack {
+                it.size(50f)
+                it.fill()
+                image("binder-file-icon") {
+                }
+            }
+            addListener(object : ClickListener()
+            {
+                override fun clicked(event: com.badlogic.gdx.scenes.scene2d.InputEvent?, x: Float, y: Float)
+                {
+                    InformationViewUI.instance.isVisible = !InformationViewUI.instance.isVisible
+                    InformationViewUI.instance.populateInformation(gameState, "creationTime")
+                }
+            }
+            )
+        }
+        row()
         val calendarLabel = Label("0", defaultSkin, "trnsprtConsole").also {
             it.setFontScale(3f)
             it.setAlignment(Align.center, Align.center)
@@ -53,7 +72,7 @@ class AssistantUI(gameState: GameState) : Table(defaultSkin), KTable
 
                     //Open Map UI
                     MapUI.instance.refresh()
-                    MapUI.instance.isVisible = true
+                    MapUI.instance.isVisible = !MapUI.instance.isVisible
                 }
             }
             )

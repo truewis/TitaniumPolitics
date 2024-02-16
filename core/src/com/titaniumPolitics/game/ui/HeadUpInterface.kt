@@ -15,6 +15,15 @@ class HeadUpInterface(val gameState: GameState) : Table(Scene2DSkin.defaultSkin)
         instance = this
         stack { cell ->
             cell.grow()
+
+            container {
+                align(Align.bottom)
+                addActor(AvailableActionsUI(this@HeadUpInterface.gameState))
+            }
+            add(MapUI(gameState = this@HeadUpInterface.gameState))
+            add(InformationViewUI())
+
+            //We draw the following UIs above any other UIs.
             table {
                 val leftSeparator = table {
                     it.fill()
@@ -32,12 +41,6 @@ class HeadUpInterface(val gameState: GameState) : Table(Scene2DSkin.defaultSkin)
                     add(CharStatusUI(this@HeadUpInterface.gameState)).align(Align.bottomRight).expandY()
                 }
             }
-            container {
-                align(Align.bottom)
-                addActor(AvailableActionsUI(this@HeadUpInterface.gameState))
-            }
-            add(MapUI(gameState = this@HeadUpInterface.gameState))
-
 
         }
 

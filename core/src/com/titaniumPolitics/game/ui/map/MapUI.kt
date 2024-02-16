@@ -36,26 +36,6 @@ class MapUI(val gameState: GameState) : Table(Scene2DSkin.defaultSkin), KTable
                     )
                 }
             }
-            container {
-                align(Align.bottomLeft)
-
-                //This button hase to be identical in appearance to the one in AssistantUI.
-                button {
-                    image("map-icon") {
-                        it.size(50f)
-                    }
-                    addListener(object : ClickListener()
-                    {
-                        override fun clicked(event: com.badlogic.gdx.scenes.scene2d.InputEvent?, x: Float, y: Float)
-                        {
-                            //Close Map UI
-                            instance.isVisible = false
-                        }
-                    }
-                    )
-                }
-            }
-            //A button to hide this UI on the bottom left of the screen.
 
 
         }
