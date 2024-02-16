@@ -27,8 +27,12 @@ class AssistantUI(gameState: GameState) : Table(defaultSkin), KTable
             {
                 override fun clicked(event: com.badlogic.gdx.scenes.scene2d.InputEvent?, x: Float, y: Float)
                 {
-                    InformationViewUI.instance.isVisible = !InformationViewUI.instance.isVisible
-                    InformationViewUI.instance.populateInformation(gameState, "creationTime")
+                    if (InformationViewUI.instance.isVisible) this@AssistantUI.closeAll()
+                    else
+                    {
+                        InformationViewUI.instance.isVisible = !InformationViewUI.instance.isVisible
+                        InformationViewUI.instance.populateInformation(gameState, "creationTime")
+                    }
                 }
             }
             )
@@ -71,8 +75,12 @@ class AssistantUI(gameState: GameState) : Table(defaultSkin), KTable
                 {
 
                     //Open Map UI
-                    MapUI.instance.refresh()
-                    MapUI.instance.isVisible = !MapUI.instance.isVisible
+                    if (MapUI.instance.isVisible) this@AssistantUI.closeAll()
+                    else
+                    {
+                        MapUI.instance.refresh()
+                        MapUI.instance.isVisible = !MapUI.instance.isVisible
+                    }
                 }
             }
             )
@@ -83,6 +91,12 @@ class AssistantUI(gameState: GameState) : Table(defaultSkin), KTable
         gameState.timeChanged += { _, y ->
             Gdx.app.postRunnable { calendarLabel.setText((y / 48).toString()) } // Current Date.
         }
+    }
+
+    fun closeAll()
+    {
+        InformationViewUI.instance.isVisible = false
+        MapUI.instance.isVisible = false
     }
 
 
