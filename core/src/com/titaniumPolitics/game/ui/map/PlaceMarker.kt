@@ -5,7 +5,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Button
 import com.titaniumPolitics.game.core.GameState
 import ktx.scene2d.Scene2DSkin.defaultSkin
 
-open class PlaceMarker(var gameState: GameState, place: String) : Button()
+open class PlaceMarker(var gameState: GameState, var owner: MapUI, place: String) : Button()
 {
     init
     {
@@ -29,7 +29,7 @@ open class PlaceMarker(var gameState: GameState, place: String) : Button()
             override fun clicked(event: com.badlogic.gdx.scenes.scene2d.InputEvent?, x: Float, y: Float)
             {
                 //Open Place UI
-                MapUI.instance.currentPlaceMarkerWindow.refresh(getX(), getY(), place)
+                owner.currentPlaceMarkerWindow.refresh(getX(), getY(), place)
             }
         })
     }

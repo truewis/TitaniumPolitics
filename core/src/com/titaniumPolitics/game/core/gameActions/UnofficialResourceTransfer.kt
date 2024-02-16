@@ -33,7 +33,7 @@ class UnofficialResourceTransfer(override val tgtCharacter: String, override val
                     action = "unofficialResourceTransfer"
                 )/*spread rumor in the responsible party*/.also {
                     parent.informations[it.generateName()] =
-                        it;
+                        it
                     it.publicity[parent.places[tgtPlace]!!.responsibleParty] = 1
                 }
             }

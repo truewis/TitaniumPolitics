@@ -160,6 +160,7 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable
                                 {
                                     ResourceTransferUI.instance.isVisible = true
                                     ResourceTransferUI.instance.refresh(this@AvailableActionsUI.gameState.characters[this@AvailableActionsUI.gameState.playerAgent]!!.place.resources)
+                                    ResourceTransferUI.instance.mode = "unofficial"
                                 }
                             })
                         }
@@ -167,6 +168,19 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable
                         "OfficialResourceTransfer" ->
                         {
                             this.setDrawable(defaultSkin, "boxes-icon")
+                            this@button.addListener(object : ClickListener()
+                            {
+                                override fun clicked(
+                                    event: com.badlogic.gdx.scenes.scene2d.InputEvent?,
+                                    x: Float,
+                                    y: Float
+                                )
+                                {
+                                    ResourceTransferUI.instance.isVisible = true
+                                    ResourceTransferUI.instance.refresh(this@AvailableActionsUI.gameState.characters[this@AvailableActionsUI.gameState.playerAgent]!!.place.resources)
+                                    ResourceTransferUI.instance.mode = "official"
+                                }
+                            })
                         }
 
                         else ->

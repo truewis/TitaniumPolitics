@@ -8,17 +8,16 @@ import com.badlogic.gdx.utils.Align
 import com.titaniumPolitics.game.core.GameState
 import ktx.scene2d.*
 
-class MapUI(val gameState: GameState) : Table(Scene2DSkin.defaultSkin), KTable
+open class MapUI(val gameState: GameState) : Table(Scene2DSkin.defaultSkin), KTable
 {
     val currentConnections = arrayListOf<Connection>()
     val currentMarkers = arrayListOf<PlaceMarker>()
-    val currentPlaceMarkerWindow = PlaceMarkerWindowUI(gameState)
+    val currentPlaceMarkerWindow = PlaceMarkerWindowUI(gameState, this)
 
 
     init
     {
         isVisible = false
-        instance = this
 
         stack { cell ->
             cell.grow()
@@ -37,16 +36,32 @@ class MapUI(val gameState: GameState) : Table(Scene2DSkin.defaultSkin), KTable
                 }
             }
 
+            container {
+                align(Align.topRight)
+                button {
+                    image("close-square-line-icon") {
+                        it.size(50f)
+                    }
+                    addListener(object : ClickListener()
+                    {
+                        override fun clicked(event: com.badlogic.gdx.scenes.scene2d.InputEvent?, x: Float, y: Float)
+                        {
+                            this@MapUI.isVisible = false
+                        }
+                    })
+                }
+            }
+
 
         }
         currentPlaceMarkerWindow.isVisible = false
-        addActor(currentPlaceMarkerWindow)
+        this.addActor(currentPlaceMarkerWindow)
 
 
     }
 
 
-    fun refresh()
+    open fun refresh()
     {
         //TODO: Home Marker, Current Location Marker
         //CurrentPlaceMarkerWindow is a window that shows up when a place marker is clicked. It should be removed and re-added to the stage to ensure it is on top.
@@ -74,12 +89,12 @@ class MapUI(val gameState: GameState) : Table(Scene2DSkin.defaultSkin), KTable
         gameState.places.forEach { (placeName, _) ->
             if (!placeName.contains("home"))
             {
-                addActor(PlaceMarker(gameState, placeName).also {
+                addActor(PlaceMarker(gameState, this, placeName).also {
                     currentMarkers.add(it)
                 })
             } else if (placeName == "home_" + gameState.playerAgent)
             {
-                addActor(HomePlaceMarker(gameState, placeName).also {
+                addActor(HomePlaceMarker(gameState, this, placeName).also {
                     currentMarkers.add(it)
                 })
             }
@@ -89,8 +104,6 @@ class MapUI(val gameState: GameState) : Table(Scene2DSkin.defaultSkin), KTable
 
     companion object
     {
-        //Singleton
-        lateinit var instance: MapUI
 
         fun convertToScreenCoords(x: Float, y: Float): Pair<Float, Float>
         {
