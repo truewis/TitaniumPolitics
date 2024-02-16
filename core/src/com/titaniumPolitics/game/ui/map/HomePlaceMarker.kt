@@ -5,7 +5,7 @@ import com.titaniumPolitics.game.core.GameState
 import ktx.scene2d.image
 import ktx.scene2d.scene2d
 
-class HomePlaceMarker(gameState: GameState, place: String) : PlaceMarker(gameState, place)
+class HomePlaceMarker(gameState: GameState, owner: MapUI, place: String) : PlaceMarker(gameState, owner, place)
 {
     init
     {

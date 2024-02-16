@@ -7,6 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.badlogic.gdx.utils.Align
 import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.ui.map.MapUI
+import com.titaniumPolitics.game.ui.map.PlaceSelectionUI
 import ktx.scene2d.*
 import ktx.scene2d.Scene2DSkin.defaultSkin
 
@@ -75,11 +76,11 @@ class AssistantUI(gameState: GameState) : Table(defaultSkin), KTable
                 {
 
                     //Open Map UI
-                    if (MapUI.instance.isVisible) this@AssistantUI.closeAll()
+                    if (HeadUpInterface.instance.mapUI.isVisible) this@AssistantUI.closeAll()
                     else
                     {
-                        MapUI.instance.refresh()
-                        MapUI.instance.isVisible = !MapUI.instance.isVisible
+                        HeadUpInterface.instance.mapUI.refresh()
+                        HeadUpInterface.instance.mapUI.isVisible = !HeadUpInterface.instance.mapUI.isVisible
                     }
                 }
             }
@@ -96,7 +97,8 @@ class AssistantUI(gameState: GameState) : Table(defaultSkin), KTable
     fun closeAll()
     {
         InformationViewUI.instance.isVisible = false
-        MapUI.instance.isVisible = false
+        HeadUpInterface.instance.mapUI.isVisible = false
+        PlaceSelectionUI.instance.isVisible = false
         ResourceInfoUI.instance.isVisible = false
         ResourceTransferUI.instance.isVisible = false
     }

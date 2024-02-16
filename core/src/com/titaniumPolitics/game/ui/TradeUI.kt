@@ -16,7 +16,6 @@ class TradeUI(var gameState: GameState) : Table(defaultSkin)
     var titleLabel: Label
     private val docList1 = VerticalGroup()
     private val docList2 = VerticalGroup()
-    private var isOpen = false;
     val submitButton = TextButton("지시", skin)
     val cancelButton = TextButton("취소", skin)
     var trade: Trade = Trade("", "")
@@ -24,7 +23,7 @@ class TradeUI(var gameState: GameState) : Table(defaultSkin)
     init
     {
         instance = this
-        titleLabel = Label("거래", skin, "trnsprtConsole")
+        titleLabel = Label("Trade", skin, "trnsprtConsole")
         titleLabel.setFontScale(2f)
         add(titleLabel).growX()
         row()
