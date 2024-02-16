@@ -24,7 +24,6 @@ class CapsuleStage(val gameState: GameState) : Stage(FitViewport(1920F, 1080F))
     var hud: HeadUpInterface
     val rootStack = Stack()
     val assetManager = AssetManager()
-    val tradeBox: TradeUI
     val commandBox: CommandUI
     val onMouseClick = ArrayList<(Float, Float) -> Unit>()
     val onMouseDown = ArrayList<(Float, Float) -> Unit>()
@@ -57,13 +56,7 @@ class CapsuleStage(val gameState: GameState) : Stage(FitViewport(1920F, 1080F))
         addActor(hud)
         hud.setFillParent(true)
 
-        tradeBox = TradeUI(Scene2DSkin.defaultSkin, gameState)
-        addActor(ResourceInfoUI(Scene2DSkin.defaultSkin, gameState).also {
-            it.setFillParent(true);it.isVisible = false
-        })
         commandBox = CommandUI(Scene2DSkin.defaultSkin, gameState)
-        addActor(tradeBox)
-        tradeBox.setFillParent(true)
         addActor(commandBox)
         commandBox.setFillParent(true)
 

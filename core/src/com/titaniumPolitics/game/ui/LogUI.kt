@@ -42,7 +42,8 @@ class LogUI(val gameState: GameState) : Table(defaultSkin)
     // Called and cleared when the ctnuButton is pressed.
     var ctnuCallback: () -> Unit = {}
     var isInputEnabled = false
-    var playerActionList = ArrayList<String>()//Temporary solution for player action. Unnecessary if all the actions has the corresponding UI.
+    var playerActionList =
+        ArrayList<String>()//Temporary solution for player action. Unnecessary if all the actions has the corresponding UI.
     var numberMode = false
     var numberModeCallback: (Int) -> Unit = {}
 
@@ -101,17 +102,17 @@ class LogUI(val gameState: GameState) : Table(defaultSkin)
         ctnuButton.setFontScale(2f)
         // Blinking ctnuButton
         ctnuButton.addAction(
-                Actions.forever(Actions.sequence(
-                        Actions.delay(0.5f),
-                        AlphaAction().apply {
-                            duration = 0.2f
-                            alpha = 0f
-                        },
-                        AlphaAction().apply {
-                            duration = 0.2f
-                            alpha = 1f
-                        }
-                )))
+            Actions.forever(Actions.sequence(
+                Actions.delay(0.5f),
+                AlphaAction().apply {
+                    duration = 0.2f
+                    alpha = 0f
+                },
+                AlphaAction().apply {
+                    duration = 0.2f
+                    alpha = 1f
+                }
+            )))
         addActor(ctnuButton)
         ctnuButton.isVisible = false
         ctnuButton.addListener(object : ClickListener()
@@ -134,7 +135,9 @@ class LogUI(val gameState: GameState) : Table(defaultSkin)
         GameEngine.acquireEvent += {//Print the action list. This is unnecessary if tall the action has the corresponding UI.
             if (it.type == "Action")
             {
-                appendText((it.variables["actionList"] as ArrayList<String>).toString().replace("[", "").replace("]", ""))
+                appendText(
+                    (it.variables["actionList"] as ArrayList<String>).toString().replace("[", "").replace("]", "")
+                )
                 playerActionList = it.variables["actionList"] as ArrayList<String>
                 isInputEnabled = true
             }
@@ -207,7 +210,7 @@ class LogUI(val gameState: GameState) : Table(defaultSkin)
                     {
                         "trade" ->
                         {
-                            (stage as CapsuleStage).tradeBox.open()
+                            TradeUI.instance.open()
                         }
 
                         "command" ->
@@ -217,10 +220,11 @@ class LogUI(val gameState: GameState) : Table(defaultSkin)
 
                         else ->
                         {
-                            val action = Class.forName("com.titaniumPolitics.game.core.gameActions." + playerActionList[choice])
+                            val action =
+                                Class.forName("com.titaniumPolitics.game.core.gameActions." + playerActionList[choice])
                                     .getDeclaredConstructor(String::class.java, String::class.java).newInstance(
-                                            gameState.playerAgent,
-                                            gameState.places.values.find { it.characters.contains(gameState.playerAgent) }!!.name
+                                        gameState.playerAgent,
+                                        gameState.places.values.find { it.characters.contains(gameState.playerAgent) }!!.name
                                     ) as GameAction
                             action.injectParent(gameState)
                             thread(start = true) {

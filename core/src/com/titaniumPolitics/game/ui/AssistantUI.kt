@@ -31,7 +31,7 @@ class AssistantUI(gameState: GameState) : Table(defaultSkin), KTable
                     else
                     {
                         InformationViewUI.instance.isVisible = !InformationViewUI.instance.isVisible
-                        InformationViewUI.instance.populateInformation(gameState, "creationTime")
+                        InformationViewUI.instance.refresh(gameState, "creationTime")
                     }
                 }
             }

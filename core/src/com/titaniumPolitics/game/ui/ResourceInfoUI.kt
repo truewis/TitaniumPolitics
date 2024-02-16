@@ -9,67 +9,58 @@ import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.core.Information
 
 import ktx.scene2d.*
+import ktx.scene2d.Scene2DSkin.defaultSkin
 
 
-class ResourceInfoUI(skin: Skin?, var gameState: GameState) : Table(skin), KTable
+class ResourceInfoUI : Table(defaultSkin), KTable
 {
+    private val dataTable = Table()
+
     init
     {
-        debug()
-
-// Assuming you have an instance of Information like this
-        val information = Information(
-            author = "Author",
-            creationTime = 0,
-            type = "resources",
-            tgtTime = 0,
-            tgtPlace = "Place",
-            resources = hashMapOf("type" to 0)
-        ).also { it.knownTo.add("Author"); it.credibility = 100 }
-
-        val dataTable = scene2d.table {
-            label("Resource") {
-                it.growX()
-                setAlignment(Align.center)
-            }
-            label("Amount") {
-                it.growX()
-                setAlignment(Align.center)
-            }
-            information.resources.forEach { entry ->
-                row()
-
-                label(entry.key) {
-                    it.fill()
-                    setAlignment(Align.center)
-                }
-                label(entry.value.toString()) {
-                    it.fill()
-                    setAlignment(Align.center)
-                }
-            }
-
-            setFillParent(true)
-        }
-
-
-        val authorLabel = label("Author: ${information.author}") { setAlignment(Align.center) }
-        row()
-        val creationTimeLabel = label("Creation Time: ${information.creationTime}") { setAlignment(Align.center) }
-        row()
-        val typeLabel = label("Type: ${information.type}") { setAlignment(Align.center) }
-        row()
-        val tgtTimeLabel = label("Target Time: ${information.tgtTime}") { setAlignment(Align.center) }
-        row()
-        val tgtPlaceLabel = label("Target Place: ${information.tgtPlace}") { setAlignment(Align.center) }
-        row()
-        val scrollPane = scrollPane {
+        isVisible = false
+        instance = this
+        val informationPane = ScrollPane(dataTable)
+        informationPane.setScrollingDisabled(false, false)
+        stack {
             it.grow()
-            addActor(dataTable)
-            setScrollingDisabled(true, false)
+            image("capsuleDevLabel1") {
+            }
+            add(informationPane)
+
         }
 
 
+    }
+
+    fun refresh(information: Information)
+    {
+        dataTable.clear()
+        dataTable.apply {
+            val authorLabel = label("Author: ${information.author}") { setAlignment(Align.center) }
+            row()
+            val creationTimeLabel = label("Creation Time: ${information.creationTime}") { setAlignment(Align.center) }
+            row()
+            val typeLabel = label("Type: ${information.type}") { setAlignment(Align.center) }
+            row()
+            val tgtTimeLabel = label("Target Time: ${information.tgtTime}") { setAlignment(Align.center) }
+            row()
+            val tgtPlaceLabel = label("Target Place: ${information.tgtPlace}") { setAlignment(Align.center) }
+            row()
+            table {
+                information.resources.forEach { (resourceName, resourceAmount) ->
+                    val resourceLabel = label("$resourceName: $resourceAmount") { setAlignment(Align.center) }
+                    row()
+                }
+            }
+        }
+
+    }
+
+    companion object
+    {
+        //Singleton
+        lateinit var instance: ResourceInfoUI
     }
 
 

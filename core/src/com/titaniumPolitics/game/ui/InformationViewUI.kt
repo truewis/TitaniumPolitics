@@ -27,7 +27,7 @@ class InformationViewUI : Table(defaultSkin), KTable
 
     }
 
-    fun populateInformation(gameState: GameState, sortBy: String)
+    fun refresh(gameState: GameState, sortBy: String)
     {
         informationTable.clear()
         val informationList: List<Information>
@@ -82,7 +82,7 @@ class InformationViewUI : Table(defaultSkin), KTable
                     {
                         override fun clicked(event: com.badlogic.gdx.scenes.scene2d.InputEvent?, x: Float, y: Float)
                         {
-                            this@InformationViewUI.populateInformation(gameState, field.name)
+                            this@InformationViewUI.refresh(gameState, field.name)
                         }
                     })
                 }
@@ -94,6 +94,22 @@ class InformationViewUI : Table(defaultSkin), KTable
                     field.isAccessible = true
                     val label = Label(field.get(information).toString(), defaultSkin, "trnsprtConsole").also {
                         it.setFontScale(2f)
+                        it.addListener(object : ClickListener()
+                        {
+                            //When clicked, open the information in a new window, depending on the type of information.
+                            override fun clicked(event: com.badlogic.gdx.scenes.scene2d.InputEvent?, x: Float, y: Float)
+                            {
+                                when (information.type)
+                                {
+                                    "resource" ->
+                                    {
+                                        //Open resource window
+                                        ResourceInfoUI.instance.isVisible = true
+                                        ResourceInfoUI.instance.refresh(information)
+                                    }
+                                }
+                            }
+                        })
                     }
                     informationTable.add(label)
                 }

@@ -9,8 +9,9 @@ import com.titaniumPolitics.game.core.GameEngine
 import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.core.gameActions.Trade
 import ktx.scene2d.*
+import ktx.scene2d.Scene2DSkin.defaultSkin
 
-class TradeUI(skin: Skin?, var gameState: GameState) : Table(skin)
+class TradeUI(var gameState: GameState) : Table(defaultSkin)
 {
     var titleLabel: Label
     private val docList1 = VerticalGroup()
@@ -22,6 +23,7 @@ class TradeUI(skin: Skin?, var gameState: GameState) : Table(skin)
 
     init
     {
+        instance = this
         titleLabel = Label("거래", skin, "trnsprtConsole")
         titleLabel.setFontScale(2f)
         add(titleLabel).growX()
@@ -181,6 +183,11 @@ class TradeUI(skin: Skin?, var gameState: GameState) : Table(skin)
 
         isVisible = true
 
+    }
+
+    companion object
+    {
+        lateinit var instance: TradeUI
     }
 
 
