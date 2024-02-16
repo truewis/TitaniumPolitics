@@ -5,23 +5,21 @@ import com.titaniumPolitics.game.core.Information
 
 class UnofficialResourceTransfer(override val tgtCharacter: String, override val tgtPlace: String) : GameAction()
 {
-    var amount = 10
-    var what = ""
-    override fun chooseParams()
-    {
-        what = GameEngine.acquire(parent.places[tgtPlace]!!.resources.keys.toList())
-    }
+    var resources = hashMapOf<String, Int>()
+    var toWhere = ""
 
     override fun execute()
     {
 
         if (
-            (parent.places[tgtPlace]!!.resources[what] ?: 0) >= amount
+            resources.all { (parent.places[tgtPlace]!!.resources[it.key] ?: 0) >= it.value }
         )
         {
-            parent.places[tgtPlace]!!.resources[what] = (parent.places[tgtPlace]!!.resources[what] ?: 0) - amount
-            parent.characters[tgtCharacter]!!.resources[what] =
-                (parent.characters[tgtCharacter]!!.resources[what] ?: 0) + amount
+            //Transfer resources.
+            resources.forEach { (key, value) ->
+                parent.places[tgtPlace]!!.resources[key] = (parent.places[tgtPlace]!!.resources[key] ?: 0) - value
+                parent.places[toWhere]!!.resources[key] = (parent.places[toWhere]!!.resources[key] ?: 0) + value
+            }
             parent.characters[tgtCharacter]!!.frozen++
             //Spread rumor only when someone sees it
             if (parent.places[tgtPlace]!!.currentWorker != 0)
@@ -31,7 +29,7 @@ class UnofficialResourceTransfer(override val tgtCharacter: String, override val
                     creationTime = parent.time,
                     type = "action",
                     tgtPlace = tgtPlace,
-                    amount = amount,
+                    resources = resources,
                     action = "unofficialResourceTransfer"
                 )/*spread rumor in the responsible party*/.also {
                     parent.informations[it.generateName()] =
@@ -48,7 +46,7 @@ class UnofficialResourceTransfer(override val tgtCharacter: String, override val
 
     override fun isValid(): Boolean
     {
-        return (parent.places[tgtPlace]!!.resources[what] ?: 0) >= amount
+        return resources.all { (parent.places[tgtPlace]!!.resources[it.key] ?: 0) >= it.value }
     }
 
 }

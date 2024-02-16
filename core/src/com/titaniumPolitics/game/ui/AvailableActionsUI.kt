@@ -150,6 +150,18 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable
                         "UnofficialResourceTransfer" ->
                         {
                             this.setDrawable(defaultSkin, "boxes-icon")
+                            this@button.addListener(object : ClickListener()
+                            {
+                                override fun clicked(
+                                    event: com.badlogic.gdx.scenes.scene2d.InputEvent?,
+                                    x: Float,
+                                    y: Float
+                                )
+                                {
+                                    ResourceTransferUI.instance.isVisible = true
+                                    ResourceTransferUI.instance.refresh(this@AvailableActionsUI.gameState.characters[this@AvailableActionsUI.gameState.playerAgent]!!.place.resources)
+                                }
+                            })
                         }
 
                         "OfficialResourceTransfer" ->

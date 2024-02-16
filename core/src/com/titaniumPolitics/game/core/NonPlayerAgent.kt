@@ -237,12 +237,13 @@ class NonPlayerAgent(val character: String) : GameStateElement()
                         //Finish stealing
 
                         UnofficialResourceTransfer(character, place).also {
-                            it.what = routines[0].variables["stealResource"]!!
-                            it.amount = min(
-                                (resplace.resources["ration"] ?: 0) / 2,
-                                (charObject.reliants.size + 1) * 7
+                            it.resources = hashMapOf(
+                                routines[0].variables["stealResource"]!! to min(
+                                    (resplace.resources["ration"] ?: 0) / 2,
+                                    (charObject.reliants.size + 1) * 7
+                                )
                             )
-                            println("$character is stealing ${it.what} from ${resplace.name}: ${it.amount}")
+                            println("$character is stealing ${it.resources} from ${resplace.name}!")
                             routines.removeAt(0)//Remove the current routine.
                             return it
                         }
@@ -448,9 +449,8 @@ class NonPlayerAgent(val character: String) : GameStateElement()
                             } else
                             {
                                 OfficialResourceTransfer(character, place).also {
-                                    it.what = res
+                                    it.resources = hashMapOf(res to (resplace.resources[res] ?: 0) / 2)
                                     it.toWhere = place1.name
-                                    it.amount = (resplace.resources[res] ?: 0) / 2
                                     return it
                                 }
                             }
