@@ -1,6 +1,7 @@
 package com.titaniumPolitics.game.ui
 
 import com.badlogic.gdx.scenes.scene2d.ui.Table
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.badlogic.gdx.utils.Align
 import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.ui.map.MapUI
@@ -49,6 +50,10 @@ class HeadUpInterface(val gameState: GameState) : Table(Scene2DSkin.defaultSkin)
                     it.fill()
                     add(CharStatusUI(this@HeadUpInterface.gameState)).align(Align.bottomRight).expandY()
                 }
+            }
+            container {
+                align(Align.topLeft)
+                addActor(QuickSave(gameState = this@HeadUpInterface.gameState))
             }
 
         }
