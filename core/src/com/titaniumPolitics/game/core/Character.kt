@@ -5,7 +5,8 @@ import kotlinx.serialization.Serializable
 @Serializable
 class Character : GameStateElement()
 {
-    var name = ""
+    override val name: String
+        get() = parent.characters.filter { it.value == this }.keys.first()
     var alive = true
     var trait = hashSetOf<String>()
     var resources = hashMapOf<String, Int>()

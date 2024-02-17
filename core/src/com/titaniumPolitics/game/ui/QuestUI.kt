@@ -55,7 +55,7 @@ class QuestUI(var gameState: GameState) : Table(Scene2DSkin.defaultSkin)
                     color = Color.GREEN
                     it.size(36f)
                 }
-                label(tobj.title, "trnsprtConsole") {
+                label(tobj.name, "trnsprtConsole") {
                     it.growX()
                     setFontScale(2f)
                 }

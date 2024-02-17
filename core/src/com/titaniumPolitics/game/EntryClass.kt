@@ -40,8 +40,8 @@ class EntryClass : ApplicationAdapter()
         if (savedGamePath == null)
         {
             newGame = Json.decodeFromString(
-                    GameState.serializer(),
-                    Gdx.files.internal("json/init.json").readString()
+                GameState.serializer(),
+                Gdx.files.internal("json/init.json").readString()
             ).also {
                 it.injectDependency()
                 stage = CapsuleStage(it)
@@ -51,10 +51,9 @@ class EntryClass : ApplicationAdapter()
         } else
         {
             newGame = Json.decodeFromString(
-                    GameState.serializer(),
-                    Gdx.files.internal(savedGamePath).readString()
+                GameState.serializer(),
+                Gdx.files.internal(savedGamePath).readString()
             ).also {
-                it.injectDependency()
                 stage = CapsuleStage(it)
                 Gdx.input.inputProcessor = stage
                 it.initialize()

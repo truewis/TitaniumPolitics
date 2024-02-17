@@ -6,6 +6,8 @@ import kotlinx.serialization.Transient
 @Serializable
 class Quests : GameStateElement()
 {
+    override val name: String
+        get() = "Quests" //There is only one Quests object in the game.
     val dataBase = arrayListOf<QuestObject>()
 
     @Transient
@@ -66,7 +68,7 @@ class Quests : GameStateElement()
      * title is actual sentence, not a key.
      */
     @Serializable
-    open class QuestObject(val title: String, val due: Int) : GameStateElement()
+    open class QuestObject(override var name: String, val due: Int) : GameStateElement()
     {
         var expired = false
 
@@ -76,7 +78,7 @@ class Quests : GameStateElement()
         var completed = 0
             set(value)
             {
-                if (field != 0 && value == 0) throw IllegalArgumentException(this.title)
+                if (field != 0 && value == 0) throw IllegalArgumentException(this.name + " is already completed, cannot be uncompleted.")
                 field = value
                 parent.todo.completed.forEach { it(this) }
 

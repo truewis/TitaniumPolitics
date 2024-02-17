@@ -8,6 +8,10 @@ sealed class GameStateElement
 {
     @Transient
     lateinit var parent: GameState
+
+    @Transient
+    abstract val name: String
+
     var params = JsonObject(mapOf())
     fun add(key: String)
     {

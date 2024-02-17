@@ -6,7 +6,8 @@ import java.util.*
 @Serializable
 class Place : GameStateElement()
 {
-    var name = ""
+    override val name: String
+        get() = parent.places.filter { it.value == this }.keys.first()
     var resources = hashMapOf<String, Int>()
     var connectedPlaces = arrayListOf<String>()
     var plannedWorker = 0

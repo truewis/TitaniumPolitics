@@ -5,72 +5,50 @@
   "playerAgent": "Rui",
   "nonPlayerAgents": {
     "charlie": {
-      "character": "charlie"
     },
     "seefy": {
-      "character": "seefy"
     },
     "infy": {
-      "character": "infy"
     },
     "mini": {
-      "character": "mini"
     },
     "eddy": {
-      "character": "eddy"
     },
     "inddy": {
-      "character": "inddy"
     },
     "welly": {
-      "character": "welly"
     },
     "hhh": {
-      "character": "hhh"
     },
     "iii": {
-      "character": "iii"
     },
     "friend1": {
-      "character": "friend1"
     },
     "friend2": {
-      "character": "friend2"
     },
     "friend3": {
-      "character": "friend3"
     },
     "mini1": {
-      "character": "mini1"
     },
     "mini2": {
-      "character": "mini2"
     },
     "doci1": {
-      "character": "doci1"
     },
     "doci2": {
-      "character": "doci2"
     },
     "selli1": {
-      "character": "selli1"
     },
     "selli2": {
-      "character": "selli2"
     },
     "oldie": {
-      "character": "oldie"
     },
     "ctrler": {
-      "character": "ctrler"
     },
     "observer": {
-      "character": "observer"
     }
   },
   "characters": {
     "oldie": {
-      "name": "oldie",
       "trait": [
         "workaholic",
         "emotionless",
@@ -87,7 +65,6 @@
       "livingBy": "hanger"
     },
     "charlie": {
-      "name": "charlie",
       "trait": [
         "workaholic",
         "emotionless",
@@ -102,7 +79,6 @@
       "livingBy": "mainControlRoom"
     },
     "seefy": {
-      "name": "seefy",
       "trait": [
         "workaholic",
         "emotionless",
@@ -117,7 +93,6 @@
       "livingBy": "mainControlRoom"
     },
     "infy": {
-      "name": "infy",
       "trait": [
         "workaholic",
         "emotionless",
@@ -132,7 +107,6 @@
       "livingBy": "mainControlRoom"
     },
     "mini": {
-      "name": "mini",
       "trait": [
         "workaholic",
         "emotionless",
@@ -147,7 +121,6 @@
       "livingBy": "mainControlRoom"
     },
     "eddy": {
-      "name": "eddy",
       "trait": [
         "workaholic",
         "emotionless",
@@ -162,7 +135,6 @@
       "livingBy": "mainControlRoom"
     },
     "inddy": {
-      "name": "inddy",
       "trait": [
         "workaholic",
         "emotionless",
@@ -177,7 +149,6 @@
       "livingBy": "mainControlRoom"
     },
     "welly": {
-      "name": "welly",
       "trait": [
         "workaholic",
         "emotionless",
@@ -192,7 +163,6 @@
       "livingBy": "mainControlRoom"
     },
     "hhh": {
-      "name": "hhh",
       "trait": [
         "workaholic",
         "emotionless",
@@ -206,7 +176,6 @@
       "livingBy": "mainControlRoom"
     },
     "iii": {
-      "name": "iii",
       "trait": [
         "workaholic",
         "emotionless",
@@ -220,7 +189,6 @@
       "livingBy": "mainControlRoom"
     },
     "Rui": {
-      "name": "Rui",
       "trait": [
         "workaholic",
         "emotionless",
@@ -235,7 +203,6 @@
       "livingBy": "hanger"
     },
     "friend1": {
-      "name": "friend1",
       "trait": [
         "workaholic",
         "emotionless",
@@ -249,7 +216,6 @@
       "livingBy": "hanger"
     },
     "friend2": {
-      "name": "friend2",
       "trait": [
         "workaholic",
         "emotionless",
@@ -263,7 +229,6 @@
       "livingBy": "hanger"
     },
     "friend3": {
-      "name": "friend3",
       "trait": [
         "workaholic",
         "emotionless",
@@ -277,7 +242,6 @@
       "livingBy": "hanger"
     },
     "mini1": {
-      "name": "mini1",
       "trait": [
         "workaholic",
         "emotionless"
@@ -290,7 +254,6 @@
       "livingBy": "redMine"
     },
     "mini2": {
-      "name": "mini2",
       "trait": [
         "workaholic",
         "emotionless"
@@ -303,7 +266,6 @@
       "livingBy": "blackMine"
     },
     "doci1": {
-      "name": "doci1",
       "trait": [
         "workaholic",
         "emotionless"
@@ -316,7 +278,6 @@
       "livingBy": "hospitalWest"
     },
     "doci2": {
-      "name": "doci2",
       "trait": [
         "workaholic",
         "emotionless"
@@ -329,7 +290,6 @@
       "livingBy": "hospitalEast"
     },
     "selli1": {
-      "name": "selli1",
       "trait": [
         "workaholic",
         "emotionless"
@@ -343,7 +303,6 @@
       "livingBy": "market"
     },
     "selli2": {
-      "name": "selli2",
       "trait": [
         "workaholic",
         "emotionless"
@@ -366,7 +325,6 @@
       "livingBy": "market"
     },
     "ctrler": {
-      "name": "ctrler",
       "trait": [
         "robot"
       ],
@@ -377,7 +335,6 @@
       "livingBy": "mainControlRoom"
     },
     "observer": {
-      "name": "observer",
       "trait": [
         "robot"
       ],
@@ -390,7 +347,6 @@
   },
   "places": {
     "mainControlRoom": {
-      "name": "mainControlRoom",
       "coordinates": {
         "x": 0,
         "y": 0,
@@ -464,7 +420,6 @@
       "workHoursEnd": 24
     },
     "hospitalWest": {
-      "name": "hospitalWest",
       "coordinates": {
         "x": -5,
         "y": 0,
@@ -545,7 +500,6 @@
       "workHoursEnd": 24
     },
     "hospitalEast": {
-      "name": "hospitalEast",
       "coordinates": {
         "x": 10,
         "y": -5,
@@ -625,7 +579,6 @@
       "workHoursEnd": 24
     },
     "redMine": {
-      "name": "redMine",
       "coordinates": {
         "x": -10,
         "y": 0,
@@ -736,7 +689,6 @@
       "workHoursEnd": 17
     },
     "blackMine": {
-      "name": "blackMine",
       "coordinates": {
         "x": 10,
         "y": 0,
@@ -849,7 +801,6 @@
       "workHoursEnd": 17
     },
     "observatory": {
-      "name": "observatory",
       "coordinates": {
         "x": -10,
         "y": 15,
@@ -892,7 +843,6 @@
       "workHoursEnd": 24
     },
     "auxHanger": {
-      "name": "auxHanger",
       "coordinates": {
         "x": -5,
         "y": 10,
@@ -960,7 +910,6 @@
       "workHoursEnd": 17
     },
     "cemetery": {
-      "name": "cemetery",
       "coordinates": {
         "x": 5,
         "y": -15,
@@ -990,7 +939,6 @@
       "workHoursEnd": 17
     },
     "rocketry": {
-      "name": "rocketry",
       "coordinates": {
         "x": 15,
         "y": 15,
@@ -1056,7 +1004,6 @@
       "workHoursEnd": 17
     },
     "tankArray": {
-      "name": "tankArray",
       "coordinates": {
         "x": -2,
         "y": 12,
@@ -1136,7 +1083,6 @@
       "workHoursEnd": 24
     },
     "recycleCenterNorth": {
-      "name": "recycleCenterNorth",
       "coordinates": {
         "x": -10,
         "y": -10,
@@ -1227,7 +1173,6 @@
       "workHoursEnd": 24
     },
     "recycleCenterSouth": {
-      "name": "recycleCenterSouth",
       "coordinates": {
         "x": 13,
         "y": 13,
@@ -1338,7 +1283,6 @@
       "workHoursEnd": 24
     },
     "electrolysisStationSouth": {
-      "name": "electrolysisStationSouth",
       "coordinates": {
         "x": -8,
         "y": 12,
@@ -1433,7 +1377,6 @@
       "workHoursEnd": 24
     },
     "reservoirNorth": {
-      "name": "reservoirNorth",
       "coordinates": {
         "x": -2,
         "y": -10,
@@ -1513,7 +1456,6 @@
       "workHoursEnd": 24
     },
     "reservoirSouth": {
-      "name": "reservoirSouth",
       "coordinates": {
         "x": 7,
         "y": 12,
@@ -1594,7 +1536,6 @@
       "workHoursEnd": 24
     },
     "miningSchool": {
-      "name": "miningSchool",
       "coordinates": {
         "x": -7,
         "y": 3,
@@ -1655,7 +1596,6 @@
       "workHoursEnd": 17
     },
     "techSchool": {
-      "name": "techSchool",
       "coordinates": {
         "x": 7,
         "y": 3,
@@ -1715,7 +1655,6 @@
       "workHoursEnd": 17
     },
     "farm": {
-      "name": "farm",
       "coordinates": {
         "x": 0,
         "y": 10,
@@ -1802,7 +1741,6 @@
       "workHoursEnd": 17
     },
     "rescueStationNorth": {
-      "name": "rescueStationNorth",
       "coordinates": {
         "x": -7,
         "y": -10,
@@ -1871,7 +1809,6 @@
       "workHoursEnd": 24
     },
     "rescueStationSouth": {
-      "name": "rescueStationSouth",
       "coordinates": {
         "x": 15,
         "y": 5,
@@ -1939,7 +1876,6 @@
       "workHoursEnd": 24
     },
     "market": {
-      "name": "market",
       "coordinates": {
         "x": 0,
         "y": -5,
@@ -2025,7 +1961,6 @@
       "workHoursEnd": 17
     },
     "squareNorth": {
-      "name": "squareNorth",
       "coordinates": {
         "x": 7,
         "y": -5,
@@ -2106,7 +2041,6 @@
       "workHoursEnd": 17
     },
     "squareSouth": {
-      "name": "squareSouth",
       "coordinates": {
         "x": 0,
         "y": 5,
@@ -2185,7 +2119,6 @@
       "workHoursEnd": 17
     },
     "hanger": {
-      "name": "hanger",
       "coordinates": {
         "x": 5,
         "y": 0,
@@ -2249,7 +2182,6 @@
       "workHoursEnd": 17
     },
     "powerPlantEast": {
-      "name": "powerPlantEast",
       "coordinates": {
         "x": 20,
         "y": 10,
@@ -2332,7 +2264,6 @@
       "workHoursEnd": 24
     },
     "powerPlantWest": {
-      "name": "powerPlantWest",
       "coordinates": {
         "x": -15,
         "y": -5,
@@ -2417,7 +2348,6 @@
   },
   "parties": {
     "triumvirate": {
-      "name": "triumvirate",
       "anonymousMembers": 0,
       "leader": "ctrler",
       "members": [
@@ -2432,7 +2362,6 @@
       "home": "mainControlRoom"
     },
     "ctrler": {
-      "name": "ctrler",
       "anonymousMembers": 0,
       "leader": "ctrler",
       "members": [
@@ -2441,7 +2370,6 @@
       "home": "mainControlRoom"
     },
     "observer": {
-      "name": "observer",
       "anonymousMembers": 0,
       "leader": "observer",
       "members": [
@@ -2450,7 +2378,6 @@
       "home": "observatory"
     },
     "cabinet": {
-      "name": "cabinet",
       "anonymousMembers": 0,
       "leader": "oldie",
       "members": [
@@ -2470,7 +2397,6 @@
       "home": "mainControlRoom"
     },
     "interior": {
-      "name": "interior",
       "type": "division",
       "anonymousMembers": 650,
       "leader": "charlie",
@@ -2486,7 +2412,6 @@
       "home": "mainControlRoom"
     },
     "mining": {
-      "name": "mining",
       "type": "division",
       "anonymousMembers": 2000,
       "leader": "mini",
@@ -2498,7 +2423,6 @@
       "home": "redMine"
     },
     "education": {
-      "name": "education",
       "type": "division",
       "anonymousMembers": 50,
       "leader": "eddy",
@@ -2508,7 +2432,6 @@
       "home": "miningSchool"
     },
     "industry": {
-      "name": "industry",
       "type": "division",
       "anonymousMembers": 800,
       "leader": "inddy",
@@ -2518,7 +2441,6 @@
       "home": "farm"
     },
     "safety": {
-      "name": "safety",
       "type": "division",
       "anonymousMembers": 400,
       "leader": "seefy",
@@ -2528,7 +2450,6 @@
       "home": "rescueStationNorth"
     },
     "welfare": {
-      "name": "welfare",
       "type": "division",
       "anonymousMembers": 120,
       "leader": "welly",
@@ -2540,7 +2461,6 @@
       "home": "hospitalEast"
     },
     "infrastructure": {
-      "name": "infrastructure",
       "type": "division",
       "anonymousMembers": 500,
       "leader": "infy",

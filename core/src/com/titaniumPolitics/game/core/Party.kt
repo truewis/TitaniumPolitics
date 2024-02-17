@@ -5,7 +5,8 @@ import kotlinx.serialization.Serializable
 @Serializable
 class Party : GameStateElement()
 {
-    var name = ""
+    override val name: String
+        get() = parent.parties.filter { it.value == this }.keys.first()
     var leader = ""
     var type = ""
     var home = "" //The place where the party is based.
@@ -32,9 +33,11 @@ class Party : GameStateElement()
             //kill members
             for (i in 0..<num - anonymousMembers)
                 if (members.count { parent.characters[it]!!.alive } > num - anonymousMembers)
-                    members.filter { parent.characters[it]!!.alive }.random().let { parent.characters[it]!!.alive = false }//kill num - anonymousMembers members
+                    members.filter { parent.characters[it]!!.alive }.random()
+                        .let { parent.characters[it]!!.alive = false }//kill num - anonymousMembers members
                 else
-                    members.filter { parent.characters[it]!!.alive }.forEach { parent.characters[it]!!.alive = false }//kill all members
+                    members.filter { parent.characters[it]!!.alive }
+                        .forEach { parent.characters[it]!!.alive = false }//kill all members
 
             anonymousMembers = 0
         }

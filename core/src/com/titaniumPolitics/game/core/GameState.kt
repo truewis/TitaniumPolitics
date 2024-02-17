@@ -79,7 +79,6 @@ class GameState
         characters.forEach { char ->
             //Create home for each character.
             places["home_" + char.key] = Place().apply {
-                name = "home_" + char.key
                 responsibleParty = ""
                 //Connect the new home to the place specified in the character.
                 connectedPlaces.add(this@GameState.characters[char.key]!!.livingBy)
@@ -90,6 +89,7 @@ class GameState
                 places["home_" + char.key]!!.characters.add(char.key)
         }
         todo.add(Quest1())
+        injectDependency()
     }
 
     fun getMutuality(a: String, b: String): Double
