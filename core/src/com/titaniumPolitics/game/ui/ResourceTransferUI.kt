@@ -129,20 +129,27 @@ class ResourceTransferUI(gameState: GameState) : Table(defaultSkin), KTable
         dataTable.apply {
             add(table {
                 current.forEach { (resourceName, resourceAmount) ->
-                    label("$resourceName: $resourceAmount", "trnsprtConsole") {
-                        setFontScale(2f)
-                        setAlignment(Align.center)
-                        addListener(object : ClickListener()
-                        {
-                            override fun clicked(event: com.badlogic.gdx.scenes.scene2d.InputEvent?, x: Float, y: Float)
+                    if (resourceAmount != 0)
+                    {
+                        label("$resourceName: $resourceAmount", "trnsprtConsole") {
+                            setFontScale(2f)
+                            setAlignment(Align.center)
+                            addListener(object : ClickListener()
                             {
-                                current[resourceName] = current[resourceName]!! - 1
-                                target[resourceName] = (target[resourceName] ?: 0) + 1
-                                this@ResourceTransferUI.refresh(current, target)
-                            }
-                        })
+                                override fun clicked(
+                                    event: com.badlogic.gdx.scenes.scene2d.InputEvent?,
+                                    x: Float,
+                                    y: Float
+                                )
+                                {
+                                    current[resourceName] = current[resourceName]!! - 1
+                                    target[resourceName] = (target[resourceName] ?: 0) + 1
+                                    this@ResourceTransferUI.refresh(current, target)
+                                }
+                            })
+                        }
+                        row()
                     }
-                    row()
                 }
             })
         }
@@ -151,20 +158,27 @@ class ResourceTransferUI(gameState: GameState) : Table(defaultSkin), KTable
         targetTable.apply {
             add(table {
                 target.forEach { (resourceName, resourceAmount) ->
-                    label("$resourceName: $resourceAmount", "trnsprtConsole") {
-                        setFontScale(2f)
-                        setAlignment(Align.center)
-                        addListener(object : ClickListener()
-                        {
-                            override fun clicked(event: com.badlogic.gdx.scenes.scene2d.InputEvent?, x: Float, y: Float)
+                    if (resourceAmount != 0)
+                    {
+                        label("$resourceName: $resourceAmount", "trnsprtConsole") {
+                            setFontScale(2f)
+                            setAlignment(Align.center)
+                            addListener(object : ClickListener()
                             {
-                                target[resourceName] = target[resourceName]!! - 1
-                                current[resourceName] = (current[resourceName] ?: 0) + 1
-                                this@ResourceTransferUI.refresh(current, target)
-                            }
-                        })
+                                override fun clicked(
+                                    event: com.badlogic.gdx.scenes.scene2d.InputEvent?,
+                                    x: Float,
+                                    y: Float
+                                )
+                                {
+                                    target[resourceName] = target[resourceName]!! - 1
+                                    current[resourceName] = (current[resourceName] ?: 0) + 1
+                                    this@ResourceTransferUI.refresh(current, target)
+                                }
+                            })
+                        }
+                        row()
                     }
-                    row()
                 }
             })
         }
