@@ -9,6 +9,7 @@ import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.ui.map.*
 import ktx.scene2d.*
 
+//This UI is used to select a character as a parameter for an action.
 class CharacterSelectUI(val gameState: GameState) : Table(Scene2DSkin.defaultSkin), KTable
 {
     val currentConnections = arrayListOf<Connection>()

@@ -11,6 +11,7 @@ import ktx.scene2d.button
 import ktx.scene2d.label
 import ktx.scene2d.scene2d
 
+//This UI is a window that pops up when the player clicks on a character in the map. It allows the player to talk to the character or select them.
 class CharacterInteractionWindowUI(var gameState: GameState, var owner: CharacterSelectUI?) :
     Window("Char Marker", defaultSkin)
 {

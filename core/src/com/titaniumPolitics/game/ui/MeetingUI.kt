@@ -5,6 +5,7 @@ import com.badlogic.gdx.Screen
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.ui.Container
+import com.badlogic.gdx.scenes.scene2d.ui.HorizontalGroup
 import com.badlogic.gdx.scenes.scene2d.ui.Image
 import com.badlogic.gdx.scenes.scene2d.ui.Stack
 import com.badlogic.gdx.scenes.scene2d.ui.Table
@@ -16,11 +17,13 @@ import ktx.scene2d.image
 import ktx.scene2d.scene2d
 
 
-//This UI is used to display the portraits of the characters in the current place.
-class CharacterPortraitsUI(var gameState: GameState) : Table(Scene2DSkin.defaultSkin)
+//This UI is used for both meetings and conferences
+class MeetingUI(var gameState: GameState) : Table(Scene2DSkin.defaultSkin)
 {
     val currentCharacerMarkerWindow = CharacterInteractionWindowUI(gameState, null)
     val portraits = arrayListOf<Actor>()
+    val availableInfos = HorizontalGroup()
+    val currentAgendas = HorizontalGroup()
 
     init
     {
@@ -31,15 +34,16 @@ class CharacterPortraitsUI(var gameState: GameState) : Table(Scene2DSkin.default
         addActor(currentCharacerMarkerWindow)
     }
 
-    fun refresh(place: String)
+    //This function can be used for both meetings and conferences
+    fun refresh(meetingName: String)
     {
         portraits.forEach { it.remove() }
         portraits.clear()
-        gameState.places[place]!!.characters.forEach {
+        val meeting = gameState.ongoingMeetings[meetingName] ?: gameState.ongoingConferences[meetingName]!!
+        meeting.currentCharacters.forEach {
 
-            //Player cannot see themselves.
-            if (it != gameState.playerAgent)
-                addCharacterPortrait(it)
+            //Player can see themselves.
+            addCharacterPortrait(it)
         }
         placeCharacterPortrait()
     }
@@ -73,6 +77,7 @@ class CharacterPortraitsUI(var gameState: GameState) : Table(Scene2DSkin.default
         portraits.forEach {
             it.setPosition(portraits.indexOf(it) * Gdx.graphics.width.toFloat() / portraits.size, 0f)
         }
+        //TODO: replace portraits so that the speaker is always on the center
 
     }
 
@@ -88,6 +93,6 @@ class CharacterPortraitsUI(var gameState: GameState) : Table(Scene2DSkin.default
 
     companion object
     {
-        lateinit var instance: CharacterPortraitsUI
+        lateinit var instance: MeetingUI
     }
 }

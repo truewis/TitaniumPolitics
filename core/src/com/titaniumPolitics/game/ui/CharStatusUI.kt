@@ -11,6 +11,7 @@ import ktx.scene2d.image
 import ktx.scene2d.stack
 import ktx.scene2d.table
 
+//This class is a UI element that displays the player's portrait and their health and will meters.
 class CharStatusUI(gameState: GameState) : Table(defaultSkin), KTable
 {
 
