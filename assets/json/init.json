@@ -2,7 +2,7 @@
   "_time": 12,
   "_alertLevel": 0,
   "idlePop": 1000,
-  "playerAgent": "Rui",
+  "playerName": "Rui",
   "nonPlayerAgents": {
     "charlie": {
     },
