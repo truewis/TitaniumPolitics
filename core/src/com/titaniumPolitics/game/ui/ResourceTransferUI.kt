@@ -75,8 +75,8 @@ class ResourceTransferUI(gameState: GameState) : Table(defaultSkin), KTable
                             {
                                 GameEngine.acquireCallback(
                                     OfficialResourceTransfer(
-                                        gameState.playerAgent,
-                                        gameState.characters[gameState.playerAgent]!!.place.name
+                                        gameState.playerName,
+                                        gameState.player.place.name
                                     ).apply {
                                         this.resources = this@ResourceTransferUI.target
                                         this.toWhere = this@ResourceTransferUI.toWhere
@@ -86,8 +86,8 @@ class ResourceTransferUI(gameState: GameState) : Table(defaultSkin), KTable
                             {
                                 GameEngine.acquireCallback(
                                     UnofficialResourceTransfer(
-                                        gameState.playerAgent,
-                                        gameState.characters[gameState.playerAgent]!!.place.name
+                                        gameState.playerName,
+                                        gameState.player.place.name
                                     ).apply {
                                         this.resources = this@ResourceTransferUI.target
                                         this.toWhere = this@ResourceTransferUI.toWhere

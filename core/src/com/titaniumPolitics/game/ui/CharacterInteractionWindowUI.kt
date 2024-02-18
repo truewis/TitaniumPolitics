@@ -27,8 +27,8 @@ class CharacterInteractionWindowUI(var gameState: GameState, var owner: Characte
             {
                 //Move to place.
                 val action = Talk(
-                    gameState.playerAgent,
-                    gameState.places.values.find { it.characters.contains(gameState.playerAgent) }!!.name
+                    gameState.playerName,
+                    gameState.player.place.name
                 )
                 action.who = characterDisplayed
                 action.injectParent(gameState)
@@ -92,7 +92,7 @@ class CharacterInteractionWindowUI(var gameState: GameState, var owner: Characte
             } else
             {
                 //Disable the button if the player is already in the place. Calling place property will throw an exception when the game is first loaded.
-                if (gameState.characters[gameState.playerAgent]!!.place.name != characterDisplayed)
+                if (gameState.player.place.name != characterDisplayed)
                     add(talkButton).fill()
             }
         }

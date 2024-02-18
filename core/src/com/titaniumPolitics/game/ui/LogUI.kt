@@ -223,8 +223,8 @@ class LogUI(val gameState: GameState) : Table(defaultSkin)
                             val action =
                                 Class.forName("com.titaniumPolitics.game.core.gameActions." + playerActionList[choice])
                                     .getDeclaredConstructor(String::class.java, String::class.java).newInstance(
-                                        gameState.playerAgent,
-                                        gameState.places.values.find { it.characters.contains(gameState.playerAgent) }!!.name
+                                        gameState.playerName,
+                                        gameState.player.place.name
                                     ) as GameAction
                             action.injectParent(gameState)
                             thread(start = true) {

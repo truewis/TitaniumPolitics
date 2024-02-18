@@ -60,19 +60,19 @@ class TradeUI(var gameState: GameState) : Table(defaultSkin)
 
         with(gameState) {
             val who =
-                ongoingMeetings.filter { it.value.currentCharacters.contains(playerAgent) }
-                    .flatMap { it.value.currentCharacters }.first { it != playerAgent }
-            trade = Trade(playerAgent, characters[playerAgent]!!.place.name).apply { this.who = who }
+                ongoingMeetings.filter { it.value.currentCharacters.contains(playerName) }
+                    .flatMap { it.value.currentCharacters }.first { it != playerName }
+            trade = Trade(playerName, player.place.name).apply { this.who = who }
             isVisible = true
-            refreshList(characters[playerAgent]!!.resources,
+            refreshList(player.resources,
                 characters[who]!!.resources,
                 informations.filter {
-                    it.value.knownTo.contains(playerAgent)
+                    it.value.knownTo.contains(playerName)
                 }
                     .map { it.key }.toHashSet(),
                 informations.filter {
                     it.value.knownTo.contains(who) and !it.value.knownTo.contains(
-                        playerAgent
+                        playerName
                     )
                 }.map { it.key }.toHashSet()
             )

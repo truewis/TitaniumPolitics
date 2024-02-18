@@ -8,7 +8,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable
 import com.titaniumPolitics.game.core.GameState
-import ktx.scene2d.Scene2DSkin
 import ktx.scene2d.Scene2DSkin.defaultSkin
 import ktx.scene2d.image
 import ktx.scene2d.scene2d
@@ -26,7 +25,7 @@ class MeetingUI(var gameState: GameState) : Table(defaultSkin)
     {
         instance = this
         gameState.updateUI.add {
-            refresh(it.characters[gameState.playerAgent]!!.place.name)
+            refresh(it.player.place.name)
         }
         addActor(currentCharacerMarkerWindow)
     }

@@ -23,8 +23,8 @@ class PlaceAndCoordUI(gameState: GameState) : Table(defaultSkin)
 
         gameState.updateUI += { x ->
             Gdx.app.postRunnable {
-                l.setText(x.characters[x.playerAgent]!!.place.name)
-                c.setText(x.characters[x.playerAgent]!!.place.name.length.toString())//This is a test. It should be the coordinates of the place.
+                l.setText(x.player.place.name)
+                c.setText(x.player.place.name.length.toString())//This is a test. It should be the coordinates of the place.
             }
         }
     }

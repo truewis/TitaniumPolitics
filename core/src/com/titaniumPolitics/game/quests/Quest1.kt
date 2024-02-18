@@ -43,7 +43,7 @@ class Quest1 : QuestObject("Be a minister", 240)
                     mechanic.name,
                     it
                 )
-            } == parent.playerAgent)
+            } == parent.playerName)
             complete()
 
     }

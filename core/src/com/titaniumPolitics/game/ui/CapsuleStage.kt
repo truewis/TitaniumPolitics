@@ -65,7 +65,7 @@ class CapsuleStage(val gameState: GameState) : Stage(FitViewport(1920F, 1080F))
         commandBox.setFillParent(true)
 
         gameState.updateUI.add {
-            roomChanged(it.places.values.find { it.characters.contains(gameState.playerAgent) }!!.name)
+            roomChanged(it.player.place.name)
         }
         println("CapsuleStage initialized successfully.")
     }

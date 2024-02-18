@@ -24,8 +24,8 @@ class PlaceMarkerWindowUI(var gameState: GameState, var owner: MapUI) : Window("
             {
                 //Move to place.
                 val action = Move(
-                    gameState.playerAgent,
-                    gameState.places.values.find { it.characters.contains(gameState.playerAgent) }!!.name
+                    gameState.playerName,
+                    gameState.player.place.name
                 )
                 action.placeTo = placeDisplayed
                 action.injectParent(gameState)
@@ -88,7 +88,7 @@ class PlaceMarkerWindowUI(var gameState: GameState, var owner: MapUI) : Window("
             } else
             {
                 //Disable the button if the player is already in the place. Calling place property will throw an exception when the game is first loaded.
-                if (gameState.characters[gameState.playerAgent]!!.place.name != placeDisplayed)
+                if (gameState.characters[gameState.playerName]!!.place.name != placeDisplayed)
                     add(moveButton).fill()
             }
         }

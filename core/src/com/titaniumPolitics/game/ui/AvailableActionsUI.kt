@@ -51,8 +51,8 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable
         docList.clear()
         GameEngine.availableActions(
             gameState,
-            gameState.characters[gameState.playerAgent]!!.place.name,
-            gameState.playerAgent
+            gameState.player.place.name,
+            gameState.playerName
         ).forEach { tobj ->
             //We do not create buttons for these actions, as they are accessible through the main UI.
             if (listOf("Move", "Talk").contains(tobj))
@@ -106,8 +106,8 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable
                                 {
                                     GameEngine.acquireCallback(
                                         Wait(
-                                            this@AvailableActionsUI.gameState.playerAgent,
-                                            this@AvailableActionsUI.gameState.characters[this@AvailableActionsUI.gameState.playerAgent]!!.place.name
+                                            this@AvailableActionsUI.gameState.playerName,
+                                            this@AvailableActionsUI.gameState.player.place.name
                                         )
                                     )
                                 }
@@ -128,8 +128,8 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable
                                 {
                                     GameEngine.acquireCallback(
                                         Eat(
-                                            this@AvailableActionsUI.gameState.playerAgent,
-                                            this@AvailableActionsUI.gameState.characters[this@AvailableActionsUI.gameState.playerAgent]!!.place.name
+                                            this@AvailableActionsUI.gameState.playerName,
+                                            this@AvailableActionsUI.gameState.player.place.name
                                         )
                                     )
                                 }
@@ -159,7 +159,7 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable
                                 )
                                 {
                                     ResourceTransferUI.instance.isVisible = true
-                                    ResourceTransferUI.instance.refresh(this@AvailableActionsUI.gameState.characters[this@AvailableActionsUI.gameState.playerAgent]!!.place.resources)
+                                    ResourceTransferUI.instance.refresh(this@AvailableActionsUI.gameState.player.place.resources)
                                     ResourceTransferUI.instance.mode = "unofficial"
                                 }
                             })
@@ -177,7 +177,7 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable
                                 )
                                 {
                                     ResourceTransferUI.instance.isVisible = true
-                                    ResourceTransferUI.instance.refresh(this@AvailableActionsUI.gameState.characters[this@AvailableActionsUI.gameState.playerAgent]!!.place.resources)
+                                    ResourceTransferUI.instance.refresh(this@AvailableActionsUI.gameState.player.place.resources)
                                     ResourceTransferUI.instance.mode = "official"
                                 }
                             })

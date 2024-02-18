@@ -16,7 +16,7 @@ open class PlaceMarker(var gameState: GameState, var owner: MapUI, place: String
             gameState.places[place]!!.coordinates.y.toFloat()
         )
         //Set marker to different color if player is here.
-        if (gameState.characters[gameState.playerAgent]!!.place.name == place)
+        if (gameState.player.place.name == place)
         {
             color = Color.RED
         }

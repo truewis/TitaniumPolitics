@@ -56,7 +56,10 @@ class GameState
     var places = hashMapOf<String, Place>()
     var characters = hashMapOf<String, Character>()
     var nonPlayerAgents = hashMapOf<String, NonPlayerAgent>()
-    var playerAgent = ""
+    var playerName = ""
+
+    @Transient
+    val player = characters[playerName]!!
     var log = Log()
     var parties = hashMapOf<String, Party>()
 

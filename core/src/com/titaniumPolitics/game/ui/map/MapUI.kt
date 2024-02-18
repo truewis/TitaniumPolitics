@@ -92,7 +92,7 @@ open class MapUI(val gameState: GameState) : Table(Scene2DSkin.defaultSkin), KTa
                 addActor(PlaceMarker(gameState, this, placeName).also {
                     currentMarkers.add(it)
                 })
-            } else if (placeName == "home_" + gameState.playerAgent)
+            } else if (placeName == "home_" + gameState.playerName)
             {
                 addActor(HomePlaceMarker(gameState, this, placeName).also {
                     currentMarkers.add(it)

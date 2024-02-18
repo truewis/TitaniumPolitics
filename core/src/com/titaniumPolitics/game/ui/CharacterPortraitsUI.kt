@@ -22,7 +22,7 @@ class CharacterPortraitsUI(var gameState: GameState) : Table(defaultSkin)
     {
         instance = this
         gameState.updateUI.add {
-            refresh(it.characters[gameState.playerAgent]!!.place.name)
+            refresh(it.player.place.name)
         }
         addActor(currentCharacerMarkerWindow)
     }
@@ -34,7 +34,7 @@ class CharacterPortraitsUI(var gameState: GameState) : Table(defaultSkin)
         gameState.places[place]!!.characters.forEach {
 
             //Player cannot see themselves.
-            if (it != gameState.playerAgent)
+            if (it != gameState.playerName)
                 addCharacterPortrait(it)
         }
         placeCharacterPortrait()

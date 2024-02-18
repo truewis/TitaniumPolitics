@@ -1,13 +1,10 @@
 package com.titaniumPolitics.game.ui
 
-import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.scenes.scene2d.ui.*
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.titaniumPolitics.game.core.GameEngine
 import com.titaniumPolitics.game.core.GameState
-import com.titaniumPolitics.game.core.gameActions.Eat
 import com.titaniumPolitics.game.core.gameActions.Examine
-import com.titaniumPolitics.game.core.gameActions.Wait
 import ktx.scene2d.*
 import ktx.scene2d.Scene2DSkin.defaultSkin
 
@@ -37,8 +34,8 @@ class ExamineUI(var gameState: GameState) : Table(defaultSkin)
                     {
                         GameEngine.acquireCallback(
                             Examine(
-                                gameState.playerAgent,
-                                gameState.characters[gameState.playerAgent]!!.place.name
+                                gameState.playerName,
+                                gameState.player.place.name
                             ).also { it.what = "HR" }
                         )
                     }
@@ -59,8 +56,8 @@ class ExamineUI(var gameState: GameState) : Table(defaultSkin)
                     {
                         GameEngine.acquireCallback(
                             Examine(
-                                gameState.playerAgent,
-                                gameState.characters[gameState.playerAgent]!!.place.name
+                                gameState.playerName,
+                                gameState.player.place.name
                             ).also { it.what = "apparatus" }
                         )
                     }
@@ -81,8 +78,8 @@ class ExamineUI(var gameState: GameState) : Table(defaultSkin)
                     {
                         GameEngine.acquireCallback(
                             Examine(
-                                gameState.playerAgent,
-                                gameState.characters[gameState.playerAgent]!!.place.name
+                                gameState.playerName,
+                                gameState.player.place.name
                             ).also { it.what = "resources" }
                         )
                     }

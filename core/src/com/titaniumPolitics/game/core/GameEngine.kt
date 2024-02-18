@@ -68,7 +68,7 @@ class GameEngine(val gameState: GameState)
             this.gameState, gameState.places.values.find { it.characters.contains(char.name) }!!.name,
             char.name
         )
-        if (char.name == gameState.playerAgent)
+        if (char.name == gameState.playerName)
         {
             do
             {
@@ -924,7 +924,7 @@ class GameEngine(val gameState: GameState)
             }
         }
         val l = gameState.characters.filter { it.value.alive && !it.value.trait.contains("robot") }
-        if (!l.contains(gameState.playerAgent))
+        if (!l.contains(gameState.playerName))
         {
 
             println("You died. Game over.")
@@ -1080,7 +1080,7 @@ class GameEngine(val gameState: GameState)
                         character
                     )
                 }.values.first()
-                if (character == gameState.playerAgent)
+                if (character == gameState.playerName)
                 {
                     println("You are in a meeting.")
                     println("Attendees: ${meeting.currentCharacters}")
@@ -1111,7 +1111,7 @@ class GameEngine(val gameState: GameState)
                         character
                     )
                 }.values.first()
-                if (character == gameState.playerAgent)
+                if (character == gameState.playerName)
                 {
                     println("You are in a conference.")
                     println(
@@ -1216,7 +1216,7 @@ class GameEngine(val gameState: GameState)
                         ) && entry.value.place == place
                     }
                 }
-                if (gameState.playerAgent == character)
+                if (gameState.playerName == character)
                 {
                     when (subject)
                     {
