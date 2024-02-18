@@ -13,7 +13,6 @@ class QuestUI(var gameState: GameState) : Table(Scene2DSkin.defaultSkin)
 {
     var titleLabel: Label
     private val docList = VerticalGroup()
-    private var isOpen = false;
 
     init
     {

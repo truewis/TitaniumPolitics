@@ -1,6 +1,5 @@
 package com.titaniumPolitics.game.ui
 
-import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
@@ -64,7 +63,7 @@ class CharacterSelectUI(val gameState: GameState) : Table(Scene2DSkin.defaultSki
     }
 
 
-    open fun refresh()
+    fun refresh()
     {
         removeActor(currentCharMarkerWindow)
         currentConnections.forEach { removeActor(it) }

@@ -1,23 +1,19 @@
 package com.titaniumPolitics.game.ui
 
 import com.badlogic.gdx.Gdx
-import com.badlogic.gdx.Screen
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.scenes.scene2d.Actor
-import com.badlogic.gdx.scenes.scene2d.ui.Container
 import com.badlogic.gdx.scenes.scene2d.ui.Image
-import com.badlogic.gdx.scenes.scene2d.ui.Stack
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable
 import com.titaniumPolitics.game.core.GameState
-import ktx.scene2d.Scene2DSkin
 import ktx.scene2d.Scene2DSkin.defaultSkin
 import ktx.scene2d.image
 import ktx.scene2d.scene2d
 
 
 //This UI is used to display the portraits of the characters in the current place.
-class CharacterPortraitsUI(var gameState: GameState) : Table(Scene2DSkin.defaultSkin)
+class CharacterPortraitsUI(var gameState: GameState) : Table(defaultSkin)
 {
     val currentCharacerMarkerWindow = CharacterInteractionWindowUI(gameState, null)
     val portraits = arrayListOf<Actor>()

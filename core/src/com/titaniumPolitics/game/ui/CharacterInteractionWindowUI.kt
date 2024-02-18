@@ -4,7 +4,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Window
 import com.titaniumPolitics.game.core.GameEngine
 import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.core.gameActions.Talk
-import com.titaniumPolitics.game.ui.map.MapUI
 import com.titaniumPolitics.game.ui.map.PlaceSelectionUI
 import ktx.scene2d.Scene2DSkin.defaultSkin
 import ktx.scene2d.button

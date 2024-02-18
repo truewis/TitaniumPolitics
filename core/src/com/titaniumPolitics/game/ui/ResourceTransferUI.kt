@@ -7,8 +7,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.badlogic.gdx.utils.Align
 import com.titaniumPolitics.game.core.GameEngine
 import com.titaniumPolitics.game.core.GameState
-
-import com.titaniumPolitics.game.core.Information
 import com.titaniumPolitics.game.core.gameActions.OfficialResourceTransfer
 import com.titaniumPolitics.game.core.gameActions.UnofficialResourceTransfer
 import com.titaniumPolitics.game.ui.map.PlaceSelectionUI
@@ -54,7 +52,7 @@ class ResourceTransferUI(gameState: GameState) : Table(defaultSkin), KTable
                             PlaceSelectionUI.instance.refresh()
                             PlaceSelectionUI.instance.selectedPlaceCallback = {
                                 placeLabel.setText("Transfer Resource To: $it")
-                                this@ResourceTransferUI.toWhere = it;
+                                this@ResourceTransferUI.toWhere = it
                             }
                         }
                     })
