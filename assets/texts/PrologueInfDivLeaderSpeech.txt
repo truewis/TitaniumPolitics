@@ -1,0 +1,10 @@
+infDivLeader: Good morning everyone. I’m sure you’re already aware, but I’m NAME, the infrastructure division leader.
+infDivLeader: Although if you got to this point without knowing that already, it won’t make much difference. And you… CHANGEPOSE are our newest batch of engineers.
+infDivLeader: Now, you might think that you’re going to be working directly on solutions to the engine problems here on The Station.
+infDivLeader: You each think you’re the special one who’s going to figure out what’s wrong with it and save us all. Maybe you will be. But probably not.
+infDivLeader: Nonetheless, you’re still going to have to be useful in some capacity, no? And that’s where the mines come in. As part of your training, you will be working on producing, optimizing, and miniaturizing the machinery the miners use. If you prove yourself good enough, smart enough, then you’ll get clearance to work on the engine. But if you aren’t, then good luck even looking at the engine. Am I understood?
+friend1: Excuse me, but in the job description, it’s written that all engineers will work on the engine-
+infDivLeader: Yeah? And I’m the one who wrote that job description, and I’m telling you only some of you will be.
+infDivLeader: THIS IS MORE TO THEMSELVES: Damn, what a waste of time. ONCE AGAIN TALKING TO THE PEOPLE: Look, the fact of the matter is, if anyone makes the slightest mistake, we’re all gone. Infrastructure, bioengineering, safety, industry, education - hell, even those soulless bastards at the Division of the Interior. All of it. So if you aren’t the best, the smartest, then you have no business being here at all, let alone with the engine.
+infDivLeader: Anyone else that wants to ask questions, figure it out. Otherwise, ask someone who’s been here longer than you.
+infDivLeader: We meet every morning here at 9:30 AM. On time is late. Be here at 9:00 or you won’t be here for long. Meeting adjourned.

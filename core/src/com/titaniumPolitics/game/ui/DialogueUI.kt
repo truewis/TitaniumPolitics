@@ -1,39 +1,45 @@
 package com.titaniumPolitics.game.ui
 
+import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.scenes.scene2d.InputEvent
 import com.badlogic.gdx.scenes.scene2d.Touchable
 import com.badlogic.gdx.scenes.scene2d.actions.Actions
 import com.badlogic.gdx.scenes.scene2d.actions.AlphaAction
+import com.badlogic.gdx.scenes.scene2d.ui.Image
 import com.badlogic.gdx.scenes.scene2d.ui.Label
-import com.badlogic.gdx.scenes.scene2d.ui.Stack
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable
 import com.badlogic.gdx.utils.Align
 import com.titaniumPolitics.game.core.GameState
 import com.rafaskoberg.gdx.typinglabel.TypingAdapter
 import com.rafaskoberg.gdx.typinglabel.TypingLabel
-import ktx.scene2d.KTable
+import com.titaniumPolitics.game.core.ReadOnlyJsons
+import kotlinx.serialization.json.jsonObject
+import kotlinx.serialization.json.jsonPrimitive
+import ktx.scene2d.*
 import ktx.scene2d.Scene2DSkin.defaultSkin
-import ktx.scene2d.image
-import ktx.scene2d.stack
-import ktx.scene2d.table
+import kotlin.collections.ArrayList
 
 class DialogueUI(val gameState: GameState) : Table(defaultSkin), KTable
 {
-    val stk = Stack()
+    var currentDialogue = ""
+    var currentDialogueLength = 0
+    var currentLineNumber = 0
 
-    // Displays current log item.
+    // Displays current dialogue line.
     val currentTextDisplay = TypingLabel("", skin, "consoleWhite")
 
-    // Displays old log items, up to five lines.
     val speakerNameDisplay = Label("", skin, "consoleWhite")
     val ctnuButton = Label(">>>", skin, "console")
-    var isPlaying = false
     val donePlayingLine = ArrayList<(Int) -> Unit>()
+    val background = Image(defaultSkin, "capsuleDevLabel1")
 
     //Logs to be played.
     // Called and cleared when the ctnuButton is pressed.
     var ctnuCallback: () -> Unit = {}
+    val portraitsTable = Table(defaultSkin)
 
     init
     {
@@ -41,11 +47,14 @@ class DialogueUI(val gameState: GameState) : Table(defaultSkin), KTable
         instance = this
         stack {
             it.grow()
-            image("capsuleDevLabel1")
+            add(this@DialogueUI.background)
+            add(this@DialogueUI.portraitsTable)
             table {
-                add(this@DialogueUI.speakerNameDisplay).fill()
+                add().grow()
                 row()
-                add(this@DialogueUI.currentTextDisplay).grow()
+                add(this@DialogueUI.speakerNameDisplay).fill().growX()
+                row()
+                add(this@DialogueUI.currentTextDisplay).fill().growX()
                 row()
                 add(this@DialogueUI.ctnuButton).fill()
             }
@@ -64,6 +73,7 @@ class DialogueUI(val gameState: GameState) : Table(defaultSkin), KTable
 
             }
         }
+        currentTextDisplay.wrap = true
         ctnuButton.setPosition(1800f, 0f)
         ctnuButton.setFontScale(2f)
         // Blinking ctnuButton
@@ -85,9 +95,16 @@ class DialogueUI(val gameState: GameState) : Table(defaultSkin), KTable
             override fun clicked(event: InputEvent, x: Float, y: Float)
             {
                 super.clicked(event, x, y)
-                ctnuCallback()
-                ctnuCallback = {}
-                instance.isVisible = false
+                if (currentLineNumber < currentDialogueLength)
+                {
+                    currentLineNumber++
+                    playLine(currentLineNumber)
+                } else
+                {
+                    ctnuCallback()
+                    ctnuCallback = {}
+                    instance.isVisible = false
+                }
             }
         })
     }
@@ -95,8 +112,49 @@ class DialogueUI(val gameState: GameState) : Table(defaultSkin), KTable
     fun playDialogue(dialogueKey: String)
     {
         isVisible = true
-        currentTextDisplay.restart(dialogueKey)
+        val placeName = gameState.player.place.name
+        background.drawable = TextureRegionDrawable(
+            (stage as CapsuleStage).assetManager.get(
+                ReadOnlyJsons.mapJson[if (placeName.contains("home")) "home" else placeName]!!.jsonObject["image"]!!.jsonPrimitive.content,
+                Texture::class.java
+            )!!
+        )
+        currentDialogue = dialogueKey
+        currentDialogueLength = Gdx.files.internal("texts/$currentDialogue.txt").readString().split("\n").size
+        currentLineNumber = 0
+        playLine(currentLineNumber)
     }
+
+    fun playLine(lineNumber: Int)
+    {
+        if (lineNumber > currentDialogueLength)
+        {
+            println("Warning: Dialogue line number out of range in $currentDialogue.")
+            return
+        }
+        val line = Gdx.files.internal("texts/$currentDialogue.txt").readString().split("\n")[lineNumber]
+        val lineSpeaker = line.split(": ")[0]
+        val lineText =
+            line.split(": ")[1]
+        speakerNameDisplay.setText(lineSpeaker)
+        currentTextDisplay.restart(lineText)
+        portraitsTable.clear()
+        portraitsTable.addActor(
+//            Image(
+//                TextureRegionDrawable(
+//                    (stage as CapsuleStage).assetManager.get(
+//                        "portraits/$lineSpeaker",
+//                        Texture::class.java
+//                    )!!
+//                )
+//            )
+            scene2d.image("raincoat-icon") {
+                if (defaultSkin.has(lineSpeaker, Texture::class.java))
+                    this.setDrawable(defaultSkin, lineSpeaker)
+            }
+        )
+    }
+
 
     companion object
     {
