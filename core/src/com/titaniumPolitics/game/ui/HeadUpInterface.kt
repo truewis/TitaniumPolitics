@@ -27,11 +27,11 @@ class HeadUpInterface(val gameState: GameState) : Table(Scene2DSkin.defaultSkin)
 
             add(InformationViewUI())
             add(ResourceInfoUI())
-            add(ResourceTransferUI(gameState = this@HeadUpInterface.gameState))
-            add(TradeUI(gameState = this@HeadUpInterface.gameState))
+            add(ResourceTransferUI(this@HeadUpInterface.gameState))
+            add(TradeUI(this@HeadUpInterface.gameState))
 
             //We draw the following UIs above any other UIs, as they have to appear on top of everything else.
-            add(PlaceSelectionUI(gameState = this@HeadUpInterface.gameState))
+            add(PlaceSelectionUI(this@HeadUpInterface.gameState))
 
             //We draw the following UIs above any other UIs.
             table {
@@ -53,8 +53,11 @@ class HeadUpInterface(val gameState: GameState) : Table(Scene2DSkin.defaultSkin)
             }
             container {
                 align(Align.topLeft)
-                addActor(QuickSave(gameState = this@HeadUpInterface.gameState))
+                addActor(QuickSave(this@HeadUpInterface.gameState))
             }
+
+            //We draw the following UIs above any other UIs.
+            add(DialogueUI(this@HeadUpInterface.gameState))
 
         }
 

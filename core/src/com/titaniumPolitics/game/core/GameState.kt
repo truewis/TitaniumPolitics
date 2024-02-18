@@ -71,7 +71,8 @@ class GameState
     var informations = hashMapOf<String, Information>()
     var floatingResources = hashMapOf<String, Int>()
     var marketResources = hashMapOf<String, Int>()
-    var todo = Quests()
+    var quests = Quests()
+    var events = Events()
 
     fun initialize()
     {
@@ -88,7 +89,7 @@ class GameState
             if (places.none { it.value.characters.contains(char.key) })
                 places["home_" + char.key]!!.characters.add(char.key)
         }
-        todo.add(Quest1())
+        quests.add(Quest1())
         injectDependency()
     }
 
@@ -139,7 +140,8 @@ class GameState
         characters.forEach { it.value.injectParent(this) }
         parties.forEach { it.value.injectParent(this) }
         nonPlayerAgents.forEach { it.value.injectParent(this) }
-        todo.injectParent(this)
+        quests.injectParent(this)
+        events.injectParent(this)
     }
 
 

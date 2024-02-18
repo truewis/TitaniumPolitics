@@ -64,31 +64,4 @@ class Quests : GameStateElement()
         //completed+={ parent.log.appendLog(CapsuleText.log("log-todo-complete",it.title)) }
     }
 
-    /**
-     * title is actual sentence, not a key.
-     */
-    @Serializable
-    open class QuestObject(override var name: String, val due: Int) : GameStateElement()
-    {
-        var expired = false
-
-        /**
-         * Time of completion. 0 when not completed.
-         */
-        var completed = 0
-            set(value)
-            {
-                if (field != 0 && value == 0) throw IllegalArgumentException(this.name + " is already completed, cannot be uncompleted.")
-                field = value
-                parent.todo.completed.forEach { it(this) }
-
-            }
-
-        open val isCompleted: Boolean
-            get() = false
-
-        open fun onExpired()
-        {
-        }
-    }
 }

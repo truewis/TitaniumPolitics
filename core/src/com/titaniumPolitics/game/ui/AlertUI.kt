@@ -1,12 +1,8 @@
 package com.titaniumPolitics.game.ui
 
 import com.badlogic.gdx.Gdx
-import com.badlogic.gdx.graphics.Color
-import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.scenes.scene2d.ui.*
 import com.titaniumPolitics.game.core.GameState
-import com.titaniumPolitics.game.ui.ClockUI.Companion.formatTime
-import ktx.scene2d.*
 import ktx.scene2d.Scene2DSkin.defaultSkin
 
 class AlertUI(var gameState: GameState) : Table(defaultSkin)
@@ -25,9 +21,9 @@ class AlertUI(var gameState: GameState) : Table(defaultSkin)
         docList.grow()
 
         add(docScr).grow()
-        gameState.todo.newItemAdded += { Gdx.app.postRunnable { refreshList(); } }
-        gameState.todo.expired += { Gdx.app.postRunnable { refreshList(); } }
-        gameState.todo.completed += { Gdx.app.postRunnable { refreshList(); } }
+        gameState.quests.newItemAdded += { Gdx.app.postRunnable { refreshList(); } }
+        gameState.quests.expired += { Gdx.app.postRunnable { refreshList(); } }
+        gameState.quests.completed += { Gdx.app.postRunnable { refreshList(); } }
         gameState.timeChanged += { _, _ -> Gdx.app.postRunnable { refreshList(); } }
     }
 

@@ -24,9 +24,9 @@ class QuestUI(var gameState: GameState) : Table(Scene2DSkin.defaultSkin)
         docList.grow()
 
         add(docScr).grow()
-        gameState.todo.newItemAdded += { Gdx.app.postRunnable { refreshList(); } }
-        gameState.todo.expired += { Gdx.app.postRunnable { refreshList(); } }
-        gameState.todo.completed += { Gdx.app.postRunnable { refreshList(); } }
+        gameState.quests.newItemAdded += { Gdx.app.postRunnable { refreshList(); } }
+        gameState.quests.expired += { Gdx.app.postRunnable { refreshList(); } }
+        gameState.quests.completed += { Gdx.app.postRunnable { refreshList(); } }
         gameState.timeChanged += { _, _ -> Gdx.app.postRunnable { refreshList(); } }
     }
 
@@ -34,7 +34,7 @@ class QuestUI(var gameState: GameState) : Table(Scene2DSkin.defaultSkin)
     fun refreshList()
     {
         docList.clear()
-        gameState.todo.dataBase.forEach { tobj ->
+        gameState.quests.dataBase.forEach { tobj ->
             if (tobj.due != 0 && tobj.due + 1 < gameState.time) return@forEach
             if (tobj.completed != 0 && tobj.completed + 1 < gameState.time) return@forEach
             val t = scene2d.table {

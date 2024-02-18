@@ -2,10 +2,10 @@ package com.titaniumPolitics.game.quests
 
 import com.titaniumPolitics.game.core.Command
 import com.titaniumPolitics.game.core.GameState
-import com.titaniumPolitics.game.core.Quests
+import com.titaniumPolitics.game.core.QuestObject
 import com.titaniumPolitics.game.core.gameActions.Resign
 
-class Quest1 : Quests.QuestObject("Be a minister", 240)
+class Quest1 : QuestObject("Be a minister", 240)
 {
     //Mechanic picks a new infrastructure minister. Quest is completed if the player has the most mutuality with the mechanic among all people in the infrastructure party.
     override fun injectParent(gameState: GameState)

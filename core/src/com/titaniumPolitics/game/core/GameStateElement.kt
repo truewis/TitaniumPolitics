@@ -1,7 +1,9 @@
 package com.titaniumPolitics.game.core
 
 import kotlinx.serialization.Transient
+import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.JsonObject
+import kotlinx.serialization.json.JsonPrimitive
 
 /**Interface to dependent inject gameState to its elements*/
 sealed class GameStateElement
@@ -21,6 +23,11 @@ sealed class GameStateElement
     fun add(key: String, value: JsonObject)
     {
         params = JsonObject(this.params.plus(key to value))
+    }
+
+    fun add(key: String, value: String)
+    {
+        params = JsonObject(this.params.plus(key to JsonPrimitive(value)))
     }
 
     fun remove(key: String)

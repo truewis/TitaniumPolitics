@@ -12,9 +12,13 @@ import com.badlogic.gdx.utils.Align
 import com.titaniumPolitics.game.core.GameState
 import com.rafaskoberg.gdx.typinglabel.TypingAdapter
 import com.rafaskoberg.gdx.typinglabel.TypingLabel
+import ktx.scene2d.KTable
 import ktx.scene2d.Scene2DSkin.defaultSkin
+import ktx.scene2d.image
+import ktx.scene2d.stack
+import ktx.scene2d.table
 
-class DialogueUI(val gameState: GameState) : Table(defaultSkin)
+class DialogueUI(val gameState: GameState) : Table(defaultSkin), KTable
 {
     val stk = Stack()
 
@@ -33,17 +37,22 @@ class DialogueUI(val gameState: GameState) : Table(defaultSkin)
 
     init
     {
+        isVisible = false
         instance = this
-        add(stk).grow()
-        row()
-        val t = Table(skin)
-        stk.add(t)
-        t.add(speakerNameDisplay).fill()
-        t.row()
-        t.add(currentTextDisplay).grow()
+        stack {
+            it.grow()
+            image("capsuleDevLabel1")
+            table {
+                add(this@DialogueUI.speakerNameDisplay).fill()
+                row()
+                add(this@DialogueUI.currentTextDisplay).grow()
+                row()
+                add(this@DialogueUI.ctnuButton).fill()
+            }
+        }
         speakerNameDisplay.setAlignment(Align.bottomLeft)
-        currentTextDisplay.setFontScale(1f)
-        speakerNameDisplay.setFontScale(1f)
+        currentTextDisplay.setFontScale(2f)
+        speakerNameDisplay.setFontScale(2f)
         currentTextDisplay.touchable = Touchable.disabled
         speakerNameDisplay.touchable = Touchable.disabled
         currentTextDisplay.typingListener = object : TypingAdapter()
@@ -59,19 +68,18 @@ class DialogueUI(val gameState: GameState) : Table(defaultSkin)
         ctnuButton.setFontScale(2f)
         // Blinking ctnuButton
         ctnuButton.addAction(
-                Actions.forever(Actions.sequence(
-                        Actions.delay(0.5f),
-                        AlphaAction().apply {
-                            duration = 0.2f
-                            alpha = 0f
-                        },
-                        AlphaAction().apply {
-                            duration = 0.2f
-                            alpha = 1f
-                        }
-                )))
-        addActor(ctnuButton)
-        ctnuButton.isVisible = false
+            Actions.forever(Actions.sequence(
+                Actions.delay(0.5f),
+                AlphaAction().apply {
+                    duration = 0.2f
+                    alpha = 0f
+                },
+                AlphaAction().apply {
+                    duration = 0.2f
+                    alpha = 1f
+                }
+            )))
+        ctnuButton.isVisible = true
         ctnuButton.addListener(object : ClickListener()
         {
             override fun clicked(event: InputEvent, x: Float, y: Float)
@@ -79,15 +87,15 @@ class DialogueUI(val gameState: GameState) : Table(defaultSkin)
                 super.clicked(event, x, y)
                 ctnuCallback()
                 ctnuCallback = {}
-                ctnuButton.isVisible = false
+                instance.isVisible = false
             }
         })
     }
 
-    fun playDialogue(it: String)
+    fun playDialogue(dialogueKey: String)
     {
-
-        currentTextDisplay.restart(it)
+        isVisible = true
+        currentTextDisplay.restart(dialogueKey)
     }
 
     companion object
