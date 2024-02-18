@@ -1,10 +1,11 @@
-package com.titaniumPolitics.game.quests
+package com.titaniumPolitics.game.events
 
-import com.titaniumPolitics.game.core.EventObject
 import com.titaniumPolitics.game.core.GameState
-import com.titaniumPolitics.game.core.QuestObject
 import com.titaniumPolitics.game.ui.DialogueUI
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.Transient
 
+@Serializable
 class Event_PrologueInfDivLeaderSpeech : EventObject("Introduction of InfDivLeader.", true)
 {
     //Infrastructure Division Leader gives a speech. Quest is completed when the game starts.
@@ -15,10 +16,18 @@ class Event_PrologueInfDivLeaderSpeech : EventObject("Introduction of InfDivLead
 
     }
 
-    override val isTriggered: Boolean
-        get()
-        {
-            DialogueUI.instance.playDialogue("PrologueInfDivLeaderSpeech")
-            return true
-        }
+    @Transient
+    val func = {
+        DialogueUI.instance.playDialogue("PrologueInfDivLeaderSpeech")
+    }
+
+    override fun activate()
+    {
+        parent.onStart += func
+    }
+
+    override fun deactivate()
+    {
+        parent.onStart -= func
+    }
 }

@@ -2,9 +2,11 @@ package com.titaniumPolitics.game.quests
 
 import com.titaniumPolitics.game.core.Command
 import com.titaniumPolitics.game.core.GameState
-import com.titaniumPolitics.game.core.QuestObject
 import com.titaniumPolitics.game.core.gameActions.Resign
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.Transient
 
+@Serializable
 class Quest1 : QuestObject("Be a minister", 240)
 {
     //Mechanic picks a new infrastructure minister. Quest is completed if the player has the most mutuality with the mechanic among all people in the infrastructure party.
@@ -22,18 +24,27 @@ class Quest1 : QuestObject("Be a minister", 240)
 
     }
 
-    override val isCompleted: Boolean
-        get()
-        {
-            if (parent.time != due) return false
+    override fun activate()
+    {
+        parent.timeChanged += func
+    }
 
-            val mechanic = parent.characters.values.find { it.trait.contains("mechanic") }!!
-            return parent.parties["infrastructure"]!!.members.maxBy {
+    override fun deactivate()
+    {
+        parent.timeChanged -= func
+    }
+
+    @Transient
+    val func: (Int, Int) -> Unit = { i: Int, i1: Int ->
+
+        val mechanic = parent.characters.values.find { it.trait.contains("mechanic") }!!
+        if (parent.parties["infrastructure"]!!.members.maxBy {
                 parent.getMutuality(
                     mechanic.name,
                     it
                 )
-            } == parent.playerAgent
+            } == parent.playerAgent)
+            complete()
 
-        }
+    }
 }

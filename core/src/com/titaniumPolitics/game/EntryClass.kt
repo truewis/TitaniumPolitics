@@ -39,27 +39,30 @@ class EntryClass : ApplicationAdapter()
         val savedGamePath = System.getenv("SAVED_GAME")
         if (savedGamePath == null)
         {
+            println("Loading init.json...")
             newGame = Json.decodeFromString(
                 GameState.serializer(),
                 Gdx.files.internal("json/init.json").readString()
             ).also {
-                it.injectDependency()
+                println("Loading complete.")
                 stage = CapsuleStage(it)
                 Gdx.input.inputProcessor = stage
                 it.initialize()
             }
         } else
         {
+            println("Loading saved game from $savedGamePath...")
             newGame = Json.decodeFromString(
                 GameState.serializer(),
                 Gdx.files.internal(savedGamePath).readString()
             ).also {
+                println("Loading complete.")
                 stage = CapsuleStage(it)
                 Gdx.input.inputProcessor = stage
                 it.initialize()
             }
         }
-
+        println("Starting game engine.")
 
         thread(start = true) {
             val engine = GameEngine(newGame)

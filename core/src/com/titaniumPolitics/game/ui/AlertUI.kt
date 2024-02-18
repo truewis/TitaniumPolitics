@@ -21,9 +21,7 @@ class AlertUI(var gameState: GameState) : Table(defaultSkin)
         docList.grow()
 
         add(docScr).grow()
-        gameState.quests.newItemAdded += { Gdx.app.postRunnable { refreshList(); } }
-        gameState.quests.expired += { Gdx.app.postRunnable { refreshList(); } }
-        gameState.quests.completed += { Gdx.app.postRunnable { refreshList(); } }
+        gameState.questSystem.onChange += { Gdx.app.postRunnable { refreshList(); } }
         gameState.timeChanged += { _, _ -> Gdx.app.postRunnable { refreshList(); } }
     }
 

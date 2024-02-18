@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.scenes.scene2d.ui.*
 import com.titaniumPolitics.game.core.GameState
+import com.titaniumPolitics.game.quests.QuestObject
 import com.titaniumPolitics.game.ui.ClockUI.Companion.formatTime
 import ktx.scene2d.*
 
@@ -24,9 +25,7 @@ class QuestUI(var gameState: GameState) : Table(Scene2DSkin.defaultSkin)
         docList.grow()
 
         add(docScr).grow()
-        gameState.quests.newItemAdded += { Gdx.app.postRunnable { refreshList(); } }
-        gameState.quests.expired += { Gdx.app.postRunnable { refreshList(); } }
-        gameState.quests.completed += { Gdx.app.postRunnable { refreshList(); } }
+        gameState.questSystem.onChange += { Gdx.app.postRunnable { refreshList(); } }
         gameState.timeChanged += { _, _ -> Gdx.app.postRunnable { refreshList(); } }
     }
 
@@ -34,11 +33,10 @@ class QuestUI(var gameState: GameState) : Table(Scene2DSkin.defaultSkin)
     fun refreshList()
     {
         docList.clear()
-        gameState.quests.dataBase.forEach { tobj ->
-            if (tobj.due != 0 && tobj.due + 1 < gameState.time) return@forEach
-            if (tobj.completed != 0 && tobj.completed + 1 < gameState.time) return@forEach
+        gameState.questSystem.dataBase.forEach { tobj ->
+            if (tobj.state != QuestObject.QuestState.ACTIVE) return@forEach
             val t = scene2d.table {
-                if (tobj.completed != 0) image(
+                if (tobj.state == QuestObject.QuestState.COMPLETED) image(
                     (this@QuestUI.stage as CapsuleStage).assetManager.get(
                         "data/dev/capsuleDevBoxCheck.png",
                         Texture::class.java
@@ -59,7 +57,7 @@ class QuestUI(var gameState: GameState) : Table(Scene2DSkin.defaultSkin)
                     it.growX()
                     setFontScale(2f)
                 }
-                if (tobj.due != 0 && tobj.completed == 0)
+                if (tobj.due != null && tobj.state == QuestObject.QuestState.ACTIVE)
                 {
                     label(formatTime(tobj.due), "trnsprtConsole") {
                         if (tobj.due < gameState.time) color = Color.RED

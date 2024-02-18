@@ -31,6 +31,7 @@ class CapsuleStage(val gameState: GameState) : Stage(FitViewport(1920F, 1080F))
 
     init
     {
+        println("Initializing CapsuleStage...")
         instance = this
         val resolver = InternalFileHandleResolver()
         assetManager.setLoader(
@@ -41,8 +42,9 @@ class CapsuleStage(val gameState: GameState) : Stage(FitViewport(1920F, 1080F))
             assetManager.load(it.value.jsonObject["image"]!!.jsonPrimitive.content, Texture::class.java)
             assetManager.load("data/dev/capsuleDevBoxCheck.png", Texture::class.java)
             assetManager.load("data/dev/capsuleDevBox.png", Texture::class.java)
-            println(it.value.jsonObject["image"]!!.jsonPrimitive.content)
+
         }
+        println("Explicit asset imports successful.")
         assetManager.finishLoading()
 
         rootStack.setFillParent(true)
@@ -65,7 +67,7 @@ class CapsuleStage(val gameState: GameState) : Stage(FitViewport(1920F, 1080F))
         gameState.updateUI.add {
             roomChanged(it.places.values.find { it.characters.contains(gameState.playerAgent) }!!.name)
         }
-
+        println("CapsuleStage initialized successfully.")
     }
 
     fun roomChanged(name: String)

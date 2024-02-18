@@ -53,8 +53,7 @@ class Place : GameStateElement()
     {
         super.injectParent(gameState)
         plannedWorker =
-            apparatuses.sumOf { it.idealWorker }//TODO: this is a temporary solution to set up the planned worker.
-        println("Planned worker of $name: $plannedWorker")
+            apparatuses.sumOf { it.idealWorker }//TODO: this is a temporary solution to set up the planned worker. It should be set by division leaders.
     }
 
 }

@@ -48,6 +48,10 @@ class GameState
 
     @Transient
     var updateUI = arrayListOf<(GameState) -> Unit>()
+
+    //This is a list of functions that will be called when the game starts.
+    @Transient
+    var onStart = arrayListOf<() -> Unit>()
     var _alertLevel = 0
     var places = hashMapOf<String, Place>()
     var characters = hashMapOf<String, Character>()
@@ -71,26 +75,26 @@ class GameState
     var informations = hashMapOf<String, Information>()
     var floatingResources = hashMapOf<String, Int>()
     var marketResources = hashMapOf<String, Int>()
-    var quests = Quests()
-    var events = Events()
+    var questSystem = QuestSystem()
+    var eventSystem = EventSystem()
 
     fun initialize()
     {
-        injectDependency()
+        println("Initializing game state...")
         characters.forEach { char ->
             //Create home for each character.
             places["home_" + char.key] = Place().apply {
                 responsibleParty = ""
                 //Connect the new home to the place specified in the character.
                 connectedPlaces.add(this@GameState.characters[char.key]!!.livingBy)
-                characters.add(char.key)
             }
             places[this@GameState.characters[char.key]!!.livingBy]!!.connectedPlaces.add("home_" + char.key)
             if (places.none { it.value.characters.contains(char.key) })
                 places["home_" + char.key]!!.characters.add(char.key)
         }
-        quests.add(Quest1())
+        questSystem.add(Quest1())
         injectDependency()
+        println("Game state initialized successfully.")
     }
 
     fun getMutuality(a: String, b: String): Double
@@ -133,15 +137,17 @@ class GameState
         if (getPartyMutuality(a, b) < 0) _partyMutuality[a]!![b] = 0.0
     }
 
-    fun injectDependency()
+    //Injects the parent gameState to all elements in the gameState. This function should be called exactly once after the gameState is created.
+    private fun injectDependency()
     {
         log.injectParent(this)
         places.forEach { it.value.injectParent(this) }
         characters.forEach { it.value.injectParent(this) }
         parties.forEach { it.value.injectParent(this) }
         nonPlayerAgents.forEach { it.value.injectParent(this) }
-        quests.injectParent(this)
-        events.injectParent(this)
+        questSystem.injectParent(this)
+        eventSystem.injectParent(this)
+        println("GameState injected successfully.")
     }
 
 
