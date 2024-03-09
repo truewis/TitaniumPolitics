@@ -95,7 +95,7 @@ class DialogueUI(val gameState: GameState) : Table(defaultSkin), KTable
             override fun clicked(event: InputEvent, x: Float, y: Float)
             {
                 super.clicked(event, x, y)
-                if (currentLineNumber < currentDialogueLength)
+                if (currentLineNumber < currentDialogueLength - 1)
                 {
                     currentLineNumber++
                     playLine(currentLineNumber)
