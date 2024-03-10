@@ -1254,7 +1254,7 @@ class GameEngine(val gameState: GameState)
                 "denounce" -> return true
                 "workingHoursChange" -> return mt.involvedParty != "" && mt.subject == "divisionDailyConference"
                 "reassignWorkersToApparatus" -> return mt.involvedParty != "" && mt.subject == "divisionDailyConference"
-                "salary" -> return mt.involvedParty != "" && mt.subject == "divisionDailyConference"
+                "salary" -> return mt.involvedParty != "" && mt.subject == "divisionDailyConference" && !gameState.parties[mt.involvedParty]!!.isSalaryPaid
                 "appointMeeting" -> return mt.involvedParty != "" && mt.subject == "divisionDailyConference"
 
 
@@ -1267,6 +1267,34 @@ class GameEngine(val gameState: GameState)
                 return false
             val party = gameState.parties[mt.involvedParty]!!
             return true
+        }
+        fun progressMeeting(gameState: GameState, mt: Meeting)
+        {
+            mt.agendas.forEach {
+                var deltaAgreement = 0
+                when(it.subjectType){
+                    "proofOfWork" -> {
+                        when(mt.involvedParty){
+                            "infrastructure" -> {
+                                it.informationKeys.forEach {key->
+                                    val info = gameState.informations[key]!!
+                                    //Only count actions done within 5 days.
+                                    if(info.type == "action" && info.action=="repair" && info.creationTime>gameState.time-48*5)
+                                        deltaAgreement+=3;
+                                }
+                            }
+                        }
+                    }
+                    "budgetProposal" -> return mt.involvedParty == "cabinet" && !gameState.isBudgetProposed
+                    "budgetResolution" -> return mt.involvedParty == "triumvirate" && !gameState.isBudgetResolved
+                    "praise" -> return true
+                    "denounce" -> return true
+                    "workingHoursChange" -> return mt.involvedParty != "" && mt.subject == "divisionDailyConference"
+                    "reassignWorkersToApparatus" -> return mt.involvedParty != "" && mt.subject == "divisionDailyConference"
+                    "salary" -> return mt.involvedParty != "" && mt.subject == "divisionDailyConference" && !gameState.parties[mt.involvedParty]!!.isSalaryPaid
+                    "appointMeeting" -> return mt.involvedParty != "" && mt.subject == "divisionDailyConference"
+                }
+            }
         }
 
     }
