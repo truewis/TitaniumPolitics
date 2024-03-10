@@ -1,5 +1,6 @@
 package com.titaniumPolitics.game.core.gameActions
 
+@Deprecated("This class is deprecated. Salary is a separate agenda item.")
 class Salary(override val tgtCharacter: String, override val tgtPlace: String) : GameAction()
 {
     var amount = 2

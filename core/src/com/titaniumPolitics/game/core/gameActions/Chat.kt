@@ -1,5 +1,6 @@
 package com.titaniumPolitics.game.core.gameActions
 
+@Deprecated("This class is deprecated. It could be implemented later.")
 class Chat(override val tgtCharacter: String, override val tgtPlace: String) : GameAction()
 {
     override fun execute()

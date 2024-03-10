@@ -1085,22 +1085,34 @@ class GameEngine(val gameState: GameState)
                     println("You are in a meeting.")
                     println("Attendees: ${meeting.currentCharacters}")
                 }
-                actions.add("Chat")
+                //You cannot chat currently.
                 //Trade is allowed only if there are exactly two people in the meeting.
                 //InfoShare is allowed only if there are more than two people in the meeting.
                 if (meeting.currentCharacters.count() == 2)
-                    actions.add("Trade")
-                else
-                    actions.add("InfoShare")
-
-                if (gameState.parties.values.any { it.leader == character && it.members.containsAll(meeting.currentCharacters) })//Only the leader of a party can command.
+                    actions.add("Trade") //TODO: Trade is an agenda. More unequal the trade, harder it is to agree.
+                if (meeting.currentSpeaker == character)
                 {
-                    actions.add("UnofficialCommand")
-                    if (meeting.currentCharacters.count() >= 3)
-                        actions.add("InfoRequest")
+                    actions.add("NewAgenda")
+                    actions.add("AddInfo")
+                    actions.add("EndMeeting")
+                    actions.add("EndSpeech")
+                } else
+                {
+                    actions.add("Wait")
+                    actions.add("Intercept")
+
+                    //Takeover/Refuse as a separate action is not useful. Once you are nominated to speak, you can either speak or end the speech.
                 }
-                actions.add("AppointMeeting")
-                actions.add("Wait")
+
+//                if (gameState.parties.values.any { it.leader == character && it.members.containsAll(meeting.currentCharacters) })//Only the leader of a party can command.
+//                {
+//                    //actions.add("UnofficialCommand") UnofficialCommand is gone. Command is always official. Trade can be used for unofficial commands.
+//                    if (meeting.currentCharacters.count() >= 3)
+//                        actions.add("InfoRequest")
+//                }
+                //actions.add("AppointMeeting") AppointMeeting is an agenda now.
+                //actions.add("Wait")
+                actions.add("UseItem")
                 actions.add("LeaveMeeting")
                 return actions
             }
@@ -1124,31 +1136,28 @@ class GameEngine(val gameState: GameState)
                 val subject = conf.subject
                 if (character == gameState.parties[conf.involvedParty]!!.leader)//Only the leader can do below actions.
                 {
-                    when (subject)
-                    {
-                        "budgetProposal" -> if (!gameState.isBudgetProposed) actions.add("BudgetProposal")
-                        "budgetResolution" -> if (!gameState.isBudgetResolved) actions.add("BudgetResolution")
-                        "leaderAssignment" -> if (gameState.parties[conf.auxSubject]!!.leader == "") actions.add("LeaderAssignment")
-
-                    }
-                    actions.add("Resign") //Only leaders can resign right now.
+                    actions.add("Resign") //Only leaders can resign right now. Resign is one of the few actions that can be done without an agenda.
                 }
                 //When not the leader, you can only do below actions.
-                when (subject)
+                //Salary is implemented through an agenda.
+                //There is no command anymore.
+//                if (gameState.parties[conf.involvedParty]?.leader == character)
+//                {
+//                    actions.add("Command")
+//                }
+                if (conf.currentSpeaker == character)
                 {
-                    "divisionDailyConference" -> if (gameState.parties[conf.involvedParty]!!.isDailySalaryPaid[character] == false) actions.add(
-                        "Salary"
-                    )
-                }
-                //Command is allowed only if the character is the division leader.
-                if (gameState.parties[conf.involvedParty]?.leader == character)
+                    actions.add("NewAgenda")
+                    actions.add("AddInfo")
+                    actions.add("EndMeeting")
+                    actions.add("EndSpeech")
+                } else
                 {
-                    actions.add("Command")
-                    actions.add("InfoRequest")
+                    actions.add("Wait")
+                    actions.add("Intercept")
+
+                    //Takeover/Refuse as a separate action is not useful. Once you are nominated to speak, you can either speak or end the speech.
                 }
-                actions.add("InfoShare")
-                actions.add("AppointMeeting")
-                actions.add("Wait")
                 actions.add("LeaveMeeting")
                 return actions
             }
@@ -1188,7 +1197,7 @@ class GameEngine(val gameState: GameState)
 
             if (place == "mainControlRoom" || place == "market" || place == "squareNorth" || place == "squareSouth")
             {
-                actions.add("InfoAnnounce")
+                //actions.add("InfoAnnounce") Only the leader of the internal division can announce.
             }
             if (gameState.places[place]!!.responsibleParty != "" && gameState.parties[gameState.places[place]!!.responsibleParty]!!.members.contains(
                     character
@@ -1231,5 +1240,34 @@ class GameEngine(val gameState: GameState)
             }
             return actions
         }
+
+
+        //People will be more interested in agendas related to their interest. However, this is handled in NPC class.
+        fun isValidMeetingAgenda(gameState: GameState, mt: Meeting, agenda: MeetingAgenda): Boolean
+        {
+            when (agenda.subjectType)
+            {
+                "proofOfWork" -> return mt.involvedParty != "" && mt.subject == "divisionDailyConference"
+                "budgetProposal" -> return mt.involvedParty == "cabinet" && !gameState.isBudgetProposed
+                "budgetResolution" -> return mt.involvedParty == "triumvirate" && !gameState.isBudgetResolved
+                "praise" -> return true
+                "denounce" -> return true
+                "workingHoursChange" -> return mt.involvedParty != "" && mt.subject == "divisionDailyConference"
+                "reassignWorkersToApparatus" -> return mt.involvedParty != "" && mt.subject == "divisionDailyConference"
+                "salary" -> return mt.involvedParty != "" && mt.subject == "divisionDailyConference"
+                "appointMeeting" -> return mt.involvedParty != "" && mt.subject == "divisionDailyConference"
+
+
+            }
+            if (mt.involvedParty == "")
+                return false
+            if (mt.involvedParty == "cabinet")
+                return false
+            if (mt.involvedParty == "triumvirate")
+                return false
+            val party = gameState.parties[mt.involvedParty]!!
+            return true
+        }
+
     }
 }

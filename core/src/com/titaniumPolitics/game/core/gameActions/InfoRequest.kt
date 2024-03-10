@@ -3,6 +3,7 @@ package com.titaniumPolitics.game.core.gameActions
 import com.titaniumPolitics.game.core.GameEngine
 
 //TODO: party integrity affects the chances. Party integrity is affected.
+@Deprecated("This class is deprecated. Info requests are done naturally through agendas.")
 class InfoRequest(override val tgtCharacter: String, override val tgtPlace: String) : GameAction()
 {
     var who = hashSetOf<String>()

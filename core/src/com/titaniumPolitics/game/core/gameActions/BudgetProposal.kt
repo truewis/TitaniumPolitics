@@ -1,5 +1,6 @@
 package com.titaniumPolitics.game.core.gameActions
 
+@Deprecated("This class is deprecated. BudgetProposal is a separate agenda item.")
 class BudgetProposal(override val tgtCharacter: String, override val tgtPlace: String) : GameAction()
 {
     val budget = hashMapOf<String, Int>()//"mainControlRoom" to 11520, "redMine" to 38400, "blackMine" to 38400,

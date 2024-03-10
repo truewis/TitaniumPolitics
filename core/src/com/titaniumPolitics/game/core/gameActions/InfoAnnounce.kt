@@ -3,6 +3,7 @@ package com.titaniumPolitics.game.core.gameActions
 import com.titaniumPolitics.game.core.GameEngine
 import kotlin.math.min
 
+@Deprecated("This class is deprecated. Only internal division leader can announce.")
 class InfoAnnounce(override val tgtCharacter: String, override val tgtPlace: String) : GameAction()
 {
     var who = hashSetOf<String>()

@@ -3,6 +3,7 @@ package com.titaniumPolitics.game.core.gameActions
 import com.titaniumPolitics.game.core.GameEngine
 import com.titaniumPolitics.game.core.Information
 
+@Deprecated("This class is deprecated. Info requests are done naturally through agendas.")
 class InfoShare(override val tgtCharacter: String, override val tgtPlace: String) : GameAction()
 {
     var who = hashSetOf<String>()

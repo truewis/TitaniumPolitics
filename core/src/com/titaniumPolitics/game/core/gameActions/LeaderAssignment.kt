@@ -2,6 +2,7 @@ package com.titaniumPolitics.game.core.gameActions
 
 import com.titaniumPolitics.game.core.GameEngine
 
+@Deprecated("This class is deprecated. Division leaders are elected by the party members.")
 class LeaderAssignment(override val tgtCharacter: String, override val tgtPlace: String) : GameAction()
 {
     var targetParty = ""
