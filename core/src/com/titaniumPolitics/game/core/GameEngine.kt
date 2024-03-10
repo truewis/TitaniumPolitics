@@ -152,6 +152,13 @@ class GameEngine(val gameState: GameState)
         checkMarketResources(gameState)
         ageInformation()
         spreadPublicInfo()
+        gameState.ongoingMeetings.forEach{
+            progressMeeting(gameState, it.value)
+        }
+        gameState.ongoingConferences.forEach{
+            progressMeeting(gameState, it.value)
+        }
+
 
         //println("Time: ${gameState.time}")
         //println("My approval:${gameState.characters[gameState.playerAgent]!!.approval}")
@@ -473,10 +480,6 @@ class GameEngine(val gameState: GameState)
 
             gameState.scheduledConferences["conference-${stringPartyEntry.value.home}-${stringPartyEntry.value.name}-${gameState.time}"] =
                 conference
-        }
-        //Since the party is division, it pays out the salary of the members.
-        gameState.parties.values.filter { it.type == "division" }.forEach { party ->
-            party.members.forEach { char -> party.isDailySalaryPaid[char] = false }
         }
     }
 
@@ -942,6 +945,10 @@ class GameEngine(val gameState: GameState)
         { //Every 15 days, reset the budget.
             gameState.isBudgetProposed = false
             gameState.isBudgetResolved = false
+            //Since the party is division, it pays out the salary of the members.
+            gameState.parties.values.filter { it.type == "division" }.forEach { party ->
+                party.isSalaryPaid = false
+            }
         }
         if (gameState.time % 48 == 0)
         { //Every day, we used to inform the infrastructure minister about total resource.
@@ -1268,31 +1275,96 @@ class GameEngine(val gameState: GameState)
             val party = gameState.parties[mt.involvedParty]!!
             return true
         }
+        //Agreement change is computed every turn based on deltaAgreement, rather than changing once when information are added.
+        //This is to prevent the meeting going nowhere when their isn't enough supporting information.
         fun progressMeeting(gameState: GameState, mt: Meeting)
         {
             mt.agendas.forEach {
                 var deltaAgreement = 0
+                //TODO: final value of deltaAgreement is based on the participant's overall mutuality to the proposer of the agenda.
+                //TODO: final value of deltaAgreement is propotional to current Attention.
                 when(it.subjectType){
                     "proofOfWork" -> {
+                        //For:
+                        //Did their job well
                         when(mt.involvedParty){
                             "infrastructure" -> {
                                 it.informationKeys.forEach {key->
                                     val info = gameState.informations[key]!!
                                     //Only count actions done within 5 days.
                                     if(info.type == "action" && info.action=="repair" && info.creationTime>gameState.time-48*5)
-                                        deltaAgreement+=3;
+                                        deltaAgreement+=3; //TODO: this should change based on how old the information is.
                                 }
                             }
                         }
+                        //Agenda proposer gave a command to one of the people in the meeting. Agreement increases when they suplement with their proof of execution.
                     }
-                    "budgetProposal" -> return mt.involvedParty == "cabinet" && !gameState.isBudgetProposed
-                    "budgetResolution" -> return mt.involvedParty == "triumvirate" && !gameState.isBudgetResolved
-                    "praise" -> return true
-                    "denounce" -> return true
-                    "workingHoursChange" -> return mt.involvedParty != "" && mt.subject == "divisionDailyConference"
-                    "reassignWorkersToApparatus" -> return mt.involvedParty != "" && mt.subject == "divisionDailyConference"
-                    "salary" -> return mt.involvedParty != "" && mt.subject == "divisionDailyConference" && !gameState.parties[mt.involvedParty]!!.isSalaryPaid
-                    "appointMeeting" -> return mt.involvedParty != "" && mt.subject == "divisionDailyConference"
+                    "budgetProposal" -> {
+                        //For:
+                        //Our division is low in resource
+                        //Against:
+                        //Too much budget allocated to an unpopular division
+                        //Budget is too low compared to salary paid.
+                    }
+                    "budgetResolution" -> {
+
+                        //Against:
+                        //Too much budget allocated to an unpopular division
+                        //The government is low in resource.
+                    }
+                    "praise" -> {
+                        //For:
+                        //Did their job well recently.
+                        when(mt.involvedParty){
+                            "infrastructure" -> {
+                                it.informationKeys.forEach {key->
+                                    val info = gameState.informations[key]!!
+                                    //Only count actions done within 5 days.
+                                    if(info.type == "action" && info.action=="repair" && info.creationTime>gameState.time-48*5)
+                                        deltaAgreement+=3;//TODO: this should change based on how old the information is.
+                                }
+                            }
+                        }
+                        //Against:
+                    }
+                    "denounce" -> {
+                        //For:
+                        //Didn't work during work hours
+                        //Embezzled resources
+                        //Rebelled
+                        //Greedy
+
+                        //Against:
+
+                    }
+                    "workingHoursChange" -> {
+                        //Increase work hours when
+                        //Demands are high
+                        //Not enough workers
+
+                        //Decrease work hours when
+                        //Demands are low
+                        //supplies are low.
+                        //Cannot pay salaries for the laborers.
+                    }
+                    "reassignWorkersToApparatus" -> {
+
+
+                    }
+                    "salary" -> {
+                        //For:
+                        //We are hungry
+
+                        //Against:
+                        //Cannot pay salaries
+
+                    }
+                    "appointMeeting" -> {
+
+                    }
+                    "trade" -> {
+
+                    }
                 }
             }
         }

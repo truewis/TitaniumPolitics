@@ -22,4 +22,10 @@ class Meeting(
     var currentSpeaker = ""
     var currentAttention = 0
     var agendas = arrayListOf<MeetingAgenda>()
+
+    fun endMeeting(){
+        //TODO: Execute dominant agendas.
+        //TODO: Affect mutuality based on lost agendas.
+
+    }
 }
