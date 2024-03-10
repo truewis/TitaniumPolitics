@@ -8,5 +8,5 @@ data class MeetingAgenda(
     var subjectParams: HashMap<String, String>,
     var subjectIntParams: HashMap<String, Int>,
     var agreement: Int,
-    var informationKeys: List<String>
+    var informationKeys: ArrayList<String>
 )
