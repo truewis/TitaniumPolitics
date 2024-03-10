@@ -9,6 +9,7 @@ import kotlin.coroutines.suspendCoroutine
 import kotlin.math.log
 import kotlin.math.max
 import kotlin.math.min
+import kotlin.math.sqrt
 import kotlin.random.Random
 import kotlin.system.exitProcess
 
@@ -1271,7 +1272,7 @@ class GameEngine(val gameState: GameState)
                                     val info = gameState.informations[key]!!
                                     //Only count actions done within 5 days.
                                     if (info.type == "action" && info.action == "repair" && info.creationTime > gameState.time - 48 * 5)
-                                        deltaAgreement += 3; //TODO: this should change based on how old the information is.
+                                        deltaAgreement += 3 //TODO: this should change based on how old the information is.
                                 }
                             }
                         }
@@ -1285,6 +1286,7 @@ class GameEngine(val gameState: GameState)
                         //Against:
                         //Too much budget allocated to an unpopular division
                         //Budget is too low compared to salary paid.
+                        deltaAgreement += 3
                     }
 
                     "budgetResolution" ->
@@ -1293,6 +1295,7 @@ class GameEngine(val gameState: GameState)
                         //Against:
                         //Too much budget allocated to an unpopular division
                         //The government is low in resource.
+                        deltaAgreement += 3
                     }
 
                     "praise" ->
@@ -1307,7 +1310,7 @@ class GameEngine(val gameState: GameState)
                                     val info = gameState.informations[key]!!
                                     //Only count actions done within 5 days.
                                     if (info.type == "action" && info.action == "repair" && info.creationTime > gameState.time - 48 * 5)
-                                        deltaAgreement += 3;//TODO: this should change based on how old the information is.
+                                        deltaAgreement += 3//TODO: this should change based on how old the information is.
                                 }
                             }
                         }
@@ -1323,7 +1326,7 @@ class GameEngine(val gameState: GameState)
                         //Greedy
 
                         //Against:
-
+                        deltaAgreement += 3
                     }
 
                     "workingHoursChange" ->
@@ -1336,12 +1339,13 @@ class GameEngine(val gameState: GameState)
                         //Demands are low
                         //supplies are low.
                         //Cannot pay salaries for the laborers.
+                        deltaAgreement += 3
                     }
 
                     "reassignWorkersToApparatus" ->
                     {
 
-
+                        deltaAgreement += 3
                     }
 
                     "salary" ->
@@ -1351,19 +1355,21 @@ class GameEngine(val gameState: GameState)
 
                         //Against:
                         //Cannot pay salaries
-
+                        deltaAgreement += 3
                     }
 
                     "appointMeeting" ->
                     {
-
+                        deltaAgreement += 3
                     }
 
                     "trade" ->
                     {
-
+                        deltaAgreement += 3
                     }
                 }
+                it.agreement += deltaAgreement * mt.currentAttention / 10 / mt.currentCharacters.size
+
             }
         }
 

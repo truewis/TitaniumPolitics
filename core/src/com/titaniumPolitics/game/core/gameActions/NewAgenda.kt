@@ -15,6 +15,7 @@ class NewAgenda(override val tgtCharacter: String, override val tgtPlace: String
         meeting.agendas.add(agenda)
         meeting.currentAttention = max(meeting.currentAttention - 10, 0)
         parent.characters[tgtCharacter]!!.frozen++
+        //TODO: affect mutuality based on the agenda.
     }
 
     override fun isValid(): Boolean
@@ -23,15 +24,16 @@ class NewAgenda(override val tgtCharacter: String, override val tgtPlace: String
         val mt = parent.characters[tgtCharacter]!!.currentMeeting!!
         when (agenda.subjectType)
         {
-            "proofOfWork" -> return mt.involvedParty != "" && mt.subject == "divisionDailyConference"
+            "proofOfWork" -> return mt.involvedParty != "" && mt.subject == "divisionDailyConference" //TODO: how do we handle command issued?
             "budgetProposal" -> return mt.involvedParty == "cabinet" && !parent.isBudgetProposed
             "budgetResolution" -> return mt.involvedParty == "triumvirate" && !parent.isBudgetResolved
             "praise" -> return true
             "denounce" -> return true
-            "workingHoursChange" -> return mt.involvedParty != "" && mt.subject == "divisionDailyConference"
-            "reassignWorkersToApparatus" -> return mt.involvedParty != "" && mt.subject == "divisionDailyConference"
+            "workingHoursChange" -> return mt.involvedParty != "" && mt.subject == "divisionDailyConference" && parent.places[agenda.subjectParams["where"]]!!.responsibleParty == mt.involvedParty
+            "reassignWorkersToApparatus" -> return mt.involvedParty != "" && mt.subject == "divisionDailyConference" && parent.places[agenda.subjectParams["where"]]!!.responsibleParty == mt.involvedParty //TODO: check apparatus key.
             "salary" -> return mt.involvedParty != "" && mt.subject == "divisionDailyConference" && !parent.parties[mt.involvedParty]!!.isSalaryPaid
-            "appointMeeting" -> return mt.involvedParty != "" && mt.subject == "divisionDailyConference"
+            "appointMeeting" -> return true
+            //TODO: impeach, fire
 
 
         }

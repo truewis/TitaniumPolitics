@@ -5,8 +5,8 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class MeetingAgenda(
     var subjectType: String,
-    var subjectParams: HashMap<String, String>,
-    var subjectIntParams: HashMap<String, Int>,
-    var agreement: Int,
-    var informationKeys: ArrayList<String>
+    var subjectParams: HashMap<String, String> = hashMapOf(),
+    var subjectIntParams: HashMap<String, Int> = hashMapOf(),
+    var agreement: Int = 0,
+    var informationKeys: ArrayList<String> = arrayListOf()
 )

@@ -558,175 +558,215 @@ class NonPlayerAgent : GameStateElement()
                 }
                 when (conf.subject)
                 {
-                    "budgetProposal" ->
+                    "triumvirateDailyConference" ->
                     {
-                        //If leader, propose budget
-                        if (parent.parties[conf.involvedParty]!!.leader == name)
+                        //If not speaker, wait if the mutuality to the speaker is high. Otherwise, if possible, interrupt the speaker.
+                        if (conf.currentSpeaker != name)
                         {
-                            if (!parent.isBudgetProposed)
-                            {
-                                return BudgetProposal(name, place)
-                            } else //If budget is proposed, leave the conference.
-                            {
-                                routines.removeAt(0)//Remove the current routine.
-                                return executeRoutine()
-                            }
+                            if (parent.getMutuality(
+                                    name,
+                                    conf.currentSpeaker
+                                ) > 50 || conf.currentAttention > Intercept.threshold
+                            )
+                                return Wait(name, place)
+                            else
+                                return Intercept(name, place)
                         } else
                         {
-                            //If not leader, wait for the budget to be proposed.
-                            if (!parent.isBudgetProposed)
+                            //If budget is proposed but not resolved, resolve it.
+                            if (parent.isBudgetProposed && !parent.isBudgetResolved && conf.agendas.none { it.subjectType == "budgetResolve" })
                             {
-                                return Wait(name, place)
+                                return NewAgenda(name, place).also {
+                                    it.agenda = MeetingAgenda("budgetResolve")
+                                }
                             } else
                             {
-                                routines.removeAt(0)//Remove the current routine.
-                                return executeRoutine()
+                                //If the agenda is already proposed, support it.
+                                routines.add(
+                                    Routine(
+                                        "supportAgenda",
+                                        routines[0].priority + 10
+                                    ).also {
+                                        it.intVariables["agendaIndex"] =
+                                            conf.agendas.indexOfFirst { it.subjectType == "budgetResolve" }
+                                    })//Add a routine, priority higher than work.
                             }
                         }
                     }
 
-                    "leaderAssignment" ->
+                    "cabinetDailyConference" ->
                     {
-                        //If leader, assign new leader
-                        if (parent.parties[conf.involvedParty]!!.leader == name)
+                        //If not speaker, wait if the mutuality to the speaker is high. Otherwise, if possible, interrupt the speaker.
+                        if (conf.currentSpeaker != name)
                         {
-                            if (parent.parties[conf.auxSubject]!!.leader == "")//If the subject party does not have a leader yet, assign a leader.
-                            {
-                                return LeaderAssignment(name, place).also {
-                                    it.targetParty = conf.auxSubject
-                                    //First option: Assign the leader of the subject party to the character with the highest mutuality.
-                                    it.who = parent.parties[conf.auxSubject]!!.members.maxByOrNull {
-                                        parent.getMutuality(
-                                            it,
-                                            name
-                                        )
-                                    }!!
-                                    //TODO: Second option: Assign the leader of the subject party to the character with the highest support within the party.
-
-                                }
-                            } else //If leader is assigned, leave the conference.
-                            {
-                                routines.removeAt(0)//Remove the current routine.
-                                return executeRoutine()
-                            }
+                            if (parent.getMutuality(
+                                    name,
+                                    conf.currentSpeaker
+                                ) > 50 || conf.currentAttention > Intercept.threshold
+                            )
+                                return Wait(name, place)
+                            else
+                                return Intercept(name, place)
                         } else
                         {
-                            //If not leader, wait for the leader to be assigned.
-                            if (parent.parties[conf.auxSubject]!!.leader == "")
+                            //If budget is not proposed, propose it.
+                            if (!parent.isBudgetProposed && conf.agendas.none { it.subjectType == "budgetPropose" })
                             {
-                                return Wait(name, place)
+                                return NewAgenda(name, place).also {
+                                    it.agenda = MeetingAgenda("budgetPropose")
+                                }
                             } else
                             {
-                                routines.removeAt(0)//Remove the current routine.
-                                return executeRoutine()
+                                //If the agenda is already proposed, support it.
+                                routines.add(
+                                    Routine(
+                                        "supportAgenda",
+                                        routines[0].priority + 10
+                                    ).also {
+                                        it.intVariables["agendaIndex"] =
+                                            conf.agendas.indexOfFirst { it.subjectType == "budgetPropose" }
+                                    })//Add a routine, priority higher than work.
                             }
                         }
                     }
 
                     "divisionDailyConference" ->
                     {
-                        //Grab the salary if not grabbed yet.
-                        if (!parent.parties[conf.involvedParty]!!.isDailySalaryPaid[name]!!)
+                        //If not speaker, wait if the mutuality to the speaker is high. Otherwise, if possible, interrupt the speaker.
+                        if (conf.currentSpeaker != name)
                         {
-                            return Salary(name, place)
-                        }
-                        //If division leader, share information about the division.
-                        //Also, praise or criticize the division members.
-                        if (parent.parties[conf.involvedParty]!!.leader == name)
+                            if (parent.getMutuality(
+                                    name,
+                                    conf.currentSpeaker
+                                ) > 50 || conf.currentAttention > Intercept.threshold
+                            )
+                                return Wait(name, place)
+                            else
+                                return Intercept(name, place)
+                        } else
                         {
-                            //Share information about the division, if the information is not known to all division members.
-                            parent.informations.filter {
-                                it.value.tgtParty == conf.involvedParty && it.value.knownTo.contains(
-                                    name
-                                ) && !it.value.knownTo.containsAll(conf.currentCharacters) && it.value.tgtTime in parent.time / 48..parent.time / 48 + 47
-                            }.forEach {
-                                InfoShare(name, place).also { action ->
-                                    action.what = it.key
-                                    return action
-                                }//TODO: do not share all information. Share only the information that the leader wants to share.
+                            //If speaker, propose proof of work.
+                            if (conf.agendas.none { it.subjectType == "proofOfWork" })
+                            {
+                                return NewAgenda(name, place).also {
+                                    it.agenda = MeetingAgenda("proofOfWork")
+                                }
+                            } else
+                            {
+                                //If the agenda is already proposed, support it.
+                                routines.add(
+                                    Routine(
+                                        "supportAgenda",
+                                        routines[0].priority + 10
+                                    ).also {
+                                        it.intVariables["agendaIndex"] =
+                                            conf.agendas.indexOfFirst { it.subjectType == "proofOfWork" }
+                                    })//Add a routine, priority higher than work.
                             }
-                            //Praise or criticize the division members, if there is any relevant information.
-                            parent.parties[conf.involvedParty]!!.members.forEach { member ->
-                                if (member != name && parent.informations.values.any {
-                                        it.tgtCharacter == member && it.knownTo.contains(
-                                            name
+
+                            //Grab the salary if not grabbed yet.
+                            if (conf.currentSpeaker == name && !parent.parties[conf.involvedParty]!!.isSalaryPaid)
+                            {
+                                if (conf.agendas.none { it.subjectType == "salary" })
+                                    return NewAgenda(name, place).also {
+                                        it.agenda = MeetingAgenda(
+                                            "salary"
                                         )
-                                    })
-                                {
-                                    //praise if the mutuality is high, criticize if the mutuality is low.
-                                    val mutuality = parent.getMutuality(name, member)
-                                    if (mutuality > 80)
-                                    {
-                                        InfoShare(name, place).also { action ->
-                                            //just take random information for now. TODO: take the information that is most useful for praising.
-                                            action.what = parent.informations.values.filter {
-                                                it.tgtCharacter == member && it.knownTo.contains(name)
-                                            }.random().name
-                                            action.application = "praise"
-                                            action.who = hashSetOf(member)
-                                            return action
-                                        }
-                                    } else if (mutuality < 20)
-                                    {
-                                        InfoShare(name, place).also { action ->
-                                            //just take random information for now. TODO: take the information that is most useful for criticizing.
-                                            action.what = parent.informations.values.filter {
-                                                it.tgtCharacter == member && it.knownTo.contains(name)
-                                            }.random().name
-                                            action.application = "criticize"
-                                            action.who = hashSetOf(member)
-                                            return action
-                                        }
                                     }
-                                }//TODO: there must be a cooldown, stored in party class.
+                                else
+                                {
+                                    //If the agenda is already proposed, support it.
+                                    routines.add(
+                                        Routine(
+                                            "supportAgenda",
+                                            routines[0].priority + 10
+                                        ).also {
+                                            it.intVariables["agendaIndex"] =
+                                                conf.agendas.indexOfFirst { it.subjectType == "salary" }
+                                        })//Add a routine, priority higher than work.
+                                }
                             }
-                            //TODO: If it is not covered above, if the division is short of resources, share the information about the resource shortage.
-                            //Criticize the common enemies of the division. It is determined by the party with the low mutuality with the division.
-                            val enemyParty = parent.parties.values.filter { it.name != conf.involvedParty }
-                                .minByOrNull { parent.getPartyMutuality(it.name, conf.involvedParty) }!!.name
-                            //Criticize the leader if there is any relevant information.
-                            if (parent.parties[enemyParty]!!.leader != "")
-                                if (parent.informations.values.any {
-                                        (it.tgtParty == enemyParty || it.tgtCharacter == parent.parties[enemyParty]!!.leader) && it.knownTo.contains(
-                                            name
-                                        )
-                                    })
-                                    InfoShare(name, place).also { action ->
-                                        action.what = parent.informations.values.filter {
-                                            (it.tgtParty == enemyParty || it.tgtCharacter == parent.parties[enemyParty]!!.leader) && it.knownTo.contains(
+                            //If division leader, praise or criticize the division members.
+                            if (parent.parties[conf.involvedParty]!!.leader == name)
+                            {
+                                //Praise or criticize the division members, if there is any relevant information.
+                                parent.parties[conf.involvedParty]!!.members.forEach { member ->
+                                    if (member != name && parent.informations.values.any {
+                                            it.tgtCharacter == member && it.knownTo.contains(
                                                 name
                                             )
-                                        }.random().name//TODO: take the information that is most useful for criticizing.
-                                        action.application = "criticize"
-                                        action.who = hashSetOf(parent.parties[enemyParty]!!.leader)
-                                        return action
+                                        })
+                                    {
+                                        //praise if the mutuality is high, criticize if the mutuality is low.
+                                        val mutuality = parent.getMutuality(name, member)
+                                        if (mutuality > 80)
+                                        {
+                                            return NewAgenda(name, place).also {
+                                                it.agenda =
+                                                    MeetingAgenda("praise", subjectParams = hashMapOf("who" to member))
+                                            }
+                                        } else if (mutuality < 20)
+                                        {
+                                            return NewAgenda(name, place).also {
+                                                it.agenda =
+                                                    MeetingAgenda(
+                                                        "denounce",
+                                                        subjectParams = hashMapOf("who" to member)
+                                                    )
+                                            }
+                                        }
+                                    }//TODO: there must be a cooldown, stored in party class.
+                                }
+                                //TODO: If it is not covered above, if the division is short of resources, share the information about the resource shortage.
+                                //TODO: Criticize the common enemies of the division. It is determined by the party with the low mutuality with the division.
+                                val enemyParty = parent.parties.values.filter { it.name != conf.involvedParty }
+                                    .minByOrNull { parent.getPartyMutuality(it.name, conf.involvedParty) }!!.name
+                                //TODO: Criticize the leader if there is any relevant information.
+//                                if (parent.parties[enemyParty]!!.leader != "")
+//                                    if (parent.informations.values.any {
+//                                            (it.tgtParty == enemyParty || it.tgtCharacter == parent.parties[enemyParty]!!.leader) && it.knownTo.contains(
+//                                                name
+//                                            )
+//                                        })
+//                                        InfoShare(name, place).also { action ->
+//                                            action.what = parent.informations.values.filter {
+//                                                (it.tgtParty == enemyParty || it.tgtCharacter == parent.parties[enemyParty]!!.leader) && it.knownTo.contains(
+//                                                    name
+//                                                )
+//                                            }
+//                                                .random().name//TODO: take the information that is most useful for criticizing.
+//                                            action.application = "criticize"
+//                                            action.who = hashSetOf(parent.parties[enemyParty]!!.leader)
+//                                            return action
+//                                        }
+                                //Criticize the common enemy. It is determined by average individual mutuality.
+                                val enemy = parent.characters.maxByOrNull { ch ->
+                                    parent.parties[conf.involvedParty]!!.members.sumOf { mem ->
+                                        parent.getMutuality(
+                                            mem,
+                                            ch.key
+                                        )
                                     }
-                            //Criticize the common enemy. It is determined by average individual mutuality.
-                            val enemy = parent.characters.maxByOrNull { ch ->
-                                parent.parties[conf.involvedParty]!!.members.sumOf { mem ->
-                                    parent.getMutuality(
-                                        mem,
-                                        ch.key
-                                    )
                                 }
+                                //TODO: request information about the commands issued today.
                             }
-                            //TODO: request information about the commands issued today.
-                        }
-                        //If not division leader, Share information about what happened in the division today.
-                        if (parent.parties[conf.involvedParty]!!.leader != name)
-                        {
-                            parent.informations.filter {
-                                it.value.tgtParty == conf.involvedParty && it.value.knownTo.contains(
-                                    name
-                                ) && it.value.type == "action" && it.value.tgtTime in parent.time / 48..parent.time / 48 + 47
-                            }.forEach {
-                                InfoShare(name, place).also { action ->
-                                    action.what = it.key
-                                    return action
-                                }
+                            //TODO: If not division leader, Share information about what happened in the division today.
+                            if (parent.parties[conf.involvedParty]!!.leader != name)
+                            {
+//                                parent.informations.filter {
+//                                    it.value.tgtParty == conf.involvedParty && it.value.knownTo.contains(
+//                                        name
+//                                    ) && it.value.type == "action" && it.value.tgtTime in parent.time / 48..parent.time / 48 + 47
+//                                }.forEach {
+//                                    InfoShare(name, place).also { action ->
+//                                        action.what = it.key
+//                                        return action
+//                                    }
+//                                }
                             }
-                        }
 
+
+                        }
                     }
                 }
                 return Wait(name, place)

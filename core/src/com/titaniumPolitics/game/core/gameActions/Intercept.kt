@@ -21,7 +21,12 @@ class Intercept(override val tgtCharacter: String, override val tgtPlace: String
     override fun isValid(): Boolean
     {
         val meeting = parent.characters[tgtCharacter]!!.currentMeeting!!
-        return meeting.currentSpeaker != tgtCharacter && meeting.currentAttention <= 30
+        return meeting.currentSpeaker != tgtCharacter && meeting.currentAttention <= Companion.threshold
+    }
+
+    companion object
+    {
+        val threshold = 30
     }
 
 }

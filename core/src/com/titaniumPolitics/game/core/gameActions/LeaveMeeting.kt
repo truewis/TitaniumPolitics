@@ -12,10 +12,9 @@ class LeaveMeeting(override val tgtCharacter: String, override val tgtPlace: Str
         if (meeting.currentCharacters.count() <= 1)
         {
             println("Ending meeting $meetingName")
-            meeting.endMeeting()
-            parent.ongoingMeetings.remove(
-                meetingName//End the meeting if it has less than 2 participants
-            )
+            //End meeting if there is only one character left.
+            meeting.endMeeting(parent)
+
         }
     }
 

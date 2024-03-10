@@ -22,16 +22,16 @@ class Salary(override val tgtCharacter: String, override val tgtPlace: String) :
 
         val party = parent.parties.values.find { it.members.containsAll(who + tgtCharacter) }!!
         val guildHall = party.home
-        if (party.isDailySalaryPaid.keys.none { it == tgtCharacter })
-        {
-            println("Warning: $tgtCharacter is not eligible to be paid from ${party.name}.")
-            return
-        }
-        if (party.isDailySalaryPaid[tgtCharacter] == true)
-        {
-            println("Warning: $tgtCharacter has already been paid from ${party.name} today.")
-            return
-        }
+//        if (party.isDailySalaryPaid.keys.none { it == tgtCharacter })
+//        {
+//            println("Warning: $tgtCharacter is not eligible to be paid from ${party.name}.")
+//            return
+//        }
+//        if (party.isDailySalaryPaid[tgtCharacter] == true)
+//        {
+//            println("Warning: $tgtCharacter has already been paid from ${party.name} today.")
+//            return
+//        }
         if (
             (parent.places[guildHall]!!.resources[what1]
                 ?: 0) >= amount && (parent.places[guildHall]!!.resources[what2] ?: 0) >= amount
@@ -44,7 +44,7 @@ class Salary(override val tgtCharacter: String, override val tgtPlace: String) :
             parent.places[guildHall]!!.resources[what2] = (parent.places[guildHall]!!.resources[what2] ?: 0) - amount
             parent.characters[tgtCharacter]!!.resources[what2] =
                 (parent.characters[tgtCharacter]!!.resources[what2] ?: 0) + amount
-            party.isDailySalaryPaid[tgtCharacter] = true
+            //party.isDailySalaryPaid[tgtCharacter] = true
             println("$tgtCharacter is paid $amount $what1 and $amount $what2 from $${party.name}.")
             parent.characters[tgtCharacter]!!.frozen++
 
@@ -58,8 +58,8 @@ class Salary(override val tgtCharacter: String, override val tgtPlace: String) :
             {
                 parent.setMutuality(tgtCharacter, party.leader, -1.0)
             }
-            party.isDailySalaryPaid[tgtCharacter] =
-                true//TODO: this is a hack to prevent infinite loop. This is a lie, but who would be able to complain?
+//            party.isDailySalaryPaid[tgtCharacter] =
+//                true//TODO: this is a hack to prevent infinite loop. This is a lie, but who would be able to complain?
         }
 
     }
@@ -76,16 +76,16 @@ class Salary(override val tgtCharacter: String, override val tgtPlace: String) :
 
         val party = parent.parties.values.find { it.members.containsAll(who + tgtCharacter) }!!
         val guildHall = party.home
-        if (party.isDailySalaryPaid.keys.none { it == tgtCharacter })
-        {
-            //println("Warning: $tgtCharacter is not eligible to be paid from ${party.name}.")
-            return false
-        }
-        if (party.isDailySalaryPaid[tgtCharacter] == true)
-        {
-            //println("Warning: $tgtCharacter has already been paid from ${party.name} today.")
-            return false
-        }
+//        if (party.isDailySalaryPaid.keys.none { it == tgtCharacter })
+//        {
+//            //println("Warning: $tgtCharacter is not eligible to be paid from ${party.name}.")
+//            return false
+//        }
+//        if (party.isDailySalaryPaid[tgtCharacter] == true)
+//        {
+//            //println("Warning: $tgtCharacter has already been paid from ${party.name} today.")
+//            return false
+//        }
         return true
     }
 
