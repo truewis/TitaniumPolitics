@@ -1,0 +1,10 @@
+{
+  "lengthOfDay": 48,
+  "startTime": 18,
+  "hungerMax": 100,
+  "thirstMax": 100,
+  "hungerThreshold": 90,
+  "thirstThreshold": 70,
+  "mutualityMin": 0,
+  "mutualityMax": 100
+}

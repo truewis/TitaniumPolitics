@@ -41,8 +41,14 @@ class GameEngine(val gameState: GameState)
                             it.health--
                             it.hunger++
                             it.thirst++
-                            if (it.hunger > 90) it.health -= 10 / (101 - it.hunger)
-                            if (it.thirst > 70) it.health -= 30 / (101 - it.thirst)
+                            with(ReadOnlyJsons) {
+                                if (it.hunger > getConst("hungerThreshold")) it.health -= ((getConst("hungerMax") - getConst(
+                                    "hungerThreshold"
+                                )) / (getConst("hungerMax") + 1 - it.hunger)).toInt()
+                                if (it.thirst > getConst("thirstThreshold")) it.health -= ((getConst("thirstMax") - getConst(
+                                    "thirstThreshold"
+                                )) / (getConst("thirstMax") + 1 - it.thirst)).toInt()
+                            }
                         }
                     }
                     while (it.frozen == 0)
@@ -53,7 +59,7 @@ class GameEngine(val gameState: GameState)
                 }
             }
             progression()
-            if (gameState.time % 48 == 0)//Every day
+            if (gameState.time % ReadOnlyJsons.getConst("lengthOfDay").toInt() == 0)//Every day
             {
                 partySizeAdjust()
                 scheduleDailyConferences()
@@ -168,6 +174,7 @@ class GameEngine(val gameState: GameState)
     //TODO: Normalization of mutuality is not implemented yet.
     private fun calculateMutuality()
     {
+        val mutualityZero = (ReadOnlyJsons.getConst("mutualityMin") + ReadOnlyJsons.getConst("mutualityMax")) / 2
         //Party mutualities are correlated; if a is friendly to b, a is also friendly to b's friends and hostile to b's enemies. If a is hostile to b, a is also hostile to b's friends and friendly to b's enemies.
         gameState.parties.keys.forEach { a ->
             gameState.parties.keys.forEach { b ->
@@ -175,8 +182,8 @@ class GameEngine(val gameState: GameState)
                 var factorb = 0.0
                 gameState.parties[a]!!.members.forEach { c ->
                     gameState.parties[b]!!.members.forEach { d ->
-                        factora += gameState.getMutuality(c, d) - 50
-                        factorb += gameState.getMutuality(d, c) - 50
+                        factora += gameState.getMutuality(c, d) - mutualityZero
+                        factorb += gameState.getMutuality(d, c) - mutualityZero
                     }
                 }
                 val sizea = gameState.parties[a]!!.members.size + gameState.parties[a]!!.anonymousMembers
@@ -194,8 +201,8 @@ class GameEngine(val gameState: GameState)
                 var factorb = 0.0
                 gameState.parties.filter { it.value.members.contains(a) }.forEach { c ->
                     gameState.parties.filter { it.value.members.contains(b) }.forEach { d ->
-                        factora += gameState.getPartyMutuality(c.key, d.key) - 50
-                        factorb += gameState.getPartyMutuality(d.key, c.key) - 50
+                        factora += gameState.getPartyMutuality(c.key, d.key) - mutualityZero
+                        factorb += gameState.getPartyMutuality(d.key, c.key) - mutualityZero
                     }
                 }
                 //Make sure that denominator is not 0.
@@ -1383,7 +1390,7 @@ class GameEngine(val gameState: GameState)
 
                     //Against:
                     //Cannot pay salaries
-                    deltaAgreement += 3
+                    deltaAgreement += 30
                 }
 
                 "appointMeeting" ->
