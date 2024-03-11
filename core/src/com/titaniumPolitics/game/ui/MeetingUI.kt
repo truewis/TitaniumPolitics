@@ -5,9 +5,11 @@ import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.ui.HorizontalGroup
 import com.badlogic.gdx.scenes.scene2d.ui.Image
+import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable
 import com.titaniumPolitics.game.core.GameState
+import com.titaniumPolitics.game.core.Meeting
 import ktx.scene2d.Scene2DSkin.defaultSkin
 import ktx.scene2d.image
 import ktx.scene2d.scene2d
@@ -20,28 +22,45 @@ class MeetingUI(var gameState: GameState) : Table(defaultSkin)
     val portraits = arrayListOf<Actor>()
     val availableInfos = HorizontalGroup()
     val currentAgendas = HorizontalGroup()
+    val currentAttention = Label("0", defaultSkin, "trnsprtConsole")
 
     init
     {
         instance = this
+        //Red color for attention
+        currentAttention.setColor(1f, 0f, 0f, 1f)
+
+
         gameState.updateUI.add {
-            refresh(it.player.place.name)
+            if (it.player.currentMeeting != null)
+                refresh(it.player.currentMeeting!!)
         }
         addActor(currentCharacerMarkerWindow)
+        add(currentAttention)
+        row()
+        add(currentAgendas)
+
+
     }
 
     //This function can be used for both meetings and conferences
-    fun refresh(meetingName: String)
+    fun refresh(meeting: Meeting)
     {
         portraits.forEach { it.remove() }
         portraits.clear()
-        val meeting = gameState.ongoingMeetings[meetingName] ?: gameState.ongoingConferences[meetingName]!!
         meeting.currentCharacters.forEach {
 
             //Player can see themselves.
             addCharacterPortrait(it)
         }
         placeCharacterPortrait()
+        currentAgendas.clear()
+        meeting.agendas.forEach {
+            val agendaUI = AgendaUI(gameState)
+            agendaUI.refresh(meeting, it)
+            currentAgendas.addActor(agendaUI)
+        }
+        currentAttention.setText(meeting.currentAttention.toString())
     }
 
     private fun addCharacterPortrait(characterName: String)

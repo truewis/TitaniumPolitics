@@ -490,7 +490,7 @@ class GameEngine(val gameState: GameState)
 
 
         val conference2 = Meeting(
-            gameState.time + 24 /*12 in the afternoon*/,
+            gameState.time + 30 /*3 in the afternoon*/,
             "triumvirateDailyConference",
             place = gameState.parties["triumvirate"]!!.home,
             scheduledCharacters = gameState.parties["triumvirate"]!!.members
@@ -1321,7 +1321,7 @@ class GameEngine(val gameState: GameState)
                     //Against:
                     //Too much budget allocated to an unpopular division
                     //Budget is too low compared to salary paid.
-                    deltaAgreement += 3
+                    deltaAgreement += 30
                 }
 
                 "budgetResolution" ->
@@ -1330,7 +1330,7 @@ class GameEngine(val gameState: GameState)
                     //Against:
                     //Too much budget allocated to an unpopular division
                     //The government is low in resource.
-                    deltaAgreement += 3
+                    deltaAgreement += 30
                 }
 
                 "praise" ->

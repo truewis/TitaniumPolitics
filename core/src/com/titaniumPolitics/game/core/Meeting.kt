@@ -55,7 +55,7 @@ class Meeting(
 
                 "budgetProposal" ->
                 {
-                    println("Budget proposal executed.")
+                    println("Budget proposed.")
                     gameState.isBudgetProposed = true
                     gameState.budget = it.subjectIntParams
                     println(it.subjectIntParams)
@@ -64,6 +64,7 @@ class Meeting(
 
                 "budgetResolution" ->
                 {
+                    println("Budget resolved.")
                     with(gameState) {
                         //Distribute resources according to the budget plan.
                         places["reservoirNorth"]!!.resources["water"] =

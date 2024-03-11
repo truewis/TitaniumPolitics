@@ -536,7 +536,7 @@ class NonPlayerAgent : GameStateElement()
                         return executeRoutine()
                     }
 
-                    "budgetPropose" ->
+                    "budgetProposal" ->
                     {
                         routines.removeAt(0)//Remove the current routine.
                         return executeRoutine()
@@ -630,22 +630,27 @@ class NonPlayerAgent : GameStateElement()
                         } else
                         {
                             //If budget is proposed but not resolved, resolve it.
-                            if (parent.isBudgetProposed && !parent.isBudgetResolved && conf.agendas.none { it.subjectType == "budgetResolve" })
+                            if (parent.isBudgetProposed && !parent.isBudgetResolved && conf.agendas.none { it.subjectType == "budgetResolution" })
                             {
                                 return NewAgenda(name, place).also {
-                                    it.agenda = MeetingAgenda("budgetResolve")
+                                    it.agenda = MeetingAgenda("budgetResolution")
                                 }
                             } else
                             {
-                                //If the agenda is already proposed, support it.
-                                routines.add(
-                                    Routine(
-                                        "supportAgenda",
-                                        routines[0].priority + 10
-                                    ).also {
-                                        it.intVariables["agendaIndex"] =
-                                            conf.agendas.indexOfFirst { it.subjectType == "budgetResolve" }
-                                    })//Add a routine, priority higher than work.
+                                //If we haven't tried this branch in the current routine
+                                if (routines[0].intVariables["try_support_budgetResolution"] == 0)
+                                {
+                                    routines[0].intVariables["try_support_budgetResolution"] = 1
+                                    //If the agenda is already proposed, support it.
+                                    routines.add(
+                                        Routine(
+                                            "supportAgenda",
+                                            routines[0].priority + 10
+                                        ).also {
+                                            it.intVariables["agendaIndex"] =
+                                                conf.agendas.indexOfFirst { it.subjectType == "budgetResolution" }
+                                        })//Add a routine, priority higher than work.
+                                }
                             }
                         }
                     }
@@ -666,10 +671,10 @@ class NonPlayerAgent : GameStateElement()
                         } else
                         {
                             //If budget is not proposed, propose it.
-                            if (!parent.isBudgetProposed && conf.agendas.none { it.subjectType == "budgetPropose" })
+                            if (!parent.isBudgetProposed && conf.agendas.none { it.subjectType == "budgetProposal" })
                             {
                                 return NewAgenda(name, place).also {
-                                    it.agenda = MeetingAgenda("budgetPropose").also { agenda ->
+                                    it.agenda = MeetingAgenda("budgetProposal").also { agenda ->
                                         //TODO: calculate the budget based on the information. Right now the budget is calculated based on the work hours of the places.
                                         parent.places.forEach {
                                             if (it.key == "home" || it.value.responsibleParty == "") return@forEach else agenda.subjectIntParams[it.value.responsibleParty] =
@@ -680,15 +685,20 @@ class NonPlayerAgent : GameStateElement()
                                 }
                             } else
                             {
-                                //If the agenda is already proposed, support it.
-                                routines.add(
-                                    Routine(
-                                        "supportAgenda",
-                                        routines[0].priority + 10
-                                    ).also {
-                                        it.intVariables["agendaIndex"] =
-                                            conf.agendas.indexOfFirst { it.subjectType == "budgetPropose" }
-                                    })//Add a routine, priority higher than work.
+                                //If we haven't tried this branch in the current routine
+                                if (routines[0].intVariables["try_support_budgetProposal"] == 0)
+                                {
+                                    routines[0].intVariables["try_support_budgetProposal"] = 1
+                                    //If the agenda is already proposed, support it.
+                                    routines.add(
+                                        Routine(
+                                            "supportAgenda",
+                                            routines[0].priority + 10
+                                        ).also {
+                                            it.intVariables["agendaIndex"] =
+                                                conf.agendas.indexOfFirst { it.subjectType == "budgetProposal" }
+                                        })//Add a routine, priority higher than work.
+                                }
                             }
                         }
                     }
@@ -842,8 +852,16 @@ class NonPlayerAgent : GameStateElement()
 
                         }
                     }
+
                 }
-                return Wait(name, place)
+                return if (conf.currentSpeaker == name)
+                //If nothing else to talk about, end the speech. The next speaker is the character with the highest mutuality.
+                    EndSpeech(name, place).also {
+                        it.nextSpeaker =
+                            conf.currentCharacters.maxBy { char -> parent.getMutuality(name, char) }
+                    }
+                //If I'm not the speaker, wait.
+                else Wait(name, place)
                 //TODO: do something in the meeting. Leave the meeting if nothing to do.
 
             }
