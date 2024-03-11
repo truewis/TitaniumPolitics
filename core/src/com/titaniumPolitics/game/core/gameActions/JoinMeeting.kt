@@ -14,12 +14,17 @@ class JoinMeeting(override val tgtCharacter: String, override val tgtPlace: Stri
     override fun execute()
     {
         parent.ongoingMeetings[meetingName]!!.currentCharacters.add(tgtCharacter)
+        println("$tgtCharacter joined the meeting $meetingName")
         parent.characters[tgtCharacter]!!.frozen++
     }
 
     override fun isValid(): Boolean
     {
-        return parent.ongoingMeetings.any { it.value.scheduledCharacters.contains(tgtCharacter) && it.value.place == tgtPlace }
+        return parent.ongoingMeetings.any {
+            it.value.scheduledCharacters.contains(tgtCharacter) && !it.value.currentCharacters.contains(
+                tgtCharacter
+            ) && it.value.place == tgtPlace
+        }
     }
 
 }

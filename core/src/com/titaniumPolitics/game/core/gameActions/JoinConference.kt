@@ -19,7 +19,11 @@ class JoinConference(override val tgtCharacter: String, override val tgtPlace: S
 
     override fun isValid(): Boolean
     {
-        return parent.ongoingConferences.any { it.value.scheduledCharacters.contains(tgtCharacter) && it.value.place == tgtPlace }
+        return parent.ongoingConferences.any {
+            it.value.scheduledCharacters.contains(tgtCharacter) && !it.value.currentCharacters.contains(
+                tgtCharacter
+            ) && it.value.place == tgtPlace
+        }
     }
 
 }

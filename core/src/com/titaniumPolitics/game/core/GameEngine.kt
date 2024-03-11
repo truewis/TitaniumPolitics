@@ -1205,17 +1205,17 @@ class GameEngine(val gameState: GameState)
                 actions.add("Eat")
             }
             val availableConferences =
-                gameState.scheduledConferences.filter { it.value.time + 2 > gameState.time && gameState.time + 2 > it.value.time && it.value.place == place }
+                gameState.scheduledConferences.filter { it.value.time + 2 >= gameState.time && gameState.time + 2 >= it.value.time && it.value.place == place }
                     .filter { !gameState.ongoingMeetings.containsKey(it.key) }
             if (availableConferences.isNotEmpty())
                 if (gameState.parties[availableConferences.values.first().involvedParty]!!.leader == character)//Only the party leader can do below actions.
                 {
                     actions.add("StartConference")
                 }
-            val ongoingConferences = gameState.ongoingConferences.filter {
+            val conferencesToJoin = gameState.ongoingConferences.filter {
                 it.value.scheduledCharacters.contains(character) && !it.value.currentCharacters.contains(character) && it.value.place == place
             }
-            if (ongoingConferences.isNotEmpty())
+            if (conferencesToJoin.isNotEmpty())
                 actions.add("JoinConference")
 
             if (place == "mainControlRoom" || place == "market" || place == "squareNorth" || place == "squareSouth")

@@ -6,8 +6,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.*
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.titaniumPolitics.game.core.GameEngine
 import com.titaniumPolitics.game.core.GameState
-import com.titaniumPolitics.game.core.gameActions.Eat
-import com.titaniumPolitics.game.core.gameActions.Wait
+import com.titaniumPolitics.game.core.gameActions.*
 import ktx.scene2d.*
 import ktx.scene2d.Scene2DSkin.defaultSkin
 
@@ -140,6 +139,22 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable
                         "Sleep" ->
                         {
                             this.setDrawable(defaultSkin, "closed-eye-icon")
+                            this@button.addListener(object : ClickListener()
+                            {
+                                override fun clicked(
+                                    event: com.badlogic.gdx.scenes.scene2d.InputEvent?,
+                                    x: Float,
+                                    y: Float
+                                )
+                                {
+                                    GameEngine.acquireCallback(
+                                        Sleep(
+                                            this@AvailableActionsUI.gameState.playerName,
+                                            this@AvailableActionsUI.gameState.player.place.name
+                                        )
+                                    )
+                                }
+                            })
                         }
 
                         "Repair" ->
@@ -179,6 +194,79 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable
                                     ResourceTransferUI.instance.isVisible = true
                                     ResourceTransferUI.instance.refresh(this@AvailableActionsUI.gameState.player.place.resources)
                                     ResourceTransferUI.instance.mode = "official"
+                                }
+                            })
+                        }
+
+                        "JoinMeeting" ->
+                        {
+                            this.setDrawable(defaultSkin, "speaking-bubbles-line-icon")
+                            this@button.addListener(object : ClickListener()
+                            {
+                                override fun clicked(
+                                    event: com.badlogic.gdx.scenes.scene2d.InputEvent?,
+                                    x: Float,
+                                    y: Float
+                                )
+                                {
+                                    GameEngine.acquireCallback(
+                                        JoinMeeting(
+                                            this@AvailableActionsUI.gameState.playerName,
+                                            this@AvailableActionsUI.gameState.player.place.name
+                                        ).also {
+                                            it.meetingName = this@AvailableActionsUI.gameState.ongoingMeetings.filter {
+                                                it.value.scheduledCharacters.contains(this@AvailableActionsUI.gameState.playerName) && it.value.place == this@AvailableActionsUI.gameState.player.place.name
+                                            }.keys.first()
+                                        }
+                                    )
+                                }
+                            })
+                        }
+
+                        "JoinConference" ->
+                        {
+                            this.setDrawable(defaultSkin, "speaking-bubbles-line-icon")
+                            this@button.addListener(object : ClickListener()
+                            {
+                                override fun clicked(
+                                    event: com.badlogic.gdx.scenes.scene2d.InputEvent?,
+                                    x: Float,
+                                    y: Float
+                                )
+                                {
+                                    GameEngine.acquireCallback(
+                                        JoinConference(
+                                            this@AvailableActionsUI.gameState.playerName,
+                                            this@AvailableActionsUI.gameState.player.place.name
+                                        ).also {
+                                            it.meetingName =
+                                                this@AvailableActionsUI.gameState.ongoingConferences.filter {
+                                                    it.value.scheduledCharacters.contains(this@AvailableActionsUI.gameState.playerName) && it.value.place == this@AvailableActionsUI.gameState.player.place.name
+                                                }.keys.first()
+                                        }
+                                    )
+                                }
+                            })
+                        }
+
+                        "LeaveMeeting" ->
+                        {
+                            this.setDrawable(defaultSkin, "close-square-line-icon")
+                            this@button.addListener(object : ClickListener()
+                            {
+                                override fun clicked(
+                                    event: com.badlogic.gdx.scenes.scene2d.InputEvent?,
+                                    x: Float,
+                                    y: Float
+                                )
+                                {
+                                    GameEngine.acquireCallback(
+                                        LeaveMeeting(
+                                            this@AvailableActionsUI.gameState.playerName,
+                                            this@AvailableActionsUI.gameState.player.place.name
+                                        )
+                                        
+                                    )
                                 }
                             })
                         }

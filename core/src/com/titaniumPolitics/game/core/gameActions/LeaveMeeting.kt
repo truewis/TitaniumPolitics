@@ -9,6 +9,8 @@ class LeaveMeeting(override val tgtCharacter: String, override val tgtPlace: Str
         val meetingName = parent.ongoingMeetings.filter { it.value == meeting }.keys.firstOrNull()
             ?: parent.ongoingConferences.filter { it.value == meeting }.keys.first()
         meeting.currentCharacters.remove(tgtCharacter)
+        parent.characters[tgtCharacter]!!.frozen++
+        println("$tgtCharacter left the meeting $meetingName")
         if (meeting.currentCharacters.count() <= 1)
         {
             println("Ending meeting $meetingName")

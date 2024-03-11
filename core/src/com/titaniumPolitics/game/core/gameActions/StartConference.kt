@@ -8,7 +8,7 @@ class StartConference(override val tgtCharacter: String, override val tgtPlace: 
     override fun chooseParams()
     {
         meetingName =
-            GameEngine.acquire(parent.scheduledConferences.filter { it.value.time + 2 > parent.time && parent.time + 2 > it.value.time }
+            GameEngine.acquire(parent.scheduledConferences.filter { it.value.time + 2 >= parent.time && parent.time + 2 >= it.value.time }
                 .filter { !parent.ongoingMeetings.containsKey(it.key) }
                 .filter { it.value.scheduledCharacters.contains(tgtCharacter) }.keys.toList())
         // Interrupt other required characters and add them to the meeting.
@@ -23,16 +23,19 @@ class StartConference(override val tgtCharacter: String, override val tgtPlace: 
 
     override fun execute()
     {
-        parent.ongoingConferences[meetingName] = parent.scheduledConferences[meetingName]!!
+        val meeting = parent.scheduledConferences[meetingName]!!
+        parent.ongoingConferences[meetingName] = meeting
         parent.scheduledConferences.remove(meetingName)
-        parent.ongoingConferences[meetingName]!!.currentCharacters.add(tgtCharacter)
+        meeting.currentCharacters.add(tgtCharacter)
+        meeting.currentSpeaker = tgtCharacter
+        meeting.currentAttention = parent.getPartyMutuality(meeting.involvedParty, meeting.involvedParty).toInt()
         parent.characters[tgtCharacter]!!.frozen++
     }
 
     override fun isValid(): Boolean
     {
         val targetMeeting =
-            parent.scheduledConferences.filter { it.value.time + 2 > parent.time && parent.time + 2 > it.value.time }
+            parent.scheduledConferences.filter { it.value.time + 2 >= parent.time && parent.time + 2 >= it.value.time }
                 .filter { !parent.ongoingConferences.containsKey(it.key) }
                 .filter { it.value.scheduledCharacters.contains(tgtCharacter) }.keys.firstOrNull()
         return if (targetMeeting == null) false else

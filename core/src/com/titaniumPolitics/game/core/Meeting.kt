@@ -119,6 +119,7 @@ class Meeting(
 
                 "salary" ->
                 {
+                    println("Salary is paid in party $involvedParty.")
                     var amount = 2
                     var what1 = "ration"
                     var what2 = "water"

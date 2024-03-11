@@ -75,13 +75,15 @@ class NonPlayerAgent : GameStateElement()
         }
         routines.sortByDescending { it.priority }
         //Leave meeting or conference if the routine was changed.
-        if (routines.none { it.name == "attendMeeting" } && charObject.currentMeeting != null)
+        if ((routines.none { it.name == "attendConference" } && routines.none { it.name == "attendMeeting" } && charObject.currentMeeting != null))
         {
             return LeaveMeeting(name, place)
         }
-        if (routines.none { it.name == "attendConference" } && charObject.currentMeeting != null)
+        //Stop meeting routine if the character is not in a meeting.
+        if (routines.any { it.name == "attendMeeting" || it.name == "attendConference" } && charObject.currentMeeting == null)
         {
-            return LeaveMeeting(name, place)
+            while (routines.any { it.name == "attendMeeting" || it.name == "attendConference" })
+                routines.removeAt(0)
         }
         val commands = charObject.commands
         //If there is a command that is within the set time window, issued party is trusted enough, and seems to be executable (AvailableActions), start execution routine.
@@ -329,10 +331,10 @@ class NonPlayerAgent : GameStateElement()
                     }
                     //----------------------------------------------------------------------------------Move to the conference
                 }
-                if (parent.scheduledConferences.any { it.value.scheduledCharacters.contains(name) && it.value.time - parent.time in -1..-1 })//If a conference is soon
-                {
+                if (parent.scheduledConferences.any { it.value.scheduledCharacters.contains(name) && it.value.time - parent.time in -2..2 })//If a conference is soon
+                {//TODO: consider the distance to the conference place.
                     val conf = parent.scheduledConferences.filter {
-                        it.value.scheduledCharacters.contains(name) && it.value.time - parent.time in -1..-1
+                        it.value.scheduledCharacters.contains(name) && it.value.time - parent.time in -2..2
                     }.values.first()
                     //----------------------------------------------------------------------------------Move to the conference
                     if (place != conf.place)
