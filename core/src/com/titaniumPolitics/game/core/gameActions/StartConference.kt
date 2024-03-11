@@ -33,7 +33,7 @@ class StartConference(override val tgtCharacter: String, override val tgtPlace: 
     {
         val targetMeeting =
             parent.scheduledConferences.filter { it.value.time + 2 > parent.time && parent.time + 2 > it.value.time }
-                .filter { !parent.ongoingMeetings.containsKey(it.key) }
+                .filter { !parent.ongoingConferences.containsKey(it.key) }
                 .filter { it.value.scheduledCharacters.contains(tgtCharacter) }.keys.firstOrNull()
         return if (targetMeeting == null) false else
         //Check if there are at least 2 characters to join.

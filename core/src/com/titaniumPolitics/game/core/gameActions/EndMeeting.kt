@@ -19,7 +19,7 @@ class EndMeeting(override val tgtCharacter: String, override val tgtPlace: Strin
     {
         val meeting = parent.characters[tgtCharacter]!!.currentMeeting!!
         //Should have at least one dominant agenda. The threshold for dominant agenda is different based on meeting type.
-        when (meeting.subject)
+        when (meeting.type)
         {
             "divisionDailyConference" -> return meeting.agendas.maxOf { it.agreement } >= 34
             "cabinetMeeting" -> return meeting.agendas.maxOf { it.agreement } >= 34

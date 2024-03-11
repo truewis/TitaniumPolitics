@@ -11,7 +11,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 class Meeting(
     var time: Int,
-    var subject: String,
+    var type: String,
     var scheduledCharacters: HashSet<String>,
     var place: String,
     var currentCharacters: HashSet<String> = hashSetOf()
@@ -33,7 +33,7 @@ class Meeting(
         //TODO: Execute dominant agendas.
         var dominantAgenda: ArrayList<MeetingAgenda> = arrayListOf()
         var maxAgendas = 0
-        when (subject)
+        when (type)
         {
             "divisionDailyConference" -> maxAgendas = 2
             "triumvirateMeeting" -> maxAgendas = 1
@@ -50,7 +50,7 @@ class Meeting(
                 "proofOfWork" ->
                 {
 
-
+                    gameState.setPartyMutuality(involvedParty, involvedParty, 3.0)
                 }
 
                 "budgetProposal" ->

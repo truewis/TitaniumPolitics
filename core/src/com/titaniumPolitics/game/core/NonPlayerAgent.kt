@@ -244,6 +244,7 @@ class NonPlayerAgent : GameStateElement()
                                     (charObject.reliants.size + 1) * 7
                                 )
                             )
+                            it.toWhere = "home_$name"
                             println("$name is stealing ${it.resources} from ${resplace.name}!")
                             routines.removeAt(0)//Remove the current routine.
                             return it
@@ -521,6 +522,59 @@ class NonPlayerAgent : GameStateElement()
                 }
             }
 
+            "supportAgenda" ->
+            {
+                val conf =
+                    charObject.currentMeeting!!
+                when (routines[0].variables["agenda"])
+                {
+                    "budgetResolve" ->
+                    {
+                        routines.removeAt(0)//Remove the current routine.
+                        return executeRoutine()
+                    }
+
+                    "budgetPropose" ->
+                    {
+                        routines.removeAt(0)//Remove the current routine.
+                        return executeRoutine()
+                    }
+
+                    "proofOfWork" ->
+                    {
+                        //TODO: implement support proofOfWork within the deck of information
+                        when (conf.involvedParty)
+                        {
+                            "infrastructure" ->
+                            {
+                                //Repair jobs prove the work.
+                                val info = parent.informations.filter {
+                                    it.value.type == "action" && it.value.action == "repair" && parent.places.filterValues { it.responsibleParty == conf.involvedParty }.keys.contains(
+                                        it.value.tgtPlace
+                                    )
+                                }
+                                if (info.isNotEmpty())
+                                {
+                                    return AddInfo(name, place).also {
+                                        it.infoKey = info.keys.first()
+                                    }
+                                }
+                            }
+                        }
+                        routines.removeAt(0)//Remove the current routine.
+                        return executeRoutine()
+                    }
+
+                    "salary" ->
+                    {
+
+                        routines.removeAt(0)//Remove the current routine.
+                        return executeRoutine()
+                    }
+                }
+
+            }
+
             "attendMeeting" ->
             {
                 //If the meeting is over, leave the routine.
@@ -556,7 +610,7 @@ class NonPlayerAgent : GameStateElement()
                     routines.removeAt(0)//Remove the current routine.
                     return executeRoutine()
                 }
-                when (conf.subject)
+                when (conf.type)
                 {
                     "triumvirateDailyConference" ->
                     {
@@ -613,7 +667,14 @@ class NonPlayerAgent : GameStateElement()
                             if (!parent.isBudgetProposed && conf.agendas.none { it.subjectType == "budgetPropose" })
                             {
                                 return NewAgenda(name, place).also {
-                                    it.agenda = MeetingAgenda("budgetPropose")
+                                    it.agenda = MeetingAgenda("budgetPropose").also { agenda ->
+                                        //TODO: calculate the budget based on the information. Right now the budget is calculated based on the work hours of the places.
+                                        parent.places.forEach {
+                                            if (it.key == "home" || it.value.responsibleParty == "") return@forEach else agenda.subjectIntParams[it.value.responsibleParty] =
+                                                (agenda.subjectIntParams[it.value.responsibleParty]
+                                                    ?: 0) + it.value.plannedWorker * (it.value.workHoursEnd - it.value.workHoursStart) * 15
+                                        }
+                                    }
                                 }
                             } else
                             {
@@ -645,7 +706,7 @@ class NonPlayerAgent : GameStateElement()
                                 return Intercept(name, place)
                         } else
                         {
-                            //If speaker, propose proof of work.
+                            //If speaker, propose proof of work if nothing else is important.
                             if (conf.agendas.none { it.subjectType == "proofOfWork" })
                             {
                                 return NewAgenda(name, place).also {
@@ -653,15 +714,21 @@ class NonPlayerAgent : GameStateElement()
                                 }
                             } else
                             {
-                                //If the agenda is already proposed, support it.
-                                routines.add(
-                                    Routine(
-                                        "supportAgenda",
-                                        routines[0].priority + 10
-                                    ).also {
-                                        it.intVariables["agendaIndex"] =
-                                            conf.agendas.indexOfFirst { it.subjectType == "proofOfWork" }
-                                    })//Add a routine, priority higher than work.
+                                //If we haven't tried this branch in the current routine
+                                if (routines[0].intVariables["try_support_proofOfWork"] == 0)
+                                {
+                                    //If the agenda is already proposed, and we have a supporting information, support it.
+                                    routines[0].intVariables["try_support_proofOfWork"] = 1
+                                    routines.add(
+                                        Routine(
+                                            "supportAgenda",
+                                            routines[0].priority + 10
+                                        ).also {
+                                            it.intVariables["agendaIndex"] =
+                                                conf.agendas.indexOfFirst { it.subjectType == "proofOfWork" }
+                                        })//Add a routine, priority higher than work.
+                                    return executeRoutine()
+                                }
                             }
 
                             //Grab the salary if not grabbed yet.
@@ -675,15 +742,20 @@ class NonPlayerAgent : GameStateElement()
                                     }
                                 else
                                 {
-                                    //If the agenda is already proposed, support it.
-                                    routines.add(
-                                        Routine(
-                                            "supportAgenda",
-                                            routines[0].priority + 10
-                                        ).also {
-                                            it.intVariables["agendaIndex"] =
-                                                conf.agendas.indexOfFirst { it.subjectType == "salary" }
-                                        })//Add a routine, priority higher than work.
+                                    //If we haven't tried this branch in the current routine
+                                    if (routines[0].intVariables["try_support_salary"] == 0)
+                                    {
+                                        routines[0].intVariables["try_support_salary"] = 1
+                                        //If the agenda is already proposed, support it.
+                                        routines.add(
+                                            Routine(
+                                                "supportAgenda",
+                                                routines[0].priority + 10
+                                            ).also {
+                                                it.intVariables["agendaIndex"] =
+                                                    conf.agendas.indexOfFirst { it.subjectType == "salary" }
+                                            })//Add a routine, priority higher than work.
+                                    }
                                 }
                             }
                             //If division leader, praise or criticize the division members.

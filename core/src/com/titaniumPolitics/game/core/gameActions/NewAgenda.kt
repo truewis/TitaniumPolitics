@@ -1,7 +1,5 @@
 package com.titaniumPolitics.game.core.gameActions
 
-import com.titaniumPolitics.game.core.GameEngine
-import com.titaniumPolitics.game.core.Information
 import com.titaniumPolitics.game.core.MeetingAgenda
 import kotlin.math.max
 
@@ -24,14 +22,14 @@ class NewAgenda(override val tgtCharacter: String, override val tgtPlace: String
         val mt = parent.characters[tgtCharacter]!!.currentMeeting!!
         when (agenda.subjectType)
         {
-            "proofOfWork" -> return mt.involvedParty != "" && mt.subject == "divisionDailyConference" //TODO: how do we handle command issued?
+            "proofOfWork" -> return mt.involvedParty != "" && mt.type == "divisionDailyConference" //TODO: how do we handle command issued?
             "budgetProposal" -> return mt.involvedParty == "cabinet" && !parent.isBudgetProposed
             "budgetResolution" -> return mt.involvedParty == "triumvirate" && !parent.isBudgetResolved
             "praise" -> return true
             "denounce" -> return true
-            "workingHoursChange" -> return mt.involvedParty != "" && mt.subject == "divisionDailyConference" && parent.places[agenda.subjectParams["where"]]!!.responsibleParty == mt.involvedParty
-            "reassignWorkersToApparatus" -> return mt.involvedParty != "" && mt.subject == "divisionDailyConference" && parent.places[agenda.subjectParams["where"]]!!.responsibleParty == mt.involvedParty //TODO: check apparatus key.
-            "salary" -> return mt.involvedParty != "" && mt.subject == "divisionDailyConference" && !parent.parties[mt.involvedParty]!!.isSalaryPaid
+            "workingHoursChange" -> return mt.involvedParty != "" && mt.type == "divisionDailyConference" && parent.places[agenda.subjectParams["where"]]!!.responsibleParty == mt.involvedParty
+            "reassignWorkersToApparatus" -> return mt.involvedParty != "" && mt.type == "divisionDailyConference" && parent.places[agenda.subjectParams["where"]]!!.responsibleParty == mt.involvedParty //TODO: check apparatus key.
+            "salary" -> return mt.involvedParty != "" && mt.type == "divisionDailyConference" && !parent.parties[mt.involvedParty]!!.isSalaryPaid
             "appointMeeting" -> return true
             //TODO: impeach, fire
 
