@@ -49,6 +49,7 @@ class EntryClass : ApplicationAdapter()
                 Gdx.input.inputProcessor = stage
                 it.initialize()
             }
+            newGame.onStart.forEach { it() }
         } else
         {
             println("Loading saved game from $savedGamePath...")

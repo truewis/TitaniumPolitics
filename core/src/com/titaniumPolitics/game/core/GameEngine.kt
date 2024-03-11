@@ -24,7 +24,7 @@ class GameEngine(val gameState: GameState)
     fun startGame()
     {
         //Start the game.
-        gameState.onStart.forEach { it() }
+
         gameState.updateUI.forEach { it(gameState) }//Update UI
         println("Game started. Time: ${gameState.time}. Starting main loop.")
         //Main loop

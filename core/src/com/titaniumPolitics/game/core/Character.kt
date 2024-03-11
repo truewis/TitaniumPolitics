@@ -11,6 +11,7 @@ class Character : GameStateElement()
     var trait = hashSetOf<String>()
     var resources = hashMapOf<String, Int>()
     var commands = arrayListOf<Command>()//Commands issued by other characters.
+    var preparedInfoKeys = arrayListOf<String>()//Information that can be presented in meetings.
     var health = 0
         set(value)
         {

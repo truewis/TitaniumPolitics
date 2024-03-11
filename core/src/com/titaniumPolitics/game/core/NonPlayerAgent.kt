@@ -329,10 +329,10 @@ class NonPlayerAgent : GameStateElement()
                     }
                     //----------------------------------------------------------------------------------Move to the conference
                 }
-                if (parent.scheduledConferences.any { it.value.scheduledCharacters.contains(name) && it.value.time - parent.time in -1..3 })//If a conference is soon
+                if (parent.scheduledConferences.any { it.value.scheduledCharacters.contains(name) && it.value.time - parent.time in -1..-1 })//If a conference is soon
                 {
                     val conf = parent.scheduledConferences.filter {
-                        it.value.scheduledCharacters.contains(name) && it.value.time - parent.time in -1..3
+                        it.value.scheduledCharacters.contains(name) && it.value.time - parent.time in -1..-1
                     }.values.first()
                     //----------------------------------------------------------------------------------Move to the conference
                     if (place != conf.place)
