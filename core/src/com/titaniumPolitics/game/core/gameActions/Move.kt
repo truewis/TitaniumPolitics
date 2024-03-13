@@ -16,7 +16,7 @@ class Move(override val tgtCharacter: String, override val tgtPlace: String) : G
 
         parent.places[tgtPlace]!!.characters.remove(tgtCharacter)
         parent.places[placeTo]!!.characters.add(tgtCharacter)
-        parent.characters[tgtCharacter]!!.frozen++
+        super.execute()
     }
 
 }

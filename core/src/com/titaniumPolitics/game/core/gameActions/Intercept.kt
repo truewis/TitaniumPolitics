@@ -15,7 +15,7 @@ class Intercept(override val tgtCharacter: String, override val tgtPlace: String
         //The amount of attention gained can be modified here.
         meeting.currentAttention += 20
         meeting.currentSpeaker = tgtCharacter
-        parent.characters[tgtCharacter]!!.frozen++
+        super.execute()
     }
 
     override fun isValid(): Boolean

@@ -15,7 +15,7 @@ class JoinMeeting(override val tgtCharacter: String, override val tgtPlace: Stri
     {
         parent.ongoingMeetings[meetingName]!!.currentCharacters.add(tgtCharacter)
         println("$tgtCharacter joined the meeting $meetingName")
-        parent.characters[tgtCharacter]!!.frozen++
+        super.execute()
     }
 
     override fun isValid(): Boolean

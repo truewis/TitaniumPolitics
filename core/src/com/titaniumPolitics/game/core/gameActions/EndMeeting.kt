@@ -12,6 +12,7 @@ class EndMeeting(override val tgtCharacter: String, override val tgtPlace: Strin
         println("Ending meeting $meetingName")
         meeting.endMeeting(parent)
         //We don't have to remove participants one by one because they don't count once the meeting is not kept tracked in the gameState.
+        super.execute()
 
     }
 

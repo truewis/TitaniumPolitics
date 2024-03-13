@@ -10,7 +10,7 @@ class Sleep(override val tgtCharacter: String, override val tgtPlace: String) : 
             parent.characters[tgtCharacter]!!.health += 40
         else
             parent.characters[tgtCharacter]!!.health += 50
-        parent.characters[tgtCharacter]!!.frozen += 8
+        super.execute()
     }
 
     override fun isValid(): Boolean

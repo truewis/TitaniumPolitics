@@ -20,7 +20,6 @@ class UnofficialResourceTransfer(override val tgtCharacter: String, override val
                 parent.places[tgtPlace]!!.resources[key] = (parent.places[tgtPlace]!!.resources[key] ?: 0) - value
                 parent.places[toWhere]!!.resources[key] = (parent.places[toWhere]!!.resources[key] ?: 0) + value
             }
-            parent.characters[tgtCharacter]!!.frozen++
             //Spread rumor only when someone sees it
             if (parent.places[tgtPlace]!!.currentWorker != 0)
             {
@@ -41,6 +40,7 @@ class UnofficialResourceTransfer(override val tgtCharacter: String, override val
         {
             println("Not enough resources: $tgtPlace, ${parent.places[tgtPlace]!!.resources["water"]}")
         }
+        super.execute()
 
     }
 

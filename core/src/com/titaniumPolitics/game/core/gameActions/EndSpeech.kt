@@ -16,7 +16,7 @@ class EndSpeech(override val tgtCharacter: String, override val tgtPlace: String
         //The amount of attention gained can be modified here.
         meeting.currentAttention += 10
         meeting.currentSpeaker = nextSpeaker
-        parent.characters[tgtCharacter]!!.frozen++
+        super.execute()
     }
 
     override fun isValid(): Boolean

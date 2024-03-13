@@ -16,12 +16,12 @@ class Eat(override val tgtCharacter: String, override val tgtPlace: String) : Ga
             parent.setMutuality(tgtCharacter, tgtCharacter, 10.0)//Increase will.
             parent.characters[tgtCharacter]!!.hunger -= 50
             parent.characters[tgtCharacter]!!.thirst -= 50
-            parent.characters[tgtCharacter]!!.frozen++
             println("$tgtCharacter ate a ration and drank some water.")
         } else
         {
             println("$tgtCharacter tried to eat, but there is nothing to eat.")
         }
+        super.execute()
     }
 
     override fun isValid(): Boolean

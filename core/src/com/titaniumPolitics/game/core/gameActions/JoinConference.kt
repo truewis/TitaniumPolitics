@@ -14,7 +14,7 @@ class JoinConference(override val tgtCharacter: String, override val tgtPlace: S
     override fun execute()
     {
         parent.ongoingConferences[meetingName]!!.currentCharacters.add(tgtCharacter)
-        parent.characters[tgtCharacter]!!.frozen++
+        super.execute()
     }
 
     override fun isValid(): Boolean

@@ -29,7 +29,7 @@ class StartConference(override val tgtCharacter: String, override val tgtPlace: 
         meeting.currentCharacters.add(tgtCharacter)
         meeting.currentSpeaker = tgtCharacter
         meeting.currentAttention = parent.getPartyMutuality(meeting.involvedParty, meeting.involvedParty).toInt()
-        parent.characters[tgtCharacter]!!.frozen++
+        super.execute()
     }
 
     override fun isValid(): Boolean

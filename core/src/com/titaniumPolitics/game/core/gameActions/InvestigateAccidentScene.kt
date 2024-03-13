@@ -12,7 +12,7 @@ class InvestigateAccidentScene(override val tgtCharacter: String, override val t
                     100;parent.informations[it.generateName()] = it
                 }
             }//Add all accident information to the character.
-        parent.characters[tgtCharacter]!!.frozen += 3
+        super.execute()
     }
 
     override fun isValid(): Boolean

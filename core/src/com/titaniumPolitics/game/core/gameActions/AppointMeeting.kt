@@ -20,7 +20,7 @@ class AppointMeeting(override val tgtCharacter: String, override val tgtPlace: S
     {
         parent.scheduledMeetings["meeting-${where}-${tgtCharacter}-${meetingTime}"] =
             Meeting(meetingTime, "subjectTBD", who, where)
-        parent.characters[tgtCharacter]!!.frozen++
+
     }
 
     override fun isValid(): Boolean

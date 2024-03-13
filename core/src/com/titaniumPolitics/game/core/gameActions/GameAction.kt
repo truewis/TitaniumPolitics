@@ -1,6 +1,7 @@
 package com.titaniumPolitics.game.core.gameActions
 
 import com.titaniumPolitics.game.core.GameState
+import com.titaniumPolitics.game.core.ReadOnlyJsons
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 
@@ -19,6 +20,9 @@ sealed class GameAction()
     abstract val tgtCharacter: String
     abstract val tgtPlace: String
 
+    val tgtCharObj get() = parent.characters[tgtCharacter]!!
+    val tgtPlaceObj get() = parent.places[tgtPlace]!!
+
     @Transient
     lateinit var parent: GameState
     fun injectParent(parent: GameState)
@@ -30,10 +34,15 @@ sealed class GameAction()
     {
     }
 
+    //This is a test function to check if the action is valid. It is called before execute. You can insert conditions to check here.
+    //The execute function is still called even if this function returns false, but the engine throws a warning.
     open fun isValid(): Boolean
     {
         return true
     }
 
-    abstract fun execute()
+    open fun execute()
+    {
+        tgtCharObj.frozen += ReadOnlyJsons.getConst(this::class.simpleName!! + "Duration").toInt()
+    }
 }

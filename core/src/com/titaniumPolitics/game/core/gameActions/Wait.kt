@@ -5,7 +5,7 @@ class Wait(override val tgtCharacter: String, override val tgtPlace: String) : G
 
     override fun execute()
     {
-        parent.characters[tgtCharacter]!!.frozen++
+        super.execute()
     }
 
     override fun isValid(): Boolean

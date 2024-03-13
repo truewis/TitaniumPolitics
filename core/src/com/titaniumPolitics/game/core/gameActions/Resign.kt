@@ -36,6 +36,7 @@ class Resign(override val tgtCharacter: String, override val tgtPlace: String) :
                 it.execute()
             }
         }
+        super.execute()
 
     }
 

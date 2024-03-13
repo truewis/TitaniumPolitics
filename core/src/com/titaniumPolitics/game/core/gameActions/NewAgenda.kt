@@ -12,7 +12,7 @@ class NewAgenda(override val tgtCharacter: String, override val tgtPlace: String
         val meeting = parent.characters[tgtCharacter]!!.currentMeeting!!
         meeting.agendas.add(agenda)
         meeting.currentAttention = max(meeting.currentAttention - 10, 0)
-        parent.characters[tgtCharacter]!!.frozen++
+        super.execute()
         //TODO: affect mutuality based on the agenda.
     }
 

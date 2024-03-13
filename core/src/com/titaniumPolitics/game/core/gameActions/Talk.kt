@@ -19,7 +19,7 @@ class Talk(override val tgtCharacter: String, override val tgtPlace: String) : G
         parent.ongoingMeetings["meeting-$tgtPlace-$tgtCharacter-${parent.time}"] =
             Meeting(parent.time, tgtPlace, scheduledCharacters = hashSetOf(who, tgtCharacter), tgtPlace)
         parent.ongoingMeetings["meeting-$tgtPlace-$tgtCharacter-${parent.time}"]!!.currentCharacters.add(tgtCharacter)
-        parent.characters[tgtCharacter]!!.frozen++
+        super.execute()
     }
 
     override fun isValid(): Boolean

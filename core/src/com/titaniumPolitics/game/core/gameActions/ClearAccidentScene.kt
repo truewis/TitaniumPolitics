@@ -7,7 +7,7 @@ class ClearAccidentScene(override val tgtCharacter: String, override val tgtPlac
     {
         parent.places[tgtPlace]!!.isAccidentScene = false
         parent.places[tgtPlace]!!.accidentInformations.clear()//Remove all accident information from the place.
-        parent.characters[tgtCharacter]!!.frozen += 3
+        super.execute()
     }
 
     override fun isValid(): Boolean

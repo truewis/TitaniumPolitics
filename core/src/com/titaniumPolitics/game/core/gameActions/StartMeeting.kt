@@ -18,7 +18,6 @@ class StartMeeting(override val tgtCharacter: String, override val tgtPlace: Str
         parent.ongoingMeetings[meetingName] = parent.scheduledMeetings[meetingName]!!
         parent.scheduledMeetings.remove(meetingName)
         parent.ongoingMeetings[meetingName]!!.currentCharacters.add(tgtCharacter)
-        parent.characters[tgtCharacter]!!.frozen++
         // Interrupt other required characters and add them to the meeting.
         val meeting = parent.ongoingMeetings[meetingName]!!
         meeting.currentSpeaker = tgtCharacter
@@ -29,7 +28,7 @@ class StartMeeting(override val tgtCharacter: String, override val tgtPlace: Str
             parent.ongoingMeetings[meetingName]!!.currentCharacters.add(it)
             println("Interrupt: $it is forced to join the meeting.")
         }
-
+        super.execute()
 
     }
 

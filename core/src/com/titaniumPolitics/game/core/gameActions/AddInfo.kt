@@ -22,7 +22,7 @@ class AddInfo(override val tgtCharacter: String, override val tgtPlace: String) 
             ) //TODO: gain more attention when presenting an information that is not known to the characters in the meeting.
         //The information is known to the characters in the meeting.
         parent.informations[infoKey]!!.knownTo.addAll(meeting.currentCharacters)
-        parent.characters[tgtCharacter]!!.frozen++
+        super.execute()
     }
 
     override fun isValid(): Boolean

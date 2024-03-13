@@ -80,7 +80,7 @@ class Examine(override val tgtCharacter: String, override val tgtPlace: String) 
 
             }
         }
-        parent.characters[tgtCharacter]!!.frozen += 2
+        super.execute()
     }
 
     override fun isValid(): Boolean

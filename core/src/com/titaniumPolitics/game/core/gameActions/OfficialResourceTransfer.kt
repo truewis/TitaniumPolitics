@@ -19,12 +19,13 @@ class OfficialResourceTransfer(override val tgtCharacter: String, override val t
                 parent.places[tgtPlace]!!.resources[key] = (parent.places[tgtPlace]!!.resources[key] ?: 0) - value
                 parent.places[toWhere]!!.resources[key] = (parent.places[toWhere]!!.resources[key] ?: 0) + value
             }
-            parent.characters[tgtCharacter]!!.frozen++
+
 
         } else
         {
             println("Not enough resources: $tgtPlace, $resources")
         }
+        super.execute()
 
     }
 

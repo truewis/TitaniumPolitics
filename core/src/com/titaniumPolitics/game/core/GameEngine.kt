@@ -1210,6 +1210,7 @@ class GameEngine(val gameState: GameState)
             {
                 actions.add("Sleep")
                 actions.add("Eat")
+                actions.add("PrepareInfo")
             }
             val availableConferences =
                 gameState.scheduledConferences.filter { it.value.time + 2 >= gameState.time && gameState.time + 2 >= it.value.time && it.value.place == place }
