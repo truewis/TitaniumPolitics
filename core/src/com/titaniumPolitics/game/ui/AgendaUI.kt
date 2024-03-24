@@ -35,7 +35,7 @@ class AgendaUI(var gameState: GameState) : Table(defaultSkin), KTable
         AgendaDeltaAgreement.setFontScale(2f)
 
 
-        
+
         add(AgendaTitle).colspan(2)
         row()
         add(AgendaAgreement)
@@ -46,12 +46,6 @@ class AgendaUI(var gameState: GameState) : Table(defaultSkin), KTable
     fun refresh(meeting: Meeting, agenda: MeetingAgenda)
     {
         AgendaTitle.setText(agenda.subjectType)
-        AgendaAgreement.setText(agenda.agreement.toString())
-        val delta = GameEngine.getDeltaAgreement(gameState, meeting, agenda)
-        if (delta > 0)
-            AgendaDeltaAgreement.setText("+$delta")
-        else
-            AgendaDeltaAgreement.setText("-$delta")
     }
 
 

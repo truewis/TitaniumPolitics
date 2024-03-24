@@ -1274,138 +1274,15 @@ class GameEngine(val gameState: GameState)
 
 
         //Agreement change is computed every turn based on deltaAgreement, rather than changing once when information are added.
-        //This is to prevent the meeting going nowhere when their isn't enough supporting information.
+        //This is to prevent the meeting going nowhere when there isn't enough supporting information.
         fun progressMeeting(gameState: GameState, mt: Meeting)
         {
             mt.agendas.forEach { agenda ->
 
-                agenda.agreement +=
-                    getDeltaAgreement(
-                        gameState,
-                        mt,
-                        agenda
-                    ) * mt.currentAttention / 10 / mt.currentCharacters.size
 
             }
         }
 
-        fun getDeltaAgreement(gameState: GameState, mt: Meeting, agenda: MeetingAgenda): Int
-        {
-            var deltaAgreement = 0
-            //TODO: final value of deltaAgreement is based on the participant's overall mutuality to the proposer of the agenda.
-            //TODO: final value of deltaAgreement is propotional to current Attention.
-            when (agenda.subjectType)
-            {
-                "proofOfWork" ->
-                {
-                    //For:
-                    //Did their job well
-                    when (mt.involvedParty)
-                    {
-                        "infrastructure" ->
-                        {
-                            agenda.informationKeys.forEach { key ->
-                                val info = gameState.informations[key]!!
-                                //Only count actions done within 5 days.
-                                if (info.type == "action" && info.action == "repair" && info.creationTime > gameState.time - 48 * 5)
-                                    deltaAgreement += 3 //TODO: this should change based on how old the information is.
-                            }
-                        }
-                    }
-                    //Agenda proposer gave a command to one of the people in the meeting. Agreement increases when they suplement with their proof of execution.
-                }
-
-                "budgetProposal" ->
-                {
-                    //For:
-                    //Our division is low in resource
-                    //Against:
-                    //Too much budget allocated to an unpopular division
-                    //Budget is too low compared to salary paid.
-                    deltaAgreement += 30
-                }
-
-                "budgetResolution" ->
-                {
-
-                    //Against:
-                    //Too much budget allocated to an unpopular division
-                    //The government is low in resource.
-                    deltaAgreement += 30
-                }
-
-                "praise" ->
-                {
-                    //For:
-                    //Did their job well recently.
-                    when (mt.involvedParty)
-                    {
-                        "infrastructure" ->
-                        {
-                            agenda.informationKeys.forEach { key ->
-                                val info = gameState.informations[key]!!
-                                //Only count actions done within 5 days.
-                                if (info.type == "action" && info.action == "repair" && info.creationTime > gameState.time - 48 * 5)
-                                    deltaAgreement += 3//TODO: this should change based on how old the information is.
-                            }
-                        }
-                    }
-                    //Against:
-                }
-
-                "denounce" ->
-                {
-                    //For:
-                    //Didn't work during work hours
-                    //Embezzled resources
-                    //Rebelled
-                    //Greedy
-
-                    //Against:
-                    deltaAgreement += 3
-                }
-
-                "workingHoursChange" ->
-                {
-                    //Increase work hours when
-                    //Demands are high
-                    //Not enough workers
-
-                    //Decrease work hours when
-                    //Demands are low
-                    //supplies are low.
-                    //Cannot pay salaries for the laborers.
-                    deltaAgreement += 3
-                }
-
-                "reassignWorkersToApparatus" ->
-                {
-
-                    deltaAgreement += 3
-                }
-
-                "salary" ->
-                {
-                    //For:
-                    //We are hungry
-
-                    //Against:
-                    //Cannot pay salaries
-                    deltaAgreement += 30
-                }
-
-                "appointMeeting" ->
-                {
-                    deltaAgreement += 3
-                }
-
-                "trade" ->
-                {
-                    deltaAgreement += 3
-                }
-            }
-            return deltaAgreement
-        }
 
     }
 }

@@ -15,6 +15,7 @@ class AddInfo(override val tgtCharacter: String, override val tgtPlace: String) 
         meeting.agendas[agendaIndex].informationKeys.add(infoKey)
 
         //The amount of attention spent can be modified here.
+        //TODO: each prepared information can only be presented once in a meeting.
         meeting.currentAttention =
             max(
                 meeting.currentAttention - 10,
