@@ -25,27 +25,28 @@ class AgendaUI(var gameState: GameState) : Table(defaultSkin), KTable
 
     val AddedInfos = HorizontalGroup()
     val AgendaTitle = Label("Agenda", defaultSkin, "trnsprtConsole")
-    val AgendaAgreement = Label("0", defaultSkin, "trnsprtConsole")
-    val AgendaDeltaAgreement = Label("+0", defaultSkin, "trnsprtConsole")
 
     init
     {
         AgendaTitle.setFontScale(2f)
-        AgendaAgreement.setFontScale(2f)
-        AgendaDeltaAgreement.setFontScale(2f)
 
 
 
-        add(AgendaTitle).colspan(2)
+        add(AgendaTitle)
         row()
-        add(AgendaAgreement)
-        add(AgendaDeltaAgreement)
+        add(AddedInfos)
     }
 
     //This function can be used for both meetings and conferences
     fun refresh(meeting: Meeting, agenda: MeetingAgenda)
     {
         AgendaTitle.setText(agenda.subjectType)
+        AddedInfos.clear()
+        agenda.informationKeys.forEach {
+            val infoCardUI = InfoCardUI(gameState)
+            infoCardUI.refresh(gameState.informations[it]!!)
+            AddedInfos.addActor(infoCardUI)
+        }
     }
 
 

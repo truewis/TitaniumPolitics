@@ -60,6 +60,13 @@ class MeetingUI(var gameState: GameState) : Table(defaultSkin)
             agendaUI.refresh(meeting, it)
             currentAgendas.addActor(agendaUI)
         }
+        availableInfos.clear()
+        gameState.player.preparedInfoKeys.filter { key -> meeting.agendas.none { it.informationKeys.contains(key) } }
+            .forEach {
+                val infoUI = InfoCardUI(gameState)
+                infoUI.refresh(gameState.informations[it]!!)
+                availableInfos.addActor(infoUI)
+            }
         currentAttention.setText(meeting.currentAttention.toString())
     }
 
