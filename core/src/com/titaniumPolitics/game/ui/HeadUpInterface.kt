@@ -26,6 +26,7 @@ class HeadUpInterface(val gameState: GameState) : Table(Scene2DSkin.defaultSkin)
 
             add(InformationViewUI())
             add(ResourceInfoUI())
+            add(HumanResourceInfoUI())
             add(ResourceTransferUI(this@HeadUpInterface.gameState))
             add(TradeUI(this@HeadUpInterface.gameState))
 

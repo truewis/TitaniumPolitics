@@ -1,7 +1,10 @@
 package com.titaniumPolitics.game.core.gameActions
 
+import com.badlogic.gdx.Gdx
 import com.titaniumPolitics.game.core.GameEngine
 import com.titaniumPolitics.game.core.Information
+import com.titaniumPolitics.game.ui.HumanResourceInfoUI
+import com.titaniumPolitics.game.ui.ResourceInfoUI
 
 class Examine(override val tgtCharacter: String, override val tgtPlace: String) : GameAction()
 {
@@ -19,6 +22,15 @@ class Examine(override val tgtCharacter: String, override val tgtPlace: String) 
             {
                 //Acquire HR information is not planned.
                 println("HR: ${parent.places[tgtPlace]!!.currentWorker}/${parent.places[tgtPlace]!!.plannedWorker}, ${parent.places[tgtPlace]!!.workHoursStart}-${parent.places[tgtPlace]!!.workHoursEnd}, ${parent.places[tgtPlace]!!.responsibleParty}")
+                //This action has no effect on the game state.
+                //Open HR window Directly.
+                if (tgtCharacter == parent.playerName)
+                {
+                    Gdx.app.postRunnable {
+                        HumanResourceInfoUI.instance.isVisible = true
+                        HumanResourceInfoUI.instance.refresh(parent.places[tgtPlace]!!, parent.time)
+                    }
+                }
             }
 
             "apparatus" ->
