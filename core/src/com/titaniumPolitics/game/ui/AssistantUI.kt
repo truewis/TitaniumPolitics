@@ -56,7 +56,13 @@ class AssistantUI(gameState: GameState) : Table(defaultSkin), KTable
             {
                 override fun clicked(event: com.badlogic.gdx.scenes.scene2d.InputEvent?, x: Float, y: Float)
                 {
-                    Gdx.app.log("AssistantUI", "CALENDAR")
+                    //Open Map UI
+                    if (HeadUpInterface.instance.calendarUI.isVisible) this@AssistantUI.closeAll()
+                    else
+                    {
+                        HeadUpInterface.instance.calendarUI.refresh(gameState)
+                        HeadUpInterface.instance.calendarUI.isVisible = !HeadUpInterface.instance.calendarUI.isVisible
+                    }
                 }
             }
             )
@@ -98,8 +104,11 @@ class AssistantUI(gameState: GameState) : Table(defaultSkin), KTable
     {
         InformationViewUI.instance.isVisible = false
         HeadUpInterface.instance.mapUI.isVisible = false
+        HeadUpInterface.instance.calendarUI.isVisible = false
         PlaceSelectionUI.instance.isVisible = false
         ResourceInfoUI.instance.isVisible = false
+        ApparatusInfoUI.instance.isVisible = false
+        HumanResourceInfoUI.instance.isVisible = false
         ResourceTransferUI.instance.isVisible = false
     }
 

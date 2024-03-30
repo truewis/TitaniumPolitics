@@ -25,9 +25,9 @@ class GameState
             timeChanged.forEach { it(old, _time) }
         }
     val hour: Int
-        get() = _time % 48 / 2
+        get() = _time % ReadOnlyJsons.getConst("lengthOfDay").toInt() / 2
     val day: Int
-        get() = _time / 48
+        get() = _time / ReadOnlyJsons.getConst("lengthOfDay").toInt()
 
 
     @Transient

@@ -10,6 +10,7 @@ import ktx.scene2d.*
 class HeadUpInterface(val gameState: GameState) : Table(Scene2DSkin.defaultSkin), KTable
 {
     val mapUI = MapUI(gameState = this@HeadUpInterface.gameState)
+    val calendarUI = CalendarUI()
 
     init
     {
@@ -23,6 +24,7 @@ class HeadUpInterface(val gameState: GameState) : Table(Scene2DSkin.defaultSkin)
                 addActor(AvailableActionsUI(this@HeadUpInterface.gameState))
             }
             add(this@HeadUpInterface.mapUI)
+            add(this@HeadUpInterface.calendarUI)
 
             add(InformationViewUI())
             add(ResourceInfoUI())
