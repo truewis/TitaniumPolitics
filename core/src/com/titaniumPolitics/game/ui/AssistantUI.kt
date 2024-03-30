@@ -16,6 +16,29 @@ class AssistantUI(gameState: GameState) : Table(defaultSkin), KTable
 
     init
     {
+        val PoliticiansViewButton = button {
+            it.fill()
+            stack {
+                it.size(50f)
+                it.fill()
+                image("raincoat-icon") {
+                }
+            }
+            addListener(object : ClickListener()
+            {
+                override fun clicked(event: com.badlogic.gdx.scenes.scene2d.InputEvent?, x: Float, y: Float)
+                {
+                    if (PoliticiansInfoUI.instance.isVisible) this@AssistantUI.closeAll()
+                    else
+                    {
+                        PoliticiansInfoUI.instance.isVisible = !PoliticiansInfoUI.instance.isVisible
+                        PoliticiansInfoUI.instance.refresh(gameState)
+                    }
+                }
+            }
+            )
+        }
+        row()
         val informationViewButton = button {
             it.fill()
             stack {
@@ -105,6 +128,7 @@ class AssistantUI(gameState: GameState) : Table(defaultSkin), KTable
         InformationViewUI.instance.isVisible = false
         HeadUpInterface.instance.mapUI.isVisible = false
         HeadUpInterface.instance.calendarUI.isVisible = false
+        HeadUpInterface.instance.politiciansInfoUI.isVisible = false
         PlaceSelectionUI.instance.isVisible = false
         ResourceInfoUI.instance.isVisible = false
         ApparatusInfoUI.instance.isVisible = false

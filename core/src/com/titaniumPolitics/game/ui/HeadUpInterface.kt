@@ -11,6 +11,7 @@ class HeadUpInterface(val gameState: GameState) : Table(Scene2DSkin.defaultSkin)
 {
     val mapUI = MapUI(gameState = this@HeadUpInterface.gameState)
     val calendarUI = CalendarUI()
+    val politiciansInfoUI = PoliticiansInfoUI()
 
     init
     {
@@ -25,7 +26,7 @@ class HeadUpInterface(val gameState: GameState) : Table(Scene2DSkin.defaultSkin)
             }
             add(this@HeadUpInterface.mapUI)
             add(this@HeadUpInterface.calendarUI)
-
+            add(this@HeadUpInterface.politiciansInfoUI)
             add(InformationViewUI())
             add(ResourceInfoUI())
             add(HumanResourceInfoUI())
