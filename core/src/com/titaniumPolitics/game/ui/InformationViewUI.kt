@@ -107,6 +107,13 @@ class InformationViewUI : Table(defaultSkin), KTable
                                         ResourceInfoUI.instance.isVisible = true
                                         ResourceInfoUI.instance.refresh(information)
                                     }
+
+                                    "apparatusDurability" ->
+                                    {
+                                        //Open apparatus window
+                                        ApparatusInfoUI.instance.isVisible = true
+                                        ApparatusInfoUI.instance.refresh(information)
+                                    }
                                 }
                             }
                         })
