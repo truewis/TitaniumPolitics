@@ -2,6 +2,7 @@ package com.titaniumPolitics.game.ui
 
 
 import com.badlogic.gdx.scenes.scene2d.ui.*
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 
 import com.badlogic.gdx.utils.Align
 
@@ -28,6 +29,21 @@ class ResourceInfoUI : Table(defaultSkin), KTable
             }
             add(informationPane)
 
+        }
+        row()
+        button {
+            it.fill()
+            label("Close") {
+                setAlignment(Align.center)
+                setFontScale(2f)
+            }
+            addListener(object : ClickListener()
+            {
+                override fun clicked(event: com.badlogic.gdx.scenes.scene2d.InputEvent?, x: Float, y: Float)
+                {
+                    this@ResourceInfoUI.isVisible = false
+                }
+            })
         }
 
 
