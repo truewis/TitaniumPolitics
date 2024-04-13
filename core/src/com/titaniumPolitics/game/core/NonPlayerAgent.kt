@@ -607,6 +607,7 @@ class NonPlayerAgent : GameStateElement()
                 val conf =
                     charObject.currentMeeting!!
                 //If two hours has passed since the meeting started, leave the meeting. TODO: what if the meeting has started late?
+                //TODO: stay in the meeting until I have something to do.
                 if (routines[0].intVariables["time"]!! + 4 <= parent.time)
                 {
                     routines.removeAt(0)//Remove the current routine.

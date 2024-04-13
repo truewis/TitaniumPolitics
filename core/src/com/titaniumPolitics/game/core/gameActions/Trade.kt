@@ -6,9 +6,11 @@ import com.titaniumPolitics.game.core.Information
 import com.titaniumPolitics.game.core.TradeParams
 
 
+//Important: there is no trade anymore, just requests.
 //TODO: because of a no interrupt polity, the trade action should be executed immediately, not after the current action is finished.
 //The player character accepts the trade if the value of the offered item is higher than the value of the requested item.
 //The player cannot affect this decision.
+@Deprecated("This class is deprecated. Use request as meeting agenda instead.")
 class Trade(override val tgtCharacter: String, override val tgtPlace: String) : GameAction()
 {
     var who = ""

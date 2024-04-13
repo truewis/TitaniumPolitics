@@ -1100,6 +1100,7 @@ class GameEngine(val gameState: GameState)
             return@runBlocking wanted as T
         }
 
+        //When someone else requests an action, request class will check isValid function of the action, not this function.
         fun availableActions(gameState: GameState, place: String, character: String): ArrayList<String>
         {
             val actions = arrayListOf<String>()

@@ -24,7 +24,8 @@ class Talk(override val tgtCharacter: String, override val tgtPlace: String) : G
 
     override fun isValid(): Boolean
     {
-        return parent.places[tgtPlace]!!.characters.filter { it != tgtCharacter }.toList().isNotEmpty()
+        return parent.places[tgtPlace]!!.characters.filter { it != tgtCharacter }.toList()
+            .isNotEmpty() && parent.characters[tgtCharacter]!!.currentMeeting == null
     }
 
 }

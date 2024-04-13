@@ -3,7 +3,7 @@ package com.titaniumPolitics.game.core.gameActions
 import com.titaniumPolitics.game.core.Command
 import com.titaniumPolitics.game.core.GameEngine
 
-@Deprecated("This class is deprecated. Use Trade instead.")
+@Deprecated("This class is deprecated. Use Use request as meeting agenda instead.")
 class Command(override val tgtCharacter: String, override val tgtPlace: String) : GameAction()
 {
     var who = ""

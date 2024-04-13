@@ -8,5 +8,5 @@ class Command(var place: String, var action: GameAction)
 {
     var executeTime = 0
     val compulsion = 0
-    var issuedParty = ""//TODO: command is not necessarily issued by a party, since a trade can generate a command.
+    var issuedParty = ""//TODO: command should be issued by a list of people, and to a list of people.
 }
