@@ -1,6 +1,7 @@
 package com.titaniumPolitics.game.core
 
 import com.titaniumPolitics.game.core.gameActions.*
+import com.titaniumPolitics.game.core.Command
 import kotlinx.serialization.Serializable
 import kotlin.math.min
 
@@ -69,7 +70,6 @@ class NonPlayerAgent : GameStateElement()
     //This is a recursive function. It returns the action to be executed.
     private fun executeRoutine(): GameAction
     {
-        val charObject = parent.characters[name]!!//Shortcut
         if (routines.isEmpty())
         {
             whenIdle()
@@ -78,18 +78,18 @@ class NonPlayerAgent : GameStateElement()
         }
         routines.sortByDescending { it.priority }
         //Leave meeting or conference if the routine was changed.
-        if ((routines.none { it.name == "attendConference" } && routines.none { it.name == "attendMeeting" } && charObject.currentMeeting != null))
+        if ((routines.none { it.name == "attendConference" } && routines.none { it.name == "attendMeeting" } && character.currentMeeting != null))
         {
             return LeaveMeeting(name, place)
         }
         //Stop meeting routine if the character is not in a meeting.
-        if (routines.any { it.name == "attendMeeting" || it.name == "attendConference" } && charObject.currentMeeting == null)
+        if (routines.any { it.name == "attendMeeting" || it.name == "attendConference" } && character.currentMeeting == null)
         {
             while (routines.any { it.name == "attendMeeting" || it.name == "attendConference" })
                 routines.removeAt(0)
         }
         //Force start meeting routing if the character is in a meeting. Note that the character will leave the meeting immediately if nothing interests it.
-        if(parent.ongoingMeetings.any{it.value.currentCharacters.contains(name)} && routines.none { it.name=="attendMeeting" })
+        if (parent.ongoingMeetings.any { it.value.currentCharacters.contains(name) } && routines.none { it.name == "attendMeeting" })
             routines.add(
                 Routine(
                     "attendMeeting",
@@ -97,16 +97,21 @@ class NonPlayerAgent : GameStateElement()
                 )
             )//Add the routine with higher priority.
         //If the character is in a conference but not in attendConference routine, throw an error.
-        if(parent.ongoingConferences.any{it.value.currentCharacters.contains(name)} && routines.none { it.name=="attendConference" })
+        if (parent.ongoingConferences.any { it.value.currentCharacters.contains(name) } && routines.none { it.name == "attendConference" })
             throw IllegalStateException("$name is in ${character.currentMeeting!!}, which is a conference, but not in attendConference Routine.")
-        val commands = charObject.commands
+        val commands = character.commands
         //If there is a command that is within the set time window, issued party is trusted enough, and seems to be executable (AvailableActions), start execution routine.
         //Note that the command may not be valid even if it in AvailableActions list. For example, if the character is already at the place, move command is not valid.
         //We should not enter executeCommand routine if it is already in the routine list.
         if (routines.none { it.name == "executeCommand" })
         {
             if (commands.any {
-                    it.executeTime in parent.time - 3..parent.time + 3 && parent.parties[it.issuedParty]!!.integrity > 30.0 && GameEngine.availableActions(
+                    it.executeTime in parent.time - 3..parent.time + 3 && it.issuedBy.sumOf {
+                        parent.getMutuality(
+                            name,
+                            it
+                        )
+                    } / it.issuedBy.size > ReadOnlyJsons.getConst("CommandRejectAverageMutuality") && GameEngine.availableActions(
                         parent,
                         it.place,
                         name
@@ -134,9 +139,9 @@ class NonPlayerAgent : GameStateElement()
                     })//Add a move routine with higher priority.
                     return executeRoutine()
                 }
-                if (charObject.hunger > 50 || charObject.thirst > 50)
+                if (character.hunger > 50 || character.thirst > 50)
                     return Eat(name, place)
-                when (charObject.health)
+                when (character.health)
                 {
                     in 0..40 -> return Sleep(name, place)
                     else ->
@@ -155,8 +160,13 @@ class NonPlayerAgent : GameStateElement()
             "executeCommand" ->
             {
                 //The condition should be same with the executeCommand entry condition.
-                val executableCommands = charObject.commands.filter {
-                    it.executeTime in parent.time - 3..parent.time + 3 && parent.parties[it.issuedParty]!!.integrity > 30.0 && GameEngine.availableActions(
+                val executableCommands = character.commands.filter {
+                    it.executeTime in parent.time - 3..parent.time + 3 && it.issuedBy.sumOf {
+                        parent.getMutuality(
+                            name,
+                            it
+                        )
+                    } / it.issuedBy.size > ReadOnlyJsons.getConst("CommandRejectAverageMutuality") && GameEngine.availableActions(
                         parent,
                         it.place,
                         name
@@ -203,10 +213,10 @@ class NonPlayerAgent : GameStateElement()
 
                     if (routines[0].variables["movePlace"] == "home_$name")
                     {
-                        if (place != charObject.livingBy)
+                        if (place != character.livingBy)
                         {
                             return Move(name, place).also {
-                                it.placeTo = charObject.livingBy
+                                it.placeTo = character.livingBy
                             }//If player is far from the home, go outside the home.
                         } else
                         {
@@ -217,7 +227,7 @@ class NonPlayerAgent : GameStateElement()
                     } else
                     {
                         if (place == "home")//If the character is at home, go outside.
-                            return Move(name, place).also { it.placeTo = charObject.livingBy }
+                            return Move(name, place).also { it.placeTo = character.livingBy }
                         return Move(name, place).also { it.placeTo = routines[0].variables["movePlace"]!! }
                     }
 
@@ -257,7 +267,7 @@ class NonPlayerAgent : GameStateElement()
                             it.resources = hashMapOf(
                                 routines[0].variables["stealResource"]!! to min(
                                     (resplace.resources["ration"] ?: 0) / 2,
-                                    (charObject.reliants.size + 1) * 7
+                                    (character.reliants.size + 1) * 7
                                 )
                             )
                             it.toWhere = "home_$name"
@@ -305,7 +315,7 @@ class NonPlayerAgent : GameStateElement()
                     routines.add(Routine("rest", 0))
                     return executeRoutine()
                 }
-                if (charObject.health < 30 || charObject.hunger > 80 || charObject.thirst > 60)
+                if (character.health < 30 || character.hunger > 80 || character.thirst > 60)
                 {
                     routines.removeAt(0)//Remove the current routine.
                     routines.add(Routine("rest", 50)) //Rest with higher priority.
@@ -492,8 +502,8 @@ class NonPlayerAgent : GameStateElement()
                         if (member != null)
                         {
                             //The resource to steal is what the member is short of, either ration or water.
-                            val wantedResource = if ((charObject.resources["ration"]
-                                    ?: 0) <= rationThreshold * (charObject.reliants.size + 1)
+                            val wantedResource = if ((character.resources["ration"]
+                                    ?: 0) <= rationThreshold * (character.reliants.size + 1)
                             ) "ration" else "water"
                             routines[0].intVariables["corruptionTimer"] = parent.time
                             routines.add(
@@ -541,7 +551,7 @@ class NonPlayerAgent : GameStateElement()
             "supportAgenda" ->
             {
                 val conf =
-                    charObject.currentMeeting!!
+                    character.currentMeeting!!
                 when (routines[0].variables["agenda"])
                 {
                     "budgetResolve" ->
@@ -594,8 +604,38 @@ class NonPlayerAgent : GameStateElement()
             "attendMeeting" ->
             {
                 //TODO: check the subject variable to request something.
+                when (routines[0].variables["subject"])
+                {
+                    "requestResource" ->
+                    {
+                        //Fill in the agenda based on variables in the routine, resource and character.
+                        val agenda = MeetingAgenda("request")
+                        val command = Command(
+                            place,
+                            UnofficialResourceTransfer(
+                                routines[0].variables["character"]!!,
+                                tgtPlace = "" /*Anywhere*/
+                            ).also {
+                                it.toWhere = "home_$name"//This character's home
+                                it.resources = hashMapOf(
+                                    routines[0].variables["resource"]!! to routines[0].intVariables["amount"]!!
+                                )
+                            }//Created a command to transfer the resource.
+                        ).also {
+                            it.place = place
+                            it.executeTime = parent.time
+                            it.issuedBy = hashSetOf(name)
+                        }
+                        parent.characters[routines[0].variables["character"]!!]!!.commands.add(command)
+                        agenda.subjectParams["command"] = command.ID   //The command is added to the agenda.
+                        routines[0].variables["subject"] = "" //The subject is resolved.
+                        return NewAgenda(name, place).also {
+                            it.agenda = agenda
+                        }
+                    }
+                }
                 //If the meeting is over, leave the routine.
-                if (charObject.currentMeeting == null)
+                if (character.currentMeeting == null)
                 {
                     routines.removeAt(0)//Remove the current routine.
                     return executeRoutine()
@@ -614,15 +654,15 @@ class NonPlayerAgent : GameStateElement()
             {
 
                 //If the conference is over, leave the routine.
-                if (charObject.currentMeeting == null)
+                if (character.currentMeeting == null)
                 {
                     routines.removeAt(0)//Remove the current routine.
                     return executeRoutine()
                 }
                 val conf =
-                    charObject.currentMeeting!!
+                    character.currentMeeting!!
                 //If two hours has passed since the meeting started, leave the meeting. TODO: what if the meeting has started late?
-                //TODO: stay in the meeting until I have something to do, or the work hours are over.
+                //TODO: stay in the meeting until I have something else to do, or the work hours are over.
                 if (routines[0].intVariables["time"]!! + 4 <= parent.time)
                 {
                     routines.removeAt(0)//Remove the current routine.
@@ -689,40 +729,42 @@ class NonPlayerAgent : GameStateElement()
                         } else
                         {
                             //If budget is not proposed, propose it.
-                            if (!parent.isBudgetProposed && conf.agendas.none { it.subjectType == "budgetProposal" })
-                            {
-                                return NewAgenda(name, place).also {
-                                    it.agenda = MeetingAgenda("budgetProposal").also { agenda ->
-                                        //TODO: calculate the budget based on the information. Right now the budget is calculated based on the work hours of the places.
-                                        parent.places.forEach {
-                                            if (it.key == "home" || it.value.responsibleParty == "") return@forEach else agenda.subjectIntParams[it.value.responsibleParty] =
-                                                (agenda.subjectIntParams[it.value.responsibleParty]
-                                                    ?: 0) + it.value.plannedWorker * (it.value.workHoursEnd - it.value.workHoursStart) * 15
-                                        }
-                                    }
-                                }
-                            } else
-                            {
-                                //If we haven't tried this branch in the current routine
-                                if (routines[0].intVariables["try_support_budgetProposal"] == 0)
-                                {
-                                    routines[0].intVariables["try_support_budgetProposal"] = 1
-                                    //If the agenda is already proposed, support it.
-                                    routines.add(
-                                        Routine(
-                                            "supportAgenda",
-                                            routines[0].priority + 10
-                                        ).also {
-                                            it.intVariables["agendaIndex"] =
-                                                conf.agendas.indexOfFirst { it.subjectType == "budgetProposal" }
-                                        })//Add a routine, priority higher than work.
-                                }
-                            }
+                            //Budget is resolved through voting, which is not in the meeting.
+//                            if (!parent.isBudgetProposed && conf.agendas.none { it.subjectType == "budgetProposal" })
+//                            {
+//                                return NewAgenda(name, place).also {
+//                                    it.agenda = MeetingAgenda("budgetProposal").also { agenda ->
+//                                        //TODO: calculate the budget based on the information. Right now the budget is calculated based on the work hours of the places.
+//                                        parent.places.forEach {
+//                                            if (it.key == "home" || it.value.responsibleParty == "") return@forEach else agenda.subjectIntParams[it.value.responsibleParty] =
+//                                                (agenda.subjectIntParams[it.value.responsibleParty]
+//                                                    ?: 0) + it.value.plannedWorker * (it.value.workHoursEnd - it.value.workHoursStart) * 15
+//                                        }
+//                                    }
+//                                }
+//                            } else
+//                            {
+//                                //If we haven't tried this branch in the current routine
+//                                if (routines[0].intVariables["try_support_budgetProposal"] == 0)
+//                                {
+//                                    routines[0].intVariables["try_support_budgetProposal"] = 1
+//                                    //If the agenda is already proposed, support it.
+//                                    routines.add(
+//                                        Routine(
+//                                            "supportAgenda",
+//                                            routines[0].priority + 10
+//                                        ).also {
+//                                            it.intVariables["agendaIndex"] =
+//                                                conf.agendas.indexOfFirst { it.subjectType == "budgetProposal" }
+//                                        })//Add a routine, priority higher than work.
+//                                }
+//                            }
                         }
                     }
 
                     "divisionDailyConference" ->
                     {
+                        val party = parent.parties[conf.involvedParty]!!
                         //If not speaker, wait if the mutuality to the speaker is high. Otherwise, if possible, interrupt the speaker.
                         if (conf.currentSpeaker != name)
                         {
@@ -737,6 +779,8 @@ class NonPlayerAgent : GameStateElement()
                         } else
                         {
                             //If speaker, propose proof of work if nothing else is important.
+                            //Proof of work should have corresponding request. If there is no request or no relevant information, do not propose proof of work.
+                            //Some information are more relevant than others.
                             if (conf.agendas.none { it.subjectType == "proofOfWork" })
                             {
                                 return NewAgenda(name, place).also {
@@ -761,36 +805,47 @@ class NonPlayerAgent : GameStateElement()
                                 }
                             }
 
-                            //Grab the salary if not grabbed yet.
-                            if (conf.currentSpeaker == name && !parent.parties[conf.involvedParty]!!.isSalaryPaid)
+                            //If not division leader and salary is not paid, request salary.
+                            if (conf.currentSpeaker == name && !party.isSalaryPaid && party.leader != name)
                             {
-                                if (conf.agendas.none { it.subjectType == "salary" })
-                                    return NewAgenda(name, place).also {
-                                        it.agenda = MeetingAgenda(
-                                            "salary"
-                                        )
-                                    }
-                                else
+                                //Check if there is already a salary request.
+                                if (conf.agendas.none { it.subjectType == "request" && it.subjectParams["command"] != null })
                                 {
-                                    //If we haven't tried this branch in the current routine
-                                    if (routines[0].intVariables["try_support_salary"] == 0)
-                                    {
-                                        routines[0].intVariables["try_support_salary"] = 1
-                                        //If the agenda is already proposed, support it.
-                                        routines.add(
-                                            Routine(
-                                                "supportAgenda",
-                                                routines[0].priority + 10
-                                            ).also {
-                                                it.intVariables["agendaIndex"] =
-                                                    conf.agendas.indexOfFirst { it.subjectType == "salary" }
-                                            })//Add a routine, priority higher than work.
+                                    //Fill in the agenda based on variables in the routine, resource and character.
+                                    val agenda = MeetingAgenda("request")
+                                    val command = Command(
+                                        place,
+                                        Salary(
+                                            routines[0].variables["character"]!!,
+                                            tgtPlace = party.home
+                                        ).also {
+                                            //TODO: adjust the salary, it.resources.
+                                        }//Created a command to transfer the resource.
+                                    ).also {
+                                        it.place = place
+                                        it.executeTime = parent.time
+                                        it.issuedBy = hashSetOf(name)
                                     }
+                                    parent.characters[routines[0].variables["character"]!!]!!.commands.add(command)
+                                    agenda.subjectParams["command"] = command.ID   //The command is added to the agenda.
+                                    routines[0].variables["subject"] = "" //The subject is resolved.
+                                    return NewAgenda(name, place).also {
+                                        it.agenda = agenda
+                                    }
+                                } else //If the agenda already exists, support it.
+                                {
+
+
                                 }
                             }
-                            //If division leader, praise or criticize the division members.
+                            //If division leader,
                             if (parent.parties[conf.involvedParty]!!.leader == name)
                             {
+                                //Pay the salary if not paid yet.
+                                if (!parent.parties[conf.involvedParty]!!.isSalaryPaid)
+                                {
+                                    return Salary(name, place)
+                                }
                                 //Praise or criticize the division members, if there is any relevant information.
                                 parent.parties[conf.involvedParty]!!.members.forEach { member ->
                                     if (member != name && parent.informations.values.any {
@@ -950,9 +1005,12 @@ class NonPlayerAgent : GameStateElement()
                         routines.add(Routine("attendMeeting", routines[0].priority + 10).also {
                             it.variables["subject"] = "requestResource"
                             it.variables["resource"] = routines[0].variables["wantedResource"]!!
+                            it.intVariables["amount"] =
+                                this.character.reliants.size //The amount of resource to request is proportional to the number of reliants.
+                            //TODO: the amount of resource to request should be determined by the character's trait.
                             it.variables["requestTo"] = tradeCharacter
                         })//Add a move routine with higher priority.
-                        return Talk(name, place).also{
+                        return Talk(name, place).also {
                             it.who = tradeCharacter
                         }
                     }
@@ -966,9 +1024,9 @@ class NonPlayerAgent : GameStateElement()
 //                                parent.characters[tradeCharacter]!!.reliants.size + 1
 //                            //Give away unwanted resources
 //                            val res =
-//                                charObject.resources.keys.filter { it != routines[0].variables["wantedResource"]!! }
+//                                character.resources.keys.filter { it != routines[0].variables["wantedResource"]!! }
 //                                    .random()
-//                            trade.item[res] = charObject.resources[res] ?: 0
+//                            trade.item[res] = character.resources[res] ?: 0
 //                            //Give away information they want
 //                            trade.info = parent.informations.values.filter {
 //                                it.tgtCharacter == tradeCharacter && it.knownTo.contains(name)

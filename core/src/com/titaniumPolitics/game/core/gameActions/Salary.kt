@@ -1,11 +1,9 @@
 package com.titaniumPolitics.game.core.gameActions
 
-@Deprecated("This class is deprecated. Salary is a separate agenda item.")
+//Salary is performed by the party leader. It decides the amount of resources to be paid to the party members.
 class Salary(override val tgtCharacter: String, override val tgtPlace: String) : GameAction()
 {
-    var amount = 2
-    var what1 = "ration"
-    var what2 = "water"
+    var resources = hashMapOf("ration" to 2, "water" to 2)
     override fun chooseParams()
     {
     }
@@ -32,35 +30,37 @@ class Salary(override val tgtCharacter: String, override val tgtPlace: String) :
 //            println("Warning: $tgtCharacter has already been paid from ${party.name} today.")
 //            return
 //        }
-        if (
-            (parent.places[guildHall]!!.resources[what1]
-                ?: 0) >= amount && (parent.places[guildHall]!!.resources[what2] ?: 0) >= amount
-        )
-        {
-            parent.places[guildHall]!!.resources[what1] = (parent.places[guildHall]!!.resources[what1] ?: 0) - amount
-            parent.characters[tgtCharacter]!!.resources[what1] =
-                (parent.characters[tgtCharacter]!!.resources[what1] ?: 0) + amount
-
-            parent.places[guildHall]!!.resources[what2] = (parent.places[guildHall]!!.resources[what2] ?: 0) - amount
-            parent.characters[tgtCharacter]!!.resources[what2] =
-                (parent.characters[tgtCharacter]!!.resources[what2] ?: 0) + amount
-            //party.isDailySalaryPaid[tgtCharacter] = true
-            println("$tgtCharacter is paid $amount $what1 and $amount $what2 from $${party.name}.")
-            parent.characters[tgtCharacter]!!.frozen++
-
-        } else
-        {
-            println("Not enough resources to pay salary to $tgtCharacter: $tgtPlace, ${parent.places[tgtPlace]!!.resources}")
-            //Party integrity decreases
-            parent.setPartyMutuality(party.name, party.name, -1.0)
-            //Opinion of the leader of the party decreases
-            if (party.leader != "")
+        who.forEach { character ->
+            if (
+                resources.all { (what, amount) -> (parent.places[guildHall]!!.resources[what] ?: 0) >= amount }
+            )
             {
-                parent.setMutuality(tgtCharacter, party.leader, -1.0)
+                resources.forEach { (what, amount) ->
+                    parent.places[guildHall]!!.resources[what] =
+                        (parent.places[guildHall]!!.resources[what] ?: 0) - amount
+                    parent.characters[character]!!.resources[what] =
+                        (parent.characters[character]!!.resources[what] ?: 0) + amount
+                }
+                //party.isDailySalaryPaid[tgtCharacter] = true
+                println("$character is paid $resources from $${party.name}.")
+                parent.characters[character]!!.frozen++
+
+            } else
+            {
+                println("Not enough resources to pay salary to $character: $tgtPlace, ${parent.places[tgtPlace]!!.resources}")
+                //Party integrity decreases
+                parent.setPartyMutuality(party.name, party.name, -1.0)
+                //Opinion of the leader of the party decreases
+                if (party.leader != "")
+                {
+                    parent.setMutuality(character, party.leader, -1.0)
+                }
+                //TODO: are we sure that if the unpaid people are not in the meeting, there is no penalty to the party integrity?
+//
             }
-//            party.isDailySalaryPaid[tgtCharacter] =
-//                true//TODO: this is a hack to prevent infinite loop. This is a lie, but who would be able to complain?
         }
+        party.isSalaryPaid =
+            true//Even if some members are not paid, the salary is considered paid, and cannot be paid again this quarter.
 
     }
 
@@ -86,7 +86,7 @@ class Salary(override val tgtCharacter: String, override val tgtPlace: String) :
 //            //println("Warning: $tgtCharacter has already been paid from ${party.name} today.")
 //            return false
 //        }
-        return true
+        return !party.isSalaryPaid && who.isNotEmpty() && tgtCharacter == party.leader
     }
 
 }

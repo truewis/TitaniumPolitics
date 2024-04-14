@@ -18,13 +18,20 @@ class Meeting(
 )
 {
     var involvedParty: String = ""
-    var auxSubject = ""
     var currentSpeaker = ""
     var currentAttention = 0
     var agendas = arrayListOf<MeetingAgenda>()
 
     fun endMeeting(gameState: GameState)
     {
-
+        //Remove the meeting from the ongoingMeetings or ongoingConferences.
+        if (gameState.ongoingMeetings.containsValue(this))
+        {
+            gameState.ongoingMeetings.remove(gameState.ongoingMeetings.filter { it.value == this }.keys.first())
+        } else if (gameState.ongoingConferences.containsValue(this))
+        {
+            gameState.ongoingConferences.remove(gameState.ongoingConferences.filter { it.value == this }.keys.first())
+        } else
+            throw IllegalStateException("Meeting $this is not found in the ongoingMeetings or ongoingConferences.")
     }
 }
