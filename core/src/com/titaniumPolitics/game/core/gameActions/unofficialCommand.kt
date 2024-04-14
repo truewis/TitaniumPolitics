@@ -3,7 +3,7 @@ package com.titaniumPolitics.game.core.gameActions
 import com.titaniumPolitics.game.core.Command
 import com.titaniumPolitics.game.core.GameEngine
 
-@Deprecated("This class is deprecated. Use Trade instead.")
+@Deprecated("This class is deprecated. Use meeting agendas to request actions instead.")
 class unofficialCommand(override val tgtCharacter: String, override val tgtPlace: String) : GameAction()
 {
     var who = ""
@@ -25,8 +25,10 @@ class unofficialCommand(override val tgtCharacter: String, override val tgtPlace
 
     override fun execute()
     {
-        parent.characters[who]!!.commands.add(command!!)
+
+        parent.commands[command!!.name] = command!!
         parent.characters[tgtCharacter]!!.frozen++
     }
+
 
 }

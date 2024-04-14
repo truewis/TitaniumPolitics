@@ -7,9 +7,24 @@ import java.util.UUID
 @Serializable
 class Command(var place: String, var action: GameAction)
 {
-    var ID = UUID.randomUUID().toString()
+    var name = ""
     var executeTime = 0
     val compulsion = 0
     var issuedBy: HashSet<String> = hashSetOf()
     var issuedTo: HashSet<String> = hashSetOf()
+    fun generateName(): String
+    {
+        if (this.name != "")
+        {
+            //println("Warning: name of an information is already set but you are trying to generate a new one. $name");
+            return this.name
+
+        }
+        val name =
+            "$action-$place-$executeTime-${
+                Math.random().toString().substring(8)
+            }"
+        this.name = name
+        return name
+    }
 }

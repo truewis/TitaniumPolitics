@@ -155,8 +155,8 @@ class Trade(override val tgtCharacter: String, override val tgtPlace: String) : 
                             ?: 0) + it.value
                 }
             }
-            action?.let { parent.characters[tgtCharacter]!!.commands.add(it) }
-            action2?.let { parent.characters[who]!!.commands.add(it) }
+            //action?.let { parent.characters[tgtCharacter]!!.commands.add(it) }
+            //action2?.let { parent.characters[who]!!.commands.add(it) }
             info?.let { parent.informations[it.name]!!.knownTo.add(who) }
             info2?.let { parent.informations[it.name]!!.knownTo.add(tgtCharacter) }
             //Increase mutualities of each character with the other. Value is proportional to the value of the traded item.

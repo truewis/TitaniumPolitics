@@ -99,13 +99,13 @@ class NonPlayerAgent : GameStateElement()
         //If the character is in a conference but not in attendConference routine, throw an error.
         if (parent.ongoingConferences.any { it.value.currentCharacters.contains(name) } && routines.none { it.name == "attendConference" })
             throw IllegalStateException("$name is in ${character.currentMeeting!!}, which is a conference, but not in attendConference Routine.")
-        val commands = character.commands
+
         //If there is a command that is within the set time window, issued party is trusted enough, and seems to be executable (AvailableActions), start execution routine.
         //Note that the command may not be valid even if it in AvailableActions list. For example, if the character is already at the place, move command is not valid.
         //We should not enter executeCommand routine if it is already in the routine list.
         if (routines.none { it.name == "executeCommand" })
         {
-            if (commands.any {
+            if (parent.commands.values.any {
                     it.executeTime in parent.time - 3..parent.time + 3 && it.issuedBy.sumOf {
                         parent.getMutuality(
                             name,
@@ -160,7 +160,7 @@ class NonPlayerAgent : GameStateElement()
             "executeCommand" ->
             {
                 //The condition should be same with the executeCommand entry condition.
-                val executableCommands = character.commands.filter {
+                val executableCommands = parent.commands.values.filter {
                     it.executeTime in parent.time - 3..parent.time + 3 && it.issuedBy.sumOf {
                         parent.getMutuality(
                             name,
@@ -184,7 +184,7 @@ class NonPlayerAgent : GameStateElement()
                         if (command.action.isValid())
                         {
                             println("$name: The command ${command.action} is valid. Executing...")
-                            commands.remove(command)//Execute the command.
+                            parent.commands.remove(command.name)//Execute the command.
                             return command.action
                         }
                     }
@@ -626,8 +626,8 @@ class NonPlayerAgent : GameStateElement()
                             it.executeTime = parent.time
                             it.issuedBy = hashSetOf(name)
                         }
-                        parent.characters[routines[0].variables["character"]!!]!!.commands.add(command)
-                        agenda.subjectParams["command"] = command.ID   //The command is added to the agenda.
+                        parent.commands[command.name] = command
+                        agenda.subjectParams["command"] = command.name   //The command is added to the agenda.
                         routines[0].variables["subject"] = "" //The subject is resolved.
                         return NewAgenda(name, place).also {
                             it.agenda = agenda
@@ -826,8 +826,9 @@ class NonPlayerAgent : GameStateElement()
                                         it.executeTime = parent.time
                                         it.issuedBy = hashSetOf(name)
                                     }
-                                    parent.characters[routines[0].variables["character"]!!]!!.commands.add(command)
-                                    agenda.subjectParams["command"] = command.ID   //The command is added to the agenda.
+                                    parent.commands[command.name] = command
+                                    agenda.subjectParams["command"] =
+                                        command.name   //The command is added to the agenda.
                                     routines[0].variables["subject"] = "" //The subject is resolved.
                                     return NewAgenda(name, place).also {
                                         it.agenda = agenda

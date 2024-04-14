@@ -25,7 +25,7 @@ class Command(override val tgtCharacter: String, override val tgtPlace: String) 
 
     override fun execute()
     {
-        parent.characters[who]!!.commands.add(command!!)
+        //parent.characters[who]!!.commands.add(command!!)
         parent.characters[tgtCharacter]!!.frozen++
     }
 
