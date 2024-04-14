@@ -554,21 +554,11 @@ class NonPlayerAgent : GameStateElement()
                     character.currentMeeting!!
                 when (routines[0].variables["agenda"])
                 {
-                    "budgetResolve" ->
-                    {
-                        routines.removeAt(0)//Remove the current routine.
-                        return executeRoutine()
-                    }
-
-                    "budgetProposal" ->
-                    {
-                        routines.removeAt(0)//Remove the current routine.
-                        return executeRoutine()
-                    }
 
                     "proofOfWork" ->
                     {
                         //TODO: implement support proofOfWork within the deck of information
+                        //TODO: implement support proofOfWork about a previous request.
                         when (conf.involvedParty)
                         {
                             "infrastructure" ->
@@ -924,6 +914,55 @@ class NonPlayerAgent : GameStateElement()
                             }
 
 
+                        }
+                    }
+
+                    "divisionLeaderElection" ->
+                    {
+                        //If not speaker, wait if the mutuality to the speaker is high. Otherwise, if possible, interrupt the speaker.
+                        val party = parent.parties[conf.involvedParty]!!
+                        //If not speaker, wait if the mutuality to the speaker is high. Otherwise, if possible, interrupt the speaker.
+                        if (conf.currentSpeaker != name)
+                        {
+                            if (parent.getMutuality(
+                                    name,
+                                    conf.currentSpeaker
+                                ) > 50 || conf.currentAttention > Intercept.threshold
+                            )
+                                return Wait(name, place)
+                            else
+                                return Intercept(name, place)
+                        } else
+                        {
+                            val nominee = parent.characters.keys.filter { it != name }
+                                .maxByOrNull { parent.getMutuality(name, it) }!!
+                            //Nominate the person with the highest mutuality, if not nominated yet.
+                            if (conf.agendas.none { it.subjectType == "nomination" && it.subjectParams["character"] == nominee })
+                            {
+                                return NewAgenda(name, place).also {
+                                    it.agenda =
+                                        MeetingAgenda("nomination", subjectParams = hashMapOf("character" to nominee))
+                                }
+                            }
+                            //otherwise, support the nominee.
+                            else
+                            {
+                                //If we haven't tried this branch in the current routine
+                                if (routines[0].intVariables["try_support_nomination"] == 0)
+                                {
+                                    //If the agenda is already proposed, and we have a supporting information, support it.
+                                    routines[0].intVariables["try_support_nomination"] = 1
+                                    routines.add(
+                                        Routine(
+                                            "supportAgenda",
+                                            routines[0].priority + 10
+                                        ).also {
+                                            it.intVariables["agendaIndex"] =
+                                                conf.agendas.indexOfFirst { it.subjectType == "nomination" && it.subjectParams["character"] == nominee }
+                                        })//Add a routine, priority higher than work.
+                                    return executeRoutine()
+                                }
+                            }
                         }
                     }
 

@@ -466,14 +466,27 @@ class GameEngine(val gameState: GameState)
     {
         //Each division has a conference every day. The conference is attended by the head of the division and the members of the division.
         gameState.parties.values.filter { it.type == "division" }.forEach { party ->
-            val conference = Meeting(
-                gameState.time + 18 /*9 in the morning*/,
-                "divisionDailyConference",
-                place = party.home,
-                scheduledCharacters = party.members
-            ).also { it.involvedParty = party.name }
+            if (party.leader != "")
+            {
+                val conference = Meeting(
+                    gameState.time + 18 /*9 in the morning*/,
+                    "divisionDailyConference",
+                    place = party.home,
+                    scheduledCharacters = party.members
+                ).also { it.involvedParty = party.name }
 
-            gameState.scheduledConferences["conference-${party.home}-${party.name}-${gameState.time}"] = conference
+                gameState.scheduledConferences["conference-${party.home}-${party.name}-${gameState.time}"] = conference
+            } else
+            {
+                //If the division leader is not assigned, the conference for electing the division leader is scheduled.
+                val conference = Meeting(
+                    gameState.time + 18 /*9 in the morning*/,
+                    "divisionLeaderElection",
+                    place = party.home,
+                    scheduledCharacters = party.members
+                ).also { it.involvedParty = party.name }
+                gameState.scheduledConferences["conference-${party.home}-${party.name}-${gameState.time}"] = conference
+            }
         }
 
         //Cabinet has a conference every day. The conference is attended by the division leaders
@@ -499,11 +512,6 @@ class GameEngine(val gameState: GameState)
         gameState.scheduledConferences["conference-${gameState.parties["triumvirate"]!!.home}-triumvirate-${gameState.time}"] =
             conference2
 
-
-        //TODO: If some of the division leaders are not assigned, an election is scheduled to assign them.
-        gameState.parties.filter { it.value.type == "division" && it.value.leader == "" }.forEach { stringPartyEntry ->
-
-        }
     }
 
     //Workers are assigned to apparatuses. If there is not enough workers, some apparatuses are not worked.

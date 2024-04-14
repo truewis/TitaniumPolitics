@@ -36,6 +36,7 @@ class NewAgenda(override val tgtCharacter: String, override val tgtPlace: String
 
             "denounceParty" -> return true
             "request" -> return true
+            "nominate" -> return mt.type == "divisionLeaderElection" && agenda.subjectParams["character"]!! in parent.parties[mt.involvedParty]!!.members
             //You can choose the person to request, and one of the actions that the person can do. The command is issued immediately, and other people can opt in.
             //The below actions are executed by the leader. Party members can request the leader to do these actions.
             //"workingHoursChange" -> return mt.involvedParty != "" && mt.type == "divisionDailyConference" && parent.places[agenda.subjectParams["where"]]!!.responsibleParty == mt.involvedParty

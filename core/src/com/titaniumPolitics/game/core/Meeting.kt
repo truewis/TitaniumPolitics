@@ -24,6 +24,17 @@ class Meeting(
 
     fun endMeeting(gameState: GameState)
     {
+        //If this is an election, elect the leader from the mutuality matrix.
+        if (type == "divisionLeaderElection")
+        {
+
+            if (gameState.parties[involvedParty]!!.leader != "")
+                throw IllegalStateException("The leader of the party $involvedParty exists as ${gameState.parties[involvedParty]!!.leader}, but the election is still happening.")
+            val leader = gameState.parties[involvedParty]!!.members.maxByOrNull { s ->
+                gameState.parties[involvedParty]!!.members.sumOf { gameState.getMutuality(it, s) }
+            }!!//TODO: This logic has to be more thorough. display the actual election process.
+            gameState.parties[involvedParty]!!.leader = leader
+        }
         //Remove the meeting from the ongoingMeetings or ongoingConferences.
         if (gameState.ongoingMeetings.containsValue(this))
         {
