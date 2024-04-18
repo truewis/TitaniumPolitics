@@ -11,8 +11,7 @@ class Party : GameStateElement()
     var type = ""
     var home = "" //The place where the party is based.
     var members = hashSetOf<String>()
-    var isSalaryPaid = false
-    var commands = hashSetOf<String>()//The commands that the party can issue. Currently only used in CommandUI.
+    var isSalaryPaid = false //This variable is reset every quarter.
     var anonymousMembers = 0
     val size: Int
         get() = members.size + anonymousMembers

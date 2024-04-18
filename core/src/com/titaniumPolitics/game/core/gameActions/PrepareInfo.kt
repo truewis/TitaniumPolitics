@@ -6,6 +6,24 @@ import com.titaniumPolitics.game.core.Information
 class PrepareInfo(override val tgtCharacter: String, override val tgtPlace: String) : GameAction()
 {
     var newSetOfPrepInfoKeys = arrayListOf<String>()
+    fun recommendedKeys()
+    {
+        newSetOfPrepInfoKeys.clear()
+        //If you have executed a command, you know the result. Add the result to the prepared information.
+        parent.commands.values.filter { it.issuedBy.contains(tgtCharacter) }.forEach { command ->
+            //If you have the corresponding action information.
+            parent.informations.filter { it.value.knownTo.contains(tgtCharacter) && it.value.type == "action" && it.value.action == command.action.javaClass.simpleName }
+                .forEach {
+                    newSetOfPrepInfoKeys.add(it.key)
+                }
+        }
+
+        //If you have done wrongdoings, you know the result. Add the result to the prepared information.
+        parent.informations.filter { it.value.knownTo.contains(tgtCharacter) && it.value.type == "action" && it.value.action == "unofficialResourceTransfer" }
+            .forEach {
+                newSetOfPrepInfoKeys.add(it.key)
+            }
+    }
 
     override fun execute()
     {

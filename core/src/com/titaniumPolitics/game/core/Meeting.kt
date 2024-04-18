@@ -30,7 +30,11 @@ class Meeting(
 
             if (gameState.parties[involvedParty]!!.leader != "")
                 throw IllegalStateException("The leader of the party $involvedParty exists as ${gameState.parties[involvedParty]!!.leader}, but the election is still happening.")
-            val leader = gameState.parties[involvedParty]!!.members.maxByOrNull { s ->
+            val leader = gameState.parties[involvedParty]!!.members.filter { char ->
+                agendas.any {
+                    it.subjectType == "nomination" && it.subjectParams["character"] == char
+                }
+            }.maxByOrNull { s ->
                 gameState.parties[involvedParty]!!.members.sumOf { gameState.getMutuality(it, s) }
             }!!//TODO: This logic has to be more thorough. display the actual election process.
             gameState.parties[involvedParty]!!.leader = leader

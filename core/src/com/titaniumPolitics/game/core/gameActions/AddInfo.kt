@@ -29,7 +29,9 @@ class AddInfo(override val tgtCharacter: String, override val tgtPlace: String) 
     override fun isValid(): Boolean
     {
         val meeting = parent.characters[tgtCharacter]!!.currentMeeting!!
-        return meeting.agendas.size > agendaIndex
+        if (meeting.agendas.size <= agendaIndex)
+            return false
+        return true //We are assuming that the information is always valid. Whether the information is effective or not is a different matter.
     }
 
 }

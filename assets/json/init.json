@@ -2356,10 +2356,6 @@
         "ctrler",
         "observer"
       ],
-      "commands": [
-        "investigateAccidentScene",
-        "clearAccidentScene"
-      ],
       "home": "mainControlRoom"
     },
     "ctrler": {
@@ -2391,10 +2387,6 @@
         "inddy",
         "welly"
       ],
-      "commands": [
-        "investigateAccidentScene",
-        "clearAccidentScene"
-      ],
       "home": "mainControlRoom"
     },
     "interior": {
@@ -2405,10 +2397,6 @@
         "charlie",
         "selli1",
         "selli2"
-      ],
-      "commands": [
-        "investigateAccidentScene",
-        "clearAccidentScene"
       ],
       "home": "mainControlRoom"
     },
@@ -2471,11 +2459,6 @@
         "friend1",
         "friend2",
         "friend3"
-      ],
-      "commands": [
-        "investigateAccidentScene",
-        "clearAccidentScene",
-        "repair"
       ],
       "home": "hanger"
     }

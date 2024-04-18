@@ -28,6 +28,9 @@ class NonPlayerAgent : GameStateElement()
     val place
         get() = parent.places.values.find { it.characters.contains(name) }!!.name
 
+    val finishedRequests =
+        HashMap<String, Command>() //Command Name, Information Name which is the result of the command.
+
     fun chooseAction(): GameAction
     {
         //1. High priority routine change
@@ -159,7 +162,7 @@ class NonPlayerAgent : GameStateElement()
 
             "executeCommand" ->
             {
-                //The condition should be same with the executeCommand entry condition.
+                //The condition should be same with the executeCommand routine entry condition.
                 val executableCommands = parent.commands.values.filter {
                     it.executeTime in parent.time - 3..parent.time + 3 && it.issuedBy.sumOf {
                         parent.getMutuality(
@@ -184,7 +187,8 @@ class NonPlayerAgent : GameStateElement()
                         if (command.action.isValid())
                         {
                             println("$name: The command ${command.action} is valid. Executing...")
-                            parent.commands.remove(command.name)//Execute the command.
+                            finishedRequests[command.name] =
+                                parent.commands.remove(command.name)!!//Execute the command.
                             return command.action
                         }
                     }
@@ -587,6 +591,18 @@ class NonPlayerAgent : GameStateElement()
                         routines.removeAt(0)//Remove the current routine.
                         return executeRoutine()
                     }
+
+                    "nomination" ->
+                    {
+                        //If there is any supporting information, support it.
+                        if (character.preparedInfoKeys.any {
+                                return@any true
+                            })
+                        {//TODO: implement support nomination within the deck of information
+                        }
+                        routines.removeAt(0)//Remove the current routine.
+                        return executeRoutine()
+                    }
                 }
 
             }
@@ -937,7 +953,9 @@ class NonPlayerAgent : GameStateElement()
                             val nominee = parent.characters.keys.filter { it != name }
                                 .maxByOrNull { parent.getMutuality(name, it) }!!
                             //Nominate the person with the highest mutuality, if not nominated yet.
-                            if (conf.agendas.none { it.subjectType == "nomination" && it.subjectParams["character"] == nominee })
+                            //Note that nomination is only valid at the begeinning of the conference.
+
+                            if (conf.agendas.none { it.subjectType == "nomination" && it.subjectParams["character"] == nominee } && conf.time == parent.time)
                             {
                                 return NewAgenda(name, place).also {
                                     it.agenda =
@@ -961,6 +979,22 @@ class NonPlayerAgent : GameStateElement()
                                                 conf.agendas.indexOfFirst { it.subjectType == "nomination" && it.subjectParams["character"] == nominee }
                                         })//Add a routine, priority higher than work.
                                     return executeRoutine()
+                                }
+                                //After you support the nominee, attack the other nominees.
+                                val otherNominees =
+                                    parent.characters.keys.filter { it != name && it != nominee && conf.agendas.any { it.subjectType == "nomination" && it.subjectParams["character"] == nominee } }
+                                if (otherNominees.isNotEmpty())
+                                {
+                                    routines.add(
+                                        Routine(
+                                            "attackAgenda",
+                                            routines[0].priority + 10
+                                        ).also {
+                                            it.intVariables["agendaIndex"] =
+                                                conf.agendas.indexOfFirst { it.subjectType == "nomination" && it.subjectParams["character"] == nominee }
+                                        })//Add a routine, priority higher than work.
+                                    return executeRoutine()
+
                                 }
                             }
                         }
