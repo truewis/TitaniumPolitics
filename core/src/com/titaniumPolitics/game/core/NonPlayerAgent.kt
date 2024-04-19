@@ -1,7 +1,6 @@
 package com.titaniumPolitics.game.core
 
 import com.titaniumPolitics.game.core.gameActions.*
-import com.titaniumPolitics.game.core.Command
 import kotlinx.serialization.Serializable
 import kotlin.math.min
 
@@ -29,7 +28,7 @@ class NonPlayerAgent : GameStateElement()
         get() = parent.places.values.find { it.characters.contains(name) }!!.name
 
     val finishedRequests =
-        HashMap<String, Command>() //Command Name, Information Name which is the result of the command.
+        HashSet<String>() //Command Name, Information Name which is the result of the command.
 
     fun chooseAction(): GameAction
     {
@@ -187,8 +186,7 @@ class NonPlayerAgent : GameStateElement()
                         if (command.action.isValid())
                         {
                             println("$name: The command ${command.action} is valid. Executing...")
-                            finishedRequests[command.name] =
-                                parent.commands.remove(command.name)!!//Execute the command.
+                            finishedRequests.add(command.name)//Execute the command.
                             return command.action
                         }
                     }
@@ -609,6 +607,7 @@ class NonPlayerAgent : GameStateElement()
 
             "attendMeeting" ->
             {
+                val meeting = character.currentMeeting!!
                 //TODO: check the subject variable to request something.
                 when (routines[0].variables["subject"])
                 {
@@ -616,7 +615,7 @@ class NonPlayerAgent : GameStateElement()
                     {
                         //Fill in the agenda based on variables in the routine, resource and character.
                         val agenda = MeetingAgenda("request")
-                        val command = Command(
+                        val request = Request(
                             place,
                             UnofficialResourceTransfer(
                                 routines[0].variables["character"]!!,
@@ -632,12 +631,19 @@ class NonPlayerAgent : GameStateElement()
                             it.executeTime = parent.time
                             it.issuedBy = hashSetOf(name)
                         }
-                        parent.commands[command.name] = command
-                        agenda.subjectParams["command"] = command.name   //The command is added to the agenda.
+                        parent.commands[request.name] = request
+                        agenda.subjectParams["command"] = request.name   //The command is added to the agenda.
                         routines[0].variables["subject"] = "" //The subject is resolved.
                         return NewAgenda(name, place).also {
                             it.agenda = agenda
                         }
+                    }
+                }
+                //If there is a proof of work agenda about the request you have finished, support it.
+                if (meeting.agendas.any { it.subjectType == "proofOfWork" && finishedRequests.contains(it.subjectParams["request"]) })
+                {
+                    return NewAgenda(name, place).also {
+                        it.agenda = MeetingAgenda("proofOfWork")
                     }
                 }
                 //If the meeting is over, leave the routine.
@@ -819,7 +825,7 @@ class NonPlayerAgent : GameStateElement()
                                 {
                                     //Fill in the agenda based on variables in the routine, resource and character.
                                     val agenda = MeetingAgenda("request")
-                                    val command = Command(
+                                    val request = Request(
                                         place,
                                         Salary(
                                             routines[0].variables["character"]!!,
@@ -832,9 +838,9 @@ class NonPlayerAgent : GameStateElement()
                                         it.executeTime = parent.time
                                         it.issuedBy = hashSetOf(name)
                                     }
-                                    parent.commands[command.name] = command
+                                    parent.commands[request.name] = request
                                     agenda.subjectParams["command"] =
-                                        command.name   //The command is added to the agenda.
+                                        request.name   //The command is added to the agenda.
                                     routines[0].variables["subject"] = "" //The subject is resolved.
                                     return NewAgenda(name, place).also {
                                         it.agenda = agenda

@@ -1,6 +1,6 @@
 package com.titaniumPolitics.game.core.gameActions
 
-import com.titaniumPolitics.game.core.Command
+import com.titaniumPolitics.game.core.Request
 import com.titaniumPolitics.game.core.GameEngine
 import com.titaniumPolitics.game.core.Information
 import com.titaniumPolitics.game.core.TradeParams
@@ -16,8 +16,8 @@ class Trade(override val tgtCharacter: String, override val tgtPlace: String) : 
     var who = ""
     var item = hashMapOf<String, Int>()
     var item2 = hashMapOf<String, Int>()
-    var action: Command? = null
-    var action2: Command? = null
+    var action: Request? = null
+    var action2: Request? = null
     var info: Information? = null
     var info2: Information? = null
     var onFinished: (Boolean) -> Unit = {} //This is called when the trade is accepted or rejected.

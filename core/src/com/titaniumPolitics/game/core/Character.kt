@@ -79,7 +79,7 @@ class Character : GameStateElement()
 
     }
 
-    fun actionValue(action: Command): Double
+    fun actionValue(action: Request): Double
     {
         //TODO: the value of the action should be calculated based on the expected outcome.
         //TODO: Action to remove rivals is more valuable.

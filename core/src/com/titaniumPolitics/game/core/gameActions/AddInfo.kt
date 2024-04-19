@@ -23,6 +23,7 @@ class AddInfo(override val tgtCharacter: String, override val tgtPlace: String) 
             ) //TODO: gain more attention when presenting an information that is not known to the characters in the meeting.
         //The information is known to the characters in the meeting.
         parent.informations[infoKey]!!.knownTo.addAll(meeting.currentCharacters)
+        //TODO: affect mutuality based on the information.
         super.execute()
     }
 

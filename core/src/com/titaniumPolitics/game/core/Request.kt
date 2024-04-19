@@ -2,10 +2,9 @@ package com.titaniumPolitics.game.core
 
 import com.titaniumPolitics.game.core.gameActions.GameAction
 import kotlinx.serialization.Serializable
-import java.util.UUID
 
 @Serializable
-class Command(var place: String, var action: GameAction)
+class Request(var place: String, var action: GameAction)
 {
     var name = ""
     var executeTime = 0

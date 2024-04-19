@@ -1,6 +1,6 @@
 package com.titaniumPolitics.game.quests
 
-import com.titaniumPolitics.game.core.Command
+import com.titaniumPolitics.game.core.Request
 import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.core.gameActions.Resign
 import kotlinx.serialization.Serializable
@@ -15,7 +15,7 @@ class Quest1 : QuestObject("Be a minister", 240)
         super.injectParent(gameState)
         //The current infrastructure minister resigns and the mechanic picks a new one.
         val who = parent.parties["infrastructure"]!!.leader
-        val c = Command(
+        val c = Request(
             parent.parties["infrastructure"]!!.home,
             Resign(tgtCharacter = who, tgtPlace = parent.parties["infrastructure"]!!.home).also {
                 it.injectParent(gameState)

@@ -3,7 +3,7 @@ package com.titaniumPolitics.game.ui
 import com.badlogic.gdx.scenes.scene2d.InputEvent
 import com.badlogic.gdx.scenes.scene2d.ui.*
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
-import com.titaniumPolitics.game.core.Command
+import com.titaniumPolitics.game.core.Request
 import com.titaniumPolitics.game.core.GameEngine
 import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.core.gameActions.GameAction
@@ -55,7 +55,7 @@ class CommandUI(skin: Skin?, var gameState: GameState) : Table(skin)
                                     gameState.places.values.find { it.characters.contains(who) }!!.name
                                 ) as GameAction
                         GameEngine.acquireCallback(
-                            Command(
+                            Request(
                                 placeDropDown.selected,
                                 action
                             ).also { command ->
