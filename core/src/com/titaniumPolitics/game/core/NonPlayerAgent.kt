@@ -599,10 +599,12 @@ class NonPlayerAgent : GameStateElement()
                                         }
                             }
                         }.forEach { key ->
-                            return AddInfo(name, place).also {
+                            val action = AddInfo(name, place).also {
                                 it.infoKey = key
                                 it.agendaIndex = routines[0].intVariables["agendaIndex"]!!
                             }
+                            if (action.isValid())//In particular, if this information is not already presented in the meeting.
+                                return action
                         }
 
                         routines.removeAt(0)//Remove the current routine.
@@ -611,6 +613,19 @@ class NonPlayerAgent : GameStateElement()
 
                     "salary" ->
                     {
+                        //If my resources are low, support the salary increase.
+                        character.preparedInfoKeys.filter { key ->
+                            parent.informations[key]!!.type == "resource"
+                                    && parent.informations[key]!!.tgtCharacter == name && (parent.informations[key]!!.resources["ration"]!! < character.reliants.size * 7 || parent.informations[key]!!.resources["water"]!! < character.reliants.size * 7)
+
+                        }.forEach { key ->
+                            val action = AddInfo(name, place).also {
+                                it.infoKey = key
+                                it.agendaIndex = routines[0].intVariables["agendaIndex"]!!
+                            }
+                            if (action.isValid())//In particular, if this information is not already presented in the meeting.
+                                return action
+                        }
 
                         routines.removeAt(0)//Remove the current routine.
                         return executeRoutine()
@@ -621,12 +636,36 @@ class NonPlayerAgent : GameStateElement()
                         //if there is any supporting information, add it.
                         character.preparedInfoKeys.filter { key ->
                             parent.informations[key]!!.tgtCharacter == conf.agendas[routines[0].intVariables["agendaIndex"]!!].subjectParams["character"]
-                                    && (parent.informations[key]!!.type == "action")
+                                    && parent.characters[parent.informations[key]!!.tgtCharacter]!!.infoPreference(
+                                parent.informations[key]!!
+                            ) > 0
                         }.forEach { key ->
-                            return AddInfo(name, place).also {
+                            val action = AddInfo(name, place).also {
                                 it.infoKey = key
                                 it.agendaIndex = routines[0].intVariables["agendaIndex"]!!
                             }
+                            if (action.isValid())//In particular, if this information is not already presented in the meeting.
+                                return action
+                        }
+                        routines.removeAt(0)//Remove the current routine.
+                        return executeRoutine()
+                    }
+
+                    "denounce" ->
+                    {
+                        //if there is any supporting information, add it.
+                        character.preparedInfoKeys.filter { key ->
+                            parent.informations[key]!!.tgtCharacter == conf.agendas[routines[0].intVariables["agendaIndex"]!!].subjectParams["character"]
+                                    && parent.characters[parent.informations[key]!!.tgtCharacter]!!.infoPreference(
+                                parent.informations[key]!!
+                            ) < 0
+                        }.forEach { key ->
+                            val action = AddInfo(name, place).also {
+                                it.infoKey = key
+                                it.agendaIndex = routines[0].intVariables["agendaIndex"]!!
+                            }
+                            if (action.isValid())//In particular, if this information is not already presented in the meeting.
+                                return action
                         }
                         routines.removeAt(0)//Remove the current routine.
                         return executeRoutine()
@@ -694,8 +733,8 @@ class NonPlayerAgent : GameStateElement()
                     routines.removeAt(0)//Remove the current routine.
                     return executeRoutine()
                 }
-                //If an hour has passed since the meeting started, leave the meeting. TODO: what if the meeting has started late?
-                if (routines[0].intVariables["time"]!! + 1 <= parent.time)
+                //If two hours has passed since the meeting started, leave the meeting. TODO: what if the meeting has started late?
+                if (routines[0].intVariables["time"]!! + 4 <= parent.time)
                 {
                     routines.removeAt(0)//Remove the current routine.
                     return executeRoutine()

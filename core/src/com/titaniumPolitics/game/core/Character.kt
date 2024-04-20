@@ -99,18 +99,58 @@ class Character : GameStateElement()
         return 1.0
     }
 
-    //The preference of this information spreading. -1 is hate, 0 is neutral, 1 is like.
+    //The character's preference of this information spreading. -1 is hate, 0 is neutral, 1 is like.
+    //TODO: preference depend on the trait of the character. When other characters use this function, the trait must be not reflected since they don't know the trait.
     fun infoPreference(info: Information): Double
     {
-        //The character don't like information about its wrongdoings.
-        //Stole resource
-        if (info.tgtCharacter == name && info.type == "action" && info.action == "unofficialResourceTransfer")
-            return -1.0
-        //Stayed in home during work hours
-        //Did their job well
-        //when(partf)
-        if (info.tgtCharacter == name && info.type == "action" && info.action == "unofficialResourceTransfer")
-            return 1.0
+        //Is the information about the character itself?
+        if (info.tgtCharacter == name)
+        {
+            //The character don't like information about its wrongdoings.
+            //Stole resource
+            if (info.type == "action" && info.action == "UnofficialResourceTransfer")
+                return -1.0
+            //Stayed in home during work hours
+            //Did their job well
+            if (info.type == "action" && info.action == "NewAgenda")
+                return 0.5
+            if (info.type == "action" && info.action == "AddInfo")
+                return 0.5
+            if (info.type == "action" && info.action == "OfficialResourceTransfer")
+                return 0.5
+            if (info.type == "action" && info.action == "InvestigateAccidentScene")
+                return 1.0
+            if (info.type == "action" && info.action == "ClearAccidentScene")
+                return 1.0
+
+            //Depends on their party
+            parent.parties.filter { it.value.members.contains(name) }.forEach { party ->
+                when (party.key)
+                {
+                    "infrastructure" ->
+                    {
+                        if (info.type == "action" && info.action == "Repair")
+                            return 1.0
+                    }
+                }
+            }
+
+        }
+        //If the information is about some other people, the character's preference depends on their relationship with the target.
+        //The target character's preference is reflected.
+        else
+        {
+            if (parent.getMutuality(
+                    name,
+                    info.tgtCharacter
+                ) > (ReadOnlyJsons.getConst("mutualityMin") + ReadOnlyJsons.getConst("mutualityMax")) / 2
+            )
+                return parent.characters[info.tgtCharacter]!!.infoPreference(info)
+            else
+                return -parent.characters[info.tgtCharacter]!!.infoPreference(info)
+
+        }
+
 
         //Otherwise, the character is neutral to the information.
         return 0.0

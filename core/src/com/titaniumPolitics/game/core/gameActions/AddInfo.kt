@@ -32,6 +32,9 @@ class AddInfo(override val tgtCharacter: String, override val tgtPlace: String) 
         val meeting = parent.characters[tgtCharacter]!!.currentMeeting!!
         if (meeting.agendas.size <= agendaIndex)
             return false
+        //If the information is already presented in the meeting, it cannot be presented again.
+        if (meeting.agendas.any { it.informationKeys.contains(infoKey) })
+            return false
         return true //We are assuming that the information is always valid. Whether the information is effective or not is a different matter.
     }
 
