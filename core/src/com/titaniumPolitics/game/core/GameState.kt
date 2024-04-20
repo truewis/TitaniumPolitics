@@ -62,7 +62,7 @@ class GameState
     val player = characters[playerName]!!
     var log = Log()
     var parties = hashMapOf<String, Party>()
-    var commands = hashMapOf<String, Request>()
+    var requests = hashMapOf<String, Request>()
 
     @Serializable
     private var _mutuality = hashMapOf<String, HashMap<String, Double>>()

@@ -7,6 +7,7 @@
   "thirstThreshold": 70,
   "mutualityMin": 0,
   "mutualityMax": 100,
+  "RequestRejectAverageMutuality": 30,
   "AddInfoDuration": 1,
   "ClearAccidentSceneDuration": 3,
   "EatDuration": 1,

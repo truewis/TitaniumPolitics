@@ -139,7 +139,7 @@ class GameEngine(val gameState: GameState)
             tgtCharacter = char.name,
             action = action.javaClass.simpleName
         ).also {
-            it.knownTo.add(char.name)
+            it.knownTo.addAll(char.place.characters)//All characters from the same place know about the action.
             gameState.informations[it.generateName()] = it
         }
         action.execute()
@@ -1176,9 +1176,10 @@ class GameEngine(val gameState: GameState)
                 if (character == gameState.parties[conf.involvedParty]!!.leader)//Only the leader can do below actions.
                 {
                     actions.add("Resign") //Only leaders can resign right now. Resign is one of the few actions that can be done without an agenda.
+                    if (subject == "divisionDailyConference" && !gameState.parties[conf.involvedParty]!!.isSalaryPaid)
+                        actions.add("Salary") //Salary is distributed in a divisionDailyConference.
                 }
                 //When not the leader, you can only do below actions.
-                //Salary is implemented through an agenda.
                 //There is no command anymore.
 //                if (gameState.parties[conf.involvedParty]?.leader == character)
 //                {

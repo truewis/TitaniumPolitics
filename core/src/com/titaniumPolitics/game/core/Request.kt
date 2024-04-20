@@ -20,7 +20,7 @@ class Request(var place: String, var action: GameAction)
 
         }
         val name =
-            "$action-$place-$executeTime-${
+            "${action.javaClass.simpleName}-$place-$executeTime-${
                 Math.random().toString().substring(8)
             }"
         this.name = name

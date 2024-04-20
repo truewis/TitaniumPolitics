@@ -99,6 +99,24 @@ class Character : GameStateElement()
         return 1.0
     }
 
+    //The preference of this information spreading. -1 is hate, 0 is neutral, 1 is like.
+    fun infoPreference(info: Information): Double
+    {
+        //The character don't like information about its wrongdoings.
+        //Stole resource
+        if (info.tgtCharacter == name && info.type == "action" && info.action == "unofficialResourceTransfer")
+            return -1.0
+        //Stayed in home during work hours
+        //Did their job well
+        //when(partf)
+        if (info.tgtCharacter == name && info.type == "action" && info.action == "unofficialResourceTransfer")
+            return 1.0
+
+        //Otherwise, the character is neutral to the information.
+        return 0.0
+    }
+
+    @Deprecated("This function has lost its purpose with the removal of trade.")
     fun infoValue(info: Information): Double
     {
         //Known information is less valuable.

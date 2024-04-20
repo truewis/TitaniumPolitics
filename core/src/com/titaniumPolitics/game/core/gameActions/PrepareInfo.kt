@@ -1,8 +1,5 @@
 package com.titaniumPolitics.game.core.gameActions
 
-import com.titaniumPolitics.game.core.GameEngine
-import com.titaniumPolitics.game.core.Information
-
 class PrepareInfo(override val tgtCharacter: String, override val tgtPlace: String) : GameAction()
 {
     var newSetOfPrepInfoKeys = arrayListOf<String>()
@@ -10,7 +7,7 @@ class PrepareInfo(override val tgtCharacter: String, override val tgtPlace: Stri
     {
         newSetOfPrepInfoKeys.clear()
         //If you have executed a command, you know the result. Add the result to the prepared information.
-        parent.commands.values.filter { it.issuedBy.contains(tgtCharacter) }.forEach { command ->
+        parent.requests.values.filter { it.issuedBy.contains(tgtCharacter) }.forEach { command ->
             //If you have the corresponding action information.
             parent.informations.filter { it.value.knownTo.contains(tgtCharacter) && it.value.type == "action" && it.value.action == command.action.javaClass.simpleName }
                 .forEach {

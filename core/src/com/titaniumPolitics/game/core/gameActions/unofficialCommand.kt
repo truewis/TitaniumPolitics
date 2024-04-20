@@ -26,7 +26,7 @@ class unofficialCommand(override val tgtCharacter: String, override val tgtPlace
     override fun execute()
     {
 
-        parent.commands[request!!.name] = request!!
+        parent.requests[request!!.name] = request!!
         parent.characters[tgtCharacter]!!.frozen++
     }
 

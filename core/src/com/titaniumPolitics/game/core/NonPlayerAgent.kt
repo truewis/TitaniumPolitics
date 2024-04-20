@@ -102,22 +102,22 @@ class NonPlayerAgent : GameStateElement()
         if (parent.ongoingConferences.any { it.value.currentCharacters.contains(name) } && routines.none { it.name == "attendConference" })
             throw IllegalStateException("$name is in ${character.currentMeeting!!}, which is a conference, but not in attendConference Routine.")
 
-        //If there is a command that is within the set time window, issued party is trusted enough, and seems to be executable (AvailableActions), start execution routine.
+        //If there is a command that is within the set time window, issued party is trusted enough, and seems to be executable at the exact place the character is in right now,(AvailableActions), start execution routine.
         //Note that the command may not be valid even if it in AvailableActions list. For example, if the character is already at the place, move command is not valid.
         //We should not enter executeCommand routine if it is already in the routine list.
         if (routines.none { it.name == "executeCommand" })
         {
-            if (parent.commands.values.any {
+            if (parent.requests.values.any {
                     it.executeTime in parent.time - 3..parent.time + 3 && it.issuedBy.sumOf {
                         parent.getMutuality(
                             name,
                             it
                         )
-                    } / it.issuedBy.size > ReadOnlyJsons.getConst("CommandRejectAverageMutuality") && GameEngine.availableActions(
+                    } / it.issuedBy.size > ReadOnlyJsons.getConst("RequestRejectAverageMutuality") && GameEngine.availableActions(
                         parent,
                         it.place,
                         name
-                    ).contains(it.action.javaClass.simpleName)
+                    ).contains(it.action.javaClass.simpleName) && it.place == place
                 })
             {
                 routines.add(
@@ -162,41 +162,41 @@ class NonPlayerAgent : GameStateElement()
             "executeCommand" ->
             {
                 //The condition should be same with the executeCommand routine entry condition.
-                val executableCommands = parent.commands.values.filter {
+                val executableRequests = parent.requests.values.filter {
                     it.executeTime in parent.time - 3..parent.time + 3 && it.issuedBy.sumOf {
                         parent.getMutuality(
                             name,
                             it
                         )
-                    } / it.issuedBy.size > ReadOnlyJsons.getConst("CommandRejectAverageMutuality") && GameEngine.availableActions(
+                    } / it.issuedBy.size > ReadOnlyJsons.getConst("RequestRejectAverageMutuality") && GameEngine.availableActions(
                         parent,
                         it.place,
                         name
                     ).contains(it.action.javaClass.simpleName)
                 }
-                if (executableCommands.isEmpty())
+                if (executableRequests.isEmpty())
                 {
                     routines.removeAt(0)//Remove the current routine.
                     return executeRoutine()
                 }
-                println("$name is executing the command from ${executableCommands}.")
-                executableCommands.forEach { command ->
-                    if (place == command.place)
+                println("$name is executing the command from ${executableRequests}.")
+                executableRequests.forEach { request ->
+                    if (place == request.place)
                     {
-                        if (command.action.isValid())
+                        if (request.action.isValid())
                         {
-                            println("$name: The command ${command.action} is valid. Executing...")
-                            finishedRequests.add(command.name)//Execute the command.
-                            return command.action
+                            println("$name: The request ${request.action} is valid. Executing...")
+                            finishedRequests.add(request.name)//Execute the request.
+                            return request.action
                         }
                     }
                     //Check other executable commands.
                 }
-                executableCommands.forEach { command ->
-                    if (place != command.place)
+                executableRequests.forEach { request ->
+                    if (place != request.place)
                     {
                         routines.add(Routine("move", routines[0].priority + 10).also {
-                            it.variables["movePlace"] = command.place
+                            it.variables["movePlace"] = request.place
                         })//Add a move routine with higher priority.
                         return executeRoutine()
                     }
@@ -519,6 +519,34 @@ class NonPlayerAgent : GameStateElement()
                         }
                     }
 
+                //Execute a command if there is any. Here, we can move to the place actively if the command is not in the current place.
+                //If there is a command that is within the set time window, issued party is trusted enough, and seems to be executable at some place(AvailableActions), start execution routine.
+                //Note that the command may not be valid even if it in AvailableActions list. For example, if the character is already at the place, move command is not valid.
+                //We should not enter executeCommand routine if it is already in the routine list.
+                if (routines.none { it.name == "executeCommand" })
+                {
+                    if (parent.requests.values.any {
+                            it.executeTime in parent.time - 3..parent.time + 3 && it.issuedBy.sumOf {
+                                parent.getMutuality(
+                                    name,
+                                    it
+                                )
+                            } / it.issuedBy.size > ReadOnlyJsons.getConst("RequestRejectAverageMutuality") && GameEngine.availableActions(
+                                parent,
+                                it.place,
+                                name
+                            ).contains(it.action.javaClass.simpleName)
+                        })
+                    {
+                        routines.add(
+                            Routine(
+                                "executeCommand",
+                                routines[0].priority + 10
+                            )
+                        )//Add the routine with higher priority.
+                    }
+                }
+
 
                 //If there is nothing above to do, move to a place that is the home of one of the parties of the character.
                 //If already at home, wait.
@@ -559,26 +587,24 @@ class NonPlayerAgent : GameStateElement()
 
                     "proofOfWork" ->
                     {
-                        //TODO: implement support proofOfWork within the deck of information
-                        //TODO: implement support proofOfWork about a previous request.
-                        when (conf.involvedParty)
-                        {
-                            "infrastructure" ->
-                            {
-                                //Repair jobs prove the work.
-                                val info = parent.informations.filter {
-                                    it.value.type == "action" && it.value.action == "repair" && parent.places.filterValues { it.responsibleParty == conf.involvedParty }.keys.contains(
-                                        it.value.tgtPlace
-                                    )
-                                }
-                                if (info.isNotEmpty())
-                                {
-                                    return AddInfo(name, place).also {
-                                        it.infoKey = info.keys.first()
-                                    }
-                                }
+                        //if there is any supporting information, add it.
+                        character.preparedInfoKeys.filter { key ->
+                            parent.informations[key]!!.type == "action"
+                                    && finishedRequests.any {
+                                parent.requests[it]!!.action.javaClass.simpleName == parent.informations[key]!!.action &&
+                                        parent.requests[it]!!.issuedBy.any {
+                                            character.currentMeeting!!.currentCharacters.contains(
+                                                it
+                                            )
+                                        }
+                            }
+                        }.forEach { key ->
+                            return AddInfo(name, place).also {
+                                it.infoKey = key
+                                it.agendaIndex = routines[0].intVariables["agendaIndex"]!!
                             }
                         }
+
                         routines.removeAt(0)//Remove the current routine.
                         return executeRoutine()
                     }
@@ -590,13 +616,17 @@ class NonPlayerAgent : GameStateElement()
                         return executeRoutine()
                     }
 
-                    "nomination" ->
+                    "nomination", "praise" ->
                     {
-                        //If there is any supporting information, support it.
-                        if (character.preparedInfoKeys.any {
-                                return@any true
-                            })
-                        {//TODO: implement support nomination within the deck of information
+                        //if there is any supporting information, add it.
+                        character.preparedInfoKeys.filter { key ->
+                            parent.informations[key]!!.tgtCharacter == conf.agendas[routines[0].intVariables["agendaIndex"]!!].subjectParams["character"]
+                                    && (parent.informations[key]!!.type == "action")
+                        }.forEach { key ->
+                            return AddInfo(name, place).also {
+                                it.infoKey = key
+                                it.agendaIndex = routines[0].intVariables["agendaIndex"]!!
+                            }
                         }
                         routines.removeAt(0)//Remove the current routine.
                         return executeRoutine()
@@ -631,7 +661,7 @@ class NonPlayerAgent : GameStateElement()
                             it.executeTime = parent.time
                             it.issuedBy = hashSetOf(name)
                         }
-                        parent.commands[request.name] = request
+                        parent.requests[request.name] = request
                         agenda.subjectParams["command"] = request.name   //The command is added to the agenda.
                         routines[0].variables["subject"] = "" //The subject is resolved.
                         return NewAgenda(name, place).also {
@@ -642,8 +672,20 @@ class NonPlayerAgent : GameStateElement()
                 //If there is a proof of work agenda about the request you have finished, support it.
                 if (meeting.agendas.any { it.subjectType == "proofOfWork" && finishedRequests.contains(it.subjectParams["request"]) })
                 {
-                    return NewAgenda(name, place).also {
-                        it.agenda = MeetingAgenda("proofOfWork")
+                    //If we haven't tried this branch in the current routine
+                    if (routines[0].intVariables["try_support_proofOfWork"] == 0)
+                    {
+                        //If the agenda is already proposed, and we have a supporting information, support it.
+                        routines[0].intVariables["try_support_proofOfWork"] = 1
+                        routines.add(
+                            Routine(
+                                "supportAgenda",
+                                routines[0].priority + 10
+                            ).also {
+                                it.intVariables["agendaIndex"] =
+                                    meeting.agendas.indexOfFirst { it.subjectType == "proofOfWork" }
+                            })//Add a routine, priority higher than work.
+                        return executeRoutine()
                     }
                 }
                 //If the meeting is over, leave the routine.
@@ -838,7 +880,7 @@ class NonPlayerAgent : GameStateElement()
                                         it.executeTime = parent.time
                                         it.issuedBy = hashSetOf(name)
                                     }
-                                    parent.commands[request.name] = request
+                                    parent.requests[request.name] = request
                                     agenda.subjectParams["command"] =
                                         request.name   //The command is added to the agenda.
                                     routines[0].variables["subject"] = "" //The subject is resolved.
@@ -847,7 +889,21 @@ class NonPlayerAgent : GameStateElement()
                                     }
                                 } else //If the agenda already exists, support it.
                                 {
-
+                                    //If we haven't tried this branch in the current routine
+                                    if (routines[0].intVariables["try_support_salary"] == 0)
+                                    {
+                                        //If the agenda is already proposed, and we have a supporting information, support it.
+                                        routines[0].intVariables["try_support_salary"] = 1
+                                        routines.add(
+                                            Routine(
+                                                "supportAgenda",
+                                                routines[0].priority + 10
+                                            ).also {
+                                                it.intVariables["agendaIndex"] =
+                                                    conf.agendas.indexOfFirst { it.subjectType == "salary" }
+                                            })//Add a routine, priority higher than work.
+                                        return executeRoutine()
+                                    }
 
                                 }
                             }
@@ -959,7 +1015,7 @@ class NonPlayerAgent : GameStateElement()
                             val nominee = parent.characters.keys.filter { it != name }
                                 .maxByOrNull { parent.getMutuality(name, it) }!!
                             //Nominate the person with the highest mutuality, if not nominated yet.
-                            //Note that nomination is only valid at the begeinning of the conference.
+                            //Note that nomination is only valid at the beginning of the conference.
 
                             if (conf.agendas.none { it.subjectType == "nomination" && it.subjectParams["character"] == nominee } && conf.time == parent.time)
                             {
@@ -1072,7 +1128,6 @@ class NonPlayerAgent : GameStateElement()
                 } else
                 {
                     //If the character is in the same place, start a conversation first
-
                     if (parent.ongoingMeetings.none {
                             it.value.currentCharacters.containsAll(
                                 listOf(
@@ -1144,6 +1199,7 @@ class NonPlayerAgent : GameStateElement()
             routines.add(Routine("rest", 0))
     }
 
+    @Deprecated("This function is not used anymore because we don't have trade action anymore.")
     fun decideTrade(
         who: String,
         value: Double /*value of the items I am giving away*/,

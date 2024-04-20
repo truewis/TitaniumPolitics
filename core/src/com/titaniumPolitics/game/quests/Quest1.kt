@@ -20,7 +20,7 @@ class Quest1 : QuestObject("Be a minister", 240)
             Resign(tgtCharacter = who, tgtPlace = parent.parties["infrastructure"]!!.home).also {
                 it.injectParent(gameState)
             }).also { it.executeTime = 48 + 18; it.issuedBy = hashSetOf("ctrler"); it.generateName() }
-        parent.commands[c.name] = c
+        parent.requests[c.name] = c
 
 
     }
