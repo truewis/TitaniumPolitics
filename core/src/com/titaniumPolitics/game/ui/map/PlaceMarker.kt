@@ -13,7 +13,7 @@ open class PlaceMarker(var gameState: GameState, var owner: MapUI, place: String
         style = defaultSkin.get("diamond", ButtonStyle::class.java)
         val start: Pair<Float, Float> = MapUI.convertToScreenCoords(
             gameState.places[place]!!.coordinates.x.toFloat(),
-            gameState.places[place]!!.coordinates.y.toFloat()
+            gameState.places[place]!!.coordinates.z.toFloat()
         )
         //Set marker to different color if player is here.
         if (gameState.player.place.name == place)

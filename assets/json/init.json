@@ -62,7 +62,7 @@
         "ration": 10
       },
       "health": 80,
-      "livingBy": "hanger"
+      "livingBy": "constructionYardNorth"
     },
     "charlie": {
       "trait": [
@@ -200,7 +200,7 @@
         "ration": 10
       },
       "health": 80,
-      "livingBy": "hanger"
+      "livingBy": "constructionYardNorth"
     },
     "friend1": {
       "trait": [
@@ -213,7 +213,7 @@
         "ration": 10
       },
       "health": 80,
-      "livingBy": "hanger"
+      "livingBy": "constructionYardNorth"
     },
     "friend2": {
       "trait": [
@@ -226,7 +226,7 @@
         "ration": 10
       },
       "health": 80,
-      "livingBy": "hanger"
+      "livingBy": "constructionYardNorth"
     },
     "friend3": {
       "trait": [
@@ -239,7 +239,7 @@
         "ration": 10
       },
       "health": 80,
-      "livingBy": "hanger"
+      "livingBy": "constructionYardNorth"
     },
     "mini1": {
       "trait": [
@@ -251,7 +251,7 @@
         "ration": 10
       },
       "health": 80,
-      "livingBy": "redMine"
+      "livingBy": "excavationShaftA"
     },
     "mini2": {
       "trait": [
@@ -263,7 +263,7 @@
         "ration": 10
       },
       "health": 80,
-      "livingBy": "blackMine"
+      "livingBy": "excavationShaftB"
     },
     "doci1": {
       "trait": [
@@ -275,7 +275,7 @@
         "ration": 10
       },
       "health": 80,
-      "livingBy": "hospitalWest"
+      "livingBy": "welfareStationWest"
     },
     "doci2": {
       "trait": [
@@ -287,7 +287,7 @@
         "ration": 10
       },
       "health": 80,
-      "livingBy": "hospitalEast"
+      "livingBy": "welfareStationEast"
     },
     "selli1": {
       "trait": [
@@ -358,11 +358,10 @@
         "ration": 100
       },
       "connectedPlaces": [
-        "hanger",
+        "reservoirEast",
         "squareSouth",
-        "market",
-        "squareNorth",
-        "hospitalWest"
+        "securityCheckCenter",
+        "rescueStationWest"
       ],
       "plannedWorker": 32,
       "apparatuses": [
@@ -419,11 +418,11 @@
       "workHoursStart": 0,
       "workHoursEnd": 24
     },
-    "hospitalWest": {
+    "welfareStationWest": {
       "coordinates": {
-        "x": -5,
+        "x": -1,
         "y": 0,
-        "z": 0
+        "z": 4
       },
       "resources": {
         "oxygen": 50,
@@ -431,9 +430,7 @@
         "ration": 50
       },
       "connectedPlaces": [
-        "mainControlRoom",
-        "redMine",
-        "miningSchool"
+        "squareNorth"
       ],
       "plannedWorker": 40,
       "apparatuses": [
@@ -499,11 +496,11 @@
       "workHoursStart": 0,
       "workHoursEnd": 24
     },
-    "hospitalEast": {
+    "welfareStationEast": {
       "coordinates": {
-        "x": 10,
-        "y": -5,
-        "z": 0
+        "x": 5,
+        "y": 0,
+        "z": -3
       },
       "resources": {
         "oxygen": 50,
@@ -511,8 +508,8 @@
         "ration": 50
       },
       "connectedPlaces": [
-        "squareNorth",
-        "blackMine"
+        "squareSouth",
+        "rescueStationSouth"
       ],
       "plannedWorker": 40,
       "apparatuses": [
@@ -578,11 +575,11 @@
       "workHoursStart": 0,
       "workHoursEnd": 24
     },
-    "redMine": {
+    "excavationShaftA": {
       "coordinates": {
         "x": -10,
         "y": 0,
-        "z": 0
+        "z": -10
       },
       "resources": {
         "oxygen": 50,
@@ -592,9 +589,10 @@
         "component": 50
       },
       "connectedPlaces": [
-        "hospitalWest",
-        "observatory",
-        "rescueStationNorth"
+        "reservoirWest",
+        "securityCheckWest",
+        "rescueStationWest",
+        "theEngine"
       ],
       "plannedWorker": 480,
       "apparatuses": [
@@ -688,11 +686,11 @@
       "workHoursStart": 9,
       "workHoursEnd": 17
     },
-    "blackMine": {
+    "excavationShaftB": {
       "coordinates": {
         "x": 10,
         "y": 0,
-        "z": 0
+        "z": -10
       },
       "resources": {
         "oxygen": 50,
@@ -702,8 +700,8 @@
         "component": 50
       },
       "connectedPlaces": [
-        "hospitalEast",
-        "hanger",
+        "miningSchool",
+        "constructionYardSouth",
         "rescueStationSouth"
       ],
       "plannedWorker": 480,
@@ -800,20 +798,127 @@
       "workHoursStart": 9,
       "workHoursEnd": 17
     },
+    "asteroidMine": {
+      "coordinates": {
+        "x": 12,
+        "y": 0,
+        "z": 10
+      },
+      "resources": {
+        "oxygen": 50,
+        "water": 15000,
+        "ration": 50,
+        "metal": 100,
+        "component": 50
+      },
+      "connectedPlaces": [
+        "rescueStationNorth"
+      ],
+      "plannedWorker": 480,
+      "apparatuses": [
+        {
+          "name": "metalShaft",
+          "durability": 95,
+          "baseDanger": 8e-4,
+          "idealWorker": 160,
+          "currentWorker": 0,
+          "idealProduction": {
+            "lightMetal": 100,
+            "heavyMetal": 20,
+            "rareMetal": 1
+          },
+          "idealConsumption": {
+            "energy": 2
+          }
+        },
+        {
+          "name": "liquidShaft",
+          "durability": 95,
+          "baseDanger": 10e-4,
+          "idealWorker": 160,
+          "currentWorker": 0,
+          "idealProduction": {
+            "organics": 100
+          },
+          "idealConsumption": {
+            "energy": 2
+          }
+        },
+        {
+          "name": "glassShaft",
+          "durability": 95,
+          "baseDanger": 10e-4,
+          "idealWorker": 160,
+          "currentWorker": 0,
+          "idealProduction": {
+            "glass": 80
+          },
+          "idealConsumption": {
+            "energy": 2
+          }
+        },
+        {
+          "name": "oxygenStorage",
+          "durability": 95,
+          "baseDanger": 6e-4,
+          "idealWorker": 5,
+          "currentWorker": 0
+        },
+        {
+          "name": "waterStorage",
+          "durability": 95,
+          "baseDanger": 3e-4,
+          "idealWorker": 5,
+          "currentWorker": 0
+        },
+        {
+          "name": "metalStorage",
+          "durability": 95,
+          "baseDanger": 2e-4,
+          "idealWorker": 5,
+          "currentWorker": 0
+        },
+        {
+          "name": "energyStorage",
+          "durability": 95,
+          "baseDanger": 2e-4,
+          "idealWorker": 10,
+          "currentWorker": 0
+        },
+        {
+          "name": "energyStorage",
+          "durability": 95,
+          "baseDanger": 2e-4,
+          "idealWorker": 10,
+          "currentWorker": 0
+        },
+        {
+          "name": "energyStorage",
+          "durability": 95,
+          "baseDanger": 2e-4,
+          "idealWorker": 10,
+          "currentWorker": 0
+        }
+      ],
+      "characters": [
+      ],
+      "responsibleParty": "mining",
+      "workHoursStart": 9,
+      "workHoursEnd": 17
+    },
     "observatory": {
       "coordinates": {
-        "x": -10,
-        "y": 15,
-        "z": 0
+        "x": -12,
+        "y": 0,
+        "z": 15
       },
       "resources": {
         "oxygen": 50,
         "water": 15000
       },
       "connectedPlaces": [
-        "redMine",
-        "miningSchool",
-        "auxHanger"
+        "recycleFacilityWest",
+        "spacePort"
       ],
       "plannedWorker": 0,
       "apparatuses": [
@@ -842,11 +947,11 @@
       "workHoursStart": 0,
       "workHoursEnd": 24
     },
-    "auxHanger": {
+    "constructionYardSouth": {
       "coordinates": {
-        "x": -5,
-        "y": 10,
-        "z": 0
+        "x": 12,
+        "y": 0,
+        "z": -8
       },
       "resources": {
         "lightMetal": 50,
@@ -854,10 +959,8 @@
         "water": 15000
       },
       "connectedPlaces": [
-        "observatory",
-        "farm",
-        "tankArray",
-        "electrolysisStationSouth"
+        "techSchool",
+        "excavationShaftB"
       ],
       "plannedWorker": 0,
       "apparatuses": [
@@ -911,16 +1014,16 @@
     },
     "cemetery": {
       "coordinates": {
-        "x": 5,
-        "y": -15,
-        "z": 0
+        "x": 15,
+        "y": 0,
+        "z": 4
       },
       "resources": {
         "component": 10,
         "water": 0
       },
       "connectedPlaces": [
-        "squareNorth"
+        "securityCheckEast"
       ],
       "plannedWorker": 0,
       "apparatuses": [
@@ -938,11 +1041,11 @@
       "workHoursStart": 9,
       "workHoursEnd": 17
     },
-    "rocketry": {
+    "spacePort": {
       "coordinates": {
-        "x": 15,
-        "y": 15,
-        "z": 0
+        "x": -10,
+        "y": 0,
+        "z": 15
       },
       "resources": {
         "lightMetal": 50,
@@ -950,7 +1053,7 @@
         "water": 15000
       },
       "connectedPlaces": [
-        "squareNorth"
+        "observatory"
       ],
       "plannedWorker": 0,
       "apparatuses": [
@@ -958,40 +1061,40 @@
           "name": "launchPad",
           "durability": 95,
           "baseDanger": 6e-4,
-          "idealWorker": 5,
+          "idealWorker": 0,
           "currentWorker": 0
         },
         {
           "name": "oxygenStorage",
-          "durability": 95,
+          "durability": 0,
           "baseDanger": 6e-4,
           "idealWorker": 5,
           "currentWorker": 0
         },
         {
           "name": "waterStorage",
-          "durability": 95,
+          "durability": 0,
           "baseDanger": 3e-4,
           "idealWorker": 5,
           "currentWorker": 0
         },
         {
           "name": "componentStorage",
-          "durability": 95,
+          "durability": 0,
           "baseDanger": 2e-4,
           "idealWorker": 5,
           "currentWorker": 0
         },
         {
           "name": "metalStorage",
-          "durability": 95,
+          "durability": 0,
           "baseDanger": 2e-4,
           "idealWorker": 5,
           "currentWorker": 0
         },
         {
           "name": "energyStorage",
-          "durability": 95,
+          "durability": 0,
           "baseDanger": 2e-4,
           "idealWorker": 10,
           "currentWorker": 0
@@ -1005,9 +1108,9 @@
     },
     "tankArray": {
       "coordinates": {
-        "x": -2,
-        "y": 12,
-        "z": 0
+        "x": 14,
+        "y": 0,
+        "z": 10
       },
       "resources": {
         "lightMetal": 50,
@@ -1015,7 +1118,7 @@
         "water": 0
       },
       "connectedPlaces": [
-        "auxHanger"
+        "recycleFacilityEast"
       ],
       "plannedWorker": 5,
       "apparatuses": [
@@ -1082,7 +1185,7 @@
       "workHoursStart": 0,
       "workHoursEnd": 24
     },
-    "recycleCenterNorth": {
+    "recycleFacilityWest": {
       "coordinates": {
         "x": -10,
         "y": -10,
@@ -1094,7 +1197,9 @@
         "water": 0
       },
       "connectedPlaces": [
-        "rescueStationNorth"
+        "observatory",
+        "electrolysisStationNorth",
+        "squareNorth"
       ],
       "plannedWorker": 5,
       "apparatuses": [
@@ -1172,11 +1277,11 @@
       "workHoursStart": 0,
       "workHoursEnd": 24
     },
-    "recycleCenterSouth": {
+    "recycleFacilityEast": {
       "coordinates": {
         "x": 13,
-        "y": 13,
-        "z": 0
+        "y": 0,
+        "z": 13
       },
       "resources": {
         "lightMetal": 50,
@@ -1184,7 +1289,8 @@
         "water": 0
       },
       "connectedPlaces": [
-        "reservoirSouth"
+        "rescueStationNorth",
+        "tankArray"
       ],
       "plannedWorker": 5,
       "apparatuses": [
@@ -1284,9 +1390,9 @@
     },
     "electrolysisStationSouth": {
       "coordinates": {
-        "x": -8,
-        "y": 12,
-        "z": 0
+        "x": 4,
+        "y": 0,
+        "z": -8
       },
       "resources": {
         "lightMetal": 50,
@@ -1295,7 +1401,8 @@
         "oxygen": 0
       },
       "connectedPlaces": [
-        "auxHanger"
+        "squareSouth",
+        "reservoirEast"
       ],
       "plannedWorker": 5,
       "apparatuses": [
@@ -1376,11 +1483,105 @@
       "workHoursStart": 0,
       "workHoursEnd": 24
     },
-    "reservoirNorth": {
+    "electrolysisStationNorth": {
       "coordinates": {
-        "x": -2,
-        "y": -10,
-        "z": 0
+        "x": -10,
+        "y": 0,
+        "z": 4
+      },
+      "resources": {
+        "lightMetal": 50,
+        "component": 100,
+        "water": 15000,
+        "oxygen": 0
+      },
+      "connectedPlaces": [
+        "recycleFacilityWest"
+      ],
+      "plannedWorker": 5,
+      "apparatuses": [
+        {
+          "name": "oxygenStorage",
+          "durability": 95,
+          "baseDanger": 6e-4,
+          "idealWorker": 5,
+          "currentWorker": 0
+        },
+        {
+          "name": "oxygenStorage",
+          "durability": 95,
+          "baseDanger": 6e-4,
+          "idealWorker": 5,
+          "currentWorker": 0
+        },
+        {
+          "name": "waterStorage",
+          "durability": 95,
+          "baseDanger": 3e-4,
+          "idealWorker": 5,
+          "currentWorker": 0
+        },
+        {
+          "name": "waterStorage",
+          "durability": 95,
+          "baseDanger": 3e-4,
+          "idealWorker": 5,
+          "currentWorker": 0
+        },
+        {
+          "name": "electrolysisArray",
+          "durability": 95,
+          "baseDanger": 8e-4,
+          "idealWorker": 5,
+          "currentWorker": 0,
+          "idealDistribution": {
+            "oxygen": 70
+          },
+          "idealConsumption": {
+            "water": 70,
+            "energy": 2
+          }
+        },
+        {
+          "name": "electrolysisArray",
+          "durability": 95,
+          "baseDanger": 8e-4,
+          "idealWorker": 5,
+          "currentWorker": 0,
+          "idealDistribution": {
+            "oxygen": 70
+          },
+          "idealConsumption": {
+            "water": 70,
+            "energy": 2
+          }
+        },
+        {
+          "name": "energyStorage",
+          "durability": 95,
+          "baseDanger": 2e-4,
+          "idealWorker": 10,
+          "currentWorker": 0
+        },
+        {
+          "name": "energyStorage",
+          "durability": 95,
+          "baseDanger": 2e-4,
+          "idealWorker": 10,
+          "currentWorker": 0
+        }
+      ],
+      "characters": [
+      ],
+      "responsibleParty": "infrastructure",
+      "workHoursStart": 0,
+      "workHoursEnd": 24
+    },
+    "reservoirEast": {
+      "coordinates": {
+        "x": 0,
+        "y": 0,
+        "z": -8
       },
       "resources": {
         "water": 300000,
@@ -1388,7 +1589,9 @@
         "component": 100
       },
       "connectedPlaces": [
-        "market"
+        "mainControlRoom",
+        "farm",
+        "electrolysisStationSouth"
       ],
       "plannedWorker": 5,
       "apparatuses": [
@@ -1455,10 +1658,10 @@
       "workHoursStart": 0,
       "workHoursEnd": 24
     },
-    "reservoirSouth": {
+    "reservoirWest": {
       "coordinates": {
-        "x": 7,
-        "y": 12,
+        "x": -12,
+        "y": 0,
         "z": 0
       },
       "resources": {
@@ -1467,8 +1670,7 @@
         "water": 15000
       },
       "connectedPlaces": [
-        "farm",
-        "recycleCenterSouth"
+        "excavationShaftA"
       ],
       "plannedWorker": 5,
       "apparatuses": [
@@ -1537,8 +1739,8 @@
     },
     "miningSchool": {
       "coordinates": {
-        "x": -7,
-        "y": 3,
+        "x": 8,
+        "y": 0,
         "z": 0
       },
       "resources": {
@@ -1547,9 +1749,11 @@
         "ration": 50
       },
       "connectedPlaces": [
-        "observatory",
+        "securityCheckEast",
+        "techSchool",
         "squareSouth",
-        "hospitalWest"
+        "excavationShaftB",
+        "rescueStationSouth"
       ],
       "plannedWorker": 100,
       "apparatuses": [
@@ -1597,8 +1801,8 @@
     },
     "techSchool": {
       "coordinates": {
-        "x": 7,
-        "y": 3,
+        "x": 12,
+        "y": 0,
         "z": 0
       },
       "resources": {
@@ -1607,8 +1811,8 @@
         "ration": 50
       },
       "connectedPlaces": [
-        "squareSouth",
-        "rescueStationSouth"
+        "miningSchool",
+        "constructionYardSouth"
       ],
       "plannedWorker": 100,
       "apparatuses": [
@@ -1666,9 +1870,7 @@
         "ration": 500
       },
       "connectedPlaces": [
-        "squareSouth",
-        "auxHanger",
-        "reservoirSouth"
+        "reservoirEast"
       ],
       "plannedWorker": 200,
       "apparatuses": [
@@ -1742,9 +1944,9 @@
     },
     "rescueStationNorth": {
       "coordinates": {
-        "x": -7,
-        "y": -10,
-        "z": 0
+        "x": 7,
+        "y": 0,
+        "z": 7
       },
       "resources": {
         "oxygen": 100,
@@ -1752,10 +1954,10 @@
         "ration": 100
       },
       "connectedPlaces": [
-        "redMine",
+        "asteroidMine",
         "market",
-        "recycleCenterNorth",
-        "powerPlantWest"
+        "recycleFacilityEast",
+        "securityCheckEast"
       ],
       "plannedWorker": 50,
       "apparatuses": [
@@ -1810,9 +2012,9 @@
     },
     "rescueStationSouth": {
       "coordinates": {
-        "x": 15,
-        "y": 5,
-        "z": 0
+        "x": 8,
+        "y": 0,
+        "z": -5
       },
       "resources": {
         "oxygen": 100,
@@ -1820,9 +2022,9 @@
         "ration": 100
       },
       "connectedPlaces": [
-        "blackMine",
-        "techSchool",
-        "powerPlantEast"
+        "excavationShaftB",
+        "miningSchool",
+        "squareSouth"
       ],
       "plannedWorker": 50,
       "apparatuses": [
@@ -1875,11 +2077,256 @@
       "workHoursStart": 0,
       "workHoursEnd": 24
     },
+    "rescueStationWest": {
+      "coordinates": {
+        "x": -6,
+        "y": 0,
+        "z": -5
+      },
+      "resources": {
+        "oxygen": 100,
+        "water": 15000,
+        "ration": 100
+      },
+      "connectedPlaces": [
+        "excavationShaftA",
+        "mainControlRoom"
+      ],
+      "plannedWorker": 50,
+      "apparatuses": [
+        {
+          "name": "rescueEquipment",
+          "durability": 95,
+          "baseDanger": 1e-4,
+          "idealWorker": 25,
+          "currentWorker": 0
+        },
+        {
+          "name": "rescueEquipment",
+          "durability": 95,
+          "baseDanger": 1e-4,
+          "idealWorker": 25,
+          "currentWorker": 0
+        },
+        {
+          "name": "waterStorage",
+          "durability": 95,
+          "baseDanger": 3e-4,
+          "idealWorker": 5,
+          "currentWorker": 0
+        },
+        {
+          "name": "oxygenStorage",
+          "durability": 95,
+          "baseDanger": 6e-4,
+          "idealWorker": 5,
+          "currentWorker": 0
+        },
+        {
+          "name": "energyStorage",
+          "durability": 95,
+          "baseDanger": 2e-4,
+          "idealWorker": 10,
+          "currentWorker": 0
+        },
+        {
+          "name": "energyStorage",
+          "durability": 95,
+          "baseDanger": 2e-4,
+          "idealWorker": 10,
+          "currentWorker": 0
+        }
+      ],
+      "characters": [
+      ],
+      "responsibleParty": "safety",
+      "workHoursStart": 0,
+      "workHoursEnd": 24
+    },
+    "securityCheckWest": {
+      "coordinates": {
+        "x": -10,
+        "y": 0,
+        "z": 0
+      },
+      "resources": {
+        "oxygen": 100,
+        "water": 15000,
+        "ration": 100
+      },
+      "connectedPlaces": [
+        "excavationShaftA",
+        "squareNorth"
+      ],
+      "plannedWorker": 50,
+      "apparatuses": [
+        {
+          "name": "pressureDoor",
+          "durability": 95,
+          "baseDanger": 1e-4,
+          "idealWorker": 25,
+          "currentWorker": 0
+        },
+        {
+          "name": "waterStorage",
+          "durability": 95,
+          "baseDanger": 3e-4,
+          "idealWorker": 5,
+          "currentWorker": 0
+        },
+        {
+          "name": "oxygenStorage",
+          "durability": 95,
+          "baseDanger": 6e-4,
+          "idealWorker": 5,
+          "currentWorker": 0
+        },
+        {
+          "name": "energyStorage",
+          "durability": 95,
+          "baseDanger": 2e-4,
+          "idealWorker": 10,
+          "currentWorker": 0
+        },
+        {
+          "name": "energyStorage",
+          "durability": 95,
+          "baseDanger": 2e-4,
+          "idealWorker": 10,
+          "currentWorker": 0
+        }
+      ],
+      "characters": [
+      ],
+      "responsibleParty": "safety",
+      "workHoursStart": 0,
+      "workHoursEnd": 24
+    },
+    "securityCheckCenter": {
+      "coordinates": {
+        "x": 2,
+        "y": 0,
+        "z": 0
+      },
+      "resources": {
+        "oxygen": 100,
+        "water": 15000,
+        "ration": 100
+      },
+      "connectedPlaces": [
+        "squareSouth",
+        "mainControlRoom",
+        "market"
+      ],
+      "plannedWorker": 50,
+      "apparatuses": [
+        {
+          "name": "pressureDoor",
+          "durability": 95,
+          "baseDanger": 1e-4,
+          "idealWorker": 25,
+          "currentWorker": 0
+        },
+        {
+          "name": "waterStorage",
+          "durability": 95,
+          "baseDanger": 3e-4,
+          "idealWorker": 5,
+          "currentWorker": 0
+        },
+        {
+          "name": "oxygenStorage",
+          "durability": 95,
+          "baseDanger": 6e-4,
+          "idealWorker": 5,
+          "currentWorker": 0
+        },
+        {
+          "name": "energyStorage",
+          "durability": 95,
+          "baseDanger": 2e-4,
+          "idealWorker": 10,
+          "currentWorker": 0
+        },
+        {
+          "name": "energyStorage",
+          "durability": 95,
+          "baseDanger": 2e-4,
+          "idealWorker": 10,
+          "currentWorker": 0
+        }
+      ],
+      "characters": [
+      ],
+      "responsibleParty": "safety",
+      "workHoursStart": 0,
+      "workHoursEnd": 24
+    },
+    "securityCheckEast": {
+      "coordinates": {
+        "x": 10,
+        "y": 0,
+        "z": 0
+      },
+      "resources": {
+        "oxygen": 100,
+        "water": 15000,
+        "ration": 100
+      },
+      "connectedPlaces": [
+        "miningSchool",
+        "rescueStationNorth",
+        "cemetery"
+      ],
+      "plannedWorker": 50,
+      "apparatuses": [
+        {
+          "name": "pressureDoor",
+          "durability": 95,
+          "baseDanger": 1e-4,
+          "idealWorker": 25,
+          "currentWorker": 0
+        },
+        {
+          "name": "waterStorage",
+          "durability": 95,
+          "baseDanger": 3e-4,
+          "idealWorker": 5,
+          "currentWorker": 0
+        },
+        {
+          "name": "oxygenStorage",
+          "durability": 95,
+          "baseDanger": 6e-4,
+          "idealWorker": 5,
+          "currentWorker": 0
+        },
+        {
+          "name": "energyStorage",
+          "durability": 95,
+          "baseDanger": 2e-4,
+          "idealWorker": 10,
+          "currentWorker": 0
+        },
+        {
+          "name": "energyStorage",
+          "durability": 95,
+          "baseDanger": 2e-4,
+          "idealWorker": 10,
+          "currentWorker": 0
+        }
+      ],
+      "characters": [
+      ],
+      "responsibleParty": "safety",
+      "workHoursStart": 0,
+      "workHoursEnd": 24
+    },
     "market": {
       "coordinates": {
-        "x": 0,
-        "y": -5,
-        "z": 0
+        "x": 4,
+        "y": 0,
+        "z": 8
       },
       "resources": {
         "water": 15000,
@@ -1887,9 +2334,8 @@
       },
       "connectedPlaces": [
         "rescueStationNorth",
-        "mainControlRoom",
-        "reservoirNorth",
-        "squareNorth"
+        "securityCheckCenter",
+        "constructionYardNorth"
       ],
       "plannedWorker": 300,
       "apparatuses": [
@@ -1962,21 +2408,19 @@
     },
     "squareNorth": {
       "coordinates": {
-        "x": 7,
-        "y": -5,
-        "z": 0
+        "x": -7,
+        "y": 0,
+        "z": 5
       },
       "resources": {
         "water": 15000,
         "ration": 100
       },
       "connectedPlaces": [
-        "market",
-        "rocketry",
-        "cemetery",
-        "hospitalEast",
-        "hanger",
-        "mainControlRoom"
+        "recycleFacilityWest",
+        "welfareStationWest",
+        "constructionYardNorth",
+        "securityCheckWest"
       ],
       "plannedWorker": 300,
       "apparatuses": [
@@ -2052,9 +2496,10 @@
       },
       "connectedPlaces": [
         "mainControlRoom",
-        "techSchool",
+        "welfareStationEast",
+        "rescueStationSouth",
         "miningSchool",
-        "farm"
+        "electrolysisStationSouth"
       ],
       "plannedWorker": 300,
       "apparatuses": [
@@ -2118,11 +2563,11 @@
       "workHoursStart": 9,
       "workHoursEnd": 17
     },
-    "hanger": {
+    "constructionYardNorth": {
       "coordinates": {
-        "x": 5,
+        "x": 0,
         "y": 0,
-        "z": 0
+        "z": 9
       },
       "resources": {
         "lightMetal": 100,
@@ -2130,8 +2575,7 @@
         "water": 15000
       },
       "connectedPlaces": [
-        "mainControlRoom",
-        "blackMine",
+        "market",
         "squareNorth"
       ],
       "plannedWorker": 5,
@@ -2182,11 +2626,11 @@
       "workHoursStart": 9,
       "workHoursEnd": 17
     },
-    "powerPlantEast": {
+    "theEngine": {
       "coordinates": {
-        "x": 20,
-        "y": 10,
-        "z": 0
+        "x": -5,
+        "y": 0,
+        "z": -25
       },
       "resources": {
         "lightMetal": 100,
@@ -2194,89 +2638,7 @@
         "water": 15000
       },
       "connectedPlaces": [
-        "rescueStationSouth"
-      ],
-      "plannedWorker": 70,
-      "apparatuses": [
-        {
-          "name": "reactor",
-          "durability": 95,
-          "baseDanger": 6e-4,
-          "idealWorker": 50,
-          "currentWorker": 0,
-          "idealProduction": {
-            "energy": 100
-          }
-        },
-        {
-          "name": "waterStorage",
-          "durability": 95,
-          "baseDanger": 3e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
-        },
-        {
-          "name": "metalStorage",
-          "durability": 95,
-          "baseDanger": 2e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
-        },
-        {
-          "name": "componentStorage",
-          "durability": 95,
-          "baseDanger": 2e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
-        },
-        {
-          "name": "energyStorage",
-          "durability": 95,
-          "baseDanger": 2e-4,
-          "idealWorker": 10,
-          "currentWorker": 0
-        },
-        {
-          "name": "energyStorage",
-          "durability": 95,
-          "baseDanger": 2e-4,
-          "idealWorker": 10,
-          "currentWorker": 0
-        },
-        {
-          "name": "energyStorage",
-          "durability": 95,
-          "baseDanger": 2e-4,
-          "idealWorker": 10,
-          "currentWorker": 0
-        },
-        {
-          "name": "energyStorage",
-          "durability": 95,
-          "baseDanger": 2e-4,
-          "idealWorker": 10,
-          "currentWorker": 0
-        }
-      ],
-      "characters": [
-      ],
-      "responsibleParty": "infrastructure",
-      "workHoursStart": 0,
-      "workHoursEnd": 24
-    },
-    "powerPlantWest": {
-      "coordinates": {
-        "x": -15,
-        "y": -5,
-        "z": 0
-      },
-      "resources": {
-        "lightMetal": 100,
-        "component": 200,
-        "water": 15000
-      },
-      "connectedPlaces": [
-        "rescueStationNorth"
+        "excavationShaftA"
       ],
       "plannedWorker": 100,
       "apparatuses": [
@@ -2409,7 +2771,7 @@
         "mini1",
         "mini2"
       ],
-      "home": "redMine"
+      "home": "excavationShaftA"
     },
     "education": {
       "type": "division",
@@ -2447,7 +2809,7 @@
         "doci1",
         "doci2"
       ],
-      "home": "hospitalEast"
+      "home": "welfareStationEast"
     },
     "infrastructure": {
       "type": "division",
@@ -2460,7 +2822,7 @@
         "friend2",
         "friend3"
       ],
-      "home": "hanger"
+      "home": "constructionYardNorth"
     }
   },
   "scheduledConferences": {

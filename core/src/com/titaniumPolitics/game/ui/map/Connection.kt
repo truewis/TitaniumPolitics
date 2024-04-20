@@ -16,25 +16,34 @@ class Connection(var gameState: GameState, startPlace: String, endPlace: String)
     {
         //Fetch default drawable from skin.
         drawable = defaultSkin.getDrawable("black")
-        val start: Pair<Float, Float> = MapUI.convertToScreenCoords(
-            gameState.places[startPlace]!!.coordinates.x.toFloat(),
-            gameState.places[startPlace]!!.coordinates.y.toFloat()
-        )
-        val end: Pair<Float, Float> = MapUI.convertToScreenCoords(
-            gameState.places[endPlace]!!.coordinates.x.toFloat(),
-            gameState.places[endPlace]!!.coordinates.y.toFloat()
-        )
-        //Set the position of the connection to the start of the line.
-        setPosition(start.first, start.second)
-        //Set the size of the connection to the length of the line.
-        setSize(
-            sqrt((end.first - start.first) * (end.first - start.first) + (end.second - start.second) * (end.second - start.second)),
-            5f
-        )
-        //Set the rotation of the connection to the angle of the line.
-        rotation = Math.toDegrees(atan2((end.second - start.second).toDouble(), (end.first - start.first).toDouble()))
-            .toFloat()
+        try
+        {
 
+            val start: Pair<Float, Float> = MapUI.convertToScreenCoords(
+                gameState.places[startPlace]!!.coordinates.x.toFloat(),
+                gameState.places[startPlace]!!.coordinates.z.toFloat()
+            )
+            val end: Pair<Float, Float> = MapUI.convertToScreenCoords(
+                gameState.places[endPlace]!!.coordinates.x.toFloat(),
+                gameState.places[endPlace]!!.coordinates.z.toFloat()
+            )
+
+
+            //Set the position of the connection to the start of the line.
+            setPosition(start.first, start.second)
+            //Set the size of the connection to the length of the line.
+            setSize(
+                sqrt((end.first - start.first) * (end.first - start.first) + (end.second - start.second) * (end.second - start.second)),
+                5f
+            )
+            //Set the rotation of the connection to the angle of the line.
+            rotation =
+                Math.toDegrees(atan2((end.second - start.second).toDouble(), (end.first - start.first).toDouble()))
+                    .toFloat()
+        } catch (e: Exception)
+        {
+            Gdx.app.log("Connection", "Error: $startPlace, $endPlace. $e")
+        }
 
     }
 

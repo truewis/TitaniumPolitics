@@ -13,7 +13,7 @@ class HomePlaceMarker(gameState: GameState, owner: MapUI, place: String) : Place
         val place2 = gameState.characters[place.substring(5)]!!.livingBy
         val start: Pair<Float, Float> = MapUI.convertToScreenCoords(
             gameState.places[place2]!!.coordinates.x.toFloat(),
-            gameState.places[place2]!!.coordinates.y.toFloat()
+            gameState.places[place2]!!.coordinates.z.toFloat()
         )
         add(scene2d.image("hovel-hut-outline-icon")).fill()
         //Set the position slightly to the right and down from the center of the place so that it does not overlap with the place marker.
