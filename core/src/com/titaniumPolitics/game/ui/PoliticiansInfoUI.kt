@@ -62,47 +62,15 @@ class PoliticiansInfoUI : Table(defaultSkin), KTable
                 )
             })
             row()
-            add(label("Infrastructure Division Leader: ${gameState.characters.filter { it.value.trait.contains("infraMinister") }.keys.firstOrNull() ?: "None"}") {
-                setAlignment(
-                    Align.center
-                )
-            })
-            row()
-            add(label("Interior Division Leader: ${gameState.characters.filter { it.value.trait.contains("interiorMinister") }.keys.firstOrNull() ?: "None"}") {
-                setAlignment(
-                    Align.center
-                )
-            })
-            row()
-            add(label("Safety Division Leader: ${gameState.characters.filter { it.value.trait.contains("safetyMinister") }.keys.firstOrNull() ?: "None"}") {
-                setAlignment(
-                    Align.center
-                )
-            })
-            row()
-            add(label("Education Division Leader: ${gameState.characters.filter { it.value.trait.contains("eduMinister") }.keys.firstOrNull() ?: "None"}") {
-                setAlignment(
-                    Align.center
-                )
-            })
-            row()
-            add(label("Industry Division Leader: ${gameState.characters.filter { it.value.trait.contains("industryMinister") }.keys.firstOrNull() ?: "None"}") {
-                setAlignment(
-                    Align.center
-                )
-            })
-            row()
-            add(label("Bioengineering Division Leader: ${gameState.characters.filter { it.value.trait.contains("bioMinister") }.keys.firstOrNull() ?: "None"}") {
-                setAlignment(
-                    Align.center
-                )
-            })
-            row()
-            add(label("Mining Division Leader: ${gameState.characters.filter { it.value.trait.contains("miningMinister") }.keys.firstOrNull() ?: "None"}") {
-                setAlignment(
-                    Align.center
-                )
-            })
+            gameState.parties.filter { it.value.type == "division" }.forEach {
+                add(label("${it.key} Division Leader: ${it.value.leader}") {
+                    setAlignment(
+                        Align.center
+                    )
+                })
+                row()
+            }
+
         }
 
     }
