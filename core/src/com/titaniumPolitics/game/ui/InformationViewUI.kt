@@ -75,7 +75,7 @@ class InformationViewUI : Table(defaultSkin), KTable
             val firstInformation = informationList.first()
             firstInformation::class.java.declaredFields.forEach { field ->
                 if (field.name == "Companion" || field.name == "knownTo" || field.name == "\$childSerializers")
-                {
+                { //We don't want to show these fields.
                 } else
                 {
                     val button = button {
@@ -97,7 +97,7 @@ class InformationViewUI : Table(defaultSkin), KTable
             informationList.forEach { information ->
                 information::class.java.declaredFields.forEach { field ->
                     if (field.name == "Companion" || field.name == "knownTo" || field.name == "\$childSerializers")
-                    {
+                    { //We don't want to show these fields.
                     } else
                     {
                         field.isAccessible = true

@@ -6,7 +6,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 
 import com.badlogic.gdx.utils.Align
 
-import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.core.Information
 
 import ktx.scene2d.*

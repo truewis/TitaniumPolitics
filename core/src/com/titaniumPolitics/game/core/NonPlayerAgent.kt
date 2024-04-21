@@ -754,6 +754,7 @@ class NonPlayerAgent : GameStateElement()
                                     routines[0].variables["resource"]!! to routines[0].intVariables["amount"]!!
                                 )
                             }//Created a command to transfer the resource.
+                            , issuedTo = hashSetOf(routines[0].variables["character"]!!)
                         ).also {
                             it.place = place
                             it.executeTime = parent.time
@@ -973,6 +974,8 @@ class NonPlayerAgent : GameStateElement()
                                         ).also {
                                             //TODO: adjust the salary, it.resources.
                                         }//Created a command to transfer the resource.
+                                        ,
+                                        issuedTo = hashSetOf(party.leader)
                                     ).also {
                                         it.place = place
                                         it.executeTime = parent.time

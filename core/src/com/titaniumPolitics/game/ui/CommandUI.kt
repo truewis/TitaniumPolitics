@@ -57,7 +57,8 @@ class CommandUI(skin: Skin?, var gameState: GameState) : Table(skin)
                         GameEngine.acquireCallback(
                             Request(
                                 placeDropDown.selected,
-                                action
+                                action,
+                                issuedTo = hashSetOf(who)
                             ).also { command ->
                                 command.executeTime = timeSelection.value.toInt(); command.issuedBy =
                                 hashSetOf(gameState.playerName)

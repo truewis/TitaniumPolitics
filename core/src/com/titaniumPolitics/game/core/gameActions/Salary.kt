@@ -78,7 +78,6 @@ class Salary(override val tgtCharacter: String, override val tgtPlace: String) :
             }.flatMap { it.value.currentCharacters }).toHashSet()
 
         val party = parent.parties.values.find { it.members.containsAll(who + tgtCharacter) }!!
-        val guildHall = party.home
 //        if (party.isDailySalaryPaid.keys.none { it == tgtCharacter })
 //        {
 //            //println("Warning: $tgtCharacter is not eligible to be paid from ${party.name}.")

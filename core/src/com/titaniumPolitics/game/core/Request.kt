@@ -4,13 +4,13 @@ import com.titaniumPolitics.game.core.gameActions.GameAction
 import kotlinx.serialization.Serializable
 
 @Serializable
-class Request(var place: String, var action: GameAction)
+class Request(var place: String, var action: GameAction, var issuedTo: HashSet<String>)
 {
     var name = ""
         private set
     var executeTime = 0//If unspecified, it can be executed anytime.
     var issuedBy: HashSet<String> = hashSetOf() //If unspecified, it is a system request.
-    var issuedTo: HashSet<String> = hashSetOf()
+
     fun generateName(): String
     {
         if (this.name != "")

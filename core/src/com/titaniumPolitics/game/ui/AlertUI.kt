@@ -117,12 +117,12 @@ class AlertUI(var gameState: GameState) : Table(defaultSkin)
             newInformation.forEach {
                 if (gameState.informations[it]!!.type == "accident")
                     addAlert("accident") {
-                        InformationViewUI.instance.refresh(gameState, "creationTime");
+                        InformationViewUI.instance.refresh(gameState, "creationTime")
                         InformationViewUI.instance.isVisible = true
                     }
                 else if (!(gameState.informations[it]!!.type == "action" && gameState.informations[it]!!.tgtCharacter == gameState.playerName))//Ignore my actions, they are not surprising.
                     addAlert("newInfo") {
-                        InformationViewUI.instance.refresh(gameState, "creationTime");
+                        InformationViewUI.instance.refresh(gameState, "creationTime")
                         InformationViewUI.instance.isVisible = true
                     }
             }

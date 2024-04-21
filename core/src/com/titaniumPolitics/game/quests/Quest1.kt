@@ -26,7 +26,8 @@ class Quest1 : QuestObject("Be the Infrastructure Division Leader.", 240)
             parent.parties["infrastructure"]!!.home,
             Resign(tgtCharacter = who, tgtPlace = parent.parties["infrastructure"]!!.home).also {
                 it.injectParent(parent)
-            }).also { it.generateName() }
+            }, issuedTo = hashSetOf(who)
+        ).also { it.generateName() }
         println("Quest1: ${c.name}")
         parent.requests[c.name] = c
     }
