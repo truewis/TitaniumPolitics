@@ -22,7 +22,7 @@ open class MapUI(val gameState: GameState) : Table(Scene2DSkin.defaultSkin), KTa
         stack { cell ->
             cell.grow()
             table {
-                image("capsuleDevLabel1") {
+                image("panel") {
                     it.grow()
                     addListener(object : ClickListener()
                     {

@@ -5,7 +5,10 @@ import com.titaniumPolitics.game.core.GameEngine
 import com.titaniumPolitics.game.core.Information
 import com.titaniumPolitics.game.ui.HumanResourceInfoUI
 import com.titaniumPolitics.game.ui.ResourceInfoUI
+import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.Serializable
+import kotlin.coroutines.resume
+import kotlin.coroutines.suspendCoroutine
 
 @Serializable
 class Examine(override val tgtCharacter: String, override val tgtPlace: String) : GameAction()
@@ -28,9 +31,14 @@ class Examine(override val tgtCharacter: String, override val tgtPlace: String) 
                 //Open HR window Directly.
                 if (tgtCharacter == parent.playerName)
                 {
-                    Gdx.app.postRunnable {
-                        HumanResourceInfoUI.instance.isVisible = true
-                        HumanResourceInfoUI.instance.refresh(parent.places[tgtPlace]!!, parent.time)
+                    runBlocking {
+                        suspendCoroutine { cont ->
+                            Gdx.app.postRunnable {
+                                HumanResourceInfoUI.instance.isVisible = true
+                                HumanResourceInfoUI.instance.refresh(parent.places[tgtPlace]!!, parent.time)
+                                cont.resume(Unit)
+                            }
+                        }
                     }
                 }
             }

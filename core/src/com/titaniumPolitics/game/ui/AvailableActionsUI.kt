@@ -15,7 +15,7 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable
 {
     var titleLabel: Label
     private val docList = HorizontalGroup()
-    val options: KStack
+    val options: ExamineUI
 
     init
     {
@@ -24,11 +24,8 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable
         add(titleLabel).growX()
         row()
 
-        options = stack {
-            add(ExamineUI(this@AvailableActionsUI.gameState))
-            it.fill()
-            isVisible = false
-        }
+        options = ExamineUI(this@AvailableActionsUI.gameState)
+        add(options)
         CapsuleStage.instance.onMouseDown.add { x, y ->
             //If x and y are not within the bounds of this UI, hide the option ui.
             val localpos = options.screenToLocalCoordinates(Vector2(x, y))
@@ -87,7 +84,8 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable
                                     y: Float
                                 )
                                 {
-                                    this@AvailableActionsUI.options.isVisible = true
+                                    this@AvailableActionsUI.options.isVisible =
+                                        !this@AvailableActionsUI.options.isVisible
                                 }
                             }
                             )

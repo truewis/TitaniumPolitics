@@ -24,8 +24,7 @@ class QuestUI(var gameState: GameState) : Table(Scene2DSkin.defaultSkin)
         docList.grow()
 
         add(docScr).grow()
-        gameState.questSystem.onChange += { Gdx.app.postRunnable { refreshList(); } }
-        gameState.timeChanged += { _, _ -> Gdx.app.postRunnable { refreshList(); } }
+        gameState.updateUI += { _ -> Gdx.app.postRunnable { refreshList(); } }
     }
 
 

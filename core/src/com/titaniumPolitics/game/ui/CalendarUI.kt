@@ -85,6 +85,22 @@ class CalendarUI : Table(defaultSkin), KTable
                         }
                     }
                 }).grow().align(Align.top)
+
+                //Call alert UI for conferences and meetings that are within an hour.
+                gameState.scheduledMeetings.filter {
+                    it.value.time in gameState.time..gameState.time + 2 && it.value.scheduledCharacters.contains(
+                        gameState.playerName
+                    )
+                }.forEach { meeting ->
+                    AlertUI.instance.addAlert("meeting")
+                }
+                gameState.scheduledConferences.filter {
+                    it.value.time in gameState.time..gameState.time + 2 && it.value.scheduledCharacters.contains(
+                        gameState.playerName
+                    )
+                }.forEach { conference ->
+                    AlertUI.instance.addAlert("meeting")
+                }
             }
         }
 

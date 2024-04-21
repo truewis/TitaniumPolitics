@@ -25,7 +25,7 @@ class ResourceInfoUI : Table(defaultSkin), KTable
         informationPane.setScrollingDisabled(false, false)
         stack {
             it.grow()
-            image("capsuleDevLabel1") {
+            image("panel") {
             }
             add(informationPane)
 

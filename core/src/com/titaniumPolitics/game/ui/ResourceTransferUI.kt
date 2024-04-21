@@ -37,7 +37,7 @@ class ResourceTransferUI(gameState: GameState) : Table(defaultSkin), KTable
         targetResourcePane.setScrollingDisabled(false, false)
         stack {
             it.grow()
-            image("capsuleDevLabel1") {
+            image("panel") {
             }
             table {
                 //Select place to transfer resources to.

@@ -21,11 +21,19 @@ class GameEngine(val gameState: GameState)
 {
     val random = Random(System.currentTimeMillis())
 
+
     fun startGame()
     {
         //Start the game.
 
-        gameState.updateUI.forEach { it(gameState) }//Update UI
+        runBlocking {
+            suspendCoroutine { cont ->
+                Gdx.app.postRunnable {
+                    gameState.updateUI.forEach { it(gameState) }//Update UI
+                    cont.resume(Unit)
+                }
+            }
+        }
         println("Game started. Time: ${gameState.time}. Starting main loop.")
         //Main loop
         while (true)
@@ -171,7 +179,14 @@ class GameEngine(val gameState: GameState)
 
         //println("Time: ${gameState.time}")
         //println("My approval:${gameState.characters[gameState.playerAgent]!!.approval}")
-        gameState.updateUI.forEach { it(gameState) }
+        runBlocking {
+            suspendCoroutine { cont ->
+                Gdx.app.postRunnable {
+                    gameState.updateUI.forEach { it(gameState) }//Update UI
+                    cont.resume(Unit)
+                }
+            }
+        }
     }
 
     //TODO: Normalization of mutuality is not implemented yet.
@@ -839,6 +854,7 @@ class GameEngine(val gameState: GameState)
                         }
                     }
             }
+            onAccident.forEach { it(tgtPlace.name, death) }
         }
 
 
@@ -946,6 +962,7 @@ class GameEngine(val gameState: GameState)
                     }
             }
         }
+        onAccident.forEach { it(tgtPlace.name, death) }
     }
 
 
@@ -1028,6 +1045,7 @@ class GameEngine(val gameState: GameState)
     {
         var acquireCallback: (Any) -> Unit = {}
         var acquireEvent = arrayListOf<(AcquireParams) -> Unit>()
+        val onAccident = ArrayList<(String, Int) -> Unit>()//Place and Casualty
 
         class AcquireParams(val type: String, val variables: HashMap<String, Any>)
 
