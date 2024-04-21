@@ -74,51 +74,65 @@ class InformationViewUI : Table(defaultSkin), KTable
         {
             val firstInformation = informationList.first()
             firstInformation::class.java.declaredFields.forEach { field ->
-                val button = button {
-                    label(field.name, "trnsprtConsole") {
-                        setFontScale(2f)
-                    }
-                    addListener(object : ClickListener()
-                    {
-                        override fun clicked(event: com.badlogic.gdx.scenes.scene2d.InputEvent?, x: Float, y: Float)
-                        {
-                            this@InformationViewUI.refresh(gameState, field.name)
+                if (field.name == "Companion" || field.name == "knownTo" || field.name == "\$childSerializers")
+                {
+                } else
+                {
+                    val button = button {
+                        label(field.name, "trnsprtConsole") {
+                            setFontScale(2f)
                         }
-                    })
+                        addListener(object : ClickListener()
+                        {
+                            override fun clicked(event: com.badlogic.gdx.scenes.scene2d.InputEvent?, x: Float, y: Float)
+                            {
+                                this@InformationViewUI.refresh(gameState, field.name)
+                            }
+                        })
+                    }
+                    informationTable.add(button)
                 }
-                informationTable.add(button)
             }
             informationTable.row()
             informationList.forEach { information ->
                 information::class.java.declaredFields.forEach { field ->
-                    field.isAccessible = true
-                    val label = Label(field.get(information).toString(), defaultSkin, "trnsprtConsole").also {
-                        it.setFontScale(2f)
-                        it.addListener(object : ClickListener()
-                        {
-                            //When clicked, open the information in a new window, depending on the type of information.
-                            override fun clicked(event: com.badlogic.gdx.scenes.scene2d.InputEvent?, x: Float, y: Float)
+                    if (field.name == "Companion" || field.name == "knownTo" || field.name == "\$childSerializers")
+                    {
+                    } else
+                    {
+                        field.isAccessible = true
+                        val label = Label(field.get(information).toString(), defaultSkin, "trnsprtConsole").also {
+                            it.setFontScale(2f)
+                            it.addListener(object : ClickListener()
                             {
-                                when (information.type)
+                                //When clicked, open the information in a new window, depending on the type of information.
+                                override fun clicked(
+                                    event: com.badlogic.gdx.scenes.scene2d.InputEvent?,
+                                    x: Float,
+                                    y: Float
+                                )
                                 {
-                                    "resources" ->
+                                    when (information.type)
                                     {
-                                        //Open resource window
-                                        ResourceInfoUI.instance.isVisible = true
-                                        ResourceInfoUI.instance.refresh(information)
-                                    }
+                                        "resources" ->
+                                        {
+                                            //Open resource window
+                                            ResourceInfoUI.instance.isVisible = true
+                                            ResourceInfoUI.instance.refresh(information)
+                                        }
 
-                                    "apparatusDurability" ->
-                                    {
-                                        //Open apparatus window
-                                        ApparatusInfoUI.instance.isVisible = true
-                                        ApparatusInfoUI.instance.refresh(information)
+                                        "apparatusDurability" ->
+                                        {
+                                            //Open apparatus window
+                                            ApparatusInfoUI.instance.isVisible = true
+                                            ApparatusInfoUI.instance.refresh(information)
+                                        }
                                     }
                                 }
-                            }
-                        })
+                            })
+                        }
+                        informationTable.add(label)
                     }
-                    informationTable.add(label)
                 }
                 informationTable.row()
             }
