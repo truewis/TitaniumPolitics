@@ -365,13 +365,24 @@ class NonPlayerAgent : GameStateElement()
                                     parent.scheduledConferences.keys.first { parent.scheduledConferences[it] == conf }
                                 return action
                             }
-                        } else
-                        {
-                            return Wait(
-                                name,
-                                place
-                            )//Wait for the conference to start.
-                        }
+                        } else //if this character is the controller and the election is planned, start the conference.
+                            if (name == "ctrler" && conf.type == "divisionLeaderElection")
+                            {
+                                routines.add(Routine("attendConference", routines[0].priority + 10).also {
+                                    it.intVariables["time"] = conf.time
+                                })//Add a routine with higher priority.
+                                StartConference(name, place).also { action ->
+                                    action.meetingName =
+                                        parent.scheduledConferences.keys.first { parent.scheduledConferences[it] == conf }
+                                    return action
+                                }
+                            } else//Wait for the conference to start.
+                            {
+                                return Wait(
+                                    name,
+                                    place
+                                )
+                            }
 
                     }
                     //----------------------------------------------------------------------------------Move to the conference
@@ -644,6 +655,69 @@ class NonPlayerAgent : GameStateElement()
                                     && parent.characters[parent.informations[key]!!.tgtCharacter]!!.infoPreference(
                                 parent.informations[key]!!
                             ) < 0
+                        }.forEach { key ->
+                            val action = AddInfo(name, place).also {
+                                it.infoKey = key
+                                it.agendaIndex = routines[0].intVariables["agendaIndex"]!!
+                            }
+                            if (action.isValid())//In particular, if this information is not already presented in the meeting.
+                                return action
+                        }
+                        routines.removeAt(0)//Remove the current routine.
+                        return executeRoutine()
+                    }
+                }
+
+            }
+
+            "attackAgenda" ->
+            {
+                val conf =
+                    character.currentMeeting!!
+                when (routines[0].variables["agenda"])
+                {
+
+                    "proofOfWork" ->
+                    {
+                        //if there is any attacking information, add it.
+                        routines.removeAt(0)//Remove the current routine.
+                        return executeRoutine()
+                    }
+
+                    "salary" ->
+                    {
+                        routines.removeAt(0)//Remove the current routine.
+                        return executeRoutine()
+                    }
+
+                    "nomination", "praise" ->
+                    {
+                        //if there is any attacking information, add it.
+                        character.preparedInfoKeys.filter { key ->
+                            parent.informations[key]!!.tgtCharacter == conf.agendas[routines[0].intVariables["agendaIndex"]!!].subjectParams["character"]
+                                    && parent.characters[parent.informations[key]!!.tgtCharacter]!!.infoPreference(
+                                parent.informations[key]!!
+                            ) < 0
+                        }.forEach { key ->
+                            val action = AddInfo(name, place).also {
+                                it.infoKey = key
+                                it.agendaIndex = routines[0].intVariables["agendaIndex"]!!
+                            }
+                            if (action.isValid())//In particular, if this information is not already presented in the meeting.
+                                return action
+                        }
+                        routines.removeAt(0)//Remove the current routine.
+                        return executeRoutine()
+                    }
+
+                    "denounce" ->
+                    {
+                        //if there is any attacking information, add it.
+                        character.preparedInfoKeys.filter { key ->
+                            parent.informations[key]!!.tgtCharacter == conf.agendas[routines[0].intVariables["agendaIndex"]!!].subjectParams["character"]
+                                    && parent.characters[parent.informations[key]!!.tgtCharacter]!!.infoPreference(
+                                parent.informations[key]!!
+                            ) > 0
                         }.forEach { key ->
                             val action = AddInfo(name, place).also {
                                 it.infoKey = key
@@ -1021,7 +1095,6 @@ class NonPlayerAgent : GameStateElement()
 
                     "divisionLeaderElection" ->
                     {
-                        //If not speaker, wait if the mutuality to the speaker is high. Otherwise, if possible, interrupt the speaker.
                         val party = parent.parties[conf.involvedParty]!!
                         //If not speaker, wait if the mutuality to the speaker is high. Otherwise, if possible, interrupt the speaker.
                         if (conf.currentSpeaker != name)
@@ -1036,7 +1109,7 @@ class NonPlayerAgent : GameStateElement()
                                 return Intercept(name, place)
                         } else
                         {
-                            val nominee = parent.characters.keys.filter { it != name }
+                            val nominee = parent.characters.keys.filter { it != name && party.members.contains(it) }
                                 .maxByOrNull { parent.getMutuality(name, it) }!!
                             //Nominate the person with the highest mutuality, if not nominated yet.
                             //Note that nomination is only valid at the beginning of the conference.
@@ -1203,6 +1276,12 @@ class NonPlayerAgent : GameStateElement()
 //                        }
 //                    }
                 }
+            }
+
+            else ->
+            {
+                println("Warning: Routine ${routines[0].name} is not implemented, but $name is trying to execute it.")
+                return Wait(name, place)
             }
 
         }

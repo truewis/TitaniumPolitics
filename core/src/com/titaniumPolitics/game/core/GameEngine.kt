@@ -486,7 +486,7 @@ class GameEngine(val gameState: GameState)
                     gameState.time + 18 /*9 in the morning*/,
                     "divisionLeaderElection",
                     place = party.home,
-                    scheduledCharacters = party.members
+                    scheduledCharacters = (setOf("ctrler") + party.members).toHashSet()
                 ).also { it.involvedParty = party.name }
                 gameState.scheduledConferences["conference-${party.home}-${party.name}-${gameState.time}"] = conference
             }
@@ -1229,10 +1229,16 @@ class GameEngine(val gameState: GameState)
                 gameState.scheduledConferences.filter { it.value.time + 2 >= gameState.time && gameState.time + 2 >= it.value.time && it.value.place == place }
                     .filter { !gameState.ongoingMeetings.containsKey(it.key) }
             if (availableConferences.isNotEmpty())
+            {
+                val conf = availableConferences.values.first()
                 if (gameState.parties[availableConferences.values.first().involvedParty]!!.leader == character)//Only the party leader can do below actions.
                 {
                     actions.add("StartConference")
+                } else if (conf.type == "divisionLeaderElection" && character == "ctrler")
+                { //Only the controller can start the division leader election, since the division leader is not assigned in this case.
+                    actions.add("StartConference")
                 }
+            }
             val conferencesToJoin = gameState.ongoingConferences.filter {
                 it.value.scheduledCharacters.contains(character) && !it.value.currentCharacters.contains(character) && it.value.place == place
             }
