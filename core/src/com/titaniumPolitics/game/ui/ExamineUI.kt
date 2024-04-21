@@ -38,6 +38,7 @@ class ExamineUI(var gameState: GameState) : Table(defaultSkin)
                                 gameState.player.place.name
                             ).also { it.what = "HR" }
                         )
+                        this@ExamineUI.isVisible = false
                     }
                 }
                 )
@@ -60,6 +61,7 @@ class ExamineUI(var gameState: GameState) : Table(defaultSkin)
                                 gameState.player.place.name
                             ).also { it.what = "apparatus" }
                         )
+                        this@ExamineUI.isVisible = false
                     }
                 }
                 )
@@ -82,6 +84,7 @@ class ExamineUI(var gameState: GameState) : Table(defaultSkin)
                                 gameState.player.place.name
                             ).also { it.what = "resources" }
                         )
+                        this@ExamineUI.isVisible = false
                     }
                 }
                 )

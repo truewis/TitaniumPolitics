@@ -15,7 +15,7 @@ import com.badlogic.gdx.utils.Align
 import com.titaniumPolitics.game.core.GameState
 import com.rafaskoberg.gdx.typinglabel.TypingAdapter
 import com.rafaskoberg.gdx.typinglabel.TypingLabel
-import com.titaniumPolitics.game.core.ReadOnlyJsons
+import com.titaniumPolitics.game.core.ReadOnly
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
 import ktx.scene2d.*
@@ -115,7 +115,7 @@ class DialogueUI(val gameState: GameState) : Table(defaultSkin), KTable
         val placeName = gameState.player.place.name
         background.drawable = TextureRegionDrawable(
             (stage as CapsuleStage).assetManager.get(
-                ReadOnlyJsons.mapJson[if (placeName.contains("home")) "home" else placeName]!!.jsonObject["image"]!!.jsonPrimitive.content,
+                ReadOnly.mapJson[if (placeName.contains("home")) "home" else placeName]!!.jsonObject["image"]!!.jsonPrimitive.content,
                 Texture::class.java
             )!!
         )

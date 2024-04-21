@@ -10,7 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Stack
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable
 import com.badlogic.gdx.utils.viewport.FitViewport
 import com.titaniumPolitics.game.core.GameState
-import com.titaniumPolitics.game.core.ReadOnlyJsons
+import com.titaniumPolitics.game.core.ReadOnly
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
 import ktx.scene2d.Scene2DSkin
@@ -39,7 +39,7 @@ class CapsuleStage(val gameState: GameState) : Stage(FitViewport(1920F, 1080F))
             Texture::class.java, TextureLoader(resolver)
         )
 
-        ReadOnlyJsons.mapJson.forEach {
+        ReadOnly.mapJson.forEach {
             assetManager.load(it.value.jsonObject["image"]!!.jsonPrimitive.content, Texture::class.java)
             assetManager.load("data/dev/capsuleDevBoxCheck.png", Texture::class.java)
             assetManager.load("data/dev/capsuleDevBox.png", Texture::class.java)
@@ -88,7 +88,7 @@ class CapsuleStage(val gameState: GameState) : Stage(FitViewport(1920F, 1080F))
 
             background.drawable = TextureRegionDrawable(
                 assetManager.get(
-                    ReadOnlyJsons.mapJson[if (name.contains("home")) "home" else name]!!.jsonObject["image"]!!.jsonPrimitive.content,
+                    ReadOnly.mapJson[if (name.contains("home")) "home" else name]!!.jsonObject["image"]!!.jsonPrimitive.content,
                     Texture::class.java
                 )!!
             )

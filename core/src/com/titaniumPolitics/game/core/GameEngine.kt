@@ -41,13 +41,13 @@ class GameEngine(val gameState: GameState)
                             it.health--
                             it.hunger++
                             it.thirst++
-                            with(ReadOnlyJsons) {
-                                if (it.hunger > getConst("hungerThreshold")) it.health -= ((getConst("hungerMax") - getConst(
+                            with(ReadOnly) {
+                                if (it.hunger > const("hungerThreshold")) it.health -= ((const("hungerMax") - const(
                                     "hungerThreshold"
-                                )) / (getConst("hungerMax") + 1 - it.hunger)).toInt()
-                                if (it.thirst > getConst("thirstThreshold")) it.health -= ((getConst("thirstMax") - getConst(
+                                )) / (const("hungerMax") + 1 - it.hunger)).toInt()
+                                if (it.thirst > const("thirstThreshold")) it.health -= ((const("thirstMax") - const(
                                     "thirstThreshold"
-                                )) / (getConst("thirstMax") + 1 - it.thirst)).toInt()
+                                )) / (const("thirstMax") + 1 - it.thirst)).toInt()
                             }
                         }
                     }
@@ -59,7 +59,7 @@ class GameEngine(val gameState: GameState)
                 }
             }
             progression()
-            if (gameState.time % ReadOnlyJsons.getConst("lengthOfDay").toInt() == 0)//Every day
+            if (gameState.time % ReadOnly.const("lengthOfDay").toInt() == 0)//Every day
             {
                 partySizeAdjust()
                 scheduleDailyConferences()
@@ -177,7 +177,7 @@ class GameEngine(val gameState: GameState)
     //TODO: Normalization of mutuality is not implemented yet.
     private fun calculateMutuality()
     {
-        val mutualityZero = (ReadOnlyJsons.getConst("mutualityMin") + ReadOnlyJsons.getConst("mutualityMax")) / 2
+        val mutualityZero = (ReadOnly.const("mutualityMin") + ReadOnly.const("mutualityMax")) / 2
         //Party mutualities are correlated; if a is friendly to b, a is also friendly to b's friends and hostile to b's enemies. If a is hostile to b, a is also hostile to b's friends and friendly to b's enemies.
         gameState.parties.keys.forEach { a ->
             gameState.parties.keys.forEach { b ->

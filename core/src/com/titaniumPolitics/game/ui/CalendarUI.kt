@@ -7,8 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.badlogic.gdx.utils.Align
 
 import com.titaniumPolitics.game.core.GameState
-import com.titaniumPolitics.game.core.Information
-import com.titaniumPolitics.game.core.ReadOnlyJsons
+import com.titaniumPolitics.game.core.ReadOnly
 
 import ktx.scene2d.*
 import ktx.scene2d.Scene2DSkin.defaultSkin
@@ -66,7 +65,7 @@ class CalendarUI : Table(defaultSkin), KTable
                         it.growX()
                     }
                     gameState.scheduledMeetings.filter {
-                        it.value.time / ReadOnlyJsons.getConst("lengthOfDay")
+                        it.value.time / ReadOnly.const("lengthOfDay")
                             .toInt() == gameState.day + i && it.value.scheduledCharacters.contains(gameState.playerName)
                     }.forEach { meeting ->
                         row()
@@ -77,7 +76,7 @@ class CalendarUI : Table(defaultSkin), KTable
                         }
                     }
                     gameState.scheduledConferences.filter {
-                        it.value.time / ReadOnlyJsons.getConst("lengthOfDay")
+                        it.value.time / ReadOnly.const("lengthOfDay")
                             .toInt() == gameState.day + i && it.value.scheduledCharacters.contains(gameState.playerName)
                     }.forEach { conference ->
                         row()

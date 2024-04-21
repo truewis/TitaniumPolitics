@@ -1,7 +1,7 @@
 package com.titaniumPolitics.game.core.gameActions
 
 import com.titaniumPolitics.game.core.GameState
-import com.titaniumPolitics.game.core.ReadOnlyJsons
+import com.titaniumPolitics.game.core.ReadOnly
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 
@@ -43,6 +43,6 @@ sealed class GameAction()
 
     open fun execute()
     {
-        tgtCharObj.frozen += ReadOnlyJsons.getConst(this::class.simpleName!! + "Duration").toInt()
+        tgtCharObj.frozen += ReadOnly.const(this::class.simpleName!! + "Duration").toInt()
     }
 }

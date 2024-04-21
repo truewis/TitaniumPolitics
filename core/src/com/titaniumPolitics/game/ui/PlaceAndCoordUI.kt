@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.titaniumPolitics.game.core.GameState
+import com.titaniumPolitics.game.core.ReadOnly
 import ktx.scene2d.Scene2DSkin.defaultSkin
 
 class PlaceAndCoordUI(gameState: GameState) : Table(defaultSkin)
@@ -23,8 +24,16 @@ class PlaceAndCoordUI(gameState: GameState) : Table(defaultSkin)
 
         gameState.updateUI += { x ->
             Gdx.app.postRunnable {
-                l.setText(x.player.place.name)
-                c.setText(x.player.place.name.length.toString())//This is a test. It should be the coordinates of the place.
+                if (x.player.place.name.contains("home"))
+                {
+                    l.setText(ReadOnly.prop("home"))
+                    c.setText(ReadOnly.prop("uncharted"))
+                } else
+                {
+                    l.setText(ReadOnly.prop(x.player.place.name))
+                    c.setText(x.player.place.coordinates.toString())
+                }
+
             }
         }
     }

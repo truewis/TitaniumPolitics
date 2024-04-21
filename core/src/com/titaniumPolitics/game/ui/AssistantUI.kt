@@ -79,7 +79,7 @@ class AssistantUI(gameState: GameState) : Table(defaultSkin), KTable
             {
                 override fun clicked(event: com.badlogic.gdx.scenes.scene2d.InputEvent?, x: Float, y: Float)
                 {
-                    //Open Map UI
+                    //Open Calendar UI
                     if (HeadUpInterface.instance.calendarUI.isVisible) this@AssistantUI.closeAll()
                     else
                     {

@@ -143,7 +143,7 @@ class Character : GameStateElement()
             if (parent.getMutuality(
                     name,
                     info.tgtCharacter
-                ) > (ReadOnlyJsons.getConst("mutualityMin") + ReadOnlyJsons.getConst("mutualityMax")) / 2
+                ) > (ReadOnly.const("mutualityMin") + ReadOnly.const("mutualityMax")) / 2
             )
                 return parent.characters[info.tgtCharacter]!!.infoPreference(info)
             else

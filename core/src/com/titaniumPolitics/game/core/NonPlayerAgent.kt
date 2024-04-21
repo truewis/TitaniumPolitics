@@ -113,7 +113,7 @@ class NonPlayerAgent : GameStateElement()
                         name,
                         it
                     )
-                } / it.issuedBy.size > ReadOnlyJsons.getConst("RequestRejectAverageMutuality")) && GameEngine.availableActions(
+                } / it.issuedBy.size > ReadOnly.const("RequestRejectAverageMutuality")) && GameEngine.availableActions(
                     parent,
                     it.place,
                     name
@@ -525,7 +525,7 @@ class NonPlayerAgent : GameStateElement()
                                 name,
                                 it
                             )
-                        } / it.issuedBy.size > ReadOnlyJsons.getConst("RequestRejectAverageMutuality")) && GameEngine.availableActions(
+                        } / it.issuedBy.size > ReadOnly.const("RequestRejectAverageMutuality")) && GameEngine.availableActions(
                             parent,
                             it.place,
                             name

@@ -1,6 +1,5 @@
 package com.titaniumPolitics.game.core
 
-import com.titaniumPolitics.game.quests.Quest1
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
@@ -25,9 +24,9 @@ class GameState
             timeChanged.forEach { it(old, _time) }
         }
     val hour: Int
-        get() = _time % ReadOnlyJsons.getConst("lengthOfDay").toInt() / 2
+        get() = _time % ReadOnly.const("lengthOfDay").toInt() / 2
     val day: Int
-        get() = _time / ReadOnlyJsons.getConst("lengthOfDay").toInt()
+        get() = _time / ReadOnly.const("lengthOfDay").toInt()
 
 
     @Transient

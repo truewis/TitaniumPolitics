@@ -6,6 +6,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.*
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.titaniumPolitics.game.core.GameEngine
 import com.titaniumPolitics.game.core.GameState
+import com.titaniumPolitics.game.core.ReadOnly
 import com.titaniumPolitics.game.core.gameActions.*
 import ktx.scene2d.*
 import ktx.scene2d.Scene2DSkin.defaultSkin
@@ -18,7 +19,7 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable
 
     init
     {
-        titleLabel = Label("AvailableActions", skin, "trnsprtConsole")
+        titleLabel = Label(ReadOnly.prop("availableActions"), skin, "trnsprtConsole")
         titleLabel.setFontScale(2f)
         add(titleLabel).growX()
         row()
@@ -59,9 +60,9 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable
                 return@forEach
             }
             val t = scene2d.button {
-                textTooltip(tobj, "default") {
+                textTooltip(ReadOnly.prop(tobj) + "\n" + ReadOnly.prop("$tobj-description"), "default") {
                     this.setFontScale(2f)
-                    it.manager.initialTime = 1f
+                    it.manager.initialTime = 0.5f
                 }
                 image("question-mark-circle-outline-icon") {
                     it.size(100f)
@@ -265,7 +266,7 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable
                                             this@AvailableActionsUI.gameState.playerName,
                                             this@AvailableActionsUI.gameState.player.place.name
                                         )
-                                        
+
                                     )
                                 }
                             })
