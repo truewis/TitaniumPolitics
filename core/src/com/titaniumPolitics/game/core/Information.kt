@@ -11,7 +11,6 @@ import kotlin.math.min
 * */
 @Serializable
 class Information(//If there is no author, it is a rumor.
-    var name: String = "",
     var author: String = "",
     var creationTime: Int = 0,
     var type: String = "",
@@ -28,7 +27,6 @@ class Information(//If there is no author, it is a rumor.
 {
     //Do not copy the name. It is unique.
     constructor(info: Information) : this(
-        "",
         info.author,
         info.creationTime,
         info.type,
@@ -42,6 +40,9 @@ class Information(//If there is no author, it is a rumor.
         info.auxParty,
         info.resources
     )
+
+    var name: String = ""
+        private set
 
     init
     {

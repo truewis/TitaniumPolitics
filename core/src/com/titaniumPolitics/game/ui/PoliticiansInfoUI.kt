@@ -56,49 +56,49 @@ class PoliticiansInfoUI : Table(defaultSkin), KTable
         dataTable.clear()
         dataTable.apply {
 
-            add(label("The Mechanic: ${gameState.characters.filter { it.value.trait.contains("mechanic") }.keys.first()}") {
+            add(label("The Mechanic: ${gameState.characters.filter { it.value.trait.contains("mechanic") }.keys.firstOrNull() ?: "None"}") {
                 setAlignment(
                     Align.center
                 )
             })
             row()
-            add(label("Infrastructure Division Leader: ${gameState.characters.filter { it.value.trait.contains("infraMinister") }.keys.first()}") {
+            add(label("Infrastructure Division Leader: ${gameState.characters.filter { it.value.trait.contains("infraMinister") }.keys.firstOrNull() ?: "None"}") {
                 setAlignment(
                     Align.center
                 )
             })
             row()
-            add(label("Interior Division Leader: ${gameState.characters.filter { it.value.trait.contains("interiorMinister") }.keys.first()}") {
+            add(label("Interior Division Leader: ${gameState.characters.filter { it.value.trait.contains("interiorMinister") }.keys.firstOrNull() ?: "None"}") {
                 setAlignment(
                     Align.center
                 )
             })
             row()
-            add(label("Safety Division Leader: ${gameState.characters.filter { it.value.trait.contains("safetyMinister") }.keys.first()}") {
+            add(label("Safety Division Leader: ${gameState.characters.filter { it.value.trait.contains("safetyMinister") }.keys.firstOrNull() ?: "None"}") {
                 setAlignment(
                     Align.center
                 )
             })
             row()
-            add(label("Education Division Leader: ${gameState.characters.filter { it.value.trait.contains("eduMinister") }.keys.first()}") {
+            add(label("Education Division Leader: ${gameState.characters.filter { it.value.trait.contains("eduMinister") }.keys.firstOrNull() ?: "None"}") {
                 setAlignment(
                     Align.center
                 )
             })
             row()
-            add(label("Industry Division Leader: ${gameState.characters.filter { it.value.trait.contains("industryMinister") }.keys.first()}") {
+            add(label("Industry Division Leader: ${gameState.characters.filter { it.value.trait.contains("industryMinister") }.keys.firstOrNull() ?: "None"}") {
                 setAlignment(
                     Align.center
                 )
             })
             row()
-            add(label("Bioengineering Division Leader: ${gameState.characters.filter { it.value.trait.contains("bioMinister") }.keys.first()}") {
+            add(label("Bioengineering Division Leader: ${gameState.characters.filter { it.value.trait.contains("bioMinister") }.keys.firstOrNull() ?: "None"}") {
                 setAlignment(
                     Align.center
                 )
             })
             row()
-            add(label("Mining Division Leader: ${gameState.characters.filter { it.value.trait.contains("miningMinister") }.keys.first()}") {
+            add(label("Mining Division Leader: ${gameState.characters.filter { it.value.trait.contains("miningMinister") }.keys.firstOrNull() ?: "None"}") {
                 setAlignment(
                     Align.center
                 )

@@ -1,5 +1,8 @@
 package com.titaniumPolitics.game.core.gameActions
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 //Salary is performed by the party leader. It decides the amount of resources to be paid to the party members.
 class Salary(override val tgtCharacter: String, override val tgtPlace: String) : GameAction()
 {

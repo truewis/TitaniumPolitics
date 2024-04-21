@@ -103,22 +103,26 @@ class GameEngine(val gameState: GameState)
             if (action.javaClass.simpleName !in actionList)
                 println(
                     "Warning: Non player character ${char.name} is performing ${action.javaClass.simpleName} at ${
-                        gameState.places.values.find {
-                            it.characters.contains(
-                                char.name
-                            )
-                        }!!.name
+                        char.place.name
                     }, time=${gameState.time}, which is not in the action list. This may be a bug."
                 )
             if (!action.isValid())
                 println(
                     "Warning: Non player character ${char.name} is performing ${action.javaClass.simpleName} at ${
-                        gameState.places.values.find {
-                            it.characters.contains(
-                                char.name
-                            )
-                        }!!.name
+                        char.place.name
                     }, time=${gameState.time}, which is not valid. This may be a bug."
+                )
+            if (action.tgtCharacter != char.name)
+                println(
+                    "Warning: Non player character ${char.name} is performing ${action.javaClass.simpleName} at ${
+                        char.place.name
+                    }, time=${gameState.time}, which is not targeting itself. This may be a bug."
+                )
+            if (action.tgtPlace != char.place.name)
+                println(
+                    "Warning: Non player character ${char.name} is performing ${action.javaClass.simpleName} at ${
+                        char.place.name
+                    }, time=${gameState.time}, which is not targeting its own place. This may be a bug."
                 )
 
         }
@@ -130,7 +134,6 @@ class GameEngine(val gameState: GameState)
         }!!.name
         //Add information to the character so that they can report back.
         Information(
-            "",
             char.name,
             creationTime = gameState.time,
             type = "action",

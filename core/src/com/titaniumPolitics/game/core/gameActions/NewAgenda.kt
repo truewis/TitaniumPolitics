@@ -1,8 +1,10 @@
 package com.titaniumPolitics.game.core.gameActions
 
 import com.titaniumPolitics.game.core.MeetingAgenda
+import kotlinx.serialization.Serializable
 import kotlin.math.max
 
+@Serializable
 class NewAgenda(override val tgtCharacter: String, override val tgtPlace: String) : GameAction()
 {
     lateinit var agenda: MeetingAgenda

@@ -1,5 +1,8 @@
 package com.titaniumPolitics.game.core.gameActions
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 class Repair(override val tgtCharacter: String, override val tgtPlace: String) : GameAction()
 {
     var amount = 30

@@ -107,24 +107,25 @@ class NonPlayerAgent : GameStateElement()
         //We should not enter executeCommand routine if it is already in the routine list.
         if (routines.none { it.name == "executeCommand" })
         {
-            if (parent.requests.values.any {
-                    it.executeTime in parent.time - 3..parent.time + 3 && it.issuedBy.sumOf {
-                        parent.getMutuality(
-                            name,
-                            it
-                        )
-                    } / it.issuedBy.size > ReadOnlyJsons.getConst("RequestRejectAverageMutuality") && GameEngine.availableActions(
-                        parent,
-                        it.place,
-                        name
-                    ).contains(it.action.javaClass.simpleName) && it.place == place
-                })
+            val request = parent.requests.values.firstOrNull() {
+                (it.executeTime in parent.time - 3..parent.time + 3 || it.executeTime == 0) && (it.issuedBy.isEmpty() || it.issuedBy.sumOf {
+                    parent.getMutuality(
+                        name,
+                        it
+                    )
+                } / it.issuedBy.size > ReadOnlyJsons.getConst("RequestRejectAverageMutuality")) && GameEngine.availableActions(
+                    parent,
+                    it.place,
+                    name
+                ).contains(it.action.javaClass.simpleName) && it.place == place
+            }
+            if (request != null)
             {
                 routines.add(
                     Routine(
                         "executeCommand",
                         routines[0].priority + 10
-                    )
+                    ).also { it.variables["request"] = request.name }
                 )//Add the routine with higher priority.
             }
         }
@@ -162,45 +163,27 @@ class NonPlayerAgent : GameStateElement()
             "executeCommand" ->
             {
                 //The condition should be same with the executeCommand routine entry condition.
-                val executableRequests = parent.requests.values.filter {
-                    it.executeTime in parent.time - 3..parent.time + 3 && it.issuedBy.sumOf {
-                        parent.getMutuality(
-                            name,
-                            it
-                        )
-                    } / it.issuedBy.size > ReadOnlyJsons.getConst("RequestRejectAverageMutuality") && GameEngine.availableActions(
-                        parent,
-                        it.place,
-                        name
-                    ).contains(it.action.javaClass.simpleName)
-                }
-                if (executableRequests.isEmpty())
+                val executableRequest = parent.requests[routines[0].variables["request"]!!]!!
+                println("$name is executing the command ${executableRequest}.")
+
+                if (place == executableRequest.place)
                 {
-                    routines.removeAt(0)//Remove the current routine.
+                    if (executableRequest.action.isValid())
+                    {
+                        println("$name: The request ${executableRequest.action} is valid. Executing...")
+                        finishedRequests.add(executableRequest.name)//Execute the request.
+                        return executableRequest.action
+                    }
+                }
+
+                if (place != executableRequest.place)
+                {
+                    routines.add(Routine("move", routines[0].priority + 10).also {
+                        it.variables["movePlace"] = executableRequest.place
+                    })//Add a move routine with higher priority.
                     return executeRoutine()
                 }
-                println("$name is executing the command from ${executableRequests}.")
-                executableRequests.forEach { request ->
-                    if (place == request.place)
-                    {
-                        if (request.action.isValid())
-                        {
-                            println("$name: The request ${request.action} is valid. Executing...")
-                            finishedRequests.add(request.name)//Execute the request.
-                            return request.action
-                        }
-                    }
-                    //Check other executable commands.
-                }
-                executableRequests.forEach { request ->
-                    if (place != request.place)
-                    {
-                        routines.add(Routine("move", routines[0].priority + 10).also {
-                            it.variables["movePlace"] = request.place
-                        })//Add a move routine with higher priority.
-                        return executeRoutine()
-                    }
-                }
+
 
             }
 
@@ -525,24 +508,26 @@ class NonPlayerAgent : GameStateElement()
                 //We should not enter executeCommand routine if it is already in the routine list.
                 if (routines.none { it.name == "executeCommand" })
                 {
-                    if (parent.requests.values.any {
-                            it.executeTime in parent.time - 3..parent.time + 3 && it.issuedBy.sumOf {
-                                parent.getMutuality(
-                                    name,
-                                    it
-                                )
-                            } / it.issuedBy.size > ReadOnlyJsons.getConst("RequestRejectAverageMutuality") && GameEngine.availableActions(
-                                parent,
-                                it.place,
-                                name
-                            ).contains(it.action.javaClass.simpleName)
-                        })
+                    val request = parent.requests.values.firstOrNull {
+                        (it.executeTime in parent.time - 3..parent.time + 3 || it.executeTime == 0) && (it.issuedBy.isEmpty() || it.issuedBy.sumOf {
+                            parent.getMutuality(
+                                name,
+                                it
+                            )
+                        } / it.issuedBy.size > ReadOnlyJsons.getConst("RequestRejectAverageMutuality")) && GameEngine.availableActions(
+                            parent,
+                            it.place,
+                            name
+                        )
+                            .contains(it.action.javaClass.simpleName) //Here, we can move to other places to execute the command, so we do not check if the place is here.
+                    }
+                    if (request != null)
                     {
                         routines.add(
                             Routine(
                                 "executeCommand",
                                 routines[0].priority + 10
-                            )
+                            ).also { it.variables["request"] = request.name }
                         )//Add the routine with higher priority.
                     }
                 }
@@ -909,7 +894,7 @@ class NonPlayerAgent : GameStateElement()
                                     val request = Request(
                                         place,
                                         Salary(
-                                            routines[0].variables["character"]!!,
+                                            party.leader,
                                             tgtPlace = party.home
                                         ).also {
                                             //TODO: adjust the salary, it.resources.

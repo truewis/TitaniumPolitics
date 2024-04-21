@@ -2,8 +2,10 @@ package com.titaniumPolitics.game.core.gameActions
 
 import com.titaniumPolitics.game.core.GameEngine
 import com.titaniumPolitics.game.core.Information
+import kotlinx.serialization.Serializable
 import kotlin.math.max
 
+@Serializable
 //This class is used to end a speech and nominate a new speaker. This action is used by the current speaker.
 class EndSpeech(override val tgtCharacter: String, override val tgtPlace: String) : GameAction()
 {

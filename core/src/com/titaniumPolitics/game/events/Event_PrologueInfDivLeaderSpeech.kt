@@ -1,6 +1,8 @@
 package com.titaniumPolitics.game.events
 
 import com.titaniumPolitics.game.core.GameState
+import com.titaniumPolitics.game.core.QuestSystem
+import com.titaniumPolitics.game.quests.Quest1
 import com.titaniumPolitics.game.ui.DialogueUI
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
@@ -19,6 +21,7 @@ class Event_PrologueInfDivLeaderSpeech : EventObject("Introduction of InfDivLead
     @Transient
     val func = {
         DialogueUI.instance.playDialogue("PrologueInfDivLeaderSpeech")
+        parent.questSystem.add(Quest1())
     }
 
     override fun activate()

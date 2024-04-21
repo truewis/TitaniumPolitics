@@ -2,8 +2,10 @@ package com.titaniumPolitics.game.core.gameActions
 
 import com.titaniumPolitics.game.core.GameEngine
 import com.titaniumPolitics.game.core.Information
+import kotlinx.serialization.Serializable
 import kotlin.math.max
 
+@Serializable
 class AddInfo(override val tgtCharacter: String, override val tgtPlace: String) : GameAction()
 {
     lateinit var infoKey: String

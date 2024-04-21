@@ -2,7 +2,9 @@ package com.titaniumPolitics.game.core.gameActions
 
 import com.titaniumPolitics.game.core.GameEngine
 import com.titaniumPolitics.game.core.Meeting
+import kotlinx.serialization.Serializable
 
+@Serializable
 //Talk is considered as a on-the-fly meeting.
 class Talk(override val tgtCharacter: String, override val tgtPlace: String) : GameAction()
 {

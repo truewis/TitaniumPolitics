@@ -1,7 +1,9 @@
 package com.titaniumPolitics.game.core.gameActions
 
 import com.titaniumPolitics.game.core.GameEngine
+import kotlinx.serialization.Serializable
 
+@Serializable
 class JoinConference(override val tgtCharacter: String, override val tgtPlace: String) : GameAction()
 {
     var meetingName = ""

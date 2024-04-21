@@ -7,9 +7,9 @@ import kotlinx.serialization.Serializable
 class Request(var place: String, var action: GameAction)
 {
     var name = ""
-    var executeTime = 0
-    val compulsion = 0
-    var issuedBy: HashSet<String> = hashSetOf()
+        private set
+    var executeTime = 0//If unspecified, it can be executed anytime.
+    var issuedBy: HashSet<String> = hashSetOf() //If unspecified, it is a system request.
     var issuedTo: HashSet<String> = hashSetOf()
     fun generateName(): String
     {

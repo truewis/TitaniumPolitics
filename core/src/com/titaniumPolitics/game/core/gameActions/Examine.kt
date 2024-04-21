@@ -5,7 +5,9 @@ import com.titaniumPolitics.game.core.GameEngine
 import com.titaniumPolitics.game.core.Information
 import com.titaniumPolitics.game.ui.HumanResourceInfoUI
 import com.titaniumPolitics.game.ui.ResourceInfoUI
+import kotlinx.serialization.Serializable
 
+@Serializable
 class Examine(override val tgtCharacter: String, override val tgtPlace: String) : GameAction()
 {
     var what = ""

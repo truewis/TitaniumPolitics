@@ -96,7 +96,6 @@ class GameState
             if (places.none { it.value.characters.contains(char.key) })
                 places["home_" + char.key]!!.characters.add(char.key)
         }
-        questSystem.add(Quest1())
         injectDependency()
         println("Game state initialized successfully.")
     }

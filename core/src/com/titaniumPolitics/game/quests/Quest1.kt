@@ -7,20 +7,12 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 
 @Serializable
-class Quest1 : QuestObject("Be a minister", 240)
+class Quest1 : QuestObject("Be the Infrastructure Division Leader.", 240)
 {
-    //Mechanic picks a new infrastructure minister. Quest is completed if the player has the most mutuality with the mechanic among all people in the infrastructure party.
+    //Mechanic picks a new infrastructure division leader. Quest is completed if the player is elected the new leader.
     override fun injectParent(gameState: GameState)
     {
         super.injectParent(gameState)
-        //The current infrastructure minister resigns and the mechanic picks a new one.
-        val who = parent.parties["infrastructure"]!!.leader
-        val c = Request(
-            parent.parties["infrastructure"]!!.home,
-            Resign(tgtCharacter = who, tgtPlace = parent.parties["infrastructure"]!!.home).also {
-                it.injectParent(gameState)
-            }).also { it.executeTime = 48 + 18; it.issuedBy = hashSetOf("ctrler"); it.generateName() }
-        parent.requests[c.name] = c
 
 
     }
@@ -28,6 +20,15 @@ class Quest1 : QuestObject("Be a minister", 240)
     override fun activate()
     {
         parent.timeChanged += func
+        //The current infrastructure minister resigns and the election happens.
+        val who = parent.parties["infrastructure"]!!.leader
+        val c = Request(
+            parent.parties["infrastructure"]!!.home,
+            Resign(tgtCharacter = who, tgtPlace = parent.parties["infrastructure"]!!.home).also {
+                it.injectParent(parent)
+            }).also { it.generateName() }
+        println("Quest1: ${c.name}")
+        parent.requests[c.name] = c
     }
 
     override fun deactivate()
