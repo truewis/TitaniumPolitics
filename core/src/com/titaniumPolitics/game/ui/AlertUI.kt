@@ -14,17 +14,12 @@ import ktx.scene2d.*
 
 class AlertUI(var gameState: GameState) : Table(defaultSkin)
 {
-    var titleLabel: Label
     private val docList = VerticalGroup()
     private val previousInformation = hashSetOf<String>()
 
     init
     {
         instance = this
-        titleLabel = Label("Alerts", skin, "trnsprtConsole")
-        titleLabel.setFontScale(2f)
-        add(titleLabel).growX()
-        row()
         val docScr = ScrollPane(docList)
         docList.grow()
 
@@ -85,6 +80,8 @@ class AlertUI(var gameState: GameState) : Table(defaultSkin)
                         {
                             super.clicked(event, x, y)
                             docList.removeActor(this@stack)
+                            if (docList.children.isEmpty)
+                                isVisible = false
                         }
 
                     }
