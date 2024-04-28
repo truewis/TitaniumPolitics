@@ -17,6 +17,7 @@ class HeadUpInterface(val gameState: GameState) : Table(Scene2DSkin.defaultSkin)
     {
         debug()
         instance = this
+        addActor(CharacterInteractionWindowUI(gameState = this@HeadUpInterface.gameState))
         stack { cell ->
             cell.grow()
 

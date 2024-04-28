@@ -81,7 +81,7 @@ class AlertUI(var gameState: GameState) : Table(defaultSkin)
                             super.clicked(event, x, y)
                             docList.removeActor(this@stack)
                             if (docList.children.isEmpty)
-                                isVisible = false
+                                this@AlertUI.isVisible = false
                         }
 
                     }
@@ -112,12 +112,19 @@ class AlertUI(var gameState: GameState) : Table(defaultSkin)
             }.toHashSet()
             newInformation.removeAll(previousInformation)
             newInformation.forEach {
+                //Decide whether to show the alert based on the type of information.
                 if (gameState.informations[it]!!.type == "accident")
                     addAlert("accident") {
                         InformationViewUI.instance.refresh(gameState, "creationTime")
                         InformationViewUI.instance.isVisible = true
                     }
-                else if (!(gameState.informations[it]!!.type == "action" && gameState.informations[it]!!.tgtCharacter == gameState.playerName))//Ignore my actions, they are not surprising.
+                else if (!(gameState.informations[it]!!.type == "action" && (gameState.informations[it]!!.tgtCharacter == gameState.playerName
+                            || setOf(
+                        "Move",
+                        "Wait"
+                    ).contains(gameState.informations[it]!!.action))//Ignore boring actions, even if they are not mine.
+                            )
+                )//Ignore my actions, they are not surprising.
                     addAlert("newInfo") {
                         InformationViewUI.instance.refresh(gameState, "creationTime")
                         InformationViewUI.instance.isVisible = true

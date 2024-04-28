@@ -9,11 +9,11 @@ import com.titaniumPolitics.game.ui.map.*
 import ktx.scene2d.*
 
 //This UI is used to select a character as a parameter for an action.
+//TODO: Select character with a simple dropdown for now. We will eventually have to differentiate between selecting characters in the same place and selecting characters in other places.
 class CharacterSelectUI(val gameState: GameState) : Table(Scene2DSkin.defaultSkin), KTable
 {
     val currentConnections = arrayListOf<Connection>()
     val currentMarkers = arrayListOf<PlaceMarker>()
-    val currentCharMarkerWindow = CharacterInteractionWindowUI(gameState, this)
 
 
     init
@@ -31,7 +31,7 @@ class CharacterSelectUI(val gameState: GameState) : Table(Scene2DSkin.defaultSki
                         override fun clicked(event: com.badlogic.gdx.scenes.scene2d.InputEvent?, x: Float, y: Float)
                         {
                             //Close Place Marker UI
-                            this@CharacterSelectUI.currentCharMarkerWindow.isVisible = false
+                            CharacterInteractionWindowUI.instance.isVisible = false
                         }
                     }
                     )
@@ -56,8 +56,7 @@ class CharacterSelectUI(val gameState: GameState) : Table(Scene2DSkin.defaultSki
 
 
         }
-        currentCharMarkerWindow.isVisible = false
-        this.addActor(currentCharMarkerWindow)
+        CharacterInteractionWindowUI.instance.isVisible = false
 
 
     }
@@ -65,7 +64,6 @@ class CharacterSelectUI(val gameState: GameState) : Table(Scene2DSkin.defaultSki
 
     fun refresh()
     {
-        removeActor(currentCharMarkerWindow)
         currentConnections.forEach { removeActor(it) }
         currentConnections.clear()
         //Draw connections between places
@@ -85,7 +83,6 @@ class CharacterSelectUI(val gameState: GameState) : Table(Scene2DSkin.defaultSki
         }
         currentMarkers.forEach { removeActor(it) }
         currentMarkers.clear()
-        addActor(currentCharMarkerWindow)
     }
 
     companion object

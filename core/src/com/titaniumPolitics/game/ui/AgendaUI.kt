@@ -12,11 +12,8 @@ import com.titaniumPolitics.game.core.GameEngine
 import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.core.Meeting
 import com.titaniumPolitics.game.core.MeetingAgenda
-import ktx.scene2d.KTable
+import ktx.scene2d.*
 import ktx.scene2d.Scene2DSkin.defaultSkin
-import ktx.scene2d.image
-import ktx.scene2d.label
-import ktx.scene2d.scene2d
 
 
 //This UI is used for both meetings and conferences
@@ -29,12 +26,17 @@ class AgendaUI(var gameState: GameState) : Table(defaultSkin), KTable
     init
     {
         AgendaTitle.setFontScale(2f)
+        stack {
+            image("panel") {
+            }
+            table {
+                add(this@AgendaUI.AgendaTitle)
+                row()
+                add(this@AgendaUI.AddedInfos)
+            }
+        }
 
 
-
-        add(AgendaTitle)
-        row()
-        add(AddedInfos)
     }
 
     //This function can be used for both meetings and conferences

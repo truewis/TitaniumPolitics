@@ -3,6 +3,7 @@ package com.titaniumPolitics.game.ui
 import com.badlogic.gdx.scenes.scene2d.ui.Window
 import com.titaniumPolitics.game.core.GameEngine
 import com.titaniumPolitics.game.core.GameState
+import com.titaniumPolitics.game.core.ReadOnly
 import com.titaniumPolitics.game.core.gameActions.Talk
 import com.titaniumPolitics.game.ui.map.PlaceSelectionUI
 import ktx.scene2d.Scene2DSkin.defaultSkin
@@ -11,7 +12,7 @@ import ktx.scene2d.label
 import ktx.scene2d.scene2d
 
 //This UI is a window that pops up when the player clicks on a character in the map. It allows the player to talk to the character or select them.
-class CharacterInteractionWindowUI(var gameState: GameState, var owner: CharacterSelectUI?) :
+class CharacterInteractionWindowUI(var gameState: GameState) :
     Window("Char Marker", defaultSkin)
 {
     var characterDisplayed = ""
@@ -32,7 +33,6 @@ class CharacterInteractionWindowUI(var gameState: GameState, var owner: Characte
                 )
                 action.who = characterDisplayed
                 action.injectParent(gameState)
-                owner?.isVisible = false
                 this@CharacterInteractionWindowUI.isVisible = false
                 GameEngine.acquireCallback(action)
             }
@@ -50,14 +50,28 @@ class CharacterInteractionWindowUI(var gameState: GameState, var owner: Characte
             {
                 //Select place.
                 PlaceSelectionUI.instance.selectedPlaceCallback(characterDisplayed)
-                owner?.isVisible = false
             }
         }
         )
     }
+    private val closeButton = scene2d.button {
+        label("Close", "console") {
+            setFontScale(2f)
+        }
+
+        addListener(object : com.badlogic.gdx.scenes.scene2d.utils.ClickListener()
+        {
+            override fun clicked(event: com.badlogic.gdx.scenes.scene2d.InputEvent?, x: Float, y: Float)
+            {
+                this@CharacterInteractionWindowUI.isVisible = false
+
+            }
+        })
+    }
 
     init
     {
+        instance = this
         isVisible = false
         titleLabel.setFontScale(2f)
         setSize(300f, 200f)
@@ -79,7 +93,7 @@ class CharacterInteractionWindowUI(var gameState: GameState, var owner: Characte
             val YOFFSET = 0
             setPosition(x + XOFFSET, y + YOFFSET)
             isVisible = true
-            this.titleLabel.setText(charName)
+            this.titleLabel.setText(ReadOnly.prop(charName))
             characterDisplayed = charName
 
             //Clear the list of any previous buttons.
@@ -89,12 +103,25 @@ class CharacterInteractionWindowUI(var gameState: GameState, var owner: Characte
             if (mode == "CharSelection")
             {
                 add(selectButton).fill()
+                row()
             } else
             {
                 //Disable the button if the player is already in the place. Calling place property will throw an exception when the game is first loaded.
-                if (gameState.player.place.name != characterDisplayed)
+                //Also, disable the button if the character is already in the meeting ("talking" to them already).
+                if (gameState.player.place.name != characterDisplayed && gameState.player.currentMeeting?.currentCharacters?.contains(
+                        characterDisplayed
+                    ) == false
+                )
                     add(talkButton).fill()
+                row()
             }
+            add(closeButton).fill()
         }
+    }
+
+    companion object
+    {
+        //Singleton instance, because there should only be one of this UI appearing at a time.
+        lateinit var instance: CharacterInteractionWindowUI
     }
 }

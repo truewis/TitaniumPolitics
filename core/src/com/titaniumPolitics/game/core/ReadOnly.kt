@@ -14,6 +14,9 @@ object ReadOnly
     val props = javaClass.classLoader.getResourceAsStream("texts/ui.properties").use {
         Properties().apply { load(it) }
     }
+    val script = javaClass.classLoader.getResourceAsStream("texts/DefaultCharacter.properties").use {
+        Properties().apply { load(it) }
+    }
 
     fun const(constName: String): Float
     {
@@ -24,6 +27,12 @@ object ReadOnly
     {
 
         return (props.getProperty(key)) ?: throw RuntimeException("could not find property $key")
+    }
+
+    fun script(key: String): String?
+    {
+        return (script.getProperty(key)) ?: return null
+
     }
 
 }

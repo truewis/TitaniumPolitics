@@ -8,7 +8,7 @@
     },
     "seefy": {
     },
-    "infy": {
+    "Alina": {
     },
     "mini": {
     },
@@ -92,7 +92,7 @@
       "health": 80,
       "livingBy": "mainControlRoom"
     },
-    "infy": {
+    "Alina": {
       "trait": [
         "workaholic",
         "emotionless",
@@ -2743,7 +2743,7 @@
         "oldie",
         "charlie",
         "seefy",
-        "infy",
+        "Alina",
         "mini",
         "eddy",
         "inddy",
@@ -2814,9 +2814,9 @@
     "infrastructure": {
       "type": "division",
       "anonymousMembers": 500,
-      "leader": "infy",
+      "leader": "Alina",
       "members": [
-        "infy",
+        "Alina",
         "Rui",
         "friend1",
         "friend2",

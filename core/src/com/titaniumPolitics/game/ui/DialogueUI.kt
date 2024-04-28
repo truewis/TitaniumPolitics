@@ -136,7 +136,7 @@ class DialogueUI(val gameState: GameState) : Table(defaultSkin), KTable
         val lineSpeaker = line.split(": ")[0]
         val lineText =
             line.split(": ")[1]
-        speakerNameDisplay.setText(lineSpeaker)
+        speakerNameDisplay.setText(ReadOnly.prop(lineSpeaker))
         currentTextDisplay.restart(lineText)
         portraitsTable.clear()
         portraitsTable.addActor(

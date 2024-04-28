@@ -10,16 +10,17 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable
 import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.core.Meeting
+import ktx.scene2d.KTable
 import ktx.scene2d.Scene2DSkin.defaultSkin
 import ktx.scene2d.image
+import ktx.scene2d.label
 import ktx.scene2d.scene2d
 
 
 //This UI is used for both meetings and conferences
-class MeetingUI(var gameState: GameState) : Table(defaultSkin)
+class MeetingUI(var gameState: GameState) : Table(defaultSkin), KTable
 {
-    val currentCharacerMarkerWindow = CharacterInteractionWindowUI(gameState, null)
-    val portraits = arrayListOf<Actor>()
+    val portraits = arrayListOf<PortraitUI>()
     val availableInfos = HorizontalGroup()
     val currentAgendas = HorizontalGroup()
     val currentAttention = Label("0", defaultSkin, "trnsprtConsole")
@@ -27,6 +28,7 @@ class MeetingUI(var gameState: GameState) : Table(defaultSkin)
     init
     {
         instance = this
+        currentAgendas.pad(50f)
         //Red color for attention
         currentAttention.setColor(1f, 0f, 0f, 1f)
 
@@ -35,8 +37,11 @@ class MeetingUI(var gameState: GameState) : Table(defaultSkin)
             if (it.player.currentMeeting != null)
                 refresh(it.player.currentMeeting!!)
         }
-        addActor(currentCharacerMarkerWindow)
         add(currentAttention)
+        row()
+        label("Agendas", "trnsprtConsole") {
+            setFontScale(2f)
+        }
         row()
         add(currentAgendas)
 
@@ -73,44 +78,32 @@ class MeetingUI(var gameState: GameState) : Table(defaultSkin)
     private fun addCharacterPortrait(characterName: String)
     {
 
-        val portrait = scene2d.image("raincoat-icon") {
-            if (defaultSkin.has(characterName, Drawable::class.java))
-                this.setDrawable(defaultSkin, characterName)
-            addListener(object : com.badlogic.gdx.scenes.scene2d.utils.ClickListener()
-            {
-                override fun clicked(event: com.badlogic.gdx.scenes.scene2d.InputEvent?, x: Float, y: Float)
-                {
-                    //Open Character Marker UI
-                    currentCharacerMarkerWindow.isVisible = true
-                    currentCharacerMarkerWindow.refresh(x, y, characterName)
-                }
-            })
-        }
+        val portrait = PortraitUI(characterName, gameState)
         portraits.add(portrait)
-        portrait.name = characterName
         addActor(portrait)
 
 
     }
 
+    //Cf. the same function in CharacterPortraitsUI
     private fun placeCharacterPortrait()
     {
+        //reorder portraits so that the speaker is always on the center
+        val speakerPortrait = portraits.find { it.tgtCharacter == gameState.player.currentMeeting!!.currentSpeaker }
+        if (speakerPortrait != null)
+        {
+            portraits.remove(speakerPortrait)
+            portraits.add(portraits.size / 2, speakerPortrait)
+        }
         //Place portraits across the screen so they are not on top of each other.
         portraits.forEach {
-            it.setPosition(portraits.indexOf(it) * Gdx.graphics.width.toFloat() / portraits.size, 0f)
+            it.setPosition(
+                (portraits.indexOf(it) + 0.5f) * CapsuleStage.instance.width / portraits.size + it.width / 2,
+                300f
+            )
         }
-        //TODO: replace portraits so that the speaker is always on the center
 
-    }
 
-    fun displayEmojiOnPortrait(characterName: String, emojiTexture: Texture)
-    {
-        val characterPortrait = children.find { it.name == characterName }
-        if (characterPortrait != null)
-        {
-            val emoji = Image(emojiTexture)
-            addActor(emoji)
-        }
     }
 
     companion object

@@ -3,6 +3,7 @@ package com.titaniumPolitics.game.ui.map
 import com.badlogic.gdx.scenes.scene2d.ui.Window
 import com.titaniumPolitics.game.core.GameEngine
 import com.titaniumPolitics.game.core.GameState
+import com.titaniumPolitics.game.core.ReadOnly
 import com.titaniumPolitics.game.core.gameActions.Move
 import ktx.scene2d.Scene2DSkin.defaultSkin
 import ktx.scene2d.button
@@ -75,7 +76,9 @@ class PlaceMarkerWindowUI(var gameState: GameState, var owner: MapUI) : Window("
             val YOFFSET = 10f
             setPosition(x + XOFFSET, y + YOFFSET)
             isVisible = true
-            this.titleLabel.setText(placeName)
+            if (placeName.contains("home")) this.titleLabel.setText(ReadOnly.prop("home"))
+            else
+                this.titleLabel.setText(ReadOnly.prop(placeName))
             placeDisplayed = placeName
 
             //Clear the list of any previous buttons.

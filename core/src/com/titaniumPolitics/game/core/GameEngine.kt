@@ -182,7 +182,9 @@ class GameEngine(val gameState: GameState)
         runBlocking {
             suspendCoroutine { cont ->
                 Gdx.app.postRunnable {
-                    gameState.updateUI.forEach { it(gameState) }//Update UI
+                    val current =
+                        gameState.updateUI.clone() as ArrayList<(GameState) -> Unit> //Clone the list to prevent concurrent modification, because updateUI can be modified by UI elements during the update.
+                    current.forEach { it(gameState) }//Update UI
                     cont.resume(Unit)
                 }
             }
