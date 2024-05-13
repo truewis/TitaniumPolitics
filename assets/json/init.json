@@ -28,6 +28,8 @@
     },
     "Mentor": {
     },
+    "Salvor": {
+    },
     "mini1": {
     },
     "mini2": {
@@ -229,6 +231,19 @@
       "livingBy": "constructionYardNorth"
     },
     "Mentor": {
+      "trait": [
+        "workaholic",
+        "emotionless",
+        "technician"
+      ],
+      "resources": {
+        "water": 10,
+        "ration": 10
+      },
+      "health": 80,
+      "livingBy": "constructionYardNorth"
+    },
+    "Salvor": {
       "trait": [
         "workaholic",
         "emotionless",
@@ -2821,7 +2836,8 @@
         "Rui",
         "Krailin",
         "Vaeme",
-        "Mentor"
+        "Mentor",
+        "Salvor"
       ],
       "home": "constructionYardNorth"
     }

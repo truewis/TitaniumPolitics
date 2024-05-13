@@ -8,6 +8,8 @@ import com.titaniumPolitics.game.core.GameEngine
 import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.core.ReadOnly
 import com.titaniumPolitics.game.core.gameActions.*
+import kotlinx.serialization.json.jsonObject
+import kotlinx.serialization.json.jsonPrimitive
 import ktx.scene2d.*
 import ktx.scene2d.Scene2DSkin.defaultSkin
 
@@ -102,6 +104,10 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable
                                     y: Float
                                 )
                                 {
+                                    val sound =
+                                        Gdx.audio.newSound(Gdx.files.internal(ReadOnly.actionJson["Wait"]!!.jsonObject["sound"]!!.jsonPrimitive.content))
+                                    sound.play()
+
                                     GameEngine.acquireCallback(
                                         Wait(
                                             this@AvailableActionsUI.gameState.playerName,
@@ -124,6 +130,9 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable
                                     y: Float
                                 )
                                 {
+                                    val sound =
+                                        Gdx.audio.newSound(Gdx.files.internal(ReadOnly.actionJson["Eat"]!!.jsonObject["sound"]!!.jsonPrimitive.content))
+                                    sound.play()
                                     GameEngine.acquireCallback(
                                         Eat(
                                             this@AvailableActionsUI.gameState.playerName,

@@ -2,6 +2,8 @@ package com.titaniumPolitics.game.ui.map
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Color
+import com.badlogic.gdx.scenes.scene2d.actions.Actions
+import com.badlogic.gdx.scenes.scene2d.actions.AlphaAction
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.badlogic.gdx.utils.Align
@@ -23,19 +25,28 @@ open class MapUI(val gameState: GameState) : Table(Scene2DSkin.defaultSkin), KTa
 
         stack { cell ->
             cell.grow()
-            table {
-                image("panel") {
-                    it.grow()
-                    addListener(object : ClickListener()
+            image("panel") {
+
+            }
+            image("mapBackground") {
+                addAction(
+                    Actions.forever(
+                        Actions.sequence(
+                            Actions.delay(0.5f),
+                            AlphaAction().apply {
+                                duration = 0.2f
+                                alpha = 0.2f
+                            }
+                        )))
+                addListener(object : ClickListener()
+                {
+                    override fun clicked(event: com.badlogic.gdx.scenes.scene2d.InputEvent?, x: Float, y: Float)
                     {
-                        override fun clicked(event: com.badlogic.gdx.scenes.scene2d.InputEvent?, x: Float, y: Float)
-                        {
-                            //Close Place Marker UI
-                            this@MapUI.currentPlaceMarkerWindow.isVisible = false
-                        }
+                        //Close Place Marker UI
+                        this@MapUI.currentPlaceMarkerWindow.isVisible = false
                     }
-                    )
                 }
+                )
             }
 
             container {

@@ -28,7 +28,6 @@ class Quest1 : QuestObject("Be the Infrastructure Division Leader.", 240)
                 it.injectParent(parent)
             }, issuedTo = hashSetOf(who)
         ).also { it.generateName() }
-        println("Quest1: ${c.name}")
         parent.requests[c.name] = c
     }
 

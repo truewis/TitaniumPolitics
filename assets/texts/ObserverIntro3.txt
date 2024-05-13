@@ -3,4 +3,4 @@ observer: We are in the construction yard now, your workplace.
 observer: There is a meeting scheduled tomorrow morning. You are free to do whatever you want until then.
 observer: Keep your eyes on the bottom right of the screen though. Should the vitals go empty, you will die.
 observer: You can always restore the vitals back in your room, given that you have the supplies.
-observer: Well, now I have to go. The station is huge and there is only one observer. Good luck.
+observer: Well, now I have to go. The station is not small and there is only one observer. We shall see again soon. Good luck.

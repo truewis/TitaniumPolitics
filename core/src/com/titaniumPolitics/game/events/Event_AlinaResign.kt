@@ -8,7 +8,7 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 
 @Serializable
-class Event_PrologueInfDivLeaderSpeech : EventObject("Introduction of Alina.", true)
+class Event_AlinaResign : EventObject("Introduction of Alina.", true)
 {
     //Infrastructure Division Leader gives a speech. Quest is completed when the game starts.
     override fun injectParent(gameState: GameState)
@@ -19,14 +19,14 @@ class Event_PrologueInfDivLeaderSpeech : EventObject("Introduction of Alina.", t
     }
 
     @Transient
-    val func = { _: Int, _: Int ->
-        if (parent.player.currentMeeting != null && parent.parties["infrastructure"]!!.leader == "Alina" && parent.player.currentMeeting!!.currentCharacters.containsAll(
-                listOf("Alina", "Krailin")
+    val func = { _: Int, newTime: Int ->
+        if (newTime > 96 && parent.player.currentMeeting != null && parent.parties["infrastructure"]!!.leader == "Alina" && parent.player.currentMeeting!!.currentCharacters.containsAll(
+                listOf("Alina")
             )
         )
         {
-            DialogueUI.instance.playDialogue("PrologueInfDivLeaderSpeech")
-            parent.eventSystem.dataBase.add(Event_AlinaResign())
+            DialogueUI.instance.playDialogue("AlinaResign")
+            parent.questSystem.add(Quest1())
             deactivate()
         }
     }
