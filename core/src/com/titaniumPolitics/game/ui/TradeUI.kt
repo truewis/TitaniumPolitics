@@ -37,7 +37,6 @@ class TradeUI(var gameState: GameState) : Table(defaultSkin)
         row()
         add(submitButton)
         add(cancelButton)
-        debug = true
         isVisible = false
         GameEngine.acquireEvent += {
             if (it.type == "Action")
