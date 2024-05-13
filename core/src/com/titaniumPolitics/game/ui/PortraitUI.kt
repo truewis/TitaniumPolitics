@@ -18,8 +18,13 @@ class PortraitUI(var tgtCharacter: String, var gameState: GameState) : Table(def
         add(this@PortraitUI.speech)
     }
     val portrait = scene2d.image("raincoat-icon") {
-        if (defaultSkin.has(this@PortraitUI.tgtCharacter, Drawable::class.java))
+        try
+        {
             this.setDrawable(defaultSkin, this@PortraitUI.tgtCharacter)
+        } catch (e: Exception)
+        {
+            println("Portrait Image Error: ${this@PortraitUI.tgtCharacter}")
+        }
         addListener(object : com.badlogic.gdx.scenes.scene2d.utils.ClickListener()
         {
             override fun clicked(event: com.badlogic.gdx.scenes.scene2d.InputEvent?, x: Float, y: Float)

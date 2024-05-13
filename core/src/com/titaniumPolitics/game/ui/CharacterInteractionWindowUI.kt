@@ -110,10 +110,12 @@ class CharacterInteractionWindowUI(var gameState: GameState) :
                 //Also, disable the button if the character is already in the meeting ("talking" to them already).
                 if (gameState.player.place.name != characterDisplayed && gameState.player.currentMeeting?.currentCharacters?.contains(
                         characterDisplayed
-                    ) == false
+                    ) != true
                 )
+                {
                     add(talkButton).fill()
-                row()
+                    row()
+                }
             }
             add(closeButton).fill()
         }

@@ -57,7 +57,7 @@ class PlaceMarkerWindowUI(var gameState: GameState, var owner: MapUI) : Window("
     init
     {
         titleLabel.setFontScale(2f)
-        setSize(300f, 200f)
+        setSize(450f, 200f)
         setPosition(100f, 100f)
 
     }
@@ -91,7 +91,7 @@ class PlaceMarkerWindowUI(var gameState: GameState, var owner: MapUI) : Window("
             } else
             {
                 //Disable the button if the player is already in the place. Calling place property will throw an exception when the game is first loaded.
-                if (gameState.characters[gameState.playerName]!!.place.name != placeDisplayed)
+                if (gameState.characters[gameState.playerName]!!.place.connectedPlaces.contains(placeDisplayed))
                     add(moveButton).fill()
             }
         }

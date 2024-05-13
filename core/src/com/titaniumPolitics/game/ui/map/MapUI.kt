@@ -6,6 +6,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.badlogic.gdx.utils.Align
 import com.titaniumPolitics.game.core.GameState
+import com.titaniumPolitics.game.ui.CapsuleStage
 import ktx.scene2d.*
 
 open class MapUI(val gameState: GameState) : Table(Scene2DSkin.defaultSkin), KTable
@@ -17,6 +18,7 @@ open class MapUI(val gameState: GameState) : Table(Scene2DSkin.defaultSkin), KTa
 
     init
     {
+        instance = this
         isVisible = false
 
         stack { cell ->
@@ -102,21 +104,30 @@ open class MapUI(val gameState: GameState) : Table(Scene2DSkin.defaultSkin), KTa
         addActor(currentPlaceMarkerWindow)
     }
 
+    fun convertToScreenCoords(x: Float, y: Float): Pair<Float, Float>
+    {
+        //Converts coordinates to screen coordinates. The Screen in centered at the player's location.
+        var rel_x = x - gameState.player.place.coordinates.x
+        var rel_y = y - gameState.player.place.coordinates.z
+        if (gameState.player.place.name == "home_" + gameState.playerName) //Homes does not have coordinates, so we use the place the player is living by.
+        {
+            rel_x = x - gameState.places[gameState.player.livingBy]!!.coordinates.x
+            rel_y = y - gameState.places[gameState.player.livingBy]!!.coordinates.z
+        }
+        val MAX_X = 20
+        val MAX_Y = 15
+        val MIN_X = -20
+        val MIN_Y = -15
+        val PADDING = 0.1
+        return Pair(
+            (stage.width * PADDING + (stage.width * (1 - 2 * PADDING) * (x - MIN_X) / (MAX_X - MIN_X))).toFloat(), //We don't do relative coordinates for now. We can replace x with rel_x
+            (stage.height * PADDING + (stage.height * (1 - 2 * PADDING) * (y - MIN_Y) / (MAX_Y - MIN_Y))).toFloat()
+        )
+    }
+
     companion object
     {
-
-        fun convertToScreenCoords(x: Float, y: Float): Pair<Float, Float>
-        {
-            val MAX_X = 20
-            val MAX_Y = 15
-            val MIN_X = -20
-            val MIN_Y = -15
-            val PADDING = 0.1
-            return Pair(
-                (Gdx.graphics.width * PADDING + (Gdx.graphics.width * (1 - 2 * PADDING) * (x - MIN_X) / (MAX_X - MIN_X))).toFloat(),
-                (Gdx.graphics.height * PADDING + (Gdx.graphics.height * (1 - 2 * PADDING) * (y - MIN_Y) / (MAX_Y - MIN_Y))).toFloat()
-            )
-        }
+        lateinit var instance: MapUI
     }
 
 }

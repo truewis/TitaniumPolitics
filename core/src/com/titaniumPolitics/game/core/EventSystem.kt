@@ -1,7 +1,6 @@
 package com.titaniumPolitics.game.core
 
-import com.titaniumPolitics.game.events.EventObject
-import com.titaniumPolitics.game.events.Event_PrologueInfDivLeaderSpeech
+import com.titaniumPolitics.game.events.*
 import com.titaniumPolitics.game.quests.QuestObject
 import com.titaniumPolitics.game.ui.DialogueUI
 import kotlinx.serialization.Serializable
@@ -23,6 +22,9 @@ class EventSystem : GameStateElement()
     {
         super.injectParent(gameState)
         dataBase.add(Event_PrologueInfDivLeaderSpeech())
+        dataBase.add(Event_ObserverIntro())
+        dataBase.add(Event_AlinaIllTheory1())
+        dataBase.add(Event_SalvorElection())
         dataBase.forEach {
             it.injectParent(parent)
             it.activate()

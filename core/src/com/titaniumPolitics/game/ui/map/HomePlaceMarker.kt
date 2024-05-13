@@ -11,7 +11,7 @@ class HomePlaceMarker(gameState: GameState, owner: MapUI, place: String) : Place
     {
         //Since place is set to home_characterName, we need to get the character's livingBy to get the actual place name.
         val place2 = gameState.characters[place.substring(5)]!!.livingBy
-        val start: Pair<Float, Float> = MapUI.convertToScreenCoords(
+        val start: Pair<Float, Float> = MapUI.instance.convertToScreenCoords(
             gameState.places[place2]!!.coordinates.x.toFloat(),
             gameState.places[place2]!!.coordinates.z.toFloat()
         )

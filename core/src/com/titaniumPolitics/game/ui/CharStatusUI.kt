@@ -19,8 +19,8 @@ class CharStatusUI(gameState: GameState) : Table(defaultSkin), KTable
             image(defaultSkin.getDrawable("panel"))
             table {
                 add(HealthMeter(gameState)).fill()
-                row()
-                add(WillMeter(gameState)).fill()
+                //row()
+                //add(WillMeter(gameState)).fill()
             }
 
         }

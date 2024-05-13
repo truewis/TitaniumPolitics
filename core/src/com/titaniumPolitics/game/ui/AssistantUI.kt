@@ -90,7 +90,7 @@ class AssistantUI(gameState: GameState) : Table(defaultSkin), KTable
             }
             )
         }
-        add(ClockUI(gameState)).growX()
+        add(ClockUI(gameState)).growX().align(Align.left)
 
         row()
 

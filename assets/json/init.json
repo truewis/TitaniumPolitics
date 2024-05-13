@@ -22,11 +22,11 @@
     },
     "iii": {
     },
-    "friend1": {
+    "Krailin": {
     },
-    "friend2": {
+    "Vaeme": {
     },
-    "friend3": {
+    "Mentor": {
     },
     "mini1": {
     },
@@ -202,7 +202,7 @@
       "health": 80,
       "livingBy": "constructionYardNorth"
     },
-    "friend1": {
+    "Krailin": {
       "trait": [
         "workaholic",
         "emotionless",
@@ -215,7 +215,7 @@
       "health": 80,
       "livingBy": "constructionYardNorth"
     },
-    "friend2": {
+    "Vaeme": {
       "trait": [
         "workaholic",
         "emotionless",
@@ -228,7 +228,7 @@
       "health": 80,
       "livingBy": "constructionYardNorth"
     },
-    "friend3": {
+    "Mentor": {
       "trait": [
         "workaholic",
         "emotionless",
@@ -1803,7 +1803,7 @@
       "coordinates": {
         "x": 12,
         "y": 0,
-        "z": 0
+        "z": -2
       },
       "resources": {
         "oxygen": 50,
@@ -2024,7 +2024,8 @@
       "connectedPlaces": [
         "excavationShaftB",
         "miningSchool",
-        "squareSouth"
+        "squareSouth",
+        "welfareStationEast"
       ],
       "plannedWorker": 50,
       "apparatuses": [
@@ -2486,9 +2487,9 @@
     },
     "squareSouth": {
       "coordinates": {
-        "x": 0,
-        "y": 5,
-        "z": 0
+        "x": 5,
+        "y": 0,
+        "z": -2
       },
       "resources": {
         "water": 15000,
@@ -2499,7 +2500,8 @@
         "welfareStationEast",
         "rescueStationSouth",
         "miningSchool",
-        "electrolysisStationSouth"
+        "electrolysisStationSouth",
+        "securityCheckCenter"
       ],
       "plannedWorker": 300,
       "apparatuses": [
@@ -2620,7 +2622,6 @@
         }
       ],
       "characters": [
-        "Rui"
       ],
       "responsibleParty": "infrastructure",
       "workHoursStart": 9,
@@ -2818,9 +2819,9 @@
       "members": [
         "Alina",
         "Rui",
-        "friend1",
-        "friend2",
-        "friend3"
+        "Krailin",
+        "Vaeme",
+        "Mentor"
       ],
       "home": "constructionYardNorth"
     }

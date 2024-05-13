@@ -10,6 +10,7 @@ import java.util.*
 object ReadOnly
 {
     val mapJson = Json.parseToJsonElement(Gdx.files.internal("json/map.json").readString()).jsonObject
+    val actionJson = Json.parseToJsonElement(Gdx.files.internal("json/action.json").readString()).jsonObject
     val constJson = Json.parseToJsonElement(Gdx.files.internal("json/consts.json").readString()).jsonObject
     val props = javaClass.classLoader.getResourceAsStream("texts/ui.properties").use {
         Properties().apply { load(it) }

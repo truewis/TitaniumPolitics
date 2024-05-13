@@ -32,7 +32,7 @@ class DialogueUI(val gameState: GameState) : Table(defaultSkin), KTable
     val currentTextDisplay = TypingLabel("", skin, "consoleWhite")
 
     val speakerNameDisplay = Label("", skin, "consoleWhite")
-    val ctnuButton = Label(">>>", skin, "console")
+    val ctnuButton = Label(">>>", skin, "consoleWhite")
     val donePlayingLine = ArrayList<(Int) -> Unit>()
     val background = Image(defaultSkin, "capsuleDevLabel1")
 
@@ -60,8 +60,8 @@ class DialogueUI(val gameState: GameState) : Table(defaultSkin), KTable
             }
         }
         speakerNameDisplay.setAlignment(Align.bottomLeft)
-        currentTextDisplay.setFontScale(2f)
-        speakerNameDisplay.setFontScale(2f)
+        currentTextDisplay.setFontScale(3f)
+        speakerNameDisplay.setFontScale(4f)
         currentTextDisplay.touchable = Touchable.disabled
         speakerNameDisplay.touchable = Touchable.disabled
         currentTextDisplay.typingListener = object : TypingAdapter()
@@ -139,7 +139,8 @@ class DialogueUI(val gameState: GameState) : Table(defaultSkin), KTable
         speakerNameDisplay.setText(ReadOnly.prop(lineSpeaker))
         currentTextDisplay.restart(lineText)
         portraitsTable.clear()
-        portraitsTable.addActor(
+        var prefwidth = 0f
+        portraitsTable.add(
 //            Image(
 //                TextureRegionDrawable(
 //                    (stage as CapsuleStage).assetManager.get(
@@ -149,10 +150,18 @@ class DialogueUI(val gameState: GameState) : Table(defaultSkin), KTable
 //                )
 //            )
             scene2d.image("raincoat-icon") {
-                if (defaultSkin.has(lineSpeaker, Texture::class.java))
+                try
+                {
                     this.setDrawable(defaultSkin, lineSpeaker)
+                    height = 800f //Normal portrait height
+                    width = drawable.minWidth * 800f / drawable.minHeight
+                    prefwidth = width
+                } catch (e: Exception)
+                {
+                    println("Portrait Image Error: $lineSpeaker")
+                }
             }
-        )
+        ).expand().align(Align.bottom).prefHeight(800f).prefWidth(prefwidth)
     }
 
 

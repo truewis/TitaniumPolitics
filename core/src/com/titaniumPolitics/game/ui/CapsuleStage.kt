@@ -1,5 +1,6 @@
 package com.titaniumPolitics.game.ui
 
+import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.assets.AssetManager
 import com.badlogic.gdx.assets.loaders.TextureLoader
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver
@@ -66,8 +67,13 @@ class CapsuleStage(val gameState: GameState) : Stage(FitViewport(1920F, 1080F))
         addActor(commandBox)
         commandBox.setFillParent(true)
 
+        var prevPlace = ""
         gameState.updateUI.add {
-            roomChanged(it.player.place.name)
+            if (prevPlace != it.player.place.name)
+            {
+                prevPlace = it.player.place.name
+                roomChanged(it.player.place.name)
+            }
             if (it.player.currentMeeting != null)
             {
                 meeting.isVisible = true
@@ -78,7 +84,16 @@ class CapsuleStage(val gameState: GameState) : Stage(FitViewport(1920F, 1080F))
                 charactersView.isVisible = true
             }
         }
+        println("Starting Audio...")
+        playMusic()
         println("CapsuleStage initialized successfully.")
+    }
+
+    fun playMusic()
+    {
+        val music = Gdx.audio.newMusic(Gdx.files.internal("data/Capsule_old_lighthouse_loop.mp3"))
+        music.isLooping = true
+        music.play()
     }
 
     fun roomChanged(name: String)
@@ -96,6 +111,15 @@ class CapsuleStage(val gameState: GameState) : Stage(FitViewport(1920F, 1080F))
         } catch (e: Exception)
         {
             println("Background Image Error: $e")
+        }
+        try
+        {
+            val sound =
+                Gdx.audio.newSound(Gdx.files.internal(ReadOnly.mapJson[if (name.contains("home")) "home" else name]!!.jsonObject["sound"]!!.jsonPrimitive.content))
+            sound.play()
+        } catch (e: Exception)
+        {
+            println("Background Sound Error: $e")
         }
     }
 

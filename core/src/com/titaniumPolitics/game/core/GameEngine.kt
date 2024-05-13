@@ -1147,11 +1147,6 @@ class GameEngine(val gameState: GameState)
                     println("You are in a meeting.")
                     println("Attendees: ${meeting.currentCharacters}")
                 }
-                //You cannot chat currently.
-                //Trade is allowed only if there are exactly two people in the meeting.
-                //InfoShare is allowed only if there are more than two people in the meeting.
-                if (meeting.currentCharacters.count() == 2)
-                    actions.add("Trade") //TODO: Trade is an agenda. More unequal the trade, harder it is to agree.
                 if (meeting.currentSpeaker == character)
                 {
                     actions.add("NewAgenda")
@@ -1194,7 +1189,6 @@ class GameEngine(val gameState: GameState)
                         }"
                     )
                 }
-                //You cannot trade in a conference.
                 val subject = conf.type
                 if (character == gameState.parties[conf.involvedParty]!!.leader)//Only the leader can do below actions.
                 {

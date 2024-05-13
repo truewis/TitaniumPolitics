@@ -5,20 +5,21 @@ import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.assets.AssetManager
 import com.badlogic.gdx.assets.loaders.SkinLoader
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator
+import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.utils.ObjectMap
 import com.badlogic.gdx.utils.ScreenUtils
 import com.titaniumPolitics.game.core.GameEngine
 import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.ui.CapsuleStage
+import com.titaniumPolitics.game.ui.MainMenu
 import kotlinx.serialization.json.Json
 import ktx.scene2d.Scene2DSkin
 import kotlin.concurrent.thread
 
 class EntryClass : ApplicationAdapter()
 {
-    lateinit var stage: CapsuleStage
-    lateinit var newGame: GameState
+    lateinit var stage: Stage
     lateinit var skin: Skin
     override fun create()
     {
@@ -36,39 +37,8 @@ class EntryClass : ApplicationAdapter()
         assetManager.finishLoading()
         skin = assetManager.get("skin/capsuleSkin.json")
         Scene2DSkin.defaultSkin = skin
-        val savedGamePath = System.getenv("SAVED_GAME")
-        if (savedGamePath == null)
-        {
-            println("Loading init.json...")
-            newGame = Json.decodeFromString(
-                GameState.serializer(),
-                Gdx.files.internal("json/init.json").readString()
-            ).also {
-                println("Loading complete.")
-                stage = CapsuleStage(it)
-                Gdx.input.inputProcessor = stage
-                it.initialize()
-            }
-            newGame.onStart.forEach { it() }
-        } else
-        {
-            println("Loading saved game from $savedGamePath...")
-            newGame = Json.decodeFromString(
-                GameState.serializer(),
-                Gdx.files.internal(savedGamePath).readString()
-            ).also {
-                println("Loading complete.")
-                stage = CapsuleStage(it)
-                Gdx.input.inputProcessor = stage
-                it.initialize()
-            }
-        }
-        println("Starting game engine.")
-
-        thread(start = true) {
-            val engine = GameEngine(newGame)
-            engine.startGame()
-        }
+        stage = MainMenu(this)
+        Gdx.input.inputProcessor = stage
     }
 
     override fun render()

@@ -1,6 +1,7 @@
 {
   "mainControlRoom": {
-    "image": "data/mainControlRoom.jpeg",
+    "image": "data/mainControlRoom.png",
+    "sound": "data/mainControlRoom.mp3",
     "desc": "Fore frame of the hexagonal frame.",
     "ind": "capsuleMapIndForeFrame",
     "light": [
@@ -11,8 +12,49 @@
     ]
   },
   "home": {
-    "image": "data/testimage.png",
+    "image": "data/home.png",
+    "sound": "data/home.mp3",
     "ind": "capsuleMapIndStarboardAftPlane",
+    "light": [
+      0,
+      0,
+      0,
+      0.4
+    ]
+  },
+  "securityCheckWest": {
+    "image": "data/securityCheck.png",
+    "ind": "capsuleMapIndPortAftPlane",
+    "light": [
+      0,
+      0,
+      0,
+      0.4
+    ]
+  },
+  "securityCheckEast": {
+    "image": "data/securityCheck.png",
+    "ind": "capsuleMapIndPortAftPlane",
+    "light": [
+      0,
+      0,
+      0,
+      0.4
+    ]
+  },
+  "securityCheckCenter": {
+    "image": "data/securityCheck.png",
+    "ind": "capsuleMapIndPortAftPlane",
+    "light": [
+      0,
+      0,
+      0,
+      0.4
+    ]
+  },
+  "asteroidMine": {
+    "image": "data/astMine.png",
+    "ind": "capsuleMapIndPortAftPlane",
     "light": [
       0,
       0,
@@ -75,7 +117,8 @@
     ]
   },
   "constructionYardNorth": {
-    "image": "data/hanger.jpeg",
+    "image": "data/conYard.png",
+    "sound": "data/conYard.mp3",
     "desc": "Center of the hexagonal frame.",
     "ind": "capsuleMapIndCenter",
     "light": [
@@ -86,7 +129,8 @@
     ]
   },
   "constructionYardSouth": {
-    "image": "data/testimage.png",
+    "image": "data/conYard.png",
+    "sound": "data/conYard.mp3",
     "desc": "Starboard-Aft frame of the hexagonal frame.",
     "ind": "capsuleMapIndStarboardAftFrame",
     "light": [
@@ -129,8 +173,9 @@
       0.4
     ]
   },
-  "recycleFacilityNorth": {
+  "recycleFacilityEast": {
     "image": "data/testimage.png",
+    "sound": "data/recycleFacility.mp3",
     "desc": "Starboard-Fore arm of the station.",
     "ind": "capsuleMapIndStarboardForeArm",
     "light": [
@@ -140,8 +185,9 @@
       0.4
     ]
   },
-  "recycleFacilitySouth": {
+  "recycleFacilityWest": {
     "image": "data/testimage.png",
+    "sound": "data/recycleFacility.mp3",
     "desc": "Starboard-Fore arm of the station.",
     "ind": "capsuleMapIndStarboardForeArm",
     "light": [
@@ -174,7 +220,7 @@
     ]
   },
   "reservoirNorth": {
-    "image": "data/reservoir.jpeg",
+    "image": "data/reservoir.png",
     "desc": "Starboard-Fore arm of the station.",
     "ind": "capsuleMapIndStarboardForeArm",
     "light": [
@@ -185,7 +231,7 @@
     ]
   },
   "reservoirSouth": {
-    "image": "data/reservoir.jpeg",
+    "image": "data/reservoir.png",
     "desc": "Starboard-Fore arm of the station.",
     "ind": "capsuleMapIndStarboardForeArm",
     "light": [
@@ -197,6 +243,7 @@
   },
   "miningSchool": {
     "image": "data/testimage.png",
+    "sound": "data/market.mp3",
     "desc": "Starboard-Fore arm of the station.",
     "ind": "capsuleMapIndStarboardForeArm",
     "light": [
@@ -208,6 +255,7 @@
   },
   "techSchool": {
     "image": "data/testimage.png",
+    "sound": "data/market.mp3",
     "desc": "Starboard-Fore arm of the station.",
     "ind": "capsuleMapIndStarboardForeArm",
     "light": [
@@ -218,7 +266,7 @@
     ]
   },
   "farm": {
-    "image": "data/farm.jpeg",
+    "image": "data/farm.png",
     "desc": "Starboard-Fore arm of the station.",
     "ind": "capsuleMapIndStarboardForeArm",
     "light": [
@@ -252,6 +300,7 @@
   },
   "market": {
     "image": "data/market.jpeg",
+    "sound": "data/market.mp3",
     "desc": "Starboard-Fore arm of the station.",
     "ind": "capsuleMapIndStarboardForeArm",
     "light": [
@@ -263,6 +312,7 @@
   },
   "squareNorth": {
     "image": "data/squareNorth.jpeg",
+    "sound": "data/market.mp3",
     "desc": "Starboard-Fore arm of the station.",
     "ind": "capsuleMapIndStarboardForeArm",
     "light": [
@@ -274,6 +324,7 @@
   },
   "squareSouth": {
     "image": "data/squareSouth.jpeg",
+    "sound": "data/market.mp3",
     "desc": "Starboard-Fore arm of the station.",
     "ind": "capsuleMapIndStarboardForeArm",
     "light": [

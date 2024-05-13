@@ -1,0 +1,6 @@
+observer: Hello. Welcome to Titanium Politics.
+observer: We will take this time to teach you what you need to know about affecting the Station.
+observer: The map of the station is at the bottom left of the screen. At your current location, you can move to the adjacent nodes in order to move locations. Currently, this takes approximately 30 minutes in the Station.
+observer: Your character is represented at the bottom right. The vitals and mood are above them. Should the vitals go empty, you will die.
+observer: The three buttons at the bottom perform actions to interact with the Station or give you information.
+observer: We hope you enjoy your visit to our home. And we hope that you can save our citizens’ lives.

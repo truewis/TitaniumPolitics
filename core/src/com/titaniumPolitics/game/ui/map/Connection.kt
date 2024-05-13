@@ -19,11 +19,11 @@ class Connection(var gameState: GameState, startPlace: String, endPlace: String)
         try
         {
 
-            val start: Pair<Float, Float> = MapUI.convertToScreenCoords(
+            val start: Pair<Float, Float> = MapUI.instance.convertToScreenCoords(
                 gameState.places[startPlace]!!.coordinates.x.toFloat(),
                 gameState.places[startPlace]!!.coordinates.z.toFloat()
             )
-            val end: Pair<Float, Float> = MapUI.convertToScreenCoords(
+            val end: Pair<Float, Float> = MapUI.instance.convertToScreenCoords(
                 gameState.places[endPlace]!!.coordinates.x.toFloat(),
                 gameState.places[endPlace]!!.coordinates.z.toFloat()
             )

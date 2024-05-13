@@ -58,6 +58,7 @@ class PoliticiansInfoUI : Table(defaultSkin), KTable
                 setAlignment(
                     Align.center
                 )
+                setFontScale(3f)
             })
             row()
             gameState.parties.filter { it.value.type == "division" }.forEach {
@@ -65,6 +66,7 @@ class PoliticiansInfoUI : Table(defaultSkin), KTable
                     setAlignment(
                         Align.center
                     )
+                    setFontScale(3f)
                 })
                 row()
             }

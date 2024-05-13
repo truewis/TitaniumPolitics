@@ -1,0 +1,17 @@
+{
+  "Move": {
+    "sound": "data/move.mp3"
+  },
+  "Wait": {
+    "sound": "data/wait.mp3"
+  },
+  "OfficialResourceTransfer": {
+    "sound": "data/open.mp3"
+  },
+  "UnofficialResourceTransfer": {
+    "sound": "data/open.mp3"
+  },
+  "Eat": {
+    "sound": "data/eat.mp3"
+  }
+}

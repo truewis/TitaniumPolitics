@@ -21,7 +21,12 @@ class GameState
         {
             val old = _time
             _time = value
-            timeChanged.forEach { it(old, _time) }
+            (timeChanged.clone() as ArrayList<(Int, Int) -> Unit>).forEach {
+                it(
+                    old,
+                    _time
+                )
+            } //Clone the list to prevent concurrent modification.
         }
     val hour: Int
         get() = _time % ReadOnly.const("lengthOfDay").toInt() / 2
