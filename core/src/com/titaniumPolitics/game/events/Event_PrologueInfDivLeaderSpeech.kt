@@ -19,24 +19,25 @@ class Event_PrologueInfDivLeaderSpeech : EventObject("Introduction of Alina.", t
     }
 
     @Transient
-    val func = {
-        if (parent.hour == 10 && parent.player.currentMeeting != null && parent.parties["infrastructure"]!!.leader == "Alina" && parent.player.currentMeeting!!.currentCharacters.containsAll(
+    val func = { _: Int, _: Int ->
+        if (parent.player.currentMeeting != null && parent.parties["infrastructure"]!!.leader == "Alina" && parent.player.currentMeeting!!.currentCharacters.containsAll(
                 listOf("Alina", "Krailin")
             )
         )
         {
             DialogueUI.instance.playDialogue("PrologueInfDivLeaderSpeech")
             parent.questSystem.add(Quest1())
+            deactivate()
         }
     }
 
     override fun activate()
     {
-        parent.onStart += func
+        parent.timeChanged += func
     }
 
     override fun deactivate()
     {
-        parent.onStart -= func
+        parent.timeChanged -= func
     }
 }

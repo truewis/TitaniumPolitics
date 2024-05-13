@@ -1,0 +1,4 @@
+observer: Welcome back.
+observer: We are in your room now. Normally, other people cannot be in your room. Neither can you be in theirs.
+observer: The map of the station is at the bottom left of the screen. At your current location, you can move to the adjacent nodes in order to move locations. Currently, this takes approximately 30 minutes in the Station.
+observer: Why don't you try going outside? I'll see you there.
