@@ -83,7 +83,6 @@ class GameState
     var informations = hashMapOf<String, Information>()
     var floatingResources = hashMapOf<String, Int>()
     var marketResources = hashMapOf<String, Int>()
-    var questSystem = QuestSystem()
     var eventSystem = EventSystem()
 
     fun initialize()
@@ -152,7 +151,6 @@ class GameState
         characters.forEach { it.value.injectParent(this) }
         parties.forEach { it.value.injectParent(this) }
         nonPlayerAgents.forEach { it.value.injectParent(this) }
-        questSystem.injectParent(this)
         eventSystem.injectParent(this)
         println("GameState injected successfully.")
     }
