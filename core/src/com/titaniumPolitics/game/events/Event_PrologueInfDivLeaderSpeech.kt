@@ -1,7 +1,6 @@
 package com.titaniumPolitics.game.events
 
 import com.titaniumPolitics.game.core.GameState
-import com.titaniumPolitics.game.quests.Quest1
 import com.titaniumPolitics.game.ui.DialogueUI
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
@@ -38,5 +37,14 @@ class Event_PrologueInfDivLeaderSpeech : EventObject("Introduction of Alina.", t
     override fun deactivate()
     {
         parent.timeChanged -= func
+    }
+
+    override fun displayEmoji(who: String): Boolean
+    {
+        if (parent.timeChanged.contains(func) && who == "Alina" && parent.player.place.name == parent.parties["infrastructure"]!!.home)
+        {
+            return true
+        }
+        return false
     }
 }

@@ -41,7 +41,7 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable
         docList.grow()
 
         add(docScr).grow()
-        gameState.updateUI += { _ -> Gdx.app.postRunnable { refreshList(); } }
+        gameState.updateUI += { _ -> refreshList(); }
     }
 
 

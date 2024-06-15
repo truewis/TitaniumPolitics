@@ -11,7 +11,7 @@ import ktx.scene2d.Scene2DSkin.defaultSkin
 import ktx.scene2d.image
 import ktx.scene2d.scene2d
 
-
+//TODO: Make this scrollable to deal with many characters.
 //This UI is used to display the portraits of the characters in the current place.
 class CharacterPortraitsUI(var gameState: GameState) : Table(defaultSkin)
 {

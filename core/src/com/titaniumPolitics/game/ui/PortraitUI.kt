@@ -1,6 +1,7 @@
 package com.titaniumPolitics.game.ui
 
 import com.badlogic.gdx.graphics.Texture
+import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.ui.Image
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable
@@ -17,6 +18,7 @@ class PortraitUI(var tgtCharacter: String, var gameState: GameState) : Table(def
         image("panel")
         add(this@PortraitUI.speech)
     }
+    val theEmoji = scene2d.image("question-mark-line-icon")
     val portrait = scene2d.image("raincoat-icon") {
         try
         {
@@ -36,35 +38,65 @@ class PortraitUI(var tgtCharacter: String, var gameState: GameState) : Table(def
         })
     }
 
+    val refresh = { state: GameState ->
+
+        //If there is an action that was taken by the character last turn, display a script on the portrait.
+        val action =
+            state.informations.values.firstOrNull { it.tgtCharacter == tgtCharacter && it.type == "action" && it.creationTime == state.time - 1 }
+        if (action != null && ReadOnly.script(action.action) != null)
+        {
+            bubble.isVisible = true
+            speech.setText(ReadOnly.script(action.action))
+        } else
+        {
+            bubble.isVisible = false
+        }
+
+        //Display emoji based on event conditions.
+        if (state.eventSystem.dataBase.any { it.displayEmoji(tgtCharacter) })
+        {
+            displayEmojiOnPortrait("question-mark-line-icon")
+        } else
+        {
+            displayEmojiOnPortrait("")
+        }
+    }
+
     init
     {
         bubble.isVisible = false
+        //mMeter.isVisible = false
+        theEmoji.isVisible = false
         add(bubble).growX()
         row()
-        add(mMeter).growX()
+        add(theEmoji).growX().size(100f)
+        row()
+        add(mMeter)
         row()
         add(portrait).size(500f, 700f)
-        gameState.updateUI += { state ->
-            //If there is an action that was taken by the character last turn, display a script on the portrait.
-            val action =
-                state.informations.values.firstOrNull { it.tgtCharacter == tgtCharacter && it.type == "action" && it.creationTime == state.time - 1 }
-            if (action != null && ReadOnly.script(action.action) != null)
-            {
-                bubble.isVisible = true
-                speech.setText(ReadOnly.script(action.action))
-            } else
-            {
-                bubble.isVisible = false
-            }
-
-        }
+        gameState.updateUI += refresh
+        refresh(gameState)
 
     }
 
-    fun displayEmojiOnPortrait(characterName: String, emojiTexture: Texture)
+    override fun remove(): Boolean
     {
-        val emoji = Image(emojiTexture)
-        addActor(emoji)
+        gameState.updateUI -= refresh
+        return super.remove()
+    }
 
+
+    fun displayEmojiOnPortrait(emojiTexture: String)
+    {
+        if (emojiTexture == "")
+        {
+            theEmoji.isVisible = false
+            println("$tgtCharacter hiding Emoji.")
+        } else
+        {
+            println("$tgtCharacter Displaying Emoji: $emojiTexture")
+            //theEmoji.setDrawable(defaultSkin, emojiTexture)
+            theEmoji.isVisible = true
+        }
     }
 }

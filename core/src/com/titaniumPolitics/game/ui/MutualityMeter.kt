@@ -9,9 +9,11 @@ import ktx.scene2d.Scene2DSkin.defaultSkin
 import ktx.scene2d.progressBar
 import ktx.scene2d.scene2d
 
-class MutualityMeter(gameState: GameState, var tgtCharacter: String, var who: String) : Table(defaultSkin)
+class MutualityMeter(var gameState: GameState, var tgtCharacter: String, var who: String) : Table(defaultSkin)
 {
     val bar = scene2d.progressBar(0f, 1f, 0.01f, false, "default-horizontal")
+
+    val refresh = { state: GameState -> setValue(state.getMutuality(tgtCharacter, who)) }
 
     init
     {
@@ -19,14 +21,20 @@ class MutualityMeter(gameState: GameState, var tgtCharacter: String, var who: St
         b.color = Color.WHITE
         add(b).size(50f)
         add(bar).growX()
-        gameState.updateUI += { y ->
-            setValue(y.getMutuality(tgtCharacter, who).toInt())
-        }
+        gameState.updateUI += refresh
+        refresh(gameState)
     }
 
-    fun setValue(value: Int)
+
+    override fun remove(): Boolean
     {
-        bar.value = value.toFloat() / 100
+        gameState.updateUI -= refresh
+        return super.remove()
+    }
+
+    fun setValue(value: Double)
+    {
+        bar.value = (value / 100).toFloat()
         bar.updateVisualValue()
     }
 }

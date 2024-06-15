@@ -23,4 +23,9 @@ sealed class EventObject(var name: String, val oneTime: Boolean)
     //This event will not be triggered by the game. Unsubscribe from events here.
     abstract fun deactivate()
 
+    open fun displayEmoji(who: String): Boolean
+    {
+        return false
+    }
+
 }

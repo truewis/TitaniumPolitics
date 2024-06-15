@@ -2849,15 +2849,6 @@
     "ration": 100000,
     "oxygen": 100000
   },
-  "questSystem": {
-    "dataBase": [
-      {
-        "type": "com.titaniumPolitics.game.quests.Quest1",
-        "name": "Be a minister",
-        "due": 240
-      }
-    ]
-  },
   "eventSystem": {
     "dataBase": [
       {

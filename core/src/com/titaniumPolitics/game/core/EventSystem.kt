@@ -1,7 +1,6 @@
 package com.titaniumPolitics.game.core
 
 import com.titaniumPolitics.game.events.*
-import com.titaniumPolitics.game.quests.QuestObject
 import com.titaniumPolitics.game.ui.DialogueUI
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient

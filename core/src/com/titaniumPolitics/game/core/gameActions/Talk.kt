@@ -5,7 +5,8 @@ import com.titaniumPolitics.game.core.Meeting
 import kotlinx.serialization.Serializable
 
 @Serializable
-//Talk is considered as a on-the-fly meeting.
+//Talk is considered as an on-the-fly meeting.
+//If the target character is already in a meeting, join the meeting if possible. Otherwise, this action is invalid.
 class Talk(override val tgtCharacter: String, override val tgtPlace: String) : GameAction()
 {
     var who = ""
@@ -18,16 +19,32 @@ class Talk(override val tgtCharacter: String, override val tgtPlace: String) : G
 
     override fun execute()
     {
-        parent.ongoingMeetings["meeting-$tgtPlace-$tgtCharacter-${parent.time}"] =
-            Meeting(parent.time, tgtPlace, scheduledCharacters = hashSetOf(who, tgtCharacter), tgtPlace)
-        parent.ongoingMeetings["meeting-$tgtPlace-$tgtCharacter-${parent.time}"]!!.currentCharacters.add(tgtCharacter)
-        super.execute()
+        if (parent.characters[tgtCharacter]!!.currentMeeting == null)
+        {
+            parent.ongoingMeetings["meeting-$tgtPlace-$tgtCharacter-${parent.time}"] =
+                Meeting(parent.time, tgtPlace, scheduledCharacters = hashSetOf(who, tgtCharacter), tgtPlace)
+            parent.ongoingMeetings["meeting-$tgtPlace-$tgtCharacter-${parent.time}"]!!.currentCharacters.add(
+                tgtCharacter
+            )
+            super.execute()
+        } else
+        {
+            parent.characters[tgtCharacter]!!.currentMeeting!!.currentCharacters.add(who)
+            super.execute()
+        }
     }
 
     override fun isValid(): Boolean
     {
-        return parent.places[tgtPlace]!!.characters.filter { it != tgtCharacter }.toList()
-            .isNotEmpty() && parent.characters[tgtCharacter]!!.currentMeeting == null
+        if (parent.characters[tgtCharacter]!!.currentMeeting == null)
+            return parent.places[tgtPlace]!!.characters.filter { it != tgtCharacter }.toList()
+                .isNotEmpty()
+        else
+        {
+            //If the target character is already in a meeting, join the meeting if possible. Otherwise, this action is invalid.
+            return parent.characters[tgtCharacter]!!.currentMeeting!!.scheduledCharacters.contains(who) &&
+                    !parent.characters[tgtCharacter]!!.currentMeeting!!.currentCharacters.contains(who)
+        }
     }
 
 }

@@ -1,7 +1,6 @@
 package com.titaniumPolitics.game.events
 
 import com.titaniumPolitics.game.core.GameState
-import com.titaniumPolitics.game.quests.Quest1
 import com.titaniumPolitics.game.ui.DialogueUI
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
@@ -25,7 +24,7 @@ class Event_AlinaResign : EventObject("Introduction of Alina.", true)
         )
         {
             DialogueUI.instance.playDialogue("AlinaResign")
-            parent.questSystem.add(Quest1())
+            parent.eventSystem.dataBase.add(Event_BecameDivLeader().also { it.injectParent(parent) })
             deactivate()
         }
     }

@@ -20,7 +20,7 @@ class HealthMeter(gameState: GameState) : Table(defaultSkin)
         add(b).size(50f)
         add(bar).growX()
         gameState.updateUI += { y ->
-            Gdx.app.postRunnable { setValue(y.player.health) }
+            setValue(y.player.health)
         }
     }
 
