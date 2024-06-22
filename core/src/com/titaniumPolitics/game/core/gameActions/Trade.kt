@@ -111,15 +111,7 @@ class Trade(override val tgtCharacter: String, override val tgtPlace: String) : 
                 parent.characters[tgtCharacter]!!.actionValue(it)
             }
                 ?: .0) + (info2?.let { parent.characters[tgtCharacter]!!.infoValue(it) } ?: .0)
-        success = if (parent.nonPlayerAgents.keys.contains(who))
-        {
-            parent.nonPlayerAgents[who]!!.decideTrade(tgtCharacter, value, value2, valuea, valuea2)
-        } else//If player, acquires the decision from the player.
-        {
-            println("$tgtCharacter offers $item for $item2,\n and $action for $action2,\n and $info for $info2.")//TODO: use the trade interface.
-            println("Do $who accept the trade?")
-            GameEngine.acquire(listOf("yes", "no")) == "yes"
-        }
+        success = true
 
         if (success)
         {

@@ -14,23 +14,17 @@ import kotlin.math.min
 *
 * */
 @Serializable
-class NonPlayerAgent : GameStateElement()
+class NonPlayerAgent : Agent()
 {
-    override val name: String
-        get() = parent.nonPlayerAgents.filter { it.value == this }.keys.first()
-
-    val character: Character
-        get() = parent.characters[name]!!
 
     private var routines =
         arrayListOf<Routine>()//Routines are sorted by priority. The first element is the current routine. All other routines are executed when the current routine is finished.
-    val place
-        get() = parent.places.values.find { it.characters.contains(name) }!!.name
+
 
     val finishedRequests =
         HashSet<String>() //Command Name, Information Name which is the result of the command.
 
-    fun chooseAction(): GameAction
+    override fun chooseAction(): GameAction
     {
         //1. High priority routine change
         selectRoutine()

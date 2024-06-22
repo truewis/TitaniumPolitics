@@ -5,48 +5,70 @@
   "playerName": "Rui",
   "nonPlayerAgents": {
     "charlie": {
+      "type": "com.titaniumPolitics.game.core.NonPlayerAgent"
     },
     "seefy": {
+      "type": "com.titaniumPolitics.game.core.NonPlayerAgent"
     },
     "Alina": {
+      "type": "com.titaniumPolitics.game.core.NonPlayerAgent"
     },
     "mini": {
+      "type": "com.titaniumPolitics.game.core.NonPlayerAgent"
     },
     "eddy": {
+      "type": "com.titaniumPolitics.game.core.NonPlayerAgent"
     },
     "inddy": {
+      "type": "com.titaniumPolitics.game.core.NonPlayerAgent"
     },
     "welly": {
+      "type": "com.titaniumPolitics.game.core.NonPlayerAgent"
     },
     "hhh": {
+      "type": "com.titaniumPolitics.game.core.NonPlayerAgent"
     },
     "iii": {
+      "type": "com.titaniumPolitics.game.core.NonPlayerAgent"
     },
     "Krailin": {
+      "type": "com.titaniumPolitics.game.core.NonPlayerAgent"
     },
     "Vaeme": {
+      "type": "com.titaniumPolitics.game.core.NonPlayerAgent"
     },
     "Mentor": {
+      "type": "com.titaniumPolitics.game.core.NonPlayerAgent"
     },
     "Salvor": {
+      "type": "com.titaniumPolitics.game.core.NonPlayerAgent"
     },
     "mini1": {
+      "type": "com.titaniumPolitics.game.core.NonPlayerAgent"
     },
     "mini2": {
+      "type": "com.titaniumPolitics.game.core.NonPlayerAgent"
     },
     "doci1": {
+      "type": "com.titaniumPolitics.game.core.NonPlayerAgent"
     },
     "doci2": {
+      "type": "com.titaniumPolitics.game.core.NonPlayerAgent"
     },
     "selli1": {
+      "type": "com.titaniumPolitics.game.core.NonPlayerAgent"
     },
     "selli2": {
+      "type": "com.titaniumPolitics.game.core.NonPlayerAgent"
     },
     "oldie": {
+      "type": "com.titaniumPolitics.game.core.NonPlayerAgent"
     },
     "ctrler": {
+      "type": "com.titaniumPolitics.game.core.NonPlayerAgent"
     },
     "observer": {
+      "type": "com.titaniumPolitics.game.core.NonPlayerAgent"
     }
   },
   "characters": {
@@ -1203,8 +1225,8 @@
     "recycleFacilityWest": {
       "coordinates": {
         "x": -10,
-        "y": -10,
-        "z": 0
+        "y": 0,
+        "z": 10
       },
       "resources": {
         "lightMetal": 50,
@@ -1677,7 +1699,7 @@
       "coordinates": {
         "x": -12,
         "y": 0,
-        "z": 0
+        "z": -2
       },
       "resources": {
         "lightMetal": 50,
@@ -2727,7 +2749,6 @@
   },
   "parties": {
     "triumvirate": {
-      "anonymousMembers": 0,
       "leader": "ctrler",
       "members": [
         "oldie",
@@ -2736,24 +2757,7 @@
       ],
       "home": "mainControlRoom"
     },
-    "ctrler": {
-      "anonymousMembers": 0,
-      "leader": "ctrler",
-      "members": [
-        "ctrler"
-      ],
-      "home": "mainControlRoom"
-    },
-    "observer": {
-      "anonymousMembers": 0,
-      "leader": "observer",
-      "members": [
-        "observer"
-      ],
-      "home": "observatory"
-    },
     "cabinet": {
-      "anonymousMembers": 0,
       "leader": "oldie",
       "members": [
         "oldie",
@@ -2769,7 +2773,6 @@
     },
     "interior": {
       "type": "division",
-      "anonymousMembers": 650,
       "leader": "charlie",
       "members": [
         "charlie",
@@ -2780,7 +2783,6 @@
     },
     "mining": {
       "type": "division",
-      "anonymousMembers": 2000,
       "leader": "mini",
       "members": [
         "mini",
@@ -2791,7 +2793,6 @@
     },
     "education": {
       "type": "division",
-      "anonymousMembers": 50,
       "leader": "eddy",
       "members": [
         "eddy"
@@ -2800,7 +2801,6 @@
     },
     "industry": {
       "type": "division",
-      "anonymousMembers": 800,
       "leader": "inddy",
       "members": [
         "inddy"
@@ -2809,7 +2809,6 @@
     },
     "safety": {
       "type": "division",
-      "anonymousMembers": 400,
       "leader": "seefy",
       "members": [
         "seefy"
@@ -2818,7 +2817,6 @@
     },
     "welfare": {
       "type": "division",
-      "anonymousMembers": 120,
       "leader": "welly",
       "members": [
         "welly",
@@ -2829,7 +2827,6 @@
     },
     "infrastructure": {
       "type": "division",
-      "anonymousMembers": 500,
       "leader": "Alina",
       "members": [
         "Alina",

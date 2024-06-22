@@ -197,47 +197,6 @@ class GameEngine(val gameState: GameState)
     //TODO: Normalization of mutuality is not implemented yet.
     private fun calculateMutuality()
     {
-        val mutualityZero = (ReadOnly.const("mutualityMin") + ReadOnly.const("mutualityMax")) / 2
-        //Party mutualities are correlated; if a is friendly to b, a is also friendly to b's friends and hostile to b's enemies. If a is hostile to b, a is also hostile to b's friends and friendly to b's enemies.
-        gameState.parties.keys.forEach { a ->
-            gameState.parties.keys.forEach { b ->
-                var factora = 0.0
-                var factorb = 0.0
-                gameState.parties[a]!!.members.forEach { c ->
-                    gameState.parties[b]!!.members.forEach { d ->
-                        factora += gameState.getMutuality(c, d) - mutualityZero
-                        factorb += gameState.getMutuality(d, c) - mutualityZero
-                    }
-                }
-                val sizea = gameState.parties[a]!!.members.size + gameState.parties[a]!!.anonymousMembers
-                val sizeb = gameState.parties[b]!!.members.size + gameState.parties[b]!!.anonymousMembers
-                gameState.setPartyMutuality(a, b, factora / sizea / sizeb)
-                gameState.setPartyMutuality(b, a, factorb / sizea / sizeb)
-
-            }
-        }
-
-        //Individual mutualities are correlated with their parties, basically the reciprocation of the above.
-        gameState.characters.keys.forEach { a ->
-            gameState.characters.keys.forEach { b ->
-                var factora = 0.0
-                var factorb = 0.0
-                gameState.parties.filter { it.value.members.contains(a) }.forEach { c ->
-                    gameState.parties.filter { it.value.members.contains(b) }.forEach { d ->
-                        factora += gameState.getPartyMutuality(c.key, d.key) - mutualityZero
-                        factorb += gameState.getPartyMutuality(d.key, c.key) - mutualityZero
-                    }
-                }
-                //Make sure that denominator is not 0.
-                val sizea = gameState.parties.filter { it.value.members.contains(a) }.count() + 1
-                val sizeb = gameState.parties.filter { it.value.members.contains(b) }.count() + 1
-                gameState.setMutuality(a, b, factora / sizea / sizeb)
-                gameState.setMutuality(b, a, factorb / sizea / sizeb)
-
-            }
-        }
-
-
         //If there are meetings where some characters are missing, all the characters in the meeting lose mutuality toward the missing characters.
         gameState.ongoingConferences.forEach { conference ->
             conference.value.scheduledCharacters.forEach { char ->
@@ -476,10 +435,8 @@ class GameEngine(val gameState: GameState)
             } else if (it.size > targetSize)
             {
                 //unnamed people leave the party.
-                val tmp = it.size - targetSize
-                it.anonymousMembers -= tmp
-                gameState.idlePop += tmp
-                if (it.anonymousMembers < 0) it.anonymousMembers = 0
+                it.reduceAnonMembers(it.size - targetSize)
+                gameState.idlePop += it.size - targetSize
             }
         }
 
