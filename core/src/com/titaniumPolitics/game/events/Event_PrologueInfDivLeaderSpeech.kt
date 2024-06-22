@@ -41,7 +41,7 @@ class Event_PrologueInfDivLeaderSpeech : EventObject("Introduction of Alina.", t
 
     override fun displayEmoji(who: String): Boolean
     {
-        if (parent.timeChanged.contains(func) && who == "Alina" && parent.player.place.name == parent.parties["infrastructure"]!!.home)
+        if (parent.timeChanged.contains(func) && who == "Alina" && parent.player.place.name == parent.parties["infrastructure"]!!.home && parent.characters["Alina"]!!.currentMeeting != null)
         {
             return true
         }

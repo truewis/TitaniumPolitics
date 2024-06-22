@@ -81,6 +81,7 @@ class PortraitUI(var tgtCharacter: String, var gameState: GameState) : Table(def
 
     override fun remove(): Boolean
     {
+        mMeter.remove()
         gameState.updateUI -= refresh
         return super.remove()
     }
