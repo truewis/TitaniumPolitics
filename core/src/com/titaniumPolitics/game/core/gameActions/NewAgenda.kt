@@ -46,6 +46,7 @@ class NewAgenda(override val tgtCharacter: String, override val tgtPlace: String
             //"salary" -> return mt.involvedParty != "" && mt.type == "divisionDailyConference" && !parent.parties[mt.involvedParty]!!.isSalaryPaid
             "appointMeeting" -> return true
             //TODO: impeach, fire
+            //TODO: Also update NewAgendaUI.kt
 
 
         }

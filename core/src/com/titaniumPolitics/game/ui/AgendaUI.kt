@@ -25,7 +25,7 @@ class AgendaUI(var gameState: GameState) : Table(defaultSkin), KTable
 
     init
     {
-        AgendaTitle.setFontScale(2f)
+        AgendaTitle.setFontScale(3f)
         stack {
             image("panel") {
             }

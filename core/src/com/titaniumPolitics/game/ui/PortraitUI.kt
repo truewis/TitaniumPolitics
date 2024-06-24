@@ -13,7 +13,9 @@ import ktx.scene2d.Scene2DSkin.defaultSkin
 class PortraitUI(var tgtCharacter: String, var gameState: GameState) : Table(defaultSkin), KTable
 {
     var mMeter = MutualityMeter(gameState, tgtCharacter = tgtCharacter, who = gameState.playerName)
-    val speech = scene2d.label("Hello", "trnsprtConsole")
+    val speech = scene2d.label("Hello", "trnsprtConsole") {
+        setFontScale(3f)
+    }
     val bubble = scene2d.stack {
         image("panel")
         add(this@PortraitUI.speech)

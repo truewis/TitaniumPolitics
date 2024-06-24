@@ -3,6 +3,8 @@ package com.titaniumPolitics.game.ui
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.utils.Align
 import com.titaniumPolitics.game.core.GameState
+import com.titaniumPolitics.game.core.gameActions.GameAction
+import com.titaniumPolitics.game.core.gameActions.NewAgenda
 import com.titaniumPolitics.game.ui.map.MapUI
 import com.titaniumPolitics.game.ui.map.PlaceSelectionUI
 import ktx.scene2d.*
@@ -31,7 +33,8 @@ class HeadUpInterface(val gameState: GameState) : Table(Scene2DSkin.defaultSkin)
             add(ResourceInfoUI())
             add(HumanResourceInfoUI())
             add(ApparatusInfoUI())
-            add(ResourceTransferUI(this@HeadUpInterface.gameState))
+            add(ResourceTransferUI(this@HeadUpInterface.gameState) { _: GameAction -> })
+            add(NewAgendaUI(this@HeadUpInterface.gameState) { _: GameAction -> })
             add(TradeUI(this@HeadUpInterface.gameState))
 
             //We draw the following UIs above any other UIs, as they have to appear on top of everything else.

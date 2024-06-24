@@ -1,5 +1,6 @@
 package com.titaniumPolitics.game.core
 
+import com.titaniumPolitics.game.core.gameActions.GameAction
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -79,20 +80,20 @@ class Character : GameStateElement()
 
     }
 
-    fun actionValue(action: Request): Double
+    fun actionValue(action: GameAction): Double
     {
         //TODO: the value of the action should be calculated based on the expected outcome.
         //TODO: Action to remove rivals is more valuable.
         //TODO: Action to acquire resources is more valuable.
 
         //Action to repair the character's apparatus is more valuable.
-        if (action.action.javaClass.simpleName == "repair" && parent.parties[parent.places[action.place]!!.responsibleParty]?.members?.contains(
+        if (action.javaClass.simpleName == "repair" && parent.parties[parent.places[action.tgtPlace]!!.responsibleParty]?.members?.contains(
                 name
             ) == true
         )
         {
             val urgency =
-                100.0 - parent.places[action.place]!!.apparatuses.sumOf { it.durability } / parent.places[action.place]!!.apparatuses.size
+                100.0 - parent.places[action.tgtPlace]!!.apparatuses.sumOf { it.durability } / parent.places[action.tgtPlace]!!.apparatuses.size
             return urgency
         }
 

@@ -25,12 +25,6 @@
     "welly": {
       "type": "com.titaniumPolitics.game.core.NonPlayerAgent"
     },
-    "hhh": {
-      "type": "com.titaniumPolitics.game.core.NonPlayerAgent"
-    },
-    "iii": {
-      "type": "com.titaniumPolitics.game.core.NonPlayerAgent"
-    },
     "Krailin": {
       "type": "com.titaniumPolitics.game.core.NonPlayerAgent"
     },
@@ -177,32 +171,6 @@
         "workaholic",
         "emotionless",
         "bioMinister",
-        "bargainer"
-      ],
-      "resources": {
-        "water": 10,
-        "ration": 10
-      },
-      "health": 80,
-      "livingBy": "mainControlRoom"
-    },
-    "hhh": {
-      "trait": [
-        "workaholic",
-        "emotionless",
-        "bargainer"
-      ],
-      "resources": {
-        "water": 10,
-        "ration": 10
-      },
-      "health": 80,
-      "livingBy": "mainControlRoom"
-    },
-    "iii": {
-      "trait": [
-        "workaholic",
-        "emotionless",
         "bargainer"
       ],
       "resources": {

@@ -93,7 +93,10 @@ class CharacterInteractionWindowUI(var gameState: GameState) :
             val YOFFSET = 0
             setPosition(x + XOFFSET, y + YOFFSET)
             isVisible = true
-            this.titleLabel.setText(ReadOnly.prop(charName))
+            if (!charName.contains("Anon"))
+                this.titleLabel.setText(ReadOnly.prop(charName))
+            else
+                this.titleLabel.setText("Survivor")
             characterDisplayed = charName
 
             //Clear the list of any previous buttons.

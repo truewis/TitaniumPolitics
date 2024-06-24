@@ -109,9 +109,9 @@ class NonPlayerAgent : Agent()
                     )
                 } / it.issuedBy.size > ReadOnly.const("RequestRejectAverageMutuality")) && GameEngine.availableActions(
                     parent,
-                    it.place,
+                    it.action.tgtPlace,
                     name
-                ).contains(it.action.javaClass.simpleName) && it.place == place
+                ).contains(it.action.javaClass.simpleName) && it.action.tgtPlace == place
             }
             if (request != null)
             {
@@ -160,7 +160,7 @@ class NonPlayerAgent : Agent()
                 val executableRequest = parent.requests[routines[0].variables["request"]!!]!!
                 println("$name is executing the command ${executableRequest}.")
 
-                if (place == executableRequest.place)
+                if (place == executableRequest.action.tgtPlace)
                 {
                     if (executableRequest.action.isValid())
                     {
@@ -170,10 +170,10 @@ class NonPlayerAgent : Agent()
                     }
                 }
 
-                if (place != executableRequest.place)
+                if (place != executableRequest.action.tgtPlace)
                 {
                     routines.add(Routine("move", routines[0].priority + 10).also {
-                        it.variables["movePlace"] = executableRequest.place
+                        it.variables["movePlace"] = executableRequest.action.tgtPlace
                     })//Add a move routine with higher priority.
                     return executeRoutine()
                 }
@@ -521,7 +521,7 @@ class NonPlayerAgent : Agent()
                             )
                         } / it.issuedBy.size > ReadOnly.const("RequestRejectAverageMutuality")) && GameEngine.availableActions(
                             parent,
-                            it.place,
+                            it.action.tgtPlace,
                             name
                         )
                             .contains(it.action.javaClass.simpleName) //Here, we can move to other places to execute the command, so we do not check if the place is here.
@@ -736,26 +736,23 @@ class NonPlayerAgent : Agent()
                     "requestResource" ->
                     {
                         //Fill in the agenda based on variables in the routine, resource and character.
-                        val agenda = MeetingAgenda("request")
-                        val request = Request(
-                            place,
-                            UnofficialResourceTransfer(
-                                routines[0].variables["character"]!!,
-                                tgtPlace = "" /*Anywhere*/
-                            ).also {
-                                it.toWhere = "home_$name"//This character's home
-                                it.resources = hashMapOf(
-                                    routines[0].variables["resource"]!! to routines[0].intVariables["amount"]!!
-                                )
-                            }//Created a command to transfer the resource.
-                            , issuedTo = hashSetOf(routines[0].variables["character"]!!)
-                        ).also {
-                            it.place = place
-                            it.executeTime = parent.time
-                            it.issuedBy = hashSetOf(name)
+                        val agenda = MeetingAgenda("request").apply {
+                            attachedRequest = Request(
+                                UnofficialResourceTransfer(
+                                    routines[0].variables["character"]!!,
+                                    tgtPlace = "" /*Anywhere*/
+                                ).also {
+                                    it.toWhere = "home_$name"//This character's home
+                                    it.resources = hashMapOf(
+                                        routines[0].variables["resource"]!! to routines[0].intVariables["amount"]!!
+                                    )
+                                }//Created a command to transfer the resource.
+                                , issuedTo = hashSetOf(routines[0].variables["character"]!!)
+                            ).apply {
+                                executeTime = parent.time
+                                issuedBy = hashSetOf(name)
+                            }
                         }
-                        parent.requests[request.name] = request
-                        agenda.subjectParams["command"] = request.name   //The command is added to the agenda.
                         routines[0].variables["subject"] = "" //The subject is resolved.
                         return NewAgenda(name, place).also {
                             it.agenda = agenda
@@ -959,25 +956,21 @@ class NonPlayerAgent : Agent()
                                 if (conf.agendas.none { it.subjectType == "request" && it.subjectParams["command"] != null })
                                 {
                                     //Fill in the agenda based on variables in the routine, resource and character.
-                                    val agenda = MeetingAgenda("request")
-                                    val request = Request(
-                                        place,
-                                        Salary(
-                                            party.leader,
-                                            tgtPlace = party.home
-                                        ).also {
-                                            //TODO: adjust the salary, it.resources.
-                                        }//Created a command to transfer the resource.
-                                        ,
-                                        issuedTo = hashSetOf(party.leader)
-                                    ).also {
-                                        it.place = place
-                                        it.executeTime = parent.time
-                                        it.issuedBy = hashSetOf(name)
+                                    val agenda = MeetingAgenda("request").apply {
+                                        attachedRequest = Request(
+                                            Salary(
+                                                party.leader,
+                                                tgtPlace = party.home
+                                            ).apply {
+                                                //TODO: adjust the salary, it.resources.
+                                            }//Created a command to transfer the resource.
+                                            ,
+                                            issuedTo = hashSetOf(party.leader)
+                                        ).apply {
+                                            executeTime = parent.time
+                                            issuedBy = hashSetOf(name)
+                                        }
                                     }
-                                    parent.requests[request.name] = request
-                                    agenda.subjectParams["command"] =
-                                        request.name   //The command is added to the agenda.
                                     routines[0].variables["subject"] = "" //The subject is resolved.
                                     return NewAgenda(name, place).also {
                                         it.agenda = agenda

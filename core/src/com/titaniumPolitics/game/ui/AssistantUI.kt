@@ -134,6 +134,7 @@ class AssistantUI(gameState: GameState) : Table(defaultSkin), KTable
         ApparatusInfoUI.instance.isVisible = false
         HumanResourceInfoUI.instance.isVisible = false
         ResourceTransferUI.instance.isVisible = false
+        NewAgendaUI.instance.isVisible = false
     }
 
 

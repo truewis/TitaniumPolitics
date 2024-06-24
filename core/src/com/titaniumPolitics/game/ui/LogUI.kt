@@ -208,15 +208,6 @@ class LogUI(val gameState: GameState) : Table(defaultSkin)
                 else
                     when (playerActionList[choice])
                     {
-                        "trade" ->
-                        {
-                            TradeUI.instance.open()
-                        }
-
-                        "command" ->
-                        {
-                            (stage as CapsuleStage).commandBox.open()
-                        }
 
                         else ->
                         {

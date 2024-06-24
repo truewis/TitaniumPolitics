@@ -7,6 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.badlogic.gdx.utils.Align
 import com.titaniumPolitics.game.core.GameEngine
 import com.titaniumPolitics.game.core.GameState
+import com.titaniumPolitics.game.core.gameActions.GameAction
 import com.titaniumPolitics.game.core.gameActions.OfficialResourceTransfer
 import com.titaniumPolitics.game.core.gameActions.UnofficialResourceTransfer
 import com.titaniumPolitics.game.ui.map.PlaceSelectionUI
@@ -15,7 +16,8 @@ import ktx.scene2d.*
 import ktx.scene2d.Scene2DSkin.defaultSkin
 
 
-class ResourceTransferUI(gameState: GameState) : Table(defaultSkin), KTable
+class ResourceTransferUI(gameState: GameState, override var actionCallback: (GameAction) -> Unit) : Table(defaultSkin),
+    KTable, ActionUI
 {
     private val dataTable = Table()
     private val targetTable = Table()
@@ -73,7 +75,7 @@ class ResourceTransferUI(gameState: GameState) : Table(defaultSkin), KTable
                         {
                             if (this@ResourceTransferUI.mode == "official")
                             {
-                                GameEngine.acquireCallback(
+                                this@ResourceTransferUI.actionCallback(
                                     OfficialResourceTransfer(
                                         gameState.playerName,
                                         gameState.player.place.name
@@ -84,7 +86,7 @@ class ResourceTransferUI(gameState: GameState) : Table(defaultSkin), KTable
                                 )
                             } else if (this@ResourceTransferUI.mode == "unofficial")
                             {
-                                GameEngine.acquireCallback(
+                                this@ResourceTransferUI.actionCallback(
                                     UnofficialResourceTransfer(
                                         gameState.playerName,
                                         gameState.player.place.name

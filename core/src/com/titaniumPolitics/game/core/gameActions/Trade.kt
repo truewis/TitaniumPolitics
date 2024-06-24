@@ -94,21 +94,21 @@ class Trade(override val tgtCharacter: String, override val tgtPlace: String) : 
     {
         var success = false
         val value = item.keys.sumOf { parent.characters[who]!!.itemValue(it) * item[it]!! } + (action?.let {
-            parent.characters[who]!!.actionValue(it)
+            parent.characters[who]!!.actionValue(it.action)
         }
             ?: .0) + (info?.let { parent.characters[who]!!.infoValue(it) }
             ?: .0)//Value is calculated based on how the opponent values the item, not how the tgtCharacter values it.
         val value2 = item2.keys.sumOf { parent.characters[who]!!.itemValue(it) * item2[it]!! } + (action2?.let {
-            parent.characters[who]!!.actionValue(it)
+            parent.characters[who]!!.actionValue(it.action)
         }
             ?: .0) + (info2?.let { parent.characters[who]!!.infoValue(it) } ?: .0)
         val valuea = item.keys.sumOf { parent.characters[tgtCharacter]!!.itemValue(it) * item[it]!! } + (action?.let {
-            parent.characters[tgtCharacter]!!.actionValue(it)
+            parent.characters[tgtCharacter]!!.actionValue(it.action)
         }
             ?: .0) + (info?.let { parent.characters[tgtCharacter]!!.infoValue(it) } ?: .0)
         val valuea2 =
             item2.keys.sumOf { parent.characters[tgtCharacter]!!.itemValue(it) * item2[it]!! } + (action2?.let {
-                parent.characters[tgtCharacter]!!.actionValue(it)
+                parent.characters[tgtCharacter]!!.actionValue(it.action)
             }
                 ?: .0) + (info2?.let { parent.characters[tgtCharacter]!!.infoValue(it) } ?: .0)
         success = true

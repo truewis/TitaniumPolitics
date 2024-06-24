@@ -27,7 +27,6 @@ class CapsuleStage(val gameState: GameState) : Stage(FitViewport(1920F, 1080F))
     val charactersView = CharacterPortraitsUI(gameState)
     val meeting = MeetingUI(gameState)
     val assetManager = AssetManager()
-    val commandBox: CommandUI
     val onMouseClick = ArrayList<(Float, Float) -> Unit>()
     val onMouseDown = ArrayList<(Float, Float) -> Unit>()
 
@@ -62,10 +61,6 @@ class CapsuleStage(val gameState: GameState) : Stage(FitViewport(1920F, 1080F))
         hud = HeadUpInterface(gameState)
         addActor(hud)
         hud.setFillParent(true)
-
-        commandBox = CommandUI(Scene2DSkin.defaultSkin, gameState)
-        addActor(commandBox)
-        commandBox.setFillParent(true)
 
         var prevPlace = ""
         gameState.updateUI.add {

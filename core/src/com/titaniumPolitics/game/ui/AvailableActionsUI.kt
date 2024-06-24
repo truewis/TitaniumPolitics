@@ -44,7 +44,7 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable
         gameState.updateUI += { _ -> refreshList(); }
     }
 
-
+    //TODO: also make changes to NewAgendaUI.kt.
     fun refreshList()
     {
         docList.clear()
@@ -182,6 +182,7 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable
                                 )
                                 {
                                     ResourceTransferUI.instance.isVisible = true
+                                    ResourceTransferUI.instance.actionCallback = GameEngine.acquireCallback
                                     ResourceTransferUI.instance.refresh(this@AvailableActionsUI.gameState.player.place.resources)
                                     ResourceTransferUI.instance.mode = "unofficial"
                                 }
@@ -200,6 +201,7 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable
                                 )
                                 {
                                     ResourceTransferUI.instance.isVisible = true
+                                    ResourceTransferUI.instance.actionCallback = GameEngine.acquireCallback
                                     ResourceTransferUI.instance.refresh(this@AvailableActionsUI.gameState.player.place.resources)
                                     ResourceTransferUI.instance.mode = "official"
                                 }
@@ -257,6 +259,23 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable
                             })
                         }
 
+                        "NewAgenda" ->
+                        {
+                            this.setDrawable(defaultSkin, "plus-circle-line-icon")
+                            this@button.addListener(object : ClickListener()
+                            {
+                                override fun clicked(
+                                    event: com.badlogic.gdx.scenes.scene2d.InputEvent?,
+                                    x: Float,
+                                    y: Float
+                                )
+                                {
+                                    NewAgendaUI.instance.isVisible = true
+                                    NewAgendaUI.instance.refresh()
+                                }
+                            })
+                        }
+
                         "LeaveMeeting" ->
                         {
                             this.setDrawable(defaultSkin, "close-square-line-icon")
@@ -278,7 +297,7 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable
                                 }
                             })
                         }
-
+                        //TODO: also make changes to NewAgendaUI.kt.
                         else ->
                         {
                             this.setDrawable(defaultSkin, "question-mark-circle-outline-icon")
@@ -292,6 +311,22 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable
         }
         isVisible = !docList.children.isEmpty
 
+    }
+
+    companion object
+    {
+        var actionCallbackIntercept: ((GameAction) -> Unit)? = null
+
+        //Singleton
+        fun gameActionCallback(action: GameAction)
+        {
+            if (actionCallbackIntercept != null)
+            {
+                actionCallbackIntercept!!(action)
+                return
+            }
+            GameEngine.acquireCallback(action)
+        }
     }
 
 

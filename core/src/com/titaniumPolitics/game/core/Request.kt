@@ -4,7 +4,10 @@ import com.titaniumPolitics.game.core.gameActions.GameAction
 import kotlinx.serialization.Serializable
 
 @Serializable
-class Request(var place: String, var action: GameAction, var issuedTo: HashSet<String>)
+class Request(
+    var action: GameAction,
+    var issuedTo: HashSet<String>/*If unspecified, anyone can finish this request.*/
+)
 {
     var name = ""
         private set
@@ -20,7 +23,7 @@ class Request(var place: String, var action: GameAction, var issuedTo: HashSet<S
 
         }
         val name =
-            "${action.javaClass.simpleName}-$place-$executeTime-${
+            "${action.javaClass.simpleName}-${action.tgtPlace}-$executeTime-${
                 Math.random().toString().substring(8)
             }"
         this.name = name
