@@ -16,13 +16,13 @@ class UnofficialResourceTransfer(override val tgtCharacter: String, override val
         if (fromHome)
         {
             if (
-                resources.all { (parent.places["home_$tgtCharacter"]!!.resources[it.key] ?: 0) >= it.value }
+                resources.all { (parent.characters[tgtCharacter]!!.resources[it.key] ?: 0) >= it.value }
             )
             {
                 //Transfer resources.
                 resources.forEach { (key, value) ->
-                    parent.places["home_$tgtCharacter"]!!.resources[key] =
-                        (parent.places["home_$tgtCharacter"]!!.resources[key] ?: 0) - value
+                    parent.characters[tgtCharacter]!!.resources[key] =
+                        (parent.characters[tgtCharacter]!!.resources[key] ?: 0) - value
                     parent.places[toWhere]!!.resources[key] = (parent.places[toWhere]!!.resources[key] ?: 0) + value
                 }
                 //Do not spread rumor
@@ -69,7 +69,9 @@ class UnofficialResourceTransfer(override val tgtCharacter: String, override val
 
     override fun isValid(): Boolean
     {
-        return resources.all { (parent.places[tgtPlace]!!.resources[it.key] ?: 0) >= it.value } &&
+        return ((fromHome && resources.all {
+            (parent.characters[tgtCharacter]!!.resources[it.key] ?: 0) >= it.value
+        }) || resources.all { (parent.places[tgtPlace]!!.resources[it.key] ?: 0) >= it.value }) &&
                 //either fromHome is true, or tgtPlace must be managed by tgtCharacter's party.
                 (fromHome || parent.parties[parent.places[tgtPlace]!!.responsibleParty]!!.members.contains(tgtCharacter))
     }

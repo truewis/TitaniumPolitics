@@ -27,6 +27,8 @@ class ResourceTransferUI(gameState: GameState, override var actionCallback: (Gam
     var current = hashMapOf<String, Int>()
     var target = hashMapOf<String, Int>()
     var toWhere = ""
+    var modeLabel: Label
+    var placeButton: Button
 
     init
     {
@@ -42,8 +44,10 @@ class ResourceTransferUI(gameState: GameState, override var actionCallback: (Gam
             image("panel") {
             }
             table {
+                this@ResourceTransferUI.modeLabel = label("Transfer Mode", "trnsprtConsole") { setFontScale(3f) }
+                row()
                 //Select place to transfer resources to.
-                button {
+                this@ResourceTransferUI.placeButton = button {
                     it.colspan(2).growX()
                     val placeLabel = label("Transfer Resource To:", "trnsprtConsole") { setFontScale(3f) }
                     addListener(object : ClickListener()
@@ -144,6 +148,9 @@ class ResourceTransferUI(gameState: GameState, override var actionCallback: (Gam
         this.actionCallback = action
         this.current = current
         this.target = target
+        this.mode = mode
+        this.modeLabel.setText("Transfer: $mode")
+        placeButton.isVisible = mode != "private"
         dataTable.clear()
         dataTable.apply {
             add(table {

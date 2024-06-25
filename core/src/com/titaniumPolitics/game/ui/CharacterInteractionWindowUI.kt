@@ -50,6 +50,7 @@ class CharacterInteractionWindowUI(var gameState: GameState) :
             {
                 this@CharacterInteractionWindowUI.isVisible = false
                 ResourceTransferUI.instance.isVisible = true
+                ResourceTransferUI.instance.toWhere = "home_$characterDisplayed"
                 ResourceTransferUI.instance.refresh("private", GameEngine.acquireCallback, gameState.player.resources)
             }
         })

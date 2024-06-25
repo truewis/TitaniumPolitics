@@ -9,6 +9,20 @@ class Place : GameStateElement()
     override val name: String
         get() = parent.places.filter { it.value == this }.keys.first()
     var resources = hashMapOf<String, Int>()
+        get()
+        {
+            //If the place is a home, return the resources of the character living there.
+            if (name.contains("home_"))
+                return parent.characters[name.substringAfter("home_")]!!.resources
+            return field
+        }
+        set(value)
+        {
+            //If the place is a home, set the resources of the character living there.
+            if (name.contains("home_"))
+                parent.characters[name.substringAfter("home_")]!!.resources = value
+            field = value
+        }
     var connectedPlaces = arrayListOf<String>()
     var plannedWorker = 0
     var coordinates = Coordinate3D(0, 0, 0)
