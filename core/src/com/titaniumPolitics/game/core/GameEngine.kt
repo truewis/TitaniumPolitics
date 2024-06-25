@@ -1231,6 +1231,10 @@ class GameEngine(val gameState: GameState)
                 actions.add("UnofficialResourceTransfer")//can only steal from their own division.
                 actions.add("OfficialResourceTransfer")//can only move resources from their own division.
             }
+            if (place == "home_$character")
+            {
+                actions.add("UnofficialResourceTransfer")//can only move resources from their home.
+            }
             val availableMeetings =
                 gameState.scheduledMeetings.filter { it.value.time + 2 > gameState.time && gameState.time + 2 > it.value.time && it.value.place == place }
                     .filter { !gameState.ongoingMeetings.containsKey(it.key) }

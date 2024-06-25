@@ -182,9 +182,11 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable
                                 )
                                 {
                                     ResourceTransferUI.instance.isVisible = true
-                                    ResourceTransferUI.instance.actionCallback = GameEngine.acquireCallback
-                                    ResourceTransferUI.instance.refresh(this@AvailableActionsUI.gameState.player.place.resources)
-                                    ResourceTransferUI.instance.mode = "unofficial"
+                                    ResourceTransferUI.instance.refresh(
+                                        "unofficial",
+                                        GameEngine.acquireCallback,
+                                        this@AvailableActionsUI.gameState.player.place.resources
+                                    )
                                 }
                             })
                         }
@@ -201,9 +203,11 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable
                                 )
                                 {
                                     ResourceTransferUI.instance.isVisible = true
-                                    ResourceTransferUI.instance.actionCallback = GameEngine.acquireCallback
-                                    ResourceTransferUI.instance.refresh(this@AvailableActionsUI.gameState.player.place.resources)
-                                    ResourceTransferUI.instance.mode = "official"
+                                    ResourceTransferUI.instance.refresh(
+                                        "official",
+                                        GameEngine.acquireCallback,
+                                        this@AvailableActionsUI.gameState.player.place.resources
+                                    )
                                 }
                             })
                         }

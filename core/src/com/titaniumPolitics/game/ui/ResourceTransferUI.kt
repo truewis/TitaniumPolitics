@@ -67,7 +67,7 @@ class ResourceTransferUI(gameState: GameState, override var actionCallback: (Gam
                     it.fill()
                     label("Transfer") {
                         setAlignment(Align.center)
-
+                        setFontScale(3f)
                     }
                     addListener(object : ClickListener()
                     {
@@ -95,6 +95,18 @@ class ResourceTransferUI(gameState: GameState, override var actionCallback: (Gam
                                         this.toWhere = this@ResourceTransferUI.toWhere
                                     }
                                 )
+                            } else if (this@ResourceTransferUI.mode == "private")
+                            {
+                                this@ResourceTransferUI.actionCallback(
+                                    UnofficialResourceTransfer(
+                                        gameState.playerName,
+                                        gameState.player.place.name
+                                    ).apply {
+                                        this.resources = this@ResourceTransferUI.target
+                                        this.toWhere = this@ResourceTransferUI.toWhere
+                                        this.fromHome = true
+                                    }
+                                )
                             }
                             this@ResourceTransferUI.isVisible = false
                         }
@@ -104,6 +116,7 @@ class ResourceTransferUI(gameState: GameState, override var actionCallback: (Gam
                     it.fill()
                     label("Cancel") {
                         setAlignment(Align.center)
+                        setFontScale(3f)
 
                     }
                     addListener(object : ClickListener()
@@ -121,8 +134,14 @@ class ResourceTransferUI(gameState: GameState, override var actionCallback: (Gam
     }
 
 
-    fun refresh(current: HashMap<String, Int>, target: HashMap<String, Int> = hashMapOf())
+    fun refresh(
+        mode: String,
+        action: (GameAction) -> Unit,
+        current: HashMap<String, Int>,
+        target: HashMap<String, Int> = hashMapOf(),
+    )
     {
+        this.actionCallback = action
         this.current = current
         this.target = target
         dataTable.clear()
@@ -144,7 +163,7 @@ class ResourceTransferUI(gameState: GameState, override var actionCallback: (Gam
                                 {
                                     current[resourceName] = current[resourceName]!! - 1
                                     target[resourceName] = (target[resourceName] ?: 0) + 1
-                                    this@ResourceTransferUI.refresh(current, target)
+                                    this@ResourceTransferUI.refresh(mode, action, current, target)
                                 }
                             })
                         }
@@ -173,7 +192,7 @@ class ResourceTransferUI(gameState: GameState, override var actionCallback: (Gam
                                 {
                                     target[resourceName] = target[resourceName]!! - 1
                                     current[resourceName] = (current[resourceName] ?: 0) + 1
-                                    this@ResourceTransferUI.refresh(current, target)
+                                    this@ResourceTransferUI.refresh(mode, action, current, target)
                                 }
                             })
                         }

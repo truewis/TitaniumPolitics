@@ -39,6 +39,22 @@ class CharacterInteractionWindowUI(var gameState: GameState) :
         })
     }
 
+    private val giveResourceButton = scene2d.button {
+        label("Give resources...", "console") {
+            setFontScale(2f)
+        }
+
+        addListener(object : com.badlogic.gdx.scenes.scene2d.utils.ClickListener()
+        {
+            override fun clicked(event: com.badlogic.gdx.scenes.scene2d.InputEvent?, x: Float, y: Float)
+            {
+                this@CharacterInteractionWindowUI.isVisible = false
+                ResourceTransferUI.instance.isVisible = true
+                ResourceTransferUI.instance.refresh("private", GameEngine.acquireCallback, gameState.player.resources)
+            }
+        })
+    }
+
     private val selectButton = scene2d.button {
         label("Select Character", "console") {
             setFontScale(2f)
@@ -111,12 +127,14 @@ class CharacterInteractionWindowUI(var gameState: GameState) :
             {
                 //Disable the button if the player is already in the place. Calling place property will throw an exception when the game is first loaded.
                 //Also, disable the button if the character is already in the meeting ("talking" to them already).
-                if (gameState.player.place.name != characterDisplayed && gameState.player.currentMeeting?.currentCharacters?.contains(
+                if (gameState.player.currentMeeting?.currentCharacters?.contains(
                         characterDisplayed
                     ) != true
                 )
                 {
                     add(talkButton).fill()
+                    row()
+                    add(giveResourceButton).fill()
                     row()
                 }
             }
