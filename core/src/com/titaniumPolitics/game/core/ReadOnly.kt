@@ -21,13 +21,14 @@ object ReadOnly
 
     fun const(constName: String): Float
     {
-        return constJson[constName]!!.jsonPrimitive.float
+        return constJson[constName]?.jsonPrimitive?.float
+            ?: 0f.also { println("Warning: Could not find constant $constName") }
     }
 
     fun prop(key: String): String
     {
 
-        return (props.getProperty(key)) ?: throw RuntimeException("could not find property $key")
+        return (props.getProperty(key)) ?: "Unknown".also { println("Warning: Could not find property $key") }
     }
 
     fun script(key: String): String?
