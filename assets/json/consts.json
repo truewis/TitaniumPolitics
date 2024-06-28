@@ -30,5 +30,6 @@
   "SleepDuration": 8,
   "StartConferenceDuration": 1,
   "StartMeetingDuration": 1,
-  "TalkDuration": 1
+  "TalkDuration": 1,
+  "maxAttentionIntercept": 30
 }

@@ -155,6 +155,7 @@ class GameEngine(val gameState: GameState)
             gameState.informations[it.generateName()] = it
         }
         action.execute()
+        gameState.setMutuality(char.name, char.name, action.deltaWill().toDouble())
 
     }
 
