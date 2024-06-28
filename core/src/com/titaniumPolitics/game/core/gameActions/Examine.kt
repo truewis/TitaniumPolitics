@@ -58,7 +58,7 @@ class Examine(override val tgtCharacter: String, override val tgtPlace: String) 
                         tgtApparatus = entry.name,
                         amount = entry.durability
                     ).also {
-                        it.knownTo.add(tgtCharacter);it.credibility = 100;parent.informations[it.generateName()] = it
+                        it.knownTo.add(tgtCharacter);parent.informations[it.generateName()] = it
                     }
 
                 }
@@ -79,7 +79,7 @@ class Examine(override val tgtCharacter: String, override val tgtPlace: String) 
                         tgtCharacter = tgtCharacter,
                         resources = parent.characters[tgtCharacter]!!.resources
                     ).also {
-                        it.knownTo.add(tgtCharacter);it.credibility = 100;parent.informations[it.generateName()] = it
+                        it.knownTo.add(tgtCharacter);parent.informations[it.generateName()] = it
                     }
 
                 } else
@@ -94,7 +94,7 @@ class Examine(override val tgtCharacter: String, override val tgtPlace: String) 
                         tgtPlace = tgtPlace,
                         resources = parent.places[tgtPlace]!!.resources
                     ).also {
-                        it.knownTo.add(tgtCharacter);it.credibility = 100;parent.informations[it.generateName()] =
+                        it.knownTo.add(tgtCharacter);parent.informations[it.generateName()] =
                         it
                     }
 
