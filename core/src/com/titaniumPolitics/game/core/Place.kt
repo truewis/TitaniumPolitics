@@ -60,8 +60,8 @@ class Place : GameStateElement()
     var responsibleParty = "" //Determines which party is responsible for the place.
     var isAccidentScene =
         false //If true, the place is closed and no one can enter. Can be cleared by clearAccidentScene.
-    var accidentInformations =
-        hashMapOf<String, Information>()//Information about the last accident. Non empty only when isAccidentScene is true.
+    var accidentInformationKeys =
+        hashSetOf<String>()//Information about the last accident. Non empty only when isAccidentScene is true.
 
     override fun injectParent(gameState: GameState)
     {

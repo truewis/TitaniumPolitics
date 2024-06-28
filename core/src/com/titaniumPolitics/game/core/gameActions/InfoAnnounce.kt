@@ -20,10 +20,7 @@ class InfoAnnounce(override val tgtCharacter: String, override val tgtPlace: Str
     {
         parent.informations[what]!!.knownTo += who
         val party = parent.places[tgtPlace]!!.responsibleParty
-        parent.informations[what]!!.publicity[party] = min(
-            (parent.informations[what]!!.publicity[party]
-                ?: 0) + 30, 100
-        )//TODO: match unit of publicity to number of people in the party
+        //TODO: match unit of publicity to number of people in the party
         parent.characters[tgtCharacter]!!.frozen++
     }
 

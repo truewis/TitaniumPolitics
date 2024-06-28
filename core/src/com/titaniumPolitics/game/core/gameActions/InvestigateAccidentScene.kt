@@ -9,10 +9,9 @@ class InvestigateAccidentScene(override val tgtCharacter: String, override val t
     override fun execute()
     {
         if (parent.places[tgtPlace]!!.isAccidentScene)
-            parent.places[tgtPlace]!!.accidentInformations.forEach { entry ->
-                entry.value.also {
-                    it.author = tgtCharacter;it.knownTo.add(tgtCharacter);parent.informations[it.generateName()] = it
-                }
+            parent.places[tgtPlace]!!.accidentInformationKeys.forEach { entry ->
+                parent.informations[entry]!!.knownTo.add(tgtCharacter)
+
             }//Add all accident information to the character.
         super.execute()
     }

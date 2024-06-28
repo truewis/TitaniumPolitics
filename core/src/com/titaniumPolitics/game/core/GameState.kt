@@ -231,6 +231,20 @@ class GameState
         }
     }
 
+    fun publicity(infoKey: String, party: String): Int
+    { //Number of people knowing this info in the party, based on anonymous people
+
+        with(informations[infoKey]!!)
+        {
+            return knownTo.filter { it in parties[party]!!.members }.sumOf {
+                if (it.contains("Anon"))
+                {
+                    parties[party]!!.anonymousMembers[it.split("-")[2].toInt()]
+                } else 1
+            }
+        }
+    }
+
     //Injects the parent gameState to all elements in the gameState. This function should be called exactly once after the gameState is created.
     private fun injectDependency()
     {

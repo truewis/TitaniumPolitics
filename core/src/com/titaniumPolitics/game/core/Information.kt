@@ -50,11 +50,12 @@ class Information(//If there is no author, it is a rumor.
             generateName()
     }
 
-    var publicity = hashMapOf<String, Int>()//Number of people knowing this info in the party.
     var life: Int = 100//How long this information will last.
 
     //We try to keep track of every aspect of our lives, but we can't. They eventually fade away.
     var knownTo = hashSetOf<String>()
+
+    //TODO: NPCs should do this instead.
     fun compatibility(other: Information): Double
     {//Two information with low compatibility fight each other.
         if (tgtCharacter == other.tgtCharacter && tgtCharacter != "")

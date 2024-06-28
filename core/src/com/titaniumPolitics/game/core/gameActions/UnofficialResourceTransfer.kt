@@ -42,22 +42,7 @@ class UnofficialResourceTransfer(override val tgtCharacter: String, override val
                     parent.places[tgtPlace]!!.resources[key] = (parent.places[tgtPlace]!!.resources[key] ?: 0) - value
                     parent.places[toWhere]!!.resources[key] = (parent.places[toWhere]!!.resources[key] ?: 0) + value
                 }
-                //Spread rumor only when someone sees it
-                if (parent.places[tgtPlace]!!.currentWorker != 0)
-                {
-                    Information(
-                        author = "",
-                        creationTime = parent.time,
-                        type = "action",
-                        tgtPlace = tgtPlace,
-                        resources = resources,
-                        action = "unofficialResourceTransfer"
-                    )/*spread rumor in the responsible party*/.also {
-                        parent.informations[it.generateName()] =
-                            it
-                        it.publicity[parent.places[tgtPlace]!!.responsibleParty] = 1
-                    }
-                }
+                //Spread rumor only when there is a character in the place. i.e. don't have to do anything here.
             } else
             {
                 throw Exception("Not enough resources: $tgtPlace, ${parent.places[tgtPlace]!!.resources["water"]}")

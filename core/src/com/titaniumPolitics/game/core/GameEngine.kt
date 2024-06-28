@@ -7,7 +7,6 @@ import kotlinx.coroutines.runBlocking
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 import kotlin.math.log
-import kotlin.math.max
 import kotlin.math.min
 import kotlin.random.Random
 import kotlin.system.exitProcess
@@ -231,20 +230,7 @@ class GameEngine(val gameState: GameState)
     //TODO: optimize this function.
     private fun spreadPublicInfo()
     {
-        //spread information within each party, if known.
-        gameState.informations.values.forEach { information ->
-            information.publicity.forEach {
-                //Spread information only if the information is known to the party.
-                if (it.value > 0) information.publicity[it.key] = it.value + 1
-                if (it.value > 100) information.publicity[it.key] = 100
-            }
-
-
-        }
-
         gameState.parties.forEach { party ->
-            //TODO: similar information merge into one. Do we really need this feature?
-
             //bad news affect the approval. casualty, stolen resource, TODO: low water ration oxygen, high wealth, crimes
             gameState.informations.filter { it.value.type == "casualty" }.forEach {
                 var factor = 1.0
@@ -258,8 +244,7 @@ class GameEngine(val gameState: GameState)
                     gameState.setPartyMutuality(
                         party.key,
                         gameState.places[it.value.tgtPlace]!!.responsibleParty,
-                        -it.value.amount * (it.value.publicity[party.key]
-                            ?: 0) * factor / 1000
+                        -it.value.amount * gameState.publicity(it.key, party.key) * factor / 1000
                     )
                 //if our party is responsible, integrity drops.
 
@@ -273,7 +258,7 @@ class GameEngine(val gameState: GameState)
                     gameState.setPartyMutuality(
                         party.key, gameState.places[it.value.tgtPlace]!!.responsibleParty, -log(
                             it.value.amount.toDouble() + 1, 2.0
-                        ) * (it.value.publicity[party.key] ?: 0) / 100 * factor
+                        ) * gameState.publicity(it.key, party.key) / 100 * factor
                     )
                 }
             //The fact that resource is low itself does not affect the mutuality.--------------------------------------------------------------------
@@ -625,19 +610,12 @@ class GameEngine(val gameState: GameState)
             tgtPlace = tgtPlace.name,
             auxParty = tgtPlace.responsibleParty,
             amount = death
-        )/*store dummy info*/.also { tgtPlace.accidentInformations[it.generateName()] = it }.also { /*spread rumor*/
-            val cpy = Information(it); tgtState.informations[cpy.generateName()] =
-                cpy; cpy.publicity[tgtPlace.responsibleParty] = 5
+        )/*store info*/.also {
+            gameState.informations[it.generateName()] = it
+            //Add all people in the place to the known list.
+            it.knownTo.addAll(tgtPlace.characters)
+            tgtPlace.accidentInformationKeys += it.name
         }
-            .also { /*copy this information to the responsible character.*/
-                if (gameState.parties[tgtPlace.responsibleParty]!!.leader != "")
-                {
-                    val cpy = Information(it)
-                    cpy.author = gameState.parties[tgtPlace.responsibleParty]!!.leader
-                    tgtState.informations[cpy.generateName()] = cpy
-                    cpy.publicity[tgtPlace.responsibleParty] = 0
-                }
-            }
 
         //Generate resource loss.
         val loss = min(50, tgtPlace.resources["water"] ?: 0)
@@ -648,19 +626,12 @@ class GameEngine(val gameState: GameState)
             type = "lostResource",
             tgtPlace = tgtPlace.name,
             resources = hashMapOf("water" to loss)
-        )/*store dummy info*/.also { tgtPlace.accidentInformations[it.generateName()] = it }.also { /*spread rumor*/
-            val cpy = Information(it); tgtState.informations[cpy.generateName()] =
-                cpy; cpy.publicity[tgtPlace.responsibleParty] = 5
+        )/*store info*/.also {
+            gameState.informations[it.generateName()] = it
+            //Add all people in the place to the known list.
+            it.knownTo.addAll(tgtPlace.characters)
+            tgtPlace.accidentInformationKeys += it.name
         }
-            .also { /*copy this information to the responsible character.*/
-                if (gameState.parties[tgtPlace.responsibleParty]!!.leader != "")
-                {
-                    val cpy = Information(it)
-                    cpy.author = gameState.parties[tgtPlace.responsibleParty]!!.leader
-                    tgtState.informations[cpy.generateName()] = cpy
-                    cpy.publicity[tgtPlace.responsibleParty] = 0
-                }
-            }
 
         //Generate apparatus damage.
         tgtPlace.apparatuses.forEach { app ->
@@ -694,22 +665,12 @@ class GameEngine(val gameState: GameState)
                     tgtPlace = tgtPlace.name,
                     amount = death,
                     tgtApparatus = app.name
-                )/*store dummy info*/.also { tgtPlace.accidentInformations[it.generateName()] = it }
-                    .also { /*spread rumor*/
-                        val cpy = Information(it); tgtState.informations[cpy.generateName()] =
-                            cpy; cpy.publicity[tgtPlace.responsibleParty] = 5
-                    }
-                    .also { /*copy this information to the responsible character.*/
-                        if (gameState.parties[tgtPlace.responsibleParty]!!.leader != "")
-                        {
-                            val cpy = Information(it)
-                            cpy.author =
-                                gameState.parties[tgtPlace.responsibleParty]!!.leader
-                            tgtState.informations[cpy.generateName()] =
-                                cpy
-                            cpy.publicity[tgtPlace.responsibleParty] = 0
-                        }
-                    }
+                )/*store info*/.also {
+                    gameState.informations[it.generateName()] = it
+                    //Add all people in the place to the known list.
+                    it.knownTo.addAll(tgtPlace.characters)
+                    tgtPlace.accidentInformationKeys += it.name
+                }
             }
             onAccident.forEach { it(tgtPlace.name, death) }
         }
@@ -729,21 +690,12 @@ class GameEngine(val gameState: GameState)
             tgtPlace = tgtPlace.name,
             auxParty = tgtPlace.responsibleParty,
             amount = death
-        ).also { tgtPlace.accidentInformations[it.generateName()] = it }.also { /*spread rumor*/
-            val cpy = Information(it); tgtState.informations[cpy.generateName()] =
-                cpy; cpy.publicity[tgtPlace.responsibleParty] = 75
+        )/*store info*/.also {
+            gameState.informations[it.generateName()] = it
+            //Add all people in the place to the known list.
+            it.knownTo.addAll(tgtPlace.characters)
+            tgtPlace.accidentInformationKeys += it.name
         }
-            .also { information -> /*copy this information to the responsible character.*/
-                if (gameState.parties[tgtPlace.responsibleParty]!!.leader != "")
-                {
-                    val cpy = Information(information)
-                    cpy.author =
-                        gameState.parties[tgtPlace.responsibleParty]!!.leader
-                    tgtState.informations[cpy.generateName()] =
-                        cpy
-                    cpy.publicity[tgtPlace.responsibleParty] = 0
-                }
-            }
 
         //Generate resource loss.
         val loss = min(50, tgtPlace.resources["water"] ?: 0)
@@ -754,21 +706,12 @@ class GameEngine(val gameState: GameState)
             type = "lostResource",
             tgtPlace = tgtPlace.name,
             resources = hashMapOf("water" to loss)
-        ).also { tgtPlace.accidentInformations[it.generateName()] = it }.also { /*spread rumor*/
-            val cpy = Information(it); tgtState.informations[cpy.generateName()] =
-                cpy; cpy.publicity[tgtPlace.responsibleParty] = 75
+        )/*store info*/.also {
+            gameState.informations[it.generateName()] = it
+            //Add all people in the place to the known list.
+            it.knownTo.addAll(tgtPlace.characters)
+            tgtPlace.accidentInformationKeys += it.name
         }
-            .also { /*copy this information to the responsible character.*/
-                if (gameState.parties[tgtPlace.responsibleParty]!!.leader != "")
-                {
-                    val cpy = Information(it)
-                    cpy.author =
-                        gameState.parties[tgtPlace.responsibleParty]!!.leader
-                    tgtState.informations[cpy.generateName()] =
-                        cpy
-                    cpy.publicity[tgtPlace.responsibleParty] = 0
-                }
-            }
 
         //Generate apparatus damage.
         tgtPlace.apparatuses.forEach { app ->
@@ -801,22 +744,12 @@ class GameEngine(val gameState: GameState)
                     type = "damagedApparatus",
                     tgtPlace = tgtPlace.name,
                     tgtApparatus = app.name
-                )/*store dummy info*/.also { tgtPlace.accidentInformations[it.generateName()] = it }
-                    .also { /*spread rumor*/
-                        val cpy = Information(it); tgtState.informations[cpy.generateName()] =
-                            cpy; cpy.publicity[tgtPlace.responsibleParty] = 75
-                    }
-                    .also { /*copy this information to the responsible character.*/
-                        if (gameState.parties[tgtPlace.responsibleParty]!!.leader != "")
-                        {
-                            val cpy = Information(it)
-                            cpy.author =
-                                gameState.parties[tgtPlace.responsibleParty]!!.leader
-                            tgtState.informations[cpy.generateName()] =
-                                cpy
-                            cpy.publicity[tgtPlace.responsibleParty] = 0
-                        }
-                    }
+                )/*store info*/.also {
+                    gameState.informations[it.generateName()] = it
+                    //Add all people in the place to the known list.
+                    it.knownTo.addAll(tgtPlace.characters)
+                    tgtPlace.accidentInformationKeys += it.name
+                }
             }
         }
         onAccident.forEach { it(tgtPlace.name, death) }
