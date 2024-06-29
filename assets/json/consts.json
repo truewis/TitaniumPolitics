@@ -32,5 +32,6 @@
   "StartMeetingDuration": 1,
   "TalkDuration": 1,
   "maxAttentionIntercept": 30,
-  "InterceptDeltaWill": -5
+  "InterceptDeltaWill": -5,
+  "WaitDeltaWill": -1
 }

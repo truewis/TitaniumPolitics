@@ -37,6 +37,10 @@ class Eat(override val tgtCharacter: String, override val tgtPlace: String) : Ga
     override fun deltaWill(): Double
     {
         var w = super.deltaWill()
+        if (parent.characters[tgtCharacter]!!.hunger < 50)
+            w -= 5
+        if (parent.characters[tgtCharacter]!!.thirst < 50)
+            w -= 5
         if (parent.characters[tgtCharacter]!!.trait.contains("gourmand"))
             w += 10
         return w

@@ -1328,11 +1328,43 @@ class NonPlayerAgent : Agent()
         ) - 50) * (valuea - valuea2) * friendlinessFactor / 100
     }
 
+    fun availableActions(): List<GameAction>
+    {
+        return routines[0].availableActions().intersect(GameEngine.availableActions(parent, place, name).toSet()).map {
+            return@map when (it)
+            {
+
+                else -> (Class.forName(it).getConstructor(String::class.java, String::class.java)
+                    .newInstance(name, place) as GameAction).apply { chooseParams() }
+            }
+        }.filter { it.isValid() }
+    }
+
     @Serializable
     class Routine(val name: String, val priority: Int)
     {
         val variables: HashMap<String, String> = hashMapOf()
         val intVariables: HashMap<String, Int> = hashMapOf()
+
+        //The actions in this list are compared with GameEngine.availableActions() to see if the command is available.
+        //Then, instances of the actions are created, their parameters are optimized for deltaWill, and their validity is checked.
+        //If the action is valid, one with the highest deltaWill is executed.
+        //Routines can switch to other routines in the meanwhile.
+        fun availableActions(): List<String>
+        {
+            return when (name)
+            {
+                "rest" -> listOf("Eat", "Sleep", "Wait")
+                "move" -> listOf("Move")
+                "attendMeeting" -> listOf("attendMeeting")
+                "supportAgenda" -> listOf("supportAgenda")
+                "attackAgenda" -> listOf("attackAgenda")
+                "attendConference" -> listOf("attendConference")
+                "findCharacter" -> listOf("Move")
+                "buy" -> listOf("buy")
+                else -> listOf()
+            }
+        }
     }
 
 
