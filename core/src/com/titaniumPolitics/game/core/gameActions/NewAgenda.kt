@@ -15,7 +15,49 @@ class NewAgenda(override val tgtCharacter: String, override val tgtPlace: String
         meeting.agendas.add(agenda)
         meeting.currentAttention = max(meeting.currentAttention - 10, 0)
         super.execute()
-        //TODO: affect mutuality based on the agenda.
+        //affect mutuality based on the agenda.
+        parent.setMutuality(tgtCharacter, tgtCharacter, deltaWill())
+        when (agenda.subjectType)
+        {
+            "proofOfWork" ->
+            {
+            }
+
+            "budgetProposal" ->
+            {
+            }
+
+            "budgetResolution" ->
+            {
+            }
+
+            "praise" ->
+            {
+                parent.setMutuality(agenda.subjectParams["character"]!!, tgtCharacter, 3.0)
+            }
+
+            "denounce" ->
+            {
+                parent.setMutuality(agenda.subjectParams["character"]!!, tgtCharacter, -10.0)
+            }
+
+            "praiseParty" ->
+            {
+                parent.setPartyMutuality(meeting.involvedParty, agenda.subjectParams["party"]!!, 3.0)
+            }
+
+            "denounceParty" ->
+            {
+                parent.setPartyMutuality(meeting.involvedParty, agenda.subjectParams["party"]!!, -10.0)
+                //Increase party integrity
+                parent.setPartyMutuality(meeting.involvedParty, meeting.involvedParty, 5.0)
+            }
+
+            "nomination" ->
+            {
+
+            }
+        }
     }
 
     override fun isValid(): Boolean
@@ -51,6 +93,20 @@ class NewAgenda(override val tgtCharacter: String, override val tgtPlace: String
 
         }
         return false
+    }
+
+    override fun deltaWill(): Double
+    {
+        val mt = parent.characters[tgtCharacter]!!.currentMeeting!!
+        when (agenda.subjectType)
+        {
+            "praise" -> return parent.getMutuality(tgtCharacter, agenda.subjectParams["character"]!!) * 0.1
+            "denounce" -> return parent.getMutuality(tgtCharacter, agenda.subjectParams["character"]!!) * -0.1
+            "nomination" -> return parent.getMutuality(tgtCharacter, agenda.subjectParams["character"]!!) * 0.1
+            "praiseParty" -> return parent.getPartyMutuality(mt.involvedParty, agenda.subjectParams["party"]!!) * 0.1
+            "denounceParty" -> return parent.getPartyMutuality(mt.involvedParty, agenda.subjectParams["party"]!!) * -0.1
+        }
+        return .0
     }
 
 }

@@ -34,7 +34,7 @@ class Eat(override val tgtCharacter: String, override val tgtPlace: String) : Ga
             ?: 0) > 0 && (parent.characters[tgtCharacter]!!.resources["water"] ?: 0) > 0
     }
 
-    override fun deltaWill(): Int
+    override fun deltaWill(): Double
     {
         var w = super.deltaWill()
         if (parent.characters[tgtCharacter]!!.trait.contains("gourmand"))

@@ -46,8 +46,8 @@ sealed class GameAction()
         tgtCharObj.frozen += ReadOnly.const(this::class.simpleName!! + "Duration").toInt()
     }
 
-    open fun deltaWill(): Int
+    open fun deltaWill(): Double
     {
-        return 0
+        return .0
     }
 }

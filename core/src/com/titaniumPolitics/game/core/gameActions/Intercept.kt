@@ -27,5 +27,12 @@ class Intercept(override val tgtCharacter: String, override val tgtPlace: String
         return meeting.currentSpeaker != tgtCharacter && meeting.currentAttention <= ReadOnly.const("maxAttentionIntercept")
     }
 
+    override fun deltaWill(): Double
+    {
+        val meeting = parent.characters[tgtCharacter]!!.currentMeeting!!
+        val factor = if (parent.characters[tgtCharacter]!!.trait.contains("provoker")) -0.05 else -0.1
+        return super.deltaWill() + parent.getMutuality(tgtCharacter, meeting.currentSpeaker) * factor
+    }
+
 
 }

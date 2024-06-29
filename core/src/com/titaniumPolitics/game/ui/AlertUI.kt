@@ -122,7 +122,7 @@ class AlertUI(var gameState: GameState) : Table(defaultSkin)
                             || setOf(
                         "Move",
                         "Wait"
-                    ).contains(gameState.informations[it]!!.action))//Ignore boring actions, even if they are not mine.
+                    ).contains(gameState.informations[it]!!.action!!.javaClass.simpleName))//Ignore boring actions, even if they are not mine.
                             )
                 )//Ignore my actions, they are not surprising.
                     addAlert("newInfo") {

@@ -149,7 +149,7 @@ class GameEngine(val gameState: GameState)
             tgtTime = gameState.time,
             tgtPlace = place,
             tgtCharacter = char.name,
-            action = action.javaClass.simpleName
+            action = action
         ).also {
             it.knownTo.addAll(char.place.characters)//All characters from the same place know about the action.
             gameState.informations[it.generateName()] = it
@@ -176,6 +176,9 @@ class GameEngine(val gameState: GameState)
         }
         gameState.ongoingConferences.forEach {
             progressMeeting(gameState, it.value)
+        }
+        gameState.requests.forEach {
+            it.value.refresh(gameState)
         }
 
 
@@ -250,7 +253,7 @@ class GameEngine(val gameState: GameState)
                 //if our party is responsible, integrity drops.
 
             }
-            gameState.informations.filter { it.value.type == "action" && it.value.action == "unofficialResourceTransfer" }
+            gameState.informations.filter { it.value.type == "action" && it.value.action!!.javaClass.simpleName == "unofficialResourceTransfer" }
                 .forEach {
                     var factor = 1
                     if (it.value.author == "") factor = 2//rumors affect the approval negatively.

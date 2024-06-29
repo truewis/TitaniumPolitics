@@ -31,5 +31,6 @@
   "StartConferenceDuration": 1,
   "StartMeetingDuration": 1,
   "TalkDuration": 1,
-  "maxAttentionIntercept": 30
+  "maxAttentionIntercept": 30,
+  "InterceptDeltaWill": -5
 }

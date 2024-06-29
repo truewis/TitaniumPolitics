@@ -45,10 +45,10 @@ class PortraitUI(var tgtCharacter: String, var gameState: GameState) : Table(def
         //If there is an action that was taken by the character last turn, display a script on the portrait.
         val action =
             state.informations.values.firstOrNull { it.tgtCharacter == tgtCharacter && it.type == "action" && it.creationTime == state.time - 1 }
-        if (action != null && ReadOnly.script(action.action) != null)
+        if (action != null && ReadOnly.script(action.action!!.javaClass.simpleName) != null)
         {
             bubble.isVisible = true
-            speech.setText(ReadOnly.script(action.action))
+            speech.setText(ReadOnly.script(action.action!!.javaClass.simpleName))
         } else
         {
             bubble.isVisible = false

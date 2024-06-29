@@ -2,6 +2,7 @@ package com.titaniumPolitics.game.core
 
 import com.titaniumPolitics.game.core.gameActions.*
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.Transient
 import kotlin.math.min
 
 /*
@@ -23,6 +24,7 @@ class NonPlayerAgent : Agent()
 
     val finishedRequests =
         HashSet<String>() //Command Name, Information Name which is the result of the command.
+
 
     override fun chooseAction(): GameAction
     {
@@ -101,13 +103,8 @@ class NonPlayerAgent : Agent()
         //We should not enter executeCommand routine if it is already in the routine list.
         if (routines.none { it.name == "executeCommand" })
         {
-            val request = parent.requests.values.firstOrNull() {
-                (it.executeTime in parent.time - 3..parent.time + 3 || it.executeTime == 0) && (it.issuedBy.isEmpty() || it.issuedBy.sumOf {
-                    parent.getMutuality(
-                        name,
-                        it
-                    )
-                } / it.issuedBy.size > ReadOnly.const("RequestRejectAverageMutuality")) && GameEngine.availableActions(
+            val request = parent.requests.values.firstOrNull {
+                GameEngine.availableActions(
                     parent,
                     it.action.tgtPlace,
                     name
@@ -152,6 +149,11 @@ class NonPlayerAgent : Agent()
                             return Wait(name, place)
                         }
                 }
+            }
+
+            "downTime" ->
+            {
+
             }
 
             "executeCommand" ->
@@ -581,7 +583,7 @@ class NonPlayerAgent : Agent()
                         character.preparedInfoKeys.filter { key ->
                             parent.informations[key]!!.type == "action"
                                     && finishedRequests.any {
-                                parent.requests[it]!!.action.javaClass.simpleName == parent.informations[key]!!.action &&
+                                parent.requests[it]!!.action == parent.informations[key]!!.action &&
                                         parent.requests[it]!!.issuedBy.any {
                                             character.currentMeeting!!.currentCharacters.contains(
                                                 it
@@ -822,11 +824,16 @@ class NonPlayerAgent : Agent()
                             if (parent.getMutuality(
                                     name,
                                     conf.currentSpeaker
-                                ) > 50 || conf.currentAttention > Intercept.threshold
+                                ) > 50.0
                             )
                                 return Wait(name, place)
                             else
-                                return Intercept(name, place)
+                            {
+                                val action = Intercept(name, place)
+                                if (action.isValid())
+                                    return action
+                                return Wait(name, place)
+                            }
                         }
                         //If this character is the speaker
                         else
@@ -865,11 +872,16 @@ class NonPlayerAgent : Agent()
                             if (parent.getMutuality(
                                     name,
                                     conf.currentSpeaker
-                                ) > 50 || conf.currentAttention > Intercept.threshold
+                                ) > 50.0
                             )
                                 return Wait(name, place)
                             else
-                                return Intercept(name, place)
+                            {
+                                val action = Intercept(name, place)
+                                if (action.isValid())
+                                    return action
+                                return Wait(name, place)
+                            }
                         } else
                         {
                             //If budget is not proposed, propose it.
@@ -915,11 +927,16 @@ class NonPlayerAgent : Agent()
                             if (parent.getMutuality(
                                     name,
                                     conf.currentSpeaker
-                                ) > 50 || conf.currentAttention > Intercept.threshold
+                                ) > 50.0
                             )
                                 return Wait(name, place)
                             else
-                                return Intercept(name, place)
+                            {
+                                val action = Intercept(name, place)
+                                if (action.isValid())
+                                    return action
+                                return Wait(name, place)
+                            }
                         } else
                         {
                             //If speaker, propose proof of work if nothing else is important.
@@ -1092,11 +1109,16 @@ class NonPlayerAgent : Agent()
                             if (parent.getMutuality(
                                     name,
                                     conf.currentSpeaker
-                                ) > 50 || conf.currentAttention > Intercept.threshold
+                                ) > 50.0
                             )
                                 return Wait(name, place)
                             else
-                                return Intercept(name, place)
+                            {
+                                val action = Intercept(name, place)
+                                if (action.isValid())
+                                    return action
+                                return Wait(name, place)
+                            }
                         } else
                         {
                             val nominee = parent.characters.keys.filter { it != name && party.members.contains(it) }
@@ -1152,10 +1174,7 @@ class NonPlayerAgent : Agent()
                 }
                 return if (conf.currentSpeaker == name)
                 //If nothing else to talk about, end the speech. The next speaker is the character with the highest mutuality.
-                    EndSpeech(name, place).also {
-                        it.nextSpeaker =
-                            conf.currentCharacters.maxBy { char -> parent.getMutuality(name, char) }
-                    }
+                    EndSpeech(name, place)//TODO: pick next speaker based on deltaWill
                 //If I'm not the speaker, wait.
                 else Wait(name, place)
                 //TODO: do something in the meeting. Leave the meeting if nothing to do.

@@ -1,5 +1,6 @@
 package com.titaniumPolitics.game.core
 
+import com.titaniumPolitics.game.core.gameActions.GameAction
 import kotlinx.serialization.Serializable
 import kotlin.math.max
 import kotlin.math.min
@@ -19,7 +20,7 @@ class Information(//If there is no author, it is a rumor.
     var tgtApparatus: String = "",
     var tgtCharacter: String = "",
     var amount: Int = 0,
-    var action: String = "",
+    var action: GameAction? = null,
     var tgtParty: String = "",
     var auxParty: String = "",
     var resources: HashMap<String, Int> = hashMapOf<String, Int>()

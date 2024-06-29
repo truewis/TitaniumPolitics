@@ -110,7 +110,7 @@ class Examine(override val tgtCharacter: String, override val tgtPlace: String) 
         return true
     }
 
-    override fun deltaWill(): Int
+    override fun deltaWill(): Double
     {
         var w = super.deltaWill()
         if (parent.characters[tgtCharacter]!!.trait.contains("investigator"))

@@ -109,19 +109,19 @@ class Character : GameStateElement()
         {
             //The character don't like information about its wrongdoings.
             //Stole resource
-            if (info.type == "action" && info.action == "UnofficialResourceTransfer")
+            if (info.type == "action" && info.action!!.javaClass.simpleName == "UnofficialResourceTransfer")
                 return -1.0
             //Stayed in home during work hours
             //Did their job well
-            if (info.type == "action" && info.action == "NewAgenda")
+            if (info.type == "action" && info.action!!.javaClass.simpleName == "NewAgenda")
                 return 0.5
-            if (info.type == "action" && info.action == "AddInfo")
+            if (info.type == "action" && info.action!!.javaClass.simpleName == "AddInfo")
                 return 0.5
-            if (info.type == "action" && info.action == "OfficialResourceTransfer")
+            if (info.type == "action" && info.action!!.javaClass.simpleName == "OfficialResourceTransfer")
                 return 0.5
-            if (info.type == "action" && info.action == "InvestigateAccidentScene")
+            if (info.type == "action" && info.action!!.javaClass.simpleName == "InvestigateAccidentScene")
                 return 1.0
-            if (info.type == "action" && info.action == "ClearAccidentScene")
+            if (info.type == "action" && info.action!!.javaClass.simpleName == "ClearAccidentScene")
                 return 1.0
 
             //Depends on their party
@@ -130,7 +130,7 @@ class Character : GameStateElement()
                 {
                     "infrastructure" ->
                     {
-                        if (info.type == "action" && info.action == "Repair")
+                        if (info.type == "action" && info.action!!.javaClass.simpleName == "Repair")
                             return 1.0
                     }
                 }
@@ -173,7 +173,10 @@ class Character : GameStateElement()
         if (info.type == "resource")
             return info.resources.keys.sumOf { itemValue(it) * info.resources[it]!! }
         //UnofficialTransfer is more valuable if it is not known to the other character.
-        if (info.type == "action" && info.action == "unofficialResourceTransfer" && !info.knownTo.contains(name))
+        if (info.type == "action" && info.action!!.javaClass.simpleName == "unofficialResourceTransfer" && !info.knownTo.contains(
+                name
+            )
+        )
             return 10.0
 
         return 1.0

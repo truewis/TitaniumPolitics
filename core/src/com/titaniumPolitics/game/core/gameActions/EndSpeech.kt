@@ -27,4 +27,9 @@ class EndSpeech(override val tgtCharacter: String, override val tgtPlace: String
         return meeting.currentSpeaker == tgtCharacter
     }
 
+    override fun deltaWill(): Double
+    {
+        return parent.getMutuality(tgtCharacter, nextSpeaker) * 0.1
+    }
+
 }
