@@ -40,7 +40,12 @@ class Request(
     {
         if (completed) return
         //This function is called every turn.
-        //If one of the issuedTo completes this request, call onComplete.
+        //Each time one of the issuedTo completes this request,
+        //Add the key of this request to finishedRequests of the character.
+        gState.informations.filter { it.value.type == "action" && it.value.action == action && (issuedTo.isEmpty() || it.value.tgtCharacter in issuedTo) }
+            .forEach {
+                gState.characters[it.value.tgtCharacter]!!.finishedRequests.add(name)
+            }
         val tgt = gState.informations.filter {
             it.value.knownTo.containsAll(issuedBy) && it.value.type == "action" && it.value.action == action && (issuedTo.isEmpty() || issuedTo.contains(
                 it.value.tgtCharacter

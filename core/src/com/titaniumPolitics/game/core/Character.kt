@@ -52,6 +52,9 @@ class Character : GameStateElement()
             ?: parent.ongoingConferences.values.firstOrNull { it.currentCharacters.contains(name) }
 
     val history = hashMapOf<Int, String>()
+    val finishedRequests =
+        HashSet<String>() //Requests that this character thinks are finished. The recipient of the request may not be aware of this yet.
+
 
     //TODO: value may be affected by power dynamics.
     fun itemValue(item: String): Double

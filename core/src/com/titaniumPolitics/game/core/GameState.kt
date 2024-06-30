@@ -160,7 +160,7 @@ class GameState
         println("Game state initialized successfully.")
     }
 
-    fun getMutuality(a: String, b: String): Double
+    fun getMutuality(a: String, b: String = a): Double
     {
         if (!characters.containsKey(a) || !characters.containsKey(b)) throw Exception("Getting mutuality $a -> $b invalid.")
         if (!_mutuality.containsKey(a))
@@ -170,7 +170,7 @@ class GameState
         return _mutuality[a]!![b]!!
     }
 
-    fun setMutuality(a: String, b: String, delta: Double)
+    fun setMutuality(a: String, b: String = a, delta: Double)
     {
         if (!characters.containsKey(a) || !characters.containsKey(b)) throw Exception("Setting mutuality $a -> $b invalid.")
         if (!_mutuality.containsKey(a))
@@ -180,7 +180,7 @@ class GameState
         if (getMutuality(a, b) < 0) _mutuality[a]!![b] = 0.0
     }
 
-    fun getPartyMutuality(a: String, b: String): Double
+    fun getPartyMutuality(a: String, b: String = a): Double
     {
         if (!parties.containsKey(a) || !parties.containsKey(b)) throw Exception("Getting party mutuality $a -> $b invalid.")
         var totalMutuality = 0.0
@@ -210,7 +210,7 @@ class GameState
         return if (count > 0) totalMutuality / count else 0.0
     }
 
-    fun setPartyMutuality(a: String, b: String, delta: Double)
+    fun setPartyMutuality(a: String, b: String = a, delta: Double)
     {
         if (!parties.containsKey(a) || !parties.containsKey(b)) throw Exception("Setting party mutuality $a -> $b invalid.")
         val membersA = parties[a]?.members ?: emptyList()

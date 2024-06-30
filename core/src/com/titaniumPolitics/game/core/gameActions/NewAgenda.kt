@@ -57,6 +57,7 @@ class NewAgenda(override val tgtCharacter: String, override val tgtPlace: String
             {
 
             }
+            //request is not executed until the end of the meeting. Check Meeting.kt
         }
     }
 
