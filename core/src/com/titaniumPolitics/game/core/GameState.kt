@@ -116,6 +116,7 @@ class GameState
                                 this.livingBy = "SquareNorth"//TODO: This is a temporary solution.
                             }
                             this.resources = hashMapOf("ration" to 1000, "water" to 1000)
+                            this.health = 100
                         } //TODO: anonymous characters get resource from market.
                     nonPlayerAgents[name] = NonPlayerAgent()
                     //TODO: Give traits to the anonymous characters.

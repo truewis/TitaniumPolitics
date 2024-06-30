@@ -130,7 +130,7 @@ class NonPlayerAgent : Agent()
         var nextRoutine = routines[0]
         while (true)
         {
-            nextRoutine.gState = parent
+            nextRoutine.injectParent(parent)
             val v = nextRoutine.newRoutineCondition(name, place)
             if (v != null)
             {

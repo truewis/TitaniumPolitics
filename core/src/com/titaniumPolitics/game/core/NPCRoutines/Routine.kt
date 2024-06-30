@@ -18,6 +18,11 @@ sealed class Routine()
     val intVariables: HashMap<String, Int> = hashMapOf()
     var executeDone = false
 
+    fun injectParent(gState: GameState)
+    {
+        this.gState = gState
+    }
+
     abstract fun newRoutineCondition(name: String, place: String): Routine?
     abstract fun execute(name: String, place: String): GameAction
     abstract fun endCondition(name: String, place: String): Boolean

@@ -156,6 +156,7 @@ class WorkRoutine() : Routine()
             try
             {
                 return MoveRoutine().apply {
+                    gState = this@WorkRoutine.gState
                     variables["movePlace"] = gState.places.values.filter { place ->
                         gState.parties.values.any { party ->
                             party.home == place.name && party.members.contains(
@@ -164,10 +165,11 @@ class WorkRoutine() : Routine()
                         }
                     }.random().name
                 }
-            } catch (e: Exception)
+            } catch (e: NoSuchElementException)
             {
-                println("Warning: No place to commute found for $name.")
+                println("Warning: No place to commute found for $name")
             }
+
 
         }
         return null
