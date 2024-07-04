@@ -94,10 +94,8 @@ class PortraitUI(var tgtCharacter: String, var gameState: GameState) : Table(def
         if (emojiTexture == "")
         {
             theEmoji.isVisible = false
-            println("$tgtCharacter hiding Emoji.")
         } else
         {
-            println("$tgtCharacter Displaying Emoji: $emojiTexture")
             //theEmoji.setDrawable(defaultSkin, emojiTexture)
             theEmoji.isVisible = true
         }

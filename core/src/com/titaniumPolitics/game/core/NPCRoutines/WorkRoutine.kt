@@ -41,8 +41,18 @@ class WorkRoutine() : Routine()
                 return MoveRoutine().apply {
                     variables["movePlace"] = conf.place
                 }
+            } else
+            {
+                return AttendConferenceRoutine().apply {
+                    actionDelegated = JoinConference(name, place).also {
+                        it.meetingName = gState.ongoingConferences.filter {
+                            it.value.scheduledCharacters.contains(name) && !it.value.currentCharacters.contains(
+                                name
+                            )
+                        }.keys.first()
+                    }
+                }
             }
-            //----------------------------------------------------------------------------------Move to the conference
         }
         if (gState.scheduledConferences.any { it.value.scheduledCharacters.contains(name) && it.value.time - gState.time in -2..2 })//If a conference is soon
         {//TODO: consider the distance to the conference place.
@@ -58,8 +68,28 @@ class WorkRoutine() : Routine()
                         variables["movePlace"] = conf.place
                     }
                 }
+            } else
+            {
+                //if this character is the leader, start the conference.
+                if (gState.parties[conf.involvedParty]!!.leader == name)
+                {
+                    return AttendConferenceRoutine().apply {
+                        actionDelegated = StartConference(name, place).apply {
+                            meetingName =
+                                gState.scheduledConferences.keys.first { gState.scheduledConferences[it] == conf }
+                        }
+                    }
+                } else //if this character is the controller and the election is planned, start the conference.
+                    if (name == "ctrler" && conf.type == "divisionLeaderElection")
+                    {
+                        return AttendConferenceRoutine().apply {
+                            actionDelegated = StartConference(name, place).apply {
+                                meetingName =
+                                    gState.scheduledConferences.keys.first { gState.scheduledConferences[it] == conf }
+                            }
+                        }
+                    }
             }
-            //----------------------------------------------------------------------------------Move to the conference
         }
         //If missed a meeting
         if (gState.ongoingMeetings.any {
@@ -79,6 +109,17 @@ class WorkRoutine() : Routine()
                 return MoveRoutine().apply {
                     variables["movePlace"] = meeting.place
                 }
+            } else
+            {
+                return AttendMeetingRoutine().apply {
+                    actionDelegated = JoinMeeting(name, place).also {
+                        it.meetingName = gState.ongoingMeetings.filter {
+                            it.value.scheduledCharacters.contains(name) && !it.value.currentCharacters.contains(
+                                name
+                            )
+                        }.keys.first()
+                    }
+                }
             }
             //----------------------------------------------------------------------------------Move to the meeting
         }
@@ -92,6 +133,15 @@ class WorkRoutine() : Routine()
             {
                 return MoveRoutine().apply {
                     variables["movePlace"] = meeting.place
+                }
+            }
+            //If arrived, start meeting
+            else
+            {
+                return AttendMeetingRoutine().apply {
+                    actionDelegated = StartMeeting(name, place).apply {
+                        meetingName = gState.scheduledMeetings.filter { it.value == meeting }.keys.first()
+                    }
                 }
             }
             //----------------------------------------------------------------------------------Move to the meeting

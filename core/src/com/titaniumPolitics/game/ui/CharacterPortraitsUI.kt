@@ -32,7 +32,7 @@ class CharacterPortraitsUI(var gameState: GameState) : Table(defaultSkin)
         gameState.places[place]!!.characters.forEach {
 
             //Player cannot see themselves.
-            if (it != gameState.playerName)
+            if (it != gameState.playerName && !it.contains("Anon"))
                 addCharacterPortrait(it)
         }
         placeCharacterPortrait()

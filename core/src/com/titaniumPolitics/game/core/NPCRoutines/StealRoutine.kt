@@ -35,7 +35,7 @@ class StealRoutine() : Routine()
     override fun execute(name: String, place: String): GameAction
     {
         executeDone = true
-        val resplace = findResource(name) ?: throw Exception("No resource found.")
+        val resplace = gState.places[place]!!
         val character = gState.characters[name]!!
         return UnofficialResourceTransfer(name, place).apply {
             resources = hashMapOf(
@@ -52,6 +52,6 @@ class StealRoutine() : Routine()
 
     override fun endCondition(name: String, place: String): Boolean
     {
-        return executeDone || findResource(name) != null
+        return executeDone || findResource(name) == null
     }
 }
