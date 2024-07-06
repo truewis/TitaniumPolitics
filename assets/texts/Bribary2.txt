@@ -1,0 +1,15 @@
+Doctor: Ah, our beloved technician. How can I help you today?
+Rui: I need to ask you something. Do you know Sylvia? She's one of the patients here.
+Doctor: Sylvia? Oh, yes. She's a very nice lady. She's been here for a while now. What about her?
+Rui: I heard that the hospital is planning to discharge her soon. Is that true?
+Doctor: Who told you that?
+Rui: I am not sure why that matters. I just want to know if it's true.
+Doctor: I don't know where you heard that from, but Sylvia is still under our care and we are trying our best to help her recover.
+Rui: Kind sir, you are not answering my question.
+{BELL}
+Doctor: Sorry, but we just got a new patient. I have to go now. Bye.
+Rui: Wait! Can I do anything to help her recovery?
+Doctor: Well, our hospital is always in need of help, especially from a technician. One of the water tanks are leaking. Can you take a look at it?
+Rui: But will you keep Sylvia here?
+Doctor: Thank you. Patients did not have clean water for a while now. That includes Sylvia. If you can fix the tank, it will help her recovery.
+Rui: I will do my best. I'll have to investigate the tank first.

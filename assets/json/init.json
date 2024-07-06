@@ -497,7 +497,7 @@
       ],
       "characters": [
       ],
-      "responsibleParty": "welfare",
+      "responsibleParty": "bioengineering",
       "workHoursStart": 0,
       "workHoursEnd": 24
     },
@@ -576,7 +576,7 @@
       ],
       "characters": [
       ],
-      "responsibleParty": "welfare",
+      "responsibleParty": "bioengineering",
       "workHoursStart": 0,
       "workHoursEnd": 24
     },
@@ -1943,7 +1943,7 @@
       ],
       "characters": [
       ],
-      "responsibleParty": "industry",
+      "responsibleParty": "bioengineering",
       "workHoursStart": 9,
       "workHoursEnd": 17
     },
@@ -2783,7 +2783,7 @@
       ],
       "home": "rescueStationNorth"
     },
-    "welfare": {
+    "bioengineering": {
       "type": "division",
       "leader": "welly",
       "members": [

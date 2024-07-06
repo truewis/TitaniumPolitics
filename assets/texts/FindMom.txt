@@ -1,0 +1,12 @@
+BoyFindingMom: Hey there!
+Rui: Do you know me?
+BoyFindingMom: I saw you at the square. You were with my mom!
+Rui: Oh, cool. Anything else?
+BoyFindingMom: Can you give this to my mom? She left it when she went to work.
+Rui: I don't even know who your mom is. I meet a lot of people at the square.
+BoyFindingMom: She works in the mine. She'll see you if you wait there with the box!
+Rui: I'm sorry, but I can't do that. First of all, I am far too busy to just stand in the mine entrance indefinitely. Second, people can be very hesitant to approach strangers. I don't want to make your mom uncomfortable.
+BoyFindingMom: If you don't take this, I'll let my mom know that a technician with the name Rui harassed me.
+Rui: (Ick...) That's not true at all. I'm not harassing you. I'm just trying to explain why I can't help you.
+BoyFindingMom: Doesn't matter. Why would my mom believe you over me?
+Rui: Darn it. Give me the box. I'll try my best to give it to your mom.
