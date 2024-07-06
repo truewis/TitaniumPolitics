@@ -200,6 +200,8 @@ class GameEngine(val gameState: GameState)
     //TODO: Normalization of mutuality is not implemented yet.
     private fun calculateMutuality()
     {
+        //Wealth display effect: opportunists mutuality to more wealthy character increases. to less wealthy character decreases.
+
         //If there are meetings where some characters are missing, all the characters in the meeting lose mutuality toward the missing characters.
         gameState.ongoingConferences.forEach { conference ->
             conference.value.scheduledCharacters.forEach { char ->
