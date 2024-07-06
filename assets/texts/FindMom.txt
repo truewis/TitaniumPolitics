@@ -10,3 +10,5 @@ BoyFindingMom: If you don't take this, I'll let my mom know that a technician wi
 Rui: (Ick...) That's not true at all. I'm not harassing you. I'm just trying to explain why I can't help you.
 BoyFindingMom: Doesn't matter. Why would my mom believe you over me?
 Rui: Darn it. Give me the box. I'll try my best to give it to your mom.
+Rui: One last word, young man. You better be more polite to strangers. Some people will not accept this kind of behavior.
+BoyFindingMom: Thank you!
