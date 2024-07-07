@@ -73,6 +73,7 @@ project(":core") {
         implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3"
         api "com.rafaskoberg.gdx:typing-label:$typingLabelVersion"
         implementation "space.earlygrey:shapedrawer:$shapedrawerVersion"
+        api 'com.github.raeleus.TenPatch:tenpatch:5.2.3'
     }
 }
 kotlin {
