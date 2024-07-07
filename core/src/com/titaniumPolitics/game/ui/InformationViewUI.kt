@@ -7,7 +7,7 @@ import com.titaniumPolitics.game.core.Information
 import ktx.scene2d.*
 import ktx.scene2d.Scene2DSkin.defaultSkin
 
-class InformationViewUI : Table(defaultSkin), KTable
+class InformationViewUI : WindowUI("InformationViewTitle")
 {
     private val informationTable = Table()
 
@@ -17,13 +17,7 @@ class InformationViewUI : Table(defaultSkin), KTable
         instance = this
         val informationPane = ScrollPane(informationTable)
         informationPane.setScrollingDisabled(false, false)
-        stack {
-            it.grow()
-            image("panel") {
-            }
-            add(informationPane)
-
-        }
+        content.add(informationPane).grow()
 
     }
 

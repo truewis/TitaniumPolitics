@@ -16,8 +16,9 @@ class TradeUI(var gameState: GameState) : Table(defaultSkin)
     var titleLabel: Label
     private val docList1 = VerticalGroup()
     private val docList2 = VerticalGroup()
-    val submitButton = TextButton("지시", skin)
-    val cancelButton = TextButton("취소", skin)
+
+    //val submitButton = TextButton("지시", skin)
+    //val cancelButton = TextButton("취소", skin)
     var trade: Trade = Trade("", "")
 
     init
@@ -35,21 +36,21 @@ class TradeUI(var gameState: GameState) : Table(defaultSkin)
         add(listScr1).growY()
         add(listScr2).growY()
         row()
-        add(submitButton)
-        add(cancelButton)
+        //add(submitButton)
+        //add(cancelButton)
         isVisible = false
-        GameEngine.acquireEvent += {
-            if (it.type == "Action")
-                submitButton.addListener(object : ClickListener()
-                {
-                    override fun clicked(event: InputEvent?, x: Float, y: Float)
-                    {
-                        super.clicked(event, x, y)
-                        GameEngine.acquireCallback(trade)
-                        isVisible = false
-                    }
-                })
-        }
+//        GameEngine.acquireEvent += {
+//            if (it.type == "Action")
+//                submitButton.addListener(object : ClickListener()
+//                {
+//                    override fun clicked(event: InputEvent?, x: Float, y: Float)
+//                    {
+//                        super.clicked(event, x, y)
+//                        GameEngine.acquireCallback(trade)
+//                        isVisible = false
+//                    }
+//                })
+//        }
 
 
     }

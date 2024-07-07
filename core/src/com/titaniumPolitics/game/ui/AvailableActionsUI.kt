@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.scenes.scene2d.ui.*
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
+import com.badlogic.gdx.utils.Align
 import com.titaniumPolitics.game.core.GameEngine
 import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.core.ReadOnly
@@ -21,13 +22,16 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable
 
     init
     {
+
         titleLabel = Label(ReadOnly.prop("availableActions"), skin, "trnsprtConsole")
         titleLabel.setFontScale(2f)
-        add(titleLabel).growX()
-        row()
+
+
 
         options = ExamineUI(this@AvailableActionsUI.gameState)
         add(options)
+        row()
+        add(titleLabel).growX()
         CapsuleStage.instance.onMouseDown.add { x, y ->
             //If x and y are not within the bounds of this UI, hide the option ui.
             val localpos = options.screenToLocalCoordinates(Vector2(x, y))
@@ -38,9 +42,10 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable
         }
         row()
         val docScr = ScrollPane(docList)
+        docList.align(Align.center)
         docList.grow()
 
-        add(docScr).grow()
+        add(docScr).size(1200f, 150f)
         gameState.updateUI += { _ -> refreshList(); }
     }
 
@@ -63,21 +68,16 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable
                     this.setFontScale(2f)
                     it.manager.initialTime = 0.5f
                 }
-                image("question-mark-circle-outline-icon") {
+                image("Help") {
                     it.size(100f)
 
                     when (tobj)
                     {
 
 
-                        "Trade" ->
-                        {
-                            this.setDrawable(defaultSkin, "hand-shake-icon")
-                        }
-
                         "Examine" ->
                         {
-                            this.setDrawable(defaultSkin, "magnifying-glass-icon")
+                            this.setDrawable(defaultSkin, "SearchGrunge")
                             this@button.addListener(object : ClickListener()
                             {
                                 override fun clicked(
@@ -95,7 +95,7 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable
 
                         "Wait" ->
                         {
-                            this.setDrawable(defaultSkin, "sand-clock-half-line-icon")
+                            this.setDrawable(defaultSkin, "DotsGrunge")
                             this@button.addListener(object : ClickListener()
                             {
                                 override fun clicked(
@@ -121,7 +121,7 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable
 
                         "Eat" ->
                         {
-                            this.setDrawable(defaultSkin, "food-dinner-icon")
+                            this.setDrawable(defaultSkin, "AppleGrunge")
                             this@button.addListener(object : ClickListener()
                             {
                                 override fun clicked(
@@ -146,7 +146,7 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable
 
                         "Sleep" ->
                         {
-                            this.setDrawable(defaultSkin, "closed-eye-icon")
+                            this.setDrawable(defaultSkin, "icon_activity_117")
                             this@button.addListener(object : ClickListener()
                             {
                                 override fun clicked(
@@ -167,12 +167,12 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable
 
                         "Repair" ->
                         {
-                            this.setDrawable(defaultSkin, "hammer-line-icon")
+                            this.setDrawable(defaultSkin, "CogGrunge")
                         }
 
                         "UnofficialResourceTransfer" ->
                         {
-                            this.setDrawable(defaultSkin, "boxes-icon")
+                            this.setDrawable(defaultSkin, "TilesGrunge")
                             this@button.addListener(object : ClickListener()
                             {
                                 override fun clicked(
@@ -193,7 +193,7 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable
 
                         "OfficialResourceTransfer" ->
                         {
-                            this.setDrawable(defaultSkin, "boxes-icon")
+                            this.setDrawable(defaultSkin, "TilesGrunge")
                             this@button.addListener(object : ClickListener()
                             {
                                 override fun clicked(
@@ -214,7 +214,7 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable
 
                         "JoinMeeting" ->
                         {
-                            this.setDrawable(defaultSkin, "speaking-bubbles-line-icon")
+                            this.setDrawable(defaultSkin, "ChatGrunge")
                             this@button.addListener(object : ClickListener()
                             {
                                 override fun clicked(
@@ -239,7 +239,7 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable
 
                         "JoinConference" ->
                         {
-                            this.setDrawable(defaultSkin, "speaking-bubbles-line-icon")
+                            this.setDrawable(defaultSkin, "ChatGrunge")
                             this@button.addListener(object : ClickListener()
                             {
                                 override fun clicked(
@@ -265,7 +265,7 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable
 
                         "NewAgenda" ->
                         {
-                            this.setDrawable(defaultSkin, "plus-circle-line-icon")
+                            this.setDrawable(defaultSkin, "PlusGrunge")
                             this@button.addListener(object : ClickListener()
                             {
                                 override fun clicked(
@@ -282,7 +282,7 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable
 
                         "LeaveMeeting" ->
                         {
-                            this.setDrawable(defaultSkin, "close-square-line-icon")
+                            this.setDrawable(defaultSkin, "XGrunge")
                             this@button.addListener(object : ClickListener()
                             {
                                 override fun clicked(
@@ -304,14 +304,16 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable
                         //TODO: also make changes to NewAgendaUI.kt.
                         else ->
                         {
-                            this.setDrawable(defaultSkin, "question-mark-circle-outline-icon")
+                            this.setDrawable(defaultSkin, "Help")
 
                         }
                     }
 
                 }
             }
-            docList.addActor(t)
+            docList.addActor(scene2d.container(t) {
+                size(150f)
+            })
         }
         isVisible = !docList.children.isEmpty
 

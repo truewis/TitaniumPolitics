@@ -34,7 +34,7 @@ class DialogueUI(val gameState: GameState) : Table(defaultSkin), KTable
     val speakerNameDisplay = Label("", skin, "consoleWhite")
     val ctnuButton = Label(">>>", skin, "consoleWhite")
     val donePlayingLine = ArrayList<(Int) -> Unit>()
-    val background = Image(defaultSkin, "capsuleDevLabel1")
+    val background = Image(defaultSkin, "BackgroundNoiseHD")
 
     //Logs to be played.
     // Called and cleared when the ctnuButton is pressed.
@@ -52,11 +52,22 @@ class DialogueUI(val gameState: GameState) : Table(defaultSkin), KTable
             table {
                 add().grow()
                 row()
-                add(this@DialogueUI.speakerNameDisplay).fill().growX()
-                row()
-                add(this@DialogueUI.currentTextDisplay).fill().growX()
-                row()
-                add(this@DialogueUI.ctnuButton).fill()
+                stack {
+                    it.growX()
+                    val t = table {
+                        add(this@DialogueUI.speakerNameDisplay).fill().growX()
+                        row()
+                        add(this@DialogueUI.currentTextDisplay).fill().growX()
+                        row()
+                        add(this@DialogueUI.ctnuButton).fill()
+                    }
+//                    image("GradientBottom") {
+//                        setSize(t.prefWidth, t.prefHeight)
+//                    }
+//                    image("BackgroundNoiseHD") {
+//                        setSize(t.prefWidth, t.prefHeight)
+//                    }
+                }
             }
         }
         speakerNameDisplay.setAlignment(Align.bottomLeft)
@@ -149,7 +160,7 @@ class DialogueUI(val gameState: GameState) : Table(defaultSkin), KTable
 //                    )!!
 //                )
 //            )
-            scene2d.image("raincoat-icon") {
+            scene2d.image("UserGrunge") {
                 try
                 {
                     this.setDrawable(defaultSkin, lineSpeaker)

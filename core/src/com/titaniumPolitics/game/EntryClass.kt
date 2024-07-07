@@ -33,9 +33,9 @@ class EntryClass : ApplicationAdapter()
         gen.dispose()
         val param = SkinLoader.SkinParameter(fontMap)
         val assetManager = AssetManager()
-        assetManager.load("skin/capsuleSkin.json", Skin::class.java, param)
+        assetManager.load("skin/titaniumSkin.json", Skin::class.java, param)
         assetManager.finishLoading()
-        skin = assetManager.get("skin/capsuleSkin.json")
+        skin = assetManager.get("skin/titaniumSkin.json")
         Scene2DSkin.defaultSkin = skin
         stage = MainMenu(this)
         Gdx.input.inputProcessor = stage

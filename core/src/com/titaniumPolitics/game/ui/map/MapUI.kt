@@ -9,9 +9,10 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.badlogic.gdx.utils.Align
 import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.ui.CapsuleStage
+import com.titaniumPolitics.game.ui.WindowUI
 import ktx.scene2d.*
 
-open class MapUI(val gameState: GameState) : Table(Scene2DSkin.defaultSkin), KTable
+open class MapUI(val gameState: GameState) : WindowUI("MapTitle")
 {
     val currentConnections = arrayListOf<Connection>()
     val currentMarkers = arrayListOf<PlaceMarker>()
@@ -23,12 +24,8 @@ open class MapUI(val gameState: GameState) : Table(Scene2DSkin.defaultSkin), KTa
         instance = this
         isVisible = false
 
-        stack { cell ->
-            cell.grow()
-            image("panel") {
-
-            }
-            image("mapBackground") {
+        val st = scene2d.stack { cell ->
+            image("MapGrid") {
                 addAction(
                     Actions.forever(
                         Actions.sequence(
@@ -48,25 +45,8 @@ open class MapUI(val gameState: GameState) : Table(Scene2DSkin.defaultSkin), KTa
                 }
                 )
             }
-
-            container {
-                align(Align.topRight)
-                button {
-                    image("close-square-line-icon") {
-                        it.size(50f)
-                    }
-                    addListener(object : ClickListener()
-                    {
-                        override fun clicked(event: com.badlogic.gdx.scenes.scene2d.InputEvent?, x: Float, y: Float)
-                        {
-                            this@MapUI.isVisible = false
-                        }
-                    })
-                }
-            }
-
-
         }
+        content.add(st).grow()
         currentPlaceMarkerWindow.isVisible = false
         this.addActor(currentPlaceMarkerWindow)
 

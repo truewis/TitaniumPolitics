@@ -19,79 +19,88 @@ class ExamineUI(var gameState: GameState) : Table(defaultSkin)
         titleLabel.setFontScale(2f)
         add(titleLabel).growX()
         row()
-        val docScr = ScrollPane(docList)
         docList.grow()
-        docList.addActor(scene2d.button {
-            image("teamwork-together-icon") {
-                it.size(70f)
-                this@button.addListener(object : ClickListener()
-                {
-                    override fun clicked(
-                        event: com.badlogic.gdx.scenes.scene2d.InputEvent?,
-                        x: Float,
-                        y: Float
-                    )
+        docList.addActor(scene2d.container {
+            button {
+                image("UserGrunge") {
+                    it.size(70f)
+                    this@button.addListener(object : ClickListener()
                     {
-                        GameEngine.acquireCallback(
-                            Examine(
-                                gameState.playerName,
-                                gameState.player.place.name
-                            ).also { it.what = "HR" }
+                        override fun clicked(
+                            event: com.badlogic.gdx.scenes.scene2d.InputEvent?,
+                            x: Float,
+                            y: Float
                         )
-                        this@ExamineUI.isVisible = false
+                        {
+                            GameEngine.acquireCallback(
+                                Examine(
+                                    gameState.playerName,
+                                    gameState.player.place.name
+                                ).also { it.what = "HR" }
+                            )
+                            this@ExamineUI.isVisible = false
+                        }
                     }
+                    )
                 }
-                )
             }
+            size(100f, 100f)
         })
-        docList.addActor(scene2d.button {
-            image("settings-line-icon") {
-                it.size(70f)
-                this@button.addListener(object : ClickListener()
-                {
-                    override fun clicked(
-                        event: com.badlogic.gdx.scenes.scene2d.InputEvent?,
-                        x: Float,
-                        y: Float
-                    )
+        docList.addActor(scene2d.container {
+            button {
+                image("CogGrunge") {
+                    it.size(70f)
+                    this@button.addListener(object : ClickListener()
                     {
-                        GameEngine.acquireCallback(
-                            Examine(
-                                gameState.playerName,
-                                gameState.player.place.name
-                            ).also { it.what = "apparatus" }
+                        override fun clicked(
+                            event: com.badlogic.gdx.scenes.scene2d.InputEvent?,
+                            x: Float,
+                            y: Float
                         )
-                        this@ExamineUI.isVisible = false
+                        {
+                            GameEngine.acquireCallback(
+                                Examine(
+                                    gameState.playerName,
+                                    gameState.player.place.name
+                                ).also { it.what = "apparatus" }
+                            )
+                            this@ExamineUI.isVisible = false
+                        }
                     }
-                }
-                )
-            }
-        })
-        docList.addActor(scene2d.button {
-            image("cube-line-icon") {
-                it.size(70f)
-                this@button.addListener(object : ClickListener()
-                {
-                    override fun clicked(
-                        event: com.badlogic.gdx.scenes.scene2d.InputEvent?,
-                        x: Float,
-                        y: Float
                     )
-                    {
-                        GameEngine.acquireCallback(
-                            Examine(
-                                gameState.playerName,
-                                gameState.player.place.name
-                            ).also { it.what = "resources" }
-                        )
-                        this@ExamineUI.isVisible = false
-                    }
                 }
-                )
             }
+            size(100f, 100f)
 
         })
-        add(docScr).grow()
+        docList.addActor(scene2d.container {
+            button {
+                image("TilesGrunge") {
+                    it.size(70f)
+                    this@button.addListener(object : ClickListener()
+                    {
+                        override fun clicked(
+                            event: com.badlogic.gdx.scenes.scene2d.InputEvent?,
+                            x: Float,
+                            y: Float
+                        )
+                        {
+                            GameEngine.acquireCallback(
+                                Examine(
+                                    gameState.playerName,
+                                    gameState.player.place.name
+                                ).also { it.what = "resources" }
+                            )
+                            this@ExamineUI.isVisible = false
+                        }
+                    }
+                    )
+                }
+
+            }
+            size(100f, 100f)
+        })
+        add(docList).size(300f, 100f)
     }
 
 

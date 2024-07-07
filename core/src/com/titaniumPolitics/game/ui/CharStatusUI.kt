@@ -16,7 +16,8 @@ class CharStatusUI(gameState: GameState) : Table(defaultSkin), KTable
     {
         stack {
             it.fillX()
-            image(defaultSkin.getDrawable("panel"))
+            it.size(200f, 100f)
+            //image("BackgroundNoiseHD")
             table {
                 add(HealthMeter(gameState)).fill()
                 //row()
@@ -25,7 +26,7 @@ class CharStatusUI(gameState: GameState) : Table(defaultSkin), KTable
 
         }
         row()
-        image(defaultSkin.getDrawable("portrait1")) {
+        image(defaultSkin.getDrawable("UserGrunge")) {
             it.size(200f)
         }
     }

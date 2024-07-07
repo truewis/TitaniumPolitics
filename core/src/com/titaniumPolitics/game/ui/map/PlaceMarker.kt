@@ -1,6 +1,8 @@
 package com.titaniumPolitics.game.ui.map
 
 import com.badlogic.gdx.graphics.Color
+import com.badlogic.gdx.scenes.scene2d.actions.Actions
+import com.badlogic.gdx.scenes.scene2d.actions.AlphaAction
 import com.badlogic.gdx.scenes.scene2d.ui.Button
 import com.titaniumPolitics.game.core.GameState
 import ktx.scene2d.Scene2DSkin.defaultSkin
@@ -32,6 +34,23 @@ open class PlaceMarker(var gameState: GameState, var owner: MapUI, place: String
                 owner.currentPlaceMarkerWindow.refresh(getX(), getY(), place)
             }
         })
+
+        addAction(
+            Actions.forever(
+                Actions.sequence(
+                    Actions.delay(0.5f),
+                    AlphaAction().apply {
+                        duration = 0.2f
+                        if (gameState.player.place.connectedPlaces.contains(place))
+                            alpha = 0f
+                        else
+                            alpha = 1f
+                    },
+                    AlphaAction().apply {
+                        duration = 0.2f
+                        alpha = 1f
+                    }
+                )))
     }
 
 

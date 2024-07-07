@@ -22,7 +22,7 @@ import ktx.scene2d.*
 import ktx.scene2d.Scene2DSkin.defaultSkin
 
 
-class NewAgendaUI(gameState: GameState, override var actionCallback: (GameAction) -> Unit) : Table(defaultSkin), KTable,
+class NewAgendaUI(gameState: GameState, override var actionCallback: (GameAction) -> Unit) : WindowUI("NewAgendaTitle"),
     ActionUI
 {
     private val dataTable = Table()
@@ -130,10 +130,8 @@ class NewAgendaUI(gameState: GameState, override var actionCallback: (GameAction
     {
         isVisible = false
         instance = this
-        stack {
+        val st = stack {
             it.grow()
-            image("panel") {
-            }
             table {
                 label("New Agenda", "trnsprtConsole") {
                     setFontScale(3f)
@@ -190,8 +188,6 @@ class NewAgendaUI(gameState: GameState, override var actionCallback: (GameAction
                 //Fill in agenda details.
                 this@NewAgendaUI.agendaDetailStack = stack {
                     it.grow()
-                    image("panel") {
-                    }
                     add(this@NewAgendaUI.praiseTable)
                     add(this@NewAgendaUI.denounceTable)
                     add(this@NewAgendaUI.praisePartyTable)
@@ -235,6 +231,7 @@ class NewAgendaUI(gameState: GameState, override var actionCallback: (GameAction
                 }
             }
         }
+        content.add(st).grow()
 
 
     }

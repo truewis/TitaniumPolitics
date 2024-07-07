@@ -16,12 +16,14 @@ class AssistantUI(gameState: GameState) : Table(defaultSkin), KTable
 
     init
     {
-        val PoliticiansViewButton = button {
+        val buttonSize = 100f
+        button {
             it.fill()
+            it.size(buttonSize)
             stack {
                 it.size(50f)
                 it.fill()
-                image("raincoat-icon") {
+                image("CrownGrunge") {
                 }
             }
             addListener(object : ClickListener()
@@ -39,12 +41,13 @@ class AssistantUI(gameState: GameState) : Table(defaultSkin), KTable
             )
         }
         row()
-        val informationViewButton = button {
+        button {
             it.fill()
+            it.size(buttonSize)
             stack {
                 it.size(50f)
                 it.fill()
-                image("binder-file-icon") {
+                image("icon_app_140") {
                 }
             }
             addListener(object : ClickListener()
@@ -66,12 +69,13 @@ class AssistantUI(gameState: GameState) : Table(defaultSkin), KTable
             it.setFontScale(3f)
             it.setAlignment(Align.center, Align.center)
         }
-        val calendarButton = button {
+        button {
             it.fill()
+            it.size(buttonSize)
             stack {
                 it.size(50f)
                 it.fill()
-                image("calendar-blank-line-icon") {
+                image("icon_app_119") {
                 }
                 add(calendarLabel)
             }
@@ -94,9 +98,10 @@ class AssistantUI(gameState: GameState) : Table(defaultSkin), KTable
 
         row()
 
-        button { cell ->
-            cell.fill()
-            image("map-icon") {
+        button {
+            it.fill()
+            it.size(buttonSize)
+            image("icon_app_195") {
                 it.size(50f)
             }
             addListener(object : ClickListener()

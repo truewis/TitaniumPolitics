@@ -13,7 +13,7 @@ import ktx.scene2d.*
 import ktx.scene2d.Scene2DSkin.defaultSkin
 
 
-class CalendarUI : Table(defaultSkin), KTable
+class CalendarUI : WindowUI("CalendarTitle")
 {
     private val dataTable = Table()
 
@@ -23,28 +23,7 @@ class CalendarUI : Table(defaultSkin), KTable
         instance = this
         val informationPane = ScrollPane(dataTable)
         informationPane.setScrollingDisabled(false, false)
-        stack {
-            it.grow()
-            image("panel") {
-            }
-            add(informationPane)
-
-        }
-        row()
-        button {
-            it.fill()
-            label("Close") {
-                setAlignment(Align.center)
-                setFontScale(2f)
-            }
-            addListener(object : ClickListener()
-            {
-                override fun clicked(event: com.badlogic.gdx.scenes.scene2d.InputEvent?, x: Float, y: Float)
-                {
-                    this@CalendarUI.isVisible = false
-                }
-            })
-        }
+        content.add(informationPane).grow()
 
 
     }

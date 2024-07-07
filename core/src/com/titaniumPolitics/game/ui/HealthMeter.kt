@@ -11,11 +11,11 @@ import ktx.scene2d.scene2d
 
 class HealthMeter(gameState: GameState) : Table(defaultSkin)
 {
-    val bar = scene2d.progressBar(0f, 1f, 0.01f, false, "default-horizontal")
+    val bar = MeterUI()
 
     init
     {
-        val b = Image(defaultSkin, "heart-beat-icon")
+        val b = Image(defaultSkin, "AidGrunge")
         b.color = Color.WHITE
         add(b).size(50f)
         add(bar).growX()
@@ -26,7 +26,6 @@ class HealthMeter(gameState: GameState) : Table(defaultSkin)
 
     fun setValue(value: Int)
     {
-        bar.value = value.toFloat() / 100
-        bar.updateVisualValue()
+        bar.setValue(value.toFloat() / 100)
     }
 }

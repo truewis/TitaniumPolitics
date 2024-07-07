@@ -20,7 +20,7 @@ class HeadUpInterface(val gameState: GameState) : Table(Scene2DSkin.defaultSkin)
         instance = this
         addActor(CharacterInteractionWindowUI(gameState = this@HeadUpInterface.gameState))
         stack { cell ->
-            cell.grow()
+            cell.size(1920f, 1080f)
 
             container {
                 align(Align.bottom)
@@ -35,7 +35,6 @@ class HeadUpInterface(val gameState: GameState) : Table(Scene2DSkin.defaultSkin)
             add(ApparatusInfoUI())
             add(ResourceTransferUI(this@HeadUpInterface.gameState) { _: GameAction -> })
             add(NewAgendaUI(this@HeadUpInterface.gameState) { _: GameAction -> })
-            add(TradeUI(this@HeadUpInterface.gameState))
 
             //We draw the following UIs above any other UIs, as they have to appear on top of everything else.
             add(PlaceSelectionUI(this@HeadUpInterface.gameState))

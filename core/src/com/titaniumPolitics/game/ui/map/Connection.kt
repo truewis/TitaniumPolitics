@@ -15,7 +15,7 @@ class Connection(var gameState: GameState, startPlace: String, endPlace: String)
     init
     {
         //Fetch default drawable from skin.
-        drawable = defaultSkin.getDrawable("black")
+        drawable = defaultSkin.getDrawable("BlackPx")
         try
         {
 

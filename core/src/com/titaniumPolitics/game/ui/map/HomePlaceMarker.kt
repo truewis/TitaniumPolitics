@@ -15,7 +15,7 @@ class HomePlaceMarker(gameState: GameState, owner: MapUI, place: String) : Place
             gameState.places[place2]!!.coordinates.x.toFloat(),
             gameState.places[place2]!!.coordinates.z.toFloat()
         )
-        add(scene2d.image("hovel-hut-outline-icon")).fill()
+        add(scene2d.image("HomeGrunge")).fill()
         //Set the position slightly to the right and down from the center of the place so that it does not overlap with the place marker.
         this.setPosition(start.first + this.width / 2, start.second - this.height)
     }

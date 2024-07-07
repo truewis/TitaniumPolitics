@@ -16,8 +16,8 @@ import ktx.scene2d.*
 import ktx.scene2d.Scene2DSkin.defaultSkin
 
 
-class ResourceTransferUI(gameState: GameState, override var actionCallback: (GameAction) -> Unit) : Table(defaultSkin),
-    KTable, ActionUI
+class ResourceTransferUI(gameState: GameState, override var actionCallback: (GameAction) -> Unit) :
+    WindowUI("ResourceTransferTitle"), ActionUI
 {
     private val dataTable = Table()
     private val targetTable = Table()
@@ -39,10 +39,8 @@ class ResourceTransferUI(gameState: GameState, override var actionCallback: (Gam
 
         val targetResourcePane = ScrollPane(targetTable)
         targetResourcePane.setScrollingDisabled(false, false)
-        stack {
+        val st = stack {
             it.grow()
-            image("panel") {
-            }
             table {
                 this@ResourceTransferUI.modeLabel = label("Transfer Mode", "trnsprtConsole") { setFontScale(3f) }
                 row()
@@ -133,6 +131,7 @@ class ResourceTransferUI(gameState: GameState, override var actionCallback: (Gam
                 }
             }
         }
+        content.add(st).grow()
 
 
     }

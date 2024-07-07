@@ -19,7 +19,7 @@ class MutualityMeter(var gameState: GameState, var tgtCharacter: String, var who
 
     init
     {
-        val b = Image(defaultSkin, "hand-shake-icon")
+        val b = Image(defaultSkin, "icon_gesture_58")
         b.color = Color.WHITE
         add(b).size(50f)
         add(bar).growX()

@@ -17,11 +17,10 @@ class PortraitUI(var tgtCharacter: String, var gameState: GameState) : Table(def
         setFontScale(3f)
     }
     val bubble = scene2d.stack {
-        image("panel")
         add(this@PortraitUI.speech)
     }
-    val theEmoji = scene2d.image("question-mark-line-icon")
-    val portrait = scene2d.image("raincoat-icon") {
+    val theEmoji = scene2d.image("HelpGrunge")
+    val portrait = scene2d.image("UserGrunge") {
         try
         {
             this.setDrawable(defaultSkin, this@PortraitUI.tgtCharacter)
@@ -57,7 +56,7 @@ class PortraitUI(var tgtCharacter: String, var gameState: GameState) : Table(def
         //Display emoji based on event conditions.
         if (state.eventSystem.dataBase.any { it.displayEmoji(tgtCharacter) })
         {
-            displayEmojiOnPortrait("question-mark-line-icon")
+            displayEmojiOnPortrait("HelpGrunge")
         } else
         {
             displayEmojiOnPortrait("")
