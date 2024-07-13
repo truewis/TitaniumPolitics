@@ -100,7 +100,33 @@ class ExamineUI(var gameState: GameState) : Table(defaultSkin)
             }
             size(100f, 100f)
         })
+        docList.addActor(scene2d.container {
+            button {
+                image("X") {
+                    it.size(70f)
+                    this@button.addListener(object : ClickListener()
+                    {
+                        override fun clicked(
+                            event: com.badlogic.gdx.scenes.scene2d.InputEvent?,
+                            x: Float,
+                            y: Float
+                        )
+                        {
+                            this@ExamineUI.isVisible = false
+                        }
+                    }
+                    )
+                }
+
+            }
+            size(100f, 100f)
+        })
         add(docList).size(300f, 100f)
+    }
+
+    override fun setVisible(visible: Boolean) {
+        CharacterPortraitsUI.instance.isVisible = !visible
+        super.setVisible(visible)
     }
 
 
