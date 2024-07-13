@@ -13,8 +13,7 @@ import ktx.scene2d.Scene2DSkin.defaultSkin
 
 open class FloatingWindowUI : Window("", defaultSkin), KTable
 {
-    val inContent = Table()
-    val nameLabel = Label("", defaultSkin, "consoleWhite")
+    val content = Table()
     val shadow = scene2d.image("TooltipShadow10p") {
         it.width = 450f
         it.height = 450f
@@ -23,16 +22,30 @@ open class FloatingWindowUI : Window("", defaultSkin), KTable
         setColor(0f, 0f, 0f, 0.7f)
         touchable = Touchable.disabled//This is a shadow outside the tooltip
     }
+    val closeButton = scene2d.button {
+        label("Close") {
+            setFontScale(2f)
+        }
+
+        addListener(object : com.badlogic.gdx.scenes.scene2d.utils.ClickListener()
+        {
+            override fun clicked(event: com.badlogic.gdx.scenes.scene2d.InputEvent?, x: Float, y: Float)
+            {
+                this@FloatingWindowUI.isVisible = false
+
+            }
+        })
+    }
 
     init
     {
         setSize(350f, 350f)
         addActor(shadow)
-        nameLabel.apply {
+        titleLabel.apply {
             setFontScale(2f)
             setAlignment(Align.center)
         }
-        add(this@FloatingWindowUI.nameLabel).growX()
+        add(this@FloatingWindowUI.titleLabel).growX()
         row()
         image("Stroke5pxHorizontal") {
             it.size(350f, 5f).fill()
@@ -50,7 +63,7 @@ open class FloatingWindowUI : Window("", defaultSkin), KTable
                 setColor(0f, 0f, 0f, 1f)
             }
             table {
-                add(this@FloatingWindowUI.inContent).grow()
+                add(this@FloatingWindowUI.content).grow()
             }
         }
 

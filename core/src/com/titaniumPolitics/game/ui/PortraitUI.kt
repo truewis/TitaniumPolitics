@@ -1,6 +1,7 @@
 package com.titaniumPolitics.game.ui
 
 import com.badlogic.gdx.graphics.Texture
+import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.ui.Image
 import com.badlogic.gdx.scenes.scene2d.ui.Table
@@ -34,7 +35,8 @@ class PortraitUI(var tgtCharacter: String, var gameState: GameState) : Table(def
             {
                 //Open Character Marker UI
                 CharacterInteractionWindowUI.instance.isVisible = true
-                CharacterInteractionWindowUI.instance.refresh(x, y, this@PortraitUI.tgtCharacter)
+                val coord = localToStageCoordinates(Vector2(x, y))
+                CharacterInteractionWindowUI.instance.refresh(coord.x, coord.y, this@PortraitUI.tgtCharacter)
             }
         })
     }

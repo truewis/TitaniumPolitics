@@ -67,36 +67,32 @@ class PlaceMarkerWindowUI(var gameState: GameState, var owner: MapUI) : Floating
             val YOFFSET = 10f
             setPosition(x + XOFFSET, y + YOFFSET)
             isVisible = true
-            if (placeName.contains("home")) this.nameLabel.setText(ReadOnly.prop("home"))
+            if (placeName.contains("home")) this.titleLabel.setText(ReadOnly.prop("home"))
             else
-                this.nameLabel.setText(ReadOnly.prop(placeName))
+                this.titleLabel.setText(ReadOnly.prop(placeName))
             placeDisplayed = placeName
 
             //Clear the list of any previous buttons.
-            inContent.clear()
-
-            //If place selection mode is active, add the selection button and nothing else.
-            if (mode == "PlaceSelection")
-            {
-                inContent.add(selectButton).size(200f, 50f).fill()
-            } else
-            {
-                //Disable the button if the player is already in the place. Calling place property will throw an exception when the game is first loaded.
-                if (gameState.characters[gameState.playerName]!!.place.connectedPlaces.contains(placeDisplayed))
-                    inContent.add(moveButton).size(200f, 50f).fill()
-            }
-
-            if (!inContent.hasChildren())
-            {
-                inContent.add(
-                    scene2d.label("No actions available") {
-                        setFontScale(2f)
+            content.apply {
+                clear()
+                //If place selection mode is active, add the selection button and nothing else.
+                if (mode == "PlaceSelection")
+                {
+                    add(selectButton).size(200f, 50f).fill()
+                    row()
+                } else
+                {
+                    //Disable the button if the player is already in the place. Calling place property will throw an exception when the game is first loaded.
+                    if (gameState.characters[gameState.playerName]!!.place.connectedPlaces.contains(placeDisplayed))
+                    {
+                        add(moveButton).size(200f, 50f).fill()
+                        row()
                     }
-                ).size(200f, 50f).fill()
+                }
 
-
+                add(closeButton).fill().size(200f, 50f)
             }
-            setSize(350f, 50f + inContent.prefHeight)
+            setSize(350f, 50f + content.prefHeight)
         }
     }
 }

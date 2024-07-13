@@ -1,12 +1,10 @@
 package com.titaniumPolitics.game.ui
 
-import com.badlogic.gdx.scenes.scene2d.ui.Window
 import com.titaniumPolitics.game.core.GameEngine
 import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.core.ReadOnly
 import com.titaniumPolitics.game.core.gameActions.Talk
 import com.titaniumPolitics.game.ui.map.PlaceSelectionUI
-import ktx.scene2d.Scene2DSkin.defaultSkin
 import ktx.scene2d.button
 import ktx.scene2d.label
 import ktx.scene2d.scene2d
@@ -18,7 +16,7 @@ class CharacterInteractionWindowUI(var gameState: GameState) :
     var characterDisplayed = ""
     var mode = ""
     private val talkButton = scene2d.button {
-        label("Talk With...", "console") {
+        label("Talk With...") {
             setFontScale(2f)
         }
 
@@ -40,7 +38,7 @@ class CharacterInteractionWindowUI(var gameState: GameState) :
     }
 
     private val giveResourceButton = scene2d.button {
-        label("Give resources...", "console") {
+        label("Give resources...") {
             setFontScale(2f)
         }
 
@@ -61,7 +59,7 @@ class CharacterInteractionWindowUI(var gameState: GameState) :
     }
 
     private val selectButton = scene2d.button {
-        label("Select Character", "console") {
+        label("Select Character") {
             setFontScale(2f)
         }
 
@@ -75,20 +73,7 @@ class CharacterInteractionWindowUI(var gameState: GameState) :
         }
         )
     }
-    private val closeButton = scene2d.button {
-        label("Close", "console") {
-            setFontScale(2f)
-        }
 
-        addListener(object : com.badlogic.gdx.scenes.scene2d.utils.ClickListener()
-        {
-            override fun clicked(event: com.badlogic.gdx.scenes.scene2d.InputEvent?, x: Float, y: Float)
-            {
-                this@CharacterInteractionWindowUI.isVisible = false
-
-            }
-        })
-    }
 
     init
     {
@@ -121,29 +106,34 @@ class CharacterInteractionWindowUI(var gameState: GameState) :
             characterDisplayed = charName
 
             //Clear the list of any previous buttons.
-            clear()
+            content.apply {
+                clear()
 
-            //If place selection mode is active, add the selection button and nothing else.
-            if (mode == "CharSelection")
-            {
-                add(selectButton).fill()
-                row()
-            } else
-            {
-                //Disable the button if the player is already in the place. Calling place property will throw an exception when the game is first loaded.
-                //Also, disable the button if the character is already in the meeting ("talking" to them already).
-                if (gameState.player.currentMeeting?.currentCharacters?.contains(
-                        characterDisplayed
-                    ) != true
-                )
+
+                //If place selection mode is active, add the selection button and nothing else.
+                if (mode == "CharSelection")
                 {
-                    add(talkButton).fill()
+                    add(selectButton).fill().size(200f, 50f)
                     row()
-                    add(giveResourceButton).fill()
-                    row()
+                } else
+                {
+                    //Disable the button if the player is already in the place. Calling place property will throw an exception when the game is first loaded.
+                    //Also, disable the button if the character is already in the meeting ("talking" to them already).
+                    if (gameState.player.currentMeeting?.currentCharacters?.contains(
+                            characterDisplayed
+                        ) != true
+                    )
+                    {
+                        add(talkButton).fill().size(200f, 50f)
+                        row()
+                        add(giveResourceButton).fill().size(200f, 50f)
+                        row()
+                    }
                 }
+                add(closeButton).fill().size(200f, 50f)
+
             }
-            add(closeButton).fill()
+            setSize(350f, 50f + content.prefHeight)
         }
     }
 
