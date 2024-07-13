@@ -1,8 +1,10 @@
 package com.titaniumPolitics.game.ui
 
 import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.Input
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.scenes.scene2d.InputEvent
+import com.badlogic.gdx.scenes.scene2d.InputListener
 import com.badlogic.gdx.scenes.scene2d.Touchable
 import com.badlogic.gdx.scenes.scene2d.actions.Actions
 import com.badlogic.gdx.scenes.scene2d.actions.AlphaAction
@@ -105,19 +107,45 @@ class DialogueUI(val gameState: GameState) : Table(defaultSkin), KTable
         {
             override fun clicked(event: InputEvent, x: Float, y: Float)
             {
+                nextLine()
                 super.clicked(event, x, y)
-                if (currentLineNumber < currentDialogueLength - 1)
-                {
-                    currentLineNumber++
-                    playLine(currentLineNumber)
-                } else
-                {
-                    ctnuCallback()
-                    ctnuCallback = {}
-                    instance.isVisible = false
-                }
             }
         })
+        addListener(object : InputListener()
+        {
+            override fun keyDown(event: InputEvent?, keycode: Int): Boolean
+            {
+                if (keycode == Input.Keys.ENTER || keycode == Input.Keys.SPACE)
+                {
+                    nextLine()
+                    return true
+                }
+                return super.keyDown(event, keycode)
+            }
+        })
+    }
+
+    override fun setVisible(visible: Boolean)
+    {
+        if (visible)
+        {
+            stage.keyboardFocus = this
+        }
+        super.setVisible(visible)
+    }
+
+    fun nextLine()
+    {
+        if (currentLineNumber < currentDialogueLength - 1)
+        {
+            currentLineNumber++
+            playLine(currentLineNumber)
+        } else
+        {
+            ctnuCallback()
+            ctnuCallback = {}
+            instance.isVisible = false
+        }
     }
 
     fun playDialogue(dialogueKey: String)

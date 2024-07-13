@@ -118,11 +118,6 @@ class CapsuleStage(val gameState: GameState) : Stage(FitViewport(1920F, 1080F))
         }
     }
 
-    override fun keyTyped(character: Char): Boolean
-    {
-
-        return super.keyTyped(character)
-    }
 
     override fun touchUp(screenX: Int, screenY: Int, pointer: Int, button: Int): Boolean
     {

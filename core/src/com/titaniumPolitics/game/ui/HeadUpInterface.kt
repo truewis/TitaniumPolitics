@@ -65,6 +65,7 @@ class HeadUpInterface(val gameState: GameState) : Table(Scene2DSkin.defaultSkin)
             //We draw the following UIs above any other UIs.
             add(DialogueUI(this@HeadUpInterface.gameState))
 
+
         }
 
 
