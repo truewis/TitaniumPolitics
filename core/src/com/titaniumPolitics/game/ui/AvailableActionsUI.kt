@@ -16,22 +16,15 @@ import ktx.scene2d.Scene2DSkin.defaultSkin
 
 class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable
 {
-    var titleLabel: Label
     private val docList = HorizontalGroup()
     val options: ExamineUI
 
     init
     {
 
-        titleLabel = Label(ReadOnly.prop("availableActions"), skin, "trnsprtConsole")
-        titleLabel.setFontScale(2f)
-
-
 
         options = ExamineUI(this@AvailableActionsUI.gameState)
         add(options)
-        row()
-        add(titleLabel).growX()
         CapsuleStage.instance.onMouseDown.add { x, y ->
             //If x and y are not within the bounds of this UI, hide the option ui.
             val localpos = options.screenToLocalCoordinates(Vector2(x, y))
