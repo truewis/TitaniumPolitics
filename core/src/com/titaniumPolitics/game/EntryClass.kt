@@ -24,10 +24,11 @@ class EntryClass : ApplicationAdapter()
     override fun create()
     {
 
-        val gen = FreeTypeFontGenerator(Gdx.files.internal("data/DungGeunMo.ttf"))
+        val gen = FreeTypeFontGenerator(Gdx.files.internal("Fonts/LondrinaSolid-Regular.ttf"))
         val parameter = FreeTypeFontGenerator.FreeTypeFontParameter()
-        parameter.size = 16
-        parameter.characters = Gdx.files.internal("korean2350.txt").readString("UTF-8")
+        parameter.size = 14
+        //Include the below line for Unicode support
+        //parameter.characters = Gdx.files.internal("korean2350.txt").readString("UTF-8")
         val nanum = gen.generateFont(parameter)
         fontMap.put("fixedsys", nanum)
         gen.dispose()

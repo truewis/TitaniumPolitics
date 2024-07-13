@@ -18,7 +18,7 @@ class HealthMeter(gameState: GameState) : Table(defaultSkin)
         val b = Image(defaultSkin, "AidGrunge")
         b.color = Color.WHITE
         add(b).size(50f)
-        add(bar).growX()
+        add(bar).size(250f, 75f).fill()
         gameState.updateUI += { y ->
             setValue(y.player.health)
         }

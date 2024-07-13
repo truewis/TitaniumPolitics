@@ -79,6 +79,6 @@ class Party : GameStateElement()
             }
         }
         if (remaining > 0)
-            throw IllegalStateException("There are not enough anonymous members to kill.")
+            println("There are not enough anonymous members to kill in $name.")
     }
 }

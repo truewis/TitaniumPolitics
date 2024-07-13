@@ -20,8 +20,11 @@ class MeterUI : Table(), KTable
     init
     {
         stack {
-            image("BarSimpleBgTiledNormal") {
+            container {
+                fillX()
+                image("BarSimpleBgTiledNormal") {
 
+                }
             }
             this@MeterUI.cont = container {
                 image("BarSimpleFillVitals") {
@@ -34,10 +37,12 @@ class MeterUI : Table(), KTable
     fun setValue(value: Float)
     {
         this.fill = value
+        println("HP:$value")
         if (this.vertical)
             this.cont.fill(1f, this.fill)
         else
             this.cont.fill(this.fill, 1f)
+        this.cont.layout()
     }
 
 }

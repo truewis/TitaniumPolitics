@@ -76,7 +76,7 @@ class WorkRoutine() : Routine()
                     return AttendConferenceRoutine().apply {
                         actionDelegated = StartConference(name, place).apply {
                             meetingName =
-                                gState.scheduledConferences.keys.first { gState.scheduledConferences[it] == conf }
+                                this@WorkRoutine.gState.scheduledConferences.keys.first { this@WorkRoutine.gState.scheduledConferences[it] == conf }
                         }
                     }
                 } else //if this character is the controller and the election is planned, start the conference.
@@ -85,7 +85,7 @@ class WorkRoutine() : Routine()
                         return AttendConferenceRoutine().apply {
                             actionDelegated = StartConference(name, place).apply {
                                 meetingName =
-                                    gState.scheduledConferences.keys.first { gState.scheduledConferences[it] == conf }
+                                    this@WorkRoutine.gState.scheduledConferences.keys.first { this@WorkRoutine.gState.scheduledConferences[it] == conf }
                             }
                         }
                     }

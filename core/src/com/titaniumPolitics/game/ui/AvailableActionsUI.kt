@@ -64,10 +64,7 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable
                 return@forEach
             }
             val t = scene2d.button {
-                textTooltip(ReadOnly.prop(tobj) + "\n" + ReadOnly.prop("$tobj-description"), "default") {
-                    this.setFontScale(2f)
-                    it.manager.initialTime = 0.5f
-                }
+                addListener(ActionTooltipUI(tobj))
                 image("Help") {
                     it.size(100f)
 
