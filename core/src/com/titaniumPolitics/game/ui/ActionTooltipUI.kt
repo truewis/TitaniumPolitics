@@ -64,4 +64,5 @@ class ActionTooltipUI(actionName: String) : Tooltip<Table>(scene2d.table {
     {
         manager.initialTime = 0.5f
     }
+    
 }

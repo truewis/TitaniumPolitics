@@ -1,6 +1,7 @@
 package com.titaniumPolitics.game.ui
 
 
+import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.scenes.scene2d.Touchable
 import com.badlogic.gdx.scenes.scene2d.ui.*
 
@@ -32,6 +33,11 @@ open class FloatingWindowUI : Window("", defaultSkin), KTable
             setAlignment(Align.center)
         }
         add(this@FloatingWindowUI.nameLabel).growX()
+        row()
+        image("Stroke5pxHorizontal") {
+            it.size(350f, 5f).fill()
+            color = Color.WHITE
+        }
         row()
         stack {
             it.grow()

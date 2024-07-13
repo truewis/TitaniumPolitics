@@ -1,6 +1,7 @@
 package com.titaniumPolitics.game.ui
 
 
+import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.scenes.scene2d.ui.*
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 
@@ -17,6 +18,7 @@ open class WindowUI(titleKey: String) : Table(defaultSkin), KTable
 {
     val titleLabel = scene2d.label(ReadOnly.prop(titleKey), "trnsprtConsole") {
         setFontScale(4f)
+        setAlignment(Align.center)
     }
     val content = Table()
 
@@ -24,7 +26,9 @@ open class WindowUI(titleKey: String) : Table(defaultSkin), KTable
     {
         stack {
             it.grow()
-            image("GradientBottom")
+            image("GradientBottom") {
+                color = Color.BLACK
+            }
             image("BackgroundNoiseHD")
             table {
                 add(this@WindowUI.titleLabel).growX().fillX()
@@ -40,7 +44,7 @@ open class WindowUI(titleKey: String) : Table(defaultSkin), KTable
                         }
                     })
                 }
-                
+
                 row()
                 add(this@WindowUI.content).colspan(2).grow()
             }

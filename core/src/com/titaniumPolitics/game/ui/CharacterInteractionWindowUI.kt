@@ -13,7 +13,7 @@ import ktx.scene2d.scene2d
 
 //This UI is a window that pops up when the player clicks on a character in the map. It allows the player to talk to the character or select them.
 class CharacterInteractionWindowUI(var gameState: GameState) :
-    Window("Char Marker", defaultSkin)
+    FloatingWindowUI()
 {
     var characterDisplayed = ""
     var mode = ""
@@ -28,11 +28,11 @@ class CharacterInteractionWindowUI(var gameState: GameState) :
             {
                 //Move to place.
                 val action = Talk(
-                    gameState.playerName,
-                    gameState.player.place.name
+                    this@CharacterInteractionWindowUI.gameState.playerName,
+                    this@CharacterInteractionWindowUI.gameState.player.place.name
                 )
-                action.who = characterDisplayed
-                action.injectParent(gameState)
+                action.who = this@CharacterInteractionWindowUI.characterDisplayed
+                action.injectParent(this@CharacterInteractionWindowUI.gameState)
                 this@CharacterInteractionWindowUI.isVisible = false
                 GameEngine.acquireCallback(action)
             }
@@ -50,8 +50,12 @@ class CharacterInteractionWindowUI(var gameState: GameState) :
             {
                 this@CharacterInteractionWindowUI.isVisible = false
                 ResourceTransferUI.instance.isVisible = true
-                ResourceTransferUI.instance.toWhere = "home_$characterDisplayed"
-                ResourceTransferUI.instance.refresh("private", GameEngine.acquireCallback, gameState.player.resources)
+                ResourceTransferUI.instance.toWhere = "home_${this@CharacterInteractionWindowUI.characterDisplayed}"
+                ResourceTransferUI.instance.refresh(
+                    "private",
+                    GameEngine.acquireCallback,
+                    this@CharacterInteractionWindowUI.gameState.player.resources
+                )
             }
         })
     }
@@ -66,7 +70,7 @@ class CharacterInteractionWindowUI(var gameState: GameState) :
             override fun clicked(event: com.badlogic.gdx.scenes.scene2d.InputEvent?, x: Float, y: Float)
             {
                 //Select place.
-                PlaceSelectionUI.instance.selectedPlaceCallback(characterDisplayed)
+                PlaceSelectionUI.instance.selectedPlaceCallback(this@CharacterInteractionWindowUI.characterDisplayed)
             }
         }
         )
