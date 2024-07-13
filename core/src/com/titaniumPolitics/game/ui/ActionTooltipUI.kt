@@ -1,6 +1,7 @@
 package com.titaniumPolitics.game.ui
 
 import com.badlogic.gdx.graphics.Color
+import com.badlogic.gdx.scenes.scene2d.Touchable
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.ui.TextTooltip
 import com.badlogic.gdx.scenes.scene2d.ui.Tooltip
@@ -16,6 +17,7 @@ class ActionTooltipUI(actionName: String) : Tooltip<Table>(scene2d.table {
         it.x = -50f
         it.y = -50f
         setColor(0f, 0f, 0f, 0.7f)
+        touchable = Touchable.disabled//This is a shadow outside the tooltip
     })
     stack {
 
