@@ -15,7 +15,7 @@ class AttendConferenceRoutine() : Routine(), IMeetingRoutine
     {
         val character = gState.characters[name]!!
         val conf =
-            character.currentMeeting!!
+            character.currentMeeting ?: return null
         when (conf.type)
         {
             "triumvirateDailyConference" ->

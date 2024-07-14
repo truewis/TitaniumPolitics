@@ -37,7 +37,6 @@ class MeterUI : Table(), KTable
     fun setValue(value: Float)
     {
         this.fill = value
-        println("HP:$value")
         if (this.vertical)
             this.cont.fill(1f, this.fill)
         else

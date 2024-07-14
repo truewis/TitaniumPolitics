@@ -45,7 +45,7 @@ class WorkRoutine() : Routine()
             {
                 return AttendConferenceRoutine().apply {
                     actionDelegated = JoinConference(name, place).also {
-                        it.meetingName = gState.ongoingConferences.filter {
+                        it.meetingName = this@WorkRoutine.gState.ongoingConferences.filter {
                             it.value.scheduledCharacters.contains(name) && !it.value.currentCharacters.contains(
                                 name
                             )

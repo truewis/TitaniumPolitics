@@ -1,20 +1,17 @@
-package com.titaniumPolitics.game.ui
+package com.titaniumPolitics.game.ui.meeting
 
-import com.badlogic.gdx.Gdx
-import com.badlogic.gdx.graphics.Texture
-import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.ui.HorizontalGroup
-import com.badlogic.gdx.scenes.scene2d.ui.Image
 import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.Table
-import com.badlogic.gdx.scenes.scene2d.utils.Drawable
 import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.core.Meeting
+import com.titaniumPolitics.game.ui.AgendaUI
+import com.titaniumPolitics.game.ui.CapsuleStage
+import com.titaniumPolitics.game.ui.InfoCardUI
+import com.titaniumPolitics.game.ui.PortraitUI
 import ktx.scene2d.KTable
 import ktx.scene2d.Scene2DSkin.defaultSkin
-import ktx.scene2d.image
 import ktx.scene2d.label
-import ktx.scene2d.scene2d
 
 
 //This UI is used for both meetings and conferences

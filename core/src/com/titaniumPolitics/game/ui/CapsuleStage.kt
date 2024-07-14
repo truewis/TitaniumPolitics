@@ -12,9 +12,9 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable
 import com.badlogic.gdx.utils.viewport.FitViewport
 import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.core.ReadOnly
+import com.titaniumPolitics.game.ui.meeting.MeetingUI
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
-import ktx.scene2d.Scene2DSkin
 
 class CapsuleStage(val gameState: GameState) : Stage(FitViewport(1920F, 1080F))
 {
