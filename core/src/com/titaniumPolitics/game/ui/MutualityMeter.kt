@@ -6,29 +6,78 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.core.ReadOnly
+import ktx.scene2d.*
 import ktx.scene2d.Scene2DSkin.defaultSkin
-import ktx.scene2d.progressBar
-import ktx.scene2d.scene2d
-import ktx.scene2d.textTooltip
+import kotlin.random.Random
 
-class MutualityMeter(var gameState: GameState, var tgtCharacter: String, var who: String) : Table(defaultSkin)
+class MutualityMeter(var gameState: GameState, var tgtCharacter: String, var who: String) : Table(defaultSkin), KTable
 {
-    val bar = scene2d.progressBar(0f, 1f, 0.01f, false, "default-horizontal")
+    val bar1 = MeterOvalUI()
+    val bar2 = MeterOvalUI()
 
-    val refresh = { state: GameState -> setValue(state.getMutuality(tgtCharacter, who)) }
+
+    val refresh =
+        { state: GameState ->
+            setValue(
+                state.getMutuality(tgtCharacter, who) / 100f,
+                state.getMutuality(who, tgtCharacter) / 100f
+            )
+        }
 
     init
     {
-        val b = Image(defaultSkin, "icon_gesture_58")
-        b.color = Color.WHITE
-        add(b).size(50f)
-        add(bar).growX()
-        textTooltip("${(bar.value * 100).toInt()}", "default") {
-            this.setFontScale(2f)
-            it.manager.initialTime = 0.5f
+        stack {
+            it.grow()
+
+            table {
+                add(this@MutualityMeter.bar1).size(300f, 30f)
+                row()
+                add(this@MutualityMeter.bar2).size(300f, 30f)
+            }
+            container {
+                size(50f, 50f)
+                image("icon_gesture_58") {
+                    color = Color(1f, 1f, 1f, 0.7f)
+                }
+
+            }
         }
+
+//        textTooltip("${(bar.fill * 100).toInt()}", "default") {
+//            this.setFontScale(2f)
+//            it.manager.initialTime = 0.5f
+//        }
         gameState.updateUI += refresh
         refresh(gameState)
+        val tgtName = ReadOnly.prop(tgtCharacter)
+        var text = if (gameState.getMutuality(tgtCharacter, who) > 75)
+        {
+            "You think of $tgtName as trustworthy.\n"
+        } else if (gameState.getMutuality(tgtCharacter, who) > 50)
+        {
+            "You think of $tgtName as reasonable.\n"
+        } else if (gameState.getMutuality(tgtCharacter, who) > 25)
+        {
+            "You think of $tgtName as untrustworthy.\n"
+        } else
+        {
+            "You hates $tgtName.\n"
+        }
+
+        if (gameState.getMutuality(who, tgtCharacter) > 75)
+        {
+            text += "They think of you as trustworthy."
+        } else if (gameState.getMutuality(who, tgtCharacter) > 50)
+        {
+            text += "They think of you as reasonable."
+        } else if (gameState.getMutuality(who, tgtCharacter) > 25)
+        {
+            text += "They think of you as untrustworthy."
+        } else
+        {
+            text += "They hates you."
+        }
+        addListener(SimpleTextTooltipUI(text))
     }
 
 
@@ -38,9 +87,9 @@ class MutualityMeter(var gameState: GameState, var tgtCharacter: String, var who
         return super.remove()
     }
 
-    fun setValue(value: Double)
+    fun setValue(value1: Double, value2: Double)
     {
-        bar.value = (value / 100).toFloat()
-        bar.updateVisualValue()
+        bar1.setValue(value1.toFloat())
+        bar2.setValue(value2.toFloat())
     }
 }

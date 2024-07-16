@@ -13,7 +13,6 @@ import ktx.scene2d.Scene2DSkin.defaultSkin
 
 class PortraitUI(var tgtCharacter: String, var gameState: GameState) : Table(defaultSkin), KTable
 {
-    var mMeter = MutualityMeter(gameState, tgtCharacter = tgtCharacter, who = gameState.playerName)
     val speech = scene2d.label("Hello", "trnsprtConsole") {
         setFontScale(3f)
     }
@@ -74,8 +73,6 @@ class PortraitUI(var tgtCharacter: String, var gameState: GameState) : Table(def
         row()
         add(theEmoji).growX().size(100f)
         row()
-        add(mMeter)
-        row()
         add(portrait).size(500f, 700f)
         gameState.updateUI += refresh
         refresh(gameState)
@@ -84,7 +81,6 @@ class PortraitUI(var tgtCharacter: String, var gameState: GameState) : Table(def
 
     override fun remove(): Boolean
     {
-        mMeter.remove()
         gameState.updateUI -= refresh
         return super.remove()
     }

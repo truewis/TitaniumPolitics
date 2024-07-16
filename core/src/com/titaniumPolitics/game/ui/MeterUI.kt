@@ -12,7 +12,7 @@ import ktx.scene2d.stack
 
 class MeterUI : Table(), KTable
 {
-    lateinit var cont: Container<Actor>
+    var cont: Container<Actor>
 
     var fill = 0f
     var vertical = false

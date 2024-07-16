@@ -109,7 +109,10 @@ class CharacterInteractionWindowUI(var gameState: GameState) :
             content.apply {
                 clear()
 
-
+                add(MutualityMeter(gameState, tgtCharacter = characterDisplayed, who = gameState.playerName).also {
+                    it.remove() //Do not refresh the meter, since this window is not persistent.
+                })
+                row()
                 //If place selection mode is active, add the selection button and nothing else.
                 if (mode == "CharSelection")
                 {

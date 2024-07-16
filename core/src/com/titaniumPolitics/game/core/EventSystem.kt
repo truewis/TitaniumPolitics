@@ -21,7 +21,7 @@ class EventSystem : GameStateElement()
     {
         super.injectParent(gameState)
         dataBase.add(Event_PrologueInfDivLeaderSpeech())
-        dataBase.add(Event_ObserverIntro())
+        //dataBase.add(Event_ObserverIntro())
         dataBase.add(Event_AlinaIllTheory1())
         dataBase.add(Event_SalvorElection())
         dataBase.forEach {
