@@ -29,68 +29,14 @@ class AlertUI(var gameState: GameState) : Table(defaultSkin)
 
     fun addAlert(type: String, action: () -> Unit = {})
     {
-        docList.addActor(scene2d.stack {
-            image("panel")
-            table {
-                when (type)
-                {
-                    "newInfo" -> image("edit-document-icon") {
-                        it.size(36f)
-                    }
-
-                    "vital" -> image("heart-beat-icon") {
-                        it.size(36f)
-                    }
-
-                    "accident" -> image("skull-icon") {
-                        it.size(36f)
-                    }
-
-                    "hunger" -> image("heart-beat-icon") {
-                        it.size(36f)
-                    }
-
-                    "thrist" -> image("heart-beat-icon") {
-                        it.size(36f)
-                    }
-
-                    "meeting" -> image("speaking-bubbles-line-icon") {
-                        it.size(36f)
-                    }
-                }
-                label(ReadOnly.prop(type), "trnsprtConsole") {
-                    it.growX()
-                    setFontScale(2f)
-                    this@label.addListener(object : ClickListener()
-                    {
-                        override fun clicked(event: InputEvent?, x: Float, y: Float)
-                        {
-                            super.clicked(event, x, y)
-                            action()
-                        }
-                    })
-                }
-                button {
-                    image("close-square-line-icon") {
-                        it.size(36f)
-                    }
-                    this@button.addListener(object : ClickListener()
-                    {
-                        override fun clicked(event: InputEvent?, x: Float, y: Float)
-                        {
-                            super.clicked(event, x, y)
-                            docList.removeActor(this@stack)
-                            if (docList.children.isEmpty)
-                                this@AlertUI.isVisible = false
-                        }
-
-                    }
-                    )
-
-                }
-            }
-        })
-        isVisible = true
+        if (type in listOf("vital", "hunger", "thirst") && docList.children.none {
+                (it as AlertPanelUI).type == type
+            })
+            docList.addActor(AlertPanelUI(type, action, docList))
+        else if (type !in listOf("vital", "hunger", "thirst"))
+            docList.addActor(AlertPanelUI(type, action, docList))
+        if (!isVisible)
+            isVisible = true
     }
 
 

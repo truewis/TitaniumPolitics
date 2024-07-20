@@ -156,6 +156,9 @@ class GameState
             places[this@GameState.characters[char.key]!!.livingBy]!!.connectedPlaces.add("home_" + char.key)
             if (places.none { it.value.characters.contains(char.key) })
                 places["home_" + char.key]!!.characters.add(char.key)
+
+            //Set Will to 50 for all characters.
+            setMutuality(char.key, char.key, 50.0)
         }
         injectDependency()
         println("Game state initialized successfully.")
