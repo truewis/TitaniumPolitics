@@ -54,7 +54,7 @@ filter: Linear, Linear
 repeat: none
 PanelDottedShade700x700
   rotate: false
-  xy: 1025, 905
+  xy: 1025, 906
   size: 700, 700
   split: 75, 75, 75, 75
   pad: 0, 0, 0, 0
@@ -63,427 +63,434 @@ PanelDottedShade700x700
   index: -1
 BubbleFill
   rotate: false
-  xy: 1667, 563
+  xy: 1667, 564
   size: 340, 340
   orig: 340, 340
   offset: 0, 0
   index: -1
 BubbleHandle
   rotate: false
-  xy: 1, 158
+  xy: 1, 159
   size: 320, 30
   orig: 320, 30
   offset: 0, 0
   index: -1
 BubbleShade
   rotate: false
-  xy: 1667, 221
+  xy: 1667, 222
   size: 340, 340
   orig: 340, 340
   offset: 0, 0
   index: -1
 BubbleStroke
   rotate: false
-  xy: 1275, 161
+  xy: 1275, 162
   size: 350, 350
   orig: 350, 350
   offset: 0, 0
   index: -1
 SliderHalfBg
   rotate: false
-  xy: 1025, 1607
+  xy: 1025, 1608
   size: 700, 40
   orig: 700, 40
   offset: 0, 0
   index: -1
 SliderHalfFill
   rotate: false
-  xy: 1, 580
+  xy: 1, 581
   size: 710, 91
   orig: 710, 91
   offset: 0, 0
   index: -1
 SliderHandleHorizontal
   rotate: false
-  xy: 1, 497
+  xy: 1, 498
   size: 652, 74
   orig: 652, 74
   offset: 0, 0
   index: -1
 SliderHorizontal
   rotate: false
-  xy: 1, 474
+  xy: 1, 475
   size: 600, 21
   orig: 600, 21
   offset: 0, 0
   index: -1
 ButtonOutlinedBg
   rotate: false
-  xy: 1025, 1771
+  xy: 1025, 1772
   size: 756, 146
   orig: 756, 146
   offset: 0, 0
   index: -1
 ButtonRegularBg
   rotate: false
-  xy: 1, 795
+  xy: 1, 796
   size: 758, 148
   orig: 758, 148
   offset: 0, 0
   index: -1
 ButtonRegularShade
   rotate: false
-  xy: 1, 673
+  xy: 1, 674
   size: 730, 120
   orig: 730, 120
   offset: 0, 0
   index: -1
 ButtonStroke
   rotate: false
-  xy: 1025, 1649
+  xy: 1025, 1650
   size: 730, 120
   orig: 730, 120
   offset: 0, 0
   index: -1
 Dropdown
   rotate: false
-  xy: 1, 945
+  xy: 1, 946
   size: 847, 120
   orig: 847, 120
   offset: 0, 0
   index: -1
 Toggle2Bg
   rotate: false
-  xy: 1, 66
+  xy: 1, 67
   size: 221, 90
   orig: 221, 90
   offset: 0, 0
   index: -1
 Toggle2Off
   rotate: false
-  xy: 850, 961
+  xy: 850, 962
   size: 154, 104
   orig: 154, 104
   offset: 0, 0
   index: -1
 Toggle2On
   rotate: false
-  xy: 1867, 1935
+  xy: 1867, 1936
   size: 154, 104
   orig: 154, 104
   offset: 0, 0
   index: -1
 icon_tool_1
   rotate: false
-  xy: 1727, 1129
+  xy: 744, 132
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
 icon_tool_10
   rotate: false
-  xy: 1857, 1269
+  xy: 744, 2
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
 icon_tool_11
   rotate: false
-  xy: 1857, 1139
+  xy: 874, 2
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
 icon_tool_12
   rotate: false
-  xy: 1857, 1009
+  xy: 1004, 2
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
 icon_tool_13
   rotate: false
-  xy: 733, 261
+  xy: 1134, 2
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
 icon_tool_14
   rotate: false
-  xy: 863, 261
+  xy: 1264, 32
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
 icon_tool_15
   rotate: false
-  xy: 993, 261
+  xy: 1394, 32
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
 icon_tool_16
   rotate: false
-  xy: 1123, 261
+  xy: 1524, 32
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
 icon_tool_17
   rotate: false
-  xy: 744, 131
+  xy: 1654, 92
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
 icon_tool_18
   rotate: false
-  xy: 874, 131
+  xy: 1784, 92
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
 icon_tool_19
   rotate: false
-  xy: 1004, 131
+  xy: 1914, 92
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
 icon_tool_2
   rotate: false
-  xy: 1727, 999
+  xy: 874, 132
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
 icon_tool_20
   rotate: false
-  xy: 1134, 131
+  xy: 1783, 1660
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
 icon_tool_21
   rotate: false
-  xy: 744, 1
+  xy: 1913, 1676
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
 icon_tool_22
   rotate: false
-  xy: 874, 1
+  xy: 1857, 1530
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
 icon_tool_23
   rotate: false
-  xy: 1004, 1
+  xy: 1857, 1400
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
 icon_tool_24
   rotate: false
-  xy: 1134, 1
+  xy: 1857, 1270
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
 icon_tool_25
   rotate: false
-  xy: 1264, 31
+  xy: 1857, 1140
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
 icon_tool_26
   rotate: false
-  xy: 1394, 31
+  xy: 1857, 1010
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
 icon_tool_3
   rotate: false
-  xy: 1627, 91
+  xy: 1004, 132
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
 icon_tool_4
   rotate: false
-  xy: 1757, 91
+  xy: 1134, 132
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
 icon_tool_5
   rotate: false
-  xy: 1887, 91
+  xy: 1727, 1520
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
 icon_tool_6
   rotate: false
-  xy: 1783, 1659
+  xy: 1727, 1390
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
 icon_tool_7
   rotate: false
-  xy: 1913, 1675
+  xy: 1727, 1260
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
 icon_tool_8
   rotate: false
-  xy: 1857, 1529
+  xy: 1727, 1130
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
 icon_tool_9
   rotate: false
-  xy: 1857, 1399
+  xy: 1727, 1000
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
 icon_traffic_16
   rotate: false
-  xy: 448, 202
+  xy: 1783, 1790
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
 icon_traffic_35
   rotate: false
-  xy: 1783, 1789
+  xy: 1913, 1806
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
 icon_traffic_37
   rotate: false
-  xy: 1913, 1805
+  xy: 224, 29
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
 icon_traffic_38
   rotate: false
-  xy: 224, 28
+  xy: 354, 61
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
 icon_traffic_39
   rotate: false
-  xy: 354, 60
+  xy: 484, 63
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
 icon_weather_1
   rotate: false
-  xy: 484, 72
+  xy: 603, 368
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
 icon_weather_20
   rotate: false
-  xy: 614, 72
+  xy: 733, 262
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
 icon_weather_21
   rotate: false
-  xy: 603, 367
+  xy: 863, 262
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
 icon_weather_24
   rotate: false
-  xy: 1727, 1519
+  xy: 993, 262
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
 icon_weather_26
   rotate: false
-  xy: 1727, 1389
+  xy: 1123, 262
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
 icon_weather_27
   rotate: false
-  xy: 1727, 1259
+  xy: 614, 108
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
 icon_weather_4
   rotate: false
-  xy: 578, 202
+  xy: 603, 238
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
 MapGrid
   rotate: false
-  xy: 1275, 513
+  xy: 1275, 514
   size: 390, 390
   orig: 390, 390
   offset: 0, 0
   index: -1
 NoiseBackground
   rotate: false
-  xy: 761, 391
+  xy: 761, 392
   size: 512, 512
   orig: 512, 512
   offset: 0, 0
   index: -1
 Stroke5pxHorizontal
   rotate: false
-  xy: 1, 573
+  xy: 1, 574
   size: 700, 5
   orig: 700, 5
   offset: 0, 0
   index: -1
+BadgeRound
+  rotate: false
+  xy: 448, 193
+  size: 138, 138
+  orig: 138, 138
+  offset: 0, 0
+  index: -1
 TitleBar
   rotate: false
-  xy: 1, 332
+  xy: 1, 333
   size: 600, 140
   orig: 600, 140
   offset: 0, 0
   index: -1
 TitleBar2
   rotate: false
-  xy: 1, 190
+  xy: 1, 191
   size: 445, 140
   orig: 445, 140
   offset: 0, 0
   index: -1
 TooltipTitle
   rotate: false
-  xy: 1025, 1919
+  xy: 1025, 1920
   size: 840, 120
   orig: 840, 120
   offset: 0, 0
   index: -1
 TooltipShadow
   rotate: false
-  xy: 1, 1067
+  xy: 1, 1068
   size: 1022, 972
   split: 88, 88, 88, 88
   orig: 1022, 972

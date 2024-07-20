@@ -133,9 +133,9 @@ class MainMenu(val entry: EntryClass) : Stage(FitViewport(1920F, 1080F))
                 Gdx.files.internal("json/init.json").readString()
             ).also {
                 println("Loading complete.")
+                it.initialize()
                 entry.stage = CapsuleStage(it)
                 Gdx.input.inputProcessor = entry.stage
-                it.initialize()
             }
             newGame.onStart.forEach { it() }
         } else
@@ -145,10 +145,10 @@ class MainMenu(val entry: EntryClass) : Stage(FitViewport(1920F, 1080F))
                 GameState.serializer(),
                 Gdx.files.internal(savedGamePath).readString()
             ).also {
+                it.injectDependency()
                 println("Loading complete.")
                 entry.stage = CapsuleStage(it)
                 Gdx.input.inputProcessor = entry.stage
-                it.initialize()
             }
         }
         println("Starting game engine.")

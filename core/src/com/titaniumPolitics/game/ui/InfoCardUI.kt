@@ -7,7 +7,9 @@ import ktx.scene2d.KTable
 import ktx.scene2d.Scene2DSkin.defaultSkin
 
 
-//This UI is used for both meetings and conferences
+//This UI is used for both meetings and conferences.
+//It appears as cards in the lower half of the screen.
+//Once they are deployed, they appear as InfoBubbleUIs.
 class InfoCardUI(var gameState: GameState) : Table(defaultSkin), KTable
 {
 

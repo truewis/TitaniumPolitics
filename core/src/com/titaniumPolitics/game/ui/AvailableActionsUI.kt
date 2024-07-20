@@ -25,6 +25,7 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable
 
         options = ExamineUI(this@AvailableActionsUI.gameState)
         add(options)
+        options.isVisible = false
 //        CapsuleStage.instance.onMouseDown.add { x, y ->
 //            //If x and y are not within the bounds of this UI, hide the option ui.
 //            val localpos = options.screenToLocalCoordinates(Vector2(x, y))

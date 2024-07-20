@@ -11,23 +11,9 @@ import com.titaniumPolitics.game.core.ReadOnly
 import ktx.scene2d.*
 import ktx.scene2d.Scene2DSkin.defaultSkin
 
-class PortraitUI(var tgtCharacter: String, var gameState: GameState) : Table(defaultSkin), KTable
+class PortraitUI(character: String, var gameState: GameState) : Table(defaultSkin), KTable
 {
-    val speech = scene2d.label("Hello", "trnsprtConsole") {
-        setFontScale(3f)
-    }
-    val bubble = scene2d.stack {
-        add(this@PortraitUI.speech)
-    }
-    val theEmoji = scene2d.image("HelpGrunge")
     val portrait = scene2d.image("UserGrunge") {
-        try
-        {
-            this.setDrawable(defaultSkin, this@PortraitUI.tgtCharacter)
-        } catch (e: Exception)
-        {
-            println("Portrait Image Error: ${this@PortraitUI.tgtCharacter}")
-        }
         addListener(object : com.badlogic.gdx.scenes.scene2d.utils.ClickListener()
         {
             override fun clicked(event: com.badlogic.gdx.scenes.scene2d.InputEvent?, x: Float, y: Float)
@@ -39,6 +25,25 @@ class PortraitUI(var tgtCharacter: String, var gameState: GameState) : Table(def
             }
         })
     }
+    var tgtCharacter = character
+        set(value)
+        {
+            field = value
+            try
+            {
+                portrait.setDrawable(defaultSkin, value)
+            } catch (e: Exception)
+            {
+                println("Portrait Image Error: $value")
+            }
+        }
+    val speech = scene2d.label("Hello", "trnsprtConsole") {
+        setFontScale(3f)
+    }
+    val bubble = scene2d.stack {
+        add(this@PortraitUI.speech)
+    }
+    val theEmoji = scene2d.image("HelpGrunge")
 
     val refresh = { state: GameState ->
 

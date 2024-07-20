@@ -247,7 +247,7 @@ class GameState
     }
 
     //Injects the parent gameState to all elements in the gameState. This function should be called exactly once after the gameState is created.
-    private fun injectDependency()
+    fun injectDependency()
     {
         log.injectParent(this)
         places.forEach { it.value.injectParent(this) }
