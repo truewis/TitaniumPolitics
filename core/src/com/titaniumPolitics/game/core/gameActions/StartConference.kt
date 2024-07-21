@@ -14,7 +14,6 @@ class StartConference(override val tgtCharacter: String, override val tgtPlace: 
                 .filter { !parent.ongoingMeetings.containsKey(it.key) }
                 .filter { it.value.scheduledCharacters.contains(tgtCharacter) }.keys.toList())
         // Interrupt other required characters and add them to the meeting.
-        val meeting = parent.ongoingMeetings[meetingName]!!
 //        val requiredCharacters = meeting.scheduledCharacters.intersect(parent.places[tgtPlace]!!.characters)
 //        requiredCharacters.forEach {
 //            parent.characters[it]!!.frozen = 1 //Force them to join the meeting.
@@ -32,6 +31,7 @@ class StartConference(override val tgtCharacter: String, override val tgtPlace: 
         meeting.currentSpeaker = tgtCharacter
         meeting.currentAttention = parent.getPartyMutuality(meeting.involvedParty, meeting.involvedParty).toInt()
         super.execute()
+        println("Conference $meetingName started.")
     }
 
     override fun isValid(): Boolean

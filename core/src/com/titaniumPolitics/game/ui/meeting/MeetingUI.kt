@@ -32,7 +32,10 @@ class MeetingUI(var gameState: GameState) : Table(defaultSkin), KTable
 
         gameState.updateUI.add {
             if (it.player.currentMeeting != null)
+            {
+                println("MeetingUI: Refreshing meeting ${it.player.currentMeeting!!}")
                 refresh(it.player.currentMeeting!!)
+            }
         }
         add(speakerPortrait).grow()
         discussionTable = stack {

@@ -72,7 +72,7 @@ class InformationViewUI : WindowUI("InformationViewTitle")
                 { //We don't want to show these fields.
                 } else
                 {
-                    val button = button {
+                    val button = scene2d.button {
                         label(field.name, "trnsprtConsole") {
                             setFontScale(2f)
                         }
@@ -84,7 +84,7 @@ class InformationViewUI : WindowUI("InformationViewTitle")
                             }
                         })
                     }
-                    informationTable.add(button)
+                    informationTable.add(button).size(200f, 100f)
                 }
             }
             informationTable.row()

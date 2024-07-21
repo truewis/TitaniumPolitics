@@ -33,5 +33,6 @@
   "TalkDuration": 1,
   "maxAttentionIntercept": 30,
   "InterceptDeltaWill": -5,
-  "WaitDeltaWill": -1
+  "WaitDeltaWill": -1,
+  "GlobalAccidentRate": 0
 }

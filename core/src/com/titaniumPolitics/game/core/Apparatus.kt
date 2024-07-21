@@ -42,7 +42,8 @@ class Apparatus
                 if (currentWorker <= idealWorker)
                     result[it.key] = it.value * currentWorker / idealWorker
                 else
-                    result[it.key] = it.value + it.value * (currentWorker - idealWorker) / idealWorker / 2 //Labor efficiency drops to 50% if overcrowded.
+                    result[it.key] =
+                        it.value + it.value * (currentWorker - idealWorker) / idealWorker / 2 //Labor efficiency drops to 50% if overcrowded.
 
             }
             return result
@@ -57,7 +58,8 @@ class Apparatus
                 if (currentWorker <= idealWorker)
                     result[it.key] = it.value * currentWorker / idealWorker
                 else
-                    result[it.key] = it.value + it.value * (currentWorker - idealWorker) / idealWorker / 2 //Labor efficiency drops to 50% if overcrowded.
+                    result[it.key] =
+                        it.value + it.value * (currentWorker - idealWorker) / idealWorker / 2 //Labor efficiency drops to 50% if overcrowded.
 
             }
             return result
@@ -72,7 +74,8 @@ class Apparatus
                 if (currentWorker <= idealWorker)
                     result[it.key] = it.value * currentWorker / idealWorker
                 else
-                    result[it.key] = it.value + it.value * (currentWorker - idealWorker) / idealWorker / 2 //Labor efficiency drops to 50% if overcrowded.
+                    result[it.key] =
+                        it.value + it.value * (currentWorker - idealWorker) / idealWorker / 2 //Labor efficiency drops to 50% if overcrowded.
 
             }
             return result
@@ -87,7 +90,8 @@ class Apparatus
                 if (currentWorker <= idealWorker)
                     result[it.key] = it.value * currentWorker / idealWorker
                 else
-                    result[it.key] = it.value + it.value * (currentWorker - idealWorker) / idealWorker / 2 //Labor efficiency drops to 50% if overcrowded.
+                    result[it.key] =
+                        it.value + it.value * (currentWorker - idealWorker) / idealWorker / 2 //Labor efficiency drops to 50% if overcrowded.
 
             }
             return result
@@ -98,9 +102,9 @@ class Apparatus
             return if (currentWorker == 0) 0.0 else if (durability == 0) 0.0 else
             {
                 if (currentWorker <= idealWorker)
-                    baseDanger * (2 - currentWorker / idealWorker) * 100 / durability
+                    baseDanger * (2 - currentWorker / idealWorker) * 100 / durability * ReadOnly.const("GlobalAccidentRate")
                 else
-                    baseDanger * (2 * currentWorker / idealWorker - 1) * 100 / durability //Danger increases when overcrewed or undercrewed.
+                    baseDanger * (2 * currentWorker / idealWorker - 1) * 100 / durability * ReadOnly.const("GlobalAccidentRate")//Danger increases when overcrewed or undercrewed.
             }
         }
     val currentGraveDanger: Double
@@ -109,9 +113,9 @@ class Apparatus
             return if (currentWorker == 0) 0.0
             else if (durability == 0) 0.0
             else if (currentWorker <= idealWorker * 4 / 5)
-                baseDanger * (0.2 - currentWorker / 4 / idealWorker) * 100 / durability
+                baseDanger * (0.2 - currentWorker / 4 / idealWorker) * 100 / durability * ReadOnly.const("GlobalAccidentRate")
             else if (currentWorker >= idealWorker * 6 / 5)
-                baseDanger * (2 * currentWorker / 3 / idealWorker - 0.8) * 100 / durability //Nonzero only when very overcrewed or undercrewed.
+                baseDanger * (2 * currentWorker / 3 / idealWorker - 0.8) * 100 / durability * ReadOnly.const("GlobalAccidentRate") //Nonzero only when very overcrewed or undercrewed.
             else
                 0.0
         }

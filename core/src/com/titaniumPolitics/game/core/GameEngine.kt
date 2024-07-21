@@ -39,7 +39,7 @@ class GameEngine(val gameState: GameState)
         //Main loop
         while (true)
         {
-            gameState.characters.values.forEach {
+            gameState.characters.values.sortedByDescending { if (it == gameState.player) 1 else 0 }.forEach {
                 if (it.alive)
                 {
                     if (it.frozen > 0)
@@ -163,6 +163,7 @@ class GameEngine(val gameState: GameState)
     fun progression()
     {
         gameState.time += 1
+        println("[${gameState.time}]")
         distributePopulation()
         distributeResources()
         calculateMutuality()
