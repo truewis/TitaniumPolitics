@@ -11,7 +11,7 @@ import com.titaniumPolitics.game.core.ReadOnly
 import ktx.scene2d.*
 import ktx.scene2d.Scene2DSkin.defaultSkin
 
-class PortraitUI(character: String, var gameState: GameState) : Table(defaultSkin), KTable
+class PortraitUI(character: String, var gameState: GameState, scale: Float) : Table(defaultSkin), KTable
 {
     val portrait = scene2d.image("UserGrunge") {
         addListener(object : com.badlogic.gdx.scenes.scene2d.utils.ClickListener()
@@ -78,7 +78,7 @@ class PortraitUI(character: String, var gameState: GameState) : Table(defaultSki
         row()
         add(theEmoji).growX().size(100f)
         row()
-        add(portrait).size(500f, 700f)
+        add(portrait).size(500f * scale, 700f * scale)
         gameState.updateUI += refresh
         refresh(gameState)
 

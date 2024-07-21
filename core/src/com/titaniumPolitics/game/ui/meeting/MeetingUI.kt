@@ -3,6 +3,7 @@ package com.titaniumPolitics.game.ui.meeting
 import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.Stack
 import com.badlogic.gdx.scenes.scene2d.ui.Table
+import com.badlogic.gdx.utils.Align
 import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.core.Meeting
 import com.titaniumPolitics.game.ui.CapsuleStage
@@ -11,13 +12,15 @@ import ktx.scene2d.KTable
 import ktx.scene2d.Scene2DSkin.defaultSkin
 import ktx.scene2d.image
 import ktx.scene2d.stack
+import kotlin.math.cos
+import kotlin.math.sin
 
 
 //This UI is used for both meetings and conferences
 class MeetingUI(var gameState: GameState) : Table(defaultSkin), KTable
 {
     val portraits = arrayListOf<PortraitUI>()
-    val speakerPortrait = PortraitUI("", gameState)
+    val speakerPortrait = PortraitUI("", gameState, 1f)
     val deployedInfos = arrayListOf<InfoBubbleUI>()
     val currentAgendas = arrayListOf<AgendaBubbleUI>()
     val currentAttention = Label("0", defaultSkin, "trnsprtConsole")
@@ -28,6 +31,8 @@ class MeetingUI(var gameState: GameState) : Table(defaultSkin), KTable
         instance = this
         //Red color for attention
         currentAttention.setColor(1f, 0f, 0f, 1f)
+        currentAttention.setFontScale(3f)
+        currentAttention.setAlignment(Align.center, Align.center)
 
 
         gameState.updateUI.add {
@@ -59,6 +64,14 @@ class MeetingUI(var gameState: GameState) : Table(defaultSkin), KTable
                 addCharacterPortrait(it)
             }
         }
+        portraits.forEach {
+            if (!meeting.currentCharacters.contains(it.tgtCharacter))
+            {
+                it.remove()
+                portraits.remove(it)
+            } else
+                it.refresh(gameState)
+        }
         placeCharacterPortrait()
         currentAgendas.clear()
 //        meeting.agendas.forEach {
@@ -73,7 +86,7 @@ class MeetingUI(var gameState: GameState) : Table(defaultSkin), KTable
     private fun addCharacterPortrait(characterName: String)
     {
 
-        val portrait = PortraitUI(characterName, gameState)
+        val portrait = PortraitUI(characterName, gameState, 0.2f)
         portraits.add(portrait)
         addActor(portrait)
 
@@ -93,12 +106,20 @@ class MeetingUI(var gameState: GameState) : Table(defaultSkin), KTable
             oldSpeakerPortrait.tgtCharacter = gameState.player.currentMeeting!!.currentSpeaker
             speakerPortrait.tgtCharacter = oldCharacter
         }
-        //Place portraits across the screen so they are not on top of each other.
+        //Place portraits in a circle.
+        val radius = 300f
+        val centerX = discussionTable.x + discussionTable.width / 2
+        val centerY = discussionTable.y + discussionTable.height / 2
+        println("Center: $centerX, $centerY")
         portraits.forEach {
-            it.setPosition(
-                (portraits.indexOf(it) + 0.5f) * CapsuleStage.instance.width / portraits.size + it.width / 2,
-                300f
-            )
+            if (it != speakerPortrait)
+            {
+                val angle = 360f / portraits.size * portraits.indexOf(it)
+                it.setPosition(
+                    centerX + radius * cos(Math.toRadians(angle.toDouble())).toFloat(),
+                    centerY + radius * sin(Math.toRadians(angle.toDouble())).toFloat()
+                )
+            }
         }
 
 

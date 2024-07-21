@@ -118,7 +118,7 @@ class GameState
                             this.resources = hashMapOf("ration" to 1000, "water" to 1000)
                             this.health = 100
                         } //TODO: anonymous characters get resource from market.
-                    nonPlayerAgents[name] = NonPlayerAgent()
+                    nonPlayerAgents[name] = AnonAgent()
                     //TODO: Give traits to the anonymous characters.
                     party.members.add(name)
                     //Gaussian distribution of anonymous members
