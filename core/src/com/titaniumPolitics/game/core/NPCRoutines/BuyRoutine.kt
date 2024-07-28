@@ -1,5 +1,6 @@
 package com.titaniumPolitics.game.core.NPCRoutines
 
+import com.titaniumPolitics.game.core.InformationType
 import com.titaniumPolitics.game.core.gameActions.GameAction
 import com.titaniumPolitics.game.core.gameActions.Move
 import com.titaniumPolitics.game.core.gameActions.Talk
@@ -15,7 +16,7 @@ class BuyRoutine() : Routine()
         //Select a character to trade with, based on the information known to the character.
 
         val info = gState.informations.values.filter {
-            it.type == "resource" && it.tgtCharacter != "" && it.tgtCharacter != name && it.resources.containsKey(
+            it.type == InformationType.RESOURCES && it.tgtCharacter != "" && it.tgtCharacter != name && it.resources.containsKey(
                 variables["wantedResource"]
             ) && it.resources[variables["wantedResource"]]!! > 10 && it.knownTo.contains(
                 name

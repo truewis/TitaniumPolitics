@@ -112,19 +112,19 @@ class Character : GameStateElement()
         {
             //The character don't like information about its wrongdoings.
             //Stole resource
-            if (info.type == "action" && info.action!!.javaClass.simpleName == "UnofficialResourceTransfer")
+            if (info.type == InformationType.ACTION && info.action!!.javaClass.simpleName == "UnofficialResourceTransfer")
                 return -1.0
             //Stayed in home during work hours
             //Did their job well
-            if (info.type == "action" && info.action!!.javaClass.simpleName == "NewAgenda")
+            if (info.type == InformationType.ACTION && info.action!!.javaClass.simpleName == "NewAgenda")
                 return 0.5
-            if (info.type == "action" && info.action!!.javaClass.simpleName == "AddInfo")
+            if (info.type == InformationType.ACTION && info.action!!.javaClass.simpleName == "AddInfo")
                 return 0.5
-            if (info.type == "action" && info.action!!.javaClass.simpleName == "OfficialResourceTransfer")
+            if (info.type == InformationType.ACTION && info.action!!.javaClass.simpleName == "OfficialResourceTransfer")
                 return 0.5
-            if (info.type == "action" && info.action!!.javaClass.simpleName == "InvestigateAccidentScene")
+            if (info.type == InformationType.ACTION && info.action!!.javaClass.simpleName == "InvestigateAccidentScene")
                 return 1.0
-            if (info.type == "action" && info.action!!.javaClass.simpleName == "ClearAccidentScene")
+            if (info.type == InformationType.ACTION && info.action!!.javaClass.simpleName == "ClearAccidentScene")
                 return 1.0
 
             //Depends on their party
@@ -133,7 +133,7 @@ class Character : GameStateElement()
                 {
                     "infrastructure" ->
                     {
-                        if (info.type == "action" && info.action!!.javaClass.simpleName == "Repair")
+                        if (info.type == InformationType.ACTION && info.action!!.javaClass.simpleName == "Repair")
                             return 1.0
                     }
                 }
@@ -173,10 +173,10 @@ class Character : GameStateElement()
         if (parent.parties[info.tgtParty]?.members?.contains(name) == true)
             return 2.0
         //Information about valuable resource is more valuable.
-        if (info.type == "resource")
+        if (info.type == InformationType.RESOURCES)
             return info.resources.keys.sumOf { itemValue(it) * info.resources[it]!! }
         //UnofficialTransfer is more valuable if it is not known to the other character.
-        if (info.type == "action" && info.action!!.javaClass.simpleName == "unofficialResourceTransfer" && !info.knownTo.contains(
+        if (info.type == InformationType.ACTION && info.action!!.javaClass.simpleName == "unofficialResourceTransfer" && !info.knownTo.contains(
                 name
             )
         )

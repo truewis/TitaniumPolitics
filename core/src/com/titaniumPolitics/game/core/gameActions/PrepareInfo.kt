@@ -1,5 +1,6 @@
 package com.titaniumPolitics.game.core.gameActions
 
+import com.titaniumPolitics.game.core.InformationType
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -12,14 +13,14 @@ class PrepareInfo(override val tgtCharacter: String, override val tgtPlace: Stri
         //If you have executed a command, you know the result. Add the result to the prepared information.
         parent.requests.values.filter { it.issuedBy.contains(tgtCharacter) }.forEach { command ->
             //If you have the corresponding action information.
-            parent.informations.filter { it.value.knownTo.contains(tgtCharacter) && it.value.type == "action" && it.value.action!!.javaClass.simpleName == command.action.javaClass.simpleName }
+            parent.informations.filter { it.value.knownTo.contains(tgtCharacter) && it.value.type == InformationType.ACTION && it.value.action!!.javaClass.simpleName == command.action.javaClass.simpleName }
                 .forEach {
                     newSetOfPrepInfoKeys.add(it.key)
                 }
         }
 
         //If you have done wrongdoings, you know the result. Add the result to the prepared information.
-        parent.informations.filter { it.value.knownTo.contains(tgtCharacter) && it.value.type == "action" && it.value.action!!.javaClass.simpleName == "unofficialResourceTransfer" }
+        parent.informations.filter { it.value.knownTo.contains(tgtCharacter) && it.value.type == InformationType.ACTION && it.value.action!!.javaClass.simpleName == "unofficialResourceTransfer" }
             .forEach {
                 newSetOfPrepInfoKeys.add(it.key)
             }

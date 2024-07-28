@@ -14,7 +14,7 @@ import kotlin.math.min
 class Information(//If there is no author, it is a rumor.
     var author: String = "",
     var creationTime: Int = 0,
-    var type: String = "",
+    var type: InformationType = InformationType.ACTION,
     var tgtTime: Int = 0,
     var tgtPlace: String = "",
     var tgtApparatus: String = "",
@@ -73,7 +73,7 @@ class Information(//If there is no author, it is a rumor.
             return .0 //TODO: the two information should be merged..?
 
         }
-        if (type == "casualty" && other.type == "casualty")
+        if (type == InformationType.CASUALTY && other.type == InformationType.CASUALTY)
         {
             if (tgtTime - other.tgtTime !in -6..6)//If time does not overlap
                 return 1.0
@@ -86,7 +86,7 @@ class Information(//If there is no author, it is a rumor.
                 return 0.0 //One info says zero, other says not.
             return 0.0/*TODO: continuous compatibility change*///min(amount, other.amount)/tmp.toDouble()
         }
-        if (type == "action" && other.type == "action")
+        if (type == InformationType.ACTION && other.type == InformationType.ACTION)
         {
             //This case is dealt in 'alibi' case above.
             return 0.0
@@ -109,4 +109,9 @@ class Information(//If there is no author, it is a rumor.
         this.name = name
         return name
     }
+}
+
+enum class InformationType
+{
+    ACTION, RESOURCES, CASUALTY, LOST_RESOURCES, DAMAGED_APPARATUS, APPARATUS_DURABILITY
 }

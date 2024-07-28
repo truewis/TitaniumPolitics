@@ -3,6 +3,7 @@ package com.titaniumPolitics.game.core.gameActions
 import com.badlogic.gdx.Gdx
 import com.titaniumPolitics.game.core.GameEngine
 import com.titaniumPolitics.game.core.Information
+import com.titaniumPolitics.game.core.InformationType
 import com.titaniumPolitics.game.ui.HumanResourceInfoUI
 import com.titaniumPolitics.game.ui.ResourceInfoUI
 import kotlinx.coroutines.runBlocking
@@ -52,7 +53,7 @@ class Examine(override val tgtCharacter: String, override val tgtPlace: String) 
                     Information(
                         author = tgtCharacter,
                         creationTime = parent.time,
-                        type = "apparatusDurability",
+                        type = InformationType.APPARATUS_DURABILITY,
                         tgtTime = parent.time,
                         tgtPlace = tgtPlace,
                         tgtApparatus = entry.name,
@@ -74,7 +75,7 @@ class Examine(override val tgtCharacter: String, override val tgtPlace: String) 
                     Information(
                         author = tgtCharacter,
                         creationTime = parent.time,
-                        type = "resources",
+                        type = InformationType.RESOURCES,
                         tgtTime = parent.time,
                         tgtCharacter = tgtCharacter,
                         resources = parent.characters[tgtCharacter]!!.resources
@@ -89,7 +90,7 @@ class Examine(override val tgtCharacter: String, override val tgtPlace: String) 
                     Information(
                         author = tgtCharacter,
                         creationTime = parent.time,
-                        type = "resources",
+                        type = InformationType.RESOURCES,
                         tgtTime = parent.time,
                         tgtPlace = tgtPlace,
                         resources = parent.places[tgtPlace]!!.resources

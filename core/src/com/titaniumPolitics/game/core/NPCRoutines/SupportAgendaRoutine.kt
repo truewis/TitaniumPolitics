@@ -1,5 +1,6 @@
 package com.titaniumPolitics.game.core.NPCRoutines
 
+import com.titaniumPolitics.game.core.InformationType
 import com.titaniumPolitics.game.core.gameActions.*
 import kotlinx.serialization.Serializable
 
@@ -24,7 +25,7 @@ class SupportAgendaRoutine() : Routine(), IMeetingRoutine
             {
                 //if there is any supporting information, add it.
                 character.preparedInfoKeys.filter { key ->
-                    gState.informations[key]!!.type == "action"
+                    gState.informations[key]!!.type == InformationType.ACTION
                             && character.finishedRequests.any {
                         gState.requests[it]!!.action == gState.informations[key]!!.action &&
                                 gState.requests[it]!!.issuedBy.any {

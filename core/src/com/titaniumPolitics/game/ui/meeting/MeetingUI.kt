@@ -116,8 +116,8 @@ class MeetingUI(var gameState: GameState) : Table(defaultSkin), KTable
             {
                 val angle = 360f / portraits.size * portraits.indexOf(it)
                 it.setPosition(
-                    centerX + radius * cos(Math.toRadians(angle.toDouble())).toFloat(),
-                    centerY + radius * sin(Math.toRadians(angle.toDouble())).toFloat()
+                    centerX + radius * cos(Math.toRadians(angle.toDouble())).toFloat() - it.width / 2,
+                    centerY + radius * sin(Math.toRadians(angle.toDouble())).toFloat() - it.height / 2
                 )
             }
         }

@@ -7,6 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable
 import com.titaniumPolitics.game.core.GameState
+import com.titaniumPolitics.game.core.InformationType
 import com.titaniumPolitics.game.core.ReadOnly
 import ktx.scene2d.*
 import ktx.scene2d.Scene2DSkin.defaultSkin
@@ -49,7 +50,7 @@ class PortraitUI(character: String, var gameState: GameState, scale: Float) : Ta
 
         //If there is an action that was taken by the character last turn, display a script on the portrait.
         val action =
-            state.informations.values.firstOrNull { it.tgtCharacter == tgtCharacter && it.type == "action" && it.creationTime == state.time - 1 }
+            state.informations.values.firstOrNull { it.tgtCharacter == tgtCharacter && it.type == InformationType.ACTION && it.creationTime == state.time - 1 }
         if (action != null && ReadOnly.script(action.action!!.javaClass.simpleName) != null)
         {
             bubble.isVisible = true

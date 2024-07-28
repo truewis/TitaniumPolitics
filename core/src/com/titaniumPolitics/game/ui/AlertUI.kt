@@ -7,6 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.*
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.titaniumPolitics.game.core.GameEngine
 import com.titaniumPolitics.game.core.GameState
+import com.titaniumPolitics.game.core.InformationType
 import com.titaniumPolitics.game.core.ReadOnly
 import ktx.scene2d.Scene2DSkin.defaultSkin
 import ktx.scene2d.scene2d
@@ -59,12 +60,12 @@ class AlertUI(var gameState: GameState) : Table(defaultSkin)
             newInformation.removeAll(previousInformation)
             newInformation.forEach {
                 //Decide whether to show the alert based on the type of information.
-                if (gameState.informations[it]!!.type == "accident")
+                if (gameState.informations[it]!!.type == InformationType.CASUALTY)
                     addAlert("accident") {
                         InformationViewUI.instance.refresh(gameState, "creationTime")
                         InformationViewUI.instance.isVisible = true
                     }
-                else if (!(gameState.informations[it]!!.type == "action" && (gameState.informations[it]!!.tgtCharacter == gameState.playerName
+                else if (!(gameState.informations[it]!!.type == InformationType.ACTION && (gameState.informations[it]!!.tgtCharacter == gameState.playerName
                             || setOf(
                         "Move",
                         "Wait"

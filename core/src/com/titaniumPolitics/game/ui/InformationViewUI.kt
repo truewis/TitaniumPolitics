@@ -4,6 +4,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.*
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.core.Information
+import com.titaniumPolitics.game.core.InformationType
 import ktx.scene2d.*
 import ktx.scene2d.Scene2DSkin.defaultSkin
 
@@ -109,18 +110,23 @@ class InformationViewUI : WindowUI("InformationViewTitle")
                                     {
                                         when (information.type)
                                         {
-                                            "resources" ->
+                                            InformationType.RESOURCES ->
                                             {
                                                 //Open resource window
                                                 ResourceInfoUI.instance.isVisible = true
                                                 ResourceInfoUI.instance.refresh(information)
                                             }
 
-                                            "apparatusDurability" ->
+                                            InformationType.APPARATUS_DURABILITY ->
                                             {
                                                 //Open apparatus window
                                                 ApparatusInfoUI.instance.isVisible = true
                                                 ApparatusInfoUI.instance.refresh(information)
+                                            }
+
+                                            else ->
+                                            {
+                                                //Do nothing
                                             }
                                         }
                                     }

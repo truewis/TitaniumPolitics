@@ -145,7 +145,7 @@ class GameEngine(val gameState: GameState)
         Information(
             char.name,
             creationTime = gameState.time,
-            type = "action",
+            type = InformationType.ACTION,
             tgtTime = gameState.time,
             tgtPlace = place,
             tgtCharacter = char.name,
@@ -239,7 +239,7 @@ class GameEngine(val gameState: GameState)
     {
         gameState.parties.forEach { party ->
             //bad news affect the approval. casualty, stolen resource, TODO: low water ration oxygen, high wealth, crimes
-            gameState.informations.filter { it.value.type == "casualty" }.forEach {
+            gameState.informations.filter { it.value.type == InformationType.CASUALTY }.forEach {
                 var factor = 1.0
                 if (it.value.author == "") factor *= 2.0//rumors affect the approval negatively.
                 if (it.value.auxParty == party.key) factor *= 2.0//If the casualty is in our party, approval of the responsible party drops even more.
@@ -256,7 +256,7 @@ class GameEngine(val gameState: GameState)
                 //if our party is responsible, integrity drops.
 
             }
-            gameState.informations.filter { it.value.type == "action" && it.value.action!!.javaClass.simpleName == "unofficialResourceTransfer" }
+            gameState.informations.filter { it.value.type == InformationType.ACTION && it.value.action!!.javaClass.simpleName == "unofficialResourceTransfer" }
                 .forEach {
                     var factor = 1
                     if (it.value.author == "") factor = 2//rumors affect the approval negatively.
@@ -540,7 +540,7 @@ class GameEngine(val gameState: GameState)
                 Information(
                     author = "",
                     creationTime = tgtState.time,
-                    type = "casualty",
+                    type = InformationType.CASUALTY,
                     tgtPlace = "everywhere",
                     amount = death,
                     auxParty = this.name
@@ -567,7 +567,7 @@ class GameEngine(val gameState: GameState)
                 Information(
                     author = "",
                     creationTime = tgtState.time,
-                    type = "casualty",
+                    type = InformationType.CASUALTY,
                     tgtPlace = "everywhere",
                     amount = death,
                     auxParty = this.name
@@ -593,7 +593,7 @@ class GameEngine(val gameState: GameState)
                 Information(
                     author = "",
                     creationTime = tgtState.time,
-                    type = "casualty",
+                    type = InformationType.CASUALTY,
                     tgtPlace = "everywhere",
                     amount = death,
                     auxParty = this.name
@@ -613,7 +613,7 @@ class GameEngine(val gameState: GameState)
         Information(
             author = "",
             creationTime = tgtState.time,
-            type = "casualty",
+            type = InformationType.CASUALTY,
             tgtPlace = tgtPlace.name,
             auxParty = tgtPlace.responsibleParty,
             amount = death
@@ -630,7 +630,7 @@ class GameEngine(val gameState: GameState)
         Information(
             author = "",
             creationTime = tgtState.time,
-            type = "lostResource",
+            type = InformationType.LOST_RESOURCES,
             tgtPlace = tgtPlace.name,
             resources = hashMapOf("water" to loss)
         )/*store info*/.also {
@@ -668,7 +668,7 @@ class GameEngine(val gameState: GameState)
                 Information(
                     author = "",
                     creationTime = tgtState.time,
-                    type = "damagedApparatus",
+                    type = InformationType.DAMAGED_APPARATUS,
                     tgtPlace = tgtPlace.name,
                     amount = death,
                     tgtApparatus = app.name
@@ -693,7 +693,7 @@ class GameEngine(val gameState: GameState)
         Information(
             author = "",
             creationTime = tgtState.time,
-            type = "casualty",
+            type = InformationType.CASUALTY,
             tgtPlace = tgtPlace.name,
             auxParty = tgtPlace.responsibleParty,
             amount = death
@@ -710,7 +710,7 @@ class GameEngine(val gameState: GameState)
         Information(
             author = "",
             creationTime = tgtState.time,
-            type = "lostResource",
+            type = InformationType.LOST_RESOURCES,
             tgtPlace = tgtPlace.name,
             resources = hashMapOf("water" to loss)
         )/*store info*/.also {
@@ -748,7 +748,7 @@ class GameEngine(val gameState: GameState)
                 Information(
                     author = "",
                     creationTime = tgtState.time,
-                    type = "damagedApparatus",
+                    type = InformationType.DAMAGED_APPARATUS,
                     tgtPlace = tgtPlace.name,
                     tgtApparatus = app.name
                 )/*store info*/.also {
