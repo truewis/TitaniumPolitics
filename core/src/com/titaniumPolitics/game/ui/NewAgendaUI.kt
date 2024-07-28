@@ -9,10 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.badlogic.gdx.utils.Array
 
 import com.badlogic.gdx.utils.Align
-import com.titaniumPolitics.game.core.GameEngine
-import com.titaniumPolitics.game.core.GameState
-import com.titaniumPolitics.game.core.MeetingAgenda
-import com.titaniumPolitics.game.core.ReadOnly
+import com.titaniumPolitics.game.core.*
 import com.titaniumPolitics.game.core.gameActions.*
 import com.titaniumPolitics.game.ui.map.PlaceSelectionUI
 import kotlinx.serialization.json.jsonObject
@@ -43,7 +40,7 @@ class NewAgendaUI(gameState: GameState, override var actionCallback: (GameAction
             {
                 override fun changed(event: ChangeEvent?, actor: Actor?)
                 {
-                    this@NewAgendaUI.agenda = MeetingAgenda("praise", hashMapOf("character" to selected))
+                    this@NewAgendaUI.agenda = MeetingAgenda(AgendaType.PRAISE, hashMapOf("character" to selected))
                 }
             })
         }
@@ -57,7 +54,7 @@ class NewAgendaUI(gameState: GameState, override var actionCallback: (GameAction
             {
                 override fun changed(event: ChangeEvent?, actor: Actor?)
                 {
-                    this@NewAgendaUI.agenda = MeetingAgenda("denounce", hashMapOf("character" to selected))
+                    this@NewAgendaUI.agenda = MeetingAgenda(AgendaType.DENOUNCE, hashMapOf("character" to selected))
                 }
             })
         }
@@ -71,7 +68,7 @@ class NewAgendaUI(gameState: GameState, override var actionCallback: (GameAction
             {
                 override fun changed(event: ChangeEvent?, actor: Actor?)
                 {
-                    this@NewAgendaUI.agenda = MeetingAgenda("praiseParty", hashMapOf("party" to selected))
+                    this@NewAgendaUI.agenda = MeetingAgenda(AgendaType.PRAISE_PARTY, hashMapOf("party" to selected))
                 }
             })
         }
@@ -85,7 +82,7 @@ class NewAgendaUI(gameState: GameState, override var actionCallback: (GameAction
             {
                 override fun changed(event: ChangeEvent?, actor: Actor?)
                 {
-                    this@NewAgendaUI.agenda = MeetingAgenda("denounceParty", hashMapOf("party" to selected))
+                    this@NewAgendaUI.agenda = MeetingAgenda(AgendaType.DENOUNCE_PARTY, hashMapOf("party" to selected))
                 }
             })
         }

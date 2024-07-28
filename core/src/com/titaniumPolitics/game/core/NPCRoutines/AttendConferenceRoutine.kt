@@ -1,10 +1,10 @@
 package com.titaniumPolitics.game.core.NPCRoutines
 
+import com.titaniumPolitics.game.core.AgendaType
 import com.titaniumPolitics.game.core.MeetingAgenda
 import com.titaniumPolitics.game.core.Request
 import com.titaniumPolitics.game.core.gameActions.*
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.Transient
 
 @Serializable
 class AttendConferenceRoutine() : Routine(), IMeetingRoutine
@@ -41,7 +41,7 @@ class AttendConferenceRoutine() : Routine(), IMeetingRoutine
                 //If speaker, propose proof of work if nothing else is important.
                 //Proof of work should have corresponding request. If there is no request or no relevant information, do not propose proof of work.
                 //Some information are more relevant than others.
-                if (conf.agendas.any { it.subjectType == "proofOfWork" })
+                if (conf.agendas.any { it.type == AgendaType.PROOF_OF_WORK })
                 {
 
                     //If we haven't tried this branch in the current routine
@@ -52,7 +52,7 @@ class AttendConferenceRoutine() : Routine(), IMeetingRoutine
                         return (
                                 SupportAgendaRoutine().apply {
                                     intVariables["agendaIndex"] =
-                                        conf.agendas.indexOfFirst { it.subjectType == "proofOfWork" }
+                                        conf.agendas.indexOfFirst { it.type == AgendaType.PROOF_OF_WORK }
                                 })//Add a routine, priority higher than work.
                     }
                 }
@@ -62,7 +62,7 @@ class AttendConferenceRoutine() : Routine(), IMeetingRoutine
                 if (conf.currentSpeaker == name && !party.isSalaryPaid && party.leader != name)
                 {
                     //Check if there is already a salary request.
-                    if (conf.agendas.none { it.subjectType == "request" && it.attachedRequest!!.action.javaClass.simpleName == "salary" })
+                    if (conf.agendas.none { it.type == AgendaType.REQUEST && it.attachedRequest!!.action.javaClass.simpleName == "salary" })
                     {
 
                     } else //If the agenda already exists, support it.
@@ -74,7 +74,7 @@ class AttendConferenceRoutine() : Routine(), IMeetingRoutine
                             intVariables["try_support_salary"] = 1
                             return SupportAgendaRoutine().apply {
                                 intVariables["agendaIndex"] =
-                                    conf.agendas.indexOfFirst { it.subjectType == "request" && it.attachedRequest!!.action.javaClass.simpleName == "salary" }
+                                    conf.agendas.indexOfFirst { it.type == AgendaType.REQUEST && it.attachedRequest!!.action.javaClass.simpleName == "salary" }
                             }//Add a routine, priority higher than work.
                         }
 
@@ -96,7 +96,7 @@ class AttendConferenceRoutine() : Routine(), IMeetingRoutine
                     //Nominate the person with the highest mutuality, if not nominated yet.
                     //Note that nomination is only valid at the beginning of the conference.
 
-                    if (conf.agendas.none { it.subjectType == "nomination" && it.subjectParams["character"] == nominee } && conf.time == gState.time)
+                    if (conf.agendas.none { it.type == AgendaType.NOMINATE && it.subjectParams["character"] == nominee } && conf.time == gState.time)
                     {
                     }
                     //otherwise, support the nominee.
@@ -109,18 +109,18 @@ class AttendConferenceRoutine() : Routine(), IMeetingRoutine
                             intVariables["try_support_nomination"] = 1
                             return SupportAgendaRoutine().apply {
                                 intVariables["agendaIndex"] =
-                                    conf.agendas.indexOfFirst { it.subjectType == "nomination" && it.subjectParams["character"] == nominee }
+                                    conf.agendas.indexOfFirst { it.type == AgendaType.NOMINATE && it.subjectParams["character"] == nominee }
                             }
                         }
                         //After you support the nominee, attack the other nominees.
                         val otherNominees =
-                            gState.characters.keys.filter { it != name && it != nominee && conf.agendas.any { it.subjectType == "nomination" && it.subjectParams["character"] == nominee } }
+                            gState.characters.keys.filter { it != name && it != nominee && conf.agendas.any { it.type == AgendaType.NOMINATE && it.subjectParams["character"] == nominee } }
                         if (otherNominees.isNotEmpty())
                         {
                             return (
                                     AttackAgendaRoutine().apply {
                                         intVariables["agendaIndex"] =
-                                            conf.agendas.indexOfFirst { it.subjectType == "nomination" && it.subjectParams["character"] == nominee }
+                                            conf.agendas.indexOfFirst { it.type == AgendaType.NOMINATE && it.subjectParams["character"] == nominee }
                                     })//Add a routine, priority higher than work.
 
                         }
@@ -181,10 +181,10 @@ class AttendConferenceRoutine() : Routine(), IMeetingRoutine
                 //If speaker, propose proof of work if nothing else is important.
                 //Proof of work should have corresponding request. If there is no request or no relevant information, do not propose proof of work.
                 //Some information are more relevant than others.
-                if (conf.agendas.none { it.subjectType == "proofOfWork" })
+                if (conf.agendas.none { it.type == AgendaType.PROOF_OF_WORK })
                 {
                     return NewAgenda(name, place).also {
-                        it.agenda = MeetingAgenda("proofOfWork")
+                        it.agenda = MeetingAgenda(AgendaType.PROOF_OF_WORK)
                     }
                 }
 
@@ -192,10 +192,10 @@ class AttendConferenceRoutine() : Routine(), IMeetingRoutine
                 if (conf.currentSpeaker == name && !party.isSalaryPaid && party.leader != name)
                 {
                     //Check if there is already a salary request.
-                    if (conf.agendas.none { it.subjectType == "request" && it.subjectParams["command"] != null })
+                    if (conf.agendas.none { it.type == AgendaType.REQUEST && it.subjectParams["command"] != null })
                     {
                         //Fill in the agenda based on variables in the routine, resource and character.
-                        val agenda = MeetingAgenda("request").apply {
+                        val agenda = MeetingAgenda(AgendaType.REQUEST).apply {
                             attachedRequest = Request(
                                 Salary(
                                     party.leader,
@@ -238,14 +238,14 @@ class AttendConferenceRoutine() : Routine(), IMeetingRoutine
                             {
                                 return NewAgenda(name, place).also {
                                     it.agenda =
-                                        MeetingAgenda("praise", subjectParams = hashMapOf("who" to member))
+                                        MeetingAgenda(AgendaType.PRAISE, subjectParams = hashMapOf("who" to member))
                                 }
                             } else if (mutuality < 20)
                             {
                                 return NewAgenda(name, place).also {
                                     it.agenda =
                                         MeetingAgenda(
-                                            "denounce",
+                                            AgendaType.DENOUNCE,
                                             subjectParams = hashMapOf("who" to member)
                                         )
                                 }
@@ -314,11 +314,11 @@ class AttendConferenceRoutine() : Routine(), IMeetingRoutine
                 //Nominate the person with the highest mutuality, if not nominated yet.
                 //Note that nomination is only valid at the beginning of the conference.
 
-                if (conf.agendas.none { it.subjectType == "nomination" && it.subjectParams["character"] == nominee } && conf.time == gState.time)
+                if (conf.agendas.none { it.type == AgendaType.NOMINATE && it.subjectParams["character"] == nominee } && conf.time == gState.time)
                 {
                     return NewAgenda(name, place).also {
                         it.agenda =
-                            MeetingAgenda("nomination", subjectParams = hashMapOf("character" to nominee))
+                            MeetingAgenda(AgendaType.NOMINATE, subjectParams = hashMapOf("character" to nominee))
                     }
                 }
                 //otherwise, support the nominee.

@@ -1,5 +1,6 @@
 package com.titaniumPolitics.game.core.gameActions
 
+import com.titaniumPolitics.game.core.AgendaType
 import com.titaniumPolitics.game.core.MeetingAgenda
 import kotlinx.serialization.Serializable
 import kotlin.math.max
@@ -17,47 +18,50 @@ class NewAgenda(override val tgtCharacter: String, override val tgtPlace: String
         super.execute()
         //affect mutuality based on the agenda.
         parent.setMutuality(tgtCharacter, tgtCharacter, deltaWill())
-        when (agenda.subjectType)
+        when (agenda.type)
         {
-            "proofOfWork" ->
+            AgendaType.PROOF_OF_WORK ->
             {
             }
 
-            "budgetProposal" ->
+            AgendaType.BUDGET_PROPOSAL ->
             {
             }
 
-            "budgetResolution" ->
+            AgendaType.BUDGET_RESOLUTION ->
             {
             }
 
-            "praise" ->
+            AgendaType.PRAISE ->
             {
                 parent.setMutuality(agenda.subjectParams["character"]!!, tgtCharacter, 3.0)
             }
 
-            "denounce" ->
+            AgendaType.DENOUNCE ->
             {
                 parent.setMutuality(agenda.subjectParams["character"]!!, tgtCharacter, -10.0)
             }
 
-            "praiseParty" ->
+            AgendaType.PRAISE_PARTY ->
             {
                 parent.setPartyMutuality(meeting.involvedParty, agenda.subjectParams["party"]!!, 3.0)
             }
 
-            "denounceParty" ->
+            AgendaType.DENOUNCE_PARTY ->
             {
                 parent.setPartyMutuality(meeting.involvedParty, agenda.subjectParams["party"]!!, -10.0)
                 //Increase party integrity
                 parent.setPartyMutuality(meeting.involvedParty, meeting.involvedParty, 5.0)
             }
 
-            "nomination" ->
+            AgendaType.NOMINATE ->
             {
 
             }
             //request is not executed until the end of the meeting. Check Meeting.kt
+            else ->
+            {
+            }
         }
     }
 
@@ -65,29 +69,29 @@ class NewAgenda(override val tgtCharacter: String, override val tgtPlace: String
     {
         //People will be more interested in agendas related to their interest. However, this is handled in NPC class.
         val mt = parent.characters[tgtCharacter]!!.currentMeeting!!
-        when (agenda.subjectType)
+        when (agenda.type)
         {
-            "proofOfWork" -> return mt.involvedParty != "" && mt.type == "divisionDailyConference" //TODO: how do we handle command issued?
+            AgendaType.PROOF_OF_WORK -> return mt.involvedParty != "" && mt.type == "divisionDailyConference" //TODO: how do we handle command issued?
             //You have to choose which command you are responding to. The character who issued the command must be present in the meeting.
             //Other people may add supporting or disapproving information.
-            "budgetProposal" -> return mt.involvedParty == "cabinet" && !parent.isBudgetProposed
+            AgendaType.BUDGET_PROPOSAL -> return mt.involvedParty == "cabinet" && !parent.isBudgetProposed
             //TODO: this is done by the mandatory cabinet election, which is separate from meetings.
-            "budgetResolution" -> return mt.involvedParty == "triumvirate" && !parent.isBudgetResolved
+            AgendaType.BUDGET_RESOLUTION -> return mt.involvedParty == "triumvirate" && !parent.isBudgetResolved
             //TODO: this is done by the mandatory triumvirate election, which is separate from meetings.
-            "praise" -> return true
+            AgendaType.PRAISE -> return true
 
-            "denounce" -> return true
-            "praiseParty" -> return true
+            AgendaType.DENOUNCE -> return true
+            AgendaType.PRAISE_PARTY -> return true
 
-            "denounceParty" -> return true
-            "request" -> return true
-            "nomination" -> return mt.type == "divisionLeaderElection" && agenda.subjectParams["character"]!! in parent.parties[mt.involvedParty]!!.members
+            AgendaType.DENOUNCE_PARTY -> return true
+            AgendaType.REQUEST -> return true
+            AgendaType.NOMINATE -> return mt.type == "divisionLeaderElection" && agenda.subjectParams["character"]!! in parent.parties[mt.involvedParty]!!.members
             //You can choose the person to request, and one of the actions that the person can do. The command is issued immediately, and other people can opt in.
             //The below actions are executed by the leader. Party members can request the leader to do these actions.
             //"workingHoursChange" -> return mt.involvedParty != "" && mt.type == "divisionDailyConference" && parent.places[agenda.subjectParams["where"]]!!.responsibleParty == mt.involvedParty
             //"reassignWorkersToApparatus" -> return mt.involvedParty != "" && mt.type == "divisionDailyConference" && parent.places[agenda.subjectParams["where"]]!!.responsibleParty == mt.involvedParty //TODO: check apparatus key.
             //"salary" -> return mt.involvedParty != "" && mt.type == "divisionDailyConference" && !parent.parties[mt.involvedParty]!!.isSalaryPaid
-            "appointMeeting" -> return true
+            AgendaType.APPOINT_MEETING -> return true
             //TODO: impeach, fire
             //TODO: Also update NewAgendaUI.kt
 
@@ -99,15 +103,23 @@ class NewAgenda(override val tgtCharacter: String, override val tgtPlace: String
     override fun deltaWill(): Double
     {
         val mt = parent.characters[tgtCharacter]!!.currentMeeting!!
-        when (agenda.subjectType)
+        when (agenda.type)
         {
-            "praise" -> return parent.getMutuality(tgtCharacter, agenda.subjectParams["character"]!!) * 0.1
-            "denounce" -> return parent.getMutuality(tgtCharacter, agenda.subjectParams["character"]!!) * -0.1
-            "nomination" -> return parent.getMutuality(tgtCharacter, agenda.subjectParams["character"]!!) * 0.1
-            "praiseParty" -> return parent.getPartyMutuality(mt.involvedParty, agenda.subjectParams["party"]!!) * 0.1
-            "denounceParty" -> return parent.getPartyMutuality(mt.involvedParty, agenda.subjectParams["party"]!!) * -0.1
+            AgendaType.PRAISE -> return parent.getMutuality(tgtCharacter, agenda.subjectParams["character"]!!) * 0.1
+            AgendaType.DENOUNCE -> return parent.getMutuality(tgtCharacter, agenda.subjectParams["character"]!!) * -0.1
+            AgendaType.NOMINATE -> return parent.getMutuality(tgtCharacter, agenda.subjectParams["character"]!!) * 0.5
+            AgendaType.PRAISE_PARTY -> return parent.getPartyMutuality(
+                mt.involvedParty,
+                agenda.subjectParams["party"]!!
+            ) * 0.1
+
+            AgendaType.DENOUNCE_PARTY -> return parent.getPartyMutuality(
+                mt.involvedParty,
+                agenda.subjectParams["party"]!!
+            ) * -0.1
+
+            else -> return .0
         }
-        return .0
     }
 
 }

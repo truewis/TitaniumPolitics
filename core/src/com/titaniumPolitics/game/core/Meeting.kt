@@ -33,7 +33,7 @@ class Meeting(
                 throw IllegalStateException("The leader of the party $involvedParty exists as ${party.leader}, but the election is still happening.")
             val leader = party.members.filter { char ->
                 agendas.any {
-                    it.subjectType == "nomination" && it.subjectParams["character"] == char
+                    it.type == AgendaType.NOMINATE && it.subjectParams["character"] == char
                 }
             }.maxByOrNull { s ->
                 (party.members.sumOf {

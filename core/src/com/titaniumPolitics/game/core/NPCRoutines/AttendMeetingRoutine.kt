@@ -1,10 +1,10 @@
 package com.titaniumPolitics.game.core.NPCRoutines
 
+import com.titaniumPolitics.game.core.AgendaType
 import com.titaniumPolitics.game.core.MeetingAgenda
 import com.titaniumPolitics.game.core.Request
 import com.titaniumPolitics.game.core.gameActions.*
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.Transient
 
 @Serializable
 class AttendMeetingRoutine() : Routine(), IMeetingRoutine
@@ -16,7 +16,7 @@ class AttendMeetingRoutine() : Routine(), IMeetingRoutine
         val character = gState.characters[name]!!
         val meeting = character.currentMeeting!!
         //If there is a proof of work agenda about the request you have finished, support it.
-        if (meeting.agendas.any { it.subjectType == "proofOfWork" && character.finishedRequests.contains(it.subjectParams["request"]) })
+        if (meeting.agendas.any { it.type == AgendaType.PROOF_OF_WORK && character.finishedRequests.contains(it.subjectParams["request"]) })
         {
             //If we haven't tried this branch in the current routine
             if (intVariables["try_support_proofOfWork"] != 1)
@@ -25,7 +25,7 @@ class AttendMeetingRoutine() : Routine(), IMeetingRoutine
                 intVariables["try_support_proofOfWork"] = 1
                 return SupportAgendaRoutine().apply {
                     intVariables["agendaIndex"] =
-                        meeting.agendas.indexOfFirst { it.subjectType == "proofOfWork" }
+                        meeting.agendas.indexOfFirst { it.type == AgendaType.PROOF_OF_WORK }
                 }
             }
         }
@@ -63,7 +63,7 @@ class AttendMeetingRoutine() : Routine(), IMeetingRoutine
             "requestResource" ->
             {
                 //Fill in the agenda based on variables in the routine, resource and character.
-                val agenda = MeetingAgenda("request").apply {
+                val agenda = MeetingAgenda(AgendaType.REQUEST).apply {
                     attachedRequest = Request(
                         UnofficialResourceTransfer(
                             variables["character"]!!,

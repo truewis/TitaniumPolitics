@@ -1,14 +1,8 @@
 package com.titaniumPolitics.game.ui
 
-import com.badlogic.gdx.Gdx
-import com.badlogic.gdx.graphics.Texture
-import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.ui.HorizontalGroup
-import com.badlogic.gdx.scenes.scene2d.ui.Image
 import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.Table
-import com.badlogic.gdx.scenes.scene2d.utils.Drawable
-import com.titaniumPolitics.game.core.GameEngine
 import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.core.Meeting
 import com.titaniumPolitics.game.core.MeetingAgenda
@@ -42,7 +36,6 @@ class AgendaUI(var gameState: GameState) : Table(defaultSkin), KTable
     //This function can be used for both meetings and conferences
     fun refresh(meeting: Meeting, agenda: MeetingAgenda)
     {
-        AgendaTitle.setText(agenda.subjectType)
         AddedInfos.clear()
         agenda.informationKeys.forEach {
             val infoCardUI = InfoCardUI(gameState)

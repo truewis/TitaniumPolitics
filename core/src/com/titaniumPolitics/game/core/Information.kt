@@ -1,6 +1,7 @@
 package com.titaniumPolitics.game.core
 
 import com.titaniumPolitics.game.core.gameActions.GameAction
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlin.math.max
 import kotlin.math.min
@@ -111,6 +112,7 @@ class Information(//If there is no author, it is a rumor.
     }
 }
 
+@Serializable
 enum class InformationType
 {
     ACTION, RESOURCES, CASUALTY, LOST_RESOURCES, DAMAGED_APPARATUS, APPARATUS_DURABILITY
