@@ -43,7 +43,7 @@ class NewAgendaUI(gameState: GameState, override var actionCallback: (GameAction
                     this@NewAgendaUI.agenda = MeetingAgenda(AgendaType.PRAISE, hashMapOf("character" to selected))
                 }
             })
-        }
+        }.inCell.size(300f, 100f)
     }
     private val denounceTable = scene2d.table {
         label("Target:", "trnsprtConsole") { setFontScale(3f) }
@@ -57,7 +57,7 @@ class NewAgendaUI(gameState: GameState, override var actionCallback: (GameAction
                     this@NewAgendaUI.agenda = MeetingAgenda(AgendaType.DENOUNCE, hashMapOf("character" to selected))
                 }
             })
-        }
+        }.inCell.size(300f, 100f)
     }
     private val praisePartyTable = scene2d.table {
         label("Target:", "trnsprtConsole") { setFontScale(3f) }
@@ -71,7 +71,7 @@ class NewAgendaUI(gameState: GameState, override var actionCallback: (GameAction
                     this@NewAgendaUI.agenda = MeetingAgenda(AgendaType.PRAISE_PARTY, hashMapOf("party" to selected))
                 }
             })
-        }
+        }.inCell.size(300f, 100f)
     }
     private val denouncePartyTable = scene2d.table {
         label("Target:", "trnsprtConsole") { setFontScale(3f) }
@@ -85,12 +85,12 @@ class NewAgendaUI(gameState: GameState, override var actionCallback: (GameAction
                     this@NewAgendaUI.agenda = MeetingAgenda(AgendaType.DENOUNCE_PARTY, hashMapOf("party" to selected))
                 }
             })
-        }
+        }.inCell.size(300f, 100f)
     }
 
     private val requestTable = scene2d.table {
         button {
-            it.colspan(2).growX()
+            it.colspan(2).growX().size(300f, 100f)
             val placeLabel = label("Request Place:", "trnsprtConsole") { setFontScale(3f) }
             addListener(object : ClickListener()
             {
@@ -117,7 +117,7 @@ class NewAgendaUI(gameState: GameState, override var actionCallback: (GameAction
                     this@NewAgendaUI.toWho = selected
                 }
             })
-        }
+        }.inCell.size(300f, 100f)
         row()
         //Select Action
         add(this@NewAgendaUI.actionButtonList)
@@ -130,10 +130,18 @@ class NewAgendaUI(gameState: GameState, override var actionCallback: (GameAction
         val st = stack {
             it.grow()
             table {
-                label("New Agenda", "trnsprtConsole") {
-                    setFontScale(3f)
-                }
-                this@NewAgendaUI.agendaSelectBox = selectBox {
+                this@NewAgendaUI.agendaSelectBox = selectBox<String> {
+
+                    items = Array(
+                        arrayOf(
+                            "proofOfWork",
+                            "praise",
+                            "denounce",
+                            "praiseParty",
+                            "denounceParty",
+                            "request"
+                        )
+                    )
                     //TODO: Also update NewAgenda.kt
                     addListener(object : ChangeListener()
                     {
@@ -179,7 +187,7 @@ class NewAgendaUI(gameState: GameState, override var actionCallback: (GameAction
                         }
                     })
 
-                }
+                }.also { it.inCell.size(300f, 100f) }
 
                 row()
                 //Fill in agenda details.
@@ -194,8 +202,9 @@ class NewAgendaUI(gameState: GameState, override var actionCallback: (GameAction
                 }
                 row()
                 button {
-                    it.fill()
+                    it.size(300f, 100f).fill()
                     label("Submit") {
+                        setFontScale(3f)
                         setAlignment(Align.center)
 
                     }
@@ -213,8 +222,9 @@ class NewAgendaUI(gameState: GameState, override var actionCallback: (GameAction
                     })
                 }
                 button {
-                    it.fill()
+                    it.fill().size(300f, 100f)
                     label("Cancel") {
+                        setFontScale(3f)
                         setAlignment(Align.center)
 
                     }
@@ -229,6 +239,7 @@ class NewAgendaUI(gameState: GameState, override var actionCallback: (GameAction
             }
         }
         content.add(st).grow()
+        hideAllAgendaDetailsTable()
 
 
     }

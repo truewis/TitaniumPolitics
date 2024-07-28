@@ -84,6 +84,7 @@ class GameState
     var floatingResources = hashMapOf<String, Int>()
     var marketResources = hashMapOf<String, Int>()
     var eventSystem = EventSystem()
+    val realCharList = characters.keys.filter { !it.contains("Anon") && characters[it]!!.alive }
 
     fun initialize()
     {

@@ -74,11 +74,19 @@ class MeetingUI(var gameState: GameState) : Table(defaultSkin), KTable
         }
         placeCharacterPortrait()
         currentAgendas.clear()
-//        meeting.agendas.forEach {
-//            val agendaUI = AgendaUI(gameState)
-//            agendaUI.refresh(meeting, it)
-//            currentAgendas.addActor(agendaUI)
-//        }
+        deployedInfos.clear()
+        meeting.agendas.forEach {
+            val agendaUI = AgendaBubbleUI(it)
+            currentAgendas += agendaUI
+            addActor(agendaUI)
+            it.informationKeys.forEach { key ->
+                val info = gameState.informations[key]!!
+                val infoUI = InfoBubbleUI(info)
+                deployedInfos += infoUI
+                addActor(infoUI)
+            }
+        }
+        placeBubbles()
 
         currentAttention.setText(meeting.currentAttention.toString())
     }
@@ -118,6 +126,35 @@ class MeetingUI(var gameState: GameState) : Table(defaultSkin), KTable
                 it.setPosition(
                     centerX + radius * cos(Math.toRadians(angle.toDouble())).toFloat() - it.width / 2,
                     centerY + radius * sin(Math.toRadians(angle.toDouble())).toFloat() - it.height / 2
+                )
+            }
+        }
+
+
+    }
+
+    fun placeBubbles()
+    {
+        //Place bubbles in a circle. Agenda bubbles are placed in the inner circle.
+        val radius = 200f
+        val centerX = discussionTable.x + discussionTable.width / 2
+        val centerY = discussionTable.y + discussionTable.height / 2
+        currentAgendas.forEach {
+            val angle = 360f / currentAgendas.size * currentAgendas.indexOf(it)
+            it.setPosition(
+                centerX + radius / 2 * cos(Math.toRadians(angle.toDouble())).toFloat() - it.width / 2,
+                centerY + radius / 2 * sin(Math.toRadians(angle.toDouble())).toFloat() - it.height / 2
+            )
+            //Place information bubbles around the corresponding agenda bubble.
+            val infoRadius = 100f
+            val infoCenterX = it.x + it.width / 2
+            val infoCenterY = it.y + it.height / 2
+            it.agenda.informationKeys.forEach { key ->
+                val info = deployedInfos.find { it.info.name == key }!!
+                val infoAngle = 360f / it.agenda.informationKeys.size * it.agenda.informationKeys.indexOf(key)
+                info.setPosition(
+                    infoCenterX + infoRadius * cos(Math.toRadians(infoAngle.toDouble())).toFloat() - info.width / 2,
+                    infoCenterY + infoRadius * sin(Math.toRadians(infoAngle.toDouble())).toFloat() - info.height / 2
                 )
             }
         }
