@@ -32,4 +32,5 @@ class EndSpeech(override val tgtCharacter: String, override val tgtPlace: String
         return parent.getMutuality(tgtCharacter, nextSpeaker) * 0.1
     }
 
+
 }

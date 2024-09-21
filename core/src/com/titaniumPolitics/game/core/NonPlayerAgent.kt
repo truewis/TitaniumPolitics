@@ -135,6 +135,9 @@ class NonPlayerAgent : Agent()
             if (v != null)
             {
                 nextRoutine = v.apply { priority = nextRoutine.priority + 10 }
+                routines.add(nextRoutine)
+                routines.sortByDescending { it.priority }
+                continue
             } else if (nextRoutine.endCondition(name, place))
             {
                 routines.remove(nextRoutine)
@@ -143,9 +146,13 @@ class NonPlayerAgent : Agent()
                 {
                     whenIdle()
                     if (routines.isEmpty())
+                    {
+                        println("Warning: No routine is available for $name. Waiting.")
                         return Wait(name, place)
+                    }
                 }
                 nextRoutine = routines[0]
+                continue
             } else break
         }
         return nextRoutine.execute(name, place)

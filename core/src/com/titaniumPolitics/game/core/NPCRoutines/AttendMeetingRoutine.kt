@@ -11,6 +11,8 @@ class AttendMeetingRoutine() : Routine(), IMeetingRoutine
 {
     //Sometimes, this routine is created before joining the meeting. In that case, the action required to join the meeting is stored here.
     var actionDelegated: GameAction? = null
+
+    //TODO: Also check AttendConferenceRoutine for the same function.
     override fun newRoutineCondition(name: String, place: String): Routine?
     {
         val character = gState.characters[name]!!
@@ -32,11 +34,14 @@ class AttendMeetingRoutine() : Routine(), IMeetingRoutine
         return null
     }
 
+    //TODO: Also check AttendConferenceRoutine for the same function.
     override fun execute(name: String, place: String): GameAction
     {
         if (actionDelegated != null)
         {
-            return actionDelegated!!
+            val action = actionDelegated!!
+            actionDelegated = null //The action is executed.
+            return action
         }
         val character = gState.characters[name]!!
         val meeting = character.currentMeeting!!
@@ -91,9 +96,10 @@ class AttendMeetingRoutine() : Routine(), IMeetingRoutine
 
     }
 
+    //TODO: Also check AttendConferenceRoutine for the same function.
     override fun endCondition(name: String, place: String): Boolean
     {
-        if (actionDelegated != null)
+        if (actionDelegated != null)//If there is still an action to be executed from the previous routine, do not leave the routine.
         {
             return false
         }
@@ -107,7 +113,7 @@ class AttendMeetingRoutine() : Routine(), IMeetingRoutine
             character.currentMeeting!!
         //If two hours has passed since the meeting started, leave the meeting. TODO: what if the meeting has started late?
         //TODO: stay in the meeting until I have something else to do, or the work hours are over.
-        if (intVariables["time"]!! + 4 <= gState.time)
+        if (intVariables["routineStartTime"]!! + 4 <= gState.time)
         {
             return true
         }

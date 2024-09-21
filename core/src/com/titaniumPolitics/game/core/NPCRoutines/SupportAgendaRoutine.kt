@@ -82,7 +82,10 @@ class SupportAgendaRoutine() : Routine(), IMeetingRoutine
             }
         }
         //If there is no supporting information, end speech.
-        return EndSpeech(name, place).apply { chooseParams() }
+        return EndSpeech(name, place).also {
+            it.nextSpeaker = conf.currentCharacters.filter { it != name }
+                .maxByOrNull { gState.getMutuality(name, it) }!!
+        }
     }
 
     override fun endCondition(name: String, place: String): Boolean
