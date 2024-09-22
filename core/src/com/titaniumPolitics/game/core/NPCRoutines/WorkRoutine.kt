@@ -70,8 +70,8 @@ class WorkRoutine() : Routine()
                 }
             } else
             {
-                //if this character is the leader, start the Meeting.
-                if (gState.parties[conf.involvedParty]!!.leader == name)
+                //if this character is the leader and there are enough members, start the Meeting.
+                if (gState.parties[conf.involvedParty]!!.leader == name && conf.scheduledCharacters.intersect(gState.places[place]!!.characters).size >= 2)
                 {
                     return AttendMeetingRoutine().apply {
                         actionDelegated = StartMeeting(name, place).apply {
@@ -80,7 +80,10 @@ class WorkRoutine() : Routine()
                         }
                     }
                 } else //if this character is the controller and the election is planned, start the Meeting.
-                    if (name == "ctrler" && conf.type == "divisionLeaderElection")
+                    if (name == "ctrler" && conf.type == "divisionLeaderElection" && conf.scheduledCharacters.intersect(
+                            gState.places[place]!!.characters
+                        ).size >= 2
+                    )
                     {
                         return AttendMeetingRoutine().apply {
                             actionDelegated = StartMeeting(name, place).apply {

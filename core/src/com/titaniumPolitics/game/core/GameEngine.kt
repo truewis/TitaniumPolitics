@@ -116,11 +116,14 @@ class GameEngine(val gameState: GameState)
                     }, time=${gameState.time}, which is not in the action list. This may be a bug."
                 )
             if (!action.isValid())
+            {
                 println(
                     "Warning: Non player character ${char.name} is performing ${action.javaClass.simpleName} at ${
                         char.place.name
                     }, time=${gameState.time}, which is not valid. This may be a bug."
                 )
+                throw Exception("Non player character ${char.name} is performing an invalid action.")
+            }
             if (action.tgtCharacter != char.name)
                 println(
                     "Warning: Non player character ${char.name} is performing ${action.javaClass.simpleName} at ${

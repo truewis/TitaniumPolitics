@@ -156,7 +156,7 @@ class AttendMeetingRoutine : Routine(), IMeetingRoutine
                 return Wait(name, place)
             else
             {
-                val action = Intercept(name, place)
+                val action = Intercept(name, place).also { it.injectParent(gState) }
                 if (action.isValid())
                     return action
                 return Wait(name, place)
