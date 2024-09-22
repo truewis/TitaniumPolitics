@@ -16,8 +16,8 @@ class BudgetProposal(override val tgtCharacter: String, override val tgtPlace: S
     }
 
     override fun isValid(): Boolean =
-        parent.ongoingConferences.any { it.value.type == "budgetProposal" } and
-                parent.ongoingConferences.filter { it.value.type == "budgetProposal" }.values.first().currentCharacters.containsAll(
+        parent.ongoingMeetings.any { it.value.type == "budgetProposal" } and
+                parent.ongoingMeetings.filter { it.value.type == "budgetProposal" }.values.first().currentCharacters.containsAll(
                     parent.parties["cabinet"]!!.members
                 )
 
@@ -29,7 +29,7 @@ class BudgetProposal(override val tgtCharacter: String, override val tgtPlace: S
         parent.isBudgetProposed = true
         parent.budget = budget
         //Now, take the time of all characters present.
-        parent.ongoingConferences.filter { it.value.type == "budgetProposal" }.values.first().currentCharacters.forEach { parent.characters[it]!!.frozen++ }
+        parent.ongoingMeetings.filter { it.value.type == "budgetProposal" }.values.first().currentCharacters.forEach { parent.characters[it]!!.frozen++ }
         println(budget)
     }
 

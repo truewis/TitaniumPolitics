@@ -500,12 +500,12 @@ class NewAgendaUI(gameState: GameState, override var actionCallback: (GameAction
                                 )
                                 {
                                     GameEngine.acquireCallback(
-                                        JoinConference(
+                                        JoinMeeting(
                                             gameState.playerName,
                                             gameState.player.place.name
                                         ).also {
                                             it.meetingName =
-                                                gameState.ongoingConferences.filter {
+                                                gameState.ongoingMeetings.filter {
                                                     it.value.scheduledCharacters.contains(gameState.playerName) && it.value.place == gameState.player.place.name
                                                 }.keys.first()
                                         }

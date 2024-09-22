@@ -5,8 +5,8 @@ class BudgetResolution(override val tgtCharacter: String, override val tgtPlace:
 {
     // If budgetResolution conference is ongoing and has the triumvirate, then the action is valid.
     override fun isValid(): Boolean =
-        parent.ongoingConferences.any { it.value.type == "budgetResolution" } &&
-                parent.ongoingConferences.filter { it.value.type == "budgetResolution" }.values.first().currentCharacters.containsAll(
+        parent.ongoingMeetings.any { it.value.type == "budgetResolution" } &&
+                parent.ongoingMeetings.filter { it.value.type == "budgetResolution" }.values.first().currentCharacters.containsAll(
                     parent.parties["triumvirate"]!!.members
                 )
 
@@ -17,7 +17,7 @@ class BudgetResolution(override val tgtCharacter: String, override val tgtPlace:
 
         with(parent) {
             //take the time of all characters present.
-            ongoingConferences.filter { it.value.type == "budgetResolution" }.values.first().currentCharacters.forEach { characters[it]!!.frozen++ }
+            ongoingMeetings.filter { it.value.type == "budgetResolution" }.values.first().currentCharacters.forEach { characters[it]!!.frozen++ }
             //Distribute resources according to the budget plan.
             places["reservoirNorth"]!!.resources["water"] =
                 places["reservoirNorth"]!!.resources["water"]!! - budget.values.sum()

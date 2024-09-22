@@ -54,7 +54,7 @@ class CalendarUI : WindowUI("CalendarTitle")
                             )
                         }
                     }
-                    gameState.scheduledConferences.filter {
+                    gameState.scheduledMeetings.filter {
                         it.value.time / ReadOnly.const("lengthOfDay")
                             .toInt() == gameState.day + i && it.value.scheduledCharacters.contains(gameState.playerName)
                     }.forEach { conference ->
@@ -73,7 +73,7 @@ class CalendarUI : WindowUI("CalendarTitle")
                 }.forEach { meeting ->
                     AlertUI.instance.addAlert("meeting")
                 }
-                gameState.scheduledConferences.filter {
+                gameState.scheduledMeetings.filter {
                     it.value.time in gameState.time..gameState.time + 2 && it.value.scheduledCharacters.contains(
                         gameState.playerName
                     )

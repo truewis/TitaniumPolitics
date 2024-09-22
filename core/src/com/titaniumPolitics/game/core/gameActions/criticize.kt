@@ -9,7 +9,8 @@ class criticize(override val tgtCharacter: String, override val tgtPlace: String
     override fun chooseParams()
     {
         who =
-                GameEngine.acquire(parent.ongoingMeetings.filter { it.value.currentCharacters.contains(tgtCharacter) }.flatMap { it.value.currentCharacters } + parent.ongoingConferences.filter { it.value.currentCharacters.contains(tgtCharacter) }.flatMap { it.value.currentCharacters })
+            GameEngine.acquire(parent.ongoingMeetings.filter { it.value.currentCharacters.contains(tgtCharacter) }
+                .flatMap { it.value.currentCharacters })
     }
 
     override fun execute()

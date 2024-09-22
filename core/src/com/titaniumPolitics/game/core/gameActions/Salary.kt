@@ -15,11 +15,7 @@ class Salary(override val tgtCharacter: String, override val tgtPlace: String) :
     {
         val who =
             (parent.ongoingMeetings.filter { it.value.currentCharacters.contains(tgtCharacter) }
-                .flatMap { it.value.currentCharacters } + parent.ongoingConferences.filter {
-                it.value.currentCharacters.contains(
-                    tgtCharacter
-                )
-            }.flatMap { it.value.currentCharacters }).toHashSet()
+                .flatMap { it.value.currentCharacters }).toHashSet()
 
         val party = parent.parties.values.find { it.members.containsAll(who + tgtCharacter) }!!
         val guildHall = party.home
@@ -71,11 +67,7 @@ class Salary(override val tgtCharacter: String, override val tgtPlace: String) :
     {
         val who =
             (parent.ongoingMeetings.filter { it.value.currentCharacters.contains(tgtCharacter) }
-                .flatMap { it.value.currentCharacters } + parent.ongoingConferences.filter {
-                it.value.currentCharacters.contains(
-                    tgtCharacter
-                )
-            }.flatMap { it.value.currentCharacters }).toHashSet()
+                .flatMap { it.value.currentCharacters }).toHashSet()
 
         val party = parent.parties.values.find { it.members.containsAll(who + tgtCharacter) }!!
 //        if (party.isDailySalaryPaid.keys.none { it == tgtCharacter })

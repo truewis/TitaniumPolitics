@@ -13,7 +13,7 @@ class Resign(override val tgtCharacter: String, override val tgtPlace: String) :
     override fun execute()
     {
         val party =
-            parent.ongoingConferences.filter { it.value.currentCharacters.contains(tgtCharacter) }.values.first().involvedParty
+            parent.ongoingMeetings.filter { it.value.currentCharacters.contains(tgtCharacter) }.values.first().involvedParty
         if (parent.parties[party]!!.leader != tgtCharacter)
         {
             println("Warning: $tgtCharacter is not the leader of $party.")
@@ -29,7 +29,7 @@ class Resign(override val tgtCharacter: String, override val tgtPlace: String) :
             println("$tgtCharacter resigns from cabinet.")
         }
         //Should immediately leave the party meeting if it is ongoing
-        if (parent.ongoingConferences.any { it.value.currentCharacters.contains(tgtCharacter) && it.value.involvedParty == party })
+        if (parent.ongoingMeetings.any { it.value.currentCharacters.contains(tgtCharacter) && it.value.involvedParty == party })
         {
             LeaveMeeting(tgtCharacter, tgtPlace).also {
                 it.injectParent(parent)
@@ -45,7 +45,7 @@ class Resign(override val tgtCharacter: String, override val tgtPlace: String) :
         try
         {
             val party =
-                parent.ongoingConferences.filter { it.value.currentCharacters.contains(tgtCharacter) }.values.first().involvedParty
+                parent.ongoingMeetings.filter { it.value.currentCharacters.contains(tgtCharacter) }.values.first().involvedParty
             return parent.parties[party]!!.leader == tgtCharacter
         } catch (e: Exception)
         {

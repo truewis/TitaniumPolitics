@@ -74,9 +74,7 @@ class GameState
     private var _mutuality = hashMapOf<String, HashMap<String, Double>>()
 
     var scheduledMeetings = hashMapOf<String, Meeting>()
-    var scheduledConferences = hashMapOf<String, Meeting>()
     var ongoingMeetings = hashMapOf<String, Meeting>()
-    var ongoingConferences = hashMapOf<String, Meeting>()
     var budget = hashMapOf<String, Int>()//Party name to budget
     var isBudgetProposed = false
     var isBudgetResolved = false

@@ -55,9 +55,6 @@ class Meeting(
         if (gameState.ongoingMeetings.containsValue(this))
         {
             gameState.ongoingMeetings.remove(gameState.ongoingMeetings.filter { it.value == this }.keys.first())
-        } else if (gameState.ongoingConferences.containsValue(this))
-        {
-            gameState.ongoingConferences.remove(gameState.ongoingConferences.filter { it.value == this }.keys.first())
         } else
             throw IllegalStateException("Meeting $this is not found in the ongoingMeetings or ongoingConferences.")
     }

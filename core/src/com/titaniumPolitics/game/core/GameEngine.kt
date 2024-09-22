@@ -175,9 +175,6 @@ class GameEngine(val gameState: GameState)
         gameState.ongoingMeetings.forEach {
             progressMeeting(gameState, it.value)
         }
-        gameState.ongoingConferences.forEach {
-            progressMeeting(gameState, it.value)
-        }
         gameState.requests.forEach {
             it.value.refresh(gameState)
         }
@@ -204,14 +201,6 @@ class GameEngine(val gameState: GameState)
         //Wealth display effect: opportunists mutuality to more wealthy character increases. to less wealthy character decreases.
 
         //If there are meetings where some characters are missing, all the characters in the meeting lose mutuality toward the missing characters.
-        gameState.ongoingConferences.forEach { conference ->
-            conference.value.scheduledCharacters.forEach { char ->
-                if (!conference.value.currentCharacters.contains(char))
-                    conference.value.currentCharacters.forEach { char2 ->
-                        gameState.setMutuality(char, char2, -1.0)
-                    }
-            }
-        }
         gameState.ongoingMeetings.forEach { meeting ->
             meeting.value.scheduledCharacters.forEach { char ->
                 if (!meeting.value.currentCharacters.contains(char))
@@ -342,7 +331,7 @@ class GameEngine(val gameState: GameState)
                     scheduledCharacters = party.members
                 ).also { it.involvedParty = party.name }
 
-                gameState.scheduledConferences["conference-${party.home}-${party.name}-${gameState.time}"] = conference
+                gameState.scheduledMeetings["conference-${party.home}-${party.name}-${gameState.time}"] = conference
             } else
             {
                 //If the division leader is not assigned, the conference for electing the division leader is scheduled.
@@ -352,7 +341,7 @@ class GameEngine(val gameState: GameState)
                     place = party.home,
                     scheduledCharacters = (setOf("ctrler") + party.members).toHashSet()
                 ).also { it.involvedParty = party.name }
-                gameState.scheduledConferences["conference-${party.home}-${party.name}-${gameState.time}"] = conference
+                gameState.scheduledMeetings["conference-${party.home}-${party.name}-${gameState.time}"] = conference
             }
         }
 
@@ -365,7 +354,7 @@ class GameEngine(val gameState: GameState)
             scheduledCharacters = gameState.parties["cabinet"]!!.members
         ).also { it.involvedParty = "cabinet" }
 
-        gameState.scheduledConferences["conference-${gameState.parties["cabinet"]!!.home}-cabinet-${gameState.time}"] =
+        gameState.scheduledMeetings["conference-${gameState.parties["cabinet"]!!.home}-cabinet-${gameState.time}"] =
             conference
 
 
@@ -376,7 +365,7 @@ class GameEngine(val gameState: GameState)
             scheduledCharacters = gameState.parties["triumvirate"]!!.members
         ).also { it.involvedParty = "triumvirate" }
 
-        gameState.scheduledConferences["conference-${gameState.parties["triumvirate"]!!.home}-triumvirate-${gameState.time}"] =
+        gameState.scheduledMeetings["conference-${gameState.parties["triumvirate"]!!.home}-triumvirate-${gameState.time}"] =
             conference2
 
     }
@@ -968,9 +957,9 @@ class GameEngine(val gameState: GameState)
                 actions.add("LeaveMeeting")
                 return actions
             }
-            if (gameState.ongoingConferences.any { it.value.currentCharacters.contains(character) })
+            if (gameState.ongoingMeetings.any { it.value.currentCharacters.contains(character) })
             {
-                val conf = gameState.ongoingConferences.filter {
+                val conf = gameState.ongoingMeetings.filter {
                     it.value.currentCharacters.contains(
                         character
                     )
@@ -985,12 +974,15 @@ class GameEngine(val gameState: GameState)
                     )
                 }
                 val subject = conf.type
-                if (character == gameState.parties[conf.involvedParty]!!.leader)//Only the leader can do below actions.
+                if (subject == "informal")
                 {
-                    actions.add("Resign") //Only leaders can resign right now. Resign is one of the few actions that can be done without an agenda.
-                    if (subject == "divisionDailyConference" && !gameState.parties[conf.involvedParty]!!.isSalaryPaid)
-                        actions.add("Salary") //Salary is distributed in a divisionDailyConference.
-                }
+                } else
+                    if (character == gameState.parties[conf.involvedParty]!!.leader)//Only the leader can do below actions.
+                    {
+                        actions.add("Resign") //Only leaders can resign right now. Resign is one of the few actions that can be done without an agenda.
+                        if (subject == "divisionDailyConference" && !gameState.parties[conf.involvedParty]!!.isSalaryPaid)
+                            actions.add("Salary") //Salary is distributed in a divisionDailyConference.
+                    }
                 //When not the leader, you can only do below actions.
                 //There is no command anymore.
 //                if (gameState.parties[conf.involvedParty]?.leader == character)
@@ -1034,25 +1026,6 @@ class GameEngine(val gameState: GameState)
                 actions.add("Eat")
                 actions.add("PrepareInfo")
             }
-            val availableConferences =
-                gameState.scheduledConferences.filter { it.value.time + 2 >= gameState.time && gameState.time + 2 >= it.value.time && it.value.place == place }
-                    .filter { !gameState.ongoingMeetings.containsKey(it.key) }
-            if (availableConferences.isNotEmpty())
-            {
-                val conf = availableConferences.values.first()
-                if (gameState.parties[availableConferences.values.first().involvedParty]!!.leader == character)//Only the party leader can do below actions.
-                {
-                    actions.add("StartConference")
-                } else if (conf.type == "divisionLeaderElection" && character == "ctrler")
-                { //Only the controller can start the division leader election, since the division leader is not assigned in this case.
-                    actions.add("StartConference")
-                }
-            }
-            val conferencesToJoin = gameState.ongoingConferences.filter {
-                it.value.scheduledCharacters.contains(character) && !it.value.currentCharacters.contains(character) && it.value.place == place
-            }
-            if (conferencesToJoin.isNotEmpty())
-                actions.add("JoinConference")
 
             if (place == "mainControlRoom" || place == "market" || place == "squareNorth" || place == "squareSouth")
             {

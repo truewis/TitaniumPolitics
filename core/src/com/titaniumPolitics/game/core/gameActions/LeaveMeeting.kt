@@ -10,7 +10,6 @@ class LeaveMeeting(override val tgtCharacter: String, override val tgtPlace: Str
     {
         val meeting = parent.characters[tgtCharacter]!!.currentMeeting!!
         val meetingName = parent.ongoingMeetings.filter { it.value == meeting }.keys.firstOrNull()
-            ?: parent.ongoingConferences.filter { it.value == meeting }.keys.first()
         meeting.currentCharacters.remove(tgtCharacter)
 
         println("$tgtCharacter left the meeting $meetingName")

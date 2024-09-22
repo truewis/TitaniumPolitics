@@ -22,6 +22,9 @@
     "inddy": {
       "type": "com.titaniumPolitics.game.core.NonPlayerAgent"
     },
+    "inddy2": {
+      "type": "com.titaniumPolitics.game.core.NonPlayerAgent"
+    },
     "welly": {
       "type": "com.titaniumPolitics.game.core.NonPlayerAgent"
     },
@@ -157,6 +160,19 @@
         "workaholic",
         "emotionless",
         "industryMinister",
+        "thief"
+      ],
+      "resources": {
+        "water": 10,
+        "ration": 10
+      },
+      "health": 80,
+      "livingBy": "mainControlRoom"
+    },
+    "inddy2": {
+      "trait": [
+        "workaholic",
+        "emotionless",
         "thief"
       ],
       "resources": {
@@ -2771,7 +2787,8 @@
       "type": "division",
       "leader": "inddy",
       "members": [
-        "inddy"
+        "inddy",
+        "inddy2"
       ],
       "home": "farm"
     },
@@ -2806,8 +2823,6 @@
       ],
       "home": "constructionYardNorth"
     }
-  },
-  "scheduledConferences": {
   },
   "marketResources": {
     "water": 300000,

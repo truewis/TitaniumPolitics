@@ -10,7 +10,6 @@ class EndMeeting(override val tgtCharacter: String, override val tgtPlace: Strin
     {
         val meeting = parent.characters[tgtCharacter]!!.currentMeeting!!
         val meetingName = parent.ongoingMeetings.filter { it.value == meeting }.keys.firstOrNull()
-            ?: parent.ongoingConferences.filter { it.value == meeting }.keys.first()
 
         println("Ending meeting $meetingName")
         meeting.endMeeting(parent)

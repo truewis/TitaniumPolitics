@@ -64,13 +64,18 @@ class MeetingUI(var gameState: GameState) : Table(defaultSkin), KTable
                 addCharacterPortrait(it)
             }
         }
-        portraits.forEach {
-            if (!meeting.currentCharacters.contains(it.tgtCharacter))
+        val iterator = portraits.iterator()
+        while (iterator.hasNext())
+        {
+            val portrait = iterator.next()
+            if (!meeting.currentCharacters.contains(portrait.tgtCharacter))
             {
-                it.remove()
-                portraits.remove(it)
+                portrait.remove()
+                iterator.remove()
             } else
-                it.refresh(gameState)
+            {
+                portrait.refresh(gameState)
+            }
         }
         placeCharacterPortrait()
         currentAgendas.clear()

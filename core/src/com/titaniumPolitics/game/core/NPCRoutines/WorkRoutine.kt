@@ -24,18 +24,18 @@ class WorkRoutine() : Routine()
             }
         }
 
-        if (gState.ongoingConferences.any {
+        if (gState.ongoingMeetings.any {
                 it.value.scheduledCharacters.contains(name) && !it.value.currentCharacters.contains(
                     name
                 )
             })//If missed a conference
         {
-            val conf = gState.ongoingConferences.filter {
+            val conf = gState.ongoingMeetings.filter {
                 it.value.scheduledCharacters.contains(name) && !it.value.currentCharacters.contains(
                     name
                 )
             }.values.first()
-            //----------------------------------------------------------------------------------Move to the conference
+            //----------------------------------------------------------------------------------Move to the Meeting
             if (place != conf.place)
             {
                 return MoveRoutine().apply {
@@ -43,9 +43,9 @@ class WorkRoutine() : Routine()
                 }
             } else
             {
-                return AttendConferenceRoutine().apply {
-                    actionDelegated = JoinConference(name, place).also {
-                        it.meetingName = this@WorkRoutine.gState.ongoingConferences.filter {
+                return AttendMeetingRoutine().apply {
+                    actionDelegated = JoinMeeting(name, place).also {
+                        it.meetingName = this@WorkRoutine.gState.ongoingMeetings.filter {
                             it.value.scheduledCharacters.contains(name) && !it.value.currentCharacters.contains(
                                 name
                             )
@@ -54,12 +54,12 @@ class WorkRoutine() : Routine()
                 }
             }
         }
-        if (gState.scheduledConferences.any { it.value.scheduledCharacters.contains(name) && it.value.time - gState.time in -2..2 })//If a conference is soon
-        {//TODO: consider the distance to the conference place.
-            val conf = gState.scheduledConferences.filter {
+        if (gState.scheduledMeetings.any { it.value.scheduledCharacters.contains(name) && it.value.time - gState.time in -2..2 })//If a Meeting is soon
+        {//TODO: consider the distance to the Meeting place.
+            val conf = gState.scheduledMeetings.filter {
                 it.value.scheduledCharacters.contains(name) && it.value.time - gState.time in -2..2
             }.values.first()
-            //----------------------------------------------------------------------------------Move to the conference
+            //----------------------------------------------------------------------------------Move to the Meeting
             if (place != conf.place)
             {
                 if (place != conf.place)
@@ -70,81 +70,26 @@ class WorkRoutine() : Routine()
                 }
             } else
             {
-                //if this character is the leader, start the conference.
+                //if this character is the leader, start the Meeting.
                 if (gState.parties[conf.involvedParty]!!.leader == name)
                 {
-                    return AttendConferenceRoutine().apply {
-                        actionDelegated = StartConference(name, place).apply {
+                    return AttendMeetingRoutine().apply {
+                        actionDelegated = StartMeeting(name, place).apply {
                             meetingName =
-                                this@WorkRoutine.gState.scheduledConferences.keys.first { this@WorkRoutine.gState.scheduledConferences[it] == conf }
+                                this@WorkRoutine.gState.scheduledMeetings.keys.first { this@WorkRoutine.gState.scheduledMeetings[it] == conf }
                         }
                     }
-                } else //if this character is the controller and the election is planned, start the conference.
+                } else //if this character is the controller and the election is planned, start the Meeting.
                     if (name == "ctrler" && conf.type == "divisionLeaderElection")
                     {
-                        return AttendConferenceRoutine().apply {
-                            actionDelegated = StartConference(name, place).apply {
+                        return AttendMeetingRoutine().apply {
+                            actionDelegated = StartMeeting(name, place).apply {
                                 meetingName =
-                                    this@WorkRoutine.gState.scheduledConferences.keys.first { this@WorkRoutine.gState.scheduledConferences[it] == conf }
+                                    this@WorkRoutine.gState.scheduledMeetings.keys.first { this@WorkRoutine.gState.scheduledMeetings[it] == conf }
                             }
                         }
                     }
             }
-        }
-        //If missed a meeting
-        if (gState.ongoingMeetings.any {
-                it.value.scheduledCharacters.contains(name) && !it.value.currentCharacters.contains(
-                    name
-                )
-            })
-        {
-            //----------------------------------------------------------------------------------Move to the meeting
-            val meeting = gState.ongoingMeetings.filter {
-                it.value.scheduledCharacters.contains(name) && !it.value.currentCharacters.contains(
-                    name
-                )
-            }.values.first()
-            if (place != meeting.place)
-            {
-                return MoveRoutine().apply {
-                    variables["movePlace"] = meeting.place
-                }
-            } else
-            {
-                return AttendMeetingRoutine().apply {
-                    actionDelegated = JoinMeeting(name, place).also {
-                        it.meetingName = gState.ongoingMeetings.filter {
-                            it.value.scheduledCharacters.contains(name) && !it.value.currentCharacters.contains(
-                                name
-                            )
-                        }.keys.first()
-                    }
-                }
-            }
-            //----------------------------------------------------------------------------------Move to the meeting
-        }
-        if (gState.scheduledMeetings.any { it.value.scheduledCharacters.contains(name) && it.value.time - gState.time in -1..3 })//If a meeting is soon
-        {
-            //----------------------------------------------------------------------------------Move to the meeting
-            val meeting = gState.scheduledMeetings.filter {
-                it.value.scheduledCharacters.contains(name) && it.value.time - gState.time in -1..3
-            }.values.first()
-            if (place != meeting.place)
-            {
-                return MoveRoutine().apply {
-                    variables["movePlace"] = meeting.place
-                }
-            }
-            //If arrived, start meeting
-            else
-            {
-                return AttendMeetingRoutine().apply {
-                    actionDelegated = StartMeeting(name, place).apply {
-                        meetingName = gState.scheduledMeetings.filter { it.value == meeting }.keys.first()
-                    }
-                }
-            }
-            //----------------------------------------------------------------------------------Move to the meeting
         }
 
         //Corruption for power: If the character is the leader of a party, and a party member is short of resources, steal resources from workplace to party member's home

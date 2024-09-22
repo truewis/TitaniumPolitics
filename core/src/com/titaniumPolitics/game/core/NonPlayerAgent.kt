@@ -98,12 +98,6 @@ class NonPlayerAgent : Agent()
                     priority = 800
                 }
             )
-        if (parent.ongoingConferences.any { it.value.currentCharacters.contains(name) } && routines.none { it is AttendConferenceRoutine })
-            routines.add(
-                AttendConferenceRoutine().apply {
-                    priority = 800
-                }
-            )
 
         //If there is a command that is within the set time window, issued party is trusted enough, and seems to be executable at the exact place the character is in right now,(AvailableActions), start execution routine.
         //Note that the command may not be valid even if it in AvailableActions list. For example, if the character is already at the place, move command is not valid.

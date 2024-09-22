@@ -49,7 +49,6 @@ class Character : GameStateElement()
 
     val currentMeeting
         get() = parent.ongoingMeetings.values.firstOrNull { it.currentCharacters.contains(name) }
-            ?: parent.ongoingConferences.values.firstOrNull { it.currentCharacters.contains(name) }
 
     val history = hashMapOf<Int, String>()
     val finishedRequests =
