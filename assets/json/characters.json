@@ -1,0 +1,65 @@
+{
+  "charlie": {
+    "image": "portraits/default.png"
+  },
+  "seefy": {
+    "image": "portraits/default.png"
+  },
+  "Alina": {
+    "image": "portraits/Alina.png"
+  },
+  "mini": {
+    "image": "portraits/default.png"
+  },
+  "eddy": {
+    "image": "portraits/default.png"
+  },
+  "inddy": {
+    "image": "portraits/default.png"
+  },
+  "inddy2": {
+    "image": "portraits/default.png"
+  },
+  "welly": {
+    "image": "portraits/default.png"
+  },
+  "Krailin": {
+    "image": "portraits/default.png"
+  },
+  "Vaeme": {
+    "image": "portraits/default.png"
+  },
+  "Mentor": {
+    "image": "portraits/default.png"
+  },
+  "Salvor": {
+    "image": "portraits/default.png"
+  },
+  "mini1": {
+    "image": "portraits/default.png"
+  },
+  "mini2": {
+    "image": "portraits/default.png"
+  },
+  "doci1": {
+    "image": "portraits/default.png"
+  },
+  "doci2": {
+    "image": "portraits/default.png"
+  },
+  "selli1": {
+    "image": "portraits/default.png"
+  },
+  "selli2": {
+    "image": "portraits/default.png"
+  },
+  "oldie": {
+    "image": "portraits/default.png"
+  },
+  "ctrler": {
+    "image": "portraits/ctrler.png"
+  },
+  "observer": {
+    "image": "portraits/observer.png"
+  }
+}

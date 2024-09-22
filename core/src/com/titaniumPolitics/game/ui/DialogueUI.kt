@@ -191,7 +191,13 @@ class DialogueUI(val gameState: GameState) : Table(defaultSkin), KTable
             scene2d.image("UserGrunge") {
                 try
                 {
-                    this.setDrawable(defaultSkin, lineSpeaker)
+                    //TODO: Also check PortraitUI for this.
+                    drawable = TextureRegionDrawable(
+                        CapsuleStage.instance.assetManager.get( //TODO: Temporary solution for portrait image loading. DialogueUI does not have a stage.
+                            ReadOnly.charJson[lineSpeaker]!!.jsonObject["image"]!!.jsonPrimitive.content,
+                            Texture::class.java
+                        )!!
+                    )
                     height = 800f //Normal portrait height
                     width = drawable.minWidth * 800f / drawable.minHeight
                     prefwidth = width

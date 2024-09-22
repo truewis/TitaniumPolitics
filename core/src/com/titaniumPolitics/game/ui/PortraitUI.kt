@@ -6,9 +6,12 @@ import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.ui.Image
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable
 import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.core.InformationType
 import com.titaniumPolitics.game.core.ReadOnly
+import kotlinx.serialization.json.jsonObject
+import kotlinx.serialization.json.jsonPrimitive
 import ktx.scene2d.*
 import ktx.scene2d.Scene2DSkin.defaultSkin
 
@@ -29,10 +32,17 @@ class PortraitUI(character: String, var gameState: GameState, scale: Float) : Ta
     var tgtCharacter = character
         set(value)
         {
+            //TODO: Also check DialogueUI for this.
             field = value
+            portrait.drawable = TextureRegionDrawable(
+                CapsuleStage.instance.assetManager.get( //TODO: Temporary solution for portrait image loading. PortraitUI does not have a stage.
+                    ReadOnly.charJson[tgtCharacter]!!.jsonObject["image"]!!.jsonPrimitive.content,
+                    Texture::class.java
+                )!!
+            )
             try
             {
-                portrait.setDrawable(defaultSkin, value)
+
             } catch (e: Exception)
             {
                 println("Portrait Image Error: $value")
