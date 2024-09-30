@@ -33,14 +33,26 @@ class ApparatusInfoUI : WindowUI("ApparatusInfoTitle")
         dataTable.clear()
         dataTable.apply {
 
-            add(label("Author: ${information.author}") { setAlignment(Align.center) })
+            add(label("Author: ${information.author}") {
+                setAlignment(Align.center)
+                setFontScale(2f)
+            })
             row()
-            add(label("Creation Time: ${information.creationTime}") { setAlignment(Align.center) })
+            add(label("Creation Time: ${information.creationTime}") {
+                setAlignment(Align.center)
+                setFontScale(2f)
+            })
 
             row()
-            add(label("Apparatus Name: ${information.tgtApparatus}") { setAlignment(Align.center) })
+            add(label("Apparatus Name: ${information.tgtApparatus}") {
+                setAlignment(Align.center)
+                setFontScale(2f)
+            })
             row()
-            add(label("Durability: ${information.amount}") { setAlignment(Align.center) })
+            add(label("Durability: ${information.amount}") {
+                setAlignment(Align.center)
+                setFontScale(2f)
+            })
         }
 
     }

@@ -43,7 +43,7 @@ class ActionTooltipUI(actionName: String) : Tooltip<Table>(scene2d.table {
                         it.size(50f)
                         color = Color.BLACK
                     }
-                    label(ReadOnly.const(actionName + "Duration").toString(), "black") {
+                    label("${ReadOnly.const(actionName + "Duration") * 30}m", "black") {
                         setFontScale(2f)
                     }
                 }
@@ -64,5 +64,5 @@ class ActionTooltipUI(actionName: String) : Tooltip<Table>(scene2d.table {
     {
         manager.initialTime = 0.5f
     }
-    
+
 }

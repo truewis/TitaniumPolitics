@@ -90,8 +90,8 @@ class AlertUI(var gameState: GameState) : Table(defaultSkin)
                     InformationType.APPARATUS_DURABILITY ->
                     {
                         addAlert("apparatus") {
-                            InformationViewUI.instance.refresh(gameState, "creationTime")
-                            InformationViewUI.instance.isVisible = true
+                            ApparatusInfoUI.instance.refresh(info)
+                            ApparatusInfoUI.instance.isVisible = true
                         }
                     }
 
