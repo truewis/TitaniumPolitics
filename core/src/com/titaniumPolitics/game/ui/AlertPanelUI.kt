@@ -52,6 +52,10 @@ class AlertPanelUI(var type: String, action: () -> Unit, val docList: Group) : T
                     "meeting" -> image("ChatGrunge") {
                         it.size(36f).fill()
                     }
+
+                    "apparatus" -> image("CogGrunge") {
+                        it.size(36f).fill()
+                    }
                 }
                 label(ReadOnly.prop(this@AlertPanelUI.type), "trnsprtConsole") {
                     it.growX()

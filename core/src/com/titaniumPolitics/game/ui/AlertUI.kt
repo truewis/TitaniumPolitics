@@ -32,7 +32,7 @@ class AlertUI(var gameState: GameState) : Table(defaultSkin)
     {
         if (type in listOf("vital", "hunger", "thirst") && docList.children.none {
                 (it as AlertPanelUI).type == type
-            })
+            })//Only one alert of each type is visible at a time.
             docList.addActor(AlertPanelUI(type, action, docList))
         else if (type !in listOf("vital", "hunger", "thirst"))
             docList.addActor(AlertPanelUI(type, action, docList))
@@ -60,22 +60,47 @@ class AlertUI(var gameState: GameState) : Table(defaultSkin)
             newInformation.removeAll(previousInformation)
             newInformation.forEach {
                 //Decide whether to show the alert based on the type of information.
-                if (gameState.informations[it]!!.type == InformationType.CASUALTY)
-                    addAlert("accident") {
-                        InformationViewUI.instance.refresh(gameState, "creationTime")
-                        InformationViewUI.instance.isVisible = true
+                val info = gameState.informations[it]!!
+                when (info.type)
+                {
+                    InformationType.CASUALTY ->
+                    {
+                        addAlert("accident") {
+                            InformationViewUI.instance.refresh(gameState, "creationTime")
+                            InformationViewUI.instance.isVisible = true
+                        }
                     }
-                else if (!(gameState.informations[it]!!.type == InformationType.ACTION && (gameState.informations[it]!!.tgtCharacter == gameState.playerName
+
+                    InformationType.ACTION ->
+                    {
+                        if (info.tgtCharacter == gameState.playerName//Ignore my actions, they are not surprising.
                             || setOf(
-                        "Move",
-                        "Wait"
-                    ).contains(gameState.informations[it]!!.action!!.javaClass.simpleName))//Ignore boring actions, even if they are not mine.
-                            )
-                )//Ignore my actions, they are not surprising.
-                    addAlert("newInfo") {
-                        InformationViewUI.instance.refresh(gameState, "creationTime")
-                        InformationViewUI.instance.isVisible = true
+                                "Move",
+                                "Wait"
+                            ).contains(info.action!!.javaClass.simpleName)
+                        )//Ignore boring actions, even if they are not mine.
+                        {
+                            addAlert("newInfo") {
+                                InformationViewUI.instance.refresh(gameState, "creationTime")
+                                InformationViewUI.instance.isVisible = true
+                            }
+                        }
                     }
+
+                    InformationType.APPARATUS_DURABILITY ->
+                    {
+                        addAlert("apparatus") {
+                            InformationViewUI.instance.refresh(gameState, "creationTime")
+                            InformationViewUI.instance.isVisible = true
+                        }
+                    }
+
+                    else ->
+                    {
+                        //Do nothing.
+                    }
+                }
+
             }
             previousInformation.clear()
             previousInformation.addAll(newInformation)
