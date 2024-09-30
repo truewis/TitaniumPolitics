@@ -30,11 +30,6 @@ class InformationViewUI : WindowUI("InformationViewTitle")
         when (sortBy)
         {
             //All major fields of informations.
-            "name" ->
-            {
-                informationList = knownInfos.sortedBy { it.name }
-            }
-
             "tgtPlace" ->
             {
                 informationList = knownInfos.sortedBy { it.tgtPlace }
@@ -91,7 +86,7 @@ class InformationViewUI : WindowUI("InformationViewTitle")
             informationTable.row()
             informationList.forEach { information ->
                 information::class.java.declaredFields.forEach { field ->
-                    if (field.name == "Companion" || field.name == "knownTo" || field.name == "\$childSerializers")
+                    if (field.name == "name" || field.name == "Companion" || field.name == "knownTo" || field.name == "\$childSerializers")
                     { //We don't want to show these fields.
                     } else
                     {
