@@ -17,6 +17,7 @@ import ktx.scene2d.Scene2DSkin.defaultSkin
 
 class PortraitUI(character: String, var gameState: GameState, scale: Float) : Table(defaultSkin), KTable
 {
+    var displayTextBubble = true
     val portrait = scene2d.image("UserGrunge") {
         addListener(object : com.badlogic.gdx.scenes.scene2d.utils.ClickListener()
         {
@@ -48,10 +49,12 @@ class PortraitUI(character: String, var gameState: GameState, scale: Float) : Ta
                 println("Portrait Image Error: $value")
             }
         }
-    val speech = scene2d.label("Hello", "trnsprtConsole") {
+    val speech = scene2d.label("Hello", "console") {
         setFontScale(3f)
     }
     val bubble = scene2d.stack {
+        image("TooltipTitle") {
+        }
         add(this@PortraitUI.speech)
     }
     val theEmoji = scene2d.image("HelpGrunge")
@@ -61,7 +64,7 @@ class PortraitUI(character: String, var gameState: GameState, scale: Float) : Ta
         //If there is an action that was taken by the character last turn, display a script on the portrait.
         val action =
             state.informations.values.firstOrNull { it.tgtCharacter == tgtCharacter && it.type == InformationType.ACTION && it.creationTime == state.time - 1 }
-        if (action != null && ReadOnly.script(action.action!!.javaClass.simpleName) != null)
+        if (action != null && ReadOnly.script(action.action!!.javaClass.simpleName) != null && displayTextBubble)
         {
             bubble.isVisible = true
             speech.setText(ReadOnly.script(action.action!!.javaClass.simpleName))
