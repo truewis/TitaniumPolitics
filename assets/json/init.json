@@ -16,7 +16,7 @@
     "mini": {
       "type": "com.titaniumPolitics.game.core.NonPlayerAgent"
     },
-    "eddy": {
+    "Eugene": {
       "type": "com.titaniumPolitics.game.core.NonPlayerAgent"
     },
     "inddy": {
@@ -46,7 +46,7 @@
     "mini2": {
       "type": "com.titaniumPolitics.game.core.NonPlayerAgent"
     },
-    "doci1": {
+    "DrPaik": {
       "type": "com.titaniumPolitics.game.core.NonPlayerAgent"
     },
     "doci2": {
@@ -141,7 +141,7 @@
       "health": 80,
       "livingBy": "mainControlRoom"
     },
-    "eddy": {
+    "Eugene": {
       "trait": [
         "workaholic",
         "emotionless",
@@ -286,7 +286,7 @@
       "health": 80,
       "livingBy": "excavationShaftB"
     },
-    "doci1": {
+    "DrPaik": {
       "trait": [
         "workaholic",
         "emotionless"
@@ -2749,7 +2749,7 @@
         "seefy",
         "Alina",
         "mini",
-        "eddy",
+        "Eugene",
         "inddy",
         "welly"
       ],
@@ -2777,9 +2777,9 @@
     },
     "education": {
       "type": "division",
-      "leader": "eddy",
+      "leader": "Eugene",
       "members": [
-        "eddy"
+        "Eugene"
       ],
       "home": "miningSchool"
     },
@@ -2805,7 +2805,7 @@
       "leader": "welly",
       "members": [
         "welly",
-        "doci1",
+        "DrPaik",
         "doci2"
       ],
       "home": "welfareStationEast"
