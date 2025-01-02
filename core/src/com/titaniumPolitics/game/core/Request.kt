@@ -88,4 +88,9 @@ class Request(
         else
             0.0
     }
+
+    override fun toString(): String
+    {
+        return "Request(action=$action, issuedTo=$issuedTo, name='$name', executeTime=$executeTime, issuedBy=$issuedBy, completed=$completed)"
+    }
 }

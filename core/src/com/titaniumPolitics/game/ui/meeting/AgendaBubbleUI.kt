@@ -13,6 +13,7 @@ class AgendaBubbleUI(val agenda: MeetingAgenda) : Table(), KTable
 
     init
     {
+        addListener(AgendaTooltipUI(agenda))
 
         with(agenda) {
             stack {
