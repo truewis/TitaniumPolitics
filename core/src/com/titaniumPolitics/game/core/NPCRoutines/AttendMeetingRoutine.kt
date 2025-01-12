@@ -197,7 +197,7 @@ class AttendMeetingRoutine : Routine(), IMeetingRoutine
                 if (conf.currentSpeaker == name && !party.isSalaryPaid && party.leader != name)
                 {
                     //Check if there is already a salary request.
-                    if (conf.agendas.none { it.type == AgendaType.REQUEST && it.subjectParams["command"] != null })
+                    if (conf.agendas.none { it.type == AgendaType.REQUEST && it.attachedRequest?.action is Salary })
                     {
                         //Fill in the agenda based on variables in the routine, resource and character.
                         val agenda = MeetingAgenda(AgendaType.REQUEST).apply {
@@ -334,7 +334,11 @@ class AttendMeetingRoutine : Routine(), IMeetingRoutine
         }
         return if (conf.currentSpeaker == name)
         //If nothing else to talk about, end the speech. The next speaker is the character with the highest mutuality.
-            EndSpeech(name, place)//TODO: pick next speaker based on deltaWill
+            EndSpeech(name, place).also {
+                it.nextSpeaker = conf.currentCharacters.minus(name)
+                    .maxByOrNull { gState.getMutuality(name, it) }!!
+            }
+
         //If I'm not the speaker, wait.
         else Wait(name, place)
         //TODO: do something in the meeting. Leave the meeting if nothing to do.
