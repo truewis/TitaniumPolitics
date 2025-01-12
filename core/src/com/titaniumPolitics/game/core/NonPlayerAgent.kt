@@ -48,6 +48,7 @@ class NonPlayerAgent : Agent()
                     routines.add(StealRoutine().apply {
                         priority = 1000
                         variables["stealResource"] = wantedResource
+                        intVariables["routineStartTime"] = parent.time
                     })//Add a routine, priority higher than work.
 
             } else if (parent.characters[name]!!.trait.contains("bargainer"))
@@ -56,6 +57,7 @@ class NonPlayerAgent : Agent()
                     routines.add(BuyRoutine().apply {
                         priority = 1000
                         variables["wantedResource"] = wantedResource
+                        intVariables["routineStartTime"] = parent.time
                     })//Add a routine, priority higher than work.
             }
         }
@@ -66,6 +68,7 @@ class NonPlayerAgent : Agent()
             if (routines.none { it is DowntimeRoutine })
                 routines.add(DowntimeRoutine().apply {
                     priority = 800
+                    intVariables["routineStartTime"] = parent.time
                 })//Add a routine, priority higher than work.
         }
 
@@ -96,6 +99,7 @@ class NonPlayerAgent : Agent()
             routines.add(
                 AttendMeetingRoutine().apply {
                     priority = 800
+                    intVariables["routineStartTime"] = parent.time
                 }
             )
 
@@ -117,19 +121,22 @@ class NonPlayerAgent : Agent()
                     ExecuteCommandRoutine().apply {
                         priority = routines[0].priority + 10
                         variables["request"] = request.name
+                        intVariables["routineStartTime"] = parent.time
                     }
                 )//Add the routine with higher priority.
             }
         }
         var nextRoutine = routines[0]
+        nextRoutine.injectParent(parent)
         while (true)
         {
-            nextRoutine.injectParent(parent)
             val v = nextRoutine.newRoutineCondition(name, place)
             if (v != null)
             {
+                v.injectParent(parent)
                 nextRoutine = v.apply { priority = nextRoutine.priority + 10 }
                 routines.add(nextRoutine)
+                nextRoutine.intVariables["routineStartTime"] = parent.time
                 routines.sortByDescending { it.priority }
                 continue
             } else if (nextRoutine.endCondition(name, place))
@@ -146,6 +153,7 @@ class NonPlayerAgent : Agent()
                     }
                 }
                 nextRoutine = routines[0]
+                nextRoutine.injectParent(parent)
                 continue
             } else break
         }

@@ -48,6 +48,7 @@ class AnonAgent : Agent()
                     routines.add(StealRoutine().apply {
                         priority = 1000
                         variables["stealResource"] = wantedResource
+                        intVariables["routineStartTime"] = parent.time
                     })//Add a routine, priority higher than work.
 
             } else if (parent.characters[name]!!.trait.contains("bargainer"))
@@ -56,6 +57,7 @@ class AnonAgent : Agent()
                     routines.add(BuyRoutine().apply {
                         priority = 1000
                         variables["wantedResource"] = wantedResource
+                        intVariables["routineStartTime"] = parent.time
                     })//Add a routine, priority higher than work.
             }
         }
@@ -86,12 +88,13 @@ class AnonAgent : Agent()
         //Don't start meetings
         //Don't execute commands
         var nextRoutine = routines[0]
+        nextRoutine.injectParent(parent)
         while (true)
         {
-            nextRoutine.injectParent(parent)
             val v = nextRoutine.newRoutineCondition(name, place)
             if (v != null)
             {
+                v.injectParent(parent)
                 nextRoutine = v.apply { priority = nextRoutine.priority + 10 }
             } else if (nextRoutine.endCondition(name, place))
             {
@@ -104,6 +107,7 @@ class AnonAgent : Agent()
                         return Wait(name, place)
                 }
                 nextRoutine = routines[0]
+                nextRoutine.injectParent(parent)
             } else break
         }
         return nextRoutine.execute(name, place)

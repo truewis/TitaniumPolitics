@@ -22,7 +22,6 @@ sealed class Routine()
     fun injectParent(gState: GameState)
     {
         this.gState = gState
-        intVariables["routineStartTime"] = gState.time
     }
 
     abstract fun newRoutineCondition(name: String, place: String): Routine?
