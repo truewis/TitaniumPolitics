@@ -27,6 +27,7 @@ class Event_BribeDoctor1 : EventObject("Illness of Sylvia.", true)
             {
                 DialogueUI.instance.playDialogue("BribeDoctor1")
                 deactivate()
+                
             }
         }
     }
