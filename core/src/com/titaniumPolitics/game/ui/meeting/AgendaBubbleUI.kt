@@ -17,7 +17,7 @@ class AgendaBubbleUI(val agenda: MeetingAgenda) : Table(), KTable
 
         with(agenda) {
             stack {
-                it.size(100f, 100f).fill()
+                it.size(80f, 80f).fill()
                 image("BadgeRound") {
 
                 }

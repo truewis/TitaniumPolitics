@@ -1,5 +1,8 @@
 package com.titaniumPolitics.game.ui.meeting
 
+import com.badlogic.gdx.graphics.Color
+import com.badlogic.gdx.scenes.scene2d.ui.Container
+import com.badlogic.gdx.scenes.scene2d.ui.Image
 import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.Stack
 import com.badlogic.gdx.scenes.scene2d.ui.Table
@@ -8,10 +11,9 @@ import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.core.Meeting
 import com.titaniumPolitics.game.ui.CapsuleStage
 import com.titaniumPolitics.game.ui.PortraitUI
-import ktx.scene2d.KTable
+import com.titaniumPolitics.game.ui.SimplePortraitUI
+import ktx.scene2d.*
 import ktx.scene2d.Scene2DSkin.defaultSkin
-import ktx.scene2d.image
-import ktx.scene2d.stack
 import kotlin.math.cos
 import kotlin.math.sin
 
@@ -19,18 +21,18 @@ import kotlin.math.sin
 //This UI is used for both meetings and conferences
 class MeetingUI(var gameState: GameState) : Table(defaultSkin), KTable
 {
-    val portraits = arrayListOf<PortraitUI>()
+    val portraits = arrayListOf<SimplePortraitUI>()
     val speakerPortrait = PortraitUI("", gameState, 1f)
     val deployedInfos = arrayListOf<InfoBubbleUI>()
     val currentAgendas = arrayListOf<AgendaBubbleUI>()
     val currentAttention = Label("0", defaultSkin, "trnsprtConsole")
     val discussionTable: Stack
+    val attentionMeter: Image = image("BadgeRound")
 
     init
     {
         instance = this
-        //Red color for attention
-        currentAttention.setColor(1f, 0f, 0f, 1f)
+        currentAttention.setColor(0f, 0f, 0f, 1f)
         currentAttention.setFontScale(3f)
         currentAttention.setAlignment(Align.center, Align.center)
 
@@ -45,11 +47,10 @@ class MeetingUI(var gameState: GameState) : Table(defaultSkin), KTable
         add(speakerPortrait).grow()
         discussionTable = stack {
             it.size(800f, 800f)
-            image("BadgeRound") {
-
-            }
+            add(this@MeetingUI.attentionMeter)
             add(this@MeetingUI.currentAttention)
         }
+        discussionTable.debug()
 
 
     }
@@ -72,12 +73,11 @@ class MeetingUI(var gameState: GameState) : Table(defaultSkin), KTable
             {
                 portrait.remove()
                 iterator.remove()
-            } else
-            {
-                portrait.refresh(gameState)
             }
         }
         placeCharacterPortrait()
+        //Remove all bubbles before placing them again.
+        removeBubbles()
         currentAgendas.clear()
         deployedInfos.clear()
         meeting.agendas.forEach {
@@ -94,12 +94,13 @@ class MeetingUI(var gameState: GameState) : Table(defaultSkin), KTable
         placeBubbles()
 
         currentAttention.setText(meeting.currentAttention.toString())
+        attentionMeter.color = Color(meeting.currentAttention.toFloat() / 100, 0f, 0f, 1f)
     }
 
     private fun addCharacterPortrait(characterName: String)
     {
 
-        val portrait = PortraitUI(characterName, gameState, 0.2f)
+        val portrait = SimplePortraitUI(characterName, gameState, 0.2f)
         portraits.add(portrait)
         addActor(portrait)
 
@@ -125,14 +126,12 @@ class MeetingUI(var gameState: GameState) : Table(defaultSkin), KTable
         val centerY = discussionTable.y + discussionTable.height / 2
         println("Center: $centerX, $centerY")
         portraits.forEach {
-            if (it != speakerPortrait)
-            {
-                val angle = 360f / portraits.size * portraits.indexOf(it)
-                it.setPosition(
-                    centerX + radius * cos(Math.toRadians(angle.toDouble())).toFloat() - it.width / 2,
-                    centerY + radius * sin(Math.toRadians(angle.toDouble())).toFloat() - it.height / 2
-                )
-            }
+            val angle = 360f / portraits.size * portraits.indexOf(it)
+            it.setPosition(
+                centerX + radius * cos(Math.toRadians(angle.toDouble())).toFloat() - it.width / 2,
+                centerY + radius * sin(Math.toRadians(angle.toDouble())).toFloat() - it.height / 2
+            )
+
         }
 
 
@@ -165,6 +164,16 @@ class MeetingUI(var gameState: GameState) : Table(defaultSkin), KTable
         }
 
 
+    }
+
+    fun removeBubbles()
+    {
+        currentAgendas.forEach {
+            it.remove()
+        }
+        deployedInfos.forEach {
+            it.remove()
+        }
     }
 
     companion object

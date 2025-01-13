@@ -180,32 +180,7 @@ class DialogueUI(val gameState: GameState) : Table(defaultSkin), KTable
         portraitsTable.clear()
         var prefwidth = 0f
         portraitsTable.add(
-//            Image(
-//                TextureRegionDrawable(
-//                    (stage as CapsuleStage).assetManager.get(
-//                        "portraits/$lineSpeaker",
-//                        Texture::class.java
-//                    )!!
-//                )
-//            )
-            scene2d.image("UserGrunge") {
-                try
-                {
-                    //TODO: Also check PortraitUI for this.
-                    drawable = TextureRegionDrawable(
-                        CapsuleStage.instance.assetManager.get( //TODO: Temporary solution for portrait image loading. DialogueUI does not have a stage.
-                            ReadOnly.charJson[lineSpeaker]!!.jsonObject["image"]!!.jsonPrimitive.content,
-                            Texture::class.java
-                        )!!
-                    )
-                    height = 800f //Normal portrait height
-                    width = drawable.minWidth * 800f / drawable.minHeight
-                    prefwidth = width
-                } catch (e: Exception)
-                {
-                    println("Portrait Image Error: $lineSpeaker")
-                }
-            }
+            SimplePortraitUI(lineSpeaker, gameState, 1f)
         ).expand().align(Align.bottom).prefHeight(800f).prefWidth(prefwidth)
     }
 

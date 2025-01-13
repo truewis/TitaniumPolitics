@@ -33,17 +33,16 @@ class PortraitUI(character: String, var gameState: GameState, scale: Float) : Ta
     var tgtCharacter = character
         set(value)
         {
-            //TODO: Also check DialogueUI for this.
+            //TODO: Also check SimplePortraitUI for this.
             field = value
-            portrait.drawable = TextureRegionDrawable(
-                CapsuleStage.instance.assetManager.get( //TODO: Temporary solution for portrait image loading. PortraitUI does not have a stage.
-                    ReadOnly.charJson[tgtCharacter]!!.jsonObject["image"]!!.jsonPrimitive.content,
-                    Texture::class.java
-                )!!
-            )
             try
             {
-
+                portrait.drawable = TextureRegionDrawable(
+                    CapsuleStage.instance.assetManager.get( //TODO: Temporary solution for portrait image loading. PortraitUI does not have a stage.
+                        ReadOnly.charJson[tgtCharacter]!!.jsonObject["image"]!!.jsonPrimitive.content,
+                        Texture::class.java
+                    )!!
+                )
             } catch (e: Exception)
             {
                 println("Portrait Image Error: $value")
@@ -51,6 +50,8 @@ class PortraitUI(character: String, var gameState: GameState, scale: Float) : Ta
         }
     val speech = scene2d.label("Hello", "console") {
         setFontScale(3f)
+        wrap = true
+        width = 400f
     }
     val bubble = scene2d.stack {
         image("TooltipTitle") {
