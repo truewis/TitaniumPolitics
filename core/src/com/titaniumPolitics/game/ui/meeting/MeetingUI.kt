@@ -50,7 +50,6 @@ class MeetingUI(var gameState: GameState) : Table(defaultSkin), KTable
             add(this@MeetingUI.attentionMeter)
             add(this@MeetingUI.currentAttention)
         }
-        discussionTable.debug()
 
 
     }

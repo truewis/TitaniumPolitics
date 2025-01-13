@@ -13,7 +13,7 @@ import ktx.scene2d.Scene2DSkin.defaultSkin
 import ktx.scene2d.scene2d
 import ktx.scene2d.*
 
-class AlertPanelUI(var type: String, action: () -> Unit, val docList: Group) : Table(), KTable
+class AlertPanelUI(var type: String, action: () -> Unit, val docList: Group, vararg params: String) : Table(), KTable
 {
 
     init
@@ -30,6 +30,10 @@ class AlertPanelUI(var type: String, action: () -> Unit, val docList: Group) : T
                 when (this@AlertPanelUI.type)
                 {
                     "newInfo" -> image("icon_activity_66") {
+                        it.size(36f).fill()
+                    }
+
+                    "moved" -> image("StatsGrunge") {
                         it.size(36f).fill()
                     }
 
@@ -57,19 +61,51 @@ class AlertPanelUI(var type: String, action: () -> Unit, val docList: Group) : T
                         it.size(36f).fill()
                     }
                 }
-                label(ReadOnly.prop(this@AlertPanelUI.type), "trnsprtConsole") {
-                    it.growX()
-                    setFontScale(2f)
-                    if (this@AlertPanelUI.type in listOf("hunger", "thrist", "vital"))
-                        color = Color.RED
-                    this@label.addListener(object : ClickListener()
-                    {
-                        override fun clicked(event: InputEvent?, x: Float, y: Float)
-                        {
-                            super.clicked(event, x, y)
-                            action()
+                when (this@AlertPanelUI.type)
+                {
+                    "moved" ->
+                        label(ReadOnly.prop(this@AlertPanelUI.type).format(params[0], params[1]), "trnsprtConsole") {
+                            it.growX()
+                            setFontScale(1.5f)
+                            wrap = true
+                            this@label.addListener(object : ClickListener()
+                            {
+                                override fun clicked(event: InputEvent?, x: Float, y: Float)
+                                {
+                                    super.clicked(event, x, y)
+                                    action()
+                                }
+                            })
                         }
-                    })
+
+                    "hunger", "thirst", "vital" ->
+                        label(ReadOnly.prop(this@AlertPanelUI.type), "trnsprtConsole") {
+                            it.growX()
+                            setFontScale(2f)
+                            color = Color.RED
+                            this@label.addListener(object : ClickListener()
+                            {
+                                override fun clicked(event: InputEvent?, x: Float, y: Float)
+                                {
+                                    super.clicked(event, x, y)
+                                    action()
+                                }
+                            })
+                        }
+
+                    else ->
+                        label(ReadOnly.prop(this@AlertPanelUI.type), "trnsprtConsole") {
+                            it.growX()
+                            setFontScale(2f)
+                            this@label.addListener(object : ClickListener()
+                            {
+                                override fun clicked(event: InputEvent?, x: Float, y: Float)
+                                {
+                                    super.clicked(event, x, y)
+                                    action()
+                                }
+                            })
+                        }
                 }
                 button {
                     it.size(50f)
