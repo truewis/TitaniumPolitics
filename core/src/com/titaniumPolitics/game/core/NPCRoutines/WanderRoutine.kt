@@ -10,7 +10,9 @@ class WanderRoutine() : Routine()
     override fun newRoutineCondition(name: String, place: String): Routine?
     {
         return MoveRoutine().apply {
-            variables["movePlace"] = this@WanderRoutine.gState.places.values.filter { it.name != place }.random().name
+            variables["movePlace"] =
+                this@WanderRoutine.gState.places.values.filter { it.name != place && !it.name.contains("home") }//Should not wander into other people's homes.
+                    .random().name
         }//Add a move routine with higher priority.
     }
 
