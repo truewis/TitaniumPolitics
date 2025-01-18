@@ -120,7 +120,10 @@ class DialogueUI(val gameState: GameState) : Table(defaultSkin), KTable
             {
                 if (keycode == Input.Keys.ENTER || keycode == Input.Keys.SPACE)
                 {
-                    nextLine()
+                    if (!currentTextDisplay.hasEnded())
+                        currentTextDisplay.skipToTheEnd()
+                    else
+                        nextLine()
                     return true
                 }
                 return super.keyDown(event, keycode)
