@@ -49,7 +49,7 @@ class AlertPanelUI(var type: String, action: () -> Unit, val docList: Group, var
                         it.size(36f).fill()
                     }
 
-                    "thrist" -> image("HandLeftGrunge") {
+                    "thirst" -> image("HandLeftGrunge") {
                         it.size(36f).fill()
                     }
 
