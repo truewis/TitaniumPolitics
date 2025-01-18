@@ -107,7 +107,10 @@ class DialogueUI(val gameState: GameState) : Table(defaultSkin), KTable
         {
             override fun clicked(event: InputEvent, x: Float, y: Float)
             {
-                nextLine()
+                if (!currentTextDisplay.hasEnded())
+                    currentTextDisplay.skipToTheEnd()
+                else
+                    nextLine()
                 super.clicked(event, x, y)
             }
         })
