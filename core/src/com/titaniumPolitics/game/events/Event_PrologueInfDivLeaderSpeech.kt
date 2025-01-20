@@ -25,6 +25,7 @@ class Event_PrologueInfDivLeaderSpeech : EventObject("Introduction of Alina.", t
         {
             DialogueUI.instance.playDialogue("PrologueInfDivLeaderSpeech")
             parent.eventSystem.dataBase.add(Event_AlinaResign())
+            parent.eventSystem.dataBase.add(Event_ObserverIntroAfterMeeting1())
             deactivate()
         }
     }
