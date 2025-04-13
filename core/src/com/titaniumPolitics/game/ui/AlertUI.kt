@@ -61,7 +61,6 @@ class AlertUI(var gameState: GameState) : Table(defaultSkin)
                 )
             }.toHashSet()
             newInformation.removeAll(previousInformation)
-            previousInformation.clear()
             previousInformation.addAll(newInformation)
         }
 
