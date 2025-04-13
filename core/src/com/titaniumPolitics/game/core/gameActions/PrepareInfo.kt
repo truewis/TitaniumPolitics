@@ -19,7 +19,7 @@ class PrepareInfo(override val sbjCharacter: String, override val tgtPlace: Stri
                 }
         }
 
-        //If you have done wrongdoings, you know the result. Add the result to the prepared information.
+        //If you have seen wrongdoings, you know the result. Add the result to the prepared information.
         parent.informations.filter { it.value.knownTo.contains(sbjCharacter) && it.value.type == InformationType.ACTION && it.value.action!!.javaClass.simpleName == "unofficialResourceTransfer" }
             .forEach {
                 newSetOfPrepInfoKeys.add(it.key)
@@ -28,8 +28,17 @@ class PrepareInfo(override val sbjCharacter: String, override val tgtPlace: Stri
 
     override fun execute()
     {
+        sbjCharObj.preparedInfoKeys.forEach {
+            parent.informations[it]!!.rememberedBy -= sbjCharacter
+        }
+
         sbjCharObj.preparedInfoKeys.clear()
         sbjCharObj.preparedInfoKeys.addAll(newSetOfPrepInfoKeys)
+
+        //rememberedBy prevents the information from disappearing, as long as some character has it in their prepared information list.
+        sbjCharObj.preparedInfoKeys.forEach {
+            parent.informations[it]!!.rememberedBy += sbjCharacter
+        }
 
         super.execute()
     }

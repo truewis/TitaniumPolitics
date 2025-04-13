@@ -220,7 +220,7 @@ class GameEngine(val gameState: GameState)
         val removed = arrayListOf<String>()
         gameState.informations.forEach {
             it.value.life--
-            if (it.value.life <= 0)
+            if (it.value.life <= 0 && it.value.rememberedBy.isEmpty())
                 removed.add(it.key)
         }
         removed.forEach { gameState.informations.remove(it) }
@@ -261,6 +261,7 @@ class GameEngine(val gameState: GameState)
                     )
                 }
             //The fact that resource is low itself does not affect the mutuality.--------------------------------------------------------------------
+            //TODO: Why?
 //            gameState.informations.filter { it.value.type == "resources" && it.value.tgtPlace== "everywhere" && it.value.tgtResource in listOf("water", "oxygen", "ration") }
 //                .forEach {
 //                    var factor = 1

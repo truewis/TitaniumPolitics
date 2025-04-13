@@ -55,6 +55,9 @@ class Information(//If there is no author, it is a rumor.
     var life: Int = 100//How long this information will last.
 
     //We try to keep track of every aspect of our lives, but we can't. They eventually fade away.
+    //But these characters has prepared this information. As far as rememberedBy is not empty, this information does not expire.
+    val rememberedBy = hashSetOf<String>()
+
     var knownTo = hashSetOf<String>()
 
     //TODO: NPCs should do this instead.
