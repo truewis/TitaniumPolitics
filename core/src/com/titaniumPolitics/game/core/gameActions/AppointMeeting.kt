@@ -5,7 +5,7 @@ import com.titaniumPolitics.game.core.Meeting
 import kotlinx.serialization.Serializable
 
 @Serializable
-class AppointMeeting(override val tgtCharacter: String, override val tgtPlace: String) : GameAction()
+class AppointMeeting(override val sbjCharacter: String, override val tgtPlace: String) : GameAction()
 {
     var meetingTime = 0
     var where = ""
@@ -20,14 +20,14 @@ class AppointMeeting(override val tgtCharacter: String, override val tgtPlace: S
 
     override fun execute()
     {
-        parent.scheduledMeetings["meeting-${where}-${tgtCharacter}-${meetingTime}"] =
+        parent.scheduledMeetings["meeting-${where}-${sbjCharacter}-${meetingTime}"] =
             Meeting(meetingTime, "informal", who, where)
 
     }
 
     override fun isValid(): Boolean
     {
-        return parent.characters[tgtCharacter]!!.currentMeeting != null
+        return parent.characters[sbjCharacter]!!.currentMeeting != null
     }
 
 }

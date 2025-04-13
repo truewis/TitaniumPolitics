@@ -17,10 +17,12 @@ import kotlinx.serialization.Transient
 @Serializable
 sealed class GameAction()
 {
-    abstract val tgtCharacter: String
+    abstract val sbjCharacter: String
+
+    //This can be different from the current place of the subject, in case of a hypothetical action.
     abstract val tgtPlace: String
 
-    val tgtCharObj get() = parent.characters[tgtCharacter]!!
+    val sbjCharObj get() = parent.characters[sbjCharacter]!!
     val tgtPlaceObj get() = parent.places[tgtPlace]!!
 
     @Transient
@@ -43,7 +45,7 @@ sealed class GameAction()
 
     open fun execute()
     {
-        tgtCharObj.frozen += ReadOnly.const(this::class.simpleName!! + "Duration").toInt()
+        sbjCharObj.frozen += ReadOnly.const(this::class.simpleName!! + "Duration").toInt()
     }
 
     open fun deltaWill(): Double

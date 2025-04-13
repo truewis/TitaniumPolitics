@@ -4,7 +4,7 @@ import com.titaniumPolitics.game.core.GameEngine
 import kotlinx.serialization.Serializable
 
 @Serializable
-class StartMeeting(override val tgtCharacter: String, override val tgtPlace: String) : GameAction()
+class StartMeeting(override val sbjCharacter: String, override val tgtPlace: String) : GameAction()
 {
     var meetingName = ""
     override fun chooseParams()
@@ -12,19 +12,20 @@ class StartMeeting(override val tgtCharacter: String, override val tgtPlace: Str
         meetingName =
             GameEngine.acquire(parent.scheduledMeetings.filter { it.value.time + 2 >= parent.time && parent.time + 2 >= it.value.time && it.value.place == tgtPlace }
                 .filter { !parent.ongoingMeetings.containsKey(it.key) }
-                .filter { it.value.scheduledCharacters.contains(tgtCharacter) }.keys.toList())
+                .filter { it.value.scheduledCharacters.contains(sbjCharacter) }.keys.toList())
     }
 
+    //Also refer to Talk.execute()
     override fun execute()
     {
         parent.ongoingMeetings[meetingName] = parent.scheduledMeetings[meetingName]!!
         parent.scheduledMeetings.remove(meetingName)
-        parent.ongoingMeetings[meetingName]!!.currentCharacters.add(tgtCharacter)
+        parent.ongoingMeetings[meetingName]!!.currentCharacters.add(sbjCharacter)
         // Interrupt other required characters and add them to the meeting.
         val meeting = parent.ongoingMeetings[meetingName]!!
-        meeting.currentSpeaker = tgtCharacter
+        meeting.currentSpeaker = sbjCharacter
         meeting.currentAttention = 100
-        val requiredCharacters = meeting.scheduledCharacters.intersect(parent.places[tgtPlace]!!.characters)
+        val requiredCharacters = meeting.scheduledCharacters.intersect(tgtPlaceObj.characters)
         requiredCharacters.forEach {
             parent.characters[it]!!.frozen = 1 //Force them to join the meeting.
             parent.ongoingMeetings[meetingName]!!.currentCharacters.add(it)
@@ -39,7 +40,7 @@ class StartMeeting(override val tgtCharacter: String, override val tgtPlace: Str
         val targetMeeting =
             parent.scheduledMeetings.filter { it.value.time + 2 >= parent.time && parent.time + 2 >= it.value.time && it.value.place == tgtPlace }
                 .filter { !parent.ongoingMeetings.containsKey(it.key) }
-                .filter { it.value.scheduledCharacters.contains(tgtCharacter) }.keys.firstOrNull()
+                .filter { it.value.scheduledCharacters.contains(sbjCharacter) }.keys.firstOrNull()
         return if (targetMeeting == null) false else
         //Check if there are at least 2 characters to join.
             parent.scheduledMeetings[targetMeeting]!!.scheduledCharacters.intersect(parent.places[tgtPlace]!!.characters).size >= 2

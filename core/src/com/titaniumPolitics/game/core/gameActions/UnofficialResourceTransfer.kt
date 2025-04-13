@@ -1,11 +1,9 @@
 package com.titaniumPolitics.game.core.gameActions
 
-import com.titaniumPolitics.game.core.GameEngine
-import com.titaniumPolitics.game.core.Information
 import kotlinx.serialization.Serializable
 
 @Serializable
-class UnofficialResourceTransfer(override val tgtCharacter: String, override val tgtPlace: String) : GameAction()
+class UnofficialResourceTransfer(override val sbjCharacter: String, override val tgtPlace: String) : GameAction()
 {
     var resources = hashMapOf<String, Int>()
     var toWhere = ""
@@ -16,13 +14,13 @@ class UnofficialResourceTransfer(override val tgtCharacter: String, override val
         if (fromHome)
         {
             if (
-                resources.all { (parent.characters[tgtCharacter]!!.resources[it.key] ?: 0) >= it.value }
+                resources.all { (parent.characters[sbjCharacter]!!.resources[it.key] ?: 0) >= it.value }
             )
             {
                 //Transfer resources.
                 resources.forEach { (key, value) ->
-                    parent.characters[tgtCharacter]!!.resources[key] =
-                        (parent.characters[tgtCharacter]!!.resources[key] ?: 0) - value
+                    parent.characters[sbjCharacter]!!.resources[key] =
+                        (parent.characters[sbjCharacter]!!.resources[key] ?: 0) - value
                     parent.places[toWhere]!!.resources[key] = (parent.places[toWhere]!!.resources[key] ?: 0) + value
                 }
                 //Do not spread rumor
@@ -55,10 +53,10 @@ class UnofficialResourceTransfer(override val tgtCharacter: String, override val
     override fun isValid(): Boolean
     {
         return ((fromHome && resources.all {
-            (parent.characters[tgtCharacter]!!.resources[it.key] ?: 0) >= it.value
+            (parent.characters[sbjCharacter]!!.resources[it.key] ?: 0) >= it.value
         }) || resources.all { (parent.places[tgtPlace]!!.resources[it.key] ?: 0) >= it.value }) &&
                 //either fromHome is true, or tgtPlace must be managed by tgtCharacter's party.
-                (fromHome || (parent.parties[parent.places[tgtPlace]!!.responsibleParty]?.members?.contains(tgtCharacter)
+                (fromHome || (parent.parties[parent.places[tgtPlace]!!.responsibleParty]?.members?.contains(sbjCharacter)
                     ?: false))
     }
 

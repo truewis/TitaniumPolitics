@@ -4,7 +4,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 //Called when a character resigns from a party, in a daily party meeting
-class Resign(override val tgtCharacter: String, override val tgtPlace: String) : GameAction()
+class Resign(override val sbjCharacter: String, override val tgtPlace: String) : GameAction()
 {
     override fun chooseParams()
     {
@@ -13,25 +13,25 @@ class Resign(override val tgtCharacter: String, override val tgtPlace: String) :
     override fun execute()
     {
         val party =
-            parent.ongoingMeetings.filter { it.value.currentCharacters.contains(tgtCharacter) }.values.first().involvedParty
-        if (parent.parties[party]!!.leader != tgtCharacter)
+            parent.ongoingMeetings.filter { it.value.currentCharacters.contains(sbjCharacter) }.values.first().involvedParty
+        if (parent.parties[party]!!.leader != sbjCharacter)
         {
-            println("Warning: $tgtCharacter is not the leader of $party.")
+            println("Warning: $sbjCharacter is not the leader of $party.")
             return
         }
-        parent.parties[party]!!.members.remove(tgtCharacter)
+        parent.parties[party]!!.members.remove(sbjCharacter)
         parent.parties[party]!!.leader = ""
-        println("$tgtCharacter resigns from $party.")
+        println("$sbjCharacter resigns from $party.")
         //If member of cabinet, also leave the cabinet
-        if (parent.parties["cabinet"]!!.members.contains(tgtCharacter))
+        if (parent.parties["cabinet"]!!.members.contains(sbjCharacter))
         {
-            parent.parties["cabinet"]!!.members.remove(tgtCharacter)
-            println("$tgtCharacter resigns from cabinet.")
+            parent.parties["cabinet"]!!.members.remove(sbjCharacter)
+            println("$sbjCharacter resigns from cabinet.")
         }
         //Should immediately leave the party meeting if it is ongoing
-        if (parent.ongoingMeetings.any { it.value.currentCharacters.contains(tgtCharacter) && it.value.involvedParty == party })
+        if (parent.ongoingMeetings.any { it.value.currentCharacters.contains(sbjCharacter) && it.value.involvedParty == party })
         {
-            LeaveMeeting(tgtCharacter, tgtPlace).also {
+            LeaveMeeting(sbjCharacter, tgtPlace).also {
                 it.injectParent(parent)
                 it.execute()
             }
@@ -45,8 +45,8 @@ class Resign(override val tgtCharacter: String, override val tgtPlace: String) :
         try
         {
             val party =
-                parent.ongoingMeetings.filter { it.value.currentCharacters.contains(tgtCharacter) }.values.first().involvedParty
-            return parent.parties[party]!!.leader == tgtCharacter
+                parent.ongoingMeetings.filter { it.value.currentCharacters.contains(sbjCharacter) }.values.first().involvedParty
+            return parent.parties[party]!!.leader == sbjCharacter
         } catch (e: Exception)
         {
             return false

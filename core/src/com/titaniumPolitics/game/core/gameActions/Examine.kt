@@ -5,14 +5,13 @@ import com.titaniumPolitics.game.core.GameEngine
 import com.titaniumPolitics.game.core.Information
 import com.titaniumPolitics.game.core.InformationType
 import com.titaniumPolitics.game.ui.HumanResourceInfoUI
-import com.titaniumPolitics.game.ui.ResourceInfoUI
 import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.Serializable
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
 @Serializable
-class Examine(override val tgtCharacter: String, override val tgtPlace: String) : GameAction()
+class Examine(override val sbjCharacter: String, override val tgtPlace: String) : GameAction()
 {
     var what = ""
     override fun chooseParams()
@@ -30,7 +29,7 @@ class Examine(override val tgtCharacter: String, override val tgtPlace: String) 
                 println("HR: ${parent.places[tgtPlace]!!.currentWorker}/${parent.places[tgtPlace]!!.plannedWorker}, ${parent.places[tgtPlace]!!.workHoursStart}-${parent.places[tgtPlace]!!.workHoursEnd}, ${parent.places[tgtPlace]!!.responsibleParty}")
                 //This action has no effect on the game state.
                 //Open HR window Directly.
-                if (tgtCharacter == parent.playerName)
+                if (sbjCharacter == parent.playerName)
                 {
                     runBlocking {
                         suspendCoroutine { cont ->
@@ -51,7 +50,7 @@ class Examine(override val tgtCharacter: String, override val tgtPlace: String) 
                 //Acquire apparatus information.
                 parent.places[tgtPlace]!!.apparatuses.forEach { entry ->
                     Information(
-                        author = tgtCharacter,
+                        author = sbjCharacter,
                         creationTime = parent.time,
                         type = InformationType.APPARATUS_DURABILITY,
                         tgtTime = parent.time,
@@ -59,7 +58,7 @@ class Examine(override val tgtCharacter: String, override val tgtPlace: String) 
                         tgtApparatus = entry.name,
                         amount = entry.durability
                     ).also {
-                        it.knownTo.add(tgtCharacter);parent.informations[it.generateName()] = it
+                        it.knownTo.add(sbjCharacter);parent.informations[it.generateName()] = it
                     }
 
                 }
@@ -69,18 +68,18 @@ class Examine(override val tgtCharacter: String, override val tgtPlace: String) 
             {
                 if (tgtPlace.contains("home"))
                 {//Home is the exception; character's resources are shown instead.
-                    println("Resources: ${parent.characters[tgtCharacter]!!.resources}")
+                    println("Resources: ${parent.characters[sbjCharacter]!!.resources}")
                     //Acquire resources information of this character.
-                    parent.characters[tgtCharacter]!!.resources
+                    parent.characters[sbjCharacter]!!.resources
                     Information(
-                        author = tgtCharacter,
+                        author = sbjCharacter,
                         creationTime = parent.time,
                         type = InformationType.RESOURCES,
                         tgtTime = parent.time,
-                        tgtCharacter = tgtCharacter,
-                        resources = parent.characters[tgtCharacter]!!.resources
+                        tgtCharacter = sbjCharacter,
+                        resources = parent.characters[sbjCharacter]!!.resources
                     ).also {
-                        it.knownTo.add(tgtCharacter);parent.informations[it.generateName()] = it
+                        it.knownTo.add(sbjCharacter);parent.informations[it.generateName()] = it
                     }
 
                 } else
@@ -88,14 +87,14 @@ class Examine(override val tgtCharacter: String, override val tgtPlace: String) 
                     println("Resources: ${parent.places[tgtPlace]!!.resources}")
                     //Acquire resources information of this place.
                     Information(
-                        author = tgtCharacter,
+                        author = sbjCharacter,
                         creationTime = parent.time,
                         type = InformationType.RESOURCES,
                         tgtTime = parent.time,
                         tgtPlace = tgtPlace,
                         resources = parent.places[tgtPlace]!!.resources
                     ).also {
-                        it.knownTo.add(tgtCharacter);parent.informations[it.generateName()] =
+                        it.knownTo.add(sbjCharacter);parent.informations[it.generateName()] =
                         it
                     }
 
@@ -114,7 +113,7 @@ class Examine(override val tgtCharacter: String, override val tgtPlace: String) 
     override fun deltaWill(): Double
     {
         var w = super.deltaWill()
-        if (parent.characters[tgtCharacter]!!.trait.contains("investigator"))
+        if (parent.characters[sbjCharacter]!!.trait.contains("investigator"))
             w += 10
         return w
     }

@@ -4,20 +4,20 @@ import com.titaniumPolitics.game.core.GameEngine
 import kotlinx.serialization.Serializable
 
 @Serializable
-class Move(override val tgtCharacter: String, override val tgtPlace: String) : GameAction()
+class Move(override val sbjCharacter: String, override val tgtPlace: String) : GameAction()
 {
     var placeTo = ""
     override fun chooseParams()
     {
-        GameEngine.acquire(parent.places[tgtPlace]!!.connectedPlaces + "cancel")
+        GameEngine.acquire(tgtPlaceObj.connectedPlaces + "cancel")
     }
 
     override fun isValid(): Boolean = placeTo != ""
     override fun execute()
     {
 
-        parent.places[tgtPlace]!!.characters.remove(tgtCharacter)
-        parent.places[placeTo]!!.characters.add(tgtCharacter)
+        tgtPlaceObj.characters.remove(sbjCharacter)
+        parent.places[placeTo]!!.characters.add(sbjCharacter)
         super.execute()
     }
 

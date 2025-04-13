@@ -4,7 +4,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 //Salary is performed by the party leader. It decides the amount of resources to be paid to the party members.
-class Salary(override val tgtCharacter: String, override val tgtPlace: String) : GameAction()
+class Salary(override val sbjCharacter: String, override val tgtPlace: String) : GameAction()
 {
     var resources = hashMapOf("ration" to 2, "water" to 2)
     override fun chooseParams()
@@ -14,10 +14,10 @@ class Salary(override val tgtCharacter: String, override val tgtPlace: String) :
     override fun execute()
     {
         val who =
-            (parent.ongoingMeetings.filter { it.value.currentCharacters.contains(tgtCharacter) }
+            (parent.ongoingMeetings.filter { it.value.currentCharacters.contains(sbjCharacter) }
                 .flatMap { it.value.currentCharacters }).toHashSet()
 
-        val party = parent.parties.values.find { it.members.containsAll(who + tgtCharacter) }!!
+        val party = parent.parties.values.find { it.members.containsAll(who + sbjCharacter) }!!
         val guildHall = party.home
 //        if (party.isDailySalaryPaid.keys.none { it == tgtCharacter })
 //        {
@@ -66,10 +66,10 @@ class Salary(override val tgtCharacter: String, override val tgtPlace: String) :
     override fun isValid(): Boolean
     {
         val who =
-            (parent.ongoingMeetings.filter { it.value.currentCharacters.contains(tgtCharacter) }
+            (parent.ongoingMeetings.filter { it.value.currentCharacters.contains(sbjCharacter) }
                 .flatMap { it.value.currentCharacters }).toHashSet()
 
-        val party = parent.parties.values.find { it.members.containsAll(who + tgtCharacter) }!!
+        val party = parent.parties.values.find { it.members.containsAll(who + sbjCharacter) }!!
 //        if (party.isDailySalaryPaid.keys.none { it == tgtCharacter })
 //        {
 //            //println("Warning: $tgtCharacter is not eligible to be paid from ${party.name}.")
@@ -80,7 +80,7 @@ class Salary(override val tgtCharacter: String, override val tgtPlace: String) :
 //            //println("Warning: $tgtCharacter has already been paid from ${party.name} today.")
 //            return false
 //        }
-        return !party.isSalaryPaid && who.isNotEmpty() && tgtCharacter == party.leader
+        return !party.isSalaryPaid && who.isNotEmpty() && sbjCharacter == party.leader
     }
 
 }

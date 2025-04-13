@@ -11,7 +11,7 @@ import com.titaniumPolitics.game.core.TradeParams
 //The player character accepts the trade if the value of the offered item is higher than the value of the requested item.
 //The player cannot affect this decision.
 @Deprecated("This class is deprecated. Use request as meeting agenda instead.")
-class Trade(override val tgtCharacter: String, override val tgtPlace: String) : GameAction()
+class Trade(override val sbjCharacter: String, override val tgtPlace: String) : GameAction()
 {
     var who = ""
     var item = hashMapOf<String, Int>()
@@ -24,9 +24,9 @@ class Trade(override val tgtCharacter: String, override val tgtPlace: String) : 
     override fun chooseParams()
     {
         who =
-            parent.ongoingMeetings.filter { it.value.currentCharacters.contains(tgtCharacter) }
+            parent.ongoingMeetings.filter { it.value.currentCharacters.contains(sbjCharacter) }
                 .flatMap { it.value.currentCharacters }
-                .first { it != tgtCharacter }//Trade can happen only when there is exactly one other character in the meeting.
+                .first { it != sbjCharacter }//Trade can happen only when there is exactly one other character in the meeting.
 
 //        println("What do you want to trade?")
 //        val type = GameEngine.acquire(listOf("resource", "information", "action"))
@@ -72,13 +72,13 @@ class Trade(override val tgtCharacter: String, override val tgtPlace: String) : 
 //            }
 //        }
         val tradeParams = GameEngine.acquire<TradeParams>("Trade", hashMapOf(
-            "items1" to parent.characters[tgtCharacter]!!.resources,
+            "items1" to parent.characters[sbjCharacter]!!.resources,
             "items2" to parent.characters[who]!!.resources,
-            "info1" to parent.informations.filter { it.value.knownTo.contains(tgtCharacter) }.map { it.key }
+            "info1" to parent.informations.filter { it.value.knownTo.contains(sbjCharacter) }.map { it.key }
                 .toHashSet(),
             "info2" to parent.informations.filter {
                 it.value.knownTo.contains(who) and !it.value.knownTo.contains(
-                    tgtCharacter
+                    sbjCharacter
                 )
             }.map { it.key }.toHashSet()
         )
@@ -102,30 +102,30 @@ class Trade(override val tgtCharacter: String, override val tgtPlace: String) : 
             parent.characters[who]!!.actionValue(it.action)
         }
             ?: .0) + (info2?.let { parent.characters[who]!!.infoValue(it) } ?: .0)
-        val valuea = item.keys.sumOf { parent.characters[tgtCharacter]!!.itemValue(it) * item[it]!! } + (action?.let {
-            parent.characters[tgtCharacter]!!.actionValue(it.action)
+        val valuea = item.keys.sumOf { parent.characters[sbjCharacter]!!.itemValue(it) * item[it]!! } + (action?.let {
+            parent.characters[sbjCharacter]!!.actionValue(it.action)
         }
-            ?: .0) + (info?.let { parent.characters[tgtCharacter]!!.infoValue(it) } ?: .0)
+            ?: .0) + (info?.let { parent.characters[sbjCharacter]!!.infoValue(it) } ?: .0)
         val valuea2 =
-            item2.keys.sumOf { parent.characters[tgtCharacter]!!.itemValue(it) * item2[it]!! } + (action2?.let {
-                parent.characters[tgtCharacter]!!.actionValue(it.action)
+            item2.keys.sumOf { parent.characters[sbjCharacter]!!.itemValue(it) * item2[it]!! } + (action2?.let {
+                parent.characters[sbjCharacter]!!.actionValue(it.action)
             }
-                ?: .0) + (info2?.let { parent.characters[tgtCharacter]!!.infoValue(it) } ?: .0)
+                ?: .0) + (info2?.let { parent.characters[sbjCharacter]!!.infoValue(it) } ?: .0)
         success = true
 
         if (success)
         {
             if (item.isNotEmpty())
             {
-                if (item.any { (parent.characters[tgtCharacter]!!.resources[it.key] ?: 0) < item[it.key]!! })
+                if (item.any { (parent.characters[sbjCharacter]!!.resources[it.key] ?: 0) < item[it.key]!! })
                 {
                     println("You don't have enough $item to trade.")
                     onFinished(false)
                     return
                 }
                 item.forEach {
-                    parent.characters[tgtCharacter]!!.resources[it.key] =
-                        (parent.characters[tgtCharacter]!!.resources[it.key]
+                    parent.characters[sbjCharacter]!!.resources[it.key] =
+                        (parent.characters[sbjCharacter]!!.resources[it.key]
                             ?: 0) - it.value
                     parent.characters[who]!!.resources[it.key] = (parent.characters[who]!!.resources[it.key]
                         ?: 0) + it.value
@@ -142,28 +142,28 @@ class Trade(override val tgtCharacter: String, override val tgtPlace: String) : 
                 item2.forEach {
                     parent.characters[who]!!.resources[it.key] = (parent.characters[who]!!.resources[it.key]
                         ?: 0) - it.value
-                    parent.characters[tgtCharacter]!!.resources[it.key] =
-                        (parent.characters[tgtCharacter]!!.resources[it.key]
+                    parent.characters[sbjCharacter]!!.resources[it.key] =
+                        (parent.characters[sbjCharacter]!!.resources[it.key]
                             ?: 0) + it.value
                 }
             }
             //action?.let { parent.characters[tgtCharacter]!!.commands.add(it) }
             //action2?.let { parent.characters[who]!!.commands.add(it) }
             info?.let { parent.informations[it.name]!!.knownTo.add(who) }
-            info2?.let { parent.informations[it.name]!!.knownTo.add(tgtCharacter) }
+            info2?.let { parent.informations[it.name]!!.knownTo.add(sbjCharacter) }
             //Increase mutualities of each character with the other. Value is proportional to the value of the traded item.
-            parent.setMutuality(who, tgtCharacter, value + value2)
-            parent.setMutuality(tgtCharacter, who, valuea + valuea2)
+            parent.setMutuality(who, sbjCharacter, value + value2)
+            parent.setMutuality(sbjCharacter, who, valuea + valuea2)
 
-            println("$who trades with $tgtCharacter.")
+            println("$who trades with $sbjCharacter.")
             onFinished(true)
         } else
         {
-            println("$who refuses to trade with $tgtCharacter.")
+            println("$who refuses to trade with $sbjCharacter.")
             onFinished(false)
             //TODO: this should come with consequences.
         }
-        parent.characters[tgtCharacter]!!.frozen++
+        parent.characters[sbjCharacter]!!.frozen++
 
     }
 

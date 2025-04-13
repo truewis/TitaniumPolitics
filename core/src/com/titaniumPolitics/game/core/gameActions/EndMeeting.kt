@@ -3,12 +3,12 @@ package com.titaniumPolitics.game.core.gameActions
 import kotlinx.serialization.Serializable
 
 @Serializable
-class EndMeeting(override val tgtCharacter: String, override val tgtPlace: String) : GameAction()
+class EndMeeting(override val sbjCharacter: String, override val tgtPlace: String) : GameAction()
 {
 
     override fun execute()
     {
-        val meeting = parent.characters[tgtCharacter]!!.currentMeeting!!
+        val meeting = parent.characters[sbjCharacter]!!.currentMeeting!!
         val meetingName = parent.ongoingMeetings.filter { it.value == meeting }.keys.firstOrNull()
 
         println("Ending meeting $meetingName")
@@ -20,7 +20,7 @@ class EndMeeting(override val tgtCharacter: String, override val tgtPlace: Strin
 
     override fun isValid(): Boolean
     {
-        val meeting = parent.characters[tgtCharacter]!!.currentMeeting!!
+        val meeting = parent.characters[sbjCharacter]!!.currentMeeting!!
         return false
     }
 

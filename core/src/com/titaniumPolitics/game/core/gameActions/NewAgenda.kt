@@ -6,18 +6,18 @@ import kotlinx.serialization.Serializable
 import kotlin.math.max
 
 @Serializable
-class NewAgenda(override val tgtCharacter: String, override val tgtPlace: String) : GameAction()
+class NewAgenda(override val sbjCharacter: String, override val tgtPlace: String) : GameAction()
 {
     lateinit var agenda: MeetingAgenda
 
     override fun execute()
     {
-        val meeting = parent.characters[tgtCharacter]!!.currentMeeting!!
+        val meeting = parent.characters[sbjCharacter]!!.currentMeeting!!
         meeting.agendas.add(agenda)
         meeting.currentAttention = max(meeting.currentAttention - 10, 0)
         super.execute()
         //affect mutuality based on the agenda.
-        parent.setMutuality(tgtCharacter, tgtCharacter, deltaWill())
+        parent.setMutuality(sbjCharacter, sbjCharacter, deltaWill())
         when (agenda.type)
         {
             AgendaType.PROOF_OF_WORK ->
@@ -34,12 +34,12 @@ class NewAgenda(override val tgtCharacter: String, override val tgtPlace: String
 
             AgendaType.PRAISE ->
             {
-                parent.setMutuality(agenda.subjectParams["character"]!!, tgtCharacter, 3.0)
+                parent.setMutuality(agenda.subjectParams["character"]!!, sbjCharacter, 3.0)
             }
 
             AgendaType.DENOUNCE ->
             {
-                parent.setMutuality(agenda.subjectParams["character"]!!, tgtCharacter, -10.0)
+                parent.setMutuality(agenda.subjectParams["character"]!!, sbjCharacter, -10.0)
             }
 
             AgendaType.PRAISE_PARTY ->
@@ -68,7 +68,7 @@ class NewAgenda(override val tgtCharacter: String, override val tgtPlace: String
     override fun isValid(): Boolean
     {
         //People will be more interested in agendas related to their interest. However, this is handled in NPC class.
-        val mt = parent.characters[tgtCharacter]!!.currentMeeting!!
+        val mt = parent.characters[sbjCharacter]!!.currentMeeting!!
         when (agenda.type)
         {
             AgendaType.PROOF_OF_WORK -> return mt.involvedParty != "" && mt.type == "divisionDailyConference" //TODO: how do we handle command issued?
@@ -102,12 +102,12 @@ class NewAgenda(override val tgtCharacter: String, override val tgtPlace: String
 
     override fun deltaWill(): Double
     {
-        val mt = parent.characters[tgtCharacter]!!.currentMeeting!!
+        val mt = parent.characters[sbjCharacter]!!.currentMeeting!!
         when (agenda.type)
         {
-            AgendaType.PRAISE -> return parent.getMutuality(tgtCharacter, agenda.subjectParams["character"]!!) * 0.1
-            AgendaType.DENOUNCE -> return parent.getMutuality(tgtCharacter, agenda.subjectParams["character"]!!) * -0.1
-            AgendaType.NOMINATE -> return parent.getMutuality(tgtCharacter, agenda.subjectParams["character"]!!) * 0.5
+            AgendaType.PRAISE -> return parent.getMutuality(sbjCharacter, agenda.subjectParams["character"]!!) * 0.1
+            AgendaType.DENOUNCE -> return parent.getMutuality(sbjCharacter, agenda.subjectParams["character"]!!) * -0.1
+            AgendaType.NOMINATE -> return parent.getMutuality(sbjCharacter, agenda.subjectParams["character"]!!) * 0.5
             AgendaType.PRAISE_PARTY -> return parent.getPartyMutuality(
                 mt.involvedParty,
                 agenda.subjectParams["party"]!!

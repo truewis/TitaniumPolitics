@@ -4,7 +4,7 @@ import com.titaniumPolitics.game.core.GameEngine
 import kotlinx.serialization.Serializable
 
 @Serializable
-class OfficialResourceTransfer(override val tgtCharacter: String, override val tgtPlace: String) : GameAction()
+class OfficialResourceTransfer(override val sbjCharacter: String, override val tgtPlace: String) : GameAction()
 {
     var toWhere = ""
     var resources = hashMapOf<String, Int>()

@@ -1,19 +1,16 @@
 package com.titaniumPolitics.game.core.gameActions
 
-import com.titaniumPolitics.game.core.GameEngine
-import com.titaniumPolitics.game.core.Information
 import kotlinx.serialization.Serializable
-import kotlin.math.max
 
 @Serializable
 //This class is used to end a speech and nominate a new speaker. This action is used by the current speaker.
-class EndSpeech(override val tgtCharacter: String, override val tgtPlace: String) : GameAction()
+class EndSpeech(override val sbjCharacter: String, override val tgtPlace: String) : GameAction()
 {
     lateinit var nextSpeaker: String
 
     override fun execute()
     {
-        val meeting = parent.characters[tgtCharacter]!!.currentMeeting!!
+        val meeting = parent.characters[sbjCharacter]!!.currentMeeting!!
 
         //The amount of attention gained can be modified here.
         meeting.currentAttention += 10
@@ -23,13 +20,13 @@ class EndSpeech(override val tgtCharacter: String, override val tgtPlace: String
 
     override fun isValid(): Boolean
     {
-        val meeting = parent.characters[tgtCharacter]!!.currentMeeting!!
-        return meeting.currentSpeaker == tgtCharacter
+        val meeting = parent.characters[sbjCharacter]!!.currentMeeting!!
+        return meeting.currentSpeaker == sbjCharacter
     }
 
     override fun deltaWill(): Double
     {
-        return parent.getMutuality(tgtCharacter, nextSpeaker) * 0.1
+        return parent.getMutuality(sbjCharacter, nextSpeaker) * 0.1
     }
 
 

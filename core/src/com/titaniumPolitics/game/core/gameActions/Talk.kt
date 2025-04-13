@@ -6,44 +6,49 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 //Talk is considered as an on-the-fly meeting.
-//If the target character is already in a meeting, join the meeting if possible. Otherwise, this action is invalid.
-class Talk(override val tgtCharacter: String, override val tgtPlace: String) : GameAction()
+//If the object (who) is already in a meeting, join the meeting if possible. Otherwise, create a new meeting with me(tgtCharacter) and the object (who).
+//Note that if the me(tgtCharacter) is in the meeting, this action is invalid.
+class Talk(override val sbjCharacter: String, override val tgtPlace: String) : GameAction()
 {
     var who = ""
     override fun chooseParams()
     {
         who =
-            GameEngine.acquire(parent.places[tgtPlace]!!.characters.filter { it != tgtCharacter }.toList())
+            GameEngine.acquire(tgtPlaceObj.characters.filter { it != sbjCharacter }.toList())
         if (parent.characters[who]!!.frozen > 1) println("Warning: $who is already busy.")
     }
 
+    //Also refer to StartMeeting.execute()
     override fun execute()
     {
-        if (parent.characters[tgtCharacter]!!.currentMeeting == null)
+        if (sbjCharObj.currentMeeting == null)
         {
-            parent.ongoingMeetings["meeting-$tgtPlace-$tgtCharacter-${parent.time}"] =
-                Meeting(parent.time, tgtPlace, scheduledCharacters = hashSetOf(who, tgtCharacter), tgtPlace)
-            parent.ongoingMeetings["meeting-$tgtPlace-$tgtCharacter-${parent.time}"]!!.currentCharacters.add(
-                tgtCharacter
+            parent.ongoingMeetings["meeting-$tgtPlace-$sbjCharacter-${parent.time}"] =
+                Meeting(parent.time, tgtPlace, scheduledCharacters = hashSetOf(who, sbjCharacter), tgtPlace)
+            parent.ongoingMeetings["meeting-$tgtPlace-$sbjCharacter-${parent.time}"]!!.currentCharacters.add(
+                sbjCharacter
             )
+
             super.execute()
         } else
         {
-            parent.characters[tgtCharacter]!!.currentMeeting!!.currentCharacters.add(who)
+            sbjCharObj.currentMeeting!!.currentCharacters.add(who)
             super.execute()
         }
     }
 
     override fun isValid(): Boolean
     {
-        if (parent.characters[tgtCharacter]!!.currentMeeting == null)
-            return parent.places[tgtPlace]!!.characters.filter { it != tgtCharacter }.toList()
-                .isNotEmpty()
+        //The subject character must not be in any meeting, otherwise they are too busy to talk.
+        if (sbjCharObj.currentMeeting != null)
+            return false
+
+        if (parent.characters[who]!!.currentMeeting == null)
+            return tgtPlaceObj.characters.contains(who)
         else
         {
-            //If the target character is already in a meeting, join the meeting if possible. Otherwise, this action is invalid.
-            return parent.characters[tgtCharacter]!!.currentMeeting!!.scheduledCharacters.contains(who) &&
-                    !parent.characters[tgtCharacter]!!.currentMeeting!!.currentCharacters.contains(who)
+            //If the object character is already in a meeting, join the meeting. Note that this bypasses the scheduledCharacters condition.
+            return !parent.characters[who]!!.currentMeeting!!.currentCharacters.contains(sbjCharacter)
         }
     }
 

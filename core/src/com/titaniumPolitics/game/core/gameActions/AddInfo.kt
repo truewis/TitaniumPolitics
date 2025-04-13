@@ -1,19 +1,17 @@
 package com.titaniumPolitics.game.core.gameActions
 
-import com.titaniumPolitics.game.core.GameEngine
-import com.titaniumPolitics.game.core.Information
 import kotlinx.serialization.Serializable
 import kotlin.math.max
 
 @Serializable
-class AddInfo(override val tgtCharacter: String, override val tgtPlace: String) : GameAction()
+class AddInfo(override val sbjCharacter: String, override val tgtPlace: String) : GameAction()
 {
     lateinit var infoKey: String
     var agendaIndex = 0
 
     override fun execute()
     {
-        val meeting = parent.characters[tgtCharacter]!!.currentMeeting!!
+        val meeting = sbjCharObj.currentMeeting!!
         meeting.agendas[agendaIndex].informationKeys.add(infoKey)
 
         //The amount of attention spent can be modified here.
@@ -31,7 +29,7 @@ class AddInfo(override val tgtCharacter: String, override val tgtPlace: String) 
 
     override fun isValid(): Boolean
     {
-        val meeting = parent.characters[tgtCharacter]!!.currentMeeting!!
+        val meeting = sbjCharObj.currentMeeting!!
         if (meeting.agendas.size <= agendaIndex)
             return false
         //If the information is already presented in the meeting, it cannot be presented again.

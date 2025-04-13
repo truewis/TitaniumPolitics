@@ -1,10 +1,9 @@
 package com.titaniumPolitics.game.core.gameActions
 
 import com.titaniumPolitics.game.core.GameEngine
-import kotlin.math.min
 
 @Deprecated("This class is deprecated. Only internal division leader can announce.")
-class InfoAnnounce(override val tgtCharacter: String, override val tgtPlace: String) : GameAction()
+class InfoAnnounce(override val sbjCharacter: String, override val tgtPlace: String) : GameAction()
 {
     var who = hashSetOf<String>()
     var what = ""
@@ -12,7 +11,7 @@ class InfoAnnounce(override val tgtCharacter: String, override val tgtPlace: Str
     {
         //TODO: ability to fabricate information
         what =
-            GameEngine.acquire(parent.informations.filter { it.value.knownTo.contains(tgtCharacter) }.map { it.key })
+            GameEngine.acquire(parent.informations.filter { it.value.knownTo.contains(sbjCharacter) }.map { it.key })
         who = parent.places[tgtPlace]!!.characters
     }
 
@@ -21,7 +20,7 @@ class InfoAnnounce(override val tgtCharacter: String, override val tgtPlace: Str
         parent.informations[what]!!.knownTo += who
         val party = parent.places[tgtPlace]!!.responsibleParty
         //TODO: match unit of publicity to number of people in the party
-        parent.characters[tgtCharacter]!!.frozen++
+        parent.characters[sbjCharacter]!!.frozen++
     }
 
     override fun isValid(): Boolean

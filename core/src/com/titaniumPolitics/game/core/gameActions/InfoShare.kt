@@ -4,7 +4,7 @@ import com.titaniumPolitics.game.core.GameEngine
 import com.titaniumPolitics.game.core.Information
 
 @Deprecated("This class is deprecated. Info requests are done naturally through agendas.")
-class InfoShare(override val tgtCharacter: String, override val tgtPlace: String) : GameAction()
+class InfoShare(override val sbjCharacter: String, override val tgtPlace: String) : GameAction()
 {
     var who = hashSetOf<String>()
     var what = ""
@@ -13,7 +13,7 @@ class InfoShare(override val tgtCharacter: String, override val tgtPlace: String
     override fun chooseParams()
     {
         //TODO: ability to fabricate information
-        what = GameEngine.acquire(parent.informations.filter { it.value.knownTo.contains(tgtCharacter) }.map { it.key })
+        what = GameEngine.acquire(parent.informations.filter { it.value.knownTo.contains(sbjCharacter) }.map { it.key })
 
         //To all participants of the meeting/conference
         application = GameEngine.acquire(listOf("praise", "criticize", "respond", "report"))
@@ -22,9 +22,9 @@ class InfoShare(override val tgtCharacter: String, override val tgtPlace: String
     override fun execute()
     {
         who =
-            parent.characters[tgtCharacter]!!.currentMeeting!!.currentCharacters.toHashSet()
+            parent.characters[sbjCharacter]!!.currentMeeting!!.currentCharacters.toHashSet()
 
-        val party = parent.parties.values.find { it.members.containsAll(who + tgtCharacter) }!!.name
+        val party = parent.parties.values.find { it.members.containsAll(who + sbjCharacter) }!!.name
         parent.informations[what]!!.knownTo += who
 
         when (application)
@@ -65,12 +65,12 @@ class InfoShare(override val tgtCharacter: String, override val tgtPlace: String
         }
         //TODO: party integrity affects the chances. Party integrity is affected.
 
-        parent.characters[tgtCharacter]!!.frozen++
+        parent.characters[sbjCharacter]!!.frozen++
     }
 
     override fun isValid(): Boolean
     {
-        return parent.characters[tgtCharacter]!!.currentMeeting != null
+        return parent.characters[sbjCharacter]!!.currentMeeting != null
     }
 
 }

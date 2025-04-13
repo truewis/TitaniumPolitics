@@ -1,7 +1,7 @@
 package com.titaniumPolitics.game.core.gameActions
 
 @Deprecated("This class is deprecated. BudgetResolution is a separate agenda item.")
-class BudgetResolution(override val tgtCharacter: String, override val tgtPlace: String) : GameAction()
+class BudgetResolution(override val sbjCharacter: String, override val tgtPlace: String) : GameAction()
 {
     // If budgetResolution conference is ongoing and has the triumvirate, then the action is valid.
     override fun isValid(): Boolean =

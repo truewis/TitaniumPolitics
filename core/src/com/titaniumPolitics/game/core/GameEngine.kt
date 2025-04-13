@@ -124,7 +124,7 @@ class GameEngine(val gameState: GameState)
                 )
                 throw Exception("Non player character ${char.name} is performing an invalid action.")
             }
-            if (action.tgtCharacter != char.name)
+            if (action.sbjCharacter != char.name)
                 println(
                     "Warning: Non player character ${char.name} is performing ${action.javaClass.simpleName} at ${
                         char.place.name

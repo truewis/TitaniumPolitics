@@ -3,16 +3,16 @@ package com.titaniumPolitics.game.core.gameActions
 import kotlinx.serialization.Serializable
 
 @Serializable
-class LeaveMeeting(override val tgtCharacter: String, override val tgtPlace: String) : GameAction()
+class LeaveMeeting(override val sbjCharacter: String, override val tgtPlace: String) : GameAction()
 {
 
     override fun execute()
     {
-        val meeting = parent.characters[tgtCharacter]!!.currentMeeting!!
+        val meeting = parent.characters[sbjCharacter]!!.currentMeeting!!
         val meetingName = parent.ongoingMeetings.filter { it.value == meeting }.keys.firstOrNull()
-        meeting.currentCharacters.remove(tgtCharacter)
+        meeting.currentCharacters.remove(sbjCharacter)
 
-        println("$tgtCharacter left the meeting $meetingName")
+        println("$sbjCharacter left the meeting $meetingName")
 
         if (meeting.currentCharacters.count() <= 1)
         {
@@ -22,7 +22,7 @@ class LeaveMeeting(override val tgtCharacter: String, override val tgtPlace: Str
 
         } else
         //If you were the speaker, the next random character will be the speaker.
-            if (meeting.currentSpeaker == tgtCharacter)
+            if (meeting.currentSpeaker == sbjCharacter)
             {
                 meeting.currentSpeaker = meeting.currentCharacters.random()
                 println("Speaker is now ${meeting.currentSpeaker}")
@@ -32,7 +32,7 @@ class LeaveMeeting(override val tgtCharacter: String, override val tgtPlace: Str
 
     override fun isValid(): Boolean
     {
-        return parent.characters[tgtCharacter]!!.currentMeeting != null
+        return parent.characters[sbjCharacter]!!.currentMeeting != null
     }
 
 }
