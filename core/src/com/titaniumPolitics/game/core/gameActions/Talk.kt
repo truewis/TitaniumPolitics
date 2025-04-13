@@ -21,18 +21,19 @@ class Talk(override val sbjCharacter: String, override val tgtPlace: String) : G
     //Also refer to StartMeeting.execute()
     override fun execute()
     {
-        if (sbjCharObj.currentMeeting == null)
+        if (parent.characters[who]!!.currentMeeting == null)
         {
             parent.ongoingMeetings["meeting-$tgtPlace-$sbjCharacter-${parent.time}"] =
                 Meeting(parent.time, tgtPlace, scheduledCharacters = hashSetOf(who, sbjCharacter), tgtPlace)
-            parent.ongoingMeetings["meeting-$tgtPlace-$sbjCharacter-${parent.time}"]!!.currentCharacters.add(
-                sbjCharacter
+            parent.ongoingMeetings["meeting-$tgtPlace-$sbjCharacter-${parent.time}"]!!.currentCharacters.addAll(
+                listOf(sbjCharacter, who)
             )
+
 
             super.execute()
         } else
         {
-            sbjCharObj.currentMeeting!!.currentCharacters.add(who)
+            parent.characters[who]!!.currentMeeting!!.currentCharacters.add(sbjCharacter)
             super.execute()
         }
     }

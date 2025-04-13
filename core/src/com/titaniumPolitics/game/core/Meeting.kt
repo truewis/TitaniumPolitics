@@ -24,10 +24,11 @@ class Meeting(
 
     fun endMeeting(gameState: GameState)
     {
-        val party = gameState.parties[involvedParty]!!
         //If this is an election, elect the leader from the mutuality matrix.
         if (type == "divisionLeaderElection")
         {
+            //involvedParty is not empty for divisionLeaderElections.
+            val party = gameState.parties[involvedParty]!!
 
             if (party.leader != "")
                 throw IllegalStateException("The leader of the party $involvedParty exists as ${party.leader}, but the election is still happening.")
