@@ -112,10 +112,11 @@ class AlertUI(var gameState: GameState) : Table(defaultSkin)
                         }
                     } else
                     {
-                        addAlert("newInfo") {
-                            InformationViewUI.instance.refresh(gameState, "creationTime")
-                            InformationViewUI.instance.isVisible = true
-                        }
+                        //TODO: Anything else are hidden for now. Display action alerts that are important for the player.
+//                        addAlert("newInfo") {
+//                            InformationViewUI.instance.refresh(gameState, "creationTime")
+//                            InformationViewUI.instance.isVisible = true
+//                        }
                     }
 
                 }
