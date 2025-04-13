@@ -1,6 +1,7 @@
 package com.titaniumPolitics.game.core.gameActions
 
 import com.titaniumPolitics.game.core.GameState
+import com.titaniumPolitics.game.core.ReadOnly
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 
@@ -16,8 +17,13 @@ import kotlinx.serialization.Transient
 @Serializable
 sealed class GameAction()
 {
-    abstract val tgtCharacter: String
+    abstract val sbjCharacter: String
+
+    //This can be different from the current place of the subject, in case of a hypothetical action.
     abstract val tgtPlace: String
+
+    val sbjCharObj get() = parent.characters[sbjCharacter]!!
+    val tgtPlaceObj get() = parent.places[tgtPlace]!!
 
     @Transient
     lateinit var parent: GameState
@@ -30,10 +36,26 @@ sealed class GameAction()
     {
     }
 
+    //Return all declared properties.
+    fun returnParams(){
+
+    }
+
+    //This is a test function to check if the action is valid. It is called before execute. You can insert conditions to check here.
+    //The execute function is still called even if this function returns false, but the engine throws a warning.
     open fun isValid(): Boolean
     {
         return true
     }
 
-    abstract fun execute()
+    open fun execute()
+    {
+        sbjCharObj.frozen += ReadOnly.const(this::class.simpleName!! + "Duration").toInt()
+    }
+
+    open fun deltaWill(): Double
+    {
+        return .0
+    }
+
 }

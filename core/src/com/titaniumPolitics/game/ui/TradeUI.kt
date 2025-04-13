@@ -7,22 +7,24 @@ import com.badlogic.gdx.scenes.scene2d.ui.*
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.titaniumPolitics.game.core.GameEngine
 import com.titaniumPolitics.game.core.GameState
-import com.titaniumPolitics.game.core.gameActions.trade
+import com.titaniumPolitics.game.core.gameActions.Trade
 import ktx.scene2d.*
+import ktx.scene2d.Scene2DSkin.defaultSkin
 
-class TradeUI(skin: Skin?, var gameState: GameState) : Table(skin)
+class TradeUI(var gameState: GameState) : Table(defaultSkin)
 {
     var titleLabel: Label
     private val docList1 = VerticalGroup()
     private val docList2 = VerticalGroup()
-    private var isOpen = false;
-    val submitButton = TextButton("지시", skin)
-    val cancelButton = TextButton("취소", skin)
-    var trade: trade = trade("", "")
+
+    //val submitButton = TextButton("지시", skin)
+    //val cancelButton = TextButton("취소", skin)
+    var trade: Trade = Trade("", "")
 
     init
     {
-        titleLabel = Label("거래", skin, "trnsprtConsole")
+        instance = this
+        titleLabel = Label("Trade", skin, "trnsprtConsole")
         titleLabel.setFontScale(2f)
         add(titleLabel).growX()
         row()
@@ -34,22 +36,21 @@ class TradeUI(skin: Skin?, var gameState: GameState) : Table(skin)
         add(listScr1).growY()
         add(listScr2).growY()
         row()
-        add(submitButton)
-        add(cancelButton)
-        debug = true
+        //add(submitButton)
+        //add(cancelButton)
         isVisible = false
-        GameEngine.acquireEvent += {
-            if (it.type == "Action")
-                submitButton.addListener(object : ClickListener()
-                {
-                    override fun clicked(event: InputEvent?, x: Float, y: Float)
-                    {
-                        super.clicked(event, x, y)
-                        GameEngine.acquireCallback(trade)
-                        isVisible = false
-                    }
-                })
-        }
+//        GameEngine.acquireEvent += {
+//            if (it.type == "Action")
+//                submitButton.addListener(object : ClickListener()
+//                {
+//                    override fun clicked(event: InputEvent?, x: Float, y: Float)
+//                    {
+//                        super.clicked(event, x, y)
+//                        GameEngine.acquireCallback(trade)
+//                        isVisible = false
+//                    }
+//                })
+//        }
 
 
     }
@@ -59,27 +60,33 @@ class TradeUI(skin: Skin?, var gameState: GameState) : Table(skin)
 
         with(gameState) {
             val who =
-                    ongoingMeetings.filter { it.value.currentCharacters.contains(playerAgent) }.flatMap { it.value.currentCharacters }.first { it != playerAgent }
-            trade = trade(playerAgent, characters[playerAgent]!!.place.name).apply { this.who = who }
+                ongoingMeetings.filter { it.value.currentCharacters.contains(playerName) }
+                    .flatMap { it.value.currentCharacters }.first { it != playerName }
+            trade = Trade(playerName, player.place.name).apply { this.who = who }
             isVisible = true
-            refreshList(characters[playerAgent]!!.resources,
-                    characters[who]!!.resources,
-                    informations.filter {
-                        it.value.knownTo.contains(playerAgent)
-                    }
-                            .map { it.key }.toHashSet(),
-                    informations.filter {
-                        it.value.knownTo.contains(who) and !it.value.knownTo.contains(
-                                playerAgent
-                        )
-                    }.map { it.key }.toHashSet()
+            refreshList(player.resources,
+                characters[who]!!.resources,
+                informations.filter {
+                    it.value.knownTo.contains(playerName)
+                }
+                    .map { it.key }.toHashSet(),
+                informations.filter {
+                    it.value.knownTo.contains(who) and !it.value.knownTo.contains(
+                        playerName
+                    )
+                }.map { it.key }.toHashSet()
             )
 
         }
     }
 
 
-    fun refreshList(items1: HashMap<String, Int>, items2: HashMap<String, Int>, info1: HashSet<String>, info2: HashSet<String>)
+    fun refreshList(
+        items1: HashMap<String, Int>,
+        items2: HashMap<String, Int>,
+        info1: HashSet<String>,
+        info2: HashSet<String>
+    )
     {
         docList1.clear()
         docList2.clear()
@@ -115,7 +122,12 @@ class TradeUI(skin: Skin?, var gameState: GameState) : Table(skin)
                     it.growX()
                     setFontScale(2f)
                 }
-                image((this@TradeUI.stage as CapsuleStage).assetManager.get("data/dev/capsuleDevBoxCheck.png", Texture::class.java)) {
+                image(
+                    (this@TradeUI.stage as CapsuleStage).assetManager.get(
+                        "data/dev/capsuleDevBoxCheck.png",
+                        Texture::class.java
+                    )
+                ) {
                     color = Color.GREEN
                     it.size(36f)
                 }
@@ -154,7 +166,12 @@ class TradeUI(skin: Skin?, var gameState: GameState) : Table(skin)
                     it.growX()
                     setFontScale(2f)
                 }
-                image((this@TradeUI.stage as CapsuleStage).assetManager.get("data/dev/capsuleDevBoxCheck.png", Texture::class.java)) {
+                image(
+                    (this@TradeUI.stage as CapsuleStage).assetManager.get(
+                        "data/dev/capsuleDevBoxCheck.png",
+                        Texture::class.java
+                    )
+                ) {
                     color = Color.GREEN
                     it.size(36f)
                 }
@@ -165,6 +182,11 @@ class TradeUI(skin: Skin?, var gameState: GameState) : Table(skin)
 
         isVisible = true
 
+    }
+
+    companion object
+    {
+        lateinit var instance: TradeUI
     }
 
 

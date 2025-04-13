@@ -6,10 +6,26 @@ import java.util.*
 @Serializable
 class Place : GameStateElement()
 {
-    var name = ""
+    override val name: String
+        get() = parent.places.filter { it.value == this }.keys.first()
     var resources = hashMapOf<String, Int>()
+        get()
+        {
+            //If the place is a home, return the resources of the character living there.
+            if (name.contains("home_"))
+                return parent.characters[name.substringAfter("home_")]!!.resources
+            return field
+        }
+        set(value)
+        {
+            //If the place is a home, set the resources of the character living there.
+            if (name.contains("home_"))
+                parent.characters[name.substringAfter("home_")]!!.resources = value
+            field = value
+        }
     var connectedPlaces = arrayListOf<String>()
     var plannedWorker = 0
+    var coordinates = Coordinate3D(0, 0, 0)
     val currentWorker: Int get() = apparatuses.sumOf { it.currentWorker }
     val maxResources: HashMap<String, Int>
         get()
@@ -42,13 +58,16 @@ class Place : GameStateElement()
     var apparatuses = hashSetOf<Apparatus>()
     var characters = hashSetOf<String>()
     var responsibleParty = "" //Determines which party is responsible for the place.
-    var isAccidentScene = false //If true, the place is closed and no one can enter. Can be cleared by clearAccidentScene.
-    var accidentInformations = hashMapOf<String, Information>()//Information about the last accident. Non empty only when isAccidentScene is true.
+    var isAccidentScene =
+        false //If true, the place is closed and no one can enter. Can be cleared by clearAccidentScene.
+    var accidentInformationKeys =
+        hashSetOf<String>()//Information about the last accident. Non empty only when isAccidentScene is true.
+
     override fun injectParent(gameState: GameState)
     {
         super.injectParent(gameState)
-        plannedWorker = apparatuses.sumOf { it.idealWorker }//TODO: this is a temporary solution to set up the planned worker.
-        println("Planned worker of $name: $plannedWorker")
+        plannedWorker =
+            apparatuses.sumOf { it.idealWorker }//TODO: this is a temporary solution to set up the planned worker. It should be set by division leaders.
     }
 
 }

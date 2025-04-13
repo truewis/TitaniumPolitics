@@ -1,0 +1,11 @@
+Rui: That is not a 'leaking' tank by any means. It is a completely busted tank. The only way to fix that is to replace the tank.
+DrPaik: That would be wonderful! Imagine having a fully functional water system in the hospital again!
+Rui: I will get right on it, but we need a titanium tank for drinking water. That shit is hard to build. I am not authorized to make purchases, but I will file a report to my supervisor.
+DrPaik: But that will take weeks! I know the system too well. We need to fix this now.
+Rui: That is the fastest I can do. I am sorry.
+DrPaik: But we might lose Sylvia if we don't fix this now!
+Rui: {SHAKE}Sir, are you fucking threatening me?{ENDSHAKE}
+DrPaik: I heard that in the lower deck construction yard there are a few tanks ready.
+Rui: That information is confidential, whether it is true or not. And now you're suggesting stealing a division property. All of this is strictly illegal.
+DrPaik: The patients need your help desperately. I'll be waiting here.
+

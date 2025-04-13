@@ -14,6 +14,7 @@ class QuickSave(gameState: GameState) : Table(defaultSkin)
     {
 
         val b = TextButton("Save", defaultSkin)
+        b.label.setFontScale(2f)
         b.addListener(object : ClickListener()
         {
             override fun clicked(event: InputEvent, x: Float, y: Float)

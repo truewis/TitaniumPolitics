@@ -1,0 +1,4 @@
+observer: Hello. Welcome to Titanium Politics.
+observer: We will take this time to teach you what you need to know about affecting the Station.
+observer: You interact with the world through taking actions, which are represented by buttons at the bottom of the screen.
+observer: One action you can always take is to wait. Why don’t you try that right now? See you in a bit.

@@ -1,6 +1,9 @@
 package com.titaniumPolitics.game.core.gameActions
 
-class observeRequest(override val tgtCharacter: String, override val tgtPlace: String) : GameAction()
+import kotlinx.serialization.Serializable
+
+@Serializable
+class observeRequest(override val sbjCharacter: String, override val tgtPlace: String) : GameAction()
 {
 
     override fun execute()

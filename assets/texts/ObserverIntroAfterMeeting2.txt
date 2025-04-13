@@ -1,0 +1,12 @@
+observer: Hope that wasn't a hassle.
+Rui: It was not, dear Observer! It is a great pleasure to be invited to your workplace.
+observer: That is correct, we are in the observatory now. Now, could you do me a favor?
+Rui: I am always ready to serve you, dear Observer.
+observer: I would like to you repair the power system of the observatory.
+Rui: It is such a pleasure to partake in such an important task, dear Observer. But are you sure you want me, not other more experienced personals, to work on the machinery?
+observer: Rui, there is one fact I would like to remind you. Every word I pronounce is supported by...
+Rui: "The Reason", dear Observer. I apologize for not remembering the fact. I believe your decision is correct.
+observer: Rather than questioning your ability, you could have asked, "is there any responsibility I must be aware of while fixing the system?"
+observer: The answer is, there is none. Nothing is operational right now, so nothing of value will be lost even if you further destroy the system.
+Rui: Understood, dear Observer.
+observer: Very good. Now, you have my permission to work on the power system. Have fun.

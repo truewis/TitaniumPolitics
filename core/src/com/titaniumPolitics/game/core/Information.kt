@@ -1,5 +1,7 @@
 package com.titaniumPolitics.game.core
 
+import com.titaniumPolitics.game.core.gameActions.GameAction
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlin.math.max
 import kotlin.math.min
@@ -11,14 +13,38 @@ import kotlin.math.min
 * */
 @Serializable
 class Information(//If there is no author, it is a rumor.
-        var name: String = "",
-        var author: String = "", var creationTime: Int = 0, var type: String = "", var tgtTime: Int = 0,
-        var tgtPlace: String = "", var tgtApparatus: String = "", var tgtCharacter: String = "",
-        var tgtResource: String = "", var amount: Int = 0, var action: String = "", var tgtParty: String = "", var auxParty: String = ""
+    var author: String = "",
+    var creationTime: Int = 0,
+    var type: InformationType = InformationType.ACTION,
+    var tgtTime: Int = 0,
+    var tgtPlace: String = "",
+    var tgtApparatus: String = "",
+    var tgtCharacter: String = "",
+    var amount: Int = 0,
+    var action: GameAction? = null,
+    var tgtParty: String = "",
+    var auxParty: String = "",
+    var resources: HashMap<String, Int> = hashMapOf<String, Int>()
 )
 {
     //Do not copy the name. It is unique.
-    constructor(info: Information) : this("", info.author, info.creationTime, info.type, info.tgtTime, info.tgtPlace, info.tgtApparatus, info.tgtCharacter, info.tgtResource, info.amount, info.action)
+    constructor(info: Information) : this(
+        info.author,
+        info.creationTime,
+        info.type,
+        info.tgtTime,
+        info.tgtPlace,
+        info.tgtApparatus,
+        info.tgtCharacter,
+        info.amount,
+        info.action,
+        info.tgtParty,
+        info.auxParty,
+        info.resources
+    )
+
+    var name: String = ""
+        private set
 
     init
     {
@@ -26,13 +52,12 @@ class Information(//If there is no author, it is a rumor.
             generateName()
     }
 
-    var publicity = hashMapOf<String, Int>()//Number of people knowing this info in the party.
-    var credibility: Int = 0
     var life: Int = 100//How long this information will last.
 
     //We try to keep track of every aspect of our lives, but we can't. They eventually fade away.
     var knownTo = hashSetOf<String>()
-    var supporters = hashSetOf<String>()
+
+    //TODO: NPCs should do this instead.
     fun compatibility(other: Information): Double
     {//Two information with low compatibility fight each other.
         if (tgtCharacter == other.tgtCharacter && tgtCharacter != "")
@@ -49,7 +74,7 @@ class Information(//If there is no author, it is a rumor.
             return .0 //TODO: the two information should be merged..?
 
         }
-        if (type == "casualty" && other.type == "casualty")
+        if (type == InformationType.CASUALTY && other.type == InformationType.CASUALTY)
         {
             if (tgtTime - other.tgtTime !in -6..6)//If time does not overlap
                 return 1.0
@@ -62,7 +87,7 @@ class Information(//If there is no author, it is a rumor.
                 return 0.0 //One info says zero, other says not.
             return 0.0/*TODO: continuous compatibility change*///min(amount, other.amount)/tmp.toDouble()
         }
-        if (type == "action" && other.type == "action")
+        if (type == InformationType.ACTION && other.type == InformationType.ACTION)
         {
             //This case is dealt in 'alibi' case above.
             return 0.0
@@ -78,8 +103,17 @@ class Information(//If there is no author, it is a rumor.
             return this.name
 
         }
-        val name = "$author-$type-$creationTime-$tgtTime-$tgtPlace-$tgtApparatus-$tgtCharacter-$tgtResource-$amount-$action-${Math.random().toString().substring(8)}"
+        val name =
+            "$author-$type-$creationTime-${
+                Math.random().toString().substring(8)
+            }"
         this.name = name
         return name
     }
+}
+
+@Serializable
+enum class InformationType
+{
+    ACTION, RESOURCES, CASUALTY, LOST_RESOURCES, DAMAGED_APPARATUS, APPARATUS_DURABILITY
 }

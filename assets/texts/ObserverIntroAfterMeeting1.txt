@@ -1,0 +1,11 @@
+observer: Hello. I was waiting for you.
+Rui: Nice to meet you dear Observer! How can I help you?
+observer: Tell me about yourself. Your name and current position.
+Rui: Huh... understood, dear Observer. My name is Rui, and I just became a junior technician of the infrastructure division.
+observer: Well said. Your identity has been verified. It seems you have followed my instructions successfully in the meeting.
+Rui: Pardon me, dear observer. But what instruction do you mean? You just came to see me.
+observer: That is an extremely well versed response from you.
+observer: One more thing, the map of the station is at the bottom left of the screen. At your current location, you can move to the adjacent nodes in order to move locations. Currently, this takes approximately 30 minutes in the Station.
+Rui: I am so sorry, dear observer, but I am not following the entirety of this conversation. Which screen do you mean? I don't see any. Also, I am able-bodied. I can walk to places without assistance.
+observer: It shouldn't make much sense to you. But each sentence I spoke was deemed necessary. I'll see you at the observatory.
+Rui: As you wish, dear Observer.
