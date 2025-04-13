@@ -143,6 +143,26 @@ class WorkRoutine() : Routine()
             return ExecuteCommandRoutine().also { it.variables["request"] = request.name }
         }
 
+        //Supply resource
+        gState.places.values.forEach fe@{ place1 -> //TODO: right now, supply resource to any place regardless of the division. In the future, agents will not supply resources to hostile divisions.
+            place1.apparatuses.forEach { apparatus ->
+                val res = GameEngine.resourceShortOf(apparatus, place1) //Type of resource that is short of.
+                if (res != "")
+                    //if there is a place within my division with the resource
+                {val resplace =
+                    gState.places.values.filter {
+                        it.responsibleParty != "" && gState.parties[it.responsibleParty]!!.members.contains(
+                            name
+                        )
+                    }
+                        .maxByOrNull { it.resources[res] ?: 0 }
+                        ?: return@fe
+                    //start new routine if there is a place with all the conditions met.
+                    return TransferResourceRoutine()
+                }
+            }
+        }
+
 
         //If there is nothing above to do, move to a place that is the home of one of the parties of the character.
         //If already at home, wait.

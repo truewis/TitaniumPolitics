@@ -449,9 +449,9 @@ class GameEngine(val gameState: GameState)
                     if ((entry.value.resources[it.key] ?: 0) + it.value > (entry.value.maxResources[it.key] ?: 0))
                         return@app //If the resource is full, no one works.
                 }
-                if (isShortOfResources(apparatus, place = entry.value) != "")
+                if (resourceShortOf(apparatus, place = entry.value) != "")
                     return@app //If there is not enough resources, no one works.
-                if (isShortOfAbsorbableResources(apparatus, place = entry.value, gameState) != "")
+                if (absorbableResourceShortOf(apparatus, place = entry.value, gameState) != "")
                     return@app //If there is not enough resources, no one works.
                 //-----------------------------------------------------------------------------------------------------
                 apparatus.currentProduction.forEach {
@@ -838,7 +838,7 @@ class GameEngine(val gameState: GameState)
 
         class AcquireParams(val type: String, val variables: HashMap<String, Any>)
 
-        fun isShortOfResources(app: Apparatus, place: Place): String
+        fun resourceShortOf(app: Apparatus, place: Place): String
         {
             app.currentConsumption.forEach {
                 if ((place.resources[it.key] ?: 0) < it.value)
@@ -856,7 +856,7 @@ class GameEngine(val gameState: GameState)
 
         }
 
-        fun isShortOfAbsorbableResources(app: Apparatus, place: Place, gameState: GameState): String
+        fun absorbableResourceShortOf(app: Apparatus, place: Place, gameState: GameState): String
         {
             app.currentAbsorption.forEach {
                 if ((gameState.floatingResources[it.key] ?: 0) < it.value)

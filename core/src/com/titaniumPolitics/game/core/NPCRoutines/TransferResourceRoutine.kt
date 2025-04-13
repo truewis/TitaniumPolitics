@@ -2,7 +2,6 @@ package com.titaniumPolitics.game.core.NPCRoutines
 
 import com.titaniumPolitics.game.core.GameEngine
 import com.titaniumPolitics.game.core.gameActions.GameAction
-import com.titaniumPolitics.game.core.gameActions.Move
 import com.titaniumPolitics.game.core.gameActions.OfficialResourceTransfer
 import kotlinx.serialization.Serializable
 
@@ -13,9 +12,9 @@ class TransferResourceRoutine() : Routine()
     var transferTo = ""
     override fun newRoutineCondition(name: String, place: String): Routine?
     {
-        gState.places.values.forEach fe@{ place1 ->
+        gState.places.values.forEach fe@{ place1 -> //TODO: right now, supply resource to any place regardless of the division. In the future, agents will not supply resources to hostile divisions.
             place1.apparatuses.forEach { apparatus ->
-                res = GameEngine.isShortOfResources(apparatus, place1) //Type of resource that is short of.
+                res = GameEngine.resourceShortOf(apparatus, place1) //Type of resource that is short of.
                 if (res != "")
                 {
                     transferTo = place1.name
