@@ -36,6 +36,11 @@ sealed class GameAction()
     {
     }
 
+    //Return all declared properties.
+    fun returnParams(){
+
+    }
+
     //This is a test function to check if the action is valid. It is called before execute. You can insert conditions to check here.
     //The execute function is still called even if this function returns false, but the engine throws a warning.
     open fun isValid(): Boolean
@@ -52,4 +57,5 @@ sealed class GameAction()
     {
         return .0
     }
+
 }

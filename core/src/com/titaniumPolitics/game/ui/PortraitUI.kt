@@ -2,10 +2,7 @@ package com.titaniumPolitics.game.ui
 
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.math.Vector2
-import com.badlogic.gdx.scenes.scene2d.Actor
-import com.badlogic.gdx.scenes.scene2d.ui.Image
 import com.badlogic.gdx.scenes.scene2d.ui.Table
-import com.badlogic.gdx.scenes.scene2d.utils.Drawable
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable
 import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.core.InformationType
@@ -63,12 +60,12 @@ class PortraitUI(character: String, var gameState: GameState, scale: Float) : Ta
     val refresh = { state: GameState ->
 
         //If there is an action that was taken by the character last turn, display a script on the portrait.
-        val action =
+        val actionInfo =
             state.informations.values.firstOrNull { it.tgtCharacter == tgtCharacter && it.type == InformationType.ACTION && it.creationTime == state.time - 1 }
-        if (action != null && ReadOnly.script(action.action!!.javaClass.simpleName) != null && displayTextBubble)
+        if (actionInfo != null && ReadOnly.script(actionInfo.action!!.javaClass.simpleName) != null && displayTextBubble)
         {
             bubble.isVisible = true
-            speech.setText(ReadOnly.script(action.action!!.javaClass.simpleName))
+            speech.setText(ReadOnly.script(actionInfo.action!!.javaClass.simpleName, actionInfo.action))
         } else
         {
             bubble.isVisible = false

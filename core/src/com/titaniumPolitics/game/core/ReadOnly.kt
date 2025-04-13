@@ -26,16 +26,34 @@ object ReadOnly
             ?: 0f.also { println("Warning: Could not find constant $constName") }
     }
 
-    fun prop(key: String): String
+    fun prop(key: String, obj: Any? = null): String
     {
 
-        return (props.getProperty(key)) ?: "Unknown".also { println("Warning: Could not find property $key") }
+        return if (obj != null)
+                (props.getProperty(key)?.replacePlaceholders(obj)) ?: "Unknown".also { println("Warning: Could not find property $key") }
+        else
+                (props.getProperty(key)) ?: "Unknown".also { println("Warning: Could not find property $key") }
     }
 
-    fun script(key: String): String?
+    fun script(key: String, obj: Any? = null): String
     {
-        return (script.getProperty(key)) ?: return null
+        return if(obj != null)
+            (script.getProperty(key).replacePlaceholders(obj))
+        else
+            (script.getProperty(key))
 
+    }
+
+    private fun String.replacePlaceholders(source: Any): String {
+        val regex = "\\{VAR=([A-Za-z0-9_]+)}".toRegex()
+        val kClass = source::class
+        val propsByName = kClass.members.associateBy { it.name }
+
+        return regex.replace(this) { matchResult ->
+            val varName = matchResult.groupValues[1]
+            val prop = propsByName[varName]
+            prop?.call(source)?.toString() ?: matchResult.value // leave as-is if not found
+        }
     }
 
 }
