@@ -37,10 +37,10 @@ object ReadOnly
 
     fun script(key: String, obj: Any? = null): String
     {
-        return if(obj != null)
-            (script.getProperty(key).replacePlaceholders(obj))
+        return if (obj != null)
+            (script.getProperty(key)?.replacePlaceholders(obj)) ?: "Unknown".also { println("Warning: Could not find property $key") }
         else
-            (script.getProperty(key))
+            (script.getProperty(key)) ?: "Unknown".also { println("Warning: Could not find property $key") }
 
     }
 
