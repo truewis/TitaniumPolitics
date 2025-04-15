@@ -6,6 +6,7 @@ import kotlinx.serialization.Transient
 
 @Serializable
 class Request(
+    //This is the action to be executed.
     //IMPORTANT! tgtCharacter param of action is not used, as we want to support issuing requests to multiple characters.
     var action: GameAction,
     var issuedTo: HashSet<String>/*If unspecified, anyone can finish this request.*/
@@ -13,7 +14,7 @@ class Request(
 {
     var name = ""
         private set
-    var executeTime = 0//If unspecified, it can be executed anytime.
+    var executeTime = 0//The time the requester want the action to be executed. If 0, it can be executed anytime.
     var issuedBy: HashSet<String> = hashSetOf() //If unspecified, it is a system request.
 
     @Transient
@@ -59,12 +60,12 @@ class Request(
                 issuedBy.forEach { issuedBy ->
                     if (gState.characters[issuedBy]!!.trait.contains("psychopath"))
                         issuedTo.forEach { issuedTo ->
-                            gState.setMutuality(issuedBy, issuedTo, 2.0)
+                            gState.setMutuality(issuedBy, issuedTo, ReadOnly.const("RequestFinishDeltaMutuality").toDouble()/3)
                         }
                     else
                     {
                         issuedTo.forEach { issuedTo ->
-                            gState.setMutuality(issuedBy, issuedTo, 7.0)
+                            gState.setMutuality(issuedBy, issuedTo, ReadOnly.const("RequestFinishDeltaMutuality").toDouble())
                         }
                     }
                 }
@@ -84,7 +85,7 @@ class Request(
     fun deltaWill(tgtChar: String, gState: GameState): Double
     {
         return if ((executeTime in gState.time - 3..gState.time + 3 || executeTime == 0))
-            issuedBy.sumOf { gState.getMutuality(tgtChar, it) * ReadOnly.const("requestFinishDeltaWill") }
+            issuedBy.sumOf { gState.getMutuality(tgtChar, it) * ReadOnly.const("RequestFinishDeltaWill") }
         else
             0.0
     }

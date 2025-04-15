@@ -1,13 +1,17 @@
 package com.titaniumPolitics.game.core.NPCRoutines
 
+import com.titaniumPolitics.game.core.ReadOnly
 import com.titaniumPolitics.game.core.gameActions.GameAction
 import com.titaniumPolitics.game.core.gameActions.Move
+import com.titaniumPolitics.game.core.gameActions.Wait
 import kotlinx.serialization.Serializable
 
 @Serializable
 class ExecuteCommandRoutine() : Routine()
 {
+    var err = false
     val executableRequest = gState.requests[variables["request"]!!]!!
+    var timeout = ReadOnly.const("ExecuteCommandRoutineInvalidActionTimeout")
 
     override fun newRoutineCondition(name: String, place: String): Routine?
     {
@@ -32,14 +36,25 @@ class ExecuteCommandRoutine() : Routine()
                 executeDone = true
                 return executableRequest.action
             }
+            else {
+                timeout -= 1
+                //Wait a bit to see if the action gets valid
+                if (timeout <=0) {err = true
+                //TODO: executableRequest callback
+                }
+                return Wait(name, place)
+
+            }
         }
-        throw Exception("The request ${executableRequest.action} is invalid.")
+
+        println("$name: Cannot move to ${executableRequest.action.tgtPlace} to execute the request ${executableRequest.action}. Terminating the routine......")
+        err = true
+        return Wait(name, place)
     }
 
     override fun endCondition(name: String, place: String): Boolean
     {
-        return place == executableRequest.action.tgtPlace && !executableRequest.action.isValid()
-        //TODO: if execution is too late, return true.
+        return executeDone || err
     }
 
 }

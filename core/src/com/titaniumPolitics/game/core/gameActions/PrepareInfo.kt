@@ -7,7 +7,7 @@ import kotlinx.serialization.Serializable
 class PrepareInfo(override val sbjCharacter: String, override val tgtPlace: String) : GameAction()
 {
     var newSetOfPrepInfoKeys = arrayListOf<String>()
-    fun recommendedKeys()
+    fun recommendKeys()
     {
         newSetOfPrepInfoKeys.clear()
         //If you have executed a command, you know the result. Add the result to the prepared information.

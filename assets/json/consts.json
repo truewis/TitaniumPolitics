@@ -8,6 +8,8 @@
   "mutualityMin": 0,
   "mutualityMax": 100,
   "RequestRejectAverageMutuality": 30,
+  "RequestFinishDeltaMutuality":7,
+  "RequestFinishDeltaWill":5,
   "AddInfoDuration": 1,
   "ClearAccidentSceneDuration": 3,
   "EatDuration": 1,
@@ -34,5 +36,6 @@
   "maxAttentionIntercept": 30,
   "InterceptDeltaWill": -5,
   "WaitDeltaWill": -1,
-  "GlobalAccidentRate": 0
+  "GlobalAccidentRate": 0,
+  "ExecuteCommandRoutineInvalidActionTimeout": 4
 }

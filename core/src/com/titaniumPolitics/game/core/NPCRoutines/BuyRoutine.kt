@@ -9,6 +9,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 class BuyRoutine() : Routine()
 {
+    var err = false
     lateinit var tradeCharacter: String
     override fun newRoutineCondition(name: String, place: String): Routine?
     {
@@ -58,6 +59,7 @@ class BuyRoutine() : Routine()
                         who = tradeCharacter
                     }
                 }
+                //TODO: determine the success of this routine by implementing the success check of AttendMeetingRoutine.
             }
         }
         return null
