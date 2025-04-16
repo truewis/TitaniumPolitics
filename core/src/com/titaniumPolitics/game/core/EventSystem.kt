@@ -1,15 +1,12 @@
 package com.titaniumPolitics.game.core
 
 import com.titaniumPolitics.game.events.*
-import com.titaniumPolitics.game.ui.DialogueUI
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.Transient
 
 
 //Events are quests that never expire. Some can be triggered many times, some only once.
 @Serializable
-class EventSystem : GameStateElement()
-{
+class EventSystem : GameStateElement() {
     override val name: String
         get() = "EventSystem" //There is only one EventSystem object in the game.
     val dataBase = arrayListOf<EventObject>()
@@ -17,8 +14,7 @@ class EventSystem : GameStateElement()
 
     //Add an objective with a time limit.
 
-    override fun injectParent(gameState: GameState)
-    {
+    override fun injectParent(gameState: GameState) {
         super.injectParent(gameState)
         dataBase.add(Event_PrologueInfDivLeaderSpeech())
         dataBase.add(Event_BribeDoctor1())
@@ -32,8 +28,7 @@ class EventSystem : GameStateElement()
         }
     }
 
-    fun refresh()
-    {
+    fun refresh() {
         dataBase.forEach {
             it.deactivate()
         }
@@ -41,6 +36,10 @@ class EventSystem : GameStateElement()
             it.activate()
         }
 
+    }
+
+    companion object {
+        val onPlayDialogue = arrayListOf<(String) -> Unit>()
     }
 
 }

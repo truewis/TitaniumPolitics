@@ -74,6 +74,9 @@ project(":core") {
         api "com.rafaskoberg.gdx:typing-label:$typingLabelVersion"
         implementation "space.earlygrey:shapedrawer:$shapedrawerVersion"
         api 'com.github.raeleus.TenPatch:tenpatch:5.2.3'
+        implementation 'org.junit.jupiter:junit-jupiter:5.11.1'
+        implementation 'com.badlogicgames.gdx:gdx-backend-headless:1.13.0'
+
     }
 }
 kotlin {

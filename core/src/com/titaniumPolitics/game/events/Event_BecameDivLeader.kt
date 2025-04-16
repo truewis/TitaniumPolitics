@@ -6,11 +6,9 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 
 @Serializable
-class Event_BecameDivLeader : EventObject("I am the infrastructure division leader.", true)
-{
+class Event_BecameDivLeader : EventObject("I am the infrastructure division leader.", true) {
     //Infrastructure Division Leader gives a speech. Quest is completed when the game starts.
-    override fun injectParent(gameState: GameState)
-    {
+    override fun injectParent(gameState: GameState) {
         super.injectParent(gameState)
         //Injected at the start of the game. No action required.
 
@@ -19,22 +17,19 @@ class Event_BecameDivLeader : EventObject("I am the infrastructure division lead
     @Transient
     val func = { _: Int, _: Int ->
         if (parent.parties["infrastructure"]!!.leader == parent.playerName
-        )
-        {
+        ) {
 
-            DialogueUI.instance.playDialogue("BecameDivLeader")
+            onPlayDialogue("BecameDivLeader")
             deactivate()
 
         }
     }
 
-    override fun activate()
-    {
+    override fun activate() {
         parent.timeChanged += func
     }
 
-    override fun deactivate()
-    {
+    override fun deactivate() {
         parent.timeChanged -= func
     }
 }

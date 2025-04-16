@@ -17,6 +17,7 @@ import com.badlogic.gdx.utils.Align
 import com.titaniumPolitics.game.core.GameState
 import com.rafaskoberg.gdx.typinglabel.TypingAdapter
 import com.rafaskoberg.gdx.typinglabel.TypingLabel
+import com.titaniumPolitics.game.core.EventSystem
 import com.titaniumPolitics.game.core.ReadOnly
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
@@ -24,8 +25,7 @@ import ktx.scene2d.*
 import ktx.scene2d.Scene2DSkin.defaultSkin
 import kotlin.collections.ArrayList
 
-class DialogueUI(val gameState: GameState) : Table(defaultSkin), KTable
-{
+class DialogueUI(val gameState: GameState) : Table(defaultSkin), KTable {
     var currentDialogue = ""
     var currentDialogueLength = 0
     var currentLineNumber = 0
@@ -43,10 +43,12 @@ class DialogueUI(val gameState: GameState) : Table(defaultSkin), KTable
     var ctnuCallback: () -> Unit = {}
     val portraitsTable = Table(defaultSkin)
 
-    init
-    {
+    init {
         isVisible = false
         instance = this
+        EventSystem.onPlayDialogue += {
+            playDialogue(it)
+        }
         stack {
             it.grow()
             add(this@DialogueUI.background)
@@ -77,11 +79,9 @@ class DialogueUI(val gameState: GameState) : Table(defaultSkin), KTable
         speakerNameDisplay.setFontScale(4f)
         currentTextDisplay.touchable = Touchable.disabled
         speakerNameDisplay.touchable = Touchable.disabled
-        currentTextDisplay.typingListener = object : TypingAdapter()
-        {
+        currentTextDisplay.typingListener = object : TypingAdapter() {
             // Sense TypingLabel animation end and play next log in queue.
-            override fun end()
-            {
+            override fun end() {
                 super.end()
 
             }
@@ -91,22 +91,21 @@ class DialogueUI(val gameState: GameState) : Table(defaultSkin), KTable
         ctnuButton.setFontScale(2f)
         // Blinking ctnuButton
         ctnuButton.addAction(
-            Actions.forever(Actions.sequence(
-                Actions.delay(0.5f),
-                AlphaAction().apply {
-                    duration = 0.2f
-                    alpha = 0f
-                },
-                AlphaAction().apply {
-                    duration = 0.2f
-                    alpha = 1f
-                }
-            )))
+            Actions.forever(
+                Actions.sequence(
+                    Actions.delay(0.5f),
+                    AlphaAction().apply {
+                        duration = 0.2f
+                        alpha = 0f
+                    },
+                    AlphaAction().apply {
+                        duration = 0.2f
+                        alpha = 1f
+                    }
+                )))
         ctnuButton.isVisible = true
-        ctnuButton.addListener(object : ClickListener()
-        {
-            override fun clicked(event: InputEvent, x: Float, y: Float)
-            {
+        ctnuButton.addListener(object : ClickListener() {
+            override fun clicked(event: InputEvent, x: Float, y: Float) {
                 if (!currentTextDisplay.hasEnded())
                     currentTextDisplay.skipToTheEnd()
                 else
@@ -114,12 +113,9 @@ class DialogueUI(val gameState: GameState) : Table(defaultSkin), KTable
                 super.clicked(event, x, y)
             }
         })
-        addListener(object : InputListener()
-        {
-            override fun keyDown(event: InputEvent?, keycode: Int): Boolean
-            {
-                if (keycode == Input.Keys.ENTER || keycode == Input.Keys.SPACE)
-                {
+        addListener(object : InputListener() {
+            override fun keyDown(event: InputEvent?, keycode: Int): Boolean {
+                if (keycode == Input.Keys.ENTER || keycode == Input.Keys.SPACE) {
                     if (!currentTextDisplay.hasEnded())
                         currentTextDisplay.skipToTheEnd()
                     else
@@ -131,31 +127,25 @@ class DialogueUI(val gameState: GameState) : Table(defaultSkin), KTable
         })
     }
 
-    override fun setVisible(visible: Boolean)
-    {
-        if (visible)
-        {
+    override fun setVisible(visible: Boolean) {
+        if (visible) {
             stage.keyboardFocus = this
         }
         super.setVisible(visible)
     }
 
-    fun nextLine()
-    {
-        if (currentLineNumber < currentDialogueLength - 1)
-        {
+    fun nextLine() {
+        if (currentLineNumber < currentDialogueLength - 1) {
             currentLineNumber++
             playLine(currentLineNumber)
-        } else
-        {
+        } else {
             ctnuCallback()
             ctnuCallback = {}
             instance.isVisible = false
         }
     }
 
-    fun playDialogue(dialogueKey: String)
-    {
+    fun playDialogue(dialogueKey: String) {
         isVisible = true
         val placeName = gameState.player.place.name
         background.drawable = TextureRegionDrawable(
@@ -170,10 +160,8 @@ class DialogueUI(val gameState: GameState) : Table(defaultSkin), KTable
         playLine(currentLineNumber)
     }
 
-    fun playLine(lineNumber: Int)
-    {
-        if (lineNumber > currentDialogueLength)
-        {
+    fun playLine(lineNumber: Int) {
+        if (lineNumber > currentDialogueLength) {
             println("Warning: Dialogue line number out of range in $currentDialogue.")
             return
         }
@@ -191,8 +179,7 @@ class DialogueUI(val gameState: GameState) : Table(defaultSkin), KTable
     }
 
 
-    companion object
-    {
+    companion object {
         lateinit var instance: DialogueUI
     }
 }

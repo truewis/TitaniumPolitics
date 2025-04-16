@@ -6,11 +6,9 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 
 @Serializable
-class Event_PrologueInfDivLeaderSpeech : EventObject("Introduction of Alina.", true)
-{
+class Event_PrologueInfDivLeaderSpeech : EventObject("Introduction of Alina.", true) {
     //Infrastructure Division Leader gives a speech. Quest is completed when the game starts.
-    override fun injectParent(gameState: GameState)
-    {
+    override fun injectParent(gameState: GameState) {
         super.injectParent(gameState)
         //Injected at the start of the game. No action required.
 
@@ -21,29 +19,24 @@ class Event_PrologueInfDivLeaderSpeech : EventObject("Introduction of Alina.", t
         if (parent.player.currentMeeting != null && parent.parties["infrastructure"]!!.leader == "Alina" && parent.player.currentMeeting!!.currentCharacters.containsAll(
                 listOf("Alina", "Krailin")
             )
-        )
-        {
-            DialogueUI.instance.playDialogue("PrologueInfDivLeaderSpeech")
+        ) {
+            onPlayDialogue("PrologueInfDivLeaderSpeech")
             parent.eventSystem.dataBase.add(Event_AlinaResign())
             parent.eventSystem.dataBase.add(Event_ObserverIntroAfterMeeting1())
             deactivate()
         }
     }
 
-    override fun activate()
-    {
+    override fun activate() {
         parent.timeChanged += func
     }
 
-    override fun deactivate()
-    {
+    override fun deactivate() {
         parent.timeChanged -= func
     }
 
-    override fun displayEmoji(who: String): Boolean
-    {
-        if (parent.timeChanged.contains(func) && who == "Alina" && parent.player.place.name == parent.parties["infrastructure"]!!.home && parent.characters["Alina"]!!.currentMeeting != null)
-        {
+    override fun displayEmoji(who: String): Boolean {
+        if (parent.timeChanged.contains(func) && who == "Alina" && parent.player.place.name == parent.parties["infrastructure"]!!.home && parent.characters["Alina"]!!.currentMeeting != null) {
             return true
         }
         return false

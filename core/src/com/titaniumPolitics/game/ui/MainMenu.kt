@@ -19,17 +19,17 @@ import com.titaniumPolitics.game.EntryClass
 import com.titaniumPolitics.game.core.GameEngine
 import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.core.ReadOnly
+import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
-import ktx.scene2d.Scene2DSkin
-import ktx.scene2d.button
 import ktx.scene2d.label
 import ktx.scene2d.scene2d
 import kotlin.concurrent.thread
+import kotlin.coroutines.resume
+import kotlin.coroutines.suspendCoroutine
 
-class MainMenu(val entry: EntryClass) : Stage(FitViewport(1920F, 1080F))
-{
+class MainMenu(val entry: EntryClass) : Stage(FitViewport(1920F, 1080F)) {
     var background = Image()
 
     val rootStack = Stack()
@@ -52,18 +52,15 @@ class MainMenu(val entry: EntryClass) : Stage(FitViewport(1920F, 1080F))
                 )))
         setFontScale(3f)
         setAlignment(Align.bottomRight, Align.bottomRight)
-        addListener(object : ClickListener()
-        {
-            override fun clicked(event: com.badlogic.gdx.scenes.scene2d.InputEvent?, x: Float, y: Float)
-            {
+        addListener(object : ClickListener() {
+            override fun clicked(event: com.badlogic.gdx.scenes.scene2d.InputEvent?, x: Float, y: Float) {
                 println("Start button clicked.")
                 startGame()
             }
         })
     }
 
-    init
-    {
+    init {
 
         instance = this
         val resolver = InternalFileHandleResolver()
@@ -105,28 +102,24 @@ class MainMenu(val entry: EntryClass) : Stage(FitViewport(1920F, 1080F))
         }
     }
 
-    fun playMusic()
-    {
+    fun playMusic() {
 
         music.isLooping = true
         music.play()
 
     }
 
-    override fun keyTyped(character: Char): Boolean
-    {
+    override fun keyTyped(character: Char): Boolean {
 
         return super.keyTyped(character)
     }
 
-    fun startGame()
-    {
+    fun startGame() {
         music.stop()
         val savedGamePath = System.getenv("SAVED_GAME")
         var newGame: GameState
         startbutton.setText("Loading...")
-        if (savedGamePath == null)
-        {
+        if (savedGamePath == null) {
             println("Loading init.json...")
             newGame = Json.decodeFromString(
                 GameState.serializer(),
@@ -138,8 +131,7 @@ class MainMenu(val entry: EntryClass) : Stage(FitViewport(1920F, 1080F))
                 Gdx.input.inputProcessor = entry.stage
             }
             newGame.onStart.forEach { it() }
-        } else
-        {
+        } else {
             println("Loading saved game from $savedGamePath...")
             newGame = Json.decodeFromString(
                 GameState.serializer(),
@@ -155,13 +147,25 @@ class MainMenu(val entry: EntryClass) : Stage(FitViewport(1920F, 1080F))
 
         thread(start = true) {
             val engine = GameEngine(newGame)
+            engine.onObserverCall += {
+                runBlocking {
+                    suspendCoroutine { cont ->
+                        Gdx.app.postRunnable {
+                            val current =
+                                newGame.updateUI.clone() as ArrayList<(GameState) -> Unit> //Clone the list to prevent concurrent modification, because updateUI can be modified by UI elements during the update.
+                            current.forEach { it(newGame) }//Update UI
+                            cont.resume(Unit)
+                        }
+                    }
+                }
+
+            }
             engine.startGame()
         }
     }
 
 
-    companion object
-    {
+    companion object {
         lateinit var instance: MainMenu
     }
 
