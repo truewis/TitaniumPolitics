@@ -23,6 +23,9 @@ class NewAgenda(override val sbjCharacter: String, override val tgtPlace: String
             AgendaType.PROOF_OF_WORK ->
             {
             }
+            AgendaType.REQUEST -> {
+                agenda.attachedRequest!!.also{parent.requests[it.generateName()] = it}
+            }
 
             AgendaType.BUDGET_PROPOSAL ->
             {
@@ -84,7 +87,7 @@ class NewAgenda(override val sbjCharacter: String, override val tgtPlace: String
             AgendaType.PRAISE_PARTY -> return true
 
             AgendaType.DENOUNCE_PARTY -> return true
-            AgendaType.REQUEST -> return true
+            AgendaType.REQUEST -> return agenda.attachedRequest != null
             AgendaType.NOMINATE -> return mt.type == "divisionLeaderElection" && agenda.subjectParams["character"]!! in parent.parties[mt.involvedParty]!!.members
             //You can choose the person to request, and one of the actions that the person can do. The command is issued immediately, and other people can opt in.
             //The below actions are executed by the leader. Party members can request the leader to do these actions.

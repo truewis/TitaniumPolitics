@@ -7,12 +7,10 @@ import com.titaniumPolitics.game.core.gameActions.Talk
 import kotlinx.serialization.Serializable
 
 @Serializable
-class BuyRoutine() : Routine()
-{
+class BuyRoutine() : Routine() {
     var err = false
     lateinit var tradeCharacter: String
-    override fun newRoutineCondition(name: String, place: String): Routine?
-    {
+    override fun newRoutineCondition(name: String, place: String): Routine? {
         //Try to trade for resources
         //Select a character to trade with, based on the information known to the character.
 
@@ -23,21 +21,18 @@ class BuyRoutine() : Routine()
                 name
             )
         }
-        tradeCharacter = if (info.isNotEmpty())
-        {//If this character knows a character with the resource
+        tradeCharacter = if (info.isNotEmpty()) {//If this character knows a character with the resource
             info.random().tgtCharacter
         } else
             gState.characters.keys.filter { it != name }.random()
 
         //FindCharacter
         // if the character is not in the same place.
-        if (place != gState.places.values.find { it.characters.contains(tradeCharacter) }!!.name)
-        {
+        if (place != gState.places.values.find { it.characters.contains(tradeCharacter) }!!.name) {
             return FindCharacterRoutine().apply {
                 variables["character"] = tradeCharacter
             }
-        } else
-        {
+        } else {
             //If the character is in the same place, start a conversation first
             if (gState.ongoingMeetings.none {
                     it.value.currentCharacters.containsAll(
@@ -46,12 +41,11 @@ class BuyRoutine() : Routine()
                             tradeCharacter
                         )
                     )
-                })
-            {
+                }) {
                 return AttendMeetingRoutine().apply {
-                    variables["subject"] = "requestResource"
-                    variables["resource"] = variables["wantedResource"]!!
-                    intVariables["amount"] =
+                    variables["intention"] = "requestResource"
+                    variables["requestResourceType"] = variables["wantedResource"]!!
+                    intVariables["requestResourceAmount"] =
                         gState.characters[name]!!.reliants.size //The amount of resource to request is proportional to the number of reliants.
                     //TODO: the amount of resource to request should be determined by the character's trait.
                     variables["requestTo"] = tradeCharacter
@@ -59,19 +53,17 @@ class BuyRoutine() : Routine()
                         who = tradeCharacter
                     }
                 }
-                //TODO: determine the success of this routine by implementing the success check of AttendMeetingRoutine.
+                //Since this is a request, the success of this routine cannot be known because it is up to tradeCharacter whether they send resource or not.
             }
         }
         return null
     }
 
-    override fun execute(name: String, place: String): GameAction
-    {
+    override fun execute(name: String, place: String): GameAction {
         TODO("Not supposed to be called")
     }
 
-    override fun endCondition(name: String, place: String): Boolean
-    {
+    override fun endCondition(name: String, place: String): Boolean {
         return true
     }
 }

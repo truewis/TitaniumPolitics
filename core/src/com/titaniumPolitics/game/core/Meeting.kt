@@ -53,11 +53,11 @@ class Meeting(
             gameState.parties[involvedParty]!!.leader = leader
             println("The leader of the party $involvedParty is elected as $leader.")
         }
-        //Remove the meeting from the ongoingMeetings or ongoingConferences.
+        //Remove the meeting from the ongoingMeetings.
         if (gameState.ongoingMeetings.containsValue(this))
         {
             gameState.ongoingMeetings.remove(gameState.ongoingMeetings.filter { it.value == this }.keys.first())
         } else
-            throw IllegalStateException("Meeting $this is not found in the ongoingMeetings or ongoingConferences.")
+            throw IllegalStateException("Meeting $this is not found in the ongoingMeetings.")
     }
 }
