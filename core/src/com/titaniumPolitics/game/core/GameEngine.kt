@@ -24,6 +24,11 @@ class GameEngine(val gameState: GameState)
     //Let UI or other monitors to come in and read gamestate.
     var onObserverCall = arrayListOf<(GameState) -> Unit>()
 
+    init
+    {
+        Logger.gState = gameState
+    }
+
     fun startGame()
     {
         //Start the game.

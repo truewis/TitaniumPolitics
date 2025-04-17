@@ -19,7 +19,6 @@ import com.titaniumPolitics.game.EntryClass
 import com.titaniumPolitics.game.core.GameEngine
 import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.core.ReadOnly
-import com.titaniumPolitics.game.debugTools.Logger
 import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.jsonObject
@@ -170,7 +169,6 @@ class MainMenu(val entry: EntryClass) : Stage(FitViewport(1920F, 1080F))
                 }
 
             }
-            Logger.gState = newGame
             engine.startGame()
         }
     }

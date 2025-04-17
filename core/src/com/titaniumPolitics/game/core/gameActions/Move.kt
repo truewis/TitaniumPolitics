@@ -12,7 +12,9 @@ class Move(override val sbjCharacter: String, override val tgtPlace: String) : G
         GameEngine.acquire(tgtPlaceObj.connectedPlaces + "cancel")
     }
 
-    override fun isValid(): Boolean = placeTo != ""
+    override fun isValid(): Boolean =
+        placeTo != "" && sbjCharObj.currentMeeting == null //You cannot move during meeting; you have to end meeting first.
+
     override fun execute()
     {
 

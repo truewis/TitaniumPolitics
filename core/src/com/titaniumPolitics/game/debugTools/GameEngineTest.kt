@@ -26,17 +26,27 @@ class GameEngineTest
             it.initialize()
         }
         gState.onStart.forEach { it() }
-        Logger.gState = gState
         val engine = GameEngine(gState)
-        engine.runFor2Days()
+        engine.runUntil(2)
+
+        val fName = gState.dump()
+        gState = Json.decodeFromString(
+            GameState.serializer(),
+            File(fName).readText()
+        ).also {
+            it.injectDependency()
+            println("Reloading test complete.")
+        }
+        val engine2 = GameEngine(gState)
+        engine2.runUntil(4)
     }
 
-    fun GameEngine.runFor2Days()
+    fun GameEngine.runUntil(days: Int)
     {
         //Start the game.
         println("Game started. Time: ${gameState.time}. Starting main loop.")
         //Main loop
-        while (gameState.time < 96)
+        while (gameState.time < days * 48)
         {
             gameLoop()
         }
