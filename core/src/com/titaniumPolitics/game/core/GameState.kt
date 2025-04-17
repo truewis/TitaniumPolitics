@@ -261,10 +261,16 @@ class GameState
     }
 
 
-    @OptIn(ExperimentalSerializationApi::class)
-    fun dump()
+    fun dump(): String
     {
+        val fName = "save${Calendar.getInstance().time.toString("YYYYMMdd_HHmmss")}_${System.currentTimeMillis()}.json"
+        dump(fName)
+        return fName
+    }
 
+    @OptIn(ExperimentalSerializationApi::class)
+    fun dump(fileName: String)
+    {
         val prettyJson = Json { // this returns the JsonBuilder
             prettyPrint = true
             allowSpecialFloatingPointValues = true
@@ -272,7 +278,7 @@ class GameState
             prettyPrintIndent = " "
         }
 
-        val file = File("save${Calendar.getInstance().time.toString("YYYYMMdd_HHmmss")}.json")
+        val file = File(fileName)
         file.writeText(prettyJson.encodeToString(this))
         println("Save File Dumped.")
     }

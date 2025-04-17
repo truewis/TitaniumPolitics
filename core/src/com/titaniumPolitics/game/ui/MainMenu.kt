@@ -19,6 +19,7 @@ import com.titaniumPolitics.game.EntryClass
 import com.titaniumPolitics.game.core.GameEngine
 import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.core.ReadOnly
+import com.titaniumPolitics.game.debugTools.Logger
 import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.jsonObject
@@ -29,7 +30,8 @@ import kotlin.concurrent.thread
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
-class MainMenu(val entry: EntryClass) : Stage(FitViewport(1920F, 1080F)) {
+class MainMenu(val entry: EntryClass) : Stage(FitViewport(1920F, 1080F))
+{
     var background = Image()
 
     val rootStack = Stack()
@@ -52,15 +54,18 @@ class MainMenu(val entry: EntryClass) : Stage(FitViewport(1920F, 1080F)) {
                 )))
         setFontScale(3f)
         setAlignment(Align.bottomRight, Align.bottomRight)
-        addListener(object : ClickListener() {
-            override fun clicked(event: com.badlogic.gdx.scenes.scene2d.InputEvent?, x: Float, y: Float) {
+        addListener(object : ClickListener()
+        {
+            override fun clicked(event: com.badlogic.gdx.scenes.scene2d.InputEvent?, x: Float, y: Float)
+            {
                 println("Start button clicked.")
                 startGame()
             }
         })
     }
 
-    init {
+    init
+    {
 
         instance = this
         val resolver = InternalFileHandleResolver()
@@ -102,24 +107,28 @@ class MainMenu(val entry: EntryClass) : Stage(FitViewport(1920F, 1080F)) {
         }
     }
 
-    fun playMusic() {
+    fun playMusic()
+    {
 
         music.isLooping = true
         music.play()
 
     }
 
-    override fun keyTyped(character: Char): Boolean {
+    override fun keyTyped(character: Char): Boolean
+    {
 
         return super.keyTyped(character)
     }
 
-    fun startGame() {
+    fun startGame()
+    {
         music.stop()
         val savedGamePath = System.getenv("SAVED_GAME")
         var newGame: GameState
         startbutton.setText("Loading...")
-        if (savedGamePath == null) {
+        if (savedGamePath == null)
+        {
             println("Loading init.json...")
             newGame = Json.decodeFromString(
                 GameState.serializer(),
@@ -131,7 +140,8 @@ class MainMenu(val entry: EntryClass) : Stage(FitViewport(1920F, 1080F)) {
                 Gdx.input.inputProcessor = entry.stage
             }
             newGame.onStart.forEach { it() }
-        } else {
+        } else
+        {
             println("Loading saved game from $savedGamePath...")
             newGame = Json.decodeFromString(
                 GameState.serializer(),
@@ -160,12 +170,14 @@ class MainMenu(val entry: EntryClass) : Stage(FitViewport(1920F, 1080F)) {
                 }
 
             }
+            Logger.gState = newGame
             engine.startGame()
         }
     }
 
 
-    companion object {
+    companion object
+    {
         lateinit var instance: MainMenu
     }
 
