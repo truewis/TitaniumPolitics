@@ -52,5 +52,10 @@ class GameEngineTest {
         }
     }
 
+    @org.junit.jupiter.api.AfterEach
+    fun after() {
+        gState.dump()
+    }
+
 
 }

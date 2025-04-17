@@ -14,10 +14,12 @@ import kotlinx.serialization.json.Json
 import ktx.scene2d.Scene2DSkin
 import kotlin.concurrent.thread
 
-class EntryClass : ApplicationAdapter() {
+class EntryClass : ApplicationAdapter()
+{
     lateinit var stage: Stage
     lateinit var skin: Skin
-    override fun create() {
+    override fun create()
+    {
 
         val gen = FreeTypeFontGenerator(Gdx.files.internal("Fonts/LondrinaSolid-Regular.ttf"))
         val parameter = FreeTypeFontGenerator.FreeTypeFontParameter()
@@ -37,21 +39,25 @@ class EntryClass : ApplicationAdapter() {
         Gdx.input.inputProcessor = stage
     }
 
-    override fun render() {
+    override fun render()
+    {
         ScreenUtils.clear(0f, 0f, 0f, 1f)
         stage.act(Gdx.graphics.deltaTime)
         stage.draw()
     }
 
-    override fun dispose() {
+    override fun dispose()
+    {
         stage.dispose()
     }
 
-    override fun resize(width: Int, height: Int) {
+    override fun resize(width: Int, height: Int)
+    {
         stage.viewport.update(width, height, true)
     }
 
-    companion object {
+    companion object
+    {
 
         //--------------------------------------------------------------
         var fontMap = ObjectMap<String, Any>()
