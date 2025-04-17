@@ -1,6 +1,7 @@
 package com.titaniumPolitics.game.core.gameActions
 
 import com.titaniumPolitics.game.core.GameEngine
+import com.titaniumPolitics.game.core.ReadOnly
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -38,7 +39,11 @@ class StartMeeting(override val sbjCharacter: String, override val tgtPlace: Str
     override fun isValid(): Boolean
     {
         val targetMeeting =
-            parent.scheduledMeetings.filter { it.value.time + 2 >= parent.time && parent.time + 2 >= it.value.time && it.value.place == tgtPlace }
+            parent.scheduledMeetings.filter {
+                it.value.time - parent.time in -ReadOnly.constInt("MeetingStartTolerance")..ReadOnly.constInt(
+                    "MeetingStartTolerance"
+                ) && it.value.place == tgtPlace
+            }
                 .filter { !parent.ongoingMeetings.containsKey(it.key) }
                 .filter { it.value.scheduledCharacters.contains(sbjCharacter) }.keys.firstOrNull()
         return if (targetMeeting == null) false else

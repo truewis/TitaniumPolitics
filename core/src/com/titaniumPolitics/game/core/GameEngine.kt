@@ -1041,7 +1041,11 @@ class GameEngine(val gameState: GameState)
                 actions.add("UnofficialResourceTransfer")//can only move resources from their home.
             }
             val availableMeetings =
-                gameState.scheduledMeetings.filter { it.value.time + 2 > gameState.time && gameState.time + 2 > it.value.time && it.value.place == place }
+                gameState.scheduledMeetings.filter {
+                    it.value.time - gameState.time in -ReadOnly.constInt("MeetingStartTolerance")..ReadOnly.constInt(
+                        "MeetingStartTolerance"
+                    ) && it.value.place == place
+                }
                     .filter { !gameState.ongoingMeetings.containsKey(it.key) }
                     .filter { it.value.scheduledCharacters.contains(character) }
             if (availableMeetings.isNotEmpty())

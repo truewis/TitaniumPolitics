@@ -3,6 +3,7 @@ package com.titaniumPolitics.game.core
 import com.badlogic.gdx.Gdx
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.float
+import kotlinx.serialization.json.int
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
 import java.io.File
@@ -11,7 +12,8 @@ import java.io.InputStream
 import java.util.*
 import kotlin.jvm.javaClass
 
-object ReadOnly {
+object ReadOnly
+{
     val mapJson = Json.parseToJsonElement(
         Gdx.files?.internal("json/map.json")?.readString() ?: File("../assets/json/map.json").readText()
     ).jsonObject
@@ -33,12 +35,20 @@ object ReadOnly {
     } ?: Properties().apply { load(FileInputStream(File("../assets/texts/DefaultCharacter.properties"))) }
 
 
-    fun const(constName: String): Float {
+    fun const(constName: String): Float
+    {
         return constJson[constName]?.jsonPrimitive?.float
             ?: 0f.also { println("Warning: Could not find constant $constName") }
     }
 
-    fun prop(key: String, obj: Any? = null): String {
+    fun constInt(constName: String): Int
+    {
+        return constJson[constName]?.jsonPrimitive?.int
+            ?: 0.also { println("Warning: Could not find constant $constName") }
+    }
+
+    fun prop(key: String, obj: Any? = null): String
+    {
 
         return if (obj != null)
             (props.getProperty(key)?.replacePlaceholders(obj))
@@ -47,7 +57,8 @@ object ReadOnly {
             (props.getProperty(key)) ?: "Unknown".also { println("Warning: Could not find property $key") }
     }
 
-    fun script(key: String, obj: Any? = null): String {
+    fun script(key: String, obj: Any? = null): String
+    {
         return if (obj != null)
             (script.getProperty(key)?.replacePlaceholders(obj))
                 ?: "Unknown".also { println("Warning: Could not find property $key") }
@@ -56,7 +67,8 @@ object ReadOnly {
 
     }
 
-    private fun String.replacePlaceholders(source: Any): String {
+    private fun String.replacePlaceholders(source: Any): String
+    {
         val regex = "\\{VAR=([A-Za-z0-9_]+)}".toRegex()
         val kClass = source::class
         val propsByName = kClass.members.associateBy { it.name }
