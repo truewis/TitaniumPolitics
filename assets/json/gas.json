@@ -1,0 +1,23 @@
+{
+  "oxygen": {
+    "density": 1.429
+  },
+  "nitrogen": {
+    "density": 1.251
+  },
+  "carbonDioxide": {
+    "density": 1.977
+  },
+  "hydrogen": {
+    "density": 0.0899
+  },
+  "helium": {
+    "density": 0.1786
+  },
+  "methane": {
+    "density": 0.717
+  },
+  "argon": {
+    "density": 1.784
+  }
+}

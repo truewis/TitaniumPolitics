@@ -1,7 +1,11 @@
 package com.titaniumPolitics.game.core
 
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.float
+import kotlinx.serialization.json.jsonObject
+import kotlinx.serialization.json.jsonPrimitive
 import java.util.*
+import kotlin.math.exp
 
 @Serializable
 class Place : GameStateElement()
@@ -23,9 +27,12 @@ class Place : GameStateElement()
                 parent.characters[name.substringAfter("home_")]!!.resources = value
             field = value
         }
+    var gasPressure = hashMapOf<String, Double>("oxygen" to 20000.0, "carbonDioxide" to 100.0)
     var connectedPlaces = arrayListOf<String>()
     var plannedWorker = 0
     var coordinates = Coordinate3D(0, 0, 0)
+    var temperature = 300 //Ambient temperature in Kelvin.
+    var volume = 1000f //Volume in m^3.
     val currentWorker: Int get() = apparatuses.sumOf { it.currentWorker }
     val maxResources: HashMap<String, Int>
         get()
@@ -68,6 +75,37 @@ class Place : GameStateElement()
         super.injectParent(gameState)
         plannedWorker =
             apparatuses.sumOf { it.idealWorker }//TODO: this is a temporary solution to set up the planned worker. It should be set by division leaders.
+    }
+
+    //Check the gas pressure of the connected places and slowly equalize it. This function is called every time change.
+    fun diffuseGas()
+    {
+        connectedPlaces.forEach {
+            val place = parent.places[it]!!
+            //For each gas type, use the coordinates and the density in gasJson to distribute the gas according to the boltzmann distribution.
+            gasPressure.forEach { (key, _) ->
+                val mass =
+                    (ReadOnly.gasJson[key]!!.jsonObject["density"]!!.jsonPrimitive.float) * 22.4f / ReadOnly.NA
+                val potentialDiff = coordinates.z - place.coordinates.z
+                val ratio = exp(
+                    -(ReadOnly.GA * mass * potentialDiff) / (ReadOnly.KB * temperature) //[J] = [kg*m^2/s^2]
+                ) //Boltzmann distribution. TODO: reflect the volume of the place.
+                val equilabriumGasAmount =
+                    ((gasPressure[key] ?: 0.0) * volume + (place.gasPressure[key]
+                        ?: 0.0) * place.volume) / (volume + ratio * place.volume)
+
+                val flowAmount =
+                    (equilabriumGasAmount - (gasPressure[key] ?: 0.0) * volume) * ReadOnly.const("GasDiffusionRate")
+
+                gasPressure[key] =
+                    (gasPressure[key] ?: 0.0) + flowAmount / volume
+
+                place.gasPressure[key] =
+                    (place.gasPressure[key] ?: 0.0) - flowAmount / place.volume
+            }
+        }
+
+
     }
 
 }

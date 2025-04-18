@@ -42,5 +42,6 @@
   "InterceptDeltaWill": -5,
   "WaitDeltaWill": -1,
   "GlobalAccidentRate": 0,
-  "ExecuteCommandRoutineInvalidActionTimeout": 4
+  "ExecuteCommandRoutineInvalidActionTimeout": 4,
+  "GasDiffusionRate": 0.1
 }

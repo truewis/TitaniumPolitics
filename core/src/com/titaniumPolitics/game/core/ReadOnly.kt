@@ -14,6 +14,14 @@ import kotlin.jvm.javaClass
 
 object ReadOnly
 {
+    //Boltzmann constant in J/K
+    val KB = 1.380649e-23
+
+    val NA = 6.02214076e23 //Avogadro's number in mol^-1
+
+    //Gravitational acceleration in m/s^2
+    //TODO: depends on the coordinate
+    val GA = 9.8
     val mapJson = Json.parseToJsonElement(
         Gdx.files?.internal("json/map.json")?.readString() ?: File("../assets/json/map.json").readText()
     ).jsonObject
@@ -26,6 +34,10 @@ object ReadOnly
     val constJson = Json.parseToJsonElement(
         Gdx.files?.internal("json/consts.json")?.readString() ?: File("../assets/json/consts.json").readText()
     ).jsonObject
+    val gasJson = Json.parseToJsonElement(
+        Gdx.files?.internal("json/gas.json")?.readString() ?: File("../assets/json/gas.json").readText()
+    ).jsonObject
+
     val props = javaClass.classLoader.getResourceAsStream("texts/ui.properties")?.use {
         Properties().apply { load(it) }
     } ?: Properties().apply { load(FileInputStream(File("../assets/texts/ui.properties"))) }

@@ -176,6 +176,7 @@ class GameEngine(val gameState: GameState)
         println("[${gameState.time}]")
         distributePopulation()
         distributeResources()
+        diffuseGas()
         calculateMutuality()
         workAppratuses()
         conditionCheck()
@@ -433,6 +434,13 @@ class GameEngine(val gameState: GameState)
                     ?: 0) + (energyStorage / energyStorageCount * place.apparatuses.filter { it.name == "energyStorage" }.size - (place.resources["energy"]
                     ?: 0)) * energyDistributionSpeed / 100 //TODO: make sure that the energy is not lost during integer division.
             }
+    }
+
+    fun diffuseGas()
+    {
+        gameState.places.forEach {
+            it.value.diffuseGas()
+        }
     }
 
     fun workAppratuses()
