@@ -462,7 +462,7 @@ class GameEngine(val gameState: GameState)
             .forEach { place ->
                 place.resources["energy"] = (place.resources["energy"]
                     ?: .0) + (energyStorage / energyStorageCount * place.apparatuses.filter { it.name == "energyStorage" }.size - (place.resources["energy"]
-                    ?: .0)) / energyDistributionTau * dth //TODO: make sure that the energy is not lost during integer division.
+                    ?: .0)) / energyDistributionTau * dth
             }
     }
 

@@ -393,7 +393,7 @@
           "idealWorker": 32,
           "currentWorker": 0,
           "idealConsumption": {
-            "energy": 1
+            "energy": 1e4
           }
         },
         {
@@ -462,7 +462,7 @@
           "idealWorker": 20,
           "currentWorker": 0,
           "idealConsumption": {
-            "energy": 1
+            "energy": 1e4
           }
         },
         {
@@ -472,7 +472,7 @@
           "idealWorker": 20,
           "currentWorker": 0,
           "idealConsumption": {
-            "energy": 1
+            "energy": 1e4
           }
         },
         {
@@ -541,7 +541,7 @@
           "idealWorker": 20,
           "currentWorker": 0,
           "idealConsumption": {
-            "energy": 1
+            "energy": 1e4
           }
         },
         {
@@ -551,7 +551,7 @@
           "idealWorker": 20,
           "currentWorker": 0,
           "idealConsumption": {
-            "energy": 1
+            "energy": 1e4
           }
         },
         {
@@ -624,12 +624,12 @@
           "idealWorker": 160,
           "currentWorker": 0,
           "idealProduction": {
-            "lightMetal": 100,
-            "heavyMetal": 20,
-            "rareMetal": 1
+            "lightMetal": 0.01,
+            "heavyMetal": 0.02,
+            "rareMetal": 1e-3
           },
           "idealConsumption": {
-            "energy": 2
+            "energy": 1e7
           }
         },
         {
@@ -639,10 +639,10 @@
           "idealWorker": 160,
           "currentWorker": 0,
           "idealProduction": {
-            "organics": 100
+            "organics": 0.1
           },
           "idealConsumption": {
-            "energy": 2
+            "energy": 1e7
           }
         },
         {
@@ -652,10 +652,10 @@
           "idealWorker": 160,
           "currentWorker": 0,
           "idealProduction": {
-            "glass": 80
+            "glass": 0.08
           },
           "idealConsumption": {
-            "energy": 2
+            "energy": 1e7
           }
         },
         {
@@ -734,12 +734,12 @@
           "idealWorker": 160,
           "currentWorker": 0,
           "idealProduction": {
-            "lightMetal": 60,
-            "heavyMetal": 40,
-            "rareMetal": 1
+            "lightMetal": 0.06,
+            "heavyMetal": 0.04,
+            "rareMetal": 1e-3
           },
           "idealConsumption": {
-            "energy": 2
+            "energy": 1e7
           }
         },
         {
@@ -749,12 +749,12 @@
           "idealWorker": 160,
           "currentWorker": 0,
           "idealProduction": {
-            "organics": 80,
-            "hydrogen": 20,
-            "water": 20
+            "organics": 0.08,
+            "hydrogen": 0.02,
+            "water": 0.02
           },
           "idealConsumption": {
-            "energy": 2
+            "energy": 1e7
           }
         },
         {
@@ -764,10 +764,10 @@
           "idealWorker": 160,
           "currentWorker": 0,
           "idealProduction": {
-            "glass": 80
+            "glass": 0.08
           },
           "idealConsumption": {
-            "energy": 2
+            "energy": 1e7
           }
         },
         {
@@ -844,12 +844,12 @@
           "idealWorker": 160,
           "currentWorker": 0,
           "idealProduction": {
-            "lightMetal": 100,
-            "heavyMetal": 20,
-            "rareMetal": 1
+            "lightMetal": 0.1,
+            "heavyMetal": 0.02,
+            "rareMetal": 1e-3
           },
           "idealConsumption": {
-            "energy": 2
+            "energy": 1e7
           }
         },
         {
@@ -859,10 +859,10 @@
           "idealWorker": 160,
           "currentWorker": 0,
           "idealProduction": {
-            "organics": 100
+            "organics": 0.1
           },
           "idealConsumption": {
-            "energy": 2
+            "energy": 1e7
           }
         },
         {
@@ -872,10 +872,10 @@
           "idealWorker": 160,
           "currentWorker": 0,
           "idealProduction": {
-            "glass": 80
+            "glass": 0.08
           },
           "idealConsumption": {
-            "energy": 2
+            "energy": 1e7
           }
         },
         {
@@ -950,7 +950,7 @@
           "idealWorker": 0,
           "currentWorker": 0,
           "idealConsumption": {
-            "energy": 1
+            "energy": 1e7
           }
         },
         {
@@ -992,10 +992,10 @@
           "idealWorker": 5,
           "currentWorker": 0,
           "idealProduction": {
-            "component": 10
+            "component": 0.01
           },
           "idealConsumption": {
-            "energy": 1
+            "energy": 1e4
           }
         },
         {
@@ -1259,13 +1259,13 @@
           "idealWorker": 5,
           "currentWorker": 0,
           "idealConsumption": {
-            "energy": 1
+            "energy": 2.26e7
           },
           "idealAbsorption": {
-            "water": 100
+            "water": 1
           },
           "idealProduction": {
-            "water": 100
+            "water": 1
           }
         },
         {
@@ -1275,13 +1275,13 @@
           "idealWorker": 5,
           "currentWorker": 0,
           "idealConsumption": {
-            "energy": 1
+            "energy": 2.26e7
           },
           "idealAbsorption": {
-            "water": 100
+            "water": 1
           },
           "idealProduction": {
-            "water": 100
+            "water": 1
           }
         },
         {
@@ -1350,11 +1350,11 @@
           "idealWorker": 5,
           "currentWorker": 0,
           "idealConsumption": {
-            "energy": 1,
+            "energy": 2e8,
             "corpse": 1
           },
           "idealProduction": {
-            "phosphorus": 1
+            "phosphorus": 0.5
           }
         },
         {
@@ -1364,13 +1364,13 @@
           "idealWorker": 5,
           "currentWorker": 0,
           "idealConsumption": {
-            "energy": 1
+            "energy": 2.26e7
           },
           "idealAbsorption": {
-            "water": 100
+            "water": 1
           },
           "idealProduction": {
-            "water": 100
+            "water": 1
           }
         },
         {
@@ -1380,11 +1380,11 @@
           "idealWorker": 5,
           "currentWorker": 0,
           "idealConsumption": {
-            "energy": 1,
+            "energy": 2e8,
             "corpse": 1
           },
           "idealProduction": {
-            "phosphorus": 1
+            "phosphorus": 0.5
           }
         },
         {
@@ -1394,13 +1394,13 @@
           "idealWorker": 5,
           "currentWorker": 0,
           "idealConsumption": {
-            "energy": 1
+            "energy": 2.26e7
           },
           "idealAbsorption": {
-            "water": 100
+            "water": 1
           },
           "idealProduction": {
-            "water": 100
+            "water": 1
           }
         },
         {
@@ -1410,17 +1410,17 @@
           "idealWorker": 5,
           "currentWorker": 0,
           "idealAbsorption": {
-            "co2": 100
+            "co2": 1
           },
           "idealConsumption": {
-            "energy": 1,
-            "hydrogen": 8
+            "energy": 2e7,
+            "hydrogen": 0.08
           },
           "idealDistribution": {
-            "oxygen": 70
+            "oxygen": 0.7
           },
           "idealProduction": {
-            "organics": 38
+            "organics": 0.38
           }
         },
         {
@@ -1490,11 +1490,14 @@
           "idealWorker": 5,
           "currentWorker": 0,
           "idealDistribution": {
-            "oxygen": 70
+            "oxygen": 0.8
           },
           "idealConsumption": {
-            "water": 70,
-            "energy": 2
+            "water": 0.9,
+            "energy": 1.91e7
+          },
+          "idealProduction": {
+            "hydrogen": 0.1
           }
         },
         {
@@ -1504,11 +1507,14 @@
           "idealWorker": 5,
           "currentWorker": 0,
           "idealDistribution": {
-            "oxygen": 70
+            "oxygen": 0.8
           },
           "idealConsumption": {
-            "water": 70,
-            "energy": 2
+            "water": 0.9,
+            "energy": 1.91e7
+          },
+          "idealProduction": {
+            "hydrogen": 0.1
           }
         },
         {
@@ -1584,11 +1590,14 @@
           "idealWorker": 5,
           "currentWorker": 0,
           "idealDistribution": {
-            "oxygen": 70
+            "oxygen": 0.8
           },
           "idealConsumption": {
-            "water": 70,
-            "energy": 2
+            "water": 0.9,
+            "energy": 1.91e7
+          },
+          "idealProduction": {
+            "hydrogen": 0.1
           }
         },
         {
@@ -1598,11 +1607,14 @@
           "idealWorker": 5,
           "currentWorker": 0,
           "idealDistribution": {
-            "oxygen": 70
+            "oxygen": 0.8
           },
           "idealConsumption": {
-            "water": 70,
-            "energy": 2
+            "water": 0.9,
+            "energy": 1.91e7
+          },
+          "idealProduction": {
+            "hydrogen": 0.1
           }
         },
         {
@@ -1930,10 +1942,10 @@
           "idealWorker": 100,
           "currentWorker": 0,
           "idealProduction": {
-            "ration": 600
+            "ration": 0.06
           },
           "idealConsumption": {
-            "energy": 1
+            "energy": 1e7
           }
         },
         {
@@ -1943,10 +1955,10 @@
           "idealWorker": 100,
           "currentWorker": 0,
           "idealProduction": {
-            "ration": 600
+            "ration": 0.06
           },
           "idealConsumption": {
-            "energy": 1
+            "energy": 1e7
           }
         },
         {
@@ -2638,7 +2650,7 @@
           "idealWorker": 5,
           "currentWorker": 0,
           "idealProduction": {
-            "component": 10
+            "component": 0.01
           }
         },
         {
@@ -2699,7 +2711,7 @@
           "idealWorker": 50,
           "currentWorker": 0,
           "idealProduction": {
-            "energy": 100
+            "energy": 2e8
           }
         },
         {

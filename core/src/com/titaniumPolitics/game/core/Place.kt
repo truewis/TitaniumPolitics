@@ -49,6 +49,7 @@ class Place : GameStateElement()
                         "metalStorage" -> result["metal"] = (result["metal"] ?: .0) + 30000
                         "componentStorage" -> result["component"] = (result["component"] ?: .0) + 30000
                         "rationStorage" -> result["ration"] = (result["ration"] ?: .0) + 30000
+                        "energyStorage" -> result["energy"] = (result["energy"] ?: .0) + 1e11
                         else ->//concatenate string
                         {
                             if (it.name.contains("Storage"))
