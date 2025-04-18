@@ -56,5 +56,6 @@
   "GlobalAccidentRate": 0,
   "ExecuteCommandRoutineInvalidActionTimeout": 4,
   "GasDiffusionTau": 10000,
-  "MutualityReinforcementTau": 864000
+  "MutualityReinforcementTau": 864000,
+  "MutualityFromInfoTau": 864000
 }

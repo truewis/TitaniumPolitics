@@ -271,7 +271,7 @@ class GameEngine(val gameState: GameState)
                         -it.value.amount * gameState.publicity(
                             it.key,
                             party.key
-                        ) * factor / 1000//TODO: what is publicity?
+                        ) / party.value.size * factor * dt / const("MutualityFromInfoTau") * ReadOnly.mutualityScale
                     )
                 //if our party is responsible, integrity drops.
 
@@ -282,10 +282,14 @@ class GameEngine(val gameState: GameState)
                     if (it.value.author == "") factor = 2//rumors affect the approval negatively.
 
                     //party loses mutuality toward the responsible party. TODO: consider affecting the individual mutuality toward the perpetrator.
+                    //TODO: item value must be put into consideration
                     gameState.setPartyMutuality(
                         party.key, gameState.places[it.value.tgtPlace]!!.responsibleParty, -log(
                             it.value.amount.toDouble() + 1, 2.0
-                        ) * gameState.publicity(it.key, party.key) / 100 * factor
+                        ) * gameState.publicity(
+                            it.key,
+                            party.key
+                        ) / party.value.size * factor * dt / const("MutualityFromInfoTau") * ReadOnly.mutualityScale
                     )
                 }
             //The fact that resource is low itself does not affect the mutuality.--------------------------------------------------------------------
