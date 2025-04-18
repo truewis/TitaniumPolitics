@@ -1,6 +1,8 @@
 package com.titaniumPolitics.game.core.NPCRoutines
 
+import com.titaniumPolitics.game.core.AgendaType
 import com.titaniumPolitics.game.core.InformationType
+import com.titaniumPolitics.game.core.ReadOnly
 import com.titaniumPolitics.game.core.gameActions.*
 import kotlinx.serialization.Serializable
 
@@ -48,6 +50,25 @@ class SupportAgendaRoutine() : Routine(), IMeetingRoutine
                         if (action.isValid())//In particular, if this information is not already presented in the meeting.
                             return action
                     }
+
+                    //If there are any interesting (to this character) news about the division, share it.
+
+                    val gossip = gState.informations.filter {
+                        character.preparedInfoKeys.contains(
+                            it.key
+                        ) && it.value.tgtTime in gState.day * ReadOnly.constInt("lengthOfDay")..(gState.day * ReadOnly.constInt(
+                            "lengthOfDay"
+                        ) + ReadOnly.constInt("lengthOfDay") - 1)
+                                && (conf.currentCharacters - it.value.knownTo).isNotEmpty() //In order to present the info, someone must not know it. This also prevents sharing an information that is already shared in this meeting.
+                    }.maxByOrNull { character.infoPreference(it.value) } //Share the most interesting news.
+
+                    if (gossip != null && conf.agendas.any { it.type == AgendaType.PROOF_OF_WORK })//TODO: Attach the information to an appropriate agenda if proof of work does not exist.
+                        return AddInfo(name, place).also {
+                            it.infoKey = gossip.key
+                            it.agendaIndex =
+                                conf.agendas.indexOf(conf.agendas.find { it.type == AgendaType.PROOF_OF_WORK }!!)
+                        }
+
 
                 }
 

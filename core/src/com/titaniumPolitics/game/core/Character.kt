@@ -11,7 +11,8 @@ class Character : GameStateElement()
     var alive = true
     var trait = hashSetOf<String>()
     var resources = hashMapOf<String, Int>()
-    var preparedInfoKeys = arrayListOf<String>()//Information that can be presented in meetings. Note that preparing the information prevents it from expiring.
+    var preparedInfoKeys =
+        arrayListOf<String>()//Information that can be presented in meetings. Note that preparing the information prevents it from expiring.
     var health = 0
         set(value)
         {
@@ -138,11 +139,14 @@ class Character : GameStateElement()
                 }
             }
 
-        }
-        //If the information is about some other people, the character's preference depends on their relationship with the target.
-        //The target character's preference is reflected.
-        else
+        } else
         {
+            //Accidents are always interesting.
+            if (info.type == InformationType.CASUALTY)
+                return 2.0
+
+            //Otherwise, if the information is about some other people, the character's preference depends on their relationship with the target.
+            //The target character's preference is reflected.
             if (parent.getMutuality(
                     name,
                     info.tgtCharacter
