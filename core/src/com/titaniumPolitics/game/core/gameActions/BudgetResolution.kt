@@ -26,9 +26,9 @@ class BudgetResolution(override val sbjCharacter: String, override val tgtPlace:
                 places["farm"]!!.resources["ration"]!! - budget.values.sum()
 
             budget.forEach {
-                val guildHall = parties[it.key]!!.home;
-                places[guildHall]!!.resources["water"] = (places[guildHall]!!.resources["water"] ?: 0) + it.value
-                places[guildHall]!!.resources["ration"] = (places[guildHall]!!.resources["ration"] ?: 0) + it.value
+                val guildHall = parties[it.key]!!.home
+                places[guildHall]!!.resources["water"] = (places[guildHall]!!.resources["water"] ?: .0) + it.value
+                places[guildHall]!!.resources["ration"] = (places[guildHall]!!.resources["ration"] ?: .0) + it.value
             }
         }
 

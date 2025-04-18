@@ -71,17 +71,18 @@ class Trade(override val sbjCharacter: String, override val tgtPlace: String) : 
 //                info2 = tgtState.informations[GameEngine.acquire(tgtState.informations.filter { it.value.knownTo.contains(who) and it.value.doesKnowExistence(tgtCharacter) and !it.value.knownTo.contains(tgtCharacter) }.map { it.key })] //You can only request information that you know the existence, but not the content.
 //            }
 //        }
-        val tradeParams = GameEngine.acquire<TradeParams>("Trade", hashMapOf(
-            "items1" to parent.characters[sbjCharacter]!!.resources,
-            "items2" to parent.characters[who]!!.resources,
-            "info1" to parent.informations.filter { it.value.knownTo.contains(sbjCharacter) }.map { it.key }
-                .toHashSet(),
-            "info2" to parent.informations.filter {
-                it.value.knownTo.contains(who) and !it.value.knownTo.contains(
-                    sbjCharacter
-                )
-            }.map { it.key }.toHashSet()
-        )
+        val tradeParams = GameEngine.acquire<TradeParams>(
+            "Trade", hashMapOf(
+                "items1" to parent.characters[sbjCharacter]!!.resources,
+                "items2" to parent.characters[who]!!.resources,
+                "info1" to parent.informations.filter { it.value.knownTo.contains(sbjCharacter) }.map { it.key }
+                    .toHashSet(),
+                "info2" to parent.informations.filter {
+                    it.value.knownTo.contains(who) and !it.value.knownTo.contains(
+                        sbjCharacter
+                    )
+                }.map { it.key }.toHashSet()
+            )
         )
         item = tradeParams.items1
         item2 = tradeParams.items2
@@ -117,7 +118,7 @@ class Trade(override val sbjCharacter: String, override val tgtPlace: String) : 
         {
             if (item.isNotEmpty())
             {
-                if (item.any { (parent.characters[sbjCharacter]!!.resources[it.key] ?: 0) < item[it.key]!! })
+                if (item.any { (parent.characters[sbjCharacter]!!.resources[it.key] ?: .0) < item[it.key]!! })
                 {
                     println("You don't have enough $item to trade.")
                     onFinished(false)
@@ -126,14 +127,14 @@ class Trade(override val sbjCharacter: String, override val tgtPlace: String) : 
                 item.forEach {
                     parent.characters[sbjCharacter]!!.resources[it.key] =
                         (parent.characters[sbjCharacter]!!.resources[it.key]
-                            ?: 0) - it.value
+                            ?: .0) - it.value
                     parent.characters[who]!!.resources[it.key] = (parent.characters[who]!!.resources[it.key]
-                        ?: 0) + it.value
+                        ?: .0) + it.value
                 }
             }
             if (item2.isNotEmpty())
             {
-                if (item2.any { (parent.characters[who]!!.resources[it.key] ?: 0) < item2[it.key]!! })
+                if (item2.any { (parent.characters[who]!!.resources[it.key] ?: .0) < item2[it.key]!! })
                 {
                     println("They don't have enough $item2 to trade.")
                     onFinished(false)
@@ -141,10 +142,10 @@ class Trade(override val sbjCharacter: String, override val tgtPlace: String) : 
                 }
                 item2.forEach {
                     parent.characters[who]!!.resources[it.key] = (parent.characters[who]!!.resources[it.key]
-                        ?: 0) - it.value
+                        ?: .0) - it.value
                     parent.characters[sbjCharacter]!!.resources[it.key] =
                         (parent.characters[sbjCharacter]!!.resources[it.key]
-                            ?: 0) + it.value
+                            ?: .0) + it.value
                 }
             }
             //action?.let { parent.characters[tgtCharacter]!!.commands.add(it) }

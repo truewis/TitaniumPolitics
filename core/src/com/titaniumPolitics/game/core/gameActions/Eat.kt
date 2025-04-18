@@ -9,7 +9,7 @@ class Eat(override val sbjCharacter: String, override val tgtPlace: String) : Ga
     override fun execute()
     {
         if ((parent.characters[sbjCharacter]!!.resources["ration"]
-                ?: 0) > 0 && (parent.characters[sbjCharacter]!!.resources["water"] ?: 0) > 0
+                ?: .0) > 0 && (parent.characters[sbjCharacter]!!.resources["water"] ?: .0) > 0
         )
         {
             parent.characters[sbjCharacter]!!.resources["ration"] =
@@ -31,7 +31,7 @@ class Eat(override val sbjCharacter: String, override val tgtPlace: String) : Ga
     {
         //TODO: Check if the character is in a place where it can eat, and has the resources to eat.
         return tgtPlace.contains("home") && (parent.characters[sbjCharacter]!!.resources["ration"]
-            ?: 0) > 0 && (parent.characters[sbjCharacter]!!.resources["water"] ?: 0) > 0
+            ?: .0) > 0 && (parent.characters[sbjCharacter]!!.resources["water"] ?: .0) > 0
     }
 
     override fun deltaWill(): Double

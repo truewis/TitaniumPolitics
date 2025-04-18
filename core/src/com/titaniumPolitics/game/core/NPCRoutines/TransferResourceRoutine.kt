@@ -25,9 +25,9 @@ class TransferResourceRoutine() : Routine()
     override fun execute(name: String, place: String): GameAction
     {
         executeDone = true
-        if(place == source)
+        if (place == source)
             OfficialResourceTransfer(name, place).also {
-                it.resources = hashMapOf(res to (gState.places[place]!!.resources[res] ?: 0) / 2)
+                it.resources = hashMapOf(res to (gState.places[place]!!.resources[res] ?: .0) / 2)
                 it.toWhere = dest
                 return it
             }

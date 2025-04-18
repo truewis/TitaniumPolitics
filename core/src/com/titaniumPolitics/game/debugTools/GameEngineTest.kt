@@ -3,6 +3,7 @@ package com.titaniumPolitics.game.debugTools
 import com.titaniumPolitics.game.core.GameEngine
 import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.core.NonPlayerAgent
+import com.titaniumPolitics.game.core.ReadOnly
 import kotlinx.serialization.json.Json
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Test
@@ -46,7 +47,7 @@ class GameEngineTest
         //Start the game.
         println("Game started. Time: ${gameState.time}. Starting main loop.")
         //Main loop
-        while (gameState.time < days * 48)
+        while (gameState.time < days * ReadOnly.const("lengthOfDay"))
         {
             gameLoop()
         }

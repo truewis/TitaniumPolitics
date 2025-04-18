@@ -15,30 +15,30 @@ import kotlinx.serialization.Serializable
 class Apparatus
 {
     var name = ""
-    var durability = 0
+    var durability = 0.0
         set(value)
         {
             field = when
             {
-                value > 100 -> 100
-                value < 0 -> 0
+                value > ReadOnly.const("DurabilityMax") -> ReadOnly.const("DurabilityMax")
+                value < 0 -> 0.0
                 else -> value
             }
         }
     var baseDanger = .0
-    var idealAbsorption = hashMapOf<String, Int>()
-    var idealProduction = hashMapOf<String, Int>()
-    var idealConsumption = hashMapOf<String, Int>()
-    var idealDistribution = hashMapOf<String, Int>() //Converts resources into market resources.
+    var idealAbsorption = hashMapOf<String, Double>()
+    var idealProduction = hashMapOf<String, Double>()
+    var idealConsumption = hashMapOf<String, Double>()
+    var idealDistribution = hashMapOf<String, Double>() //Converts resources into market resources.
     var idealWorker = 0
     var currentWorker = 0
-    val currentProduction: Map<String, Int>
+    val currentProduction: Map<String, Double>
         get()
         {
-            val result = hashMapOf<String, Int>()
+            val result = hashMapOf<String, Double>()
             idealProduction.forEach {
                 if (idealWorker == 0) return result//No production if no worker.
-                if (durability == 0) return result//No production if broken.
+                if (durability == .0) return result//No production if broken.
                 if (currentWorker <= idealWorker)
                     result[it.key] = it.value * currentWorker / idealWorker
                 else
@@ -48,13 +48,13 @@ class Apparatus
             }
             return result
         }
-    val currentConsumption: Map<String, Int>
+    val currentConsumption: Map<String, Double>
         get()
         {
-            val result = hashMapOf<String, Int>()
+            val result = hashMapOf<String, Double>()
             idealConsumption.forEach {
                 if (idealWorker == 0) return result//No production if no worker.
-                if (durability == 0) return result//No production if broken.
+                if (durability == .0) return result//No production if broken.
                 if (currentWorker <= idealWorker)
                     result[it.key] = it.value * currentWorker / idealWorker
                 else
@@ -64,13 +64,13 @@ class Apparatus
             }
             return result
         }
-    val currentAbsorption: Map<String, Int>
+    val currentAbsorption: Map<String, Double>
         get()
         {
-            val result = hashMapOf<String, Int>()
+            val result = hashMapOf<String, Double>()
             idealAbsorption.forEach {
                 if (idealWorker == 0) return result//No production if no worker.
-                if (durability == 0) return result//No production if broken.
+                if (durability == .0) return result//No production if broken.
                 if (currentWorker <= idealWorker)
                     result[it.key] = it.value * currentWorker / idealWorker
                 else
@@ -80,13 +80,13 @@ class Apparatus
             }
             return result
         }
-    val currentDistribution: Map<String, Int>
+    val currentDistribution: Map<String, Double>
         get()
         {
-            val result = hashMapOf<String, Int>()
+            val result = hashMapOf<String, Double>()
             idealDistribution.forEach {
                 if (idealWorker == 0) return result//No production if no worker.
-                if (durability == 0) return result//No production if broken.
+                if (durability == .0) return result//No production if broken.
                 if (currentWorker <= idealWorker)
                     result[it.key] = it.value * currentWorker / idealWorker
                 else
@@ -99,7 +99,7 @@ class Apparatus
     val currentDanger: Double
         get()
         {
-            return if (currentWorker == 0) 0.0 else if (durability == 0) 0.0 else
+            return if (currentWorker == 0) 0.0 else if (durability == .0) 0.0 else
             {
                 if (currentWorker <= idealWorker)
                     baseDanger * (2 - currentWorker / idealWorker) * 100 / durability * ReadOnly.const("GlobalAccidentRate")
@@ -111,7 +111,7 @@ class Apparatus
         get()
         {
             return if (currentWorker == 0) 0.0
-            else if (durability == 0) 0.0
+            else if (durability == .0) 0.0
             else if (currentWorker <= idealWorker * 4 / 5)
                 baseDanger * (0.2 - currentWorker / 4 / idealWorker) * 100 / durability * ReadOnly.const("GlobalAccidentRate")
             else if (currentWorker >= idealWorker * 6 / 5)

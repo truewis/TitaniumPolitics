@@ -20,7 +20,7 @@ class HealthMeter(gameState: GameState) : Table(defaultSkin)
         add(b).size(50f)
         add(bar).size(250f, 75f).fill()
         gameState.updateUI += { y ->
-            setValue(y.player.health)
+            setValue(y.player.health.toInt())
         }
     }
 

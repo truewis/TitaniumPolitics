@@ -16,7 +16,7 @@ class StealRoutine() : Routine()
             it.responsibleParty != "" && gState.parties[it.responsibleParty]!!.members.contains(
                 name
             )
-        }.maxByOrNull { it.resources[variables["wantedResource"]] ?: 0 }
+        }.maxByOrNull { it.resources[variables["wantedResource"]] ?: .0 }
     }
 
     override fun newRoutineCondition(name: String, place: String): Routine?
@@ -40,8 +40,8 @@ class StealRoutine() : Routine()
         return UnofficialResourceTransfer(name, place).apply {
             resources = hashMapOf(
                 variables["stealResource"]!! to min(
-                    (resplace.resources["ration"] ?: 0) / 2,
-                    (character.reliants.size + 1) * 7
+                    (resplace.resources[variables["stealResource"]!!] ?: .0) / 2,
+                    (character.reliants.size + 1) * 7.0
                 )
             )
             toWhere = "home_$name"

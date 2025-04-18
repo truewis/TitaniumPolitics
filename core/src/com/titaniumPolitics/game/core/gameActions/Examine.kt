@@ -56,7 +56,7 @@ class Examine(override val sbjCharacter: String, override val tgtPlace: String) 
                         tgtTime = parent.time,
                         tgtPlace = tgtPlace,
                         tgtApparatus = entry.name,
-                        amount = entry.durability
+                        amount = entry.durability.toInt()
                     ).also {
                         it.knownTo.add(sbjCharacter);parent.informations[it.generateName()] = it
                     }

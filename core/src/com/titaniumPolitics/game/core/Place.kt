@@ -1,5 +1,7 @@
 package com.titaniumPolitics.game.core
 
+import com.titaniumPolitics.game.core.ReadOnly.const
+import com.titaniumPolitics.game.core.ReadOnly.dt
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.float
 import kotlinx.serialization.json.jsonObject
@@ -12,7 +14,7 @@ class Place : GameStateElement()
 {
     override val name: String
         get() = parent.places.filter { it.value == this }.keys.first()
-    var resources = hashMapOf<String, Int>()
+    var resources = hashMapOf<String, Double>()
         get()
         {
             //If the place is a home, return the resources of the character living there.
@@ -34,25 +36,25 @@ class Place : GameStateElement()
     var temperature = 300 //Ambient temperature in Kelvin.
     var volume = 1000f //Volume in m^3.
     val currentWorker: Int get() = apparatuses.sumOf { it.currentWorker }
-    val maxResources: HashMap<String, Int>
+    val maxResources: HashMap<String, Double>
         get()
         {
-            val result = hashMapOf<String, Int>()
+            val result = hashMapOf<String, Double>()
             apparatuses.forEach {
-                if (it.durability != 0)
+                if (it.durability > .0)
                     when (it.name)
                     {
-                        "waterStorage" -> result["water"] = (result["water"] ?: 0) + 30000
-                        "oxygenStorage" -> result["oxygen"] = (result["oxygen"] ?: 0) + 3000
-                        "metalStorage" -> result["metal"] = (result["metal"] ?: 0) + 30000
-                        "componentStorage" -> result["component"] = (result["component"] ?: 0) + 30000
-                        "rationStorage" -> result["ration"] = (result["ration"] ?: 0) + 30000
+                        "waterStorage" -> result["water"] = (result["water"] ?: .0) + 30000
+                        "oxygenStorage" -> result["oxygen"] = (result["oxygen"] ?: .0) + 3000
+                        "metalStorage" -> result["metal"] = (result["metal"] ?: .0) + 30000
+                        "componentStorage" -> result["component"] = (result["component"] ?: .0) + 30000
+                        "rationStorage" -> result["ration"] = (result["ration"] ?: .0) + 30000
                         else ->//concatenate string
                         {
                             if (it.name.contains("Storage"))
                             {
                                 val resource = it.name.substringBefore("Storage").lowercase(Locale.getDefault())
-                                result[resource] = (result[resource] ?: 0) + 30000
+                                result[resource] = (result[resource] ?: .0) + 30000
                             }
                         }
                     }
@@ -91,17 +93,17 @@ class Place : GameStateElement()
                     -(ReadOnly.GA * mass * potentialDiff) / (ReadOnly.KB * temperature) //[J] = [kg*m^2/s^2]
                 ) //Boltzmann distribution. TODO: reflect the volume of the place.
                 val equilabriumGasAmount =
-                    ((gasPressure[key] ?: 0.0) * volume + (place.gasPressure[key]
-                        ?: 0.0) * place.volume) / (volume + ratio * place.volume)
+                    ((gasPressure[key] ?: .0) * volume + (place.gasPressure[key]
+                        ?: .0) * place.volume) / (volume + ratio * place.volume)
 
                 val flowAmount =
-                    (equilabriumGasAmount - (gasPressure[key] ?: 0.0) * volume) * ReadOnly.const("GasDiffusionRate")
+                    (equilabriumGasAmount - (gasPressure[key] ?: .0) * volume) * dt / const("GasDiffusionTau")
 
                 gasPressure[key] =
-                    (gasPressure[key] ?: 0.0) + flowAmount / volume
+                    (gasPressure[key] ?: .0) + flowAmount / volume
 
                 place.gasPressure[key] =
-                    (place.gasPressure[key] ?: 0.0) - flowAmount / place.volume
+                    (place.gasPressure[key] ?: .0) - flowAmount / place.volume
             }
         }
 

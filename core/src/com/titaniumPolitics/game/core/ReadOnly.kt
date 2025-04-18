@@ -2,6 +2,7 @@ package com.titaniumPolitics.game.core
 
 import com.badlogic.gdx.Gdx
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.double
 import kotlinx.serialization.json.float
 import kotlinx.serialization.json.int
 import kotlinx.serialization.json.jsonObject
@@ -47,10 +48,10 @@ object ReadOnly
     } ?: Properties().apply { load(FileInputStream(File("../assets/texts/DefaultCharacter.properties"))) }
 
 
-    fun const(constName: String): Float
+    fun const(constName: String): Double
     {
-        return constJson[constName]?.jsonPrimitive?.float
-            ?: 0f.also { println("Warning: Could not find constant $constName") }
+        return constJson[constName]?.jsonPrimitive?.double
+            ?: .0.also { println("Warning: Could not find constant $constName") }
     }
 
     fun constInt(constName: String): Int
@@ -58,6 +59,11 @@ object ReadOnly
         return constJson[constName]?.jsonPrimitive?.int
             ?: 0.also { println("Warning: Could not find constant $constName") }
     }
+
+    //A timestep in seconds.
+    val dt = (86400 / const("lengthOfDay")).toInt()
+
+    val mutualityScale = const("mutualityMax") - const("mutualityMin")
 
     fun prop(key: String, obj: Any? = null): String
     {

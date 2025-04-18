@@ -66,7 +66,7 @@ class AttendMeetingRoutine : Routine(), IMeetingRoutine
                 if (conf.currentSpeaker == name && !party.isSalaryPaid && party.leader != name)
                 {
                     //Check if there is already a salary request.
-                    if (conf.agendas.none { it.type == AgendaType.REQUEST && it.attachedRequest!!.action.javaClass.simpleName == "salary" })
+                    if (conf.agendas.none { it.type == AgendaType.REQUEST && it.attachedRequest!!.action is Salary })
                     {
 
                     } else //If the agenda already exists, support it.
@@ -78,7 +78,7 @@ class AttendMeetingRoutine : Routine(), IMeetingRoutine
                             intVariables["try_support_salary"] = 1
                             return SupportAgendaRoutine().apply {
                                 intVariables["agendaIndex"] =
-                                    conf.agendas.indexOfFirst { it.type == AgendaType.REQUEST && it.attachedRequest!!.action.javaClass.simpleName == "salary" }
+                                    conf.agendas.indexOfFirst { it.type == AgendaType.REQUEST && it.attachedRequest!!.action is Salary }
                             }//Add a routine, priority higher than work.
                         }
 
@@ -159,7 +159,7 @@ class AttendMeetingRoutine : Routine(), IMeetingRoutine
             if (gState.getMutuality(
                     name,
                     conf.currentSpeaker
-                ) > 50.0
+                ) > ReadOnly.const("SpeakerInterceptMutualityThreshold")
             )
                 return Wait(name, place)
             else
@@ -169,197 +169,200 @@ class AttendMeetingRoutine : Routine(), IMeetingRoutine
                     return action
                 return Wait(name, place)
             }
-        }
-        when (conf.type)
-        {
-            "triumvirateDailyConference" ->
+        } else
+            when (conf.type)
             {
-
-                //Budget is resolved through voting, which is not in the meeting.
-            }
-
-
-            "cabinetDailyConference" ->
-            {
-
-                //If budget is not proposed, propose it.
-                //Budget is resolved through voting, which is not in the meeting.
-            }
-
-
-            "divisionDailyConference" ->
-            {
-                val party = gState.parties[conf.involvedParty]!!
-
-                //If speaker, propose proof of work if nothing else is important.
-                //Proof of work should have corresponding request. If there is no request or no relevant information, do not propose proof of work.
-                //Some information are more relevant than others.
-                if (conf.agendas.none { it.type == AgendaType.PROOF_OF_WORK })
+                "triumvirateDailyConference" ->
                 {
-                    return NewAgenda(name, place).also {
-                        it.agenda = MeetingAgenda(AgendaType.PROOF_OF_WORK)
-                    }
+
+                    //Budget is resolved through voting, which is not in the meeting.
                 }
 
-                //If not division leader and salary is not paid, request salary.
-                if (conf.currentSpeaker == name && !party.isSalaryPaid && party.leader != name)
+
+                "cabinetDailyConference" ->
                 {
-                    //Check if there is already a salary request.
-                    if (conf.agendas.none { it.type == AgendaType.REQUEST && it.attachedRequest?.action is Salary })
-                    {
-                        //Fill in the agenda based on variables in the routine, resource and character.
-                        val agenda = MeetingAgenda(AgendaType.REQUEST).apply {
-                            attachedRequest = Request(
-                                Salary(
-                                    party.leader,
-                                    tgtPlace = party.home
-                                ).apply {
-                                    //TODO: adjust the salary, it.resources.
-                                }//Created a command to transfer the resource.
-                                ,
-                                issuedTo = hashSetOf(party.leader)
-                            ).apply {
-                                executeTime = gState.time
-                                issuedBy = hashSetOf(name)
-                            }
-                        }
-                        return NewAgenda(name, place).also {
-                            it.agenda = agenda
-                        }
-                    }
+
+                    //If budget is not proposed, propose it.
+                    //Budget is resolved through voting, which is not in the meeting.
                 }
-                //If division leader, TODO: sometimes NPCs denounce even when themselves are not the leader.
-                if (gState.parties[conf.involvedParty]!!.leader == name)
+
+
+                "divisionDailyConference" ->
                 {
-                    //Pay the salary if not paid yet.
-                    if (!gState.parties[conf.involvedParty]!!.isSalaryPaid)
+                    val party = gState.parties[conf.involvedParty]!!
+
+                    //If not leader,
+                    if (party.leader != name)
                     {
-                        return Salary(name, place)
-                    }
-                    //request information about the commands issued today, by putting ProofOfWork agenda forward.
-                    if (!conf.agendas.any { it.type == AgendaType.PROOF_OF_WORK })
-                        return NewAgenda(name, place).also { it.agenda = MeetingAgenda(AgendaType.PROOF_OF_WORK) }
-                    //Praise or criticize the division members, if there is any relevant information.
-                    //It should be noted that the content of the information is not checked here. Think about this later.
-                    gState.parties[conf.involvedParty]!!.members.forEach { member ->
-                        if (member != name && gState.informations.values.any {
-                                it.tgtCharacter == member && it.knownTo.contains(
-                                    name
-                                )
-                            })
+                        //Proof of work should have corresponding request. If there is no request or no relevant information, do not propose proof of work.
+                        //Some information are more relevant than others.
+                        if (conf.agendas.none { it.type == AgendaType.PROOF_OF_WORK })
                         {
-                            //praise if the mutuality is high, criticize if the mutuality is low.
-                            val mutuality = gState.getMutuality(name, member)
-                            if (mutuality > 80)
-                            {
-                                return NewAgenda(name, place).also {
-                                    it.agenda =
-                                        MeetingAgenda(AgendaType.PRAISE, subjectParams = hashMapOf("who" to member))
-                                }
-                            } else if (mutuality < 20)
-                            {
-                                return NewAgenda(name, place).also {
-                                    it.agenda =
-                                        MeetingAgenda(
-                                            AgendaType.DENOUNCE,
-                                            subjectParams = hashMapOf("who" to member)
-                                        )
-                                }
-                            }
-                        }//TODO: there must be a cooldown, stored in party class.
-                    }
-                    //If it is not covered above, if the division is short of resources, share the information about the resource shortage.
-                    //However, right now, the resource information is available to everyone immediately, no need to share.
-
-                    //Criticize the common enemies of the division. It is determined by the party with the low mutuality with the division.
-                    val enemyParty = gState.parties.values.filter { it.name != conf.involvedParty }
-                        .minBy { gState.getPartyMutuality(it.name, conf.involvedParty) }.name
-                    if (gState.getPartyMutuality(
-                            conf.involvedParty,
-                            enemyParty
-                        ) < ReadOnly.const("EnemyPartyMutualityThreshold")
-                    )
-                        return NewAgenda(name, place).also { action ->
-                            action.agenda = MeetingAgenda(AgendaType.DENOUNCE_PARTY).also {
-                                it.subjectParams["party"] = enemyParty
+                            return NewAgenda(name, place).also {
+                                it.agenda = MeetingAgenda(AgendaType.PROOF_OF_WORK)
                             }
                         }
-                    gossip(name, place)?.also { return it }
 
-                }
-
-
-            }
-
-
-            "divisionLeaderElection" ->
-            {
-                val party = gState.parties[conf.involvedParty]!!
-                //If not speaker, wait if the mutuality to the speaker is high. Otherwise, if possible, interrupt the speaker.
-
-                val nominee = gState.characters.keys.filter { it != name && party.members.contains(it) }
-                    .maxByOrNull { gState.getMutuality(name, it) }!!
-                //Nominate the person with the highest mutuality, if not nominated yet.
-                //Note that nomination is only valid at the beginning of the conference.
-
-                if (conf.agendas.none { it.type == AgendaType.NOMINATE && it.subjectParams["character"] == nominee } && conf.time == gState.time)
-                {
-                    return NewAgenda(name, place).also {
-                        it.agenda =
-                            MeetingAgenda(AgendaType.NOMINATE, subjectParams = hashMapOf("character" to nominee))
-                    }
-                }
-                //otherwise, support the nominee.
-
-
-            }
-
-            //If the meeting is without subject, e.g. started by Talk action
-            "" ->
-            {
-                //Check if I had an intention
-                when (variables["intention"])
-                {
-                    "requestResource" ->
-                    {
-                        variables["intention"] = "" //The intention is resolved.
-                        return NewAgenda(name, place).also {
-                            it.agenda =
-                                MeetingAgenda(
-                                    AgendaType.REQUEST, attachedRequest = Request(
-                                        UnofficialResourceTransfer(
-                                            variables["requestTo"]!!,
-                                            tgtPlace = place
+                        //If not division leader and salary is not paid, request salary.
+                        if (conf.currentSpeaker == name && !party.isSalaryPaid)
+                        {
+                            //Check if there is already a salary request.
+                            if (conf.agendas.none { it.type == AgendaType.REQUEST && it.attachedRequest?.action is Salary })
+                            {
+                                //Fill in the agenda based on variables in the routine, resource and character.
+                                val agenda = MeetingAgenda(AgendaType.REQUEST).apply {
+                                    attachedRequest = Request(
+                                        Salary(
+                                            party.leader,
+                                            tgtPlace = party.home
                                         ).apply {
-                                            toWhere = "home_$name"
-                                            fromHome =
-                                                true//Transfer the {variables["requestTo"]!!}'s private resources to me.
-                                            resources = hashMapOf(
-                                                variables["requestResourceType"]!! to
-                                                        intVariables["requestResourceAmount"]!!
-                                            )
+                                            //TODO: adjust the salary, it.resources.
                                         }//Created a command to transfer the resource.
                                         ,
-                                        issuedTo = hashSetOf(variables["requestTo"]!!)
+                                        issuedTo = hashSetOf(party.leader)
                                     ).apply {
-
                                         executeTime = gState.time
                                         issuedBy = hashSetOf(name)
-                                    })
+                                    }
+                                }
+                                return NewAgenda(name, place).also {
+                                    it.agenda = agenda
+                                }
+                            }
                         }
                     }
-
-                    else ->
+                    //If division leader, TODO: sometimes NPCs denounce even when themselves are not the leader.
+                    else
                     {
-                        //No particular intention
+                        //Pay the salary if not paid yet.
+                        if (!party.isSalaryPaid)
+                        {
+                            return Salary(name, place)
+                        }
+                        //request information about the commands issued today, by putting ProofOfWork agenda forward.
+                        if (!conf.agendas.any { it.type == AgendaType.PROOF_OF_WORK })
+                            return NewAgenda(name, place).also { it.agenda = MeetingAgenda(AgendaType.PROOF_OF_WORK) }
+                        //Praise or criticize the division members, if there is any relevant information.
+                        //It should be noted that the content of the information is not checked here. Think about this later.
+                        party.members.forEach { member ->
+                            if (member != name && gState.informations.values.any {
+                                    it.tgtCharacter == member && it.knownTo.contains(
+                                        name
+                                    )
+                                })
+                            {
+                                //praise if the mutuality is high, criticize if the mutuality is low.
+                                val mutuality = gState.getMutuality(name, member)
+                                if (mutuality > 80)
+                                {
+                                    return NewAgenda(name, place).also {
+                                        it.agenda =
+                                            MeetingAgenda(AgendaType.PRAISE, subjectParams = hashMapOf("who" to member))
+                                    }
+                                } else if (mutuality < 20)
+                                {
+                                    return NewAgenda(name, place).also {
+                                        it.agenda =
+                                            MeetingAgenda(
+                                                AgendaType.DENOUNCE,
+                                                subjectParams = hashMapOf("who" to member)
+                                            )
+                                    }
+                                }
+                            }//TODO: there must be a cooldown, stored in party class.
+                        }
+                        //If it is not covered above, if the division is short of resources, share the information about the resource shortage.
+                        //However, right now, the resource information is available to everyone immediately, no need to share.
+
+                        //Criticize the common enemies of the division. It is determined by the party with the low mutuality with the division.
+                        val enemyParty = gState.parties.values.filter { it.name != conf.involvedParty }
+                            .minBy { gState.getPartyMutuality(it.name, conf.involvedParty) }.name
+                        if (gState.getPartyMutuality(
+                                conf.involvedParty,
+                                enemyParty
+                            ) < ReadOnly.const("EnemyPartyMutualityThreshold")
+                        )
+                            return NewAgenda(name, place).also { action ->
+                                action.agenda = MeetingAgenda(AgendaType.DENOUNCE_PARTY).also {
+                                    it.subjectParams["party"] = enemyParty
+                                }
+                            }
                         gossip(name, place)?.also { return it }
+
                     }
+
+
                 }
 
 
-            }
+                "divisionLeaderElection" ->
+                {
+                    val party = gState.parties[conf.involvedParty]!!
+                    //If not speaker, wait if the mutuality to the speaker is high. Otherwise, if possible, interrupt the speaker.
 
-        }
+                    val nominee = gState.characters.keys.filter { it != name && party.members.contains(it) }
+                        .maxByOrNull { gState.getMutuality(name, it) }!!
+                    //Nominate the person with the highest mutuality, if not nominated yet.
+                    //Note that nomination is only valid at the beginning of the conference.
+
+                    if (conf.agendas.none { it.type == AgendaType.NOMINATE && it.subjectParams["character"] == nominee } && conf.time == gState.time)
+                    {
+                        return NewAgenda(name, place).also {
+                            it.agenda =
+                                MeetingAgenda(AgendaType.NOMINATE, subjectParams = hashMapOf("character" to nominee))
+                        }
+                    }
+                    //otherwise, support the nominee.
+
+
+                }
+
+                //If the meeting is without subject, e.g. started by Talk action
+                "" ->
+                {
+                    //Check if I had an intention
+                    when (variables["intention"])
+                    {
+                        "requestResource" ->
+                        {
+                            variables["intention"] = "" //The intention is resolved.
+                            return NewAgenda(name, place).also {
+                                it.agenda =
+                                    MeetingAgenda(
+                                        AgendaType.REQUEST, attachedRequest = Request(
+                                            UnofficialResourceTransfer(
+                                                variables["requestTo"]!!,
+                                                tgtPlace = place
+                                            ).apply {
+                                                toWhere = "home_$name"
+                                                fromHome =
+                                                    true//Transfer the {variables["requestTo"]!!}'s private resources to me.
+                                                resources = hashMapOf(
+                                                    variables["requestResourceType"]!! to
+                                                            doubleVariables["requestResourceAmount"]!!
+                                                )
+                                            }//Created a command to transfer the resource.
+                                            ,
+                                            issuedTo = hashSetOf(variables["requestTo"]!!)
+                                        ).apply {
+
+                                            executeTime = gState.time
+                                            issuedBy = hashSetOf(name)
+                                        })
+                            }
+                        }
+
+                        else ->
+                        {
+                            //No particular intention
+                            gossip(name, place)?.also { return it }
+                        }
+                    }
+
+
+                }
+
+            }
         return if (conf.currentSpeaker == name)
         //If nothing else to talk about, end the speech. The next speaker is the character with the highest mutuality.
             EndSpeech(name, place).also {
@@ -367,7 +370,7 @@ class AttendMeetingRoutine : Routine(), IMeetingRoutine
                     .maxByOrNull { gState.getMutuality(name, it) }!!
             }
 
-        //If I'm not the speaker, wait.
+        //If everything else, wait.
         else Wait(name, place)
         //TODO: do something in the meeting. Leave the meeting if nothing to do.
 

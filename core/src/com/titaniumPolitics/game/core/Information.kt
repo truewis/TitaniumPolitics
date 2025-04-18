@@ -24,7 +24,7 @@ class Information(//If there is no author, it is a rumor.
     var action: GameAction? = null,
     var tgtParty: String = "",
     var auxParty: String = "",
-    var resources: HashMap<String, Int> = hashMapOf<String, Int>()
+    var resources: HashMap<String, Double> = hashMapOf()
 )
 {
     //Do not copy the name. It is unique.
@@ -52,7 +52,7 @@ class Information(//If there is no author, it is a rumor.
             generateName()
     }
 
-    var life: Int = 100//How long this information will last.
+    var life: Double = ReadOnly.const("InfoLifetime")//How long this information will last in seconds
 
     //We try to keep track of every aspect of our lives, but we can't. They eventually fade away.
     //But these characters has prepared this information. As far as rememberedBy is not empty, this information does not expire.

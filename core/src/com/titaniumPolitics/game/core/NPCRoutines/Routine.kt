@@ -16,6 +16,7 @@ sealed class Routine()
     var priority: Int = 0
     val variables: HashMap<String, String> = hashMapOf()
     val intVariables: HashMap<String, Int> = hashMapOf()
+    val doubleVariables: HashMap<String, Double> = hashMapOf()
     var executeDone =
         false //This is used to check if the routine execution is successful. Otherwise, there is a problem executing the routine and the parent routine should be notified.
 

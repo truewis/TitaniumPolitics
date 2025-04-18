@@ -64,7 +64,8 @@ class TradeUI(var gameState: GameState) : Table(defaultSkin)
                     .flatMap { it.value.currentCharacters }.first { it != playerName }
             trade = Trade(playerName, player.place.name).apply { this.who = who }
             isVisible = true
-            refreshList(player.resources,
+            refreshList(
+                player.resources,
                 characters[who]!!.resources,
                 informations.filter {
                     it.value.knownTo.contains(playerName)
@@ -82,8 +83,8 @@ class TradeUI(var gameState: GameState) : Table(defaultSkin)
 
 
     fun refreshList(
-        items1: HashMap<String, Int>,
-        items2: HashMap<String, Int>,
+        items1: HashMap<String, Double>,
+        items2: HashMap<String, Double>,
         info1: HashSet<String>,
         info2: HashSet<String>
     )

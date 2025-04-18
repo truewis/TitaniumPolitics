@@ -2,6 +2,7 @@ package com.titaniumPolitics.game.core
 
 import com.titaniumPolitics.game.core.gameActions.GameAction
 import kotlinx.serialization.Serializable
+import com.titaniumPolitics.game.core.ReadOnly.const
 
 @Serializable
 class Character : GameStateElement()
@@ -10,31 +11,31 @@ class Character : GameStateElement()
         get() = parent.characters.filter { it.value == this }.keys.first()
     var alive = true
     var trait = hashSetOf<String>()
-    var resources = hashMapOf<String, Int>()
+    var resources = hashMapOf<String, Double>()
     var preparedInfoKeys =
         arrayListOf<String>()//Information that can be presented in meetings. Note that preparing the information prevents it from expiring.
-    var health = 0
+    var health = .0
         set(value)
         {
-            field = if (value < 100) value else 100//Max health is 100.
+            field = if (value < const("HealthMax")) value else const("HealthMax")//Max health is 100.
         }
-    var hunger = 0
+    var hunger = .0
         set(value)
         {
             field = when
             {
-                value < 0 -> 0
-                value > 100 -> 100
+                value < .0 -> .0
+                value > const("HungerMax") -> const("HungerMax")
                 else -> value
             }//Max hunger is 100.
         }
-    var thirst = 0
+    var thirst = .0
         set(value)
         {
             field = when
             {
-                value < 0 -> 0
-                value > 100 -> 100
+                value < .0 -> .0
+                value > const("ThirstMax") -> const("ThirstMax")
                 else -> value
             }//Max thirst is 100.
         }
@@ -62,8 +63,8 @@ class Character : GameStateElement()
         return when (item)
         {
             //Value of ration and water is based on the current need of the character.
-            "ration" -> 5.0 * (reliants.size + 1.0) / ((resources["ration"] ?: 0) + 1.0)
-            "water" -> (reliants.size + 1.0) / ((resources["water"] ?: 0) + 1.0)
+            "ration" -> 5.0 * (reliants.size + 1.0) / ((resources["ration"] ?: .0) + 1.0)
+            "water" -> (reliants.size + 1.0) / ((resources["water"] ?: .0) + 1.0)
             "hydrogen" -> 1.0
             "organics" -> 5.0
             "lightMetal" -> 1.0
@@ -150,7 +151,7 @@ class Character : GameStateElement()
             if (parent.getMutuality(
                     name,
                     info.tgtCharacter
-                ) > (ReadOnly.const("mutualityMin") + ReadOnly.const("mutualityMax")) / 2
+                ) > (const("mutualityMin") + const("mutualityMax")) / 2
             )
                 return parent.characters[info.tgtCharacter]!!.infoPreference(info)
             else

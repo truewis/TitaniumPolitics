@@ -31,9 +31,9 @@ class GameState
             } //Clone the list to prevent concurrent modification.
         }
     val hour: Int
-        get() = _time % ReadOnly.const("lengthOfDay").toInt() / 2
+        get() = (_time % ReadOnly.constInt("lengthOfDay") / (ReadOnly.const("lengthOfDay") / 24.0)).toInt()
     val day: Int
-        get() = _time / ReadOnly.const("lengthOfDay").toInt()
+        get() = _time / ReadOnly.constInt("lengthOfDay")
 
 
     @Transient
@@ -75,12 +75,12 @@ class GameState
 
     var scheduledMeetings = hashMapOf<String, Meeting>()
     var ongoingMeetings = hashMapOf<String, Meeting>()
-    var budget = hashMapOf<String, Int>()//Party name to budget
+    var budget = hashMapOf<String, Double>()//Party name to budget
     var isBudgetProposed = false
     var isBudgetResolved = false
     var informations = hashMapOf<String, Information>()
-    var floatingResources = hashMapOf<String, Int>()
-    var marketResources = hashMapOf<String, Int>()
+    var floatingResources = hashMapOf<String, Double>()
+    var marketResources = hashMapOf<String, Double>()
     var eventSystem = EventSystem()
     val realCharList = characters.keys.filter { !it.contains("Anon") && characters[it]!!.alive }
 
@@ -114,8 +114,8 @@ class GameState
                             {
                                 this.livingBy = "SquareNorth"//TODO: This is a temporary solution.
                             }
-                            this.resources = hashMapOf("ration" to 1000, "water" to 1000)
-                            this.health = 100
+                            this.resources = hashMapOf("ration" to 1000.0, "water" to 1000.0)
+                            this.health = 100.0
                         } //TODO: anonymous characters get resource from market.
                     nonPlayerAgents[name] = AnonAgent()
                     //TODO: Give traits to the anonymous characters.
@@ -289,6 +289,15 @@ class GameState
     {
         val formatter = SimpleDateFormat(format, locale)
         return formatter.format(this)
+    }
+
+    fun formatTime(): String
+    {
+        val mm =
+            ((time % ReadOnly.constInt("lengthOfDay") - hour * (ReadOnly.const("lengthOfDay") / 24.0)) / (ReadOnly.const(
+                "lengthOfDay"
+            ) / (24.0 * 60))).toInt()
+        return "${hour.toString().padStart(2, '0')}:${mm}"
     }
 
 

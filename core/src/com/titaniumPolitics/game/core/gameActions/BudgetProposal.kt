@@ -3,7 +3,7 @@ package com.titaniumPolitics.game.core.gameActions
 @Deprecated("This class is deprecated. BudgetProposal is a separate agenda item.")
 class BudgetProposal(override val sbjCharacter: String, override val tgtPlace: String) : GameAction()
 {
-    val budget = hashMapOf<String, Int>()//"mainControlRoom" to 11520, "redMine" to 38400, "blackMine" to 38400,
+    val budget = hashMapOf<String, Double>()//"mainControlRoom" to 11520, "redMine" to 38400, "blackMine" to 38400,
 
     override fun chooseParams()
     {
@@ -11,7 +11,7 @@ class BudgetProposal(override val sbjCharacter: String, override val tgtPlace: S
         parent.places.forEach {
             if (it.key == "home" || it.value.responsibleParty == "") return@forEach else budget[it.value.responsibleParty] =
                 (budget[it.value.responsibleParty]
-                    ?: 0) + it.value.plannedWorker * (it.value.workHoursEnd - it.value.workHoursStart) * 15
+                    ?: .0) + it.value.plannedWorker * (it.value.workHoursEnd - it.value.workHoursStart) * 15.0
         }
     }
 

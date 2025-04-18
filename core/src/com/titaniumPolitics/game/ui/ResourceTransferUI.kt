@@ -24,8 +24,8 @@ class ResourceTransferUI(gameState: GameState, override var actionCallback: (Gam
 
     //Determines if the transfer is official or not.
     var mode: String = "official"
-    var current = hashMapOf<String, Int>()
-    var target = hashMapOf<String, Int>()
+    var current = hashMapOf<String, Double>()
+    var target = hashMapOf<String, Double>()
     var toWhere = ""
     var modeLabel: Label
     var placeButton: Button
@@ -140,8 +140,8 @@ class ResourceTransferUI(gameState: GameState, override var actionCallback: (Gam
     fun refresh(
         mode: String,
         action: (GameAction) -> Unit,
-        current: HashMap<String, Int>,
-        target: HashMap<String, Int> = hashMapOf(),
+        current: HashMap<String, Double>,
+        target: HashMap<String, Double> = hashMapOf(),
     )
     {
         this.actionCallback = action
@@ -154,7 +154,7 @@ class ResourceTransferUI(gameState: GameState, override var actionCallback: (Gam
         dataTable.apply {
             add(table {
                 current.forEach { (resourceName, resourceAmount) ->
-                    if (resourceAmount != 0)
+                    if (resourceAmount > .0)
                     {
                         label("$resourceName: $resourceAmount", "trnsprtConsole") {
                             setFontScale(2f)
@@ -168,7 +168,7 @@ class ResourceTransferUI(gameState: GameState, override var actionCallback: (Gam
                                 )
                                 {
                                     current[resourceName] = current[resourceName]!! - 1
-                                    target[resourceName] = (target[resourceName] ?: 0) + 1
+                                    target[resourceName] = (target[resourceName] ?: .0) + 1
                                     this@ResourceTransferUI.refresh(mode, action, current, target)
                                 }
                             })
@@ -183,7 +183,7 @@ class ResourceTransferUI(gameState: GameState, override var actionCallback: (Gam
         targetTable.apply {
             add(table {
                 target.forEach { (resourceName, resourceAmount) ->
-                    if (resourceAmount != 0)
+                    if (resourceAmount > .0)
                     {
                         label("$resourceName: $resourceAmount", "trnsprtConsole") {
                             setFontScale(2f)
@@ -197,7 +197,7 @@ class ResourceTransferUI(gameState: GameState, override var actionCallback: (Gam
                                 )
                                 {
                                     target[resourceName] = target[resourceName]!! - 1
-                                    current[resourceName] = (current[resourceName] ?: 0) + 1
+                                    current[resourceName] = (current[resourceName] ?: .0) + 1
                                     this@ResourceTransferUI.refresh(mode, action, current, target)
                                 }
                             })

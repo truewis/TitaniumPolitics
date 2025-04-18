@@ -105,14 +105,14 @@ class WorkRoutine() : Routine()
                 val waterThreshold = 10
                 val member = party.members.find {
                     (gState.characters[it]!!.resources["ration"]
-                        ?: 0) <= rationThreshold * (gState.characters[it]!!.reliants.size + 1) || (gState.characters[it]!!.resources["water"]
-                        ?: 0) <= waterThreshold * (gState.characters[it]!!.reliants.size + 1)
+                        ?: .0) <= rationThreshold * (gState.characters[it]!!.reliants.size + 1) || (gState.characters[it]!!.resources["water"]
+                        ?: .0) <= waterThreshold * (gState.characters[it]!!.reliants.size + 1)
                 }
                 if (member != null)
                 {
                     //The resource to steal is what the member is short of, either ration or water.
                     val wantedResource = if ((character.resources["ration"]
-                            ?: 0) <= rationThreshold * (character.reliants.size + 1)
+                            ?: .0) <= rationThreshold * (character.reliants.size + 1)
                     ) "ration" else "water"
                     intVariables["corruptionTimer"] = gState.time
                     return StealRoutine().apply {
@@ -149,18 +149,21 @@ class WorkRoutine() : Routine()
             place1.apparatuses.forEach { apparatus ->
                 val res = GameEngine.resourceShortOf(apparatus, place1) //Type of resource that is short of.
                 if (res != "")
-                    //if there is a place within my division with the resource
-                {val resplace =
-                    gState.places.values.filter {
-                        it.responsibleParty != "" && gState.parties[it.responsibleParty]!!.members.contains(
-                            name
-                        )
-                    }
-                        .maxByOrNull { it.resources[res] ?: 0 }
-                    if(resplace!= null)
-                        //start new routine if there is a place with all the conditions met.
-                        if((resplace.resources[res] ?: 0) > 0)
-                            return TransferResourceRoutine().also { it.res = res; it.source = resplace.name; it.dest = place1.name;  }
+                //if there is a place within my division with the resource
+                {
+                    val resplace =
+                        gState.places.values.filter {
+                            it.responsibleParty != "" && gState.parties[it.responsibleParty]!!.members.contains(
+                                name
+                            )
+                        }
+                            .maxByOrNull { it.resources[res] ?: .0 }
+                    if (resplace != null)
+                    //start new routine if there is a place with all the conditions met.
+                        if ((resplace.resources[res] ?: .0) > 0)
+                            return TransferResourceRoutine().also {
+                                it.res = res; it.source = resplace.name; it.dest = place1.name
+                            }
                 }
             }
         }
