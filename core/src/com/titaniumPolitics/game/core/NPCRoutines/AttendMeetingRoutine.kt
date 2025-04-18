@@ -228,7 +228,7 @@ class AttendMeetingRoutine : Routine(), IMeetingRoutine
                         }
                     }
                 }
-                //If division leader,
+                //If division leader, TODO: sometimes NPCs denounce even when themselves are not the leader.
                 if (gState.parties[conf.involvedParty]!!.leader == name)
                 {
                     //Pay the salary if not paid yet.
@@ -236,7 +236,11 @@ class AttendMeetingRoutine : Routine(), IMeetingRoutine
                     {
                         return Salary(name, place)
                     }
+                    //request information about the commands issued today, by putting ProofOfWork agenda forward.
+                    if (!conf.agendas.any { it.type == AgendaType.PROOF_OF_WORK })
+                        return NewAgenda(name, place).also { it.agenda = MeetingAgenda(AgendaType.PROOF_OF_WORK) }
                     //Praise or criticize the division members, if there is any relevant information.
+                    //It should be noted that the content of the information is not checked here. Think about this later.
                     gState.parties[conf.involvedParty]!!.members.forEach { member ->
                         if (member != name && gState.informations.values.any {
                                 it.tgtCharacter == member && it.knownTo.contains(
@@ -264,40 +268,24 @@ class AttendMeetingRoutine : Routine(), IMeetingRoutine
                             }
                         }//TODO: there must be a cooldown, stored in party class.
                     }
-                    //TODO: If it is not covered above, if the division is short of resources, share the information about the resource shortage.
-                    //TODO: Criticize the common enemies of the division. It is determined by the party with the low mutuality with the division.
-                    gState.parties.values.filter { it.name != conf.involvedParty }
-                        .minByOrNull { gState.getPartyMutuality(it.name, conf.involvedParty) }!!.name
-                    //TODO: Criticize the leader if there is any relevant information.
-//                                if (gState.parties[enemyParty]!!.leader != "")
-//                                    if (gState.informations.values.any {
-//                                            (it.tgtParty == enemyParty || it.tgtCharacter == gState.parties[enemyParty]!!.leader) && it.knownTo.contains(
-//                                                name
-//                                            )
-//                                        })
-//                                        InfoShare(name, place).also { action ->
-//                                            action.what = gState.informations.values.filter {
-//                                                (it.tgtParty == enemyParty || it.tgtCharacter == gState.parties[enemyParty]!!.leader) && it.knownTo.contains(
-//                                                    name
-//                                                )
-//                                            }
-//                                                .random().name//TODO: take the information that is most useful for criticizing.
-//                                            action.application = "criticize"
-//                                            action.who = hashSetOf(gState.parties[enemyParty]!!.leader)
-//                                            return action
-//                                        }
-                    //Criticize the common enemy. It is determined by average individual mutuality.
-                    gState.characters.maxByOrNull { ch ->
-                        gState.parties[conf.involvedParty]!!.members.sumOf { mem ->
-                            gState.getMutuality(
-                                mem,
-                                ch.key
-                            )
+                    //If it is not covered above, if the division is short of resources, share the information about the resource shortage.
+                    //However, right now, the resource information is available to everyone immediately, no need to share.
+
+                    //Criticize the common enemies of the division. It is determined by the party with the low mutuality with the division.
+                    val enemyParty = gState.parties.values.filter { it.name != conf.involvedParty }
+                        .minBy { gState.getPartyMutuality(it.name, conf.involvedParty) }.name
+                    if (gState.getPartyMutuality(
+                            conf.involvedParty,
+                            enemyParty
+                        ) < ReadOnly.const("EnemyPartyMutualityThreshold")
+                    )
+                        return NewAgenda(name, place).also { action ->
+                            action.agenda = MeetingAgenda(AgendaType.DENOUNCE_PARTY).also {
+                                it.subjectParams["party"] = enemyParty
+                            }
                         }
-                    }
-                    //request information about the commands issued today, by putting ProofOfWork agenda forward.
-                    if (!conf.agendas.any { it.type == AgendaType.PROOF_OF_WORK })
-                        return NewAgenda(name, place).also { it.agenda = MeetingAgenda(AgendaType.PROOF_OF_WORK) }
+                    gossip(name, place)?.also { return it }
+
                 }
 
 
@@ -364,6 +352,7 @@ class AttendMeetingRoutine : Routine(), IMeetingRoutine
                     else ->
                     {
                         //No particular intention
+                        gossip(name, place)?.also { return it }
                     }
                 }
 
@@ -382,6 +371,47 @@ class AttendMeetingRoutine : Routine(), IMeetingRoutine
         else Wait(name, place)
         //TODO: do something in the meeting. Leave the meeting if nothing to do.
 
+    }
+
+    fun gossip(name: String, place: String): GameAction?
+    {
+        //Criticize the enemy. It is determined by individual mutuality.
+        val enemy = gState.characters.minBy { ch ->
+            gState.getMutuality(
+                name,
+                ch.key
+            )
+        }
+        if (gState.getMutuality(
+                name,
+                enemy.key
+            ) < ReadOnly.const("EnemyMutualityThreshold")
+        )
+            return NewAgenda(name, place).also { action ->
+                action.agenda = MeetingAgenda(AgendaType.DENOUNCE).also {
+                    it.subjectParams["character"] = enemy.key
+                }
+            }
+
+        //Praise the friend.
+        //Criticize the enemy. It is determined by individual mutuality.
+        val friend = gState.characters.maxBy { ch ->
+            gState.getMutuality(
+                name,
+                ch.key
+            )
+        }
+        if (gState.getMutuality(
+                name,
+                friend.key
+            ) > ReadOnly.const("FriendMutualityThreshold")
+        )
+            return NewAgenda(name, place).also { action ->
+                action.agenda = MeetingAgenda(AgendaType.PRAISE).also {
+                    it.subjectParams["character"] = friend.key
+                }
+            }
+        return null
     }
 
     //TODO: Also check AttendMeetingRoutine for the same function.

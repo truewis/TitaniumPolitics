@@ -8,6 +8,8 @@
   "mutualityMin": 0,
   "mutualityMax": 100,
   "RequestRejectAverageMutuality": 30,
+  "EnemyPartyMutualityThreshold": 25,
+  "FriendMutualityThreshold": 75,
   "RequestFinishDeltaMutuality": 7,
   "RequestFinishDeltaWill": 5,
   "AddInfoDuration": 1,
