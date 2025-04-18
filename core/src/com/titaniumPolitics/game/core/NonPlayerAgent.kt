@@ -81,7 +81,7 @@ class NonPlayerAgent : Agent()
         }
 
         //If will is low, downTime.
-        if (parent.getMutuality(name) < 30)
+        if (parent.getMutuality(name) < ReadOnly.const("mutualityMax").toDouble())
         {
             if (routines.none { it is DowntimeRoutine })
             {

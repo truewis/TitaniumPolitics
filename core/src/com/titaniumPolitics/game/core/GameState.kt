@@ -169,7 +169,7 @@ class GameState
         if (!_mutuality.containsKey(a))
             _mutuality[a] = hashMapOf()
         if (!_mutuality[a]!!.containsKey(b))
-            _mutuality[a]!![b] = 50.0
+            _mutuality[a]!![b] = ReadOnly.const("mutualityDefault").toDouble()
         return _mutuality[a]!![b]!!
     }
 
@@ -179,8 +179,10 @@ class GameState
         if (!_mutuality.containsKey(a))
             _mutuality[a] = hashMapOf()
         _mutuality[a]!![b] = getMutuality(a, b) + delta
-        if (getMutuality(a, b) > 100) _mutuality[a]!![b] = 100.0
-        if (getMutuality(a, b) < 0) _mutuality[a]!![b] = 0.0
+        if (getMutuality(a, b) > ReadOnly.const("mutualityMax").toDouble()) _mutuality[a]!![b] =
+            ReadOnly.const("mutualityMax").toDouble()
+        if (getMutuality(a, b) < ReadOnly.const("mutualityMin").toDouble()) _mutuality[a]!![b] =
+            ReadOnly.const("mutualityMin").toDouble()
     }
 
     fun getPartyMutuality(a: String, b: String = a): Double
