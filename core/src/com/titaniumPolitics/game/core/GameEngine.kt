@@ -614,6 +614,7 @@ class GameEngine(val gameState: GameState)
             it.knownTo.addAll(tgtPlace.characters)
             tgtPlace.accidentInformationKeys += it.name
         }
+        tgtPlace.resources["corpse"] = (tgtPlace.resources["corpse"] ?: 0) + death
 
         //Generate resource loss.
         val loss = min(50, tgtPlace.resources["water"] ?: 0)
@@ -694,6 +695,7 @@ class GameEngine(val gameState: GameState)
             it.knownTo.addAll(tgtPlace.characters)
             tgtPlace.accidentInformationKeys += it.name
         }
+        tgtPlace.resources["corpse"] = (tgtPlace.resources["corpse"] ?: 0) + death
 
         //Generate resource loss.
         val loss = min(50, tgtPlace.resources["water"] ?: 0)

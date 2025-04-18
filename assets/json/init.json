@@ -1344,6 +1344,20 @@
           "currentWorker": 0
         },
         {
+          "name": "corpseRecycle",
+          "durability": 95,
+          "baseDanger": 6e-4,
+          "idealWorker": 5,
+          "currentWorker": 0,
+          "idealConsumption": {
+            "energy": 1,
+            "corpse": 1
+          },
+          "idealProduction": {
+            "phosphorus": 1
+          }
+        },
+        {
           "name": "waterRecycle",
           "durability": 95,
           "baseDanger": 6e-4,
@@ -1357,6 +1371,20 @@
           },
           "idealProduction": {
             "water": 100
+          }
+        },
+        {
+          "name": "corpseRecycle",
+          "durability": 95,
+          "baseDanger": 6e-4,
+          "idealWorker": 5,
+          "currentWorker": 0,
+          "idealConsumption": {
+            "energy": 1,
+            "corpse": 1
+          },
+          "idealProduction": {
+            "phosphorus": 1
           }
         },
         {
