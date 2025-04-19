@@ -8,6 +8,7 @@ import kotlinx.serialization.Serializable
 class Wait(override val sbjCharacter: String, override val tgtPlace: String) : GameAction()
 {
 
+    var count = ReadOnly.constInt("LongWaitTime")
     override fun execute()
     {
         parent.timeChanged.add(this::longWait)
@@ -16,11 +17,11 @@ class Wait(override val sbjCharacter: String, override val tgtPlace: String) : G
 
     private fun longWait(o: Int, n: Int)
     {
-        var count = ReadOnly.constInt("LongWaitTime")
+
         if (n - o == 1)
         {
             count--
-            sbjCharObj.frozen += ReadOnly.constInt(this::class.simpleName!! + "Duration")
+            sbjCharObj.frozen += 1
 
         }
         oldInfoKeys = newInfoKeys

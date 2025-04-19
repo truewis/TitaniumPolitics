@@ -971,44 +971,6 @@ class GameEngine(val gameState: GameState)
             val actions = arrayListOf<String>()
             if (gameState.ongoingMeetings.any { it.value.currentCharacters.contains(character) })
             {
-                val meeting = gameState.ongoingMeetings.filter {
-                    it.value.currentCharacters.contains(
-                        character
-                    )
-                }.values.first()
-                if (character == gameState.playerName)
-                {
-                    println("You are in a meeting.")
-                    println("Attendees: ${meeting.currentCharacters}")
-                }
-                if (meeting.currentSpeaker == character)
-                {
-                    actions.add("NewAgenda")
-                    actions.add("AddInfo")
-                    actions.add("EndMeeting")
-                    actions.add("EndSpeech")
-                } else
-                {
-                    actions.add("Wait")
-                    actions.add("Intercept")
-
-                    //Takeover/Refuse as a separate action is not useful. Once you are nominated to speak, you can either speak or end the speech.
-                }
-
-//                if (gameState.parties.values.any { it.leader == character && it.members.containsAll(meeting.currentCharacters) })//Only the leader of a party can command.
-//                {
-//                    //actions.add("UnofficialCommand") UnofficialCommand is gone. Command is always official. Trade can be used for unofficial commands.
-//                    if (meeting.currentCharacters.count() >= 3)
-//                        actions.add("InfoRequest")
-//                }
-                //actions.add("AppointMeeting") AppointMeeting is an agenda now.
-                //actions.add("Wait")
-                actions.add("UseItem")
-                actions.add("LeaveMeeting")
-                return actions
-            }
-            if (gameState.ongoingMeetings.any { it.value.currentCharacters.contains(character) })
-            {
                 val conf = gameState.ongoingMeetings.filter {
                     it.value.currentCharacters.contains(
                         character
@@ -1016,7 +978,7 @@ class GameEngine(val gameState: GameState)
                 }.values.first()
                 if (character == gameState.playerName)
                 {
-                    println("You are in a conference.")
+                    println("You are in a meeting.")
                     println(
                         "Attendees: ${
                             conf.currentCharacters
@@ -1024,8 +986,8 @@ class GameEngine(val gameState: GameState)
                     )
                 }
                 val subject = conf.type
-                if (subject == "informal")
-                {
+                if (subject == "")
+                {//If there is no subject, i.e. casual talk
                 } else
                     if (character == gameState.parties[conf.involvedParty]!!.leader)//Only the leader can do below actions.
                     {

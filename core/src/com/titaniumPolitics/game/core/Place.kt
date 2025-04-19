@@ -111,4 +111,13 @@ class Place : GameStateElement()
 
     }
 
+    companion object
+    {
+        fun timeBetweenPlaces(place1: String, place2: String): Int
+        {
+            if (place1 == place2) return 0
+            return ReadOnly.constInt("MoveDuration")
+        }
+    }
+
 }

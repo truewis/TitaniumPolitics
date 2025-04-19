@@ -1,6 +1,7 @@
 package com.titaniumPolitics.game.core.NPCRoutines
 
 import com.titaniumPolitics.game.core.Place
+import com.titaniumPolitics.game.core.ReadOnly
 import com.titaniumPolitics.game.core.gameActions.GameAction
 import com.titaniumPolitics.game.core.gameActions.UnofficialResourceTransfer
 import kotlinx.serialization.Serializable
@@ -40,7 +41,7 @@ class StealRoutine() : Routine()
             resources = hashMapOf(
                 variables["stealResource"]!! to min(
                     resplace.resources[variables["stealResource"]!!] / 2,
-                    (character.reliants.size + 1) * 7.0
+                    (character.reliants.size + 1) * ReadOnly.const("StealAmountMultiplier")
                 )
             )
             toWhere = "home_$name"

@@ -1,6 +1,7 @@
 package com.titaniumPolitics.game.core.NPCRoutines
 
 import com.titaniumPolitics.game.core.GameEngine
+import com.titaniumPolitics.game.core.Place
 import com.titaniumPolitics.game.core.ReadOnly
 import com.titaniumPolitics.game.core.gameActions.GameAction
 import com.titaniumPolitics.game.core.gameActions.JoinMeeting
@@ -57,10 +58,22 @@ class WorkRoutine() : Routine()
                 }
             }
         }
-        if (gState.scheduledMeetings.any { it.value.scheduledCharacters.contains(name) && it.value.time - gState.time in -2..2 })//If a Meeting is soon
+        if (gState.scheduledMeetings.any {
+                it.value.scheduledCharacters.contains(name) && it.value.time - gState.time in -ReadOnly.constInt(
+                    "MeetingStartTolerance"
+                ) + Place.timeBetweenPlaces(
+                    it.value.place,
+                    place
+                )..ReadOnly.constInt("MeetingStartTolerance") + Place.timeBetweenPlaces(it.value.place, place)
+            })//If a Meeting is soon
         {//TODO: consider the distance to the Meeting place.
             val conf = gState.scheduledMeetings.filter {
-                it.value.scheduledCharacters.contains(name) && it.value.time - gState.time in -2..2
+                it.value.scheduledCharacters.contains(name) && it.value.time - gState.time in -ReadOnly.constInt(
+                    "MeetingStartTolerance"
+                ) + Place.timeBetweenPlaces(
+                    it.value.place,
+                    place
+                )..ReadOnly.constInt("MeetingStartTolerance") + Place.timeBetweenPlaces(it.value.place, place)
             }.values.first()
             //----------------------------------------------------------------------------------Move to the Meeting
             if (place != conf.place)
@@ -97,12 +110,13 @@ class WorkRoutine() : Routine()
 
         //Corruption for power: If the character is the leader of a party, and a party member is short of resources, steal resources from workplace to party member's home
         //Only attempted once a day or once a work, whichever is shorter.
-        if (gState.time - (intVariables["corruptionTimer"] ?: 0) > 48)
+        if (gState.time - (intVariables["corruptionTimer"] ?: 0) > ReadOnly.constInt("CorruptionTau") / ReadOnly.dt)
             if (gState.parties.values.any { it.leader == name })
             {
                 val party = gState.parties.values.find { it.leader == name }!!
-                val rationThreshold = 10//TODO: threshold change depending on member's trait and need
-                val waterThreshold = 10
+                val rationThreshold =
+                    ReadOnly.const("StealAmountMultiplier")//TODO: threshold change depending on member's trait and need
+                val waterThreshold = ReadOnly.const("StealAmountMultiplier")
                 val member = party.members.find {
                     gState.characters[it]!!.resources["ration"] <= rationThreshold * (gState.characters[it]!!.reliants.size + 1) || gState.characters[it]!!.resources["water"] <= waterThreshold * (gState.characters[it]!!.reliants.size + 1)
                 }
@@ -124,7 +138,13 @@ class WorkRoutine() : Routine()
         //Note that the command may not be valid even if it in AvailableActions list. For example, if the character is already at the place, move command is not valid.
 
         val request = gState.requests.values.firstOrNull {
-            (it.executeTime in gState.time - 3..gState.time + 3 || it.executeTime == 0) && (it.issuedBy.isEmpty() || it.issuedBy.sumOf {
+            (it.executeTime in gState.time - ReadOnly.constInt("CommandExecuteTolerance") + Place.timeBetweenPlaces(
+                it.action.tgtPlace,
+                place
+            )..gState.time + ReadOnly.constInt("CommandExecuteTolerance") + Place.timeBetweenPlaces(
+                it.action.tgtPlace,
+                place
+            ) || it.executeTime == 0) && (it.issuedBy.isEmpty() || it.issuedBy.sumOf {
                 gState.getMutuality(
                     name,
                     it

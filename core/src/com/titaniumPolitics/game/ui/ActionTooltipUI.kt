@@ -43,7 +43,7 @@ class ActionTooltipUI(actionName: String) : Tooltip<Table>(scene2d.table {
                         it.size(50f)
                         color = Color.BLACK
                     }
-                    label("${ReadOnly.const(actionName + "Duration") * 30}m", "black") {
+                    label("${ReadOnly.constInt(actionName + "Duration") * ReadOnly.dt / 60}m", "black") {
                         setFontScale(2f)
                     }
                 }

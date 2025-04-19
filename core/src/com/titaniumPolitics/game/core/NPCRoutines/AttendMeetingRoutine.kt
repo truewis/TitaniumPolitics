@@ -431,6 +431,6 @@ class AttendMeetingRoutine : Routine(), IMeetingRoutine
         character.currentMeeting!!
         //If two hours has passed since the meeting started, leave the meeting. TODO: what if the meeting has started late?
         //TODO: stay in the meeting until I have something else to do, or the work hours are over.
-        return intVariables["routineStartTime"]!! + 4 <= gState.time
+        return intVariables["routineStartTime"]!! + 7200 / ReadOnly.dt <= gState.time
     }
 }

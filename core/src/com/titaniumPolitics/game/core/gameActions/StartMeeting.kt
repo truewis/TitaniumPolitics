@@ -11,7 +11,11 @@ class StartMeeting(override val sbjCharacter: String, override val tgtPlace: Str
     override fun chooseParams()
     {
         meetingName =
-            GameEngine.acquire(parent.scheduledMeetings.filter { it.value.time + 2 >= parent.time && parent.time + 2 >= it.value.time && it.value.place == tgtPlace }
+            GameEngine.acquire(parent.scheduledMeetings.filter {
+                it.value.time - parent.time in -ReadOnly.constInt("MeetingStartTolerance")..ReadOnly.constInt(
+                    "MeetingStartTolerance"
+                ) && it.value.place == tgtPlace
+            }
                 .filter { !parent.ongoingMeetings.containsKey(it.key) }
                 .filter { it.value.scheduledCharacters.contains(sbjCharacter) }.keys.toList())
     }

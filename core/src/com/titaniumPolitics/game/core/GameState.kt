@@ -297,7 +297,7 @@ class GameState
             ((time % ReadOnly.constInt("lengthOfDay") - hour * (ReadOnly.const("lengthOfDay") / 24.0)) / (ReadOnly.const(
                 "lengthOfDay"
             ) / (24.0 * 60))).toInt()
-        return "${hour.toString().padStart(2, '0')}:${mm}"
+        return "${hour.toString().padStart(2, '0')}:${mm.toString().padStart(2, '0')}"
     }
 
 
