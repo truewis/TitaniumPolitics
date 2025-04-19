@@ -2,7 +2,10 @@ package com.titaniumPolitics.game.core.NPCRoutines
 
 import com.titaniumPolitics.game.core.GameEngine
 import com.titaniumPolitics.game.core.ReadOnly
-import com.titaniumPolitics.game.core.gameActions.*
+import com.titaniumPolitics.game.core.gameActions.GameAction
+import com.titaniumPolitics.game.core.gameActions.JoinMeeting
+import com.titaniumPolitics.game.core.gameActions.StartMeeting
+import com.titaniumPolitics.game.core.gameActions.Wait
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 
@@ -62,11 +65,8 @@ class WorkRoutine() : Routine()
             //----------------------------------------------------------------------------------Move to the Meeting
             if (place != conf.place)
             {
-                if (place != conf.place)
-                {
-                    return MoveRoutine().apply {
-                        variables["movePlace"] = conf.place
-                    }
+                return MoveRoutine().apply {
+                    variables["movePlace"] = conf.place
                 }
             } else
             {
@@ -104,16 +104,14 @@ class WorkRoutine() : Routine()
                 val rationThreshold = 10//TODO: threshold change depending on member's trait and need
                 val waterThreshold = 10
                 val member = party.members.find {
-                    (gState.characters[it]!!.resources["ration"]
-                        ?: .0) <= rationThreshold * (gState.characters[it]!!.reliants.size + 1) || (gState.characters[it]!!.resources["water"]
-                        ?: .0) <= waterThreshold * (gState.characters[it]!!.reliants.size + 1)
+                    gState.characters[it]!!.resources["ration"] <= rationThreshold * (gState.characters[it]!!.reliants.size + 1) || gState.characters[it]!!.resources["water"] <= waterThreshold * (gState.characters[it]!!.reliants.size + 1)
                 }
                 if (member != null)
                 {
                     //The resource to steal is what the member is short of, either ration or water.
-                    val wantedResource = if ((character.resources["ration"]
-                            ?: .0) <= rationThreshold * (character.reliants.size + 1)
-                    ) "ration" else "water"
+                    val wantedResource =
+                        if (character.resources["ration"] <= rationThreshold * (character.reliants.size + 1)
+                        ) "ration" else "water"
                     intVariables["corruptionTimer"] = gState.time
                     return StealRoutine().apply {
                         variables["stealResource"] = wantedResource; variables["stealFor"] = member
@@ -157,10 +155,10 @@ class WorkRoutine() : Routine()
                                 name
                             )
                         }
-                            .maxByOrNull { it.resources[res] ?: .0 }
+                            .maxByOrNull { it.resources[res] }
                     if (resplace != null)
                     //start new routine if there is a place with all the conditions met.
-                        if ((resplace.resources[res] ?: .0) > 0)
+                        if (resplace.resources[res] > 0)
                             return TransferResourceRoutine().also {
                                 it.res = res; it.source = resplace.name; it.dest = place1.name
                             }

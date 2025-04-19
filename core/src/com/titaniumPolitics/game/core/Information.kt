@@ -1,7 +1,6 @@
 package com.titaniumPolitics.game.core
 
 import com.titaniumPolitics.game.core.gameActions.GameAction
-import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlin.math.max
 import kotlin.math.min
@@ -24,7 +23,7 @@ class Information(//If there is no author, it is a rumor.
     var action: GameAction? = null,
     var tgtParty: String = "",
     var auxParty: String = "",
-    var resources: HashMap<String, Double> = hashMapOf()
+    var resources: Resources = Resources()
 )
 {
     //Do not copy the name. It is unique.

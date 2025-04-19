@@ -2,7 +2,6 @@ package com.titaniumPolitics.game.core.NPCRoutines
 
 import com.titaniumPolitics.game.core.Place
 import com.titaniumPolitics.game.core.gameActions.GameAction
-import com.titaniumPolitics.game.core.gameActions.Move
 import com.titaniumPolitics.game.core.gameActions.UnofficialResourceTransfer
 import kotlinx.serialization.Serializable
 import kotlin.math.min
@@ -40,7 +39,7 @@ class StealRoutine() : Routine()
         return UnofficialResourceTransfer(name, place).apply {
             resources = hashMapOf(
                 variables["stealResource"]!! to min(
-                    (resplace.resources[variables["stealResource"]!!] ?: .0) / 2,
+                    resplace.resources[variables["stealResource"]!!] / 2,
                     (character.reliants.size + 1) * 7.0
                 )
             )

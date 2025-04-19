@@ -20,7 +20,7 @@ class EndMeeting(override val sbjCharacter: String, override val tgtPlace: Strin
 
     override fun isValid(): Boolean
     {
-        val meeting = parent.characters[sbjCharacter]!!.currentMeeting!!
+        parent.characters[sbjCharacter]!!.currentMeeting!!
         return false
     }
 

@@ -60,12 +60,20 @@ class Request(
                 issuedBy.forEach { issuedBy ->
                     if (gState.characters[issuedBy]!!.trait.contains("psychopath"))
                         issuedTo.forEach { issuedTo ->
-                            gState.setMutuality(issuedBy, issuedTo, ReadOnly.const("RequestFinishDeltaMutuality").toDouble()/3)
+                            gState.setMutuality(
+                                issuedBy,
+                                issuedTo,
+                                ReadOnly.const("RequestFinishDeltaMutuality").toDouble() / 3
+                            )
                         }
                     else
                     {
                         issuedTo.forEach { issuedTo ->
-                            gState.setMutuality(issuedBy, issuedTo, ReadOnly.const("RequestFinishDeltaMutuality").toDouble())
+                            gState.setMutuality(
+                                issuedBy,
+                                issuedTo,
+                                ReadOnly.const("RequestFinishDeltaMutuality").toDouble()
+                            )
                         }
                     }
                 }

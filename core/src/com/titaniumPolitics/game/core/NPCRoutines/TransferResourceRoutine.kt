@@ -1,6 +1,5 @@
 package com.titaniumPolitics.game.core.NPCRoutines
 
-import com.titaniumPolitics.game.core.GameEngine
 import com.titaniumPolitics.game.core.gameActions.GameAction
 import com.titaniumPolitics.game.core.gameActions.OfficialResourceTransfer
 import com.titaniumPolitics.game.core.gameActions.Wait

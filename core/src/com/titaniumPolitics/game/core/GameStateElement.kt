@@ -1,7 +1,6 @@
 package com.titaniumPolitics.game.core
 
 import kotlinx.serialization.Transient
-import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonPrimitive
 

@@ -14,7 +14,7 @@ class Place : GameStateElement()
 {
     override val name: String
         get() = parent.places.filter { it.value == this }.keys.first()
-    var resources = hashMapOf<String, Double>()
+    var resources = Resources()
         get()
         {
             //If the place is a home, return the resources of the character living there.
@@ -36,26 +36,26 @@ class Place : GameStateElement()
     var temperature = 300 //Ambient temperature in Kelvin.
     var volume = 1000f //Volume in m^3.
     val currentWorker: Int get() = apparatuses.sumOf { it.currentWorker }
-    val maxResources: HashMap<String, Double>
+    val maxResources: Resources
         get()
         {
-            val result = hashMapOf<String, Double>()
+            val result = Resources()
             apparatuses.forEach {
                 if (it.durability > .0)
                     when (it.name)
                     {
-                        "waterStorage" -> result["water"] = (result["water"] ?: .0) + 30000
-                        "oxygenStorage" -> result["oxygen"] = (result["oxygen"] ?: .0) + 3000
-                        "metalStorage" -> result["metal"] = (result["metal"] ?: .0) + 30000
-                        "componentStorage" -> result["component"] = (result["component"] ?: .0) + 30000
-                        "rationStorage" -> result["ration"] = (result["ration"] ?: .0) + 30000
-                        "energyStorage" -> result["energy"] = (result["energy"] ?: .0) + 1e11
+                        "waterStorage" -> result["water"] += 30000
+                        "oxygenStorage" -> result["oxygen"] += 3000
+                        "metalStorage" -> result["metal"] += 30000
+                        "componentStorage" -> result["component"] += 30000
+                        "rationStorage" -> result["ration"] += 30000
+                        "energyStorage" -> result["energy"] += 1e11
                         else ->//concatenate string
                         {
                             if (it.name.contains("Storage"))
                             {
                                 val resource = it.name.substringBefore("Storage").lowercase(Locale.getDefault())
-                                result[resource] = (result[resource] ?: .0) + 30000
+                                result[resource] += 30000
                             }
                         }
                     }

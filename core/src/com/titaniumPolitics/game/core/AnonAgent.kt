@@ -1,10 +1,10 @@
 package com.titaniumPolitics.game.core
 
 import com.titaniumPolitics.game.core.NPCRoutines.*
-import com.titaniumPolitics.game.core.gameActions.*
+import com.titaniumPolitics.game.core.gameActions.GameAction
+import com.titaniumPolitics.game.core.gameActions.LeaveMeeting
+import com.titaniumPolitics.game.core.gameActions.Wait
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.Transient
-import kotlin.math.min
 
 /*
 *  NonPlayerAgent is a character that is not controlled by the player.

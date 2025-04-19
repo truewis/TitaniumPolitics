@@ -3,7 +3,10 @@ package com.titaniumPolitics.game.core.NPCRoutines
 import com.titaniumPolitics.game.core.AgendaType
 import com.titaniumPolitics.game.core.InformationType
 import com.titaniumPolitics.game.core.ReadOnly
-import com.titaniumPolitics.game.core.gameActions.*
+import com.titaniumPolitics.game.core.gameActions.AddInfo
+import com.titaniumPolitics.game.core.gameActions.EndSpeech
+import com.titaniumPolitics.game.core.gameActions.GameAction
+import com.titaniumPolitics.game.core.gameActions.Wait
 import kotlinx.serialization.Serializable
 
 @Serializable

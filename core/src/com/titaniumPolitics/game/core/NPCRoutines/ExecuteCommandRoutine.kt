@@ -2,7 +2,6 @@ package com.titaniumPolitics.game.core.NPCRoutines
 
 import com.titaniumPolitics.game.core.ReadOnly
 import com.titaniumPolitics.game.core.gameActions.GameAction
-import com.titaniumPolitics.game.core.gameActions.Move
 import com.titaniumPolitics.game.core.gameActions.Wait
 import kotlinx.serialization.Serializable
 
@@ -35,12 +34,14 @@ class ExecuteCommandRoutine() : Routine()
                 println("$name: The request ${executableRequest.action} is valid. Executing...")
                 executeDone = true
                 return executableRequest.action
-            }
-            else {
+            } else
+            {
                 timeout -= 1
                 //Wait a bit to see if the action gets valid
-                if (timeout <=0) {err = true
-                //TODO: executableRequest callback
+                if (timeout <= 0)
+                {
+                    err = true
+                    //TODO: executableRequest callback
                 }
                 return Wait(name, place)
 

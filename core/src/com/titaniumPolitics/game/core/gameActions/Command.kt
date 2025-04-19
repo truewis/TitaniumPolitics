@@ -1,7 +1,7 @@
 package com.titaniumPolitics.game.core.gameActions
 
-import com.titaniumPolitics.game.core.Request
 import com.titaniumPolitics.game.core.GameEngine
+import com.titaniumPolitics.game.core.Request
 
 @Deprecated("This class is deprecated. Use Use request as meeting agenda instead.")
 class Command(override val sbjCharacter: String, override val tgtPlace: String) : GameAction()

@@ -23,8 +23,10 @@ class NewAgenda(override val sbjCharacter: String, override val tgtPlace: String
             AgendaType.PROOF_OF_WORK ->
             {
             }
-            AgendaType.REQUEST -> {
-                agenda.attachedRequest!!.also{parent.requests[it.generateName()] = it}
+
+            AgendaType.REQUEST ->
+            {
+                agenda.attachedRequest!!.also { parent.requests[it.generateName()] = it }
             }
 
             AgendaType.BUDGET_PROPOSAL ->

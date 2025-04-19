@@ -79,8 +79,8 @@ class GameState
     var isBudgetProposed = false
     var isBudgetResolved = false
     var informations = hashMapOf<String, Information>()
-    var floatingResources = hashMapOf<String, Double>()
-    var marketResources = hashMapOf<String, Double>()
+    var floatingResources = Resources()
+    var marketResources = Resources()
     var eventSystem = EventSystem()
     val realCharList = characters.keys.filter { !it.contains("Anon") && characters[it]!!.alive }
 
@@ -114,7 +114,7 @@ class GameState
                             {
                                 this.livingBy = "SquareNorth"//TODO: This is a temporary solution.
                             }
-                            this.resources = hashMapOf("ration" to 1000.0, "water" to 1000.0)
+                            this.resources = Resources("ration" to 1000.0, "water" to 1000.0)
                             this.health = 100.0
                         } //TODO: anonymous characters get resource from market.
                     nonPlayerAgents[name] = AnonAgent()
@@ -169,7 +169,7 @@ class GameState
         if (!_mutuality.containsKey(a))
             _mutuality[a] = hashMapOf()
         if (!_mutuality[a]!!.containsKey(b))
-            _mutuality[a]!![b] = ReadOnly.const("mutualityDefault").toDouble()
+            _mutuality[a]!![b] = ReadOnly.const("mutualityDefault")
         return _mutuality[a]!![b]!!
     }
 
@@ -179,10 +179,10 @@ class GameState
         if (!_mutuality.containsKey(a))
             _mutuality[a] = hashMapOf()
         _mutuality[a]!![b] = getMutuality(a, b) + delta
-        if (getMutuality(a, b) > ReadOnly.const("mutualityMax").toDouble()) _mutuality[a]!![b] =
-            ReadOnly.const("mutualityMax").toDouble()
-        if (getMutuality(a, b) < ReadOnly.const("mutualityMin").toDouble()) _mutuality[a]!![b] =
-            ReadOnly.const("mutualityMin").toDouble()
+        if (getMutuality(a, b) > ReadOnly.const("mutualityMax")) _mutuality[a]!![b] =
+            ReadOnly.const("mutualityMax")
+        if (getMutuality(a, b) < ReadOnly.const("mutualityMin")) _mutuality[a]!![b] =
+            ReadOnly.const("mutualityMin")
     }
 
     fun getPartyMutuality(a: String, b: String = a): Double

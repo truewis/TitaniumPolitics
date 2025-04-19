@@ -1,13 +1,11 @@
 package com.titaniumPolitics.game.core.NPCRoutines
 
 import com.titaniumPolitics.game.core.AgendaType
-import com.titaniumPolitics.game.core.InformationType
 import com.titaniumPolitics.game.core.MeetingAgenda
 import com.titaniumPolitics.game.core.ReadOnly
 import com.titaniumPolitics.game.core.Request
 import com.titaniumPolitics.game.core.gameActions.*
 import kotlinx.serialization.Serializable
-import kotlin.collections.set
 
 @Serializable
 class AttendMeetingRoutine : Routine(), IMeetingRoutine

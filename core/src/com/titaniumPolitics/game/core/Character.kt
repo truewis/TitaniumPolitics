@@ -1,8 +1,8 @@
 package com.titaniumPolitics.game.core
 
+import com.titaniumPolitics.game.core.ReadOnly.const
 import com.titaniumPolitics.game.core.gameActions.GameAction
 import kotlinx.serialization.Serializable
-import com.titaniumPolitics.game.core.ReadOnly.const
 
 @Serializable
 class Character : GameStateElement()
@@ -11,7 +11,7 @@ class Character : GameStateElement()
         get() = parent.characters.filter { it.value == this }.keys.first()
     var alive = true
     var trait = hashSetOf<String>()
-    var resources = hashMapOf<String, Double>()
+    var resources = Resources()
     var preparedInfoKeys =
         arrayListOf<String>()//Information that can be presented in meetings. Note that preparing the information prevents it from expiring.
     var health = .0

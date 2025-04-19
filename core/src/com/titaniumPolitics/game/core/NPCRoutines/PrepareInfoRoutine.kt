@@ -8,7 +8,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 class PrepareInfoRoutine() : Routine()
 {
-    var err = false;
+    var err = false
 
     override fun newRoutineCondition(name: String, place: String): Routine?
     {
@@ -26,7 +26,7 @@ class PrepareInfoRoutine() : Routine()
         if (place == "home_${name}")
         {
             executeDone = true
-            return PrepareInfo(name, place).also { it.recommendKeys()}
+            return PrepareInfo(name, place).also { it.recommendKeys() }
         }
         println("$name: Cannot move to home_${name} to prepare info ${variables["infoKey"]!!}. Terminating the routine......")
         err = true

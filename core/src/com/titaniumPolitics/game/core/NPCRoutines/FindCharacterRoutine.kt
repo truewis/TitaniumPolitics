@@ -1,7 +1,6 @@
 package com.titaniumPolitics.game.core.NPCRoutines
 
 import com.titaniumPolitics.game.core.gameActions.GameAction
-import com.titaniumPolitics.game.core.gameActions.Move
 import kotlinx.serialization.Serializable
 
 @Serializable

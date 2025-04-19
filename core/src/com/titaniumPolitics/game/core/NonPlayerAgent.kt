@@ -1,7 +1,9 @@
 package com.titaniumPolitics.game.core
 
 import com.titaniumPolitics.game.core.NPCRoutines.*
-import com.titaniumPolitics.game.core.gameActions.*
+import com.titaniumPolitics.game.core.gameActions.GameAction
+import com.titaniumPolitics.game.core.gameActions.LeaveMeeting
+import com.titaniumPolitics.game.core.gameActions.Wait
 import com.titaniumPolitics.game.debugTools.Logger
 import kotlinx.serialization.Serializable
 
