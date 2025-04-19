@@ -1,0 +1,3 @@
+Find: (?s)"resources": \{(.*?)\}
+Replace: "resources": {"_resources":{$1}}
+(?s): dot matches line break as well
