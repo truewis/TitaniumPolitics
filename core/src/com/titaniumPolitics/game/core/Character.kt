@@ -63,8 +63,8 @@ class Character : GameStateElement()
         return when (item)
         {
             //Value of ration and water is based on the current need of the character.
-            "ration" -> 5.0 * (reliants.size + 1.0) / ((resources["ration"] ?: .0) + 1.0)
-            "water" -> (reliants.size + 1.0) / ((resources["water"] ?: .0) + 1.0)
+            "ration" -> 5.0 * (reliants.size + 1.0) / (resources["ration"] + 1.0)
+            "water" -> (reliants.size + 1.0) / (resources["water"] + 1.0)
             "hydrogen" -> 1.0
             "organics" -> 5.0
             "lightMetal" -> 1.0

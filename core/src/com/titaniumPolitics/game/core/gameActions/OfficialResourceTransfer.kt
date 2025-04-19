@@ -12,13 +12,13 @@ class OfficialResourceTransfer(override val sbjCharacter: String, override val t
     {
 
         if (
-            resources.all { (parent.places[tgtPlace]!!.resources[it.key] ?: .0) >= it.value }
+            resources.all { parent.places[tgtPlace]!!.resources[it.key] >= it.value }
         )
         {
             //Transfer resources.
             resources.forEach { (key, value) ->
-                parent.places[tgtPlace]!!.resources[key] = (parent.places[tgtPlace]!!.resources[key] ?: .0) - value
-                parent.places[toWhere]!!.resources[key] = (parent.places[toWhere]!!.resources[key] ?: .0) + value
+                parent.places[tgtPlace]!!.resources[key] = parent.places[tgtPlace]!!.resources[key] - value
+                parent.places[toWhere]!!.resources[key] = parent.places[toWhere]!!.resources[key] + value
             }
 
 
@@ -32,7 +32,7 @@ class OfficialResourceTransfer(override val sbjCharacter: String, override val t
 
     override fun isValid(): Boolean
     {
-        return resources.all { (parent.places[tgtPlace]!!.resources[it.key] ?: .0) >= it.value }
+        return resources.all { parent.places[tgtPlace]!!.resources[it.key] >= it.value }
     }
 
 }

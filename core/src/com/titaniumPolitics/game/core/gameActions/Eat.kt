@@ -8,14 +8,13 @@ class Eat(override val sbjCharacter: String, override val tgtPlace: String) : Ga
 
     override fun execute()
     {
-        if ((parent.characters[sbjCharacter]!!.resources["ration"]
-                ?: .0) > 0 && (parent.characters[sbjCharacter]!!.resources["water"] ?: .0) > 0
+        if (parent.characters[sbjCharacter]!!.resources["ration"] > 0 && parent.characters[sbjCharacter]!!.resources["water"] > 0
         )
         {
             parent.characters[sbjCharacter]!!.resources["ration"] =
-                parent.characters[sbjCharacter]!!.resources["ration"]!! - 1
+                parent.characters[sbjCharacter]!!.resources["ration"] - 1
             parent.characters[sbjCharacter]!!.resources["water"] =
-                parent.characters[sbjCharacter]!!.resources["water"]!! - 1
+                parent.characters[sbjCharacter]!!.resources["water"] - 1
             parent.setMutuality(sbjCharacter, sbjCharacter, 10.0)//Increase will.
             parent.characters[sbjCharacter]!!.hunger -= 50
             parent.characters[sbjCharacter]!!.thirst -= 50
@@ -30,8 +29,7 @@ class Eat(override val sbjCharacter: String, override val tgtPlace: String) : Ga
     override fun isValid(): Boolean
     {
         //TODO: Check if the character is in a place where it can eat, and has the resources to eat.
-        return tgtPlace.contains("home") && (parent.characters[sbjCharacter]!!.resources["ration"]
-            ?: .0) > 0 && (parent.characters[sbjCharacter]!!.resources["water"] ?: .0) > 0
+        return tgtPlace.contains("home") && parent.characters[sbjCharacter]!!.resources["ration"] > 0 && parent.characters[sbjCharacter]!!.resources["water"] > 0
     }
 
     override fun deltaWill(): Double

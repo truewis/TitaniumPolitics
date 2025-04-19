@@ -47,14 +47,12 @@ class NonPlayerAgent : Agent()
             return
         }
         //If there is almost no food or water, stop all activities and try to get some. ----------------------------------------------------------------------------
-        if ((parent.characters[name]!!.resources["ration"]
-                ?: .0) <= (parent.characters[name]!!.reliants.size + 1) || (parent.characters[name]!!.resources["water"]
-                ?: .0) <= (parent.characters[name]!!.reliants.size + 1)
+        if (parent.characters[name]!!.resources["ration"] <= (parent.characters[name]!!.reliants.size + 1) || parent.characters[name]!!.resources["water"] <= (parent.characters[name]!!.reliants.size + 1)
         )
         {
-            val wantedResource = if ((parent.characters[name]!!.resources["ration"]
-                    ?: .0) <= (parent.characters[name]!!.reliants.size + 1)
-            ) "ration" else "water"
+            val wantedResource =
+                if (parent.characters[name]!!.resources["ration"] <= (parent.characters[name]!!.reliants.size + 1)
+                ) "ration" else "water"
             if (parent.characters[name]!!.trait.contains("thief"))
             {
                 //Find a place within my division with maximum res.

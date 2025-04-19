@@ -31,14 +31,14 @@ class Salary(override val sbjCharacter: String, override val tgtPlace: String) :
 //        }
         who.forEach { character ->
             if (
-                resources.all { (what, amount) -> (parent.places[guildHall]!!.resources[what] ?: .0) >= amount }
+                resources.all { (what, amount) -> parent.places[guildHall]!!.resources[what] >= amount }
             )
             {
                 resources.forEach { (what, amount) ->
                     parent.places[guildHall]!!.resources[what] =
-                        (parent.places[guildHall]!!.resources[what] ?: .0) - amount
+                        parent.places[guildHall]!!.resources[what] - amount
                     parent.characters[character]!!.resources[what] =
-                        (parent.characters[character]!!.resources[what] ?: .0) + amount
+                        parent.characters[character]!!.resources[what] + amount
                 }
                 //party.isDailySalaryPaid[tgtCharacter] = true
                 println("$character is paid $resources from $${party.name}.")
