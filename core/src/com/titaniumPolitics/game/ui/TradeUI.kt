@@ -65,8 +65,8 @@ class TradeUI(var gameState: GameState) : Table(defaultSkin)
             trade = Trade(playerName, player.place.name).apply { this.who = who }
             isVisible = true
             refreshList(
-                player.resources,
-                characters[who]!!.resources,
+                player.resources.toHashMap(),
+                characters[who]!!.resources.toHashMap(),
                 informations.filter {
                     it.value.knownTo.contains(playerName)
                 }

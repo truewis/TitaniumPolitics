@@ -17,8 +17,8 @@ class BuyRoutine() : Routine()
 
         val info = gState.informations.values.filter {
             it.type == InformationType.RESOURCES && it.tgtCharacter != "" && it.tgtCharacter != name && it.resources.containsKey(
-                variables["wantedResource"]
-            ) && it.resources[variables["wantedResource"]]!! > 10 && it.knownTo.contains(
+                variables["wantedResource"]!!
+            ) && it.resources[variables["wantedResource"]!!] > 10 && it.knownTo.contains(
                 name
             )
         }

@@ -15,7 +15,7 @@ class StealRoutine() : Routine()
             it.responsibleParty != "" && gState.parties[it.responsibleParty]!!.members.contains(
                 name
             )
-        }.maxByOrNull { it.resources[variables["wantedResource"]] ?: .0 }
+        }.maxByOrNull { it.resources[variables["stealResource"]!!] }
     }
 
     override fun newRoutineCondition(name: String, place: String): Routine?

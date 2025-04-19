@@ -44,18 +44,18 @@ class Place : GameStateElement()
                 if (it.durability > .0)
                     when (it.name)
                     {
-                        "waterStorage" -> result["water"] += 30000
-                        "oxygenStorage" -> result["oxygen"] += 3000
-                        "metalStorage" -> result["metal"] += 30000
-                        "componentStorage" -> result["component"] += 30000
-                        "rationStorage" -> result["ration"] += 30000
-                        "energyStorage" -> result["energy"] += 1e11
+                        "waterStorage" -> result["water"] += 30000.0
+                        "oxygenStorage" -> result["oxygen"] += 3000.0
+                        "metalStorage" -> result["metal"] += 30000.0
+                        "componentStorage" -> result["component"] += 30000.0
+                        "rationStorage" -> result["ration"] += 30000.0
+                        "energyStorage" -> result["energy"] += 1.0e11
                         else ->//concatenate string
                         {
                             if (it.name.contains("Storage"))
                             {
                                 val resource = it.name.substringBefore("Storage").lowercase(Locale.getDefault())
-                                result[resource] += 30000
+                                result[resource] += 30000.0
                             }
                         }
                     }

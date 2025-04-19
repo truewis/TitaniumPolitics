@@ -436,7 +436,7 @@ class NewAgendaUI(gameState: GameState, override var actionCallback: (GameAction
                                     ResourceTransferUI.instance.refresh(
                                         "unofficial",
                                         GameEngine.acquireCallback,
-                                        gameState.player.place.resources
+                                        gameState.player.place.resources.toHashMap()
                                     )
                                 }
                             })
@@ -457,7 +457,7 @@ class NewAgendaUI(gameState: GameState, override var actionCallback: (GameAction
                                     ResourceTransferUI.instance.refresh(
                                         "official",
                                         GameEngine.acquireCallback,
-                                        gameState.player.place.resources
+                                        gameState.player.place.resources.toHashMap()
                                     )
                                 }
                             })
@@ -525,8 +525,8 @@ class NewAgendaUI(gameState: GameState, override var actionCallback: (GameAction
                                     y: Float
                                 )
                                 {
-                                    NewAgendaUI.instance.isVisible = true
-                                    NewAgendaUI.instance.refresh()
+                                    instance.isVisible = true
+                                    instance.refresh()
                                 }
                             })
                         }

@@ -1,38 +1,43 @@
 package com.titaniumPolitics.game.core
 
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.serializer
 
 @Serializable
-class Resources : HashMap<String, Double>()
+class Resources()
 {
+    private val _resources = hashMapOf<String, Double>()
+
     constructor(vararg pairs: Pair<String, Double>) : this()
     {
-        putAll(pairs)
+        pairs.forEach {
+            _resources[it.first] = it.second
+        }
     }
 
-    override fun get(key: String): Double
+    operator fun get(key: String): Double
     {
-        return super[key] ?: .0
+        return _resources[key] ?: .0
     }
 
-    override fun put(key: String, value: Double): Double?
+    operator fun set(key: String, value: Double): Double?
     {
-        return if (this[key] + value > 0)
+        return if (this[key] + value >= 0)
         {
-            super.put(key, value)
+            _resources.put(key, value)
         } else
         {
-            throw Exception("Resource value must be positive: $key, $value")
+            throw Exception("Resource value must be nonNegative: $key, $value")
         }
     }
 
     fun plus(r1: Resources, r2: Resources): Resources
     {
         val result = Resources()
-        r1.forEach { (key, value) ->
+        r1._resources.forEach { (key, value) ->
             result[key] = value + r2[key]
         }
-        r2.forEach { (key, value) ->
+        r2._resources.forEach { (key, value) ->
             if (!result.containsKey(key))
             {
                 result[key] = value
@@ -40,4 +45,27 @@ class Resources : HashMap<String, Double>()
         }
         return result
     }
+
+    fun containsKey(key: String): Boolean
+    {
+        return _resources.containsKey(key)
+    }
+
+    fun toHashMap(): HashMap<String, Double>
+    {
+        return HashMap(_resources)
+    }
+
+    fun forEach(function: (Map.Entry<String, Double>) -> Unit)
+    {
+        _resources.forEach {
+            function(it)
+        }
+    }
+
+    val keys: Set<String>
+        get()
+        {
+            return _resources.keys
+        }
 }

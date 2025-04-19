@@ -176,7 +176,7 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable
                                     ResourceTransferUI.instance.refresh(
                                         "unofficial",
                                         GameEngine.acquireCallback,
-                                        this@AvailableActionsUI.gameState.player.place.resources
+                                        this@AvailableActionsUI.gameState.player.place.resources.toHashMap()
                                     )
                                 }
                             })
@@ -197,7 +197,7 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable
                                     ResourceTransferUI.instance.refresh(
                                         "official",
                                         GameEngine.acquireCallback,
-                                        this@AvailableActionsUI.gameState.player.place.resources
+                                        this@AvailableActionsUI.gameState.player.place.resources.toHashMap()
                                     )
                                 }
                             })

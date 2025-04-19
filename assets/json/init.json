@@ -79,8 +79,10 @@
         "bargainer"
       ],
       "resources": {
-        "water": 10,
-        "ration": 10
+        "_resources": {
+          "water": 10,
+          "ration": 10
+        }
       },
       "health": 80,
       "livingBy": "constructionYardNorth"
@@ -93,8 +95,10 @@
         "bargainer"
       ],
       "resources": {
-        "water": 10,
-        "ration": 10
+        "_resources": {
+          "water": 10,
+          "ration": 10
+        }
       },
       "health": 80,
       "livingBy": "mainControlRoom"
@@ -107,8 +111,10 @@
         "bargainer"
       ],
       "resources": {
-        "water": 10,
-        "ration": 10
+        "_resources": {
+          "water": 10,
+          "ration": 10
+        }
       },
       "health": 80,
       "livingBy": "mainControlRoom"
@@ -121,8 +127,10 @@
         "thief"
       ],
       "resources": {
-        "water": 10,
-        "ration": 10
+        "_resources": {
+          "water": 10,
+          "ration": 10
+        }
       },
       "health": 80,
       "livingBy": "mainControlRoom"
@@ -135,8 +143,10 @@
         "thief"
       ],
       "resources": {
-        "water": 10,
-        "ration": 10
+        "_resources": {
+          "water": 10,
+          "ration": 10
+        }
       },
       "health": 80,
       "livingBy": "mainControlRoom"
@@ -149,8 +159,10 @@
         "bargainer"
       ],
       "resources": {
-        "water": 10,
-        "ration": 10
+        "_resources": {
+          "water": 10,
+          "ration": 10
+        }
       },
       "health": 80,
       "livingBy": "mainControlRoom"
@@ -163,8 +175,10 @@
         "thief"
       ],
       "resources": {
-        "water": 10,
-        "ration": 10
+        "_resources": {
+          "water": 10,
+          "ration": 10
+        }
       },
       "health": 80,
       "livingBy": "mainControlRoom"
@@ -176,8 +190,10 @@
         "thief"
       ],
       "resources": {
-        "water": 10,
-        "ration": 10
+        "_resources": {
+          "water": 10,
+          "ration": 10
+        }
       },
       "health": 80,
       "livingBy": "mainControlRoom"
@@ -190,8 +206,10 @@
         "bargainer"
       ],
       "resources": {
-        "water": 10,
-        "ration": 10
+        "_resources": {
+          "water": 10,
+          "ration": 10
+        }
       },
       "health": 80,
       "livingBy": "mainControlRoom"
@@ -204,8 +222,10 @@
         "bargainer"
       ],
       "resources": {
-        "water": 10,
-        "ration": 10
+        "_resources": {
+          "water": 10,
+          "ration": 10
+        }
       },
       "health": 80,
       "livingBy": "constructionYardNorth"
@@ -217,8 +237,10 @@
         "technician"
       ],
       "resources": {
-        "water": 10,
-        "ration": 10
+        "_resources": {
+          "water": 10,
+          "ration": 10
+        }
       },
       "health": 80,
       "livingBy": "constructionYardNorth"
@@ -230,8 +252,10 @@
         "technician"
       ],
       "resources": {
-        "water": 10,
-        "ration": 10
+        "_resources": {
+          "water": 10,
+          "ration": 10
+        }
       },
       "health": 80,
       "livingBy": "constructionYardNorth"
@@ -243,8 +267,10 @@
         "technician"
       ],
       "resources": {
-        "water": 10,
-        "ration": 10
+        "_resources": {
+          "water": 10,
+          "ration": 10
+        }
       },
       "health": 80,
       "livingBy": "constructionYardNorth"
@@ -256,8 +282,10 @@
         "technician"
       ],
       "resources": {
-        "water": 10,
-        "ration": 10
+        "_resources": {
+          "water": 10,
+          "ration": 10
+        }
       },
       "health": 80,
       "livingBy": "constructionYardNorth"
@@ -268,8 +296,10 @@
         "emotionless"
       ],
       "resources": {
-        "water": 10,
-        "ration": 10
+        "_resources": {
+          "water": 10,
+          "ration": 10
+        }
       },
       "health": 80,
       "livingBy": "excavationShaftA"
@@ -280,8 +310,10 @@
         "emotionless"
       ],
       "resources": {
-        "water": 10,
-        "ration": 10
+        "_resources": {
+          "water": 10,
+          "ration": 10
+        }
       },
       "health": 80,
       "livingBy": "excavationShaftB"
@@ -292,8 +324,10 @@
         "emotionless"
       ],
       "resources": {
-        "water": 10,
-        "ration": 10
+        "_resources": {
+          "water": 10,
+          "ration": 10
+        }
       },
       "health": 80,
       "livingBy": "welfareStationWest"
@@ -304,8 +338,10 @@
         "emotionless"
       ],
       "resources": {
-        "water": 10,
-        "ration": 10
+        "_resources": {
+          "water": 10,
+          "ration": 10
+        }
       },
       "health": 80,
       "livingBy": "welfareStationEast"
@@ -316,9 +352,11 @@
         "emotionless"
       ],
       "resources": {
-        "water": 50,
-        "ration": 300,
-        "organics": 100
+        "_resources": {
+          "water": 50,
+          "ration": 300,
+          "organics": 100
+        }
       },
       "health": 80,
       "livingBy": "market"
@@ -329,18 +367,20 @@
         "emotionless"
       ],
       "resources": {
-        "water": 10,
-        "ration": 10,
-        "tank": 10,
-        "beam": 10,
-        "axle": 10,
-        "transmission": 5,
-        "bearing": 5,
-        "piston": 5,
-        "wire": 10,
-        "optics": 5,
-        "lamp": 5,
-        "vacuumTube": 5
+        "_resources": {
+          "water": 10,
+          "ration": 10,
+          "tank": 10,
+          "beam": 10,
+          "axle": 10,
+          "transmission": 5,
+          "bearing": 5,
+          "piston": 5,
+          "wire": 10,
+          "optics": 5,
+          "lamp": 5,
+          "vacuumTube": 5
+        }
       },
       "health": 80,
       "livingBy": "market"
@@ -350,7 +390,9 @@
         "robot"
       ],
       "resources": {
-        "water": 100
+        "_resources": {
+          "water": 100
+        }
       },
       "health": 100,
       "livingBy": "mainControlRoom"
@@ -360,7 +402,9 @@
         "robot"
       ],
       "resources": {
-        "water": 100
+        "_resources": {
+          "water": 100
+        }
       },
       "health": 100,
       "livingBy": "observatory"
@@ -374,9 +418,11 @@
         "z": 0
       },
       "resources": {
-        "oxygen": 100,
-        "water": 15000,
-        "ration": 100
+        "_resources": {
+          "oxygen": 100,
+          "water": 15000,
+          "ration": 100
+        }
       },
       "connectedPlaces": [
         "reservoirEast",
@@ -446,9 +492,11 @@
         "z": 4
       },
       "resources": {
-        "oxygen": 50,
-        "water": 15000,
-        "ration": 50
+        "_resources": {
+          "oxygen": 50,
+          "water": 15000,
+          "ration": 50
+        }
       },
       "connectedPlaces": [
         "squareNorth"
@@ -524,9 +572,11 @@
         "z": -3
       },
       "resources": {
-        "oxygen": 50,
-        "water": 15000,
-        "ration": 50
+        "_resources": {
+          "oxygen": 50,
+          "water": 15000,
+          "ration": 50
+        }
       },
       "connectedPlaces": [
         "squareSouth",
@@ -603,11 +653,13 @@
         "z": -10
       },
       "resources": {
-        "oxygen": 50,
-        "water": 15000,
-        "ration": 50,
-        "metal": 100,
-        "component": 50
+        "_resources": {
+          "oxygen": 50,
+          "water": 15000,
+          "ration": 50,
+          "metal": 100,
+          "component": 50
+        }
       },
       "connectedPlaces": [
         "reservoirWest",
@@ -714,11 +766,13 @@
         "z": -10
       },
       "resources": {
-        "oxygen": 50,
-        "water": 15000,
-        "ration": 50,
-        "lightMetal": 100,
-        "component": 50
+        "_resources": {
+          "oxygen": 50,
+          "water": 15000,
+          "ration": 50,
+          "lightMetal": 100,
+          "component": 50
+        }
       },
       "connectedPlaces": [
         "miningSchool",
@@ -826,11 +880,13 @@
         "z": 10
       },
       "resources": {
-        "oxygen": 50,
-        "water": 15000,
-        "ration": 50,
-        "metal": 100,
-        "component": 50
+        "_resources": {
+          "oxygen": 50,
+          "water": 15000,
+          "ration": 50,
+          "metal": 100,
+          "component": 50
+        }
       },
       "connectedPlaces": [
         "rescueStationNorth"
@@ -934,8 +990,10 @@
         "z": 15
       },
       "resources": {
-        "oxygen": 50,
-        "water": 15000
+        "_resources": {
+          "oxygen": 50,
+          "water": 15000
+        }
       },
       "connectedPlaces": [
         "recycleFacilityWest",
@@ -975,9 +1033,11 @@
         "z": -8
       },
       "resources": {
-        "lightMetal": 50,
-        "component": 100,
-        "water": 15000
+        "_resources": {
+          "lightMetal": 50,
+          "component": 100,
+          "water": 15000
+        }
       },
       "connectedPlaces": [
         "techSchool",
@@ -1040,8 +1100,10 @@
         "z": 4
       },
       "resources": {
-        "component": 10,
-        "water": 0
+        "_resources": {
+          "component": 10,
+          "water": 0
+        }
       },
       "connectedPlaces": [
         "securityCheckEast"
@@ -1069,9 +1131,11 @@
         "z": 15
       },
       "resources": {
-        "lightMetal": 50,
-        "component": 100,
-        "water": 15000
+        "_resources": {
+          "lightMetal": 50,
+          "component": 100,
+          "water": 15000
+        }
       },
       "connectedPlaces": [
         "observatory"
@@ -1134,9 +1198,11 @@
         "z": 10
       },
       "resources": {
-        "lightMetal": 50,
-        "component": 100,
-        "water": 0
+        "_resources": {
+          "lightMetal": 50,
+          "component": 100,
+          "water": 0
+        }
       },
       "connectedPlaces": [
         "recycleFacilityEast"
@@ -1213,9 +1279,11 @@
         "z": 10
       },
       "resources": {
-        "lightMetal": 50,
-        "component": 100,
-        "water": 0
+        "_resources": {
+          "lightMetal": 50,
+          "component": 100,
+          "water": 0
+        }
       },
       "connectedPlaces": [
         "observatory",
@@ -1305,9 +1373,11 @@
         "z": 13
       },
       "resources": {
-        "lightMetal": 50,
-        "component": 100,
-        "water": 0
+        "_resources": {
+          "lightMetal": 50,
+          "component": 100,
+          "water": 0
+        }
       },
       "connectedPlaces": [
         "rescueStationNorth",
@@ -1444,10 +1514,12 @@
         "z": -8
       },
       "resources": {
-        "lightMetal": 50,
-        "component": 100,
-        "water": 15000,
-        "oxygen": 0
+        "_resources": {
+          "lightMetal": 50,
+          "component": 100,
+          "water": 15000,
+          "oxygen": 0
+        }
       },
       "connectedPlaces": [
         "squareSouth",
@@ -1545,10 +1617,12 @@
         "z": 4
       },
       "resources": {
-        "lightMetal": 50,
-        "component": 100,
-        "water": 15000,
-        "oxygen": 0
+        "_resources": {
+          "lightMetal": 50,
+          "component": 100,
+          "water": 15000,
+          "oxygen": 0
+        }
       },
       "connectedPlaces": [
         "recycleFacilityWest"
@@ -1645,9 +1719,11 @@
         "z": -8
       },
       "resources": {
-        "water": 300000,
-        "lightMetal": 50,
-        "component": 100
+        "_resources": {
+          "water": 300000,
+          "lightMetal": 50,
+          "component": 100
+        }
       },
       "connectedPlaces": [
         "mainControlRoom",
@@ -1726,9 +1802,11 @@
         "z": -2
       },
       "resources": {
-        "lightMetal": 50,
-        "component": 100,
-        "water": 15000
+        "_resources": {
+          "lightMetal": 50,
+          "component": 100,
+          "water": 15000
+        }
       },
       "connectedPlaces": [
         "excavationShaftA"
@@ -1805,9 +1883,11 @@
         "z": 0
       },
       "resources": {
-        "oxygen": 50,
-        "water": 15000,
-        "ration": 50
+        "_resources": {
+          "oxygen": 50,
+          "water": 15000,
+          "ration": 50
+        }
       },
       "connectedPlaces": [
         "securityCheckEast",
@@ -1867,9 +1947,11 @@
         "z": -2
       },
       "resources": {
-        "oxygen": 50,
-        "water": 15000,
-        "ration": 50
+        "_resources": {
+          "oxygen": 50,
+          "water": 15000,
+          "ration": 50
+        }
       },
       "connectedPlaces": [
         "miningSchool",
@@ -1926,9 +2008,11 @@
         "z": 0
       },
       "resources": {
-        "oxygen": 100,
-        "water": 15000,
-        "ration": 500
+        "_resources": {
+          "oxygen": 100,
+          "water": 15000,
+          "ration": 500
+        }
       },
       "connectedPlaces": [
         "reservoirEast"
@@ -2010,9 +2094,11 @@
         "z": 7
       },
       "resources": {
-        "oxygen": 100,
-        "water": 15000,
-        "ration": 100
+        "_resources": {
+          "oxygen": 100,
+          "water": 15000,
+          "ration": 100
+        }
       },
       "connectedPlaces": [
         "asteroidMine",
@@ -2078,9 +2164,11 @@
         "z": -5
       },
       "resources": {
-        "oxygen": 100,
-        "water": 15000,
-        "ration": 100
+        "_resources": {
+          "oxygen": 100,
+          "water": 15000,
+          "ration": 100
+        }
       },
       "connectedPlaces": [
         "excavationShaftB",
@@ -2146,9 +2234,11 @@
         "z": -5
       },
       "resources": {
-        "oxygen": 100,
-        "water": 15000,
-        "ration": 100
+        "_resources": {
+          "oxygen": 100,
+          "water": 15000,
+          "ration": 100
+        }
       },
       "connectedPlaces": [
         "excavationShaftA",
@@ -2212,9 +2302,11 @@
         "z": 0
       },
       "resources": {
-        "oxygen": 100,
-        "water": 15000,
-        "ration": 100
+        "_resources": {
+          "oxygen": 100,
+          "water": 15000,
+          "ration": 100
+        }
       },
       "connectedPlaces": [
         "excavationShaftA",
@@ -2271,9 +2363,11 @@
         "z": 0
       },
       "resources": {
-        "oxygen": 100,
-        "water": 15000,
-        "ration": 100
+        "_resources": {
+          "oxygen": 100,
+          "water": 15000,
+          "ration": 100
+        }
       },
       "connectedPlaces": [
         "squareSouth",
@@ -2331,9 +2425,11 @@
         "z": 0
       },
       "resources": {
-        "oxygen": 100,
-        "water": 15000,
-        "ration": 100
+        "_resources": {
+          "oxygen": 100,
+          "water": 15000,
+          "ration": 100
+        }
       },
       "connectedPlaces": [
         "miningSchool",
@@ -2391,8 +2487,10 @@
         "z": 8
       },
       "resources": {
-        "water": 15000,
-        "ration": 100
+        "_resources": {
+          "water": 15000,
+          "ration": 100
+        }
       },
       "connectedPlaces": [
         "rescueStationNorth",
@@ -2475,8 +2573,10 @@
         "z": 5
       },
       "resources": {
-        "water": 15000,
-        "ration": 100
+        "_resources": {
+          "water": 15000,
+          "ration": 100
+        }
       },
       "connectedPlaces": [
         "recycleFacilityWest",
@@ -2553,8 +2653,10 @@
         "z": -2
       },
       "resources": {
-        "water": 15000,
-        "ration": 100
+        "_resources": {
+          "water": 15000,
+          "ration": 100
+        }
       },
       "connectedPlaces": [
         "mainControlRoom",
@@ -2633,9 +2735,11 @@
         "z": 9
       },
       "resources": {
-        "lightMetal": 100,
-        "component": 200,
-        "water": 15000
+        "_resources": {
+          "lightMetal": 100,
+          "component": 200,
+          "water": 15000
+        }
       },
       "connectedPlaces": [
         "market",
@@ -2695,9 +2799,11 @@
         "z": -25
       },
       "resources": {
-        "lightMetal": 100,
-        "component": 200,
-        "water": 15000
+        "_resources": {
+          "lightMetal": 100,
+          "component": 200,
+          "water": 15000
+        }
       },
       "connectedPlaces": [
         "excavationShaftA"
@@ -2865,9 +2971,11 @@
     }
   },
   "marketResources": {
-    "water": 300000,
-    "ration": 100000,
-    "oxygen": 100000
+    "_resources": {
+      "water": 300000,
+      "ration": 100000,
+      "oxygen": 100000
+    }
   },
   "eventSystem": {
     "dataBase": [

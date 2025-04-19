@@ -670,7 +670,7 @@ class GameEngine(val gameState: GameState)
             creationTime = tgtState.time,
             type = InformationType.LOST_RESOURCES,
             tgtPlace = tgtPlace.name,
-            resources = hashMapOf("water" to loss)
+            resources = Resources("water" to loss)
         )/*store info*/.also {
             gameState.informations[it.generateName()] = it
             //Add all people in the place to the known list.
@@ -751,7 +751,7 @@ class GameEngine(val gameState: GameState)
             creationTime = tgtState.time,
             type = InformationType.LOST_RESOURCES,
             tgtPlace = tgtPlace.name,
-            resources = hashMapOf("water" to loss)
+            resources = Resources("water" to loss)
         )/*store info*/.also {
             gameState.informations[it.generateName()] = it
             //Add all people in the place to the known list.

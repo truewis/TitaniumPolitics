@@ -52,7 +52,7 @@ class CharacterInteractionWindowUI(var gameState: GameState) :
                 ResourceTransferUI.instance.refresh(
                     "private",
                     GameEngine.acquireCallback,
-                    this@CharacterInteractionWindowUI.gameState.player.resources
+                    this@CharacterInteractionWindowUI.gameState.player.resources.toHashMap()
                 )
             }
         })
