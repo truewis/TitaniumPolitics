@@ -43,6 +43,7 @@
   "OfficialResourceTransferDuration": 30,
   "UnofficialResourceTransferDuration": 30,
   "WaitDuration": 1,
+  "LongWaitTime": 30,
   "PrepareInfoDuration": 30,
   "RepairDuration": 30,
   "ResignDuration": 3,

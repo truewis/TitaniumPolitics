@@ -37,7 +37,8 @@ sealed class GameAction()
     }
 
     //Return all declared properties.
-    fun returnParams(){
+    fun returnParams()
+    {
 
     }
 
@@ -50,7 +51,7 @@ sealed class GameAction()
 
     open fun execute()
     {
-        sbjCharObj.frozen += ReadOnly.const(this::class.simpleName!! + "Duration").toInt()
+        sbjCharObj.frozen += ReadOnly.constInt(this::class.simpleName!! + "Duration")
     }
 
     open fun deltaWill(): Double

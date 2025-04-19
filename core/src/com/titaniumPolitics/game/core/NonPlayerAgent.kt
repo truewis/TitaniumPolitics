@@ -31,14 +31,14 @@ class NonPlayerAgent : Agent()
 
     private fun selectRoutine()
     {
-
+        routines.sortByDescending { it.priority }
         //Force start meeting routing if the character is in a meeting. Note that the character will leave the meeting immediately if nothing interests it.
         //Note that even if the character has a higher priority routine, this block will not trigger.
         if (parent.ongoingMeetings.any { it.value.currentCharacters.contains(name) } && routines.none { it is AttendMeetingRoutine })
         {
             routines.add(
                 AttendMeetingRoutine().apply {
-                    priority = 800
+                    priority = routines[0].priority + 10
                     intVariables["routineStartTime"] = parent.time
                 }
             )
@@ -59,7 +59,7 @@ class NonPlayerAgent : Agent()
                 if (routines.none { it is StealRoutine })
                 {
                     routines.add(StealRoutine().apply {
-                        priority = 1000
+                        priority = routines[0].priority + 10
                         variables["stealResource"] = wantedResource
                         intVariables["routineStartTime"] = parent.time
                     })//Add a routine, priority higher than work.
@@ -71,7 +71,7 @@ class NonPlayerAgent : Agent()
                 if (routines.none { it is BuyRoutine })
                 {
                     routines.add(BuyRoutine().apply {
-                        priority = 1000
+                        priority = routines[0].priority + 10
                         variables["wantedResource"] = wantedResource
                         intVariables["routineStartTime"] = parent.time
                     })//Add a routine, priority higher than work.
