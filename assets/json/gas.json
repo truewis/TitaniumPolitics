@@ -5,6 +5,9 @@
   "nitrogen": {
     "density": 1.251
   },
+  "water": {
+    "density": 0.8
+  },
   "carbonDioxide": {
     "density": 1.977
   },

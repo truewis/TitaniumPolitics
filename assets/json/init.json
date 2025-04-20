@@ -1480,14 +1480,14 @@
           "idealWorker": 5,
           "currentWorker": 0,
           "idealAbsorption": {
-            "co2": 1
+            "co2": 1,
+            "oxygen": -0.7
           },
           "idealConsumption": {
             "energy": 2e7,
             "hydrogen": 0.08
           },
           "idealDistribution": {
-            "oxygen": 0.7
           },
           "idealProduction": {
             "organics": 0.38
@@ -1561,8 +1561,10 @@
           "baseDanger": 8e-4,
           "idealWorker": 5,
           "currentWorker": 0,
+          "idealAbsorption": {
+            "oxygen": -0.8
+          },
           "idealDistribution": {
-            "oxygen": 0.8
           },
           "idealConsumption": {
             "water": 0.9,
@@ -1578,8 +1580,10 @@
           "baseDanger": 8e-4,
           "idealWorker": 5,
           "currentWorker": 0,
+          "idealAbsorption": {
+            "oxygen": -0.8
+          },
           "idealDistribution": {
-            "oxygen": 0.8
           },
           "idealConsumption": {
             "water": 0.9,
@@ -1663,8 +1667,10 @@
           "baseDanger": 8e-4,
           "idealWorker": 5,
           "currentWorker": 0,
+          "idealAbsorption": {
+            "oxygen": -0.8
+          },
           "idealDistribution": {
-            "oxygen": 0.8
           },
           "idealConsumption": {
             "water": 0.9,
@@ -1680,8 +1686,8 @@
           "baseDanger": 8e-4,
           "idealWorker": 5,
           "currentWorker": 0,
-          "idealDistribution": {
-            "oxygen": 0.8
+          "idealAbsorption": {
+            "oxygen": -0.8
           },
           "idealConsumption": {
             "water": 0.9,
@@ -2973,8 +2979,7 @@
   "marketResources": {
     "_resources": {
       "water": 300000,
-      "ration": 100000,
-      "oxygen": 100000
+      "ration": 100000
     }
   },
   "eventSystem": {

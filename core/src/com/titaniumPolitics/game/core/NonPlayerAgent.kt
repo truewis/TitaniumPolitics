@@ -79,14 +79,26 @@ class NonPlayerAgent : Agent()
                 }
             }
         }
+        //If health is low, rest
+        if (parent.getMutuality(name) < ReadOnly.const("HealthMax") * 0.3)
+        {
+            if (routines.none { it is RestRoutine })
+            {
+                routines.add(RestRoutine().apply {
+                    priority = routines[0].priority + 10
+                    intVariables["routineStartTime"] = parent.time
+                })//Add a routine, priority higher than work.
+                return
+            }
+        }
 
         //If will is low, downTime.
-        if (parent.getMutuality(name) < ReadOnly.const("mutualityMax").toDouble())
+        if (parent.getMutuality(name) < ReadOnly.const("mutualityMax") * 0.3)
         {
             if (routines.none { it is DowntimeRoutine })
             {
                 routines.add(DowntimeRoutine().apply {
-                    priority = 800
+                    priority = routines[0].priority + 10
                     intVariables["routineStartTime"] = parent.time
                 })//Add a routine, priority higher than work.
                 return

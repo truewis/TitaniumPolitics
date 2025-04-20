@@ -59,4 +59,10 @@ sealed class GameAction()
         return .0
     }
 
+    //This function is used by agents to pick the best action they want.
+    open fun optimizeWill(): Double
+    {
+        return deltaWill()
+    }
+
 }

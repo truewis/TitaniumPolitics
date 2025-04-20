@@ -9,6 +9,7 @@ class RestRoutine() : Routine()
 {
     override fun newRoutineCondition(name: String, place: String): Routine?
     {
+
         if (place != "home_$name")
             return MoveRoutine().apply {
                 variables["movePlace"] = "home_$name"

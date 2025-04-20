@@ -29,13 +29,33 @@ class Place : GameStateElement()
                 parent.characters[name.substringAfter("home_")]!!.resources = value
             field = value
         }
-    var gasPressure = hashMapOf<String, Double>("oxygen" to 20000.0, "carbonDioxide" to 100.0)
+    var gasResources = Resources("oxygen" to 20000.0, "carbonDioxide" to 100.0)
+    fun gasPressure(gasName: String): Double =
+        gasResources[gasName] / ((ReadOnly.gasJson[gasName]!!.jsonObject["density"]!!.jsonPrimitive.float)) * (temperature / 273.15) / volume * 101325
+
+    fun pressureToMass(gasName: String, pressure: Double): Double =
+        pressure * ((ReadOnly.gasJson[gasName]!!.jsonObject["density"]!!.jsonPrimitive.float)) / (temperature / 273.15) * volume / 101325
+
     var connectedPlaces = arrayListOf<String>()
     var plannedWorker = 0
     var coordinates = Coordinate3D(0, 0, 0)
     var temperature = 300 //Ambient temperature in Kelvin.
     var volume = 1000f //Volume in m^3.
     val currentWorker: Int get() = apparatuses.sumOf { it.currentWorker }
+
+    val currentTotalPop: Int
+        //This number must be conserved.
+        get()
+        {
+            if (name == "squareSouth") return parent.idlePop + currentWorker//All idle people gather at the square.
+            if (responsibleParty == "") return 0
+            else if (parent.parties[responsibleParty]!!.home == name)
+                return parent.parties[responsibleParty]!!.size -
+                        parent.places.filter {
+                            it.value.responsibleParty == responsibleParty && it.key != name
+                        }.values.sumOf { it.currentWorker }//If this place is a guildhall, all workers stay here when they are not working. TODO: this is a simplification.
+            else return currentWorker
+        }
     val maxResources: Resources
         get()
         {
@@ -86,25 +106,24 @@ class Place : GameStateElement()
         connectedPlaces.forEach {
             val place = parent.places[it]!!
             //For each gas type, use the coordinates and the density in gasJson to distribute the gas according to the boltzmann distribution.
-            gasPressure.forEach { (key, _) ->
+            gasResources.forEach { (key, _) ->
                 val mass =
                     (ReadOnly.gasJson[key]!!.jsonObject["density"]!!.jsonPrimitive.float) * 22.4f / ReadOnly.NA
                 val potentialDiff = coordinates.z - place.coordinates.z
                 val ratio = exp(
                     -(ReadOnly.GA * mass * potentialDiff) / (ReadOnly.KB * temperature) //[J] = [kg*m^2/s^2]
                 ) //Boltzmann distribution. TODO: reflect the volume of the place.
-                val equilabriumGasAmount =
-                    ((gasPressure[key] ?: .0) * volume + (place.gasPressure[key]
-                        ?: .0) * place.volume) / (volume + ratio * place.volume)
+                val equilabriumPressure =
+                    (gasPressure(key) * volume + place.gasPressure(key) * place.volume) / (volume + ratio * place.volume)
 
-                val flowAmount =
-                    (equilabriumGasAmount - (gasPressure[key] ?: .0) * volume) * dt / const("GasDiffusionTau")
+                val flowAmount = pressureToMass(
+                    key,
+                    (equilabriumPressure - gasPressure(key)) * dt / const("GasDiffusionTau")
+                )
 
-                gasPressure[key] =
-                    (gasPressure[key] ?: .0) + flowAmount / volume
+                gasResources[key] += flowAmount / volume
 
-                place.gasPressure[key] =
-                    (place.gasPressure[key] ?: .0) - flowAmount / place.volume
+                place.gasResources[key] -= flowAmount / place.volume
             }
         }
 

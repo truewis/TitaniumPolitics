@@ -1,5 +1,7 @@
 package com.titaniumPolitics.game.core
 
+import com.titaniumPolitics.game.core.ReadOnly.const
+import com.titaniumPolitics.game.core.ReadOnly.dt
 import kotlinx.serialization.Serializable
 
 /*
@@ -59,5 +61,30 @@ class Meeting(
             gameState.ongoingMeetings.remove(gameState.ongoingMeetings.filter { it.value == this }.keys.first())
         } else
             throw IllegalStateException("Meeting $this is not found in the ongoingMeetings.")
+    }
+
+
+    //Agreement change is computed every turn based on deltaAgreement, rather than changing once when information are added.
+    //This is to prevent the meeting going nowhere when there isn't enough supporting information.
+    fun onTimeChange(gameState: GameState)
+    {
+
+        if (type == "")
+        {
+            //Chill meeting
+            currentCharacters.forEach {
+                gameState.setMutuality(it, delta = dt / const("ChillMeetingWillTau") * const("mutualityMax"))
+            }
+        } else
+        {
+            //Work meeting
+            currentCharacters.forEach {
+                gameState.setMutuality(it, delta = dt / const("WorkMeetingWillTau") * const("mutualityMax"))
+            }
+        }
+        agendas.forEach { agenda ->
+
+
+        }
     }
 }

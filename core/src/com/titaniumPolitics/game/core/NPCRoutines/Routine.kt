@@ -51,6 +51,9 @@ sealed class Routine()
 //                else -> listOf()
 //            }
 //        }
+    //TODO: it isn't clear at this moment how we pick between actions and routines. Shall we only pick between routines?
+    //Just like the player pick actions at his will, NPC doesn't have to follow the gradient of will always. We just have to implement the penalty when the will is low in the game system.
+    //Will based behaviour can be implemented in a different agent.
     fun pickAction(name: String, place: String): GameAction
     {
 
@@ -59,6 +62,6 @@ sealed class Routine()
                 .getConstructor(String::class.java, String::class.java)
                 .newInstance(name, place) as GameAction).apply { injectParent(gState);chooseParams() }
 
-        }.filter { it.isValid() }.maxBy { it.deltaWill() }
+        }.filter { it.isValid() }.maxBy { it.optimizeWill() }
     }
 }

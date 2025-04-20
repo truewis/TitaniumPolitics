@@ -15,7 +15,6 @@ class Eat(override val sbjCharacter: String, override val tgtPlace: String) : Ga
                 parent.characters[sbjCharacter]!!.resources["ration"] - 1
             parent.characters[sbjCharacter]!!.resources["water"] =
                 parent.characters[sbjCharacter]!!.resources["water"] - 1
-            parent.setMutuality(sbjCharacter, sbjCharacter, 10.0)//Increase will.
             parent.characters[sbjCharacter]!!.hunger -= 50
             parent.characters[sbjCharacter]!!.thirst -= 50
             println("$sbjCharacter ate a ration and drank some water.")

@@ -79,7 +79,6 @@ class GameState
     var isBudgetProposed = false
     var isBudgetResolved = false
     var informations = hashMapOf<String, Information>()
-    var floatingResources = Resources()
     var marketResources = Resources()
     var eventSystem = EventSystem()
     val realCharList = characters.keys.filter { !it.contains("Anon") && characters[it]!!.alive }

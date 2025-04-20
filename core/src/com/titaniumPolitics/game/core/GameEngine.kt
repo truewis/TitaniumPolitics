@@ -4,6 +4,8 @@ import com.badlogic.gdx.Gdx
 import com.titaniumPolitics.game.core.ReadOnly.const
 import com.titaniumPolitics.game.core.ReadOnly.dt
 import com.titaniumPolitics.game.core.gameActions.GameAction
+import com.titaniumPolitics.game.core.gameActions.Move
+import com.titaniumPolitics.game.core.gameActions.Wait
 import com.titaniumPolitics.game.debugTools.Logger
 import com.titaniumPolitics.game.ui.LogUI
 import kotlinx.coroutines.runBlocking
@@ -120,7 +122,7 @@ class GameEngine(val gameState: GameState)
 
 
         gameState.ongoingMeetings.forEach {
-            progressMeeting(gameState, it.value)
+            it.value.onTimeChange(gameState)
         }
         gameState.requests.forEach {
             it.value.refresh(gameState)
@@ -202,21 +204,25 @@ class GameEngine(val gameState: GameState)
                 char.name
             )
         }!!.name
-        //Add information to the character so that they can report back.
-        Information(
-            char.name,
-            creationTime = gameState.time,
-            type = InformationType.ACTION,
-            tgtTime = gameState.time,
-            tgtPlace = place,
-            tgtCharacter = char.name,
-            action = action
-        ).also {
-            it.knownTo.addAll(char.place.characters)//All characters from the same place know about the action.
-            gameState.informations[it.generateName()] = it
+        //Unless the information is wait and move. I think wait and move info is useless. It adds a lot of overhead, and the info that a character saw someone can be obtained by talking to them instead.
+        if (action !is Wait && action !is Move)
+        {
+            //Add information to the character so that they can report back.
+            Information(
+                char.name,
+                creationTime = gameState.time,
+                type = InformationType.ACTION,
+                tgtTime = gameState.time,
+                tgtPlace = place,
+                tgtCharacter = char.name,
+                action = action
+            ).also {
+                it.knownTo.addAll(char.place.characters)//All characters from the same place know about the action.
+                gameState.informations[it.generateName()] = it
+            }
         }
         action.execute()
-        gameState.setMutuality(char.name, char.name, action.deltaWill())
+        gameState.setMutuality(char.name, delta = action.deltaWill())
 
     }
 
@@ -512,10 +518,10 @@ class GameEngine(val gameState: GameState)
                     entry.value.resources[it.key] = (entry.value.resources[it.key]) - it.value * dth
                 }
                 apparatus.currentDistribution.forEach {
-                    gameState.marketResources[it.key] = (gameState.marketResources[it.key]) + it.value * dth
+                    gameState.marketResources[it.key] += it.value * dth
                 }
                 apparatus.currentAbsorption.forEach {
-                    gameState.floatingResources[it.key] = (gameState.floatingResources[it.key]) - it.value * dth
+                    entry.value.gasResources[it.key] -= it.value * dth
                 }
 
                 if (apparatus.currentGraveDanger > random.nextDouble())
@@ -554,8 +560,8 @@ class GameEngine(val gameState: GameState)
     fun checkMarketResourcesHourly(tgtState: GameState)
     {
         val dth = 3600
-        gameState.floatingResources.forEach {
-            gameState.floatingResources[it.key] = it.value * 999 / 1000
+        gameState.places.forEach { place ->
+            place.value.gasResources.forEach { place.value.gasResources[it.key] = it.value * 0.999 }
         } //1/1000 of the floating resources is lost
 
         if ((gameState.marketResources["water"]) < gameState.pop * const("MarketWaterConsumptionRate") * 86400)
@@ -565,7 +571,9 @@ class GameEngine(val gameState: GameState)
         if ((gameState.marketResources["water"]) > consumptionWater)
         {
             gameState.marketResources["water"] -= consumptionWater
-            gameState.floatingResources["water"] += consumptionWater //No water is lost, it is floating. TODO: recycle the water vapor in the gas system.
+            gameState.places.forEach {
+                it.value.gasResources["water"] += consumptionWater / gameState.pop * it.value.currentTotalPop //No water is lost, it is floating. TODO: distribute the water vapor generation
+            }
         }
         //TODO: adjust consumption rate when resource is low?
         //does not affect approval when resource is low.
@@ -588,39 +596,50 @@ class GameEngine(val gameState: GameState)
                 }
             }
         }
-        if ((gameState.marketResources["oxygen"]) < gameState.pop * const("MarketOxygenConsumptionRate") * 86400)
-            println("Less than 24 hours of oxygen out in the market.")
-        val consumptionOxygen = (gameState.pop * const("MarketOxygenConsumptionRate") * dth)
-        if ((gameState.marketResources["oxygen"]) > consumptionOxygen)
-        {
-            gameState.marketResources["oxygen"] -= consumptionOxygen //0.5kg/day consumption.
-            gameState.floatingResources["co2"] += consumptionOxygen * 96 / 64 //Oxygen is converted to CO2.
-        } else
-        {
-            val death =
-                gameState.pop / 100 + 1//TODO: adjust deaths. Also, productivity starts to drop when oxygen is low. Use the gas system.
-            gameState.pickRandomParty.apply {
-                causeDeaths(death)
-                println("Casualties: at most $death, due to suffocation. Pop left: ${gameState.pop}")
-                Information(
-                    author = "",
-                    creationTime = tgtState.time,
-                    type = InformationType.CASUALTY,
-                    tgtPlace = "everywhere",
-                    amount = death,
-                    auxParty = this.name
-                ).also { /*spread rumor*/
-                    tgtState.informations[it.generateName()] = it //it.publicity = 5
+        gameState.places.forEach { (placeName, place) ->
+            if (place.gasResources["oxygen"] < place.currentTotalPop * const("MarketOxygenConsumptionRate") * 86400)//TODO: Migrate to gas system.
+                println("Less than 24 hours of oxygen out in $placeName")
+            val consumptionOxygen = (place.currentTotalPop * const("MarketOxygenConsumptionRate") * dth)
+            if (place.gasResources["oxygen"] > consumptionOxygen)
+            {
+                place.gasResources["oxygen"] -= consumptionOxygen //0.5kg/day consumption.
+                place.gasResources["carbonDioxide"] += consumptionOxygen * 96 / 64 //Oxygen is converted to carbonDioxide.
+            }
+            if (place.gasPressure("oxygen") < const("CriticalOxygenPressure") || place.gasPressure("carbonDioxide") / place.gasPressure(
+                    "oxygen"
+                ) > const("CriticalCarbonDioxideRatio")
+            )
+            {
+                if (place.responsibleParty == "") return//TODO: currently oxygen deaths don't happen in places without responsibleParty.
+                val death =
+                    place.currentTotalPop / 100 + 1//TODO: adjust deaths. Also, productivity starts to drop when oxygen is low. Use the gas system.
+                place.apply {
+                    gameState.parties[responsibleParty]!!.causeDeaths(death)
+                    println("Casualties: at most $death, due to suffocation at $placeName. Pop left: ${gameState.pop}")
+                    Information(
+                        author = "",
+                        creationTime = tgtState.time,
+                        type = InformationType.CASUALTY,
+                        tgtPlace = placeName,
+                        amount = death,
+                        auxParty = responsibleParty
+                    ).also { /*spread rumor*/
+                        tgtState.informations[it.generateName()] = it //it.publicity = 5
+                    }
                 }
             }
+
         }
+
         if ((gameState.marketResources["ration"]) < gameState.pop * const("MarketRationConsumptionRate") * 86400)
             println("Less than 24 hours of ration out in the market.")
         val consumptionRation = (gameState.pop * const("MarketRationConsumptionRate") * dth)
         if ((gameState.marketResources["ration"]) > consumptionRation)
         {
             gameState.marketResources["ration"] -= consumptionRation //1kg/day consumption.
-            gameState.floatingResources["water"] += consumptionRation / 2 //Ration is converted to water. In carbohydrate, C:H:O = 1:2:1
+            gameState.places.forEach {
+                it.value.gasResources["water"] += consumptionWater / gameState.pop * it.value.currentTotalPop / 2.0 // TODO: distribute the water vapor generation
+            } //Ration is converted to water. In carbohydrate, C:H:O = 1:2:1, hence factor of 2.0
         } else
         {
             val death = gameState.pop / 100 + 1//TODO: adjust deaths.
@@ -906,7 +925,7 @@ class GameEngine(val gameState: GameState)
         fun absorbableResourceShortOf(app: Apparatus, place: Place, gameState: GameState): String
         {
             app.currentAbsorption.forEach {
-                if ((gameState.floatingResources[it.key]) < it.value)
+                if ((place.gasResources[it.key]) < it.value)
                     return it.key //If the resource is less than a unit time worth of consumption, return the resource name.
             }
             //Distribution does not consume resource.
@@ -1091,17 +1110,6 @@ class GameEngine(val gameState: GameState)
                 actions.add("Repair")
             }
             return actions
-        }
-
-
-        //Agreement change is computed every turn based on deltaAgreement, rather than changing once when information are added.
-        //This is to prevent the meeting going nowhere when there isn't enough supporting information.
-        fun progressMeeting(gameState: GameState, mt: Meeting)
-        {
-            mt.agendas.forEach { agenda ->
-
-
-            }
         }
 
 
