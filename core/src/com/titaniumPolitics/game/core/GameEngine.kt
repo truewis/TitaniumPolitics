@@ -390,7 +390,7 @@ class GameEngine(val gameState: GameState)
         //Cabinet has a conference every day. The conference is attended by the division leaders
 
         val conference = Meeting(
-            gameState.time + +12 * 3600 / dt /*12 in the afternoon*/,
+            gameState.time + 12 * 3600 / dt /*12 in the afternoon*/,
             "cabinetDailyConference",
             place = gameState.parties["cabinet"]!!.home,
             scheduledCharacters = gameState.parties["cabinet"]!!.members
