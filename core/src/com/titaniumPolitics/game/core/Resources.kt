@@ -63,6 +63,14 @@ class Resources()
         }
     }
 
+    fun all(function: (Map.Entry<String, Double>) -> Boolean): Boolean
+    {
+        _resources.forEach {
+            if (!function(it)) return false
+        }
+        return true
+    }
+
     val keys: Set<String>
         get()
         {

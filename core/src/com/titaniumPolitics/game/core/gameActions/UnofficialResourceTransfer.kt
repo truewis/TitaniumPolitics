@@ -1,11 +1,13 @@
 package com.titaniumPolitics.game.core.gameActions
 
+import com.titaniumPolitics.game.core.Place
+import com.titaniumPolitics.game.core.Resources
 import kotlinx.serialization.Serializable
 
 @Serializable
 class UnofficialResourceTransfer(override val sbjCharacter: String, override val tgtPlace: String) : GameAction()
 {
-    var resources = hashMapOf<String, Double>()
+    var resources = Resources()
     var toWhere = ""
     var fromHome = false
 
@@ -22,6 +24,7 @@ class UnofficialResourceTransfer(override val sbjCharacter: String, override val
                     parent.characters[sbjCharacter]!!.resources[key] -= value
                     parent.places[toWhere]!!.resources[key] += value
                 }
+
                 //Do not spread rumor
             } else
             {
@@ -45,12 +48,19 @@ class UnofficialResourceTransfer(override val sbjCharacter: String, override val
                 throw Exception("Not enough resources: $tgtPlace, ${parent.places[tgtPlace]!!.resources["water"]}")
             }
         }
+        //If you have sent someone resources
+        if (toWhere.contains("home"))
+        //The mutuality from the recipient increases.
+            Place.whoseHome(toWhere)
+                ?.also { parent.setMutuality(it, sbjCharacter, parent.characters[it]!!.itemValue(resources)) }
         super.execute()
 
     }
 
     override fun isValid(): Boolean
     {
+        //Can't send to the same place
+        if ((fromHome && toWhere == "home_$sbjCharacter") || toWhere == tgtPlace) return false
         return ((fromHome && resources.all {
             parent.characters[sbjCharacter]!!.resources[it.key] >= it.value
         }) || resources.all { parent.places[tgtPlace]!!.resources[it.key] >= it.value }) &&

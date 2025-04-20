@@ -29,6 +29,13 @@ class Place : GameStateElement()
                 parent.characters[name.substringAfter("home_")]!!.resources = value
             field = value
         }
+    val whoseHome: String?
+        get()
+        {
+            if (name.contains("home_"))
+                return name.substringAfter("home_")
+            return null
+        }
     var gasResources = Resources("oxygen" to 20000.0, "carbonDioxide" to 100.0)
     fun gasPressure(gasName: String): Double =
         gasResources[gasName] / ((ReadOnly.gasJson[gasName]!!.jsonObject["density"]!!.jsonPrimitive.float)) * (temperature / 273.15) / volume * 101325
@@ -136,6 +143,13 @@ class Place : GameStateElement()
         {
             if (place1 == place2) return 0
             return ReadOnly.constInt("MoveDuration")
+        }
+
+        fun whoseHome(place: String): String?
+        {
+            if (place.contains("home_"))
+                return place.substringAfter("home_")
+            return null
         }
     }
 

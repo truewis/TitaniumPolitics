@@ -52,10 +52,20 @@ class Character : GameStateElement()
     val currentMeeting
         get() = parent.ongoingMeetings.values.firstOrNull { it.currentCharacters.contains(name) }
 
+    val party = parent.parties.values.find { it.members.contains(name) }
+
     val history = hashMapOf<Int, String>()
     val finishedRequests =
         HashSet<String>() //Requests that this character thinks are finished. The recipient of the request may not be aware of this yet.
 
+
+    fun itemValue(resources: Resources): Double
+    {
+        var sum = .0
+        resources.forEach { (key, value) -> sum += itemValue(key) * value }
+        return sum
+
+    }
 
     //TODO: value may be affected by power dynamics.
     fun itemValue(item: String): Double
