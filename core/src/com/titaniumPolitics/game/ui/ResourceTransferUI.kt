@@ -7,6 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.badlogic.gdx.utils.Align
 import com.titaniumPolitics.game.core.GameEngine
 import com.titaniumPolitics.game.core.GameState
+import com.titaniumPolitics.game.core.Resources
 import com.titaniumPolitics.game.core.gameActions.GameAction
 import com.titaniumPolitics.game.core.gameActions.OfficialResourceTransfer
 import com.titaniumPolitics.game.core.gameActions.UnofficialResourceTransfer
@@ -82,7 +83,7 @@ class ResourceTransferUI(gameState: GameState, override var actionCallback: (Gam
                                         gameState.playerName,
                                         gameState.player.place.name
                                     ).apply {
-                                        this.resources = this@ResourceTransferUI.target
+                                        this.resources = Resources(this@ResourceTransferUI.target)
                                         this.toWhere = this@ResourceTransferUI.toWhere
                                     }
                                 )
@@ -93,7 +94,7 @@ class ResourceTransferUI(gameState: GameState, override var actionCallback: (Gam
                                         gameState.playerName,
                                         gameState.player.place.name
                                     ).apply {
-                                        this.resources = this@ResourceTransferUI.target
+                                        this.resources = Resources(this@ResourceTransferUI.target)
                                         this.toWhere = this@ResourceTransferUI.toWhere
                                     }
                                 )
@@ -104,7 +105,7 @@ class ResourceTransferUI(gameState: GameState, override var actionCallback: (Gam
                                         gameState.playerName,
                                         gameState.player.place.name
                                     ).apply {
-                                        this.resources = this@ResourceTransferUI.target
+                                        this.resources = Resources(this@ResourceTransferUI.target)
                                         this.toWhere = this@ResourceTransferUI.toWhere
                                         this.fromHome = true
                                     }

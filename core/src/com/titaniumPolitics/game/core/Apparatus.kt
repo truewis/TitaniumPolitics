@@ -31,6 +31,7 @@ class Apparatus
     var idealProduction = hashMapOf<String, Double>()
     var idealConsumption = hashMapOf<String, Double>()
     var idealDistribution = hashMapOf<String, Double>() //Converts resources into market resources.
+    var idealHeatProduction = .0
     var idealWorker = 0
     var currentWorker = 0
     val storageType: String
@@ -105,6 +106,23 @@ class Apparatus
                         it.value + it.value * (currentWorker - idealWorker) / idealWorker / 2 //Labor efficiency drops to 50% if overcrowded.
 
             }
+            return result
+        }
+    val currentHeatProduction: Double
+        get()
+        {
+            var result = .0
+            if (idealWorker == 0) return result//No production if no worker.
+            if (durability == .0) return result//No production if broken.
+            if (currentWorker <= idealWorker)
+                result = idealHeatProduction * currentWorker / idealWorker
+            else
+                result =
+                    idealHeatProduction + idealHeatProduction * (currentWorker - idealWorker) / idealWorker / 2 //Labor efficiency drops to 50% if overcrowded.
+
+            //Each worker adds a bit of heat as they work.
+            result += currentWorker * ReadOnly.const("WorkingHumanHeatProduction")
+
             return result
         }
     val currentDanger: Double

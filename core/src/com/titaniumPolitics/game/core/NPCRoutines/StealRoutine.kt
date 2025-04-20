@@ -2,6 +2,7 @@ package com.titaniumPolitics.game.core.NPCRoutines
 
 import com.titaniumPolitics.game.core.Place
 import com.titaniumPolitics.game.core.ReadOnly
+import com.titaniumPolitics.game.core.Resources
 import com.titaniumPolitics.game.core.gameActions.GameAction
 import com.titaniumPolitics.game.core.gameActions.UnofficialResourceTransfer
 import kotlinx.serialization.Serializable
@@ -38,7 +39,7 @@ class StealRoutine() : Routine()
         val resplace = gState.places[place]!!
         val character = gState.characters[name]!!
         return UnofficialResourceTransfer(name, place).apply {
-            resources = hashMapOf(
+            resources = Resources(
                 variables["stealResource"]!! to min(
                     resplace.resources[variables["stealResource"]!!] / 2,
                     (character.reliants.size + 1) * ReadOnly.const("StealAmountMultiplier")

@@ -3,6 +3,7 @@ package com.titaniumPolitics.game.core
 import com.titaniumPolitics.game.core.ReadOnly.const
 import com.titaniumPolitics.game.core.ReadOnly.dt
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.Transient
 import kotlinx.serialization.json.float
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
@@ -47,6 +48,12 @@ class Place : GameStateElement()
     var plannedWorker = 0
     var coordinates = Coordinate3D(0, 0, 0)
     var temperature = 300.0 //Ambient temperature in Kelvin.
+    var heatCapacity = 4.184e7//J/K
+    fun addHeat(energy: Double)
+    {
+        temperature += energy / heatCapacity
+    }
+
     var volume = 1000f //Volume in m^3.
     val currentWorker: Int get() = apparatuses.sumOf { it.currentWorker }
 
@@ -108,7 +115,7 @@ class Place : GameStateElement()
     }
 
     //Check the gas pressure of the connected places and slowly equalize it. This function is called every time change.
-    fun diffuseGas()
+    fun diffuseGasAndTemp()
     {
         connectedPlaces.forEach {
             val place = parent.places[it]!!
@@ -132,6 +139,16 @@ class Place : GameStateElement()
 
                 place.gasResources[key] -= flowAmount / place.volume
             }
+            val equilabriumTemp =
+                (temperature * heatCapacity + place.temperature * heatCapacity) / (heatCapacity + place.heatCapacity)
+
+            val flowAmount =
+                (equilabriumTemp - temperature) * dt / const("TemperatureDiffusionTau")
+
+
+            temperature += flowAmount / heatCapacity
+
+            place.temperature -= flowAmount / place.heatCapacity
         }
 
 

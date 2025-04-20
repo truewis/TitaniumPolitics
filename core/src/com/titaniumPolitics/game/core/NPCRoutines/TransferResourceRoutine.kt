@@ -1,5 +1,6 @@
 package com.titaniumPolitics.game.core.NPCRoutines
 
+import com.titaniumPolitics.game.core.Resources
 import com.titaniumPolitics.game.core.gameActions.GameAction
 import com.titaniumPolitics.game.core.gameActions.OfficialResourceTransfer
 import com.titaniumPolitics.game.core.gameActions.Wait
@@ -26,7 +27,7 @@ class TransferResourceRoutine() : Routine()
         executeDone = true
         if (place == source)
             OfficialResourceTransfer(name, place).also {
-                it.resources = hashMapOf(res to gState.places[place]!!.resources[res] / 2)
+                it.resources = Resources(res to gState.places[place]!!.resources[res] / 2)
                 it.toWhere = dest
                 return it
             }

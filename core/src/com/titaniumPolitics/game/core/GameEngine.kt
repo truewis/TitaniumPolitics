@@ -9,13 +9,11 @@ import com.titaniumPolitics.game.core.gameActions.Wait
 import com.titaniumPolitics.game.debugTools.Logger
 import com.titaniumPolitics.game.ui.LogUI
 import kotlinx.coroutines.runBlocking
-import java.lang.Math.pow
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 import kotlin.math.abs
 import kotlin.math.log
 import kotlin.math.min
-import kotlin.math.pow
 import kotlin.random.Random
 import kotlin.system.exitProcess
 
@@ -482,7 +480,7 @@ class GameEngine(val gameState: GameState)
     fun diffuseGas()
     {
         gameState.places.forEach {
-            it.value.diffuseGas()
+            it.value.diffuseGasAndTemp()
         }
     }
 
@@ -527,6 +525,7 @@ class GameEngine(val gameState: GameState)
                 apparatus.currentAbsorption.forEach {
                     entry.value.gasResources[it.key] -= it.value * dth
                 }
+                entry.value.addHeat(apparatus.currentHeatProduction * dth)
 
                 if (apparatus.currentGraveDanger > random.nextDouble())
                 {

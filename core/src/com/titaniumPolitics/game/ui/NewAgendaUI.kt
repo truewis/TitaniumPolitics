@@ -40,7 +40,8 @@ class NewAgendaUI(gameState: GameState, override var actionCallback: (GameAction
             {
                 override fun changed(event: ChangeEvent?, actor: Actor?)
                 {
-                    this@NewAgendaUI.agenda = MeetingAgenda(AgendaType.PRAISE, hashMapOf("character" to selected))
+                    this@NewAgendaUI.agenda =
+                        MeetingAgenda(AgendaType.PRAISE, gameState.playerName, hashMapOf("character" to selected))
                 }
             })
         }.inCell.size(300f, 100f)
@@ -54,7 +55,8 @@ class NewAgendaUI(gameState: GameState, override var actionCallback: (GameAction
             {
                 override fun changed(event: ChangeEvent?, actor: Actor?)
                 {
-                    this@NewAgendaUI.agenda = MeetingAgenda(AgendaType.DENOUNCE, hashMapOf("character" to selected))
+                    this@NewAgendaUI.agenda =
+                        MeetingAgenda(AgendaType.DENOUNCE, gameState.playerName, hashMapOf("character" to selected))
                 }
             })
         }.inCell.size(300f, 100f)
@@ -68,7 +70,8 @@ class NewAgendaUI(gameState: GameState, override var actionCallback: (GameAction
             {
                 override fun changed(event: ChangeEvent?, actor: Actor?)
                 {
-                    this@NewAgendaUI.agenda = MeetingAgenda(AgendaType.PRAISE_PARTY, hashMapOf("party" to selected))
+                    this@NewAgendaUI.agenda =
+                        MeetingAgenda(AgendaType.PRAISE_PARTY, gameState.playerName, hashMapOf("party" to selected))
                 }
             })
         }.inCell.size(300f, 100f)
@@ -82,7 +85,8 @@ class NewAgendaUI(gameState: GameState, override var actionCallback: (GameAction
             {
                 override fun changed(event: ChangeEvent?, actor: Actor?)
                 {
-                    this@NewAgendaUI.agenda = MeetingAgenda(AgendaType.DENOUNCE_PARTY, hashMapOf("party" to selected))
+                    this@NewAgendaUI.agenda =
+                        MeetingAgenda(AgendaType.DENOUNCE_PARTY, gameState.playerName, hashMapOf("party" to selected))
                 }
             })
         }.inCell.size(300f, 100f)

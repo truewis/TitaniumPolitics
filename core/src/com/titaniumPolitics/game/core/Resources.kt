@@ -8,6 +8,13 @@ class Resources()
 {
     private val _resources = hashMapOf<String, Double>()
 
+    constructor(hashMap: HashMap<String, Double>) : this()
+    {
+        hashMap.forEach {
+            _resources[it.key] = it.value
+        }
+    }
+
     constructor(vararg pairs: Pair<String, Double>) : this()
     {
         pairs.forEach {

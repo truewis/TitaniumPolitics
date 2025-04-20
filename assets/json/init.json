@@ -440,7 +440,8 @@
           "currentWorker": 0,
           "idealConsumption": {
             "energy": 1e4
-          }
+          },
+          "idealHeatProduction": 5e3
         },
         {
           "name": "oxygenStorage",
@@ -511,7 +512,8 @@
           "currentWorker": 0,
           "idealConsumption": {
             "energy": 1e4
-          }
+          },
+          "idealHeatProduction": 1e4
         },
         {
           "name": "beds",
@@ -521,7 +523,8 @@
           "currentWorker": 0,
           "idealConsumption": {
             "energy": 1e4
-          }
+          },
+          "idealHeatProduction": 1e4
         },
         {
           "name": "oxygenStorage",
@@ -592,7 +595,8 @@
           "currentWorker": 0,
           "idealConsumption": {
             "energy": 1e4
-          }
+          },
+          "idealHeatProduction": 1e4
         },
         {
           "name": "beds",
@@ -602,7 +606,8 @@
           "currentWorker": 0,
           "idealConsumption": {
             "energy": 1e4
-          }
+          },
+          "idealHeatProduction": 1e4
         },
         {
           "name": "oxygenStorage",
@@ -682,7 +687,8 @@
           },
           "idealConsumption": {
             "energy": 1e7
-          }
+          },
+          "idealHeatProduction": 1e7
         },
         {
           "name": "liquidShaft",
@@ -695,7 +701,8 @@
           },
           "idealConsumption": {
             "energy": 1e7
-          }
+          },
+          "idealHeatProduction": 1e7
         },
         {
           "name": "glassShaft",
@@ -708,7 +715,8 @@
           },
           "idealConsumption": {
             "energy": 1e7
-          }
+          },
+          "idealHeatProduction": 1e7
         },
         {
           "name": "oxygenStorage",
@@ -794,7 +802,8 @@
           },
           "idealConsumption": {
             "energy": 1e7
-          }
+          },
+          "idealHeatProduction": 1e7
         },
         {
           "name": "liquidShaft",
@@ -809,7 +818,8 @@
           },
           "idealConsumption": {
             "energy": 1e7
-          }
+          },
+          "idealHeatProduction": 1e7
         },
         {
           "name": "glassShaft",
@@ -822,7 +832,8 @@
           },
           "idealConsumption": {
             "energy": 1e7
-          }
+          },
+          "idealHeatProduction": 1e7
         },
         {
           "name": "oxygenStorage",
@@ -906,7 +917,8 @@
           },
           "idealConsumption": {
             "energy": 1e7
-          }
+          },
+          "idealHeatProduction": 1e7
         },
         {
           "name": "liquidShaft",
@@ -919,7 +931,8 @@
           },
           "idealConsumption": {
             "energy": 1e7
-          }
+          },
+          "idealHeatProduction": 1e7
         },
         {
           "name": "glassShaft",
@@ -932,7 +945,8 @@
           },
           "idealConsumption": {
             "energy": 1e7
-          }
+          },
+          "idealHeatProduction": 1e7
         },
         {
           "name": "oxygenStorage",
@@ -1009,7 +1023,8 @@
           "currentWorker": 0,
           "idealConsumption": {
             "energy": 1e7
-          }
+          },
+          "idealHeatProduction": 1e7
         },
         {
           "name": "energyStorage",
@@ -1017,6 +1032,17 @@
           "baseDanger": 2e-4,
           "idealWorker": 10,
           "currentWorker": 0
+        },
+        {
+          "name": "cooler",
+          "durability": 100,
+          "baseDanger": 0,
+          "idealWorker": 100,
+          "currentWorker": 0,
+          "idealConsumption": {
+            "energy": 1e7
+          },
+          "idealHeatProduction": -2e8
         }
       ],
       "characters": [
@@ -1056,7 +1082,8 @@
           },
           "idealConsumption": {
             "energy": 1e4
-          }
+          },
+          "idealHeatProduction": 1e4
         },
         {
           "name": "componentStorage",
@@ -1334,7 +1361,8 @@
           },
           "idealProduction": {
             "water": 1
-          }
+          },
+          "idealHeatProduction": 2.26e7
         },
         {
           "name": "waterRecycle",
@@ -1350,7 +1378,8 @@
           },
           "idealProduction": {
             "water": 1
-          }
+          },
+          "idealHeatProduction": 2.26e7
         },
         {
           "name": "energyStorage",
@@ -1425,7 +1454,8 @@
           },
           "idealProduction": {
             "phosphorus": 0.5
-          }
+          },
+          "idealHeatProduction": 2e8
         },
         {
           "name": "waterRecycle",
@@ -1441,7 +1471,8 @@
           },
           "idealProduction": {
             "water": 1
-          }
+          },
+          "idealHeatProduction": 2.26e7
         },
         {
           "name": "corpseRecycle",
@@ -1455,7 +1486,8 @@
           },
           "idealProduction": {
             "phosphorus": 0.5
-          }
+          },
+          "idealHeatProduction": 2e8
         },
         {
           "name": "waterRecycle",
@@ -1471,7 +1503,8 @@
           },
           "idealProduction": {
             "water": 1
-          }
+          },
+          "idealHeatProduction": 2.26e7
         },
         {
           "name": "co2Recycle",
@@ -1491,7 +1524,8 @@
           },
           "idealProduction": {
             "organics": 0.38
-          }
+          },
+          "idealHeatProduction": 1e7
         },
         {
           "name": "energyStorage",
@@ -1572,7 +1606,8 @@
           },
           "idealProduction": {
             "hydrogen": 0.1
-          }
+          },
+          "idealHeatProduction": 5e6
         },
         {
           "name": "electrolysisArray",
@@ -1591,7 +1626,8 @@
           },
           "idealProduction": {
             "hydrogen": 0.1
-          }
+          },
+          "idealHeatProduction": 5e6
         },
         {
           "name": "energyStorage",
@@ -1678,7 +1714,8 @@
           },
           "idealProduction": {
             "hydrogen": 0.1
-          }
+          },
+          "idealHeatProduction": 5e6
         },
         {
           "name": "electrolysisArray",
@@ -1695,7 +1732,8 @@
           },
           "idealProduction": {
             "hydrogen": 0.1
-          }
+          },
+          "idealHeatProduction": 5e6
         },
         {
           "name": "energyStorage",
@@ -2036,7 +2074,8 @@
           },
           "idealConsumption": {
             "energy": 1e7
-          }
+          },
+          "idealHeatProduction": 5e6
         },
         {
           "name": "farmArray",
@@ -2049,7 +2088,8 @@
           },
           "idealConsumption": {
             "energy": 1e7
-          }
+          },
+          "idealHeatProduction": 5e6
         },
         {
           "name": "waterStorage",
@@ -2824,7 +2864,8 @@
           "currentWorker": 0,
           "idealProduction": {
             "energy": 2e8
-          }
+          },
+          "idealHeatProduction": 1e8
         },
         {
           "name": "waterStorage",

@@ -10,6 +10,7 @@
   "SuffocationTau": 3600,
   "TemperatureDifferenceTolerance": 20,
   "TemperatureDamageTau": 36,
+  "WorkingHumanHeatProduction": 300,
   "DurabilityMax": 100,
   "DurabilityTau": 800000,
   "CorruptionTau": 864000,
@@ -69,6 +70,7 @@
   "GlobalAccidentRate": 0,
   "ExecuteCommandRoutineInvalidActionTimeout": 4,
   "GasDiffusionTau": 10000,
+  "TemperatureDiffusionTau": 10000,
   "MutualityReinforcementTau": 864000,
   "MutualityFromInfoTau": 864000
 }

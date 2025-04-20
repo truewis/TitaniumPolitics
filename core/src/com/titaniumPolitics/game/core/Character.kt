@@ -3,6 +3,7 @@ package com.titaniumPolitics.game.core
 import com.titaniumPolitics.game.core.ReadOnly.const
 import com.titaniumPolitics.game.core.gameActions.GameAction
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.Transient
 
 @Serializable
 class Character : GameStateElement()
@@ -57,8 +58,8 @@ class Character : GameStateElement()
 
     val currentMeeting
         get() = parent.ongoingMeetings.values.firstOrNull { it.currentCharacters.contains(name) }
-
-    val party = parent.parties.values.find { it.members.contains(name) }
+    val party
+        get() = parent.parties.values.find { it.members.contains(name) }
     var assistants =
         hashSetOf<String>()//TODO: Think about utilizing assistants. How do we pay them? How is it different from requests between free individuals?
     var mercenaries = hashSetOf<String>()
