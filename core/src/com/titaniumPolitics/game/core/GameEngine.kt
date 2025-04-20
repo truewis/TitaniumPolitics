@@ -94,7 +94,7 @@ class GameEngine(val gameState: GameState)
     private fun hourlyProgression()
     {
         distributeResourcesHourly()
-        workAppratusesHourly()
+        workApparatusesHourly()
         ageInformationHourly()
         spreadPublicInfo()
         checkMarketResourcesHourly(gameState)
@@ -483,7 +483,8 @@ class GameEngine(val gameState: GameState)
         }
     }
 
-    fun workAppratusesHourly()
+    //TODO: move it under Apparatus.
+    fun workApparatusesHourly()
     {
         val dth = 3600
         gameState.places.forEach { entry ->
@@ -539,13 +540,7 @@ class GameEngine(val gameState: GameState)
                     generateAccidents(gameState, entry.value)
 
                 }
-                if (apparatus.name in listOf(
-                        "waterStorage",
-                        "oxygenStorage",
-                        "lightMetalStorage",
-                        "componentStorage",
-                        "rationStorage"
-                    )
+                if (apparatus.name in Apparatus.storages
                 )
                 {
                     apparatus.durability += dth * const("DurabilityMax") / const("DurabilityTau")//Storages are repaired if they are worked.
@@ -584,15 +579,11 @@ class GameEngine(val gameState: GameState)
             gameState.pickRandomParty.apply {
                 causeDeaths(death)
                 println("Casualties: at most $death, due to dehydration. Pop left: ${gameState.pop}")
-                Information(
-                    author = "",
-                    creationTime = tgtState.time,
-                    type = InformationType.CASUALTY,
-                    tgtPlace = "everywhere",
-                    amount = death,
+                createRumor(tgtState).apply {
+                    type = InformationType.CASUALTY
+                    tgtPlace = "everywhere"
+                    amount = death
                     auxParty = this.name
-                ).also { /*spread rumor*/
-                    tgtState.informations[it.generateName()] = it //cpy.publicity = 5
                 }
             }
         }
@@ -616,15 +607,11 @@ class GameEngine(val gameState: GameState)
                 place.apply {
                     gameState.parties[responsibleParty]!!.causeDeaths(death)
                     println("Casualties: at most $death, due to suffocation at $placeName. Pop left: ${gameState.pop}")
-                    Information(
-                        author = "",
-                        creationTime = tgtState.time,
-                        type = InformationType.CASUALTY,
-                        tgtPlace = placeName,
-                        amount = death,
+                    createRumor(tgtState).apply {
+                        type = InformationType.CASUALTY
+                        tgtPlace = placeName
+                        amount = death
                         auxParty = responsibleParty
-                    ).also { /*spread rumor*/
-                        tgtState.informations[it.generateName()] = it //it.publicity = 5
                     }
                 }
             }
@@ -646,19 +633,23 @@ class GameEngine(val gameState: GameState)
             gameState.pickRandomParty.apply {
                 causeDeaths(death)
                 println("Casualties: at most $death, due to starvation. Pop left: ${gameState.pop}")
-                Information(
-                    author = "",
-                    creationTime = tgtState.time,
-                    type = InformationType.CASUALTY,
-                    tgtPlace = "everywhere",
-                    amount = death,
+                createRumor(tgtState).apply {
+                    type = InformationType.CASUALTY
+                    tgtPlace = "everywhere"
+                    amount = death
                     auxParty = this.name
-                ).also { /*spread rumor*/
-                    tgtState.informations[it.generateName()] = it //cpy.publicity = 5
                 }
             }
         }
 
+    }
+
+    fun createRumor(tgtState: GameState) = Information(
+        author = "",
+        creationTime = tgtState.time
+    ).also { /*spread rumor*/
+        tgtState.informations[it.generateName()] = it //cpy.publicity = 5
+        it.knownTo += tgtState.pickRandomCharacter.name
     }
 
     fun generateAccidents(tgtState: GameState, tgtPlace: Place)
@@ -705,17 +696,11 @@ class GameEngine(val gameState: GameState)
             {
                 app.durability = .0
                 //If storage durability = 0, lose resources.
-                if (app.name in listOf(
-                        "waterStorage",
-                        "oxygenStorage",
-                        "lightMetalStorage",
-                        "componentStorage",
-                        "rationStorage"
-                    )
+                if (app.name in Apparatus.storages
                 )
                 {
                     //TODO: resources should be stored in storages, not in places.
-                    val resourceName = app.name.substring(0, app.name.length - 7)
+                    val resourceName = app.storageType
                     tgtPlace.resources[resourceName] = (tgtPlace.resources[resourceName]
                             ) * (tgtPlace.maxResources[resourceName]) / tmp[resourceName]
                     //For example, unbroken storage number 8->7 then lose 1/8 of the resource.
@@ -737,7 +722,7 @@ class GameEngine(val gameState: GameState)
                 }
             }
             onAccident.forEach { it(tgtPlace.name, death) }
-        }
+        }//TODO: spread rumors. But think if it is a good game design.
 
 
     }
@@ -786,16 +771,10 @@ class GameEngine(val gameState: GameState)
             {
                 app.durability = .0
                 //If storage durability = 0, lose resources.
-                if (app.name in listOf(
-                        "waterStorage",
-                        "oxygenStorage",
-                        "lightMetalStorage",
-                        "componentStorage",
-                        "rationStorage"
-                    )
+                if (app.name in Apparatus.storages
                 )
                 {
-                    val resourceName = app.name.substring(0, app.name.length - 7)
+                    val resourceName = app.storageType
                     tgtPlace.resources[resourceName] =
                         (tgtPlace.resources[resourceName]
                                 ) * tgtPlace.maxResources[resourceName] / tmp[resourceName]
@@ -818,6 +797,7 @@ class GameEngine(val gameState: GameState)
             }
         }
         onAccident.forEach { it(tgtPlace.name, death) }
+        //TODO: spread rumors. But think if it is a good game design.
     }
 
 
@@ -904,6 +884,7 @@ class GameEngine(val gameState: GameState)
 
         class AcquireParams(val type: String, val variables: HashMap<String, Any>)
 
+        //TODO: move it under place.
         fun resourceShortOf(app: Apparatus, place: Place): String
         {
             app.currentConsumption.forEach {
@@ -922,6 +903,7 @@ class GameEngine(val gameState: GameState)
 
         }
 
+        //TODO: move it under place.
         fun absorbableResourceShortOf(app: Apparatus, place: Place, gameState: GameState): String
         {
             app.currentAbsorption.forEach {
@@ -967,9 +949,7 @@ class GameEngine(val gameState: GameState)
                             wanted = x as T
                         } catch (e: Exception)
                         {
-                            println("Acquire failed.")
-                            println("Wanted type: ${T::class}")
-                            println("Acquired type: ${x::class}")
+                            Logger.warning("Acquire failed: Wanted type: ${T::class}, Acquired type: ${x::class}")
                             throw e
                         }
                         // Resume the coroutine to signal completion

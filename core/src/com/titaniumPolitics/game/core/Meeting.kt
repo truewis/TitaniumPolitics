@@ -2,6 +2,7 @@ package com.titaniumPolitics.game.core
 
 import com.titaniumPolitics.game.core.ReadOnly.const
 import com.titaniumPolitics.game.core.ReadOnly.dt
+import com.titaniumPolitics.game.debugTools.Logger
 import kotlinx.serialization.Serializable
 
 /*
@@ -33,7 +34,10 @@ class Meeting(
             val party = gameState.parties[involvedParty]!!
 
             if (party.leader != "")
+            {
+                Logger.warning("The leader of the party $involvedParty exists as ${party.leader}, but the election is still happening.")
                 throw IllegalStateException("The leader of the party $involvedParty exists as ${party.leader}, but the election is still happening.")
+            }
             val leader = party.members.filter { char ->
                 agendas.any {
                     //In order to be a candidate, the character has to be nominated first.
@@ -60,7 +64,10 @@ class Meeting(
         {
             gameState.ongoingMeetings.remove(gameState.ongoingMeetings.filter { it.value == this }.keys.first())
         } else
+        {
+            Logger.warning("Meeting $this is not found in the ongoingMeetings.")
             throw IllegalStateException("Meeting $this is not found in the ongoingMeetings.")
+        }
     }
 
 

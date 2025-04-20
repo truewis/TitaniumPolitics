@@ -1,5 +1,6 @@
 package com.titaniumPolitics.game.core
 
+import com.titaniumPolitics.game.debugTools.Logger
 import kotlinx.serialization.Serializable
 
 /* Apparatus is a kind of building that can be used to produce and consume resources.
@@ -32,6 +33,16 @@ class Apparatus
     var idealDistribution = hashMapOf<String, Double>() //Converts resources into market resources.
     var idealWorker = 0
     var currentWorker = 0
+    val storageType: String
+        get()
+        {
+            if (name !in storages)
+            {
+                Logger.warning("$name is not a storage apparatus.")
+                throw Exception("$name is not a storage apparatus.")
+            }
+            return name.substring(0, name.length - 7)
+        }
     val currentProduction: Map<String, Double>
         get()
         {
@@ -123,6 +134,18 @@ class Apparatus
     override fun toString(): String
     {
         return "Apparatus(name='$name', durability=$durability, baseDanger=$baseDanger, idealProduction=$idealProduction, idealWorker=$idealWorker, currentWorker=$currentWorker, currentProduction=$currentProduction, currentDanger=$currentDanger, currentGraveDanger=$currentGraveDanger)"
+    }
+
+    companion object
+    {
+        val storages = listOf(
+            "waterStorage",
+            "oxygenStorage",
+            "lightMetalStorage",
+            "componentStorage",
+            "rationStorage",
+            "energyStorage"
+        )
     }
 
 }

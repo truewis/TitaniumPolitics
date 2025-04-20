@@ -48,6 +48,12 @@ class GameState
             //random party picker
             return parties.values.random()
         }
+    val pickRandomCharacter: Character
+        get()
+        {
+            //random party picker
+            return characters.values.filter { it.alive }.random()
+        }
 
     @Transient
     var popChanged = arrayListOf<(Int, Int) -> Unit>()

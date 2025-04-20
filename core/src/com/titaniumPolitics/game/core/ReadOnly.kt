@@ -44,13 +44,13 @@ object ReadOnly
     fun const(constName: String): Double
     {
         return constJson[constName]?.jsonPrimitive?.double
-            ?: .0.also { println("Warning: Could not find constant $constName") }
+            ?: .0.also { throw Exception("Could not find constant $constName") }
     }
 
     fun constInt(constName: String): Int
     {
         return constJson[constName]?.jsonPrimitive?.int
-            ?: 0.also { println("Warning: Could not find constant $constName") }
+            ?: 0.also { throw Exception("Could not find constant $constName") }
     }
 
     //A timestep in seconds.
