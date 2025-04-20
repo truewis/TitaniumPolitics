@@ -30,8 +30,12 @@ class AnonAgent : Agent()
         return executeRoutine()
     }
 
+    //Also check NonPlayerAgent.kt
     private fun selectRoutine()
     {
+        var pri = 10
+        if (!routines.isEmpty())
+            pri = routines[0].priority + 10
         //If there is almost no food or water, stop all activities and try to get some. ----------------------------------------------------------------------------
         if (parent.characters[name]!!.resources["ration"]
             <= (parent.characters[name]!!.reliants.size + 1) || parent.characters[name]!!.resources["water"] <= (parent.characters[name]!!.reliants.size + 1)
@@ -45,7 +49,7 @@ class AnonAgent : Agent()
                 //Find a place within my division with maximum res.
                 if (routines.none { it is StealRoutine })
                     routines.add(StealRoutine().apply {
-                        priority = 1000
+                        priority = pri
                         variables["stealResource"] = wantedResource
                         intVariables["routineStartTime"] = parent.time
                     })//Add a routine, priority higher than work.
@@ -54,7 +58,7 @@ class AnonAgent : Agent()
             {
                 if (routines.none { it is BuyRoutine })
                     routines.add(BuyRoutine().apply {
-                        priority = 1000
+                        priority = pri
                         variables["wantedResource"] = wantedResource
                         intVariables["routineStartTime"] = parent.time
                     })//Add a routine, priority higher than work.

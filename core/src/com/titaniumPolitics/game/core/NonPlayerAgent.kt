@@ -31,8 +31,12 @@ class NonPlayerAgent : Agent()
         return executeRoutine()
     }
 
+    //Also Check AnonAgent.kt
     private fun selectRoutine()
     {
+        var pri = 10
+        if (!routines.isEmpty())
+            pri = routines[0].priority + 10
         routines.sortByDescending { it.priority }
         //Force start meeting routing if the character is in a meeting. Note that the character will leave the meeting immediately if nothing interests it.
         //Note that even if the character has a higher priority routine, this block will not trigger.
@@ -40,7 +44,7 @@ class NonPlayerAgent : Agent()
         {
             routines.add(
                 AttendMeetingRoutine().apply {
-                    priority = routines[0].priority + 10
+                    priority = pri
                     intVariables["routineStartTime"] = parent.time
                 }
             )
@@ -59,7 +63,7 @@ class NonPlayerAgent : Agent()
                 if (routines.none { it is StealRoutine })
                 {
                     routines.add(StealRoutine().apply {
-                        priority = routines[0].priority + 10
+                        priority = pri
                         variables["stealResource"] = wantedResource
                         intVariables["routineStartTime"] = parent.time
                     })//Add a routine, priority higher than work.
@@ -71,7 +75,7 @@ class NonPlayerAgent : Agent()
                 if (routines.none { it is BuyRoutine })
                 {
                     routines.add(BuyRoutine().apply {
-                        priority = routines[0].priority + 10
+                        priority = pri
                         variables["wantedResource"] = wantedResource
                         intVariables["routineStartTime"] = parent.time
                     })//Add a routine, priority higher than work.
@@ -85,7 +89,7 @@ class NonPlayerAgent : Agent()
             if (routines.none { it is RestRoutine })
             {
                 routines.add(RestRoutine().apply {
-                    priority = routines[0].priority + 10
+                    priority = pri
                     intVariables["routineStartTime"] = parent.time
                 })//Add a routine, priority higher than work.
                 return
@@ -98,7 +102,7 @@ class NonPlayerAgent : Agent()
             if (routines.none { it is DowntimeRoutine })
             {
                 routines.add(DowntimeRoutine().apply {
-                    priority = routines[0].priority + 10
+                    priority = pri
                     intVariables["routineStartTime"] = parent.time
                 })//Add a routine, priority higher than work.
                 return
@@ -120,7 +124,7 @@ class NonPlayerAgent : Agent()
             {
                 routines.add(
                     ExecuteCommandRoutine().apply {
-                        priority = routines[0].priority + 10
+                        priority = pri
                         variables["request"] = request.name
                         intVariables["routineStartTime"] = parent.time
                     }
