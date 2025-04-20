@@ -53,12 +53,20 @@ class Character : GameStateElement()
         get() = parent.ongoingMeetings.values.firstOrNull { it.currentCharacters.contains(name) }
 
     val party = parent.parties.values.find { it.members.contains(name) }
+    var assistants =
+        hashSetOf<String>()//TODO: Think about utilizing assistants. How do we pay them? How is it different from requests between free individuals?
+    var mercenaries = hashSetOf<String>()
 
     val history = hashMapOf<Int, String>()
     val finishedRequests =
         HashSet<String>() //Requests that this character thinks are finished. The recipient of the request may not be aware of this yet.
 
+    fun hireCost(): Double
+    {
+        return 10000.0 / parent.idlePop
+    }
 
+    //Item value is normalized to mutuality.
     fun itemValue(resources: Resources): Double
     {
         var sum = .0
@@ -67,30 +75,32 @@ class Character : GameStateElement()
 
     }
 
+    //Item value is normalized to mutuality.
     //TODO: value may be affected by power dynamics.
     fun itemValue(item: String): Double
     {
-        return when (item)
+        val ret = when (item)
         {
             //Value of ration and water is based on the current need of the character.
-            "ration" -> 5.0 * (reliants.size + 1.0) / (resources["ration"] + 1.0)
+            "ration" -> 5.0e-2 * (reliants.size + 1.0) / (resources["ration"] + 1.0)
             "water" -> (reliants.size + 1.0) / (resources["water"] + 1.0)
-            "hydrogen" -> 1.0
-            "organics" -> 5.0
-            "lightMetal" -> 1.0
-            "heavyMetal" -> 1.0
-            "rareMetal" -> 5.0
-            "silicon" -> 1.0
-            "plastic" -> 10.0
-            "glass" -> 1.0
-            "ceramic" -> 1.0
-            "diamond" -> 3.0
-            "helium" -> 1.0
-            "glassClothes" -> 1.0
-            "cottonClothes" -> 10.0
+            "hydrogen" -> 1.0e-2
+            "organics" -> 5.0e-2
+            "lightMetal" -> 1.0e-2
+            "heavyMetal" -> 1.0e-2
+            "rareMetal" -> 5.0e-2
+            "silicon" -> 1.0e-2
+            "plastic" -> 10.0e-2
+            "glass" -> 1.0e-2
+            "ceramic" -> 1.0e-2
+            "diamond" -> 3.0e-2
+            "helium" -> 1.0e-2
+            "glassClothes" -> 1.0e-2
+            "cottonClothes" -> 10.0e-2
 
             else -> 0.0
         }
+        return ret * const("mutualityMax")
 
     }
 
@@ -118,25 +128,26 @@ class Character : GameStateElement()
     //TODO: preference depend on the trait of the character. When other characters use this function, the trait must be not reflected since they don't know the trait.
     fun infoPreference(info: Information): Double
     {
+        var ret = .0
         //Is the information about the character itself?
         if (info.tgtCharacter == name)
         {
             //The character don't like information about its wrongdoings.
             //Stole resource
             if (info.type == InformationType.ACTION && info.action!!.javaClass.simpleName == "UnofficialResourceTransfer")
-                return -1.0
+                ret = -1.0
             //Stayed in home during work hours
             //Did their job well
             if (info.type == InformationType.ACTION && info.action!!.javaClass.simpleName == "NewAgenda")
-                return 0.5
+                ret = 0.5
             if (info.type == InformationType.ACTION && info.action!!.javaClass.simpleName == "AddInfo")
-                return 0.5
+                ret = 0.5
             if (info.type == InformationType.ACTION && info.action!!.javaClass.simpleName == "OfficialResourceTransfer")
-                return 0.5
+                ret = 0.5
             if (info.type == InformationType.ACTION && info.action!!.javaClass.simpleName == "InvestigateAccidentScene")
-                return 1.0
+                ret = 1.0
             if (info.type == InformationType.ACTION && info.action!!.javaClass.simpleName == "ClearAccidentScene")
-                return 1.0
+                ret = 1.0
 
             //Depends on their party
             parent.parties.filter { it.value.members.contains(name) }.forEach { party ->
@@ -145,7 +156,7 @@ class Character : GameStateElement()
                     "infrastructure" ->
                     {
                         if (info.type == InformationType.ACTION && info.action!!.javaClass.simpleName == "Repair")
-                            return 1.0
+                            ret = 1.0
                     }
                 }
             }
@@ -154,24 +165,27 @@ class Character : GameStateElement()
         {
             //Accidents are always interesting.
             if (info.type == InformationType.CASUALTY)
-                return 2.0
-
-            //Otherwise, if the information is about some other people, the character's preference depends on their relationship with the target.
-            //The target character's preference is reflected.
-            if (parent.getMutuality(
-                    name,
-                    info.tgtCharacter
-                ) > (const("mutualityMin") + const("mutualityMax")) / 2
-            )
-                return parent.characters[info.tgtCharacter]!!.infoPreference(info)
+                ret = 2.0
             else
-                return -parent.characters[info.tgtCharacter]!!.infoPreference(info)
+            {
+
+                //Otherwise, if the information is about some other people, the character's preference depends on their relationship with the target.
+                //The target character's preference is reflected.
+                if (parent.getMutuality(
+                        name,
+                        info.tgtCharacter
+                    ) > (const("mutualityMin") + const("mutualityMax")) / 2
+                )
+                    return parent.characters[info.tgtCharacter]!!.infoPreference(info)
+                else
+                    return -parent.characters[info.tgtCharacter]!!.infoPreference(info)
+            }
 
         }
 
 
         //Otherwise, the character is neutral to the information.
-        return 0.0
+        return ret * const("mutualityMax")
     }
 
     @Deprecated("This function has lost its purpose with the removal of trade.")
