@@ -9,10 +9,13 @@ import com.titaniumPolitics.game.core.gameActions.Wait
 import com.titaniumPolitics.game.debugTools.Logger
 import com.titaniumPolitics.game.ui.LogUI
 import kotlinx.coroutines.runBlocking
+import java.lang.Math.pow
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
+import kotlin.math.abs
 import kotlin.math.log
 import kotlin.math.min
+import kotlin.math.pow
 import kotlin.random.Random
 import kotlin.system.exitProcess
 
@@ -805,6 +808,41 @@ class GameEngine(val gameState: GameState)
     fun conditionCheck()
     {
         gameState.characters.forEach { entry ->
+            //If air is not breathable, take damage.
+            if (entry.value.place.gasPressure("oxygen") < const("CriticalOxygenPressure") || entry.value.place.gasPressure(
+                    "carbonDioxide"
+                ) / entry.value.place.gasPressure(
+                    "oxygen"
+                ) > const("CriticalCarbonDioxideRatio")
+            )
+            {
+                entry.value.health -= dt / const("SuffocationTau") * const("HealthMax")
+                //If in a workplace, party integrity decreases, if I am not the leader
+                entry.value.party?.also {
+                    if (entry.value.place.responsibleParty == it.name && it.leader != entry.key)
+                        gameState.setPartyMutuality(
+                            it.name,
+                            delta = -dt / const("SuffocationTau") * const("mutualityMax")
+                        )
+                }
+
+            }
+            //If temperature is extreme, take damage.
+            if (entry.value.place.temperature - 300 /*[K]*/ !in -const("TemperatureDifferenceTolerance")..const("TemperatureDifferenceTolerance")
+            )
+            {
+                entry.value.health -= dt / const("TemperatureDamageTau") * abs(entry.value.place.temperature / 300 /*[K]*/ - 1) * const(
+                    "HealthMax"
+                )
+                //If in a workplace, party integrity decreases, if I am not the leader
+                entry.value.party?.also {
+                    if (entry.value.place.responsibleParty == it.name && it.leader != entry.key)
+                        gameState.setPartyMutuality(
+                            it.name,
+                            delta = -dt / const("TemperatureDamageTau") * const("mutualityMax")
+                        )
+                }
+            }
             if (entry.value.alive && entry.value.health <= 0)
             {
                 println("${entry.value.name} died.")

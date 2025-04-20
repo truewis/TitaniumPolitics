@@ -7,7 +7,12 @@ import kotlinx.serialization.Serializable
 @Serializable
 class Character : GameStateElement()
 {
-    val will = parent.getMutuality(name)
+    var will: Double
+        get() = parent.getMutuality(name)
+        set(value)
+        {
+            parent.setMutuality(name, delta = value - will)
+        }
     override val name: String
         get() = parent.characters.filter { it.value == this }.keys.first()
     var alive = true

@@ -46,7 +46,7 @@ class Place : GameStateElement()
     var connectedPlaces = arrayListOf<String>()
     var plannedWorker = 0
     var coordinates = Coordinate3D(0, 0, 0)
-    var temperature = 300 //Ambient temperature in Kelvin.
+    var temperature = 300.0 //Ambient temperature in Kelvin.
     var volume = 1000f //Volume in m^3.
     val currentWorker: Int get() = apparatuses.sumOf { it.currentWorker }
 
