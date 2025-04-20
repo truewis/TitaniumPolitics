@@ -33,11 +33,11 @@ class AlertUI(var gameState: GameState) : Table(defaultSkin)
 
     fun addAlert(type: String, vararg params: String, action: () -> Unit = {})
     {
-        if (type in listOf("vital", "hunger", "thirst") && docList.children.none {
+        if (type in listOf("vital", "hunger", "thirst", "will") && docList.children.none {
                 (it as AlertPanelUI).type == type
             })//Only one alert of each type is visible at a time.
             docList.addActor(AlertPanelUI(type, action, docList, *params))
-        else if (type !in listOf("vital", "hunger", "thirst"))
+        else if (type !in listOf("vital", "hunger", "thirst", "will"))
             docList.addActor(AlertPanelUI(type, action, docList, *params))
         if (!isVisible)
             isVisible = true
@@ -140,8 +140,10 @@ class AlertUI(var gameState: GameState) : Table(defaultSkin)
             addAlert("hunger")
         if (gameState.player.thirst > ReadOnly.const("thirstThreshold"))
             addAlert("thirst")
-        if (gameState.player.health < 20)
+        if (gameState.player.health < ReadOnly.const("CriticalHealth"))
             addAlert("vital")
+        if (gameState.player.will < ReadOnly.const("CriticalWill"))
+            addAlert("will")
 
         isVisible = !docList.children.isEmpty
     }

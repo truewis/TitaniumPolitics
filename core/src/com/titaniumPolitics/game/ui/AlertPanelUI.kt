@@ -41,6 +41,10 @@ class AlertPanelUI(var type: String, action: () -> Unit, val docList: Group, var
                         it.size(36f).fill()
                     }
 
+                    "will" -> image("icon_activity_105") {
+                        it.size(36f).fill()
+                    }
+
                     "accident" -> image("skull_white") {
                         it.size(36f).fill()
                     }
@@ -78,7 +82,7 @@ class AlertPanelUI(var type: String, action: () -> Unit, val docList: Group, var
                             })
                         }
 
-                    "hunger", "thirst", "vital" ->
+                    "hunger", "thirst", "vital", "will" ->
                         label(ReadOnly.prop(this@AlertPanelUI.type), "trnsprtConsole") {
                             it.growX()
                             setFontScale(2f)

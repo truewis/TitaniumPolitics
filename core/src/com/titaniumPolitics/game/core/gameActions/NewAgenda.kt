@@ -2,6 +2,7 @@ package com.titaniumPolitics.game.core.gameActions
 
 import com.titaniumPolitics.game.core.AgendaType
 import com.titaniumPolitics.game.core.MeetingAgenda
+import com.titaniumPolitics.game.core.ReadOnly
 import kotlinx.serialization.Serializable
 import kotlin.math.max
 
@@ -14,7 +15,10 @@ class NewAgenda(override val sbjCharacter: String, override val tgtPlace: String
     {
         val meeting = parent.characters[sbjCharacter]!!.currentMeeting!!
         meeting.agendas.add(agenda)
-        meeting.currentAttention = max(meeting.currentAttention - 10, 0)
+        meeting.currentAttention = max(
+            meeting.currentAttention + (10 * parent.getMutuality(sbjCharacter) / ReadOnly.const("mutualityMax")).toInt() - 20,
+            0
+        )
         super.execute()
         //affect mutuality based on the agenda.
         parent.setMutuality(sbjCharacter, sbjCharacter, deltaWill())

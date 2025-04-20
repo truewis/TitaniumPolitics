@@ -4,6 +4,7 @@ import com.titaniumPolitics.game.core.AgendaType
 import com.titaniumPolitics.game.core.MeetingAgenda
 import com.titaniumPolitics.game.core.ReadOnly
 import com.titaniumPolitics.game.core.Request
+import com.titaniumPolitics.game.core.Resources
 import com.titaniumPolitics.game.core.gameActions.*
 import kotlinx.serialization.Serializable
 
@@ -197,7 +198,7 @@ class AttendMeetingRoutine : Routine(), IMeetingRoutine
                         if (conf.agendas.none { it.type == AgendaType.PROOF_OF_WORK })
                         {
                             return NewAgenda(name, place).also {
-                                it.agenda = MeetingAgenda(AgendaType.PROOF_OF_WORK)
+                                it.agenda = MeetingAgenda(AgendaType.PROOF_OF_WORK, name)
                             }
                         }
 
@@ -208,7 +209,7 @@ class AttendMeetingRoutine : Routine(), IMeetingRoutine
                             if (conf.agendas.none { it.type == AgendaType.REQUEST && it.attachedRequest?.action is Salary })
                             {
                                 //Fill in the agenda based on variables in the routine, resource and character.
-                                val agenda = MeetingAgenda(AgendaType.REQUEST).apply {
+                                val agenda = MeetingAgenda(AgendaType.REQUEST, name).apply {
                                     attachedRequest = Request(
                                         Salary(
                                             party.leader,
@@ -239,7 +240,9 @@ class AttendMeetingRoutine : Routine(), IMeetingRoutine
                         }
                         //request information about the commands issued today, by putting ProofOfWork agenda forward.
                         if (!conf.agendas.any { it.type == AgendaType.PROOF_OF_WORK })
-                            return NewAgenda(name, place).also { it.agenda = MeetingAgenda(AgendaType.PROOF_OF_WORK) }
+                            return NewAgenda(name, place).also {
+                                it.agenda = MeetingAgenda(AgendaType.PROOF_OF_WORK, name)
+                            }
                         //Praise or criticize the division members, if there is any relevant information.
                         //It should be noted that the content of the information is not checked here. Think about this later.
                         party.members.forEach { member ->
@@ -255,14 +258,18 @@ class AttendMeetingRoutine : Routine(), IMeetingRoutine
                                 {
                                     return NewAgenda(name, place).also {
                                         it.agenda =
-                                            MeetingAgenda(AgendaType.PRAISE, subjectParams = hashMapOf("who" to member))
+                                            MeetingAgenda(
+                                                AgendaType.PRAISE,
+                                                name,
+                                                subjectParams = hashMapOf("who" to member)
+                                            )
                                     }
                                 } else if (mutuality < 20)
                                 {
                                     return NewAgenda(name, place).also {
                                         it.agenda =
                                             MeetingAgenda(
-                                                AgendaType.DENOUNCE,
+                                                AgendaType.DENOUNCE, name,
                                                 subjectParams = hashMapOf("who" to member)
                                             )
                                     }
@@ -281,7 +288,7 @@ class AttendMeetingRoutine : Routine(), IMeetingRoutine
                             ) < ReadOnly.const("EnemyPartyMutualityThreshold")
                         )
                             return NewAgenda(name, place).also { action ->
-                                action.agenda = MeetingAgenda(AgendaType.DENOUNCE_PARTY).also {
+                                action.agenda = MeetingAgenda(AgendaType.DENOUNCE_PARTY, name).also {
                                     it.subjectParams["party"] = enemyParty
                                 }
                             }
@@ -307,7 +314,11 @@ class AttendMeetingRoutine : Routine(), IMeetingRoutine
                     {
                         return NewAgenda(name, place).also {
                             it.agenda =
-                                MeetingAgenda(AgendaType.NOMINATE, subjectParams = hashMapOf("character" to nominee))
+                                MeetingAgenda(
+                                    AgendaType.NOMINATE,
+                                    name,
+                                    subjectParams = hashMapOf("character" to nominee)
+                                )
                         }
                     }
                     //otherwise, support the nominee.
@@ -327,7 +338,7 @@ class AttendMeetingRoutine : Routine(), IMeetingRoutine
                             return NewAgenda(name, place).also {
                                 it.agenda =
                                     MeetingAgenda(
-                                        AgendaType.REQUEST, attachedRequest = Request(
+                                        AgendaType.REQUEST, name, attachedRequest = Request(
                                             UnofficialResourceTransfer(
                                                 variables["requestTo"]!!,
                                                 tgtPlace = place
@@ -335,7 +346,7 @@ class AttendMeetingRoutine : Routine(), IMeetingRoutine
                                                 toWhere = "home_$name"
                                                 fromHome =
                                                     true//Transfer the {variables["requestTo"]!!}'s private resources to me.
-                                                resources = hashMapOf(
+                                                resources = Resources(
                                                     variables["requestResourceType"]!! to
                                                             doubleVariables["requestResourceAmount"]!!
                                                 )
@@ -389,7 +400,7 @@ class AttendMeetingRoutine : Routine(), IMeetingRoutine
             ) < ReadOnly.const("EnemyMutualityThreshold")
         )
             return NewAgenda(name, place).also { action ->
-                action.agenda = MeetingAgenda(AgendaType.DENOUNCE).also {
+                action.agenda = MeetingAgenda(AgendaType.DENOUNCE, name).also {
                     it.subjectParams["character"] = enemy.key
                 }
             }
@@ -408,7 +419,7 @@ class AttendMeetingRoutine : Routine(), IMeetingRoutine
             ) > ReadOnly.const("FriendMutualityThreshold")
         )
             return NewAgenda(name, place).also { action ->
-                action.agenda = MeetingAgenda(AgendaType.PRAISE).also {
+                action.agenda = MeetingAgenda(AgendaType.PRAISE, name).also {
                     it.subjectParams["character"] = friend.key
                 }
             }
