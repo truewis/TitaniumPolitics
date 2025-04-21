@@ -6,7 +6,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.badlogic.gdx.utils.Align
 import com.titaniumPolitics.game.core.GameState
-import com.titaniumPolitics.game.ui.map.MapUI
 import com.titaniumPolitics.game.ui.map.PlaceSelectionUI
 import ktx.scene2d.*
 import ktx.scene2d.Scene2DSkin.defaultSkin
@@ -138,8 +137,8 @@ class AssistantUI(gameState: GameState) : Table(defaultSkin), KTable
         ResourceInfoUI.instance.isVisible = false
         ApparatusInfoUI.instance.isVisible = false
         HumanResourceInfoUI.instance.isVisible = false
-        ResourceTransferUI.instance.isVisible = false
-        NewAgendaUI.instance.isVisible = false
+        ResourceTransferUI.primary.isVisible = false
+        NewAgendaUI.primary.isVisible = false
     }
 
 

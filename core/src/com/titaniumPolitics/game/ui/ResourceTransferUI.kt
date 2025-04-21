@@ -5,7 +5,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.*
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 
 import com.badlogic.gdx.utils.Align
-import com.titaniumPolitics.game.core.GameEngine
 import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.core.Resources
 import com.titaniumPolitics.game.core.gameActions.GameAction
@@ -14,7 +13,6 @@ import com.titaniumPolitics.game.core.gameActions.UnofficialResourceTransfer
 import com.titaniumPolitics.game.ui.map.PlaceSelectionUI
 
 import ktx.scene2d.*
-import ktx.scene2d.Scene2DSkin.defaultSkin
 
 
 class ResourceTransferUI(gameState: GameState, override var actionCallback: (GameAction) -> Unit) :
@@ -22,6 +20,9 @@ class ResourceTransferUI(gameState: GameState, override var actionCallback: (Gam
 {
     private val dataTable = Table()
     private val targetTable = Table()
+
+    private var subject = gameState.playerName
+    private val sbjChar = gameState.characters[subject]!!
 
     //Determines if the transfer is official or not.
     var mode: String = "official"
@@ -34,7 +35,6 @@ class ResourceTransferUI(gameState: GameState, override var actionCallback: (Gam
     init
     {
         isVisible = false
-        instance = this
         val currentResourcePane = ScrollPane(dataTable)
         currentResourcePane.setScrollingDisabled(false, false)
 
@@ -80,8 +80,8 @@ class ResourceTransferUI(gameState: GameState, override var actionCallback: (Gam
                             {
                                 this@ResourceTransferUI.actionCallback(
                                     OfficialResourceTransfer(
-                                        gameState.playerName,
-                                        gameState.player.place.name
+                                        this@ResourceTransferUI.subject,
+                                        this@ResourceTransferUI.sbjChar.place.name
                                     ).apply {
                                         this.resources = Resources(this@ResourceTransferUI.target)
                                         this.toWhere = this@ResourceTransferUI.toWhere
@@ -91,8 +91,8 @@ class ResourceTransferUI(gameState: GameState, override var actionCallback: (Gam
                             {
                                 this@ResourceTransferUI.actionCallback(
                                     UnofficialResourceTransfer(
-                                        gameState.playerName,
-                                        gameState.player.place.name
+                                        this@ResourceTransferUI.subject,
+                                        this@ResourceTransferUI.sbjChar.place.name
                                     ).apply {
                                         this.resources = Resources(this@ResourceTransferUI.target)
                                         this.toWhere = this@ResourceTransferUI.toWhere
@@ -102,8 +102,8 @@ class ResourceTransferUI(gameState: GameState, override var actionCallback: (Gam
                             {
                                 this@ResourceTransferUI.actionCallback(
                                     UnofficialResourceTransfer(
-                                        gameState.playerName,
-                                        gameState.player.place.name
+                                        this@ResourceTransferUI.subject,
+                                        this@ResourceTransferUI.sbjChar.place.name
                                     ).apply {
                                         this.resources = Resources(this@ResourceTransferUI.target)
                                         this.toWhere = this@ResourceTransferUI.toWhere
@@ -210,10 +210,15 @@ class ResourceTransferUI(gameState: GameState, override var actionCallback: (Gam
         }
     }
 
+    override fun changeSubject(charName: String)
+    {
+        subject = charName
+    }
+
     companion object
     {
         //Singleton
-        lateinit var instance: ResourceTransferUI
+        lateinit var primary: ResourceTransferUI
     }
 
 

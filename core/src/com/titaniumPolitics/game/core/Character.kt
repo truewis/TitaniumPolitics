@@ -62,6 +62,8 @@ class Character : GameStateElement()
         get() = parent.parties.values.find { it.members.contains(name) }
     var assistants =
         hashSetOf<String>()//TODO: Think about utilizing assistants. How do we pay them? How is it different from requests between free individuals?
+
+    //They improve resource transfer speed and prepare information speed.
     var mercenaries = hashSetOf<String>()
 
     val history = hashMapOf<Int, String>()

@@ -1,7 +1,6 @@
 package com.titaniumPolitics.game.ui
 
 import com.badlogic.gdx.Gdx
-import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.scenes.scene2d.ui.*
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.badlogic.gdx.utils.Align
@@ -159,6 +158,22 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable
                         "Repair" ->
                         {
                             this.setDrawable(defaultSkin, "CogGrunge")
+                            this@button.addListener(object : ClickListener()
+                            {
+                                override fun clicked(
+                                    event: com.badlogic.gdx.scenes.scene2d.InputEvent?,
+                                    x: Float,
+                                    y: Float
+                                )
+                                {
+                                    GameEngine.acquireCallback(
+                                        Repair(
+                                            this@AvailableActionsUI.gameState.playerName,
+                                            this@AvailableActionsUI.gameState.player.place.name
+                                        )
+                                    )
+                                }
+                            })
                         }
 
                         "UnofficialResourceTransfer" ->
@@ -172,8 +187,8 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable
                                     y: Float
                                 )
                                 {
-                                    ResourceTransferUI.instance.isVisible = true
-                                    ResourceTransferUI.instance.refresh(
+                                    ResourceTransferUI.primary.isVisible = true
+                                    ResourceTransferUI.primary.refresh(
                                         "unofficial",
                                         GameEngine.acquireCallback,
                                         this@AvailableActionsUI.gameState.player.place.resources.toHashMap()
@@ -193,8 +208,8 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable
                                     y: Float
                                 )
                                 {
-                                    ResourceTransferUI.instance.isVisible = true
-                                    ResourceTransferUI.instance.refresh(
+                                    ResourceTransferUI.primary.isVisible = true
+                                    ResourceTransferUI.primary.refresh(
                                         "official",
                                         GameEngine.acquireCallback,
                                         this@AvailableActionsUI.gameState.player.place.resources.toHashMap()
@@ -202,6 +217,179 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable
                                 }
                             })
                         }
+
+
+                        "AddInfo" ->
+                        {
+                            this.setDrawable(defaultSkin, "TilesGrunge")
+                            this@button.addListener(object : ClickListener()
+                            {
+                                override fun clicked(
+                                    event: com.badlogic.gdx.scenes.scene2d.InputEvent?,
+                                    x: Float,
+                                    y: Float
+                                )
+                                {
+                                    //TODO
+//                                    AddInfoUI.instance.isVisible = true
+//                                    AddInfoUI.instance.refresh(
+//                                        "official",
+//                                        GameEngine.acquireCallback,
+//                                        this@AvailableActionsUI.gameState.player.place.resources.toHashMap()
+//                                    )
+                                }
+                            })
+                        }
+
+                        "InvestigateAccidentScene" ->
+                        {
+                            this.setDrawable(defaultSkin, "TilesGrunge")
+                            this@button.addListener(object : ClickListener()
+                            {
+                                override fun clicked(
+                                    event: com.badlogic.gdx.scenes.scene2d.InputEvent?,
+                                    x: Float,
+                                    y: Float
+                                )
+                                {
+                                    GameEngine.acquireCallback(
+                                        InvestigateAccidentScene(
+                                            this@AvailableActionsUI.gameState.playerName,
+                                            this@AvailableActionsUI.gameState.player.place.name
+                                        )
+                                    )
+                                }
+                            })
+                        }
+
+                        "ClearAccidentScene" ->
+                        {
+                            this.setDrawable(defaultSkin, "TilesGrunge")
+                            this@button.addListener(object : ClickListener()
+                            {
+                                override fun clicked(
+                                    event: com.badlogic.gdx.scenes.scene2d.InputEvent?,
+                                    x: Float,
+                                    y: Float
+                                )
+                                {
+                                    GameEngine.acquireCallback(
+                                        ClearAccidentScene(
+                                            this@AvailableActionsUI.gameState.playerName,
+                                            this@AvailableActionsUI.gameState.player.place.name
+                                        )
+                                    )
+                                }
+                            })
+                        }
+
+                        "EndSpeech" ->
+                        {
+                            this.setDrawable(defaultSkin, "TilesGrunge")
+                            this@button.addListener(object : ClickListener()
+                            {
+                                override fun clicked(
+                                    event: com.badlogic.gdx.scenes.scene2d.InputEvent?,
+                                    x: Float,
+                                    y: Float
+                                )
+                                {
+                                    //TODO
+//                                    AddInfoUI.instance.isVisible = true
+//                                    AddInfoUI.instance.refresh(
+//                                        "official",
+//                                        GameEngine.acquireCallback,
+//                                        this@AvailableActionsUI.gameState.player.place.resources.toHashMap()
+//                                    )
+                                }
+                            })
+                        }
+
+                        "Intercept" ->
+                        {
+                            this.setDrawable(defaultSkin, "TilesGrunge")
+                            this@button.addListener(object : ClickListener()
+                            {
+                                override fun clicked(
+                                    event: com.badlogic.gdx.scenes.scene2d.InputEvent?,
+                                    x: Float,
+                                    y: Float
+                                )
+                                {
+                                    GameEngine.acquireCallback(
+                                        Intercept(
+                                            this@AvailableActionsUI.gameState.playerName,
+                                            this@AvailableActionsUI.gameState.player.place.name
+                                        )
+                                    )
+                                }
+                            })
+                        }
+
+                        "Resign" ->
+                        {
+                            this.setDrawable(defaultSkin, "TilesGrunge")
+                            this@button.addListener(object : ClickListener()
+                            {
+                                override fun clicked(
+                                    event: com.badlogic.gdx.scenes.scene2d.InputEvent?,
+                                    x: Float,
+                                    y: Float
+                                )
+                                {
+                                    GameEngine.acquireCallback(
+                                        Resign(
+                                            this@AvailableActionsUI.gameState.playerName,
+                                            this@AvailableActionsUI.gameState.player.place.name
+                                        )
+                                    )
+                                }
+                            })
+                        }
+
+                        "Salary" ->
+                        {
+                            this.setDrawable(defaultSkin, "TilesGrunge")
+                            this@button.addListener(object : ClickListener()
+                            {
+                                override fun clicked(
+                                    event: com.badlogic.gdx.scenes.scene2d.InputEvent?,
+                                    x: Float,
+                                    y: Float
+                                )
+                                {
+                                    GameEngine.acquireCallback(
+                                        Salary(
+                                            this@AvailableActionsUI.gameState.playerName,
+                                            this@AvailableActionsUI.gameState.player.place.name
+                                        )
+                                    )
+                                }
+                            })
+                        }
+
+                        "PrepareInfo" ->
+                        {
+                            this.setDrawable(defaultSkin, "TilesGrunge")
+                            this@button.addListener(object : ClickListener()
+                            {
+                                override fun clicked(
+                                    event: com.badlogic.gdx.scenes.scene2d.InputEvent?,
+                                    x: Float,
+                                    y: Float
+                                )
+                                {
+                                    //TODO
+//                                    AddInfoUI.instance.isVisible = true
+//                                    AddInfoUI.instance.refresh(
+//                                        "official",
+//                                        GameEngine.acquireCallback,
+//                                        this@AvailableActionsUI.gameState.player.place.resources.toHashMap()
+//                                    )
+                                }
+                            })
+                        }
+
 
                         "JoinMeeting" ->
                         {
@@ -228,31 +416,6 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable
                             })
                         }
 
-                        "JoinConference" ->
-                        {
-                            this.setDrawable(defaultSkin, "ChatGrunge")
-                            this@button.addListener(object : ClickListener()
-                            {
-                                override fun clicked(
-                                    event: com.badlogic.gdx.scenes.scene2d.InputEvent?,
-                                    x: Float,
-                                    y: Float
-                                )
-                                {
-                                    GameEngine.acquireCallback(
-                                        JoinMeeting(
-                                            this@AvailableActionsUI.gameState.playerName,
-                                            this@AvailableActionsUI.gameState.player.place.name
-                                        ).also {
-                                            it.meetingName =
-                                                this@AvailableActionsUI.gameState.ongoingMeetings.filter {
-                                                    it.value.scheduledCharacters.contains(this@AvailableActionsUI.gameState.playerName) && it.value.place == this@AvailableActionsUI.gameState.player.place.name
-                                                }.keys.first()
-                                        }
-                                    )
-                                }
-                            })
-                        }
 
                         "NewAgenda" ->
                         {
@@ -265,8 +428,8 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable
                                     y: Float
                                 )
                                 {
-                                    NewAgendaUI.instance.isVisible = true
-                                    NewAgendaUI.instance.refresh()
+                                    NewAgendaUI.primary.isVisible = true
+                                    NewAgendaUI.primary.refresh()
                                 }
                             })
                         }
@@ -292,7 +455,7 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable
                                 }
                             })
                         }
-                        //TODO: also make changes to NewAgendaUI.kt.
+                        //TODO: also make changes to NewAgendaUI.kt, ActionSelectUI.kt
                         else ->
                         {
                             this.setDrawable(defaultSkin, "Help")

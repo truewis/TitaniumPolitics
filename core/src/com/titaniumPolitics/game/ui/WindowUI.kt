@@ -20,6 +20,7 @@ open class WindowUI(titleKey: String) : Table(defaultSkin), KTable
         setFontScale(4f)
         setAlignment(Align.center)
     }
+    val onClose = ArrayList<() -> Unit>()
     val content = Table()
 
     init
@@ -40,6 +41,7 @@ open class WindowUI(titleKey: String) : Table(defaultSkin), KTable
                     {
                         override fun clicked(event: com.badlogic.gdx.scenes.scene2d.InputEvent?, x: Float, y: Float)
                         {
+                            this@WindowUI.onClose.forEach { it() }
                             this@WindowUI.isVisible = false
                         }
                     })

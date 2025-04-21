@@ -1,7 +1,6 @@
 package com.titaniumPolitics.game.ui
 
 
-import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.ui.*
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener
@@ -12,24 +11,26 @@ import com.badlogic.gdx.utils.Align
 import com.titaniumPolitics.game.core.*
 import com.titaniumPolitics.game.core.gameActions.*
 import com.titaniumPolitics.game.ui.map.PlaceSelectionUI
-import kotlinx.serialization.json.jsonObject
-import kotlinx.serialization.json.jsonPrimitive
 
 import ktx.scene2d.*
-import ktx.scene2d.Scene2DSkin.defaultSkin
 
 
 class NewAgendaUI(gameState: GameState, override var actionCallback: (GameAction) -> Unit) : WindowUI("NewAgendaTitle"),
     ActionUI
 {
+    private var subject = gameState.playerName
+    val sbjObject = gameState.characters[subject]!!
     private val dataTable = Table()
     private val targetTable = Table()
 
-    var toWhere = ""
-    var toWho = ""
     lateinit var agenda: MeetingAgenda
     val agendaDetailStack: Stack
-    private val actionButtonList = HorizontalGroup()
+    private val actionSelUI = ActionSelectUI(gameState, this::setRequestAction)
+    fun setRequestAction(action: GameAction)
+    {
+        agenda.attachedRequest = Request(action, hashSetOf(action.sbjCharacter))
+    }
+
     private val agendaSelectBox: SelectBox<String>
     private val praiseTable = scene2d.table {
         label("Target:", "trnsprtConsole") { setFontScale(3f) }
@@ -41,7 +42,7 @@ class NewAgendaUI(gameState: GameState, override var actionCallback: (GameAction
                 override fun changed(event: ChangeEvent?, actor: Actor?)
                 {
                     this@NewAgendaUI.agenda =
-                        MeetingAgenda(AgendaType.PRAISE, gameState.playerName, hashMapOf("character" to selected))
+                        MeetingAgenda(AgendaType.PRAISE, this@NewAgendaUI.subject, hashMapOf("character" to selected))
                 }
             })
         }.inCell.size(300f, 100f)
@@ -56,7 +57,7 @@ class NewAgendaUI(gameState: GameState, override var actionCallback: (GameAction
                 override fun changed(event: ChangeEvent?, actor: Actor?)
                 {
                     this@NewAgendaUI.agenda =
-                        MeetingAgenda(AgendaType.DENOUNCE, gameState.playerName, hashMapOf("character" to selected))
+                        MeetingAgenda(AgendaType.DENOUNCE, this@NewAgendaUI.subject, hashMapOf("character" to selected))
                 }
             })
         }.inCell.size(300f, 100f)
@@ -71,7 +72,7 @@ class NewAgendaUI(gameState: GameState, override var actionCallback: (GameAction
                 override fun changed(event: ChangeEvent?, actor: Actor?)
                 {
                     this@NewAgendaUI.agenda =
-                        MeetingAgenda(AgendaType.PRAISE_PARTY, gameState.playerName, hashMapOf("party" to selected))
+                        MeetingAgenda(AgendaType.PRAISE_PARTY, this@NewAgendaUI.subject, hashMapOf("party" to selected))
                 }
             })
         }.inCell.size(300f, 100f)
@@ -86,7 +87,11 @@ class NewAgendaUI(gameState: GameState, override var actionCallback: (GameAction
                 override fun changed(event: ChangeEvent?, actor: Actor?)
                 {
                     this@NewAgendaUI.agenda =
-                        MeetingAgenda(AgendaType.DENOUNCE_PARTY, gameState.playerName, hashMapOf("party" to selected))
+                        MeetingAgenda(
+                            AgendaType.DENOUNCE_PARTY,
+                            this@NewAgendaUI.subject,
+                            hashMapOf("party" to selected)
+                        )
                 }
             })
         }.inCell.size(300f, 100f)
@@ -104,7 +109,7 @@ class NewAgendaUI(gameState: GameState, override var actionCallback: (GameAction
                     PlaceSelectionUI.instance.refresh()
                     PlaceSelectionUI.instance.selectedPlaceCallback = {
                         placeLabel.setText("Request Place: $it")
-                        this@NewAgendaUI.toWhere = it
+                        this@NewAgendaUI.actionSelUI.changeTgtPlace(it)
                     }
                 }
             })
@@ -112,25 +117,24 @@ class NewAgendaUI(gameState: GameState, override var actionCallback: (GameAction
         row()
         label("Request to:", "trnsprtConsole") { setFontScale(3f) }
         //Select character to perform the request.
-        selectBox<String> {
+        selectBox<String> {//TODO: Replace with Character Selection UI
             items = Array(gameState.characters.keys.toTypedArray())
             addListener(object : ChangeListener()
             {
                 override fun changed(event: ChangeEvent?, actor: Actor?)
                 {
-                    this@NewAgendaUI.toWho = selected
+                    this@NewAgendaUI.actionSelUI.changeSubject(selected)
                 }
             })
         }.inCell.size(300f, 100f)
         row()
         //Select Action
-        add(this@NewAgendaUI.actionButtonList)
+        add(this@NewAgendaUI.actionSelUI)
     }
 
     init
     {
         isVisible = false
-        instance = this
         val st = stack {
             it.grow()
             table {
@@ -218,8 +222,8 @@ class NewAgendaUI(gameState: GameState, override var actionCallback: (GameAction
                         {
                             this@NewAgendaUI.actionCallback(
                                 NewAgenda(
-                                    gameState.playerName,
-                                    gameState.player.place.name
+                                    this@NewAgendaUI.subject,
+                                    this@NewAgendaUI.sbjObject.place.name
                                 ).apply { agenda = this@NewAgendaUI.agenda })
                             this@NewAgendaUI.isVisible = false
                         }
@@ -258,7 +262,7 @@ class NewAgendaUI(gameState: GameState, override var actionCallback: (GameAction
     }
 
 
-    fun refresh()
+    fun refresh(gameState: GameState)
     {
         dataTable.clear()
         dataTable.apply {
@@ -273,6 +277,8 @@ class NewAgendaUI(gameState: GameState, override var actionCallback: (GameAction
 
             })
         }
+        refreshAvailableAgendaList(gameState)
+        actionSelUI.refreshList(listOf("UnofficialResourceTransfer", "OfficialResourceTransfer"))
     }
 
     fun refreshAvailableAgendaList(gameState: GameState)
@@ -287,9 +293,9 @@ class NewAgendaUI(gameState: GameState, override var actionCallback: (GameAction
                 "request",
                 "appointMeeting"
             )
-        if (gameState.player.currentMeeting == null)
+        if (this@NewAgendaUI.sbjObject.currentMeeting == null)
             throw Exception("Player is not in a meeting.")
-        val mt = gameState.player.currentMeeting!!
+        val mt = this@NewAgendaUI.sbjObject.currentMeeting!!
         if (mt.type == "divisionLeaderElection")
             agendas += "nomination"
         if (mt.involvedParty == "cabinet" && !gameState.isBudgetProposed)
@@ -300,282 +306,15 @@ class NewAgendaUI(gameState: GameState, override var actionCallback: (GameAction
         agendaSelectBox.items = Array(agendas)
     }
 
-    //TODO: also make changes to NewAgendaUI.kt.
-    fun refreshActionList(gameState: GameState)
+    override fun changeSubject(charName: String)
     {
-
-        GameEngine.availableActions(
-            gameState,
-            gameState.player.place.name,
-            gameState.playerName
-        ).forEach { tobj ->
-            //We do not create buttons for these actions, as they are accessible through the main UI.
-            if (listOf("Move", "Talk").contains(tobj))
-            {
-                return@forEach
-            }
-            val t = scene2d.button {
-                textTooltip(ReadOnly.prop(tobj) + "\n" + ReadOnly.prop("$tobj-description"), "default") {
-                    this.setFontScale(2f)
-                    it.manager.initialTime = 0.5f
-                }
-                image("question-mark-circle-outline-icon") {
-                    it.size(100f)
-
-                    when (tobj)
-                    {
-
-
-                        "Trade" ->
-                        {
-                            this.setDrawable(defaultSkin, "hand-shake-icon")
-                        }
-
-                        "Examine" ->
-                        {
-                            this.setDrawable(defaultSkin, "magnifying-glass-icon")
-                            this@button.addListener(object : ClickListener()
-                            {
-                                override fun clicked(
-                                    event: com.badlogic.gdx.scenes.scene2d.InputEvent?,
-                                    x: Float,
-                                    y: Float
-                                )
-                                {
-
-                                }
-                            }
-                            )
-                        }
-
-                        "Wait" ->
-                        {
-                            this.setDrawable(defaultSkin, "sand-clock-half-line-icon")
-                            this@button.addListener(object : ClickListener()
-                            {
-                                override fun clicked(
-                                    event: com.badlogic.gdx.scenes.scene2d.InputEvent?,
-                                    x: Float,
-                                    y: Float
-                                )
-                                {
-                                    val sound =
-                                        Gdx.audio.newSound(Gdx.files.internal(ReadOnly.actionJson["Wait"]!!.jsonObject["sound"]!!.jsonPrimitive.content))
-                                    sound.play()
-
-                                    GameEngine.acquireCallback(
-                                        Wait(
-                                            gameState.playerName,
-                                            gameState.player.place.name
-                                        )
-                                    )
-                                }
-                            }
-                            )
-                        }
-
-                        "Eat" ->
-                        {
-                            this.setDrawable(defaultSkin, "food-dinner-icon")
-                            this@button.addListener(object : ClickListener()
-                            {
-                                override fun clicked(
-                                    event: com.badlogic.gdx.scenes.scene2d.InputEvent?,
-                                    x: Float,
-                                    y: Float
-                                )
-                                {
-                                    val sound =
-                                        Gdx.audio.newSound(Gdx.files.internal(ReadOnly.actionJson["Eat"]!!.jsonObject["sound"]!!.jsonPrimitive.content))
-                                    sound.play()
-                                    GameEngine.acquireCallback(
-                                        Eat(
-                                            gameState.playerName,
-                                            gameState.player.place.name
-                                        )
-                                    )
-                                }
-                            }
-                            )
-                        }
-
-                        "Sleep" ->
-                        {
-                            this.setDrawable(defaultSkin, "closed-eye-icon")
-                            this@button.addListener(object : ClickListener()
-                            {
-                                override fun clicked(
-                                    event: com.badlogic.gdx.scenes.scene2d.InputEvent?,
-                                    x: Float,
-                                    y: Float
-                                )
-                                {
-                                    GameEngine.acquireCallback(
-                                        Sleep(
-                                            gameState.playerName,
-                                            gameState.player.place.name
-                                        )
-                                    )
-                                }
-                            })
-                        }
-
-                        "Repair" ->
-                        {
-                            this.setDrawable(defaultSkin, "hammer-line-icon")
-                        }
-
-                        "UnofficialResourceTransfer" ->
-                        {
-                            this.setDrawable(defaultSkin, "boxes-icon")
-                            this@button.addListener(object : ClickListener()
-                            {
-                                override fun clicked(
-                                    event: com.badlogic.gdx.scenes.scene2d.InputEvent?,
-                                    x: Float,
-                                    y: Float
-                                )
-                                {
-                                    ResourceTransferUI.instance.isVisible = true
-                                    ResourceTransferUI.instance.refresh(
-                                        "unofficial",
-                                        GameEngine.acquireCallback,
-                                        gameState.player.place.resources.toHashMap()
-                                    )
-                                }
-                            })
-                        }
-
-                        "OfficialResourceTransfer" ->
-                        {
-                            this.setDrawable(defaultSkin, "boxes-icon")
-                            this@button.addListener(object : ClickListener()
-                            {
-                                override fun clicked(
-                                    event: com.badlogic.gdx.scenes.scene2d.InputEvent?,
-                                    x: Float,
-                                    y: Float
-                                )
-                                {
-                                    ResourceTransferUI.instance.isVisible = true
-                                    ResourceTransferUI.instance.refresh(
-                                        "official",
-                                        GameEngine.acquireCallback,
-                                        gameState.player.place.resources.toHashMap()
-                                    )
-                                }
-                            })
-                        }
-
-                        "JoinMeeting" ->
-                        {
-                            this.setDrawable(defaultSkin, "speaking-bubbles-line-icon")
-                            this@button.addListener(object : ClickListener()
-                            {
-                                override fun clicked(
-                                    event: com.badlogic.gdx.scenes.scene2d.InputEvent?,
-                                    x: Float,
-                                    y: Float
-                                )
-                                {
-                                    GameEngine.acquireCallback(
-                                        JoinMeeting(
-                                            gameState.playerName,
-                                            gameState.player.place.name
-                                        ).also {
-                                            it.meetingName = gameState.ongoingMeetings.filter {
-                                                it.value.scheduledCharacters.contains(gameState.playerName) && it.value.place == gameState.player.place.name
-                                            }.keys.first()
-                                        }
-                                    )
-                                }
-                            })
-                        }
-
-                        "JoinConference" ->
-                        {
-                            this.setDrawable(defaultSkin, "speaking-bubbles-line-icon")
-                            this@button.addListener(object : ClickListener()
-                            {
-                                override fun clicked(
-                                    event: com.badlogic.gdx.scenes.scene2d.InputEvent?,
-                                    x: Float,
-                                    y: Float
-                                )
-                                {
-                                    GameEngine.acquireCallback(
-                                        JoinMeeting(
-                                            gameState.playerName,
-                                            gameState.player.place.name
-                                        ).also {
-                                            it.meetingName =
-                                                gameState.ongoingMeetings.filter {
-                                                    it.value.scheduledCharacters.contains(gameState.playerName) && it.value.place == gameState.player.place.name
-                                                }.keys.first()
-                                        }
-                                    )
-                                }
-                            })
-                        }
-
-                        "NewAgenda" ->
-                        {
-                            this.setDrawable(defaultSkin, "plus-circle-line-icon")
-                            this@button.addListener(object : ClickListener()
-                            {
-                                override fun clicked(
-                                    event: com.badlogic.gdx.scenes.scene2d.InputEvent?,
-                                    x: Float,
-                                    y: Float
-                                )
-                                {
-                                    instance.isVisible = true
-                                    instance.refresh()
-                                }
-                            })
-                        }
-
-                        "LeaveMeeting" ->
-                        {
-                            this.setDrawable(defaultSkin, "close-square-line-icon")
-                            this@button.addListener(object : ClickListener()
-                            {
-                                override fun clicked(
-                                    event: com.badlogic.gdx.scenes.scene2d.InputEvent?,
-                                    x: Float,
-                                    y: Float
-                                )
-                                {
-                                    GameEngine.acquireCallback(
-                                        LeaveMeeting(
-                                            gameState.playerName,
-                                            gameState.player.place.name
-                                        )
-
-                                    )
-                                }
-                            })
-                        }
-                        //TODO: also make changes to NewAgendaUI.kt.
-                        else ->
-                        {
-                            this.setDrawable(defaultSkin, "question-mark-circle-outline-icon")
-
-                        }
-                    }
-
-                }
-            }
-            actionButtonList.addActor(t)
-        }
-        isVisible = !actionButtonList.children.isEmpty
-
+        subject = charName
     }
 
     companion object
     {
         //Singleton
-        lateinit var instance: NewAgendaUI
+        lateinit var primary: NewAgendaUI
     }
 
 
