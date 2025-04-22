@@ -2,6 +2,7 @@ package com.titaniumPolitics.game.core
 
 import com.titaniumPolitics.game.debugTools.Logger
 import kotlinx.serialization.Serializable
+import java.util.UUID
 
 /* Apparatus is a kind of building that can be used to produce and consume resources.
 * It can also be used to absorb resources from the environment.
@@ -16,6 +17,7 @@ import kotlinx.serialization.Serializable
 class Apparatus
 {
     var name = ""
+    var ID = UUID.randomUUID().toString() //Since many apparatus have same name, they need an identifier.
     var durability = 0.0
         set(value)
         {
@@ -27,6 +29,11 @@ class Apparatus
             }
         }
     var baseDanger = .0
+    var requiredResourcePerRepair = arrayListOf<Resources>(
+        Resources("lightMetal" to 1.0),
+        Resources("lightMetal" to 2.0),
+        Resources("titaniumTank" to 1.0)
+    )
     var idealAbsorption = hashMapOf<String, Double>()
     var idealProduction = hashMapOf<String, Double>()
     var idealConsumption = hashMapOf<String, Double>()

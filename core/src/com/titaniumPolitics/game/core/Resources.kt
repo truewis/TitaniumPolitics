@@ -38,6 +38,11 @@ class Resources()
         }
     }
 
+    fun contains(r1: Resources): Boolean
+    {
+        return _resources.all { it.value >= r1[it.key] }
+    }
+
     fun plus(r1: Resources, r2: Resources): Resources
     {
         val result = Resources()
@@ -49,6 +54,16 @@ class Resources()
             {
                 result[key] = value
             }
+        }
+        return result
+    }
+
+    operator fun minus(r1: Resources): Resources
+    {
+        if (!contains(r1)) throw Exception("OHH!")
+        val result = Resources()
+        _resources.forEach { (key, value) ->
+            result[key] = value - r1[key]
         }
         return result
     }

@@ -6,7 +6,7 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 
 @Serializable
-class Event_BribeDoctor1 : EventObject("Illness of Sylvia.", true)
+class Event_BribeDoctor5 : EventObject("Illness of Sylvia.", true)
 {
 
     @Transient
@@ -19,8 +19,7 @@ class Event_BribeDoctor1 : EventObject("Illness of Sylvia.", true)
                 )
             )
             {
-                onPlayDialogue("BribeDoctor1")
-                parent.eventSystem.dataBase.add(Event_BribeDoctor2())
+                onPlayDialogue("BribeDoctor5")
                 deactivate()
 
             }

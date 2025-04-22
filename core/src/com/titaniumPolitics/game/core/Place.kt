@@ -100,6 +100,11 @@ class Place : GameStateElement()
     var workHoursStart = 0
     var workHoursEnd = 0
     var apparatuses = hashSetOf<Apparatus>()
+    fun getApparatus(ID: String): Apparatus
+    {
+        return apparatuses.find { it.ID == ID }!!
+    }
+
     var characters = hashSetOf<String>()
     var responsibleParty = "" //Determines which party is responsible for the place.
     var isAccidentScene =
