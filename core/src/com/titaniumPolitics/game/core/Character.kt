@@ -3,7 +3,6 @@ package com.titaniumPolitics.game.core
 import com.titaniumPolitics.game.core.ReadOnly.const
 import com.titaniumPolitics.game.core.gameActions.GameAction
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.Transient
 
 @Serializable
 class Character : GameStateElement()
@@ -46,7 +45,7 @@ class Character : GameStateElement()
                 else -> value
             }//Max thirst is 100.
         }
-    var reliants =
+    var reliant =
         hashSetOf<String>() //Characters that this character is responsible for. If they die, this character will be sad. They consume water and ration every day.
     val scheduledMeetings: HashMap<String, Meeting>
         get() = parent.scheduledMeetings.filter { it.value.scheduledCharacters.contains(name) } as HashMap<String, Meeting>
@@ -64,6 +63,7 @@ class Character : GameStateElement()
         hashSetOf<String>()//TODO: Think about utilizing assistants. How do we pay them? How is it different from requests between free individuals?
 
     //They improve resource transfer speed and prepare information speed.
+    //You can hire specialists to write you various reports, which appears as separate UIs as well.
     var mercenaries = hashSetOf<String>()
 
     val history = hashMapOf<Int, String>()
@@ -91,8 +91,8 @@ class Character : GameStateElement()
         val ret = when (item)
         {
             //Value of ration and water is based on the current need of the character.
-            "ration" -> 5.0e-2 * (reliants.size + 1.0) / (resources["ration"] + 1.0)
-            "water" -> (reliants.size + 1.0) / (resources["water"] + 1.0)
+            "ration" -> 5.0e-2 * (reliant.size + 1.0) / (resources["ration"] + 1.0)
+            "water" -> (reliant.size + 1.0) / (resources["water"] + 1.0)
             "hydrogen" -> 1.0e-2
             "organics" -> 5.0e-2
             "lightMetal" -> 1.0e-2

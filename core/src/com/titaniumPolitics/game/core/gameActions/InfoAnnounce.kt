@@ -18,8 +18,6 @@ class InfoAnnounce(override val sbjCharacter: String, override val tgtPlace: Str
     override fun execute()
     {
         parent.informations[what]!!.knownTo += who
-        parent.places[tgtPlace]!!.responsibleParty
-        //TODO: match unit of publicity to number of people in the party
         parent.characters[sbjCharacter]!!.frozen++
     }
 

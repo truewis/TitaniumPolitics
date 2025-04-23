@@ -38,11 +38,11 @@ class AnonAgent : Agent()
             pri = routines[0].priority + 10
         //If there is almost no food or water, stop all activities and try to get some. ----------------------------------------------------------------------------
         if (parent.characters[name]!!.resources["ration"]
-            <= (parent.characters[name]!!.reliants.size + 1) || parent.characters[name]!!.resources["water"] <= (parent.characters[name]!!.reliants.size + 1)
+            <= (parent.characters[name]!!.reliant.size + 1) || parent.characters[name]!!.resources["water"] <= (parent.characters[name]!!.reliant.size + 1)
         )
         {
             val wantedResource =
-                if (parent.characters[name]!!.resources["ration"] <= (parent.characters[name]!!.reliants.size + 1)
+                if (parent.characters[name]!!.resources["ration"] <= (parent.characters[name]!!.reliant.size + 1)
                 ) "ration" else "water"
             if (parent.characters[name]!!.trait.contains("thief"))
             {

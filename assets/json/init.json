@@ -101,6 +101,10 @@
         }
       },
       "health": 80,
+      "reliant": [
+        "wife",
+        "kid"
+      ],
       "livingBy": "mainControlRoom"
     },
     "seefy": {
@@ -165,6 +169,10 @@
         }
       },
       "health": 80,
+      "reliant": [
+        "wife",
+        "kid"
+      ],
       "livingBy": "mainControlRoom"
     },
     "inddy": {
@@ -196,6 +204,10 @@
         }
       },
       "health": 80,
+      "reliant": [
+        "wife",
+        "kid"
+      ],
       "livingBy": "mainControlRoom"
     },
     "welly": {
@@ -211,6 +223,10 @@
           "ration": 10
         }
       },
+      "reliant": [
+        "wife",
+        "kid"
+      ],
       "health": 80,
       "livingBy": "mainControlRoom"
     },
@@ -273,6 +289,9 @@
         }
       },
       "health": 80,
+      "reliant": [
+        "wife"
+      ],
       "livingBy": "constructionYardNorth"
     },
     "Salvor": {
@@ -344,6 +363,10 @@
         }
       },
       "health": 80,
+      "reliant": [
+        "wife",
+        "kid"
+      ],
       "livingBy": "welfareStationEast"
     },
     "selli1": {
@@ -585,7 +608,7 @@
         "squareSouth",
         "rescueStationSouth"
       ],
-      "plannedWorker": 40,
+      "plannedWorker": 45,
       "apparatuses": [
         {
           "name": "beds",
@@ -619,6 +642,13 @@
         {
           "name": "waterStorage",
           "durability": 95,
+          "baseDanger": 3e-4,
+          "idealWorker": 5,
+          "currentWorker": 0
+        },
+        {
+          "name": "waterStorage",
+          "durability": 25,
           "baseDanger": 3e-4,
           "idealWorker": 5,
           "currentWorker": 0

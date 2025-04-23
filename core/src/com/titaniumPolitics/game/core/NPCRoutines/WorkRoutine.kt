@@ -8,7 +8,6 @@ import com.titaniumPolitics.game.core.gameActions.JoinMeeting
 import com.titaniumPolitics.game.core.gameActions.StartMeeting
 import com.titaniumPolitics.game.core.gameActions.Wait
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.Transient
 
 @Serializable
 class WorkRoutine() : Routine()
@@ -118,13 +117,13 @@ class WorkRoutine() : Routine()
                     ReadOnly.const("StealAmountMultiplier")//TODO: threshold change depending on member's trait and need
                 val waterThreshold = ReadOnly.const("StealAmountMultiplier")
                 val member = party.members.find {
-                    gState.characters[it]!!.resources["ration"] <= rationThreshold * (gState.characters[it]!!.reliants.size + 1) || gState.characters[it]!!.resources["water"] <= waterThreshold * (gState.characters[it]!!.reliants.size + 1)
+                    gState.characters[it]!!.resources["ration"] <= rationThreshold * (gState.characters[it]!!.reliant.size + 1) || gState.characters[it]!!.resources["water"] <= waterThreshold * (gState.characters[it]!!.reliant.size + 1)
                 }
                 if (member != null)
                 {
                     //The resource to steal is what the member is short of, either ration or water.
                     val wantedResource =
-                        if (character.resources["ration"] <= rationThreshold * (character.reliants.size + 1)
+                        if (character.resources["ration"] <= rationThreshold * (character.reliant.size + 1)
                         ) "ration" else "water"
                     intVariables["corruptionTimer"] = gState.time
                     return StealRoutine().apply {

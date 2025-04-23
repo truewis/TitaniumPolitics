@@ -42,7 +42,7 @@ class StealRoutine() : Routine()
             resources = Resources(
                 variables["stealResource"]!! to min(
                     resplace.resources[variables["stealResource"]!!] / 2,
-                    (character.reliants.size + 1) * ReadOnly.const("StealAmountMultiplier")
+                    (character.reliant.size + 1) * ReadOnly.const("StealAmountMultiplier")
                 )
             )
             toWhere = "home_$name"
