@@ -10,6 +10,8 @@ data class MeetingAgenda(
     var subjectIntParams: HashMap<String, Int> = hashMapOf(),
     var informationKeys: ArrayList<String> = arrayListOf(),
     var attachedRequest: Request? = null
+
+
 )
 
 @Serializable
