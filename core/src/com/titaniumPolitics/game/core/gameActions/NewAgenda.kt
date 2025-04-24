@@ -1,9 +1,12 @@
 package com.titaniumPolitics.game.core.gameActions
 
 import com.titaniumPolitics.game.core.AgendaType
+import com.titaniumPolitics.game.core.GameState
+import com.titaniumPolitics.game.core.Meeting
 import com.titaniumPolitics.game.core.MeetingAgenda
 import com.titaniumPolitics.game.core.ReadOnly
 import kotlinx.serialization.Serializable
+import kotlin.collections.set
 import kotlin.math.max
 
 @Serializable
@@ -15,64 +18,19 @@ class NewAgenda(override val sbjCharacter: String, override val tgtPlace: String
     {
         val meeting = parent.characters[sbjCharacter]!!.currentMeeting!!
         meeting.agendas.add(agenda)
+        val effectivity = meeting.currentAttention / 100.0 * sbjCharObj.will / ReadOnly.const("mutualityMax")
+
+        //Attention is consumed.
         meeting.currentAttention = max(
-            meeting.currentAttention + (10 * parent.getMutuality(sbjCharacter) / ReadOnly.const("mutualityMax")).toInt() - 20,
+            meeting.currentAttention + (10 * sbjCharObj.will / ReadOnly.const("mutualityMax")).toInt() - 20,
             0
         )
         super.execute()
         //affect mutuality based on the agenda.
         parent.setMutuality(sbjCharacter, sbjCharacter, deltaWill())
-        when (agenda.type)
-        {
-            AgendaType.PROOF_OF_WORK ->
-            {
-            }
-
-            AgendaType.REQUEST ->
-            {
-                agenda.attachedRequest!!.also { parent.requests[it.generateName()] = it }
-            }
-
-            AgendaType.BUDGET_PROPOSAL ->
-            {
-            }
-
-            AgendaType.BUDGET_RESOLUTION ->
-            {
-            }
-
-            AgendaType.PRAISE ->
-            {
-                parent.setMutuality(agenda.subjectParams["character"]!!, sbjCharacter, 3.0)
-            }
-
-            AgendaType.DENOUNCE ->
-            {
-                parent.setMutuality(agenda.subjectParams["character"]!!, sbjCharacter, -10.0)
-            }
-
-            AgendaType.PRAISE_PARTY ->
-            {
-                parent.setPartyMutuality(meeting.involvedParty, agenda.subjectParams["party"]!!, 3.0)
-            }
-
-            AgendaType.DENOUNCE_PARTY ->
-            {
-                parent.setPartyMutuality(meeting.involvedParty, agenda.subjectParams["party"]!!, -10.0)
-                //Increase party integrity
-                parent.setPartyMutuality(meeting.involvedParty, meeting.involvedParty, 5.0)
-            }
-
-            AgendaType.NOMINATE ->
-            {
-
-            }
-            //request is not executed until the end of the meeting. Check Meeting.kt
-            else ->
-            {
-            }
-        }
+        extracted(effectivity, meeting, agenda, sbjCharacter, parent)
     }
+
 
     override fun isValid(): Boolean
     {
@@ -128,6 +86,70 @@ class NewAgenda(override val sbjCharacter: String, override val tgtPlace: String
             ) * -0.1
 
             else -> return .0
+        }
+    }
+
+    companion object
+    {
+
+        fun extracted(
+            effectivity: Double,
+            meeting: Meeting,
+            agenda: MeetingAgenda,
+            sbjCharacter: String,
+            parent: GameState
+        )
+        {
+            when (agenda.type)
+            {
+                AgendaType.PROOF_OF_WORK ->
+                {
+                }
+
+                AgendaType.REQUEST ->
+                {
+                    agenda.attachedRequest!!.also { parent.requests[it.generateName()] = it }
+                }
+
+                AgendaType.BUDGET_PROPOSAL ->
+                {
+                }
+
+                AgendaType.BUDGET_RESOLUTION ->
+                {
+                }
+
+                AgendaType.PRAISE ->
+                {
+                    parent.setMutuality(agenda.subjectParams["character"]!!, sbjCharacter, 3.0 * effectivity)
+                }
+
+                AgendaType.DENOUNCE ->
+                {
+                    parent.setMutuality(agenda.subjectParams["character"]!!, sbjCharacter, -10.0)
+                }
+
+                AgendaType.PRAISE_PARTY ->
+                {
+                    parent.setPartyMutuality(meeting.involvedParty, agenda.subjectParams["party"]!!, 3.0 * effectivity)
+                }
+
+                AgendaType.DENOUNCE_PARTY ->
+                {
+                    parent.setPartyMutuality(meeting.involvedParty, agenda.subjectParams["party"]!!, -10.0)
+                    //Increase party integrity
+                    parent.setPartyMutuality(meeting.involvedParty, meeting.involvedParty, 5.0 * effectivity)
+                }
+
+                AgendaType.NOMINATE ->
+                {
+                    parent.setMutuality(agenda.subjectParams["character"]!!, sbjCharacter, 10.0 * effectivity)
+                }
+                //request is not executed until the end of the meeting. Check Meeting.kt
+                else ->
+                {
+                }
+            }
         }
     }
 
