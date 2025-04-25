@@ -4,10 +4,10 @@
   "idlePop": 1000,
   "playerName": "Rui",
   "nonPlayerAgents": {
-    "charlie": {
+    "Charles": {
       "type": "com.titaniumPolitics.game.core.NonPlayerAgent"
     },
-    "seefy": {
+    "Astinomis": {
       "type": "com.titaniumPolitics.game.core.NonPlayerAgent"
     },
     "Alina": {
@@ -19,13 +19,13 @@
     "Eugene": {
       "type": "com.titaniumPolitics.game.core.NonPlayerAgent"
     },
-    "inddy": {
+    "Hiroshi": {
       "type": "com.titaniumPolitics.game.core.NonPlayerAgent"
     },
-    "inddy2": {
+    "Indu": {
       "type": "com.titaniumPolitics.game.core.NonPlayerAgent"
     },
-    "welly": {
+    "Evan": {
       "type": "com.titaniumPolitics.game.core.NonPlayerAgent"
     },
     "Krailin": {
@@ -40,25 +40,25 @@
     "Salvor": {
       "type": "com.titaniumPolitics.game.core.NonPlayerAgent"
     },
-    "mini1": {
+    "Metros": {
       "type": "com.titaniumPolitics.game.core.NonPlayerAgent"
     },
-    "mini2": {
+    "Dias": {
       "type": "com.titaniumPolitics.game.core.NonPlayerAgent"
     },
     "DrPaik": {
       "type": "com.titaniumPolitics.game.core.NonPlayerAgent"
     },
-    "doci2": {
+    "DrHess": {
       "type": "com.titaniumPolitics.game.core.NonPlayerAgent"
     },
-    "selli1": {
+    "Boulos": {
       "type": "com.titaniumPolitics.game.core.NonPlayerAgent"
     },
-    "selli2": {
+    "Agros": {
       "type": "com.titaniumPolitics.game.core.NonPlayerAgent"
     },
-    "oldie": {
+    "Megaros": {
       "type": "com.titaniumPolitics.game.core.NonPlayerAgent"
     },
     "ctrler": {
@@ -69,12 +69,12 @@
     }
   },
   "characters": {
-    "oldie": {
+    "Megaros": {
       "trait": [
         "workaholic",
         "emotionless",
         "mechanic",
-        "technician",
+        "engineer",
         "old",
         "bargainer"
       ],
@@ -87,12 +87,13 @@
       "health": 80,
       "livingBy": "constructionYardNorth"
     },
-    "charlie": {
+    "Charles": {
       "trait": [
         "workaholic",
         "emotionless",
         "interiorMinister",
-        "bargainer"
+        "bargainer",
+        "entertainer"
       ],
       "resources": {
         "_resources": {
@@ -107,12 +108,13 @@
       ],
       "livingBy": "mainControlRoom"
     },
-    "seefy": {
+    "Astinomis": {
       "trait": [
         "workaholic",
         "emotionless",
         "safetyMinister",
-        "bargainer"
+        "bargainer",
+        "soldier"
       ],
       "resources": {
         "_resources": {
@@ -128,7 +130,8 @@
         "workaholic",
         "emotionless",
         "infraMinister",
-        "thief"
+        "thief",
+        "engineer"
       ],
       "resources": {
         "_resources": {
@@ -160,7 +163,8 @@
         "workaholic",
         "emotionless",
         "eduMinister",
-        "bargainer"
+        "bargainer",
+        "teacher"
       ],
       "resources": {
         "_resources": {
@@ -175,12 +179,13 @@
       ],
       "livingBy": "mainControlRoom"
     },
-    "inddy": {
+    "Hiroshi": {
       "trait": [
         "workaholic",
         "emotionless",
         "industryMinister",
-        "thief"
+        "thief",
+        "organizer"
       ],
       "resources": {
         "_resources": {
@@ -191,11 +196,12 @@
       "health": 80,
       "livingBy": "mainControlRoom"
     },
-    "inddy2": {
+    "Indu": {
       "trait": [
         "workaholic",
         "emotionless",
-        "thief"
+        "thief",
+        "organizer"
       ],
       "resources": {
         "_resources": {
@@ -210,12 +216,13 @@
       ],
       "livingBy": "mainControlRoom"
     },
-    "welly": {
+    "Evan": {
       "trait": [
         "workaholic",
         "emotionless",
         "bioMinister",
-        "bargainer"
+        "bargainer",
+        "organizer"
       ],
       "resources": {
         "_resources": {
@@ -234,7 +241,7 @@
       "trait": [
         "workaholic",
         "emotionless",
-        "technician",
+        "engineer",
         "bargainer"
       ],
       "resources": {
@@ -250,7 +257,7 @@
       "trait": [
         "workaholic",
         "emotionless",
-        "technician"
+        "engineer"
       ],
       "resources": {
         "_resources": {
@@ -265,7 +272,7 @@
       "trait": [
         "workaholic",
         "emotionless",
-        "technician"
+        "engineer"
       ],
       "resources": {
         "_resources": {
@@ -280,7 +287,7 @@
       "trait": [
         "workaholic",
         "emotionless",
-        "technician"
+        "engineer"
       ],
       "resources": {
         "_resources": {
@@ -298,7 +305,7 @@
       "trait": [
         "workaholic",
         "emotionless",
-        "technician"
+        "engineer"
       ],
       "resources": {
         "_resources": {
@@ -309,7 +316,7 @@
       "health": 80,
       "livingBy": "constructionYardNorth"
     },
-    "mini1": {
+    "Metros": {
       "trait": [
         "workaholic",
         "emotionless"
@@ -323,7 +330,7 @@
       "health": 80,
       "livingBy": "excavationShaftA"
     },
-    "mini2": {
+    "Dias": {
       "trait": [
         "workaholic",
         "emotionless"
@@ -340,7 +347,8 @@
     "DrPaik": {
       "trait": [
         "workaholic",
-        "emotionless"
+        "emotionless",
+        "doctor"
       ],
       "resources": {
         "_resources": {
@@ -351,10 +359,11 @@
       "health": 80,
       "livingBy": "welfareStationWest"
     },
-    "doci2": {
+    "DrHess": {
       "trait": [
         "workaholic",
-        "emotionless"
+        "emotionless",
+        "doctor"
       ],
       "resources": {
         "_resources": {
@@ -369,10 +378,11 @@
       ],
       "livingBy": "welfareStationEast"
     },
-    "selli1": {
+    "Boulos": {
       "trait": [
         "workaholic",
-        "emotionless"
+        "emotionless",
+        "organizer"
       ],
       "resources": {
         "_resources": {
@@ -384,10 +394,11 @@
       "health": 80,
       "livingBy": "market"
     },
-    "selli2": {
+    "Agros": {
       "trait": [
         "workaholic",
-        "emotionless"
+        "emotionless",
+        "organizer"
       ],
       "resources": {
         "_resources": {
@@ -453,7 +464,6 @@
         "securityCheckCenter",
         "rescueStationWest"
       ],
-      "plannedWorker": 32,
       "apparatuses": [
         {
           "name": "wiredCommunicationDevice",
@@ -525,7 +535,6 @@
       "connectedPlaces": [
         "squareNorth"
       ],
-      "plannedWorker": 40,
       "apparatuses": [
         {
           "name": "beds",
@@ -608,7 +617,6 @@
         "squareSouth",
         "rescueStationSouth"
       ],
-      "plannedWorker": 45,
       "apparatuses": [
         {
           "name": "beds",
@@ -702,7 +710,6 @@
         "rescueStationWest",
         "theEngine"
       ],
-      "plannedWorker": 480,
       "apparatuses": [
         {
           "name": "metalShaft",
@@ -817,7 +824,6 @@
         "constructionYardSouth",
         "rescueStationSouth"
       ],
-      "plannedWorker": 480,
       "apparatuses": [
         {
           "name": "metalShaft",
@@ -932,7 +938,6 @@
       "connectedPlaces": [
         "rescueStationNorth"
       ],
-      "plannedWorker": 480,
       "apparatuses": [
         {
           "name": "metalShaft",
@@ -1043,7 +1048,6 @@
         "recycleFacilityWest",
         "spacePort"
       ],
-      "plannedWorker": 0,
       "apparatuses": [
         {
           "name": "telescope",
@@ -1099,7 +1103,6 @@
         "techSchool",
         "excavationShaftB"
       ],
-      "plannedWorker": 0,
       "apparatuses": [
         {
           "name": "workshop",
@@ -1165,7 +1168,6 @@
       "connectedPlaces": [
         "securityCheckEast"
       ],
-      "plannedWorker": 0,
       "apparatuses": [
         {
           "name": "graves",
@@ -1197,7 +1199,6 @@
       "connectedPlaces": [
         "observatory"
       ],
-      "plannedWorker": 0,
       "apparatuses": [
         {
           "name": "launchPad",
@@ -1264,7 +1265,6 @@
       "connectedPlaces": [
         "recycleFacilityEast"
       ],
-      "plannedWorker": 5,
       "apparatuses": [
         {
           "name": "oxygenStorage",
@@ -1347,7 +1347,6 @@
         "electrolysisStationNorth",
         "squareNorth"
       ],
-      "plannedWorker": 5,
       "apparatuses": [
         {
           "name": "rationStorage",
@@ -1442,7 +1441,6 @@
         "rescueStationNorth",
         "tankArray"
       ],
-      "plannedWorker": 5,
       "apparatuses": [
         {
           "name": "rationStorage",
@@ -1543,7 +1541,7 @@
           "idealWorker": 5,
           "currentWorker": 0,
           "idealAbsorption": {
-            "co2": 1,
+            "carbonDioxide": 1,
             "oxygen": -0.7
           },
           "idealConsumption": {
@@ -1589,7 +1587,6 @@
         "squareSouth",
         "reservoirEast"
       ],
-      "plannedWorker": 5,
       "apparatuses": [
         {
           "name": "oxygenStorage",
@@ -1697,7 +1694,6 @@
       "connectedPlaces": [
         "recycleFacilityWest"
       ],
-      "plannedWorker": 5,
       "apparatuses": [
         {
           "name": "oxygenStorage",
@@ -1804,7 +1800,6 @@
         "farm",
         "electrolysisStationSouth"
       ],
-      "plannedWorker": 5,
       "apparatuses": [
         {
           "name": "waterStorage",
@@ -1885,7 +1880,6 @@
       "connectedPlaces": [
         "excavationShaftA"
       ],
-      "plannedWorker": 5,
       "apparatuses": [
         {
           "name": "waterStorage",
@@ -1970,7 +1964,6 @@
         "excavationShaftB",
         "rescueStationSouth"
       ],
-      "plannedWorker": 100,
       "apparatuses": [
         {
           "name": "classroom",
@@ -2031,7 +2024,6 @@
         "miningSchool",
         "constructionYardSouth"
       ],
-      "plannedWorker": 100,
       "apparatuses": [
         {
           "name": "classroom",
@@ -2091,7 +2083,6 @@
       "connectedPlaces": [
         "reservoirEast"
       ],
-      "plannedWorker": 200,
       "apparatuses": [
         {
           "name": "farmArray",
@@ -2182,7 +2173,6 @@
         "recycleFacilityEast",
         "securityCheckEast"
       ],
-      "plannedWorker": 50,
       "apparatuses": [
         {
           "name": "rescueEquipment",
@@ -2252,7 +2242,6 @@
         "squareSouth",
         "welfareStationEast"
       ],
-      "plannedWorker": 50,
       "apparatuses": [
         {
           "name": "rescueEquipment",
@@ -2320,7 +2309,6 @@
         "excavationShaftA",
         "mainControlRoom"
       ],
-      "plannedWorker": 50,
       "apparatuses": [
         {
           "name": "rescueEquipment",
@@ -2388,7 +2376,6 @@
         "excavationShaftA",
         "squareNorth"
       ],
-      "plannedWorker": 50,
       "apparatuses": [
         {
           "name": "pressureDoor",
@@ -2450,7 +2437,6 @@
         "mainControlRoom",
         "market"
       ],
-      "plannedWorker": 50,
       "apparatuses": [
         {
           "name": "pressureDoor",
@@ -2512,7 +2498,6 @@
         "rescueStationNorth",
         "cemetery"
       ],
-      "plannedWorker": 50,
       "apparatuses": [
         {
           "name": "pressureDoor",
@@ -2573,7 +2558,6 @@
         "securityCheckCenter",
         "constructionYardNorth"
       ],
-      "plannedWorker": 300,
       "apparatuses": [
         {
           "name": "exchangePost",
@@ -2660,7 +2644,6 @@
         "constructionYardNorth",
         "securityCheckWest"
       ],
-      "plannedWorker": 300,
       "apparatuses": [
         {
           "name": "exchangePost",
@@ -2742,7 +2725,6 @@
         "electrolysisStationSouth",
         "securityCheckCenter"
       ],
-      "plannedWorker": 300,
       "apparatuses": [
         {
           "name": "exchangePost",
@@ -2821,7 +2803,6 @@
         "market",
         "squareNorth"
       ],
-      "plannedWorker": 5,
       "apparatuses": [
         {
           "name": "workshop",
@@ -2884,7 +2865,6 @@
       "connectedPlaces": [
         "excavationShaftA"
       ],
-      "plannedWorker": 100,
       "apparatuses": [
         {
           "name": "reactor",
@@ -2958,33 +2938,33 @@
     "triumvirate": {
       "leader": "ctrler",
       "members": [
-        "oldie",
+        "Megaros",
         "ctrler",
         "observer"
       ],
       "home": "mainControlRoom"
     },
     "cabinet": {
-      "leader": "oldie",
+      "leader": "Megaros",
       "members": [
-        "oldie",
-        "charlie",
-        "seefy",
+        "Megaros",
+        "Charles",
+        "Astinomis",
         "Alina",
         "mini",
         "Eugene",
-        "inddy",
-        "welly"
+        "Hiroshi",
+        "Evan"
       ],
       "home": "mainControlRoom"
     },
     "interior": {
       "type": "division",
-      "leader": "charlie",
+      "leader": "Charles",
       "members": [
-        "charlie",
-        "selli1",
-        "selli2"
+        "Charles",
+        "Boulos",
+        "Agros"
       ],
       "home": "mainControlRoom"
     },
@@ -2993,8 +2973,8 @@
       "leader": "mini",
       "members": [
         "mini",
-        "mini1",
-        "mini2"
+        "Metros",
+        "Dias"
       ],
       "home": "excavationShaftA"
     },
@@ -3008,28 +2988,28 @@
     },
     "industry": {
       "type": "division",
-      "leader": "inddy",
+      "leader": "Hiroshi",
       "members": [
-        "inddy",
-        "inddy2"
+        "Hiroshi",
+        "Indu"
       ],
       "home": "farm"
     },
     "safety": {
       "type": "division",
-      "leader": "seefy",
+      "leader": "Astinomis",
       "members": [
-        "seefy"
+        "Astinomis"
       ],
       "home": "rescueStationNorth"
     },
     "bioengineering": {
       "type": "division",
-      "leader": "welly",
+      "leader": "Evan",
       "members": [
-        "welly",
+        "Evan",
         "DrPaik",
-        "doci2"
+        "DrHess"
       ],
       "home": "welfareStationEast"
     },

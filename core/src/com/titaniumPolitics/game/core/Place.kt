@@ -127,23 +127,30 @@ class Place : GameStateElement()
             val place = parent.places[it]!!
             //For each gas type, use the coordinates and the density in gasJson to distribute the gas according to the boltzmann distribution.
             gasResources.forEach { (key, _) ->
-                val mass =
-                    (ReadOnly.gasJson[key]!!.jsonObject["density"]!!.jsonPrimitive.float) * 22.4f / ReadOnly.NA
-                val potentialDiff = coordinates.z - place.coordinates.z
-                val ratio = exp(
-                    -(ReadOnly.GA * mass * potentialDiff) / (ReadOnly.KB * temperature) //[J] = [kg*m^2/s^2]
-                ) //Boltzmann distribution. TODO: reflect the volume of the place.
-                val equilabriumPressure =
-                    (gasPressure(key) * volume + place.gasPressure(key) * place.volume) / (volume + ratio * place.volume)
+                try
+                {
+                    val mass =
+                        (ReadOnly.gasJson[key]!!.jsonObject["density"]!!.jsonPrimitive.float) * 22.4f / ReadOnly.NA
 
-                val flowAmount = pressureToMass(
-                    key,
-                    (equilabriumPressure - gasPressure(key)) * dt / const("GasDiffusionTau")
-                )
+                    val potentialDiff = coordinates.z - place.coordinates.z
+                    val ratio = exp(
+                        -(ReadOnly.GA * mass * potentialDiff) / (ReadOnly.KB * temperature) //[J] = [kg*m^2/s^2]
+                    ) //Boltzmann distribution. TODO: reflect the volume of the place.
+                    val equilabriumPressure =
+                        (gasPressure(key) * volume + place.gasPressure(key) * place.volume) / (volume + ratio * place.volume)
 
-                gasResources[key] += flowAmount / volume
+                    val flowAmount = pressureToMass(
+                        key,
+                        (equilabriumPressure - gasPressure(key)) * dt / const("GasDiffusionTau")
+                    )
 
-                place.gasResources[key] -= flowAmount / place.volume
+                    gasResources[key] += flowAmount / volume
+
+                    place.gasResources[key] -= flowAmount / place.volume
+                } catch (e: Exception)
+                {
+                    throw Exception(key)
+                }
             }
             val equilabriumTemp =
                 (temperature * heatCapacity + place.temperature * heatCapacity) / (heatCapacity + place.heatCapacity)

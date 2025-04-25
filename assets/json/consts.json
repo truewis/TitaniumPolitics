@@ -30,6 +30,7 @@
   "RequestRejectAverageMutuality": 30,
   "EnemyPartyMutualityThreshold": 25,
   "FriendMutualityThreshold": 75,
+  "EnemyMutualityThreshold": 25,
   "SpeakerInterceptMutualityThreshold": 40,
   "RequestFinishDeltaMutuality": 7,
   "RequestFinishDeltaWill": 5,
