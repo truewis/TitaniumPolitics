@@ -56,7 +56,7 @@ class AddInfo(override val sbjCharacter: String, override val tgtPlace: String) 
                 return parent.characters[agenda.subjectParams["character"]]!!.infoPreference(info)
             }
 
-            AgendaType.REQUEST -> return meeting.currentCharacters.sumOf { parent.characters[it]!!.actionValue(agenda.attachedRequest!!.action) }
+            AgendaType.REQUEST -> return meeting.currentCharacters.sumOf { parent.characters[it]!!.actionValue(agenda.attachedRequest!!.action) } / meeting.currentCharacters.size
             AgendaType.DENOUNCE ->
             {
                 return -parent.characters[agenda.subjectParams["character"]]!!.infoPreference(info)
@@ -99,8 +99,10 @@ class AddInfo(override val sbjCharacter: String, override val tgtPlace: String) 
         )
         //The information is known to the characters in the meeting.
         parent.informations[infoKey]!!.knownTo.addAll(meeting.currentCharacters)
-        //affect mutuality based on the information.
+        //Call the mutuality modifier function of the agenda. If the added information is effective, the mutuality effect of the agenda is reinforced, and vice versa.
         NewAgenda.extracted(effectivity(), meeting, agenda, agenda.author, parent)
+        //affect relation with the agenda author
+        parent.setMutuality(agenda.author, sbjCharacter, effectivity())
         super.execute()
     }
 

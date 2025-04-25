@@ -429,7 +429,7 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable
                                 )
                                 {
                                     NewAgendaUI.primary.isVisible = true
-                                    NewAgendaUI.primary.refresh()
+                                    NewAgendaUI.primary.refresh(this@AvailableActionsUI.gameState)
                                 }
                             })
                         }

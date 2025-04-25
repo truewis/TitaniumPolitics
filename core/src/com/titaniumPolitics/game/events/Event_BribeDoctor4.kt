@@ -5,9 +5,10 @@ import com.titaniumPolitics.game.core.InformationType
 import com.titaniumPolitics.game.core.Resources
 import com.titaniumPolitics.game.core.gameActions.UnofficialResourceTransfer
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.Transient
 
 @Serializable
-class Event_BribeDoctor4(searchFrom: Int) : EventObject("Talking with Dr Paik.", true)
+class Event_BribeDoctor4(var searchFrom: Int) : EventObject("Talking with Dr Paik.", true)
 {
 
     @Transient
