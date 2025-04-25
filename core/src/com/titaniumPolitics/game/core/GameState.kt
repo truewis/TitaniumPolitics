@@ -88,6 +88,16 @@ class GameState
     var marketResources = Resources()
     var eventSystem = EventSystem()
     val realCharList = characters.keys.filter { !it.contains("Anon") && characters[it]!!.alive }
+    fun getApparatus(apparatusID: String): Apparatus
+    {
+        places.values.forEach { it.apparatuses.find { it.ID == apparatusID }?.apply { return this } }
+        throw Exception(apparatusID)
+    }
+
+    fun getApparatusPlace(apparatusID: String): Place
+    {
+        return places.values.find { it.apparatuses.any { it.ID == apparatusID } }!!
+    }
 
     fun initialize()
     {

@@ -1028,8 +1028,13 @@ class GameEngine(val gameState: GameState)
                     if (character == gameState.parties[conf.involvedParty]!!.leader)//Only the leader can do below actions.
                     {
                         actions.add("Resign") //Only leaders can resign right now. Resign is one of the few actions that can be done without an agenda.
-                        if (subject == "divisionDailyConference" && !gameState.parties[conf.involvedParty]!!.isSalaryPaid)
-                            actions.add("Salary") //Salary is distributed in a divisionDailyConference.
+                        if (subject == "divisionDailyConference")
+                        {
+                            actions.add("SetWorkers")
+                            actions.add("SetWorkHours")
+                            if (!gameState.parties[conf.involvedParty]!!.isSalaryPaid)
+                                actions.add("Salary") //Salary is distributed in a divisionDailyConference.
+                        }
                     }
                 //When not the leader, you can only do below actions.
                 //There is no command anymore.

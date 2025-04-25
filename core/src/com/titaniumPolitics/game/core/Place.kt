@@ -45,7 +45,9 @@ class Place : GameStateElement()
         pressure * ((ReadOnly.gasJson[gasName]!!.jsonObject["density"]!!.jsonPrimitive.float)) / (temperature / 273.15) * volume / 101325
 
     var connectedPlaces = arrayListOf<String>()
-    var plannedWorker = 0
+    val plannedWorker: Int
+        get() =
+            apparatuses.sumOf { it.plannedWorker }
     var coordinates = Coordinate3D(0, 0, 0)
     var temperature = 300.0 //Ambient temperature in Kelvin.
     var heatCapacity = 4.184e7//J/K
@@ -115,8 +117,7 @@ class Place : GameStateElement()
     override fun injectParent(gameState: GameState)
     {
         super.injectParent(gameState)
-        plannedWorker =
-            apparatuses.sumOf { it.idealWorker }//TODO: this is a temporary solution to set up the planned worker. It should be set by division leaders.
+        apparatuses.forEach { it.plannedWorker == it.idealWorker }
     }
 
     //Check the gas pressure of the connected places and slowly equalize it. This function is called every time change.
