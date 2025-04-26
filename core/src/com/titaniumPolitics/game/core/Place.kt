@@ -50,10 +50,11 @@ class Place : GameStateElement()
             apparatuses.sumOf { it.plannedWorker }
     var coordinates = Coordinate3D(0, 0, 0)
     var temperature = 300.0 //Ambient temperature in Kelvin.
-    var heatCapacity = 4.184e7//J/K
+    var heatCapacity = 4.184e8//J/K
     fun addHeat(energy: Double)
     {
         temperature += energy / heatCapacity
+        if (temperature < 4) temperature = 4.0 //TODO:temporary solution. Lowest temperature ~ 4K.
     }
 
     var volume = 1000f //Volume in m^3.
@@ -117,7 +118,7 @@ class Place : GameStateElement()
     override fun injectParent(gameState: GameState)
     {
         super.injectParent(gameState)
-        apparatuses.forEach { it.plannedWorker == it.idealWorker }
+        apparatuses.forEach { it.plannedWorker = it.idealWorker }
     }
 
     //Check the gas pressure of the connected places and slowly equalize it. This function is called every time change.
@@ -144,19 +145,19 @@ class Place : GameStateElement()
                         (equilabriumPressure - gasPressure(key)) * dt / const("GasDiffusionTau")
                     )
 
-                    gasResources[key] += flowAmount / volume
+                    gasResources[key] += flowAmount
 
-                    place.gasResources[key] -= flowAmount / place.volume
+                    place.gasResources[key] -= flowAmount
                 } catch (e: Exception)
                 {
-                    throw Exception(key)
+                    throw Exception("$key, ${e}")
                 }
             }
             val equilabriumTemp =
-                (temperature * heatCapacity + place.temperature * heatCapacity) / (heatCapacity + place.heatCapacity)
+                (temperature * heatCapacity + place.temperature * place.heatCapacity) / (heatCapacity + place.heatCapacity)
 
             val flowAmount =
-                (equilabriumTemp - temperature) * dt / const("TemperatureDiffusionTau")
+                (equilabriumTemp - temperature) * (heatCapacity + place.heatCapacity) * dt / const("TemperatureDiffusionTau")
 
 
             temperature += flowAmount / heatCapacity

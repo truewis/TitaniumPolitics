@@ -29,10 +29,10 @@ class SupportAgendaRoutine() : Routine(), IMeetingRoutine
             return Wait(name, place)
         } else //If it is my turn to speak
         {
-            when (variables["agenda"])
+            when (conf.agendas[intVariables["agendaIndex"]!!].type)
             {
 
-                "proofOfWork" ->
+                AgendaType.PROOF_OF_WORK ->
                 {
                     //if there is any supporting information, add it.
                     character.preparedInfoKeys.filter { key ->
@@ -59,9 +59,9 @@ class SupportAgendaRoutine() : Routine(), IMeetingRoutine
                     val gossip = gState.informations.filter {
                         character.preparedInfoKeys.contains(
                             it.key
-                        ) && it.value.tgtTime in gState.day * ReadOnly.constInt("lengthOfDay")..(gState.day * ReadOnly.constInt(
+                        ) && it.value.tgtTime in gState.day * ReadOnly.constInt("lengthOfDay")..((gState.day+1) * ReadOnly.constInt(
                             "lengthOfDay"
-                        ) + ReadOnly.constInt("lengthOfDay") - 1)
+                        ) - 1)
                                 && (conf.currentCharacters - it.value.knownTo).isNotEmpty() //In order to present the info, someone must not know it. This also prevents sharing an information that is already shared in this meeting.
                     }.maxByOrNull { character.infoPreference(it.value) } //Share the most interesting news.
 
@@ -75,7 +75,7 @@ class SupportAgendaRoutine() : Routine(), IMeetingRoutine
 
                 }
 
-                "nomination", "praise" ->
+                AgendaType.NOMINATE, AgendaType.PRAISE ->
                 {
                     //if there is any supporting information, add it.
                     character.preparedInfoKeys.filter { key ->
@@ -93,7 +93,7 @@ class SupportAgendaRoutine() : Routine(), IMeetingRoutine
                     }
                 }
 
-                "denounce" ->
+                AgendaType.DENOUNCE ->
                 {
                     //if there is any supporting information, add it.
                     character.preparedInfoKeys.filter { key ->
@@ -110,6 +110,13 @@ class SupportAgendaRoutine() : Routine(), IMeetingRoutine
                             return action
                     }
                 }
+
+                AgendaType.REQUEST -> TODO()
+                AgendaType.PRAISE_PARTY -> TODO()
+                AgendaType.DENOUNCE_PARTY -> TODO()
+                AgendaType.BUDGET_PROPOSAL -> TODO()
+                AgendaType.BUDGET_RESOLUTION -> TODO()
+                AgendaType.APPOINT_MEETING -> TODO()
             }
             //If there is no supporting information, end speech.
             return EndSpeech(name, place).also {

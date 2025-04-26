@@ -9,7 +9,7 @@
   "CriticalCarbonDioxideRatio": 0.1,
   "SuffocationTau": 3600,
   "TemperatureDifferenceTolerance": 20,
-  "TemperatureDamageTau": 36,
+  "TemperatureDamageTau": 3600,
   "WorkingHumanHeatProduction": 300,
   "DurabilityMax": 100,
   "DurabilityTau": 800000,

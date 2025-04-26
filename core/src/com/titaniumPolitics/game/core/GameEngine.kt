@@ -830,9 +830,9 @@ class GameEngine(val gameState: GameState)
             if (entry.value.place.temperature - 300 /*[K]*/ !in -const("TemperatureDifferenceTolerance")..const("TemperatureDifferenceTolerance")
             )
             {
-                entry.value.health -= dt / const("TemperatureDamageTau") * abs(entry.value.place.temperature / 300 /*[K]*/ - 1) * const(
-                    "HealthMax"
-                )
+//                entry.value.health -= dt / const("TemperatureDamageTau") * abs(entry.value.place.temperature / 300 /*[K]*/ - 1) * const(
+//                    "HealthMax"
+//                )//TODO: balance this
                 //If in a workplace, party integrity decreases, if I am not the leader
                 entry.value.party?.also {
                     if (entry.value.place.responsibleParty == it.name && it.leader != entry.key)

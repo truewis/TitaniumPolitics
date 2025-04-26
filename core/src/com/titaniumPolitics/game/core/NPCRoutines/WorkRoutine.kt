@@ -1,10 +1,13 @@
 package com.titaniumPolitics.game.core.NPCRoutines
 
+import com.titaniumPolitics.game.core.AgendaType
 import com.titaniumPolitics.game.core.GameEngine
+import com.titaniumPolitics.game.core.InformationType
 import com.titaniumPolitics.game.core.Place
 import com.titaniumPolitics.game.core.ReadOnly
 import com.titaniumPolitics.game.core.gameActions.GameAction
 import com.titaniumPolitics.game.core.gameActions.JoinMeeting
+import com.titaniumPolitics.game.core.gameActions.PrepareInfo
 import com.titaniumPolitics.game.core.gameActions.StartMeeting
 import com.titaniumPolitics.game.core.gameActions.Wait
 import kotlinx.serialization.Serializable
@@ -17,11 +20,11 @@ class WorkRoutine() : Routine()
         val character = gState.characters[name]!!
 
         //If an accident happened in the place of my control, investigate and clear it.
-        gState.places.values.filter {
+        gState.places.values.firstOrNull {
             it.responsibleParty != "" && gState.parties[it.responsibleParty]!!.members.contains(
                 name
             ) && it.isAccidentScene
-        }.firstOrNull()?.also {
+        }?.also {
             return InvestigateAndClearAccidentRoutine().apply {
                 variables["place"] = it.name
             }
@@ -65,7 +68,7 @@ class WorkRoutine() : Routine()
                     place
                 )..ReadOnly.constInt("MeetingStartTolerance") + Place.timeBetweenPlaces(it.value.place, place)
             })//If a Meeting is soon
-        {//TODO: consider the distance to the Meeting place.
+        {
             val conf = gState.scheduledMeetings.filter {
                 it.value.scheduledCharacters.contains(name) && it.value.time - gState.time in -ReadOnly.constInt(
                     "MeetingStartTolerance"
@@ -183,6 +186,32 @@ class WorkRoutine() : Routine()
                             }
                 }
             }
+        }
+
+        //If there is some time, prepare information
+        if (gState.scheduledMeetings.none {
+                it.value.scheduledCharacters.contains(name) && it.value.time - gState.time in -ReadOnly.constInt(
+                    "MeetingStartTolerance"
+                ) + Place.timeBetweenPlaces(
+                    it.value.place,
+                    place
+                ) + ReadOnly.constInt("PrepareInfoDuration")..ReadOnly.constInt("MeetingStartTolerance") + Place.timeBetweenPlaces(
+                    it.value.place,
+                    place
+                ) + ReadOnly.constInt("PrepareInfoDuration")
+            })//If a Meeting is not soon
+        {
+            //If we haven't prapared info recently
+            if (gState.informations.none { (_, information) ->
+                    information.author == character.name && information.type == InformationType.ACTION && information.action is PrepareInfo
+                            && gState.time - information.creationTime > ReadOnly.constInt("lengthOfDay") * 2
+                })
+            //If we haven't tried this branch in the current routine
+                if (intVariables["try_prepare_info"] != 1)
+                {
+                    intVariables["try_prepare_info"] = 1
+                    return PrepareInfoRoutine()
+                }
         }
 
 

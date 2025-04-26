@@ -16,7 +16,7 @@ import java.util.UUID
 @Serializable
 class Apparatus
 {
-    val plannedWorker = 0
+    var plannedWorker = 0
     var name = ""
     var ID = UUID.randomUUID().toString() //Since many apparatus have same name, they need an identifier.
     var durability = 0.0
