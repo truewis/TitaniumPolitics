@@ -467,49 +467,27 @@
       "apparatuses": [
         {
           "name": "wiredCommunicationDevice",
-          "durability": 95,
-          "baseDanger": 2e-4,
-          "idealWorker": 32,
-          "currentWorker": 0,
-          "idealConsumption": {
-            "energy": 1e4
-          },
-          "idealHeatProduction": 5e3
+          "durability": 95
         },
         {
           "name": "oxygenStorage",
-          "durability": 95,
-          "baseDanger": 6e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "waterStorage",
-          "durability": 95,
-          "baseDanger": 3e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "rationStorage",
-          "durability": 95,
-          "baseDanger": 2e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "energyStorage",
-          "durability": 95,
-          "baseDanger": 2e-4,
-          "idealWorker": 10,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "energyStorage",
-          "durability": 95,
-          "baseDanger": 2e-4,
-          "idealWorker": 10,
-          "currentWorker": 0
+          "durability": 95
         }
       ],
       "characters": [
@@ -538,60 +516,31 @@
       "apparatuses": [
         {
           "name": "beds",
-          "durability": 95,
-          "baseDanger": 1e-4,
-          "idealWorker": 20,
-          "currentWorker": 0,
-          "idealConsumption": {
-            "energy": 1e4
-          },
-          "idealHeatProduction": 1e4
+          "durability": 95
         },
         {
           "name": "beds",
-          "durability": 95,
-          "baseDanger": 1e-4,
-          "idealWorker": 20,
-          "currentWorker": 0,
-          "idealConsumption": {
-            "energy": 1e4
-          },
-          "idealHeatProduction": 1e4
+          "durability": 95
         },
         {
           "name": "oxygenStorage",
-          "durability": 95,
-          "baseDanger": 6e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "waterStorage",
-          "durability": 95,
-          "baseDanger": 3e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "rationStorage",
-          "durability": 95,
-          "baseDanger": 2e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "energyStorage",
-          "durability": 95,
-          "baseDanger": 2e-4,
-          "idealWorker": 10,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "energyStorage",
-          "durability": 95,
-          "baseDanger": 2e-4,
-          "idealWorker": 10,
-          "currentWorker": 0
+          "durability": 95
         }
       ],
       "characters": [
@@ -620,67 +569,35 @@
       "apparatuses": [
         {
           "name": "beds",
-          "durability": 95,
-          "baseDanger": 1e-4,
-          "idealWorker": 20,
-          "currentWorker": 0,
-          "idealConsumption": {
-            "energy": 1e4
-          },
-          "idealHeatProduction": 1e4
+          "durability": 95
         },
         {
           "name": "beds",
-          "durability": 95,
-          "baseDanger": 1e-4,
-          "idealWorker": 20,
-          "currentWorker": 0,
-          "idealConsumption": {
-            "energy": 1e4
-          },
-          "idealHeatProduction": 1e4
+          "durability": 95
         },
         {
           "name": "oxygenStorage",
-          "durability": 95,
-          "baseDanger": 6e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "waterStorage",
-          "durability": 95,
-          "baseDanger": 3e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "waterStorage",
-          "durability": 25,
-          "baseDanger": 3e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 25
         },
         {
           "name": "rationStorage",
-          "durability": 95,
-          "baseDanger": 2e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "energyStorage",
-          "durability": 95,
-          "baseDanger": 2e-4,
-          "idealWorker": 10,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "energyStorage",
-          "durability": 95,
-          "baseDanger": 2e-4,
-          "idealWorker": 10,
-          "currentWorker": 0
+          "durability": 95
         }
       ],
       "characters": [
@@ -713,89 +630,39 @@
       "apparatuses": [
         {
           "name": "metalShaft",
-          "durability": 95,
-          "baseDanger": 8e-4,
-          "idealWorker": 160,
-          "currentWorker": 0,
-          "idealProduction": {
-            "lightMetal": 0.01,
-            "heavyMetal": 0.02,
-            "rareMetal": 1e-3
-          },
-          "idealConsumption": {
-            "energy": 1e7
-          },
-          "idealHeatProduction": 1e7
+          "durability": 95
         },
         {
           "name": "liquidShaft",
-          "durability": 95,
-          "baseDanger": 10e-4,
-          "idealWorker": 160,
-          "currentWorker": 0,
-          "idealProduction": {
-            "organics": 0.1
-          },
-          "idealConsumption": {
-            "energy": 1e7
-          },
-          "idealHeatProduction": 1e7
+          "durability": 95
         },
         {
           "name": "glassShaft",
-          "durability": 95,
-          "baseDanger": 10e-4,
-          "idealWorker": 160,
-          "currentWorker": 0,
-          "idealProduction": {
-            "glass": 0.08
-          },
-          "idealConsumption": {
-            "energy": 1e7
-          },
-          "idealHeatProduction": 1e7
+          "durability": 95
         },
         {
           "name": "oxygenStorage",
-          "durability": 95,
-          "baseDanger": 6e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "waterStorage",
-          "durability": 95,
-          "baseDanger": 3e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "metalStorage",
-          "durability": 95,
-          "baseDanger": 2e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "energyStorage",
-          "durability": 95,
-          "baseDanger": 2e-4,
-          "idealWorker": 10,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "energyStorage",
-          "durability": 95,
-          "baseDanger": 2e-4,
-          "idealWorker": 10,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "energyStorage",
-          "durability": 95,
-          "baseDanger": 2e-4,
-          "idealWorker": 10,
-          "currentWorker": 0
+          "durability": 95
         }
       ],
       "characters": [
@@ -827,91 +694,39 @@
       "apparatuses": [
         {
           "name": "metalShaft",
-          "durability": 95,
-          "baseDanger": 8e-4,
-          "idealWorker": 160,
-          "currentWorker": 0,
-          "idealProduction": {
-            "lightMetal": 0.06,
-            "heavyMetal": 0.04,
-            "rareMetal": 1e-3
-          },
-          "idealConsumption": {
-            "energy": 1e7
-          },
-          "idealHeatProduction": 1e7
+          "durability": 95
         },
         {
           "name": "liquidShaft",
-          "durability": 95,
-          "baseDanger": 10e-4,
-          "idealWorker": 160,
-          "currentWorker": 0,
-          "idealProduction": {
-            "organics": 0.08,
-            "hydrogen": 0.02,
-            "water": 0.02
-          },
-          "idealConsumption": {
-            "energy": 1e7
-          },
-          "idealHeatProduction": 1e7
+          "durability": 95
         },
         {
           "name": "glassShaft",
-          "durability": 95,
-          "baseDanger": 10e-4,
-          "idealWorker": 160,
-          "currentWorker": 0,
-          "idealProduction": {
-            "glass": 0.08
-          },
-          "idealConsumption": {
-            "energy": 1e7
-          },
-          "idealHeatProduction": 1e7
+          "durability": 95
         },
         {
           "name": "oxygenStorage",
-          "durability": 95,
-          "baseDanger": 6e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "waterStorage",
-          "durability": 95,
-          "baseDanger": 3e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "metalStorage",
-          "durability": 95,
-          "baseDanger": 2e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "energyStorage",
-          "durability": 95,
-          "baseDanger": 2e-4,
-          "idealWorker": 10,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "energyStorage",
-          "durability": 95,
-          "baseDanger": 2e-4,
-          "idealWorker": 10,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "energyStorage",
-          "durability": 95,
-          "baseDanger": 2e-4,
-          "idealWorker": 10,
-          "currentWorker": 0
+          "durability": 95
         }
       ],
       "characters": [
@@ -941,89 +756,39 @@
       "apparatuses": [
         {
           "name": "metalShaft",
-          "durability": 95,
-          "baseDanger": 8e-4,
-          "idealWorker": 160,
-          "currentWorker": 0,
-          "idealProduction": {
-            "lightMetal": 0.1,
-            "heavyMetal": 0.02,
-            "rareMetal": 1e-3
-          },
-          "idealConsumption": {
-            "energy": 1e7
-          },
-          "idealHeatProduction": 1e7
+          "durability": 95
         },
         {
           "name": "liquidShaft",
-          "durability": 95,
-          "baseDanger": 10e-4,
-          "idealWorker": 160,
-          "currentWorker": 0,
-          "idealProduction": {
-            "organics": 0.1
-          },
-          "idealConsumption": {
-            "energy": 1e7
-          },
-          "idealHeatProduction": 1e7
+          "durability": 95
         },
         {
           "name": "glassShaft",
-          "durability": 95,
-          "baseDanger": 10e-4,
-          "idealWorker": 160,
-          "currentWorker": 0,
-          "idealProduction": {
-            "glass": 0.08
-          },
-          "idealConsumption": {
-            "energy": 1e7
-          },
-          "idealHeatProduction": 1e7
+          "durability": 95
         },
         {
           "name": "oxygenStorage",
-          "durability": 95,
-          "baseDanger": 6e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "waterStorage",
-          "durability": 95,
-          "baseDanger": 3e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "metalStorage",
-          "durability": 95,
-          "baseDanger": 2e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "energyStorage",
-          "durability": 95,
-          "baseDanger": 2e-4,
-          "idealWorker": 10,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "energyStorage",
-          "durability": 95,
-          "baseDanger": 2e-4,
-          "idealWorker": 10,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "energyStorage",
-          "durability": 95,
-          "baseDanger": 2e-4,
-          "idealWorker": 10,
-          "currentWorker": 0
+          "durability": 95
         }
       ],
       "characters": [
@@ -1051,32 +816,15 @@
       "apparatuses": [
         {
           "name": "telescope",
-          "durability": 100,
-          "baseDanger": 0,
-          "idealWorker": 0,
-          "currentWorker": 0,
-          "idealConsumption": {
-            "energy": 1e7
-          },
-          "idealHeatProduction": 1e7
+          "durability": 100
         },
         {
           "name": "energyStorage",
-          "durability": 95,
-          "baseDanger": 2e-4,
-          "idealWorker": 10,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "cooler",
-          "durability": 100,
-          "baseDanger": 0,
-          "idealWorker": 100,
-          "currentWorker": 0,
-          "idealConsumption": {
-            "energy": 1e7
-          },
-          "idealHeatProduction": -2e8
+          "durability": 100
         }
       ],
       "characters": [
@@ -1105,46 +853,24 @@
       ],
       "apparatuses": [
         {
-          "name": "workshop",
-          "durability": 95,
-          "baseDanger": 6e-4,
-          "idealWorker": 5,
-          "currentWorker": 0,
-          "idealProduction": {
-            "component": 0.01
-          },
-          "idealConsumption": {
-            "energy": 1e4
-          },
-          "idealHeatProduction": 1e4
+          "name": "componentWorkshop",
+          "durability": 95
         },
         {
           "name": "componentStorage",
-          "durability": 95,
-          "baseDanger": 2e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "waterStorage",
-          "durability": 95,
-          "baseDanger": 3e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "rationStorage",
-          "durability": 95,
-          "baseDanger": 2e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "energyStorage",
-          "durability": 95,
-          "baseDanger": 2e-4,
-          "idealWorker": 10,
-          "currentWorker": 0
+          "durability": 95
         }
       ],
       "characters": [
@@ -1171,10 +897,7 @@
       "apparatuses": [
         {
           "name": "graves",
-          "durability": 95,
-          "baseDanger": 1e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         }
       ],
       "characters": [
@@ -1202,45 +925,27 @@
       "apparatuses": [
         {
           "name": "launchPad",
-          "durability": 95,
-          "baseDanger": 6e-4,
-          "idealWorker": 0,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "oxygenStorage",
-          "durability": 0,
-          "baseDanger": 6e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 0
         },
         {
           "name": "waterStorage",
-          "durability": 0,
-          "baseDanger": 3e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 0
         },
         {
           "name": "componentStorage",
-          "durability": 0,
-          "baseDanger": 2e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 0
         },
         {
           "name": "metalStorage",
-          "durability": 0,
-          "baseDanger": 2e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 0
         },
         {
           "name": "energyStorage",
-          "durability": 0,
-          "baseDanger": 2e-4,
-          "idealWorker": 10,
-          "currentWorker": 0
+          "durability": 0
         }
       ],
       "characters": [
@@ -1268,59 +973,35 @@
       "apparatuses": [
         {
           "name": "oxygenStorage",
-          "durability": 95,
-          "baseDanger": 6e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "oxygenStorage",
-          "durability": 95,
-          "baseDanger": 6e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "oxygenStorage",
-          "durability": 95,
-          "baseDanger": 6e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "oxygenStorage",
-          "durability": 95,
-          "baseDanger": 6e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "oxygenStorage",
-          "durability": 95,
-          "baseDanger": 6e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "oxygenStorage",
-          "durability": 95,
-          "baseDanger": 6e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "oxygenStorage",
-          "durability": 95,
-          "baseDanger": 6e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "oxygenStorage",
-          "durability": 95,
-          "baseDanger": 6e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         }
       ],
       "characters": [
@@ -1350,72 +1031,31 @@
       "apparatuses": [
         {
           "name": "rationStorage",
-          "durability": 95,
-          "baseDanger": 2e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "rationStorage",
-          "durability": 95,
-          "baseDanger": 2e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "waterStorage",
-          "durability": 95,
-          "baseDanger": 6e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "waterStorage",
-          "durability": 95,
-          "baseDanger": 6e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "waterRecycle",
-          "durability": 95,
-          "baseDanger": 6e-4,
-          "idealWorker": 5,
-          "currentWorker": 0,
-          "idealConsumption": {
-            "energy": 2.26e7
-          },
-          "idealAbsorption": {
-            "water": 1
-          },
-          "idealProduction": {
-            "water": 1
-          },
-          "idealHeatProduction": 2.26e7
+          "durability": 95
         },
         {
           "name": "waterRecycle",
-          "durability": 95,
-          "baseDanger": 6e-4,
-          "idealWorker": 5,
-          "currentWorker": 0,
-          "idealConsumption": {
-            "energy": 2.26e7
-          },
-          "idealAbsorption": {
-            "water": 1
-          },
-          "idealProduction": {
-            "water": 1
-          },
-          "idealHeatProduction": 2.26e7
+          "durability": 95
         },
         {
           "name": "energyStorage",
-          "durability": 95,
-          "baseDanger": 2e-4,
-          "idealWorker": 10,
-          "currentWorker": 0
+          "durability": 95
         }
       ],
       "characters": [
@@ -1444,123 +1084,43 @@
       "apparatuses": [
         {
           "name": "rationStorage",
-          "durability": 95,
-          "baseDanger": 2e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "rationStorage",
-          "durability": 95,
-          "baseDanger": 2e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "waterStorage",
-          "durability": 95,
-          "baseDanger": 6e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "waterStorage",
-          "durability": 95,
-          "baseDanger": 6e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "corpseRecycle",
-          "durability": 95,
-          "baseDanger": 6e-4,
-          "idealWorker": 5,
-          "currentWorker": 0,
-          "idealConsumption": {
-            "energy": 2e8,
-            "corpse": 1
-          },
-          "idealProduction": {
-            "phosphorus": 0.5
-          },
-          "idealHeatProduction": 2e8
+          "durability": 95
         },
         {
           "name": "waterRecycle",
-          "durability": 95,
-          "baseDanger": 6e-4,
-          "idealWorker": 5,
-          "currentWorker": 0,
-          "idealConsumption": {
-            "energy": 2.26e7
-          },
-          "idealAbsorption": {
-            "water": 1
-          },
-          "idealProduction": {
-            "water": 1
-          },
-          "idealHeatProduction": 2.26e7
+          "durability": 95
         },
         {
           "name": "corpseRecycle",
-          "durability": 95,
-          "baseDanger": 6e-4,
-          "idealWorker": 5,
-          "currentWorker": 0,
-          "idealConsumption": {
-            "energy": 2e8,
-            "corpse": 1
-          },
-          "idealProduction": {
-            "phosphorus": 0.5
-          },
-          "idealHeatProduction": 2e8
+          "durability": 95
         },
         {
           "name": "waterRecycle",
-          "durability": 95,
-          "baseDanger": 6e-4,
-          "idealWorker": 5,
-          "currentWorker": 0,
-          "idealConsumption": {
-            "energy": 2.26e7
-          },
-          "idealAbsorption": {
-            "water": 1
-          },
-          "idealProduction": {
-            "water": 1
-          },
-          "idealHeatProduction": 2.26e7
+          "durability": 95
         },
         {
           "name": "co2Recycle",
-          "durability": 95,
-          "baseDanger": 6e-4,
-          "idealWorker": 5,
-          "currentWorker": 0,
-          "idealAbsorption": {
-            "carbonDioxide": 1,
-            "oxygen": -0.7
-          },
-          "idealConsumption": {
-            "energy": 2e7,
-            "hydrogen": 0.08
-          },
-          "idealDistribution": {
-          },
-          "idealProduction": {
-            "organics": 0.38
-          },
-          "idealHeatProduction": 1e7
+          "durability": 95
         },
         {
           "name": "energyStorage",
-          "durability": 95,
-          "baseDanger": 2e-4,
-          "idealWorker": 10,
-          "currentWorker": 0
+          "durability": 95
         }
       ],
       "characters": [
@@ -1590,85 +1150,35 @@
       "apparatuses": [
         {
           "name": "oxygenStorage",
-          "durability": 95,
-          "baseDanger": 6e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "oxygenStorage",
-          "durability": 95,
-          "baseDanger": 6e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "waterStorage",
-          "durability": 95,
-          "baseDanger": 3e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "waterStorage",
-          "durability": 95,
-          "baseDanger": 3e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "electrolysisArray",
-          "durability": 95,
-          "baseDanger": 8e-4,
-          "idealWorker": 5,
-          "currentWorker": 0,
-          "idealAbsorption": {
-            "oxygen": -0.8
-          },
-          "idealDistribution": {
-          },
-          "idealConsumption": {
-            "water": 0.9,
-            "energy": 1.91e7
-          },
-          "idealProduction": {
-            "hydrogen": 0.1
-          },
-          "idealHeatProduction": 5e6
+          "durability": 95
         },
         {
           "name": "electrolysisArray",
-          "durability": 95,
-          "baseDanger": 8e-4,
-          "idealWorker": 5,
-          "currentWorker": 0,
-          "idealAbsorption": {
-            "oxygen": -0.8
-          },
-          "idealDistribution": {
-          },
-          "idealConsumption": {
-            "water": 0.9,
-            "energy": 1.91e7
-          },
-          "idealProduction": {
-            "hydrogen": 0.1
-          },
-          "idealHeatProduction": 5e6
+          "durability": 95
         },
         {
           "name": "energyStorage",
-          "durability": 95,
-          "baseDanger": 2e-4,
-          "idealWorker": 10,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "energyStorage",
-          "durability": 95,
-          "baseDanger": 2e-4,
-          "idealWorker": 10,
-          "currentWorker": 0
+          "durability": 95
         }
       ],
       "characters": [
@@ -1697,83 +1207,35 @@
       "apparatuses": [
         {
           "name": "oxygenStorage",
-          "durability": 95,
-          "baseDanger": 6e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "oxygenStorage",
-          "durability": 95,
-          "baseDanger": 6e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "waterStorage",
-          "durability": 95,
-          "baseDanger": 3e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "waterStorage",
-          "durability": 95,
-          "baseDanger": 3e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "electrolysisArray",
-          "durability": 95,
-          "baseDanger": 8e-4,
-          "idealWorker": 5,
-          "currentWorker": 0,
-          "idealAbsorption": {
-            "oxygen": -0.8
-          },
-          "idealDistribution": {
-          },
-          "idealConsumption": {
-            "water": 0.9,
-            "energy": 1.91e7
-          },
-          "idealProduction": {
-            "hydrogen": 0.1
-          },
-          "idealHeatProduction": 5e6
+          "durability": 95
         },
         {
           "name": "electrolysisArray",
-          "durability": 95,
-          "baseDanger": 8e-4,
-          "idealWorker": 5,
-          "currentWorker": 0,
-          "idealAbsorption": {
-            "oxygen": -0.8
-          },
-          "idealConsumption": {
-            "water": 0.9,
-            "energy": 1.91e7
-          },
-          "idealProduction": {
-            "hydrogen": 0.1
-          },
-          "idealHeatProduction": 5e6
+          "durability": 95
         },
         {
           "name": "energyStorage",
-          "durability": 95,
-          "baseDanger": 2e-4,
-          "idealWorker": 10,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "energyStorage",
-          "durability": 95,
-          "baseDanger": 2e-4,
-          "idealWorker": 10,
-          "currentWorker": 0
+          "durability": 95
         }
       ],
       "characters": [
@@ -1803,59 +1265,35 @@
       "apparatuses": [
         {
           "name": "waterStorage",
-          "durability": 95,
-          "baseDanger": 3e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "waterStorage",
-          "durability": 95,
-          "baseDanger": 3e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "waterStorage",
-          "durability": 95,
-          "baseDanger": 3e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "waterStorage",
-          "durability": 95,
-          "baseDanger": 3e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "waterStorage",
-          "durability": 95,
-          "baseDanger": 3e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "waterStorage",
-          "durability": 95,
-          "baseDanger": 3e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "waterStorage",
-          "durability": 95,
-          "baseDanger": 3e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "waterStorage",
-          "durability": 95,
-          "baseDanger": 3e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         }
       ],
       "characters": [
@@ -1883,59 +1321,35 @@
       "apparatuses": [
         {
           "name": "waterStorage",
-          "durability": 95,
-          "baseDanger": 3e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "waterStorage",
-          "durability": 95,
-          "baseDanger": 3e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "waterStorage",
-          "durability": 95,
-          "baseDanger": 3e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "waterStorage",
-          "durability": 95,
-          "baseDanger": 3e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "waterStorage",
-          "durability": 95,
-          "baseDanger": 3e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "waterStorage",
-          "durability": 95,
-          "baseDanger": 3e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "waterStorage",
-          "durability": 95,
-          "baseDanger": 3e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "waterStorage",
-          "durability": 95,
-          "baseDanger": 3e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         }
       ],
       "characters": [
@@ -1967,38 +1381,23 @@
       "apparatuses": [
         {
           "name": "classroom",
-          "durability": 95,
-          "baseDanger": 2e-4,
-          "idealWorker": 50,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "classroom",
-          "durability": 95,
-          "baseDanger": 2e-4,
-          "idealWorker": 50,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "waterStorage",
-          "durability": 95,
-          "baseDanger": 3e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "rationStorage",
-          "durability": 95,
-          "baseDanger": 2e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "energyStorage",
-          "durability": 95,
-          "baseDanger": 2e-4,
-          "idealWorker": 10,
-          "currentWorker": 0
+          "durability": 95
         }
       ],
       "characters": [
@@ -2027,38 +1426,23 @@
       "apparatuses": [
         {
           "name": "classroom",
-          "durability": 95,
-          "baseDanger": 2e-4,
-          "idealWorker": 50,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "classroom",
-          "durability": 95,
-          "baseDanger": 2e-4,
-          "idealWorker": 50,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "waterStorage",
-          "durability": 95,
-          "baseDanger": 3e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "rationStorage",
-          "durability": 95,
-          "baseDanger": 2e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "energyStorage",
-          "durability": 95,
-          "baseDanger": 2e-4,
-          "idealWorker": 10,
-          "currentWorker": 0
+          "durability": 95
         }
       ],
       "characters": [
@@ -2086,66 +1470,31 @@
       "apparatuses": [
         {
           "name": "farmArray",
-          "durability": 95,
-          "baseDanger": 4e-4,
-          "idealWorker": 100,
-          "currentWorker": 0,
-          "idealProduction": {
-            "ration": 0.06
-          },
-          "idealConsumption": {
-            "energy": 1e7
-          },
-          "idealHeatProduction": 5e6
+          "durability": 95
         },
         {
           "name": "farmArray",
-          "durability": 95,
-          "baseDanger": 4e-4,
-          "idealWorker": 100,
-          "currentWorker": 0,
-          "idealProduction": {
-            "ration": 0.06
-          },
-          "idealConsumption": {
-            "energy": 1e7
-          },
-          "idealHeatProduction": 5e6
+          "durability": 95
         },
         {
           "name": "waterStorage",
-          "durability": 95,
-          "baseDanger": 3e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "rationStorage",
-          "durability": 95,
-          "baseDanger": 2e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "rationStorage",
-          "durability": 95,
-          "baseDanger": 2e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "energyStorage",
-          "durability": 95,
-          "baseDanger": 2e-4,
-          "idealWorker": 10,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "energyStorage",
-          "durability": 95,
-          "baseDanger": 2e-4,
-          "idealWorker": 10,
-          "currentWorker": 0
+          "durability": 95
         }
       ],
       "characters": [
@@ -2176,45 +1525,27 @@
       "apparatuses": [
         {
           "name": "rescueEquipment",
-          "durability": 95,
-          "baseDanger": 1e-4,
-          "idealWorker": 25,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "rescueEquipment",
-          "durability": 95,
-          "baseDanger": 1e-4,
-          "idealWorker": 25,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "waterStorage",
-          "durability": 95,
-          "baseDanger": 3e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "oxygenStorage",
-          "durability": 95,
-          "baseDanger": 6e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "energyStorage",
-          "durability": 95,
-          "baseDanger": 2e-4,
-          "idealWorker": 10,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "energyStorage",
-          "durability": 95,
-          "baseDanger": 2e-4,
-          "idealWorker": 10,
-          "currentWorker": 0
+          "durability": 95
         }
       ],
       "characters": [
@@ -2245,45 +1576,27 @@
       "apparatuses": [
         {
           "name": "rescueEquipment",
-          "durability": 95,
-          "baseDanger": 1e-4,
-          "idealWorker": 25,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "rescueEquipment",
-          "durability": 95,
-          "baseDanger": 1e-4,
-          "idealWorker": 25,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "waterStorage",
-          "durability": 95,
-          "baseDanger": 3e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "oxygenStorage",
-          "durability": 95,
-          "baseDanger": 6e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "energyStorage",
-          "durability": 95,
-          "baseDanger": 2e-4,
-          "idealWorker": 10,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "energyStorage",
-          "durability": 95,
-          "baseDanger": 2e-4,
-          "idealWorker": 10,
-          "currentWorker": 0
+          "durability": 95
         }
       ],
       "characters": [
@@ -2312,45 +1625,27 @@
       "apparatuses": [
         {
           "name": "rescueEquipment",
-          "durability": 95,
-          "baseDanger": 1e-4,
-          "idealWorker": 25,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "rescueEquipment",
-          "durability": 95,
-          "baseDanger": 1e-4,
-          "idealWorker": 25,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "waterStorage",
-          "durability": 95,
-          "baseDanger": 3e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "oxygenStorage",
-          "durability": 95,
-          "baseDanger": 6e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "energyStorage",
-          "durability": 95,
-          "baseDanger": 2e-4,
-          "idealWorker": 10,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "energyStorage",
-          "durability": 95,
-          "baseDanger": 2e-4,
-          "idealWorker": 10,
-          "currentWorker": 0
+          "durability": 95
         }
       ],
       "characters": [
@@ -2379,38 +1674,23 @@
       "apparatuses": [
         {
           "name": "pressureDoor",
-          "durability": 95,
-          "baseDanger": 1e-4,
-          "idealWorker": 25,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "waterStorage",
-          "durability": 95,
-          "baseDanger": 3e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "oxygenStorage",
-          "durability": 95,
-          "baseDanger": 6e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "energyStorage",
-          "durability": 95,
-          "baseDanger": 2e-4,
-          "idealWorker": 10,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "energyStorage",
-          "durability": 95,
-          "baseDanger": 2e-4,
-          "idealWorker": 10,
-          "currentWorker": 0
+          "durability": 95
         }
       ],
       "characters": [
@@ -2440,38 +1720,23 @@
       "apparatuses": [
         {
           "name": "pressureDoor",
-          "durability": 95,
-          "baseDanger": 1e-4,
-          "idealWorker": 25,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "waterStorage",
-          "durability": 95,
-          "baseDanger": 3e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "oxygenStorage",
-          "durability": 95,
-          "baseDanger": 6e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "energyStorage",
-          "durability": 95,
-          "baseDanger": 2e-4,
-          "idealWorker": 10,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "energyStorage",
-          "durability": 95,
-          "baseDanger": 2e-4,
-          "idealWorker": 10,
-          "currentWorker": 0
+          "durability": 95
         }
       ],
       "characters": [
@@ -2501,38 +1766,23 @@
       "apparatuses": [
         {
           "name": "pressureDoor",
-          "durability": 95,
-          "baseDanger": 1e-4,
-          "idealWorker": 25,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "waterStorage",
-          "durability": 95,
-          "baseDanger": 3e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "oxygenStorage",
-          "durability": 95,
-          "baseDanger": 6e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "energyStorage",
-          "durability": 95,
-          "baseDanger": 2e-4,
-          "idealWorker": 10,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "energyStorage",
-          "durability": 95,
-          "baseDanger": 2e-4,
-          "idealWorker": 10,
-          "currentWorker": 0
+          "durability": 95
         }
       ],
       "characters": [
@@ -2561,63 +1811,27 @@
       "apparatuses": [
         {
           "name": "exchangePost",
-          "durability": 95,
-          "baseDanger": 1e-4,
-          "idealWorker": 100,
-          "currentWorker": 0,
-          "idealDistribution": {
-            "ration": 100
-          },
-          "idealConsumption": {
-            "ration": 100
-          }
+          "durability": 95
         },
         {
           "name": "exchangePost",
-          "durability": 95,
-          "baseDanger": 1e-4,
-          "idealWorker": 100,
-          "currentWorker": 0,
-          "idealDistribution": {
-            "ration": 100
-          },
-          "idealConsumption": {
-            "ration": 100
-          }
+          "durability": 95
         },
         {
           "name": "exchangePost",
-          "durability": 95,
-          "baseDanger": 1e-4,
-          "idealWorker": 100,
-          "currentWorker": 0,
-          "idealDistribution": {
-            "ration": 100
-          },
-          "idealConsumption": {
-            "ration": 100
-          }
+          "durability": 95
         },
         {
           "name": "waterStorage",
-          "durability": 95,
-          "baseDanger": 3e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "rationStorage",
-          "durability": 95,
-          "baseDanger": 2e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "energyStorage",
-          "durability": 95,
-          "baseDanger": 2e-4,
-          "idealWorker": 10,
-          "currentWorker": 0
+          "durability": 95
         }
       ],
       "characters": [
@@ -2647,56 +1861,23 @@
       "apparatuses": [
         {
           "name": "exchangePost",
-          "durability": 95,
-          "baseDanger": 1e-4,
-          "idealWorker": 100,
-          "currentWorker": 0,
-          "idealDistribution": {
-            "ration": 100
-          },
-          "idealConsumption": {
-            "ration": 100
-          }
+          "durability": 95
         },
         {
           "name": "exchangePost",
-          "durability": 95,
-          "baseDanger": 1e-4,
-          "idealWorker": 100,
-          "currentWorker": 0,
-          "idealDistribution": {
-            "ration": 100
-          },
-          "idealConsumption": {
-            "ration": 100
-          }
+          "durability": 95
         },
         {
           "name": "exchangePost",
-          "durability": 95,
-          "baseDanger": 1e-4,
-          "idealWorker": 100,
-          "currentWorker": 0,
-          "idealDistribution": {
-            "ration": 100
-          },
-          "idealConsumption": {
-            "ration": 100
-          }
+          "durability": 95
         },
         {
           "name": "waterStorage",
-          "durability": 95,
-          "baseDanger": 3e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "rationStorage",
-          "durability": 95,
-          "baseDanger": 2e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         }
       ],
       "characters": [
@@ -2728,56 +1909,23 @@
       "apparatuses": [
         {
           "name": "exchangePost",
-          "durability": 95,
-          "baseDanger": 1e-4,
-          "idealWorker": 100,
-          "currentWorker": 0,
-          "idealDistribution": {
-            "ration": 100
-          },
-          "idealConsumption": {
-            "ration": 100
-          }
+          "durability": 95
         },
         {
           "name": "exchangePost",
-          "durability": 95,
-          "baseDanger": 1e-4,
-          "idealWorker": 100,
-          "currentWorker": 0,
-          "idealDistribution": {
-            "ration": 100
-          },
-          "idealConsumption": {
-            "ration": 100
-          }
+          "durability": 95
         },
         {
           "name": "exchangePost",
-          "durability": 95,
-          "baseDanger": 1e-4,
-          "idealWorker": 100,
-          "currentWorker": 0,
-          "idealDistribution": {
-            "ration": 100
-          },
-          "idealConsumption": {
-            "ration": 100
-          }
+          "durability": 95
         },
         {
           "name": "waterStorage",
-          "durability": 95,
-          "baseDanger": 3e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "rationStorage",
-          "durability": 95,
-          "baseDanger": 2e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         }
       ],
       "characters": [
@@ -2805,42 +1953,24 @@
       ],
       "apparatuses": [
         {
-          "name": "workshop",
-          "durability": 95,
-          "baseDanger": 6e-4,
-          "idealWorker": 5,
-          "currentWorker": 0,
-          "idealProduction": {
-            "component": 0.01
-          }
+          "name": "componentWorkshop",
+          "durability": 95
         },
         {
           "name": "waterStorage",
-          "durability": 95,
-          "baseDanger": 3e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "metalStorage",
-          "durability": 95,
-          "baseDanger": 2e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "componentStorage",
-          "durability": 95,
-          "baseDanger": 2e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "energyStorage",
-          "durability": 95,
-          "baseDanger": 2e-4,
-          "idealWorker": 10,
-          "currentWorker": 0
+          "durability": 95
         }
       ],
       "characters": [
@@ -2868,63 +1998,35 @@
       "apparatuses": [
         {
           "name": "reactor",
-          "durability": 95,
-          "baseDanger": 6e-4,
-          "idealWorker": 50,
-          "currentWorker": 0,
-          "idealProduction": {
-            "energy": 2e8
-          },
-          "idealHeatProduction": 1e8
+          "durability": 95
         },
         {
           "name": "waterStorage",
-          "durability": 95,
-          "baseDanger": 3e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "metalStorage",
-          "durability": 95,
-          "baseDanger": 2e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "componentStorage",
-          "durability": 95,
-          "baseDanger": 2e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "energyStorage",
-          "durability": 95,
-          "baseDanger": 2e-4,
-          "idealWorker": 10,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "energyStorage",
-          "durability": 95,
-          "baseDanger": 2e-4,
-          "idealWorker": 10,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "energyStorage",
-          "durability": 95,
-          "baseDanger": 2e-4,
-          "idealWorker": 10,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "energyStorage",
-          "durability": 95,
-          "baseDanger": 2e-4,
-          "idealWorker": 10,
-          "currentWorker": 0
+          "durability": 95
         }
       ],
       "characters": [

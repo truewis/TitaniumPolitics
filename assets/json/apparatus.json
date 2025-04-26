@@ -1,0 +1,703 @@
+{
+  "rescueEquipment": {
+    "durabilityTau": 8.64e7,
+    "baseDanger": 1.0E-4,
+    "requiredResourcePerRepair": [
+      {
+        "_resources": {
+          "lightMetal": 1.0
+        }
+      },
+      {
+        "_resources": {
+          "lightMetal": 2.0
+        }
+      },
+      {
+        "_resources": {
+          "titaniumTank": 1.0
+        }
+      }
+    ],
+    "idealWorker": 25
+  },
+  "energyStorage": {
+    "durabilityTau": 8.64e7,
+    "baseDanger": 2.0E-4,
+    "requiredResourcePerRepair": [
+      {
+        "_resources": {
+          "lightMetal": 1.0
+        }
+      },
+      {
+        "_resources": {
+          "lightMetal": 2.0
+        }
+      },
+      {
+        "_resources": {
+          "titaniumTank": 1.0
+        }
+      }
+    ],
+    "idealWorker": 10,
+    "variables": {
+      "storageType": "energy",
+      "storageAmount": 1.0e11
+    }
+  },
+  "waterStorage": {
+    "durabilityTau": 8.64e7,
+    "baseDanger": 3.0E-4,
+    "requiredResourcePerRepair": [
+      {
+        "_resources": {
+          "lightMetal": 1.0
+        }
+      },
+      {
+        "_resources": {
+          "lightMetal": 2.0
+        }
+      },
+      {
+        "_resources": {
+          "titaniumTank": 1.0
+        }
+      }
+    ],
+    "idealWorker": 5,
+    "variables": {
+      "storageType": "water",
+      "storageAmount": 3e4
+    }
+  },
+  "oxygenStorage": {
+    "durabilityTau": 8.64e6,
+    "baseDanger": 3.0E-4,
+    "requiredResourcePerRepair": [
+      {
+        "_resources": {
+          "lightMetal": 1.0
+        }
+      },
+      {
+        "_resources": {
+          "lightMetal": 2.0
+        }
+      },
+      {
+        "_resources": {
+          "titaniumTank": 1.0
+        }
+      }
+    ],
+    "idealWorker": 5,
+    "variables": {
+      "storageType": "oxygen",
+      "storageAmount": 3e3
+    }
+  },
+  "rationStorage": {
+    "durabilityTau": 8.64e7,
+    "baseDanger": 1.0E-4,
+    "requiredResourcePerRepair": [
+      {
+        "_resources": {
+          "lightMetal": 1.0
+        }
+      },
+      {
+        "_resources": {
+          "lightMetal": 2.0
+        }
+      },
+      {
+        "_resources": {
+          "titaniumTank": 1.0
+        }
+      }
+    ],
+    "idealWorker": 5,
+    "variables": {
+      "storageType": "ration",
+      "storageAmount": 3e4
+    }
+  },
+  "metalStorage": {
+    "durabilityTau": 8.64e7,
+    "baseDanger": 1.0E-4,
+    "requiredResourcePerRepair": [
+      {
+        "_resources": {
+          "lightMetal": 1.0
+        }
+      },
+      {
+        "_resources": {
+          "lightMetal": 2.0
+        }
+      },
+      {
+        "_resources": {
+          "titaniumTank": 1.0
+        }
+      }
+    ],
+    "idealWorker": 5,
+    "variables": {
+      "storageType": "metal",
+      "storageAmount": 3e4
+    }
+  },
+  "componentStorage": {
+    "durabilityTau": 8.64e7,
+    "baseDanger": 1.0E-4,
+    "requiredResourcePerRepair": [
+      {
+        "_resources": {
+          "lightMetal": 1.0
+        }
+      },
+      {
+        "_resources": {
+          "lightMetal": 2.0
+        }
+      },
+      {
+        "_resources": {
+          "titaniumTank": 1.0
+        }
+      }
+    ],
+    "idealWorker": 5,
+    "variables": {
+      "storageType": "component",
+      "storageAmount": 3e4
+    }
+  },
+  "reactor": {
+    "durabilityTau": 8.64e6,
+    "baseDanger": 6e-4,
+    "idealWorker": 50,
+    "idealProduction": {
+      "energy": 2e8
+    },
+    "idealHeatProduction": 1e8,
+    "requiredResourcePerRepair": [
+      {
+        "_resources": {
+          "lightMetal": 1.0
+        }
+      },
+      {
+        "_resources": {
+          "lightMetal": 2.0
+        }
+      },
+      {
+        "_resources": {
+          "titaniumTank": 1.0
+        }
+      }
+    ]
+  },
+  "componentWorkshop": {
+    "durabilityTau": 8.64e7,
+    "baseDanger": 6e-4,
+    "idealWorker": 5,
+    "idealProduction": {
+      "component": 0.01
+    },
+    "requiredResourcePerRepair": [
+      {
+        "_resources": {
+          "lightMetal": 1.0
+        }
+      },
+      {
+        "_resources": {
+          "lightMetal": 2.0
+        }
+      },
+      {
+        "_resources": {
+          "titaniumTank": 1.0
+        }
+      }
+    ]
+  },
+  "exchangePost": {
+    "durabilityTau": 8.64e7,
+    "baseDanger": 1e-4,
+    "idealWorker": 100,
+    "idealDistribution": {
+      "ration": 100
+    },
+    "idealConsumption": {
+      "ration": 100
+    },
+    "requiredResourcePerRepair": [
+      {
+        "_resources": {
+          "lightMetal": 1.0
+        }
+      },
+      {
+        "_resources": {
+          "lightMetal": 2.0
+        }
+      },
+      {
+        "_resources": {
+          "titaniumTank": 1.0
+        }
+      }
+    ]
+  },
+  "pressureDoor": {
+    "durabilityTau": 8.64e7,
+    "baseDanger": 1e-4,
+    "idealWorker": 8,
+    "requiredResourcePerRepair": [
+      {
+        "_resources": {
+          "lightMetal": 1.0
+        }
+      },
+      {
+        "_resources": {
+          "lightMetal": 2.0
+        }
+      },
+      {
+        "_resources": {
+          "titaniumTank": 1.0
+        }
+      }
+    ]
+  },
+  "farmArray": {
+    "durabilityTau": 8.64e6,
+    "baseDanger": 4e-4,
+    "idealWorker": 100,
+    "idealProduction": {
+      "ration": 0.06
+    },
+    "idealConsumption": {
+      "energy": 1e7
+    },
+    "idealHeatProduction": 5e6,
+    "requiredResourcePerRepair": [
+      {
+        "_resources": {
+          "lightMetal": 1.0
+        }
+      },
+      {
+        "_resources": {
+          "lightMetal": 2.0
+        }
+      },
+      {
+        "_resources": {
+          "titaniumTank": 1.0
+        }
+      }
+    ]
+  },
+  "classroom": {
+    "durabilityTau": 8.64e7,
+    "baseDanger": 2e-4,
+    "idealWorker": 50,
+    "requiredResourcePerRepair": [
+      {
+        "_resources": {
+          "lightMetal": 1.0
+        }
+      },
+      {
+        "_resources": {
+          "lightMetal": 2.0
+        }
+      },
+      {
+        "_resources": {
+          "titaniumTank": 1.0
+        }
+      }
+    ]
+  },
+  "electrolysisArray": {
+    "durabilityTau": 8.64e6,
+    "baseDanger": 8e-4,
+    "idealWorker": 5,
+    "idealAbsorption": {
+      "oxygen": -0.8
+    },
+    "idealDistribution": {
+    },
+    "idealConsumption": {
+      "water": 0.9,
+      "energy": 1.91e7
+    },
+    "idealProduction": {
+      "hydrogen": 0.1
+    },
+    "idealHeatProduction": 5e6,
+    "requiredResourcePerRepair": [
+      {
+        "_resources": {
+          "lightMetal": 1.0
+        }
+      },
+      {
+        "_resources": {
+          "lightMetal": 2.0
+        }
+      },
+      {
+        "_resources": {
+          "titaniumTank": 1.0
+        }
+      }
+    ]
+  },
+  "corpseRecycle": {
+    "durabilityTau": 8.64e5,
+    "baseDanger": 6e-4,
+    "idealWorker": 5,
+    "idealConsumption": {
+      "energy": 2e8,
+      "corpse": 1
+    },
+    "idealProduction": {
+      "phosphorus": 0.5
+    },
+    "idealHeatProduction": 2e8,
+    "requiredResourcePerRepair": [
+      {
+        "_resources": {
+          "lightMetal": 1.0
+        }
+      },
+      {
+        "_resources": {
+          "lightMetal": 2.0
+        }
+      },
+      {
+        "_resources": {
+          "titaniumTank": 1.0
+        }
+      }
+    ]
+  },
+  "waterRecycle": {
+    "durabilityTau": 8.64e6,
+    "baseDanger": 6e-4,
+    "idealWorker": 5,
+    "idealConsumption": {
+      "energy": 2.26e7
+    },
+    "idealAbsorption": {
+      "water": 1
+    },
+    "idealProduction": {
+      "water": 1
+    },
+    "idealHeatProduction": 2.26e7,
+    "requiredResourcePerRepair": [
+      {
+        "_resources": {
+          "lightMetal": 1.0
+        }
+      },
+      {
+        "_resources": {
+          "lightMetal": 2.0
+        }
+      },
+      {
+        "_resources": {
+          "titaniumTank": 1.0
+        }
+      }
+    ]
+  },
+  "co2Recycle": {
+    "durabilityTau": 8.64e6,
+    "baseDanger": 6e-4,
+    "idealWorker": 5,
+    "idealAbsorption": {
+      "carbonDioxide": 1,
+      "oxygen": -0.7
+    },
+    "idealConsumption": {
+      "energy": 2e7,
+      "hydrogen": 0.08
+    },
+    "idealDistribution": {
+    },
+    "idealProduction": {
+      "organics": 0.38
+    },
+    "idealHeatProduction": 1e7,
+    "requiredResourcePerRepair": [
+      {
+        "_resources": {
+          "lightMetal": 1.0
+        }
+      },
+      {
+        "_resources": {
+          "lightMetal": 2.0
+        }
+      },
+      {
+        "_resources": {
+          "titaniumTank": 1.0
+        }
+      }
+    ]
+  },
+  "launchPad": {
+    "durabilityTau": 8.64e7,
+    "baseDanger": 6e-4,
+    "idealWorker": 0,
+    "requiredResourcePerRepair": [
+      {
+        "_resources": {
+          "lightMetal": 1.0
+        }
+      },
+      {
+        "_resources": {
+          "lightMetal": 2.0
+        }
+      },
+      {
+        "_resources": {
+          "titaniumTank": 1.0
+        }
+      }
+    ]
+  },
+  "graves": {
+    "durabilityTau": 8.64e7,
+    "baseDanger": 6e-4,
+    "idealWorker": 0,
+    "requiredResourcePerRepair": [
+      {
+        "_resources": {
+          "lightMetal": 1.0
+        }
+      },
+      {
+        "_resources": {
+          "lightMetal": 2.0
+        }
+      },
+      {
+        "_resources": {
+          "titaniumTank": 1.0
+        }
+      }
+    ]
+  },
+  "telescope": {
+    "durabilityTau": 8.64e7,
+    "baseDanger": 0,
+    "idealWorker": 0,
+    "idealConsumption": {
+      "energy": 1e7
+    },
+    "idealHeatProduction": 1e7,
+    "requiredResourcePerRepair": [
+      {
+        "_resources": {
+          "lightMetal": 1.0
+        }
+      },
+      {
+        "_resources": {
+          "lightMetal": 2.0
+        }
+      },
+      {
+        "_resources": {
+          "titaniumTank": 1.0
+        }
+      }
+    ]
+  },
+  "cooler": {
+    "durabilityTau": 8.64e6,
+    "baseDanger": 6e-4,
+    "idealWorker": 100,
+    "currentWorker": 0,
+    "idealConsumption": {
+      "energy": 1e7
+    },
+    "idealHeatProduction": -2e8,
+    "requiredResourcePerRepair": [
+      {
+        "_resources": {
+          "lightMetal": 1.0
+        }
+      },
+      {
+        "_resources": {
+          "lightMetal": 2.0
+        }
+      },
+      {
+        "_resources": {
+          "titaniumTank": 1.0
+        }
+      }
+    ]
+  },
+  "metalShaft": {
+    "durabilityTau": 8.64e6,
+    "baseDanger": 8e-4,
+    "idealWorker": 160,
+    "idealProduction": {
+      "lightMetal": 0.1,
+      "heavyMetal": 0.02,
+      "rareMetal": 1e-3
+    },
+    "idealConsumption": {
+      "energy": 1e7
+    },
+    "idealHeatProduction": 1e7,
+    "requiredResourcePerRepair": [
+      {
+        "_resources": {
+          "lightMetal": 1.0
+        }
+      },
+      {
+        "_resources": {
+          "lightMetal": 2.0
+        }
+      },
+      {
+        "_resources": {
+          "titaniumTank": 1.0
+        }
+      }
+    ]
+  },
+  "liquidShaft": {
+    "durabilityTau": 8.64e6,
+    "baseDanger": 10e-4,
+    "idealWorker": 160,
+    "idealProduction": {
+      "organics": 0.1
+    },
+    "idealConsumption": {
+      "energy": 1e7
+    },
+    "idealHeatProduction": 1e7,
+    "requiredResourcePerRepair": [
+      {
+        "_resources": {
+          "lightMetal": 1.0
+        }
+      },
+      {
+        "_resources": {
+          "lightMetal": 2.0
+        }
+      },
+      {
+        "_resources": {
+          "titaniumTank": 1.0
+        }
+      }
+    ]
+  },
+  "glassShaft": {
+    "durabilityTau": 8.64e6,
+    "baseDanger": 10e-4,
+    "idealWorker": 160,
+    "idealProduction": {
+      "glass": 0.08
+    },
+    "idealConsumption": {
+      "energy": 1e7
+    },
+    "idealHeatProduction": 1e7,
+    "requiredResourcePerRepair": [
+      {
+        "_resources": {
+          "lightMetal": 1.0
+        }
+      },
+      {
+        "_resources": {
+          "lightMetal": 2.0
+        }
+      },
+      {
+        "_resources": {
+          "titaniumTank": 1.0
+        }
+      }
+    ]
+  },
+  "beds": {
+    "durabilityTau": 8.64e7,
+    "baseDanger": 1e-4,
+    "idealWorker": 20,
+    "idealConsumption": {
+      "energy": 1e4
+    },
+    "idealHeatProduction": 1e4,
+    "requiredResourcePerRepair": [
+      {
+        "_resources": {
+          "lightMetal": 1.0
+        }
+      },
+      {
+        "_resources": {
+          "lightMetal": 2.0
+        }
+      },
+      {
+        "_resources": {
+          "titaniumTank": 1.0
+        }
+      }
+    ]
+  },
+  "wiredCommunicationDevice": {
+    "durabilityTau": 8.64e7,
+    "baseDanger": 2e-4,
+    "idealWorker": 32,
+    "idealConsumption": {
+      "energy": 1e4
+    },
+    "idealHeatProduction": 5e3,
+    "requiredResourcePerRepair": [
+      {
+        "_resources": {
+          "lightMetal": 1.0
+        }
+      },
+      {
+        "_resources": {
+          "lightMetal": 2.0
+        }
+      },
+      {
+        "_resources": {
+          "titaniumTank": 1.0
+        }
+      }
+    ]
+  }
+}

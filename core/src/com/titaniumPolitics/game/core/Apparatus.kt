@@ -1,7 +1,17 @@
 package com.titaniumPolitics.game.core
 
+import com.badlogic.gdx.Gdx
 import com.titaniumPolitics.game.debugTools.Logger
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.builtins.MapSerializer
+import kotlinx.serialization.builtins.serializer
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.double
+import kotlinx.serialization.json.float
+import kotlinx.serialization.json.int
+import kotlinx.serialization.json.jsonArray
+import kotlinx.serialization.json.jsonObject
+import kotlinx.serialization.json.jsonPrimitive
 import java.util.UUID
 
 /* Apparatus is a kind of building that can be used to produce and consume resources.
@@ -29,18 +39,57 @@ class Apparatus
                 else -> value
             }
         }
-    var baseDanger = .0
-    var requiredResourcePerRepair = arrayListOf<Resources>(
-        Resources("lightMetal" to 1.0),
-        Resources("lightMetal" to 2.0),
-        Resources("titaniumTank" to 1.0)
-    )
-    var idealAbsorption = hashMapOf<String, Double>()
-    var idealProduction = hashMapOf<String, Double>()
-    var idealConsumption = hashMapOf<String, Double>()
-    var idealDistribution = hashMapOf<String, Double>() //Converts resources into market resources.
-    var idealHeatProduction = .0
-    var idealWorker = 0
+    val obj
+        get() = ReadOnly.appJson[name] ?: throw Exception("$name not found in apparatus file.")
+    val baseDanger
+        get() = obj.jsonObject["baseDanger"]!!.jsonPrimitive.double
+    val requiredResourcePerRepair: ArrayList<Resources>
+        get()
+        {
+            val res = arrayListOf<Resources>()
+            obj.jsonObject["requiredResourcePerRepair"]!!.jsonArray.toList().forEach {
+                res.add(
+                    Json.decodeFromString(
+                        Resources.serializer(), it.toString()
+                    )
+                )
+            }
+
+
+            return res
+        }
+    val idealAbsorption: HashMap<String, Double>
+        get() = HashMap(
+            Json.decodeFromString(
+                MapSerializer<String, Double>(String.serializer(), Double.serializer()),
+                (obj.jsonObject["idealAbsorption"]?.toString() ?: "{}")
+            )
+        )
+    val idealProduction: HashMap<String, Double>
+        get() = HashMap(
+            Json.decodeFromString(
+                MapSerializer<String, Double>(String.serializer(), Double.serializer()),
+                (obj.jsonObject["idealProduction"]?.toString() ?: "{}")
+            )
+        )
+    val idealConsumption: HashMap<String, Double>
+        get() = HashMap(
+            Json.decodeFromString(
+                MapSerializer<String, Double>(String.serializer(), Double.serializer()),
+                (obj.jsonObject["idealConsumption"]?.toString() ?: "{}")
+            )
+        )
+    val idealDistribution: HashMap<String, Double>
+        get() = HashMap(
+            Json.decodeFromString(
+                MapSerializer<String, Double>(String.serializer(), Double.serializer()),
+                (obj.jsonObject["idealDistribution"]?.toString() ?: "{}")
+            )
+        ) //Converts resources into market resources.
+    val idealHeatProduction
+        get() = obj.jsonObject["idealHeatProduction"]?.jsonPrimitive?.double ?: .0
+    val idealWorker
+        get() = obj.jsonObject["idealWorker"]?.jsonPrimitive?.int ?: 0
     var currentWorker = 0
     val storageType: String
         get()
