@@ -16,6 +16,7 @@ buildscript {
 plugins {
     id 'org.jetbrains.kotlin.multiplatform' version '1.9.0'
     id 'org.jetbrains.kotlin.plugin.serialization' version '1.9.0'
+    //id "org.jetbrains.kotlinx.dataframe" version "0.15.0"
 }
 allprojects {
     apply plugin: "eclipse"
@@ -79,6 +80,7 @@ project(":core") {
         implementation "org.junit.jupiter:junit-jupiter-engine:5.11.1"
         implementation "org.junit.vintage:junit-vintage-engine:5.11.1"
         implementation "com.badlogicgames.gdx:gdx-backend-headless:$gdxVersion"
+        implementation "org.jetbrains.kotlinx:dataframe:0.15.0"
 
     }
 }
