@@ -824,7 +824,7 @@
         },
         {
           "name": "cooler",
-          "durability": 100
+          "durability": 95
         }
       ],
       "characters": [
@@ -1989,7 +1989,8 @@
         "_resources": {
           "lightMetal": 100,
           "component": 200,
-          "water": 15000
+          "water": 15000,
+          "oxygen": 10000
         }
       },
       "connectedPlaces": [
@@ -1998,6 +1999,18 @@
       "apparatuses": [
         {
           "name": "reactor",
+          "durability": 95
+        },
+        {
+          "name": "cooler",
+          "durability": 95
+        },
+        {
+          "name": "cooler",
+          "durability": 95
+        },
+        {
+          "name": "oxygenDistributor",
           "durability": 95
         },
         {

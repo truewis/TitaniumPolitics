@@ -9,6 +9,7 @@ import com.titaniumPolitics.game.core.gameActions.Wait
 import com.titaniumPolitics.game.debugTools.Logger
 import com.titaniumPolitics.game.ui.LogUI
 import kotlinx.coroutines.runBlocking
+import kotlinx.serialization.json.Json
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 import kotlin.math.abs
@@ -174,29 +175,36 @@ class GameEngine(val gameState: GameState)
                 Logger.warning(
                     "Non player character ${char.name} is performing ${action.javaClass.simpleName} at ${
                         char.place.name
-                    }, time=${gameState.time}, which is not in the action list. This may be a bug."
+                    }, time=${gameState.formatTime()}, which is not in the action list. This may be a bug."
                 )
             if (!action.isValid())
             {
                 Logger.warning(
                     "Non player character ${char.name} is performing ${action.javaClass.simpleName} at ${
                         char.place.name
-                    }, time=${gameState.time}, which is not valid. This may be a bug."
+                    }, time=${gameState.formatTime()}, which is not valid. This may be a bug."
                 )
+                println(Json.encodeToString(GameAction.serializer(), action))
                 throw Exception("Non player character ${char.name} is performing an invalid action.")
             }
             if (action.sbjCharacter != char.name)
+            {
                 Logger.warning(
                     "Non player character ${char.name} is performing ${action.javaClass.simpleName} at ${
                         char.place.name
-                    }, time=${gameState.time}, which is not targeting itself. This may be a bug."
+                    }, time=${gameState.formatTime()}, which is not targeting itself. This may be a bug."
                 )
+                println(Json.encodeToString(GameAction.serializer(), action))
+            }
             if (action.tgtPlace != char.place.name)
+            {
                 Logger.warning(
                     "Non player character ${char.name} is performing ${action.javaClass.simpleName} at ${
                         char.place.name
-                    }, time=${gameState.time}, which is not targeting its own place. This may be a bug."
+                    }, time=${gameState.formatTime()}, which is not targeting its own place. This may be a bug."
                 )
+                println(Json.encodeToString(GameAction.serializer(), action))
+            }
 
         }
         char.history[gameState.time] = action.javaClass.simpleName

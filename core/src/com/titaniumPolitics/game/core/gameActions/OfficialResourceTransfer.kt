@@ -45,7 +45,7 @@ class OfficialResourceTransfer(override val sbjCharacter: String, override val t
     {
         //Can't send to the same place
         if (toWhere == tgtPlace) return false
-        return resources.all { parent.places[tgtPlace]!!.resources[it.key] >= it.value }
+        return parent.places[tgtPlace]!!.resources.contains(resources)
     }
 
 }

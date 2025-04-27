@@ -178,7 +178,7 @@ class WorkRoutine() : Routine()
                             )
                         }
                             .maxByOrNull { it.resources[res] }
-                    if (resplace != null)
+                    if (resplace != null && place1.name != resplace.name)
                     //start new routine if there is a place with all the conditions met.
                         if (resplace.resources[res] > 0)
                             return TransferResourceRoutine().also {

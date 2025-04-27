@@ -27,17 +27,19 @@
     "requiredResourcePerRepair": [
       {
         "_resources": {
-          "lightMetal": 1.0
+          "electronics": 1.0
         }
       },
       {
         "_resources": {
-          "lightMetal": 2.0
+          "component": 1.0,
+          "electronics": 3.0
         }
       },
       {
         "_resources": {
-          "titaniumTank": 1.0
+          "component": 1.0,
+          "electronics": 5.0
         }
       }
     ],
@@ -53,17 +55,19 @@
     "requiredResourcePerRepair": [
       {
         "_resources": {
-          "lightMetal": 1.0
+          "component": 100
         }
       },
       {
         "_resources": {
-          "lightMetal": 2.0
+          "component": 100,
+          "structure": 100
         }
       },
       {
         "_resources": {
-          "titaniumTank": 1.0
+          "structure": 200,
+          "plumbing": 200
         }
       }
     ],
@@ -79,17 +83,20 @@
     "requiredResourcePerRepair": [
       {
         "_resources": {
-          "lightMetal": 1.0
+          "component": 10
         }
       },
       {
         "_resources": {
-          "lightMetal": 2.0
+          "component": 20,
+          "plumbing": 10
         }
       },
       {
         "_resources": {
-          "titaniumTank": 1.0
+          "component": 20,
+          "plumbing": 10,
+          "structure": 50
         }
       }
     ],
@@ -100,22 +107,22 @@
     }
   },
   "rationStorage": {
-    "durabilityTau": 8.64e7,
+    "durabilityTau": 8.64e8,
     "baseDanger": 1.0E-4,
     "requiredResourcePerRepair": [
       {
         "_resources": {
-          "lightMetal": 1.0
+          "structure": 100
         }
       },
       {
         "_resources": {
-          "lightMetal": 2.0
+          "structure": 150
         }
       },
       {
         "_resources": {
-          "titaniumTank": 1.0
+          "structure": 200
         }
       }
     ],
@@ -178,7 +185,7 @@
     }
   },
   "reactor": {
-    "durabilityTau": 8.64e6,
+    "durabilityTau": 8.64e8,
     "baseDanger": 6e-4,
     "idealWorker": 50,
     "idealProduction": {
@@ -188,17 +195,17 @@
     "requiredResourcePerRepair": [
       {
         "_resources": {
-          "lightMetal": 1.0
+          "legendary": 1.0
         }
       },
       {
         "_resources": {
-          "lightMetal": 2.0
+          "legendary": 1.0
         }
       },
       {
         "_resources": {
-          "titaniumTank": 1.0
+          "legendary": 1.0
         }
       }
     ]
@@ -210,20 +217,127 @@
     "idealProduction": {
       "component": 0.01
     },
+    "idealConsumption": {
+      "lightMetal": 0.01,
+      "energy": 1e5
+    },
+    "idealHeatProduction": 1e5,
     "requiredResourcePerRepair": [
       {
         "_resources": {
-          "lightMetal": 1.0
+          "component": 5.0
         }
       },
       {
         "_resources": {
-          "lightMetal": 2.0
+          "component": 5.0,
+          "electronics": 5.0
         }
       },
       {
         "_resources": {
-          "titaniumTank": 1.0
+          "component": 10.0,
+          "electronics": 10.0
+        }
+      }
+    ]
+  },
+  "electricianWorkshop": {
+    "durabilityTau": 8.64e7,
+    "baseDanger": 6e-4,
+    "idealWorker": 5,
+    "idealProduction": {
+      "electronics": 0.01
+    },
+    "idealConsumption": {
+      "rareMetal": 1e-6,
+      "lightMetal": 0.01,
+      "energy": 1e5
+    },
+    "idealHeatProduction": 1e5,
+    "requiredResourcePerRepair": [
+      {
+        "_resources": {
+          "component": 5.0
+        }
+      },
+      {
+        "_resources": {
+          "component": 5.0,
+          "electronics": 5.0
+        }
+      },
+      {
+        "_resources": {
+          "component": 10.0,
+          "electronics": 10.0
+        }
+      }
+    ]
+  },
+  "plumberWorkshop": {
+    "durabilityTau": 8.64e7,
+    "baseDanger": 6e-4,
+    "idealWorker": 5,
+    "idealProduction": {
+      "plumbing": 0.01
+    },
+    "idealConsumption": {
+      "lightMetal": 0.005,
+      "heavyMetal": 0.005,
+      "energy": 1e5
+    },
+    "idealHeatProduction": 1e5,
+    "requiredResourcePerRepair": [
+      {
+        "_resources": {
+          "component": 5.0
+        }
+      },
+      {
+        "_resources": {
+          "component": 5.0,
+          "electronics": 5.0
+        }
+      },
+      {
+        "_resources": {
+          "component": 10.0,
+          "electronics": 10.0
+        }
+      }
+    ]
+  },
+  "steelPlant": {
+    "durabilityTau": 8.64e6,
+    "baseDanger": 10e-4,
+    "idealWorker": 500,
+    "idealProduction": {
+      "structure": 0.1
+    },
+    "idealConsumption": {
+      "heavyMetal": 0.1,
+      "energy": 1e7
+    },
+    "idealHeatProduction": 1e7,
+    "requiredResourcePerRepair": [
+      {
+        "_resources": {
+          "component": 50
+        }
+      },
+      {
+        "_resources": {
+          "component": 50,
+          "electronics": 5.0,
+          "structure": 100
+        }
+      },
+      {
+        "_resources": {
+          "component": 100,
+          "electronics": 10.0,
+          "structure": 200
         }
       }
     ]
@@ -233,25 +347,27 @@
     "baseDanger": 1e-4,
     "idealWorker": 100,
     "idealDistribution": {
-      "ration": 100
+      "ration": 1
     },
     "idealConsumption": {
-      "ration": 100
+      "ration": 1
     },
     "requiredResourcePerRepair": [
       {
         "_resources": {
-          "lightMetal": 1.0
+          "component": 5.0
         }
       },
       {
         "_resources": {
-          "lightMetal": 2.0
+          "component": 5.0,
+          "electronics": 5.0
         }
       },
       {
         "_resources": {
-          "titaniumTank": 1.0
+          "component": 10.0,
+          "electronics": 10.0
         }
       }
     ]
@@ -263,17 +379,21 @@
     "requiredResourcePerRepair": [
       {
         "_resources": {
-          "lightMetal": 1.0
+          "component": 5.0
         }
       },
       {
         "_resources": {
-          "lightMetal": 2.0
+          "component": 5.0,
+          "electronics": 5.0,
+          "structure": 50
         }
       },
       {
         "_resources": {
-          "titaniumTank": 1.0
+          "component": 10.0,
+          "electronics": 10.0,
+          "structure": 100
         }
       }
     ]
@@ -292,17 +412,21 @@
     "requiredResourcePerRepair": [
       {
         "_resources": {
-          "lightMetal": 1.0
+          "component": 5.0
         }
       },
       {
         "_resources": {
-          "lightMetal": 2.0
+          "component": 5.0,
+          "electronics": 5.0,
+          "structure": 50
         }
       },
       {
         "_resources": {
-          "titaniumTank": 1.0
+          "component": 10.0,
+          "electronics": 10.0,
+          "structure": 100
         }
       }
     ]
@@ -314,17 +438,19 @@
     "requiredResourcePerRepair": [
       {
         "_resources": {
-          "lightMetal": 1.0
+          "component": 5.0
         }
       },
       {
         "_resources": {
-          "lightMetal": 2.0
+          "component": 5.0,
+          "electronics": 5.0
         }
       },
       {
         "_resources": {
-          "titaniumTank": 1.0
+          "component": 10.0,
+          "electronics": 10.0
         }
       }
     ]
@@ -349,17 +475,55 @@
     "requiredResourcePerRepair": [
       {
         "_resources": {
-          "lightMetal": 1.0
+          "plumbing": 10,
+          "electronics": 10
         }
       },
       {
         "_resources": {
-          "lightMetal": 2.0
+          "plumbing": 10,
+          "electronics": 30
         }
       },
       {
         "_resources": {
-          "titaniumTank": 1.0
+          "plumbing": 20,
+          "electronics": 50.0
+        }
+      }
+    ]
+  },
+  "oxygenDistributor": {
+    "durabilityTau": 8.64e7,
+    "baseDanger": 8e-4,
+    "idealWorker": 5,
+    "idealAbsorption": {
+      "oxygen": -0.2
+    },
+    "idealDistribution": {
+    },
+    "idealConsumption": {
+      "oxygen": 0.2,
+      "energy": 1.91e5
+    },
+    "idealHeatProduction": 5e4,
+    "requiredResourcePerRepair": [
+      {
+        "_resources": {
+          "plumbing": 10,
+          "electronics": 10
+        }
+      },
+      {
+        "_resources": {
+          "plumbing": 10,
+          "electronics": 30
+        }
+      },
+      {
+        "_resources": {
+          "plumbing": 20,
+          "electronics": 50.0
         }
       }
     ]
@@ -379,17 +543,19 @@
     "requiredResourcePerRepair": [
       {
         "_resources": {
-          "lightMetal": 1.0
+          "plumbing": 10
         }
       },
       {
         "_resources": {
-          "lightMetal": 2.0
+          "plumbing": 10,
+          "electronics": 5.0
         }
       },
       {
         "_resources": {
-          "titaniumTank": 1.0
+          "plumbing": 20,
+          "electronics": 10.0
         }
       }
     ]
@@ -411,17 +577,19 @@
     "requiredResourcePerRepair": [
       {
         "_resources": {
-          "lightMetal": 1.0
+          "plumbing": 10
         }
       },
       {
         "_resources": {
-          "lightMetal": 2.0
+          "plumbing": 10,
+          "electronics": 5.0
         }
       },
       {
         "_resources": {
-          "titaniumTank": 1.0
+          "plumbing": 20,
+          "electronics": 10.0
         }
       }
     ]
@@ -447,17 +615,19 @@
     "requiredResourcePerRepair": [
       {
         "_resources": {
-          "lightMetal": 1.0
+          "plumbing": 10
         }
       },
       {
         "_resources": {
-          "lightMetal": 2.0
+          "plumbing": 10,
+          "electronics": 5.0
         }
       },
       {
         "_resources": {
-          "titaniumTank": 1.0
+          "plumbing": 20,
+          "electronics": 10.0
         }
       }
     ]
@@ -540,21 +710,23 @@
     "idealConsumption": {
       "energy": 1e7
     },
-    "idealHeatProduction": -2e8,
+    "idealHeatProduction": -4e7,
     "requiredResourcePerRepair": [
       {
         "_resources": {
-          "lightMetal": 1.0
+          "plumbing": 10
         }
       },
       {
         "_resources": {
-          "lightMetal": 2.0
+          "plumbing": 10,
+          "electronics": 5.0
         }
       },
       {
         "_resources": {
-          "titaniumTank": 1.0
+          "plumbing": 20,
+          "electronics": 10.0
         }
       }
     ]
@@ -575,17 +747,21 @@
     "requiredResourcePerRepair": [
       {
         "_resources": {
-          "lightMetal": 1.0
+          "component": 50
         }
       },
       {
         "_resources": {
-          "lightMetal": 2.0
+          "component": 50,
+          "electronics": 5.0,
+          "structure": 100
         }
       },
       {
         "_resources": {
-          "titaniumTank": 1.0
+          "component": 100,
+          "electronics": 10.0,
+          "structure": 200
         }
       }
     ]
@@ -604,17 +780,21 @@
     "requiredResourcePerRepair": [
       {
         "_resources": {
-          "lightMetal": 1.0
+          "component": 50
         }
       },
       {
         "_resources": {
-          "lightMetal": 2.0
+          "component": 50,
+          "electronics": 5.0,
+          "structure": 100
         }
       },
       {
         "_resources": {
-          "titaniumTank": 1.0
+          "component": 100,
+          "electronics": 10.0,
+          "structure": 200
         }
       }
     ]
@@ -633,17 +813,21 @@
     "requiredResourcePerRepair": [
       {
         "_resources": {
-          "lightMetal": 1.0
+          "component": 50
         }
       },
       {
         "_resources": {
-          "lightMetal": 2.0
+          "component": 50,
+          "electronics": 5.0,
+          "structure": 100
         }
       },
       {
         "_resources": {
-          "titaniumTank": 1.0
+          "component": 100,
+          "electronics": 10.0,
+          "structure": 200
         }
       }
     ]
@@ -659,12 +843,12 @@
     "requiredResourcePerRepair": [
       {
         "_resources": {
-          "lightMetal": 1.0
+          "components": 1.0
         }
       },
       {
         "_resources": {
-          "lightMetal": 2.0
+          "components": 2.0
         }
       },
       {
@@ -685,17 +869,19 @@
     "requiredResourcePerRepair": [
       {
         "_resources": {
-          "lightMetal": 1.0
+          "electronics": 5.0
         }
       },
       {
         "_resources": {
-          "lightMetal": 2.0
+          "component": 5.0,
+          "electronics": 5.0
         }
       },
       {
         "_resources": {
-          "titaniumTank": 1.0
+          "component": 10.0,
+          "electronics": 10.0
         }
       }
     ]

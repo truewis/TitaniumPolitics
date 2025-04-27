@@ -131,7 +131,7 @@ class Place : GameStateElement()
                 try
                 {
                     val mass =
-                        (ReadOnly.gasJson[key]!!.jsonObject["density"]!!.jsonPrimitive.float) * 22.4f / ReadOnly.NA
+                        (ReadOnly.gasJson[key]!!.jsonObject["density"]!!.jsonPrimitive.float) * 0.0224f / ReadOnly.NA
 
                     val potentialDiff = coordinates.z - place.coordinates.z
                     val ratio = exp(
