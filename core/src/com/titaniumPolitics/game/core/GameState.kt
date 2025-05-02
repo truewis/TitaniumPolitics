@@ -70,8 +70,7 @@ class GameState
     var nonPlayerAgents = hashMapOf<String, Agent>()
     var playerName = ""
 
-    @Transient
-    val player = characters[playerName]!!
+    val player get() = characters[playerName]!!
     var log = Log()
     var parties = hashMapOf<String, Party>()
     var requests = hashMapOf<String, Request>()
@@ -87,7 +86,9 @@ class GameState
     var informations = hashMapOf<String, Information>()
     var marketResources = Resources()
     var eventSystem = EventSystem()
-    val realCharList = characters.keys.filter { !it.contains("Anon") && characters[it]!!.alive }
+    val realCharList get() = characters.keys.filter { !it.contains("Anon") && characters[it]!!.alive }
+    val existingResourceList get() = places.values.map { it.resources.keys }.flatten().toHashSet()
+    val existingGasList get() = places.values.map { it.gasResources.keys }.flatten().toHashSet()
     fun getApparatus(apparatusID: String): Apparatus
     {
         places.values.forEach { it.apparatuses.find { it.ID == apparatusID }?.apply { return this } }

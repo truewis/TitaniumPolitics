@@ -1,5 +1,6 @@
 package com.titaniumPolitics.game.debugTools
 
+import com.titaniumPolitics.game.core.GameDataHandler
 import com.titaniumPolitics.game.core.GameEngine
 import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.core.NonPlayerAgent
@@ -12,11 +13,13 @@ import java.io.File
 class GameEngineTest
 {
     lateinit var gState: GameState
-
+    val gdh = GameDataHandler()
 
     @Test
     fun runFor2Days()
     {
+
+        gdh.initializeColumns()
         println("Working Directory = " + System.getProperty("user.dir"))
         gState = Json.Default.decodeFromString(
             GameState.serializer(), File("../assets/json/init.json").readText()
@@ -50,13 +53,16 @@ class GameEngineTest
         while (gameState.time < days * ReadOnly.const("lengthOfDay"))
         {
             gameLoop()
+            if (gameState.time % 240 == 0)
+                gdh.writeEveryTurn(gState)
         }
     }
 
     @AfterEach
     fun after()
     {
-        gState.dump()
+        val path = gState.dump()
+        gdh.writeUnderDirectory(path.take(19))
     }
 
 
