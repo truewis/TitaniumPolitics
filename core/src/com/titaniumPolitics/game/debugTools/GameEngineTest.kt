@@ -9,11 +9,13 @@ import kotlinx.serialization.json.Json
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Test
 import java.io.File
+import java.util.Calendar
 
 class GameEngineTest
 {
     lateinit var gState: GameState
-    val gdh = GameDataHandler()
+    val gdh =
+        GameDataHandler("data${System.currentTimeMillis()}")
 
     @Test
     fun runFor2Days()
@@ -61,8 +63,8 @@ class GameEngineTest
     @AfterEach
     fun after()
     {
-        val path = gState.dump()
-        gdh.writeUnderDirectory(path.take(19))
+        gState.dump()
+        gdh.close()
     }
 
 
