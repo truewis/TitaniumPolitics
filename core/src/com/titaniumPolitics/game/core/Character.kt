@@ -2,6 +2,7 @@ package com.titaniumPolitics.game.core
 
 import com.titaniumPolitics.game.core.ReadOnly.const
 import com.titaniumPolitics.game.core.gameActions.GameAction
+import com.titaniumPolitics.game.core.gameActions.NewAgenda
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -144,19 +145,19 @@ class Character : GameStateElement()
             //The character don't like information about its wrongdoings.
             //Stole resource
             if (info.type == InformationType.ACTION && info.action!!.javaClass.simpleName == "UnofficialResourceTransfer")
-                ret = -1.0
+                ret = -1e-1
             //Stayed in home during work hours
             //Did their job well
             if (info.type == InformationType.ACTION && info.action!!.javaClass.simpleName == "NewAgenda")
-                ret = 0.5
+                ret = 5e-2
             if (info.type == InformationType.ACTION && info.action!!.javaClass.simpleName == "AddInfo")
-                ret = 0.5
+                ret = 5e-2
             if (info.type == InformationType.ACTION && info.action!!.javaClass.simpleName == "OfficialResourceTransfer")
-                ret = 0.5
+                ret = 5e-2
             if (info.type == InformationType.ACTION && info.action!!.javaClass.simpleName == "InvestigateAccidentScene")
-                ret = 1.0
+                ret = 1e-1
             if (info.type == InformationType.ACTION && info.action!!.javaClass.simpleName == "ClearAccidentScene")
-                ret = 1.0
+                ret = 1e-1
 
             //Depends on their party
             parent.parties.filter { it.value.members.contains(name) }.forEach { party ->
@@ -165,7 +166,7 @@ class Character : GameStateElement()
                     "infrastructure" ->
                     {
                         if (info.type == InformationType.ACTION && info.action!!.javaClass.simpleName == "Repair")
-                            ret = 1.0
+                            ret = 1e-1
                     }
                 }
             }
@@ -174,7 +175,7 @@ class Character : GameStateElement()
         {
             //Accidents are always interesting.
             if (info.type == InformationType.CASUALTY)
-                ret = 2.0
+                ret = 2e-1
             else
             {
 
@@ -185,9 +186,23 @@ class Character : GameStateElement()
                         info.tgtCharacter
                     ) > (const("mutualityMin") + const("mutualityMax")) / 2
                 )
-                    return parent.characters[info.tgtCharacter]!!.infoPreference(info)
+                    ret = parent.characters[info.tgtCharacter]!!.infoPreference(info) / const("mutualityMax")
                 else
-                    return -parent.characters[info.tgtCharacter]!!.infoPreference(info)
+                    ret = -parent.characters[info.tgtCharacter]!!.infoPreference(info) / const("mutualityMax")
+            }
+
+            //I don't like unresolved requests that are given to me.
+            if (info.type == InformationType.ACTION && (info.action is NewAgenda) && (info.action as NewAgenda).agenda.type == AgendaType.REQUEST
+                && (info.action as NewAgenda).agenda.attachedRequest!!.issuedTo.contains(name) && !(info.action as NewAgenda).agenda.attachedRequest!!.completed
+            )
+            {
+                ret = -1e-1 * (1 - (info.action as NewAgenda).agenda.attachedRequest!!.issuedBy.sumOf {
+                    parent.getMutuality(
+                        name,
+                        it
+                    )
+                } / (info.action as NewAgenda).agenda.attachedRequest!!.issuedBy.size / const("mutualityMax"))
+                //If I hate the issuers, I hate this information even more. If I like the issuers, I don't hate this information as much.
             }
 
         }
