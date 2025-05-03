@@ -13,6 +13,8 @@ sealed class EventObject(var name: String, val oneTime: Boolean)
 {
     @Transient
     lateinit var parent: GameState
+
+    var completed = false
     open fun injectParent(gameState: GameState)
     {
         parent = gameState
@@ -29,6 +31,7 @@ sealed class EventObject(var name: String, val oneTime: Boolean)
     //This event will not be triggered by the game. Unsubscribe from events here.
     open fun deactivate()
     {
+        completed = true
         parent.timeChanged -= exec
     }
 

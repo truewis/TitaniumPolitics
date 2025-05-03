@@ -27,6 +27,7 @@ class Event_ObserverIntroAfterMeeting2 : EventObject("Mysterious orders from the
 
     override fun deactivate()
     {
+        completed = true
         parent.timeChanged -= exec
     }
 }

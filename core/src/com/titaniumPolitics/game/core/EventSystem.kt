@@ -13,17 +13,25 @@ class EventSystem : GameStateElement()
     private val dataBase = arrayListOf<EventObject>()
 
 
-    //Add an objective with a time limit.
-
-    override fun injectParent(gameState: GameState)
+    //Utility function called once when a new game starts.
+    fun newGame()
     {
-        super.injectParent(gameState)
         add(Event_PrologueInfDivLeaderSpeech())
         add(Event_BribeDoctor1())
         add(Event_BoyFindingMom())
         //dataBase.add(Event_ObserverIntro())
         add(Event_AlinaIllTheory1())
         add(Event_SalvorElection())
+    }
+
+    override fun injectParent(gameState: GameState)
+    {
+        super.injectParent(gameState)
+        dataBase.forEach {
+            if (!it.completed)
+                it.activate()//If loaded from disk, all events are unsubscribed, hence we have to subscribe them again.
+        }
+
     }
 
     fun add(event: EventObject)
@@ -36,17 +44,6 @@ class EventSystem : GameStateElement()
     fun displayEmoji(who: String): Boolean
     {
         return dataBase.any { it.displayEmoji(who) }
-    }
-
-    fun refresh()
-    {
-        dataBase.forEach {
-            it.deactivate()
-        }
-        dataBase.forEach {
-            it.activate()
-        }
-
     }
 
     companion object

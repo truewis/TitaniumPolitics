@@ -175,6 +175,8 @@ class GameState
             //Set Will to 50 for all characters.
             setMutuality(char.key, char.key, 50.0)
         }
+
+        eventSystem.newGame()
         injectDependency()
         println("Game state initialized successfully.")
     }
