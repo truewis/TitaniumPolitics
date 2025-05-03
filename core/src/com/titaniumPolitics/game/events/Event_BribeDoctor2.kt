@@ -9,7 +9,7 @@ class Event_BribeDoctor2 : EventObject("Talking with Dr Paik.", true)
 {
 
     @Transient
-    val func = { _: Int, _: Int ->
+    override val exec = { _: Int, _: Int ->
         if (parent.player.currentMeeting != null && parent.player.currentMeeting!!.currentCharacters.contains("DrPaik") && parent.player.place.name == "WelfareStationEast"
         )
         {
@@ -19,13 +19,5 @@ class Event_BribeDoctor2 : EventObject("Talking with Dr Paik.", true)
         }
     }
 
-    override fun activate()
-    {
-        parent.timeChanged += func
-    }
 
-    override fun deactivate()
-    {
-        parent.timeChanged -= func
-    }
 }

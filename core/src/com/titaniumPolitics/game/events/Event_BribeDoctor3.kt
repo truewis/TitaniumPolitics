@@ -10,7 +10,7 @@ class Event_BribeDoctor3(var searchFrom: Int) : EventObject("Talking with Dr Pai
 {
 
     @Transient
-    val func = { _: Int, _: Int ->
+    override val exec = { _: Int, _: Int ->
         if (parent.player.currentMeeting != null && parent.player.currentMeeting!!.currentCharacters.contains("DrPaik") &&
             parent.informations.any { (key, info) ->
                 info.creationTime > searchFrom && info.type == InformationType.APPARATUS_DURABILITY && info.tgtApparatus == "WaterStorage" && info.tgtPlace == "WelfareStationEast" && info.amount <= 30
@@ -23,13 +23,5 @@ class Event_BribeDoctor3(var searchFrom: Int) : EventObject("Talking with Dr Pai
         }
     }
 
-    override fun activate()
-    {
-        parent.timeChanged += func
-    }
 
-    override fun deactivate()
-    {
-        parent.timeChanged -= func
-    }
 }

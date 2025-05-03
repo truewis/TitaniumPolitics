@@ -12,7 +12,7 @@ class Event_BribeDoctor4(var searchFrom: Int) : EventObject("Talking with Dr Pai
 {
 
     @Transient
-    val func = { _: Int, _: Int ->
+    override val exec = { _: Int, _: Int ->
         if (
             parent.informations.any { (key, info) ->
                 info.creationTime > searchFrom && info.type == InformationType.ACTION && (info.action is UnofficialResourceTransfer).also {
@@ -29,13 +29,5 @@ class Event_BribeDoctor4(var searchFrom: Int) : EventObject("Talking with Dr Pai
         }
     }
 
-    override fun activate()
-    {
-        parent.timeChanged += func
-    }
 
-    override fun deactivate()
-    {
-        parent.timeChanged -= func
-    }
 }

@@ -9,24 +9,36 @@ import kotlinx.serialization.Transient
  *
  */
 @Serializable
-sealed class EventObject(var name: String, val oneTime: Boolean) {
+sealed class EventObject(var name: String, val oneTime: Boolean)
+{
     @Transient
     lateinit var parent: GameState
-    open fun injectParent(gameState: GameState) {
+    open fun injectParent(gameState: GameState)
+    {
         parent = gameState
     }
 
+    abstract val exec: (Int, Int) -> Unit
+
     //This event will be triggered by the game. Subscribe to events here.
-    abstract fun activate()
+    open fun activate()
+    {
+        parent.timeChanged += exec
+    }
 
     //This event will not be triggered by the game. Unsubscribe from events here.
-    abstract fun deactivate()
+    open fun deactivate()
+    {
+        parent.timeChanged -= exec
+    }
 
-    open fun displayEmoji(who: String): Boolean {
+    open fun displayEmoji(who: String): Boolean
+    {
         return false
     }
 
-    fun onPlayDialogue(dialogueKey: String) {
+    fun onPlayDialogue(dialogueKey: String)
+    {
         EventSystem.onPlayDialogue.forEach { it(dialogueKey) }
     }
 

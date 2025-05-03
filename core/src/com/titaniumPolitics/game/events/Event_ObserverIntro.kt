@@ -6,46 +6,45 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 
 @Serializable
-class Event_ObserverIntro : EventObject("Introduction of the Observer.", true) {
-    //Infrastructure Division Leader gives a speech. Quest is completed when the game starts.
-    override fun injectParent(gameState: GameState) {
-        super.injectParent(gameState)
-        //Injected at the start of the game. No action required.
-
-    }
+class Event_ObserverIntro : EventObject("Introduction of the Observer.", true)
+{
 
     @Transient
-    val func = {
+    override val exec = {
         onPlayDialogue("ObserverIntro")
-        parent.timeChanged += func2
+        parent.timeChanged += exec2
     }
     var isFunc2Played = false
 
     @Transient
-    val func2 = { _: Int, _: Int ->
-        if (!isFunc2Played) {
+    val exec2 = { _: Int, _: Int ->
+        if (!isFunc2Played)
+        {
             onPlayDialogue("ObserverIntro2")
-            parent.timeChanged += func3
+            parent.timeChanged += exec3
             isFunc2Played = true
         }
     }
 
     @Transient
-    val func3 = { _: Int, _: Int ->
+    val exec3 = { _: Int, _: Int ->
         if (parent.player.place.name == "constructionYardNorth"
-        ) {
+        )
+        {
             onPlayDialogue("ObserverIntro3")
             deactivate()
         }
     }
 
-    override fun activate() {
-        parent.onStart += func
+    override fun activate()
+    {
+        parent.onStart += exec
     }
 
-    override fun deactivate() {
-        parent.onStart -= func
-        parent.timeChanged -= func2
-        parent.timeChanged -= func3
+    override fun deactivate()
+    {
+        parent.onStart -= exec
+        parent.timeChanged -= exec2
+        parent.timeChanged -= exec3
     }
 }

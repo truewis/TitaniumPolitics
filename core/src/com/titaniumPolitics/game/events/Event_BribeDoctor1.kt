@@ -10,7 +10,7 @@ class Event_BribeDoctor1 : EventObject("Illness of Sylvia.", true)
 {
 
     @Transient
-    val func = { _: Int, _: Int ->
+    override val exec = { _: Int, _: Int ->
         if (parent.hour == 10 && parent.day in 5..8 && parent.player.currentMeeting != null
         )
         {
@@ -27,13 +27,5 @@ class Event_BribeDoctor1 : EventObject("Illness of Sylvia.", true)
         }
     }
 
-    override fun activate()
-    {
-        parent.timeChanged += func
-    }
 
-    override fun deactivate()
-    {
-        parent.timeChanged -= func
-    }
 }
