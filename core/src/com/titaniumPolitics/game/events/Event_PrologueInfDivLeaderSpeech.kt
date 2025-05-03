@@ -17,8 +17,8 @@ class Event_PrologueInfDivLeaderSpeech : EventObject("Introduction of Alina.", t
         )
         {
             onPlayDialogue("PrologueInfDivLeaderSpeech")
-            parent.eventSystem.dataBase.add(Event_AlinaResign())
-            parent.eventSystem.dataBase.add(Event_ObserverIntroAfterMeeting1())
+            parent.eventSystem.add(Event_AlinaResign())
+            parent.eventSystem.add(Event_ObserverIntroAfterMeeting1())
             deactivate()
         }
     }

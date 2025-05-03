@@ -59,7 +59,7 @@ class SupportAgendaRoutine() : Routine(), IMeetingRoutine
                     val gossip = gState.informations.filter {
                         character.preparedInfoKeys.contains(
                             it.key
-                        ) && it.value.tgtTime in gState.day * ReadOnly.constInt("lengthOfDay")..((gState.day+1) * ReadOnly.constInt(
+                        ) && it.value.tgtTime in gState.day * ReadOnly.constInt("lengthOfDay")..((gState.day + 1) * ReadOnly.constInt(
                             "lengthOfDay"
                         ) - 1)
                                 && (conf.currentCharacters - it.value.knownTo).isNotEmpty() //In order to present the info, someone must not know it. This also prevents sharing an information that is already shared in this meeting.
@@ -93,7 +93,7 @@ class SupportAgendaRoutine() : Routine(), IMeetingRoutine
                     }
                 }
 
-                AgendaType.DENOUNCE ->
+                AgendaType.DENOUNCE, AgendaType.FIRE_MANAGER ->
                 {
                     //if there is any supporting information, add it.
                     character.preparedInfoKeys.filter { key ->

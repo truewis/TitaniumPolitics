@@ -14,9 +14,14 @@ class Event_BribeDoctor2 : EventObject("Talking with Dr Paik.", true)
         )
         {
             onPlayDialogue("BribeDoctor2")
-            parent.eventSystem.dataBase.add(Event_BribeDoctor3(searchFrom = parent.time))
+            parent.eventSystem.add(Event_BribeDoctor3(searchFrom = parent.time))
             deactivate()
         }
+    }
+
+    override fun displayEmoji(who: String): Boolean
+    {
+        return who == "DrPaik"
     }
 
 

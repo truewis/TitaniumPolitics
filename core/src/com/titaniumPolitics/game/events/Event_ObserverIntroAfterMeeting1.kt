@@ -14,7 +14,7 @@ class Event_ObserverIntroAfterMeeting1 : EventObject("Mysterious orders from the
         if (parent.player.currentMeeting == null)
         {
             onPlayDialogue("ObserverIntroAfterMeeting1")
-            parent.eventSystem.dataBase.add(Event_ObserverIntroAfterMeeting2())
+            parent.eventSystem.add(Event_ObserverIntroAfterMeeting2())
             deactivate()
         }
     }

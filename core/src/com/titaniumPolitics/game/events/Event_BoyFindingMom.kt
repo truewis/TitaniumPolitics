@@ -15,7 +15,7 @@ class Event_BoyFindingMom : EventObject("A boy with a box.", true)
         )
         {
             onPlayDialogue("FindMom")
-            parent.eventSystem.dataBase.add(Event_BoyFindingMom2())
+            parent.eventSystem.add(Event_BoyFindingMom2())
             deactivate()
         }
     }

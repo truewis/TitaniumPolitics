@@ -10,7 +10,7 @@ class Event_ObserverIntro : EventObject("Introduction of the Observer.", true)
 {
 
     @Transient
-    override val exec = {
+    override val exec = { _: Int, _: Int ->
         onPlayDialogue("ObserverIntro")
         parent.timeChanged += exec2
     }
@@ -38,12 +38,11 @@ class Event_ObserverIntro : EventObject("Introduction of the Observer.", true)
 
     override fun activate()
     {
-        parent.onStart += exec
+        parent.onStart += { exec(0, 0) }
     }
 
     override fun deactivate()
     {
-        parent.onStart -= exec
         parent.timeChanged -= exec2
         parent.timeChanged -= exec3
     }

@@ -72,7 +72,7 @@ class PortraitUI(character: String, var gameState: GameState, scale: Float) : Ta
         }
 
         //Display emoji based on event conditions.
-        if (state.eventSystem.dataBase.any { it.displayEmoji(tgtCharacter) })
+        if (state.eventSystem.displayEmoji(tgtCharacter))
         {
             displayEmojiOnPortrait("HelpGrunge")
         } else
@@ -105,13 +105,7 @@ class PortraitUI(character: String, var gameState: GameState, scale: Float) : Ta
 
     fun displayEmojiOnPortrait(emojiTexture: String)
     {
-        if (emojiTexture == "")
-        {
-            theEmoji.isVisible = false
-        } else
-        {
-            //theEmoji.setDrawable(defaultSkin, emojiTexture)
-            theEmoji.isVisible = true
-        }
+        theEmoji.isVisible = emojiTexture != ""
+        //theEmoji.setDrawable(defaultSkin, emojiTexture)
     }
 }

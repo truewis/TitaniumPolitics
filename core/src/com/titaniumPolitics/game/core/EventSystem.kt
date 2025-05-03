@@ -10,7 +10,7 @@ class EventSystem : GameStateElement()
 {
     override val name: String
         get() = "EventSystem" //There is only one EventSystem object in the game.
-    val dataBase = arrayListOf<EventObject>()
+    private val dataBase = arrayListOf<EventObject>()
 
 
     //Add an objective with a time limit.
@@ -18,16 +18,24 @@ class EventSystem : GameStateElement()
     override fun injectParent(gameState: GameState)
     {
         super.injectParent(gameState)
-        dataBase.add(Event_PrologueInfDivLeaderSpeech())
-        dataBase.add(Event_BribeDoctor1())
-        dataBase.add(Event_BoyFindingMom())
+        add(Event_PrologueInfDivLeaderSpeech())
+        add(Event_BribeDoctor1())
+        add(Event_BoyFindingMom())
         //dataBase.add(Event_ObserverIntro())
-        dataBase.add(Event_AlinaIllTheory1())
-        dataBase.add(Event_SalvorElection())
-        dataBase.forEach {
-            it.injectParent(parent)
-            it.activate()
-        }
+        add(Event_AlinaIllTheory1())
+        add(Event_SalvorElection())
+    }
+
+    fun add(event: EventObject)
+    {
+        dataBase.add(event)
+        event.injectParent(parent)
+        event.activate()
+    }
+
+    fun displayEmoji(who: String): Boolean
+    {
+        return dataBase.any { it.displayEmoji(who) }
     }
 
     fun refresh()

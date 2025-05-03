@@ -17,10 +17,10 @@ class Event_AlinaResign : EventObject("Introduction of Alina.", true)
         )
         {
             onPlayDialogue("AlinaResign")
-            parent.eventSystem.dataBase.add(Event_BecameDivLeader().also { it.injectParent(parent) })
+            parent.eventSystem.add(Event_BecameDivLeader())
             deactivate()
         }
     }
 
-    
+
 }

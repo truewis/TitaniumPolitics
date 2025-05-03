@@ -24,7 +24,7 @@ class Event_BribeDoctor4(var searchFrom: Int) : EventObject("Talking with Dr Pai
         )
         {
             onPlayDialogue("BribeDoctor4")
-            parent.eventSystem.dataBase.add(Event_BribeDoctor5())
+            parent.eventSystem.add(Event_BribeDoctor5())
             deactivate()
         }
     }

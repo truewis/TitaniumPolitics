@@ -20,11 +20,16 @@ class Event_BribeDoctor1 : EventObject("Illness of Sylvia.", true)
             )
             {
                 onPlayDialogue("BribeDoctor1")
-                parent.eventSystem.dataBase.add(Event_BribeDoctor2())
+                parent.eventSystem.add(Event_BribeDoctor2())
                 deactivate()
 
             }
         }
+    }
+
+    override fun displayEmoji(who: String): Boolean
+    {
+        return who == "Mentor"
     }
 
 

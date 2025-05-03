@@ -60,7 +60,7 @@ class NewAgenda(override val sbjCharacter: String, override val tgtPlace: String
             //"salary" -> return mt.involvedParty != "" && mt.type == "divisionDailyConference" && !parent.parties[mt.involvedParty]!!.isSalaryPaid
             AgendaType.APPOINT_MEETING -> return true
 
-            AgendaType.FIRE_MANAGER -> return mt.type == "divisionDailyConference" && parent.parties[mt.involvedParty]!!.leader == sbjCharacter
+            AgendaType.FIRE_MANAGER -> return mt.type == "divisionDailyConference" && parent.parties[mt.involvedParty]!!.leader == sbjCharacter && agenda.subjectParams["character"] != null
             //TODO: impeach, fire
             //TODO: Also update NewAgendaUI.kt
 
