@@ -38,7 +38,7 @@ class NewAgenda(override val sbjCharacter: String, override val tgtPlace: String
         val mt = parent.characters[sbjCharacter]!!.currentMeeting!!
         when (agenda.type)
         {
-            AgendaType.PROOF_OF_WORK -> return mt.involvedParty != "" && mt.type == "divisionDailyConference" //TODO: how do we handle command issued?
+            AgendaType.PROOF_OF_WORK -> return mt.type == "divisionDailyConference" //TODO: how do we handle command issued?
             //You have to choose which command you are responding to. The character who issued the command must be present in the meeting.
             //Other people may add supporting or disapproving information.
             AgendaType.BUDGET_PROPOSAL -> return mt.involvedParty == "cabinet" && !parent.isBudgetProposed
@@ -59,6 +59,8 @@ class NewAgenda(override val sbjCharacter: String, override val tgtPlace: String
             //"reassignWorkersToApparatus" -> return mt.involvedParty != "" && mt.type == "divisionDailyConference" && parent.places[agenda.subjectParams["where"]]!!.responsibleParty == mt.involvedParty //TODO: check apparatus key.
             //"salary" -> return mt.involvedParty != "" && mt.type == "divisionDailyConference" && !parent.parties[mt.involvedParty]!!.isSalaryPaid
             AgendaType.APPOINT_MEETING -> return true
+
+            AgendaType.FIRE_MANAGER -> return mt.type == "divisionDailyConference" && parent.parties[mt.involvedParty]!!.leader == sbjCharacter
             //TODO: impeach, fire
             //TODO: Also update NewAgendaUI.kt
 

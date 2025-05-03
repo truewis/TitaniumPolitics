@@ -28,36 +28,48 @@ class Meeting(
     fun endMeeting(gameState: GameState)
     {
         //If this is an election, elect the leader from the mutuality matrix.
-        if (type == "divisionLeaderElection")
+        when (type)
         {
-            //involvedParty is not empty for divisionLeaderElections.
-            val party = gameState.parties[involvedParty]!!
-
-            if (party.leader != "")
+            "divisionLeaderElection" ->
             {
-                Logger.warning("The leader of the party $involvedParty exists as ${party.leader}, but the election is still happening.")
-                throw IllegalStateException("The leader of the party $involvedParty exists as ${party.leader}, but the election is still happening.")
-            }
-            val leader = party.members.filter { char ->
-                agendas.any {
-                    //In order to be a candidate, the character has to be nominated first.
-                    it.type == AgendaType.NOMINATE && it.subjectParams["character"] == char
+
+                //involvedParty is not empty for divisionLeaderElections.
+                val party = gameState.parties[involvedParty]!!
+
+                if (party.leader != "")
+                {
+                    Logger.warning("The leader of the party $involvedParty exists as ${party.leader}, but the election is still happening.")
+                    throw IllegalStateException("The leader of the party $involvedParty exists as ${party.leader}, but the election is still happening.")
                 }
-            }.maxByOrNull { s ->
-                (party.members.sumOf {
-                    gameState.getMutuality(
-                        it,
-                        s
-                    )
-                } + (0..party.anonymousMembers.size).sumOf {
-                    gameState.getMutuality(
-                        "$involvedParty-Anon-$it",
-                        s
-                    ) * party.anonymousMembers[it]
-                }).also { println("The average support of $s is ${it / party.size}.") }
-            }!!//TODO: This logic has to be more thorough. display the actual election process.
-            gameState.parties[involvedParty]!!.leader = leader
-            println("The leader of the party $involvedParty is elected as $leader.")
+                val leader = party.members.filter { char ->
+                    agendas.any {
+                        //In order to be a candidate, the character has to be nominated first.
+                        it.type == AgendaType.NOMINATE && it.subjectParams["character"] == char
+                    }
+                }.maxByOrNull { s ->
+                    (party.members.sumOf {
+                        gameState.getMutuality(
+                            it,
+                            s
+                        )
+                    } + (0..party.anonymousMembers.size).sumOf {
+                        gameState.getMutuality(
+                            "$involvedParty-Anon-$it",
+                            s
+                        ) * party.anonymousMembers[it]
+                    }).also { println("The average support of $s is ${it / party.size}.") }
+                }!!//TODO: This logic has to be more thorough. display the actual election process.
+                gameState.parties[involvedParty]!!.leader = leader
+                println("The leader of the party $involvedParty is elected as $leader.")
+            }
+
+            "divisionDailyConference" ->
+            {
+                if (agendas.any { it.type == AgendaType.FIRE_MANAGER })
+                {
+                    //TODO: This logic has to be more thorough. display the actual election process.
+                }
+            }
         }
         //Remove the meeting from the ongoingMeetings.
         if (gameState.ongoingMeetings.containsValue(this))
