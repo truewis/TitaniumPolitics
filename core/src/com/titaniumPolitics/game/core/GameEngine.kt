@@ -12,7 +12,6 @@ import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.json.Json
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
-import kotlin.math.abs
 import kotlin.math.log
 import kotlin.math.min
 import kotlin.random.Random
@@ -342,30 +341,28 @@ class GameEngine(val gameState: GameState)
     //However, if the total number of people at the station is insufficient, unnamed people may not come in, and fewer people than the target number may come to work.
     fun partySizeAdjust()
     {
-        gameState.parties.values.filter { it.type == "division" }.forEach {
-            val targetSize = gameState.places.values.filter { place -> place.responsibleParty == it.name }
-                .sumOf { place -> place.plannedWorker }
-            if (it.size < targetSize)
-            {
-                if (gameState.idlePop >= targetSize - it.size)
-                {
-                    //unnamed people join the party.
-                    val tmp = targetSize - it.size
-                    it.anonymousMembers += tmp
-                    gameState.idlePop -= tmp
-                } else
-                {
-                    //unnamed people join the party.
-                    it.anonymousMembers += gameState.idlePop
-                    gameState.idlePop = 0
-                }
-            } else if (it.size > targetSize)
-            {
-                //unnamed people leave the party.
-                it.reduceAnonMembers(it.size - targetSize)
-                gameState.idlePop += it.size - targetSize
-            }
-        }
+//        gameState.parties.values.filter { it.type == "division" }.forEach {
+//            val targetSize = it.plannedWorker
+//            if (it.size < targetSize)
+//            {
+//                if (gameState.idlePop >= targetSize - it.anonymousMembers)
+//                {
+//                    //unnamed people join the party.
+//                    it.setAnonMembers(targetSize)
+//                    gameState.idlePop -= targetSize - it.anonymousMembers
+//                } else
+//                {
+//                    //unnamed people join the party.
+//                    it.setAnonMembers(it.anonymousMembers + gameState.idlePop)
+//                    gameState.idlePop = 0
+//                }
+//            } else if (it.size > targetSize)
+//            {
+//                //unnamed people leave the party.
+//                it.setAnonMembers(targetSize)
+//                gameState.idlePop += it.size - targetSize
+//            }
+//        }
 
     }
 
@@ -424,44 +421,29 @@ class GameEngine(val gameState: GameState)
     //Workers are assigned to apparatuses. If there is not enough workers, some apparatuses are not worked.
     fun distributePopulation()
     {
-        val popsDivision = hashMapOf<String, Int>()
-        gameState.parties.values.filter { it.type == "division" }.forEach {
-            popsDivision[it.name] = it.size//TODO: named members should also go to work and tracked here,
-        }
         gameState.places.values.forEach { place ->
-            if (place.workHoursStart < gameState.hour && place.workHoursEnd > gameState.hour)
+            if (place.isAccidentScene) return@forEach //If there is an accident, no one works until it is resolved.
+            val idealWorker = place.apparatuses.sumOf { apparatus -> apparatus.idealWorker }
+            if (place.outOfBudget)//out of budget. Shut down the facility until the water is back.
             {
-                if (place.isAccidentScene) return@forEach //If there is an accident, no one works until it is resolved.
-                val idealWorker = place.apparatuses.sumOf { apparatus -> apparatus.idealWorker }
-                if (place.plannedWorker > place.resources["water"])//out of budget. Shut down the facility until the water is back.
+                place.apparatuses.forEach { apparatus -> apparatus.currentWorker = 0 }
+                return@forEach
+            }
+            var sum = 0
+            place.apparatuses.forEachIndexed lambda@{ index, apparatus ->
+                if (idealWorker == 0) return@lambda
+                if (index == place.apparatuses.size - 1)
                 {
-                    place.apparatuses.forEach { apparatus -> apparatus.currentWorker = 0 }
-                    return@forEach
-                }
-                if (popsDivision[place.responsibleParty]!! >= place.plannedWorker)
-                {
-                    place.apparatuses.forEach lambda@{ apparatus ->
-                        if (idealWorker == 0) return@lambda
-                        apparatus.currentWorker =
-                            place.plannedWorker * apparatus.idealWorker / idealWorker//Distribute workers according to ideal worker
-                        popsDivision[place.responsibleParty] =
-                            popsDivision[place.responsibleParty]!! - apparatus.currentWorker
-                    }
+                    apparatus.currentWorker = place.workForce - sum
                 } else
                 {
-                    //If there is not enough workers, the lack of workers is distributed to apparatuses.
-                    place.apparatuses.forEach lambda@{ apparatus ->
-                        if (idealWorker == 0) return@lambda
-                        apparatus.currentWorker =
-                            popsDivision[place.responsibleParty]!! * apparatus.idealWorker / idealWorker//Distribute workers according to ideal worker
-                        popsDivision[place.responsibleParty] =
-                            popsDivision[place.responsibleParty]!! - apparatus.currentWorker
-                    }
+                    apparatus.currentWorker =
+                        place.workForce * apparatus.idealWorker / idealWorker//Distribute workers according to ideal worker
+                    sum += apparatus.currentWorker
                 }
+            }
 
-            } else
-            //If it is not work hours, no one works.
-                place.apparatuses.forEach { apparatus -> apparatus.currentWorker = 0 }
+
         }
     }
 
@@ -497,6 +479,12 @@ class GameEngine(val gameState: GameState)
     {
         val dth = 3600
         gameState.places.forEach { entry ->
+            if (entry.value.responsibleParty == "") return
+            val worker = gameState.characters.values.first {
+                it.name.contains("Anon") && it.name.contains(
+                    entry.key
+                )
+            }
             entry.value.apparatuses.forEach app@{ apparatus ->
                 apparatus.durability -= dth * const("DurabilityMax") / const("DurabilityTau")//Apparatuses are damaged over time. TODO: get rid of unexpected behaviors, if any
                 if (apparatus.durability < .0)
@@ -519,16 +507,15 @@ class GameEngine(val gameState: GameState)
                     (apparatus.currentWorker * dth * const("WorkerWaterConsumptionRate")),
                     (entry.value.resources["water"])
                 )
-                entry.value.resources["water"] = (entry.value.resources["water"]
-                        ) - waterConsumption//Distribute water to workers. TODO: if there is not enough water, workers should grunt.
+                entry.value.resources["water"] -= waterConsumption//Distribute water to workers. TODO: if there is not enough water, workers should grunt.
+                //TODO: check Place.outOfBudget
 
-                gameState.marketResources["water"] =
-                    (gameState.marketResources["water"]) + waterConsumption
+                worker.resources["water"] += waterConsumption
                 apparatus.currentConsumption.forEach {
                     entry.value.resources[it.key] = (entry.value.resources[it.key]) - it.value * dth
                 }
                 apparatus.currentDistribution.forEach {
-                    gameState.marketResources[it.key] += it.value * dth
+                    worker.resources[it.key] += it.value * dth
                 }
                 apparatus.currentAbsorption.forEach {
                     entry.value.gasResources[it.key] -= it.value * dth
@@ -569,34 +556,6 @@ class GameEngine(val gameState: GameState)
             place.value.gasResources.forEach { place.value.gasResources[it.key] = it.value * 0.999 }
         } //1/1000 of the floating resources is lost
 
-        if ((gameState.marketResources["water"]) < gameState.pop * const("MarketWaterConsumptionRate") * 86400)
-            println("Less than 24 hours of water out in the market.")
-        val consumptionWater = (gameState.pop * const("MarketWaterConsumptionRate") * dth)
-        println("Water Consumed:" + consumptionWater)
-        if ((gameState.marketResources["water"]) > consumptionWater)
-        {
-            gameState.marketResources["water"] -= consumptionWater
-            gameState.places.forEach {
-                it.value.gasResources["water"] += consumptionWater / gameState.pop * it.value.currentTotalPop //No water is lost, it is floating. TODO: distribute the water vapor generation
-            }
-        }
-        //TODO: adjust consumption rate when resource is low?
-        //does not affect approval when resource is low.
-
-        else
-        {
-            val death = gameState.pop / 100 + 1//Death from dehydration.
-            gameState.pickRandomParty.apply {
-                causeDeaths(death)
-                println("Casualties: at most $death, due to dehydration. Pop left: ${gameState.pop}")
-                createRumor(tgtState).apply {
-                    type = InformationType.CASUALTY
-                    tgtPlace = "everywhere"
-                    amount = death
-                    auxParty = this.name
-                }
-            }
-        }
         gameState.places.forEach { (placeName, place) ->
             if (place.gasResources["oxygen"] < place.currentTotalPop * const("MarketOxygenConsumptionRate") * 86400)//TODO: Migrate to gas system.
                 println("Less than 24 hours of oxygen out in $placeName")
@@ -626,30 +585,6 @@ class GameEngine(val gameState: GameState)
                 }
             }
 
-        }
-
-        if ((gameState.marketResources["ration"]) < gameState.pop * const("MarketRationConsumptionRate") * 86400)
-            println("Less than 24 hours of ration out in the market.")
-        val consumptionRation = (gameState.pop * const("MarketRationConsumptionRate") * dth)
-        if ((gameState.marketResources["ration"]) > consumptionRation)
-        {
-            gameState.marketResources["ration"] -= consumptionRation //1kg/day consumption.
-            gameState.places.forEach {
-                it.value.gasResources["water"] += consumptionWater / gameState.pop * it.value.currentTotalPop / 2.0 // TODO: distribute the water vapor generation
-            } //Ration is converted to water. In carbohydrate, C:H:O = 1:2:1, hence factor of 2.0
-        } else
-        {
-            val death = gameState.pop / 100 + 1//TODO: adjust deaths.
-            gameState.pickRandomParty.apply {
-                causeDeaths(death)
-                println("Casualties: at most $death, due to starvation. Pop left: ${gameState.pop}")
-                createRumor(tgtState).apply {
-                    type = InformationType.CASUALTY
-                    tgtPlace = "everywhere"
-                    amount = death
-                    auxParty = this.name
-                }
-            }
         }
 
     }

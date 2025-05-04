@@ -9,8 +9,8 @@ import kotlinx.serialization.Transient
 class Event_AlinaIllTheory1 : EventObject("Illness of Alina.", true)
 {
 
-    @Transient
-    override val exec = { _: Int, _: Int ->
+    override fun exec(a: Int, b: Int)
+    {
         if (parent.hour == 10 && parent.player.currentMeeting != null && parent.parties["infrastructure"]!!.leader == ""
         )
         {

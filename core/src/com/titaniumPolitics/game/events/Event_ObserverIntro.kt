@@ -9,11 +9,12 @@ import kotlinx.serialization.Transient
 class Event_ObserverIntro : EventObject("Introduction of the Observer.", true)
 {
 
-    @Transient
-    override val exec = { _: Int, _: Int ->
+    override fun exec(a: Int, b: Int)
+    {
         onPlayDialogue("ObserverIntro")
         parent.timeChanged += exec2
     }
+
     var isFunc2Played = false
 
     @Transient

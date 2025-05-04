@@ -4,6 +4,7 @@ import com.titaniumPolitics.game.core.ReadOnly.const
 import com.titaniumPolitics.game.core.gameActions.GameAction
 import com.titaniumPolitics.game.core.gameActions.NewAgenda
 import kotlinx.serialization.Serializable
+import kotlin.math.max
 
 @Serializable
 class Character : GameStateElement()
@@ -25,6 +26,10 @@ class Character : GameStateElement()
         set(value)
         {
             field = if (value < const("HealthMax")) value else const("HealthMax")//Max health is 100.
+            if (field < const("HealthMax") * 0.5 && (hunger > const("ungerThreshold") || thirst > const("thirstThreshold")))
+            {
+                killReliant(max(reliant / 10, 1))
+            }
         }
     var hunger = .0
         set(value)
@@ -47,7 +52,7 @@ class Character : GameStateElement()
             }//Max thirst is 100.
         }
     var reliant =
-        hashSetOf<String>() //Characters that this character is responsible for. If they die, this character will be sad. They consume water and ration every day.
+        1 //Characters that this character is responsible for. If they die, this character will be sad. They consume water and ration every day. Always bigger or equal to 1
     val scheduledMeetings: HashMap<String, Meeting>
         get() = parent.scheduledMeetings.filter { it.value.scheduledCharacters.contains(name) } as HashMap<String, Meeting>
     var livingBy = ""
@@ -85,6 +90,29 @@ class Character : GameStateElement()
 
     }
 
+    fun killReliant(num: Int)
+    {
+        if (num == 0) return
+        if (num >= reliant) throw Exception()
+        reliant -= num
+        parent.popChanged.forEach { it() }
+        hunger = 0.0//This character ate the reliant.
+        thirst = 0.0
+        resources["corpse"] += num * 1.0
+        Information(
+            author = "",
+            creationTime = parent.time,
+            type = InformationType.CASUALTY,
+            tgtPlace = place.name,
+            auxParty = place.responsibleParty,
+            amount = num
+        ).also {
+            parent.informations[it.generateName()] = it //cpy.publicity = 5
+            it.knownTo += name
+        }
+
+    }
+
     //Item value is normalized to mutuality.
     //TODO: value may be affected by power dynamics.
     fun itemValue(item: String): Double
@@ -92,8 +120,8 @@ class Character : GameStateElement()
         val ret = when (item)
         {
             //Value of ration and water is based on the current need of the character.
-            "ration" -> 5.0e-2 * (reliant.size + 1.0) / (resources["ration"] + 1.0)
-            "water" -> (reliant.size + 1.0) / (resources["water"] + 1.0)
+            "ration" -> 5.0e-2 * (reliant) / (resources["ration"] + 1.0)
+            "water" -> (reliant) / (resources["water"] + 1.0)
             "hydrogen" -> 1.0e-2
             "organics" -> 5.0e-2
             "lightMetal" -> 1.0e-2

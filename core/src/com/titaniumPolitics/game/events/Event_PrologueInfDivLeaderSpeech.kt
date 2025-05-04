@@ -9,8 +9,8 @@ import kotlinx.serialization.Transient
 class Event_PrologueInfDivLeaderSpeech : EventObject("Introduction of Alina.", true)
 {
 
-    @Transient
-    override val exec = { _: Int, _: Int ->
+    override fun exec(a: Int, b: Int)
+    {
         if (parent.player.currentMeeting != null && parent.parties["infrastructure"]!!.leader == "Alina" && parent.player.currentMeeting!!.currentCharacters.containsAll(
                 listOf("Alina", "Krailin")
             )
@@ -26,6 +26,6 @@ class Event_PrologueInfDivLeaderSpeech : EventObject("Introduction of Alina.", t
 
     override fun displayEmoji(who: String): Boolean
     {
-        return parent.timeChanged.contains(exec) && who == "Alina" && parent.player.place.name == parent.parties["infrastructure"]!!.home && parent.characters["Alina"]!!.currentMeeting != null
+        return parent.timeChanged.contains(this::exec) && who == "Alina" && parent.player.place.name == parent.parties["infrastructure"]!!.home && parent.characters["Alina"]!!.currentMeeting != null
     }
 }

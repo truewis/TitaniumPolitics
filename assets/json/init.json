@@ -1,7 +1,7 @@
 {
   "_time": 12,
   "_alertLevel": 0,
-  "idlePop": 1000,
+  "_idlePop": 1000,
   "playerName": "Rui",
   "nonPlayerAgents": {
     "Charles": {
@@ -102,10 +102,7 @@
         }
       },
       "health": 80,
-      "reliant": [
-        "wife",
-        "kid"
-      ],
+      "reliant": 3,
       "livingBy": "mainControlRoom"
     },
     "Astinomis": {
@@ -173,10 +170,7 @@
         }
       },
       "health": 80,
-      "reliant": [
-        "wife",
-        "kid"
-      ],
+      "reliant": 3,
       "livingBy": "mainControlRoom"
     },
     "Hiroshi": {
@@ -210,10 +204,7 @@
         }
       },
       "health": 80,
-      "reliant": [
-        "wife",
-        "kid"
-      ],
+      "reliant": 3,
       "livingBy": "mainControlRoom"
     },
     "Evan": {
@@ -230,10 +221,7 @@
           "ration": 10
         }
       },
-      "reliant": [
-        "wife",
-        "kid"
-      ],
+      "reliant": 3,
       "health": 80,
       "livingBy": "mainControlRoom"
     },
@@ -296,9 +284,7 @@
         }
       },
       "health": 80,
-      "reliant": [
-        "wife"
-      ],
+      "reliant": 2,
       "livingBy": "constructionYardNorth"
     },
     "Salvor": {
@@ -372,10 +358,7 @@
         }
       },
       "health": 80,
-      "reliant": [
-        "wife",
-        "kid"
-      ],
+      "reliant": 3,
       "livingBy": "welfareStationEast"
     },
     "Boulos": {
@@ -2142,19 +2125,8 @@
       "home": "constructionYardNorth"
     }
   },
-  "marketResources": {
-    "_resources": {
-      "water": 300000,
-      "ration": 100000
-    }
-  },
   "eventSystem": {
     "dataBase": [
-      {
-        "type": "com.titaniumPolitics.game.events.Event_PrologueInfDivLeaderSpeech",
-        "name": "Introduction of InfDivLeader.",
-        "oneTime": true
-      }
     ]
   }
 }

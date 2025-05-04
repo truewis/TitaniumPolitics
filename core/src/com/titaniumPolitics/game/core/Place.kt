@@ -60,19 +60,27 @@ class Place : GameStateElement()
 
     var volume = 1000f //Volume in m^3.
     val currentWorker: Int get() = apparatuses.sumOf { it.currentWorker }
+    val workForce: Int
+        get() = characters.filter { it.contains("Anon") && it.contains(responsibleParty) }
+            .sumOf { parent.characters[it]!!.reliant }
+    val outOfBudget: Boolean
+        get() = false //TODO
 
     val currentTotalPop: Int
         //This number must be conserved.
         get()
         {
-            if (name == "squareSouth") return parent.idlePop + currentWorker//All idle people gather at the square.
-            if (responsibleParty == "") return 0
-            else if (parent.parties[responsibleParty]!!.home == name)
-                return parent.parties[responsibleParty]!!.size -
-                        parent.places.filter {
-                            it.value.responsibleParty == responsibleParty && it.key != name
-                        }.values.sumOf { it.currentWorker }//If this place is a guildhall, all workers stay here when they are not working. TODO: this is a simplification.
-            else return currentWorker
+            return characters.sumOf { if (it.contains("Anon")) parent.characters[it]!!.reliant else 1 }
+//            if (name.contains("home")) return 0 //Home populations are added to the places the home is in.
+//
+//            if (name == "squareSouth") return parent.idlePop + currentWorker//All idle people gather at the square.
+//            if (responsibleParty == "") return 0
+//            else if (parent.parties[responsibleParty]!!.home == name)
+//                return parent.parties[responsibleParty]!!.size -
+//                        parent.places.filter {
+//                            it.value.responsibleParty == responsibleParty && it.key != name
+//                        }.values.sumOf { it.currentWorker }//If this place is a guildhall, all workers stay here when they are not working. TODO: this is a simplification.
+//            else return currentWorker
 
 
             //return characters.filter { it } + currentWorker + idler +

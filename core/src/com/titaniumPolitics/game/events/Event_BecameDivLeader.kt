@@ -9,8 +9,8 @@ import kotlinx.serialization.Transient
 class Event_BecameDivLeader : EventObject("I am the infrastructure division leader.", true)
 {
 
-    @Transient
-    override val exec = { _: Int, _: Int ->
+    override fun exec(a: Int, b: Int)
+    {
         if (parent.parties["infrastructure"]!!.leader == parent.playerName
         )
         {
@@ -21,5 +21,5 @@ class Event_BecameDivLeader : EventObject("I am the infrastructure division lead
         }
     }
 
-    
+
 }

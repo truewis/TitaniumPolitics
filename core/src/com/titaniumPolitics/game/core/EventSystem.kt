@@ -28,6 +28,7 @@ class EventSystem : GameStateElement()
     {
         super.injectParent(gameState)
         dataBase.forEach {
+            it.injectParent(gameState)
             if (!it.completed)
                 it.activate()//If loaded from disk, all events are unsubscribed, hence we have to subscribe them again.
         }

@@ -51,12 +51,7 @@ class Meeting(
                         gameState.getMutuality(
                             it,
                             s
-                        )
-                    } + (0..party.anonymousMembers.size).sumOf {
-                        gameState.getMutuality(
-                            "$involvedParty-Anon-$it",
-                            s
-                        ) * party.anonymousMembers[it]
+                        ) * party.getMultiplier(it)
                     }).also { println("The average support of $s is ${it / party.size}.") }
                 }!!//TODO: This logic has to be more thorough. display the actual election process.
                 gameState.parties[involvedParty]!!.leader = leader

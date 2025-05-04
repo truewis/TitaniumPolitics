@@ -1,6 +1,5 @@
 package com.titaniumPolitics.game.core
 
-import com.titaniumPolitics.game.debugTools.Logger
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -13,9 +12,10 @@ class Party : GameStateElement()
     var home = "" //The place where the party is based.
     var members = hashSetOf<String>()
     var isSalaryPaid = false //This variable is reset every quarter.
-    var anonymousMembers = arrayListOf<Int>()
+    val anonymousMembers: Int
+        get() = members.filter { it.contains("Anon") }.sumOf { parent.characters[it]!!.reliant }
     val size: Int
-        get() = members.size + anonymousMembers.sum()
+        get() = members.sumOf { getMultiplier(it) }
 
     //This is average person to person mutuality of all members.
     fun individualMutuality(name: String): Double = members.sumOf { parent.getMutuality(it, name) } / members.size
@@ -35,62 +35,50 @@ class Party : GameStateElement()
 
     fun causeDeaths(num: Int)
     {
-        if (anonymousMembers.sum() >= num)
+        if (anonymousMembers >= num)
         {
-            reduceAnonMembers(num) //If there are anon members left, kill them first.
+            killAnonMembers(num) //If there are anon members left, kill them first.
         } else if (num >= size)
         {
-            reduceAnonMembers(anonymousMembers.sum())
+            killAnonMembers(anonymousMembers)
             members.forEach { parent.characters[it]!!.alive = false }
         } else
         {
             //kill members
-            for (i in 0..<num - anonymousMembers.sum())
+            for (i in 0..<num - anonymousMembers)
                 members.filter { parent.characters[it]!!.alive }.random()
                     .let { parent.characters[it]!!.alive = false }//kill num - anonymousMembers members
 
-            reduceAnonMembers(anonymousMembers.sum())
+            killAnonMembers(anonymousMembers)
         }
         parent.popChanged.forEach { it() }
 
     }
 
-    //Used in mutuality calculation
+    //Used in mutuality calculation. Is 1 for characters.
     fun getMultiplier(char: String): Int
     {
         return if (members.contains(char))
             1
         else if (char.startsWith("$name-Anon"))
         {
-            val index = char.split("-")[2].toInt()
-            if (index < anonymousMembers.size)
-                anonymousMembers[index]
-            else
-                0
+            parent.characters[char]!!.reliant
         } else
             0
     }
 
-    fun reduceAnonMembers(num: Int)
+    private fun killAnonMembers(num: Int)
     {
-        var remaining = num
-        var index = anonymousMembers.size - 1
-
-        while (remaining > 0 && index >= 0)
-        {
-            val currentValue = anonymousMembers[index]
-            if (currentValue > remaining)
+        val anons = members.filter { it.contains("Anon") }
+        anons.forEachIndexed { index, string ->
+            val char = parent.characters[string]!!
+            if (index == anons.size - 1)
             {
-                anonymousMembers[index] = currentValue - remaining
-                remaining = 0
+                char.killReliant(num - (num / anons.size) * (anons.size - 1))
             } else
             {
-                remaining -= currentValue
-                anonymousMembers[index] = 0
-                index--
+                char.killReliant(num / anons.size)
             }
         }
-        if (remaining > 0)
-            Logger.warning("There are not enough anonymous members to reduce in $name.")
-    }
+    }//Managers will have to rehire people after this.
 }

@@ -51,7 +51,7 @@ class BuyRoutine() : Routine()
                     variables["intention"] = "requestResource"
                     variables["requestResourceType"] = variables["wantedResource"]!!
                     doubleVariables["requestResourceAmount"] =
-                        gState.characters[name]!!.reliant.size * 1.0 //The amount of resource to request is proportional to the number of reliants.
+                        gState.characters[name]!!.reliant * 1.0 //The amount of resource to request is proportional to the number of reliants.
                     //TODO: the amount of resource to request should be determined by the character's trait.
                     variables["requestTo"] = tradeCharacter
                     actionDelegated = Talk(name, place).apply {

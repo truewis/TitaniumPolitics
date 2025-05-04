@@ -120,13 +120,13 @@ class WorkRoutine() : Routine()
                     ReadOnly.const("StealAmountMultiplier")//TODO: threshold change depending on member's trait and need
                 val waterThreshold = ReadOnly.const("StealAmountMultiplier")
                 val member = party.members.find {
-                    gState.characters[it]!!.resources["ration"] <= rationThreshold * (gState.characters[it]!!.reliant.size + 1) || gState.characters[it]!!.resources["water"] <= waterThreshold * (gState.characters[it]!!.reliant.size + 1)
+                    gState.characters[it]!!.resources["ration"] <= rationThreshold * (gState.characters[it]!!.reliant) || gState.characters[it]!!.resources["water"] <= waterThreshold * (gState.characters[it]!!.reliant)
                 }
                 if (member != null)
                 {
                     //The resource to steal is what the member is short of, either ration or water.
                     val wantedResource =
-                        if (character.resources["ration"] <= rationThreshold * (character.reliant.size + 1)
+                        if (character.resources["ration"] <= rationThreshold * (character.reliant)
                         ) "ration" else "water"
                     intVariables["corruptionTimer"] = gState.time
                     return StealRoutine().apply {

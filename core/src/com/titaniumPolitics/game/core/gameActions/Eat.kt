@@ -8,15 +8,15 @@ class Eat(override val sbjCharacter: String, override val tgtPlace: String) : Ga
 
     override fun execute()
     {
-        if (parent.characters[sbjCharacter]!!.resources["ration"] > 0 && parent.characters[sbjCharacter]!!.resources["water"] > 0
+        val amount = sbjCharObj.reliant * 1.0
+        if (sbjCharObj.resources["ration"] > amount && sbjCharObj.resources["water"] > amount
         )
         {
-            parent.characters[sbjCharacter]!!.resources["ration"] =
-                parent.characters[sbjCharacter]!!.resources["ration"] - 1
-            parent.characters[sbjCharacter]!!.resources["water"] =
-                parent.characters[sbjCharacter]!!.resources["water"] - 1
-            parent.characters[sbjCharacter]!!.hunger -= 50
-            parent.characters[sbjCharacter]!!.thirst -= 50
+            sbjCharObj.resources["ration"] -= amount
+            sbjCharObj.resources["water"] -= amount
+            sbjCharObj.hunger -= 50
+            sbjCharObj.thirst -= 50
+            tgtPlaceObj.gasResources["water"] += amount * 3.0//TODO: Calculate the amount of gas from Digestion
             println("$sbjCharacter ate a ration and drank some water.")
         } else
         {
@@ -28,17 +28,17 @@ class Eat(override val sbjCharacter: String, override val tgtPlace: String) : Ga
     override fun isValid(): Boolean
     {
         //TODO: Check if the character is in a place where it can eat, and has the resources to eat.
-        return tgtPlace.contains("home") && parent.characters[sbjCharacter]!!.resources["ration"] > 0 && parent.characters[sbjCharacter]!!.resources["water"] > 0
+        return tgtPlace.contains("home") && sbjCharObj.resources["ration"] > 0 && sbjCharObj.resources["water"] > 0
     }
 
     override fun deltaWill(): Double
     {
         var w = super.deltaWill()
-        if (parent.characters[sbjCharacter]!!.hunger < 50)
+        if (sbjCharObj.hunger < 50)
             w -= 5
-        if (parent.characters[sbjCharacter]!!.thirst < 50)
+        if (sbjCharObj.thirst < 50)
             w -= 5
-        if (parent.characters[sbjCharacter]!!.trait.contains("gourmand"))
+        if (sbjCharObj.trait.contains("gourmand"))
             w += 10
         return w
     }

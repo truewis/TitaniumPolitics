@@ -9,8 +9,8 @@ import kotlinx.serialization.Transient
 class Event_SalvorElection : EventObject("Salvor speaks in the election.", true)
 {
 
-    @Transient
-    override val exec = { _: Int, _: Int ->
+    override fun exec(a: Int, b: Int)
+    {
         if (parent.parties["infrastructure"]!!.leader == "" && parent.player.currentMeeting!!.type == "divisionLeaderElection"
         )
         {

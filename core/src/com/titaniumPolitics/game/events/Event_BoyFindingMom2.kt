@@ -9,8 +9,8 @@ import kotlinx.serialization.Transient
 class Event_BoyFindingMom2 : EventObject("A boy with a box.", true)
 {
 
-    @Transient
-    override val exec = { _: Int, _: Int ->
+    override fun exec(a: Int, b: Int)
+    {
         if (parent.player.currentMeeting != null && parent.player.currentMeeting!!.currentCharacters.contains("Mom")
         )
         {

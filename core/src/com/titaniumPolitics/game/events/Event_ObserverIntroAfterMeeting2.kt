@@ -9,8 +9,8 @@ import kotlinx.serialization.Transient
 class Event_ObserverIntroAfterMeeting2 : EventObject("Mysterious orders from the Observer.", true)
 {
 
-    @Transient
-    override val exec = { _: Int, _: Int ->
+    override fun exec(a: Int, b: Int)
+    {
         if (parent.player.place.name == "spacePort" && parent.player.currentMeeting?.currentCharacters?.contains("observer") == true)
         {
             onPlayDialogue("ObserverIntroAfterMeeting2")
@@ -22,12 +22,12 @@ class Event_ObserverIntroAfterMeeting2 : EventObject("Mysterious orders from the
     {
         //Play dialogue right after the meeting
         //TODO: check if the player has followed the orders.
-        parent.timeChanged += exec
+        parent.timeChanged += this::exec
     }
 
     override fun deactivate()
     {
         completed = true
-        parent.timeChanged -= exec
+        parent.timeChanged -= this::exec
     }
 }

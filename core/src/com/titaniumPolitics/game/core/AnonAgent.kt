@@ -19,6 +19,7 @@ import kotlinx.serialization.Serializable
 class AnonAgent : Agent()
 {
 
+    var workPlace = ""
     private var routines =
         arrayListOf<Routine>()//Routines are sorted by priority. The first element is the current routine. All other routines are executed when the current routine is finished.
 
@@ -38,11 +39,11 @@ class AnonAgent : Agent()
             pri = routines[0].priority + 10
         //If there is almost no food or water, stop all activities and try to get some. ----------------------------------------------------------------------------
         if (parent.characters[name]!!.resources["ration"]
-            <= (parent.characters[name]!!.reliant.size + 1) || parent.characters[name]!!.resources["water"] <= (parent.characters[name]!!.reliant.size + 1)
+            <= (parent.characters[name]!!.reliant) || parent.characters[name]!!.resources["water"] <= (parent.characters[name]!!.reliant)
         )
         {
             val wantedResource =
-                if (parent.characters[name]!!.resources["ration"] <= (parent.characters[name]!!.reliant.size + 1)
+                if (parent.characters[name]!!.resources["ration"] <= (parent.characters[name]!!.reliant)
                 ) "ration" else "water"
             if (parent.characters[name]!!.trait.contains("thief"))
             {
@@ -121,9 +122,9 @@ class AnonAgent : Agent()
     private fun whenIdle()
     {
         //When work hours, work
-        if (parent.hour in 8..18)
+        if (parent.hour in parent.places[workPlace]!!.workHoursStart..parent.places[workPlace]!!.workHoursEnd)
         {
-            routines.add(WanderRoutine())
+            routines.add(WorkAnonRoutine().also { it.variables["workPlace"] = workPlace })
             return
         } else
         //When not work hours, rest

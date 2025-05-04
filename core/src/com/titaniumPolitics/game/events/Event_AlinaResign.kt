@@ -9,9 +9,9 @@ import kotlinx.serialization.Transient
 class Event_AlinaResign : EventObject("Introduction of Alina.", true)
 {
 
-    @Transient
-    override val exec = { _: Int, newTime: Int ->
-        if (newTime > 96 && parent.player.currentMeeting != null && parent.parties["infrastructure"]!!.leader == "Alina" && parent.player.currentMeeting!!.currentCharacters.containsAll(
+    override fun exec(a: Int, b: Int)
+    {
+        if (b > 96 && parent.player.currentMeeting != null && parent.parties["infrastructure"]!!.leader == "Alina" && parent.player.currentMeeting!!.currentCharacters.containsAll(
                 listOf("Alina")
             )
         )

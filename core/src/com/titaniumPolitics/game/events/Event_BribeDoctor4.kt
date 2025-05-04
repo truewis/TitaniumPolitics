@@ -11,10 +11,10 @@ import kotlinx.serialization.Transient
 class Event_BribeDoctor4(var searchFrom: Int) : EventObject("Talking with Dr Paik.", true)
 {
 
-    @Transient
-    override val exec = { _: Int, _: Int ->
+    override fun exec(a: Int, b: Int)
+    {
         if (
-            parent.informations.any { (key, info) ->
+            parent.informations.any { (_, info) ->
                 info.creationTime > searchFrom && info.type == InformationType.ACTION && (info.action is UnofficialResourceTransfer).also {
                     with(info.action as UnofficialResourceTransfer) {
                         toWhere == "WelfareStationEast" && resources.contains(Resources("titaniumTank" to 1.0))

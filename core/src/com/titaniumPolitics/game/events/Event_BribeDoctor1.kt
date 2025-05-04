@@ -9,8 +9,8 @@ import kotlinx.serialization.Transient
 class Event_BribeDoctor1 : EventObject("Illness of Sylvia.", true)
 {
 
-    @Transient
-    override val exec = { _: Int, _: Int ->
+    override fun exec(a: Int, b: Int)
+    {
         if (parent.hour == 10 && parent.day in 5..8 && parent.player.currentMeeting != null
         )
         {

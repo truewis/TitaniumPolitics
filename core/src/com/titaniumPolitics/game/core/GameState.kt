@@ -15,12 +15,19 @@ import kotlin.math.roundToInt
 class GameState
 {
     private var _time = 0
+    private var _idlePop = 0
 
-    var idlePop = 0
+    var idlePop: Int
+        get() = _idlePop
+        set(value)
+        {
+            _idlePop = value
+            characters["Anon-idle"]!!.reliant = value
+        }
     val laborValuePerHour
         get() =
             ReadOnly.const("mutualityMax") * 1e-2 * (pop - idlePop) / pop//TODO: must scale with cost of living
-        
+
     var time: Int
         get() = _time
         set(value)
@@ -44,7 +51,9 @@ class GameState
     val timeChanged =
         arrayListOf<(Int, Int) -> Unit>()
     val pop: Int
-        get() = parties.values.sumOf { it.size } + idlePop
+        get() = places.values.sumOf { it.currentTotalPop }
+    val totalAnonPop: Int
+        get() = characters.values.filter { it.name.contains("Anon") }.sumOf { it.reliant }
     val pickRandomParty: Party
         get()
         {
@@ -84,7 +93,6 @@ class GameState
     var isBudgetProposed = false
     var isBudgetResolved = false
     var informations = hashMapOf<String, Information>()
-    var marketResources = Resources()
     var eventSystem = EventSystem()
     val realCharList get() = characters.keys.filter { !it.contains("Anon") && characters[it]!!.alive }
     val existingResourceList get() = places.values.map { it.resources.keys }.flatten().toHashSet()
@@ -100,66 +108,59 @@ class GameState
         return places.values.find { it.apparatuses.any { it.ID == apparatusID } }!!
     }
 
+    fun createIdleAnonAgent()
+    {
+        val name = "Anon-idle"
+        characters[name] =
+            Character().apply {
+                this.livingBy = Place.publicPlaces.random()
+                this.health = 100.0
+                this.reliant = idlePop
+            } //TODO: anonymous characters get resource from market.
+        nonPlayerAgents[name] = AnonAgent().also { it.workPlace = Place.publicPlaces.random() }
+    }
+
     fun initialize()
     {
         println("Initializing game state...")
+
+        places.forEach { it.value.injectParent(this) }
         //Gain party anonymous member size from work place requirements.
         parties.forEach {
-            var anon = 0
             val party = it.value
             party.injectParent(this)
-            places.forEach { place ->
-                if (place.value.responsibleParty == it.key)
-                {
-                    anon += place.value.apparatuses.sumOf { it.idealWorker }
-                }
-                //Create anonymous characters if the party is big enough.
+            it.value.places.sumOf { it.apparatuses.sumOf { it.idealWorker } }
 
-                for (i in 0 until anon / 100)
-                {
-                    val name = party.name + "-Anon-" + i
-                    characters[name] =
-                        Character().apply {
-                            //They live by one of their work places.
-                            try
-                            {
+            //Create anonymous characters if the party is big enough.
+            //TODO: maybe assign more then one anon agent per place.
+            party.places.forEach { place ->
 
-                                this.livingBy = places.filter { it.value.responsibleParty == party.name }.keys.random()
+                val name = party.name + "-Anon-" + place.name
+                characters[name] =
+                    Character().apply {
+                        //They live by one of their work places.
+                        try
+                        {
 
-                            } catch (e: Exception)
-                            {
-                                this.livingBy = Place.publicPlaces.random()
-                            }
-                            this.resources = Resources("ration" to 1000.0, "water" to 1000.0)
-                            this.health = 100.0
-                        } //TODO: anonymous characters get resource from market.
-                    nonPlayerAgents[name] = AnonAgent()
-                    //TODO: Give traits to the anonymous characters.
-                    party.members.add(name)
-                    //Gaussian distribution of anonymous members
-                    val segments = anon / 100 + if (anon % 100 > 0) 1 else 0 // Number of segments
-                    val mean = 1
-                    val sigma = 0.2
+                            this.livingBy = places.filter { it.value.responsibleParty == party.name }.keys.random()
 
-                    val gaussianValues = List(segments) { abs(Random().nextGaussian() * sigma + mean) }
+                        } catch (e: Exception)
+                        {
+                            this.livingBy = Place.publicPlaces.random()
+                        }
 
-                    // Normalize and scale values to match the total number of anonymous members
-                    val sumOfGaussianValues = gaussianValues.sum()
-                    val normalizedGaussianValues = gaussianValues.map { it / sumOfGaussianValues * anon }
-
-                    // Assign scaled and rounded values to anonymousMembers
-                    party.anonymousMembers.clear() // Clear existing values
-                    normalizedGaussianValues.forEach {
-                        party.anonymousMembers.add(it.roundToInt())
+                        this.health = 100.0
+                        this.reliant = place.plannedWorker
+                        this.resources = Resources("ration" to 100.0 * this.reliant, "water" to 100.0 * this.reliant)
                     }
+                nonPlayerAgents[name] = AnonAgent().also { it.workPlace = place.name }
+                //TODO: Give traits to the anonymous characters.
+                party.members.add(name)
 
-                    // Adjust the last segment to ensure the total sum remains constant
-                    val currentTotal = party.anonymousMembers.sum()
-                    party.anonymousMembers += anon - currentTotal
-
-                }
             }
+
         }
+        createIdleAnonAgent()
 
         characters.forEach { char ->
             //Create home for each character.
@@ -175,8 +176,8 @@ class GameState
             //Set Will to 50 for all characters.
             setMutuality(char.key, char.key, 50.0)
         }
-
-        eventSystem.newGame()
+        eventSystem.injectParent(this)
+        //eventSystem.newGame()
         injectDependency()
         println("Game state initialized successfully.")
     }
@@ -260,10 +261,7 @@ class GameState
         with(informations[infoKey]!!)
         {
             return knownTo.filter { it in parties[party]!!.members }.sumOf {
-                if (it.contains("Anon"))
-                {
-                    parties[party]!!.anonymousMembers[it.split("-")[2].toInt()]
-                } else 1
+                parties[party]!!.getMultiplier(it)
             }
         }
     }
