@@ -26,7 +26,7 @@ class Examine(override val sbjCharacter: String, override val tgtPlace: String) 
             "HR" ->
             {
                 //Acquire HR information is not planned.
-                println("HR: ${parent.places[tgtPlace]!!.currentWorker}/${parent.places[tgtPlace]!!.plannedWorker}, ${parent.places[tgtPlace]!!.workHoursStart}-${parent.places[tgtPlace]!!.workHoursEnd}, ${parent.places[tgtPlace]!!.responsibleParty}")
+                println("HR: ${parent.places[tgtPlace]!!.currentWorker}/${parent.places[tgtPlace]!!.plannedWorker}, ${parent.places[tgtPlace]!!.workHoursStart}-${parent.places[tgtPlace]!!.workHoursEnd}, ${parent.places[tgtPlace]!!.responsibleDivision}")
                 //This action has no effect on the game state.
                 //Open HR window Directly.
                 if (sbjCharacter == parent.playerName)

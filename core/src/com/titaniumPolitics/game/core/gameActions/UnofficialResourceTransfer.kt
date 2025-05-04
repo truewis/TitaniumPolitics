@@ -65,7 +65,9 @@ class UnofficialResourceTransfer(override val sbjCharacter: String, override val
             parent.characters[sbjCharacter]!!.resources[it.key] >= it.value
         }) || resources.all { parent.places[tgtPlace]!!.resources[it.key] >= it.value }) &&
                 //either fromHome is true, or tgtPlace must be managed by tgtCharacter's party.
-                (fromHome || (parent.parties[parent.places[tgtPlace]!!.responsibleParty]?.members?.contains(sbjCharacter)
+                (fromHome || (parent.parties[parent.places[tgtPlace]!!.responsibleDivision]?.members?.contains(
+                    sbjCharacter
+                )
                     ?: false))
     }
 

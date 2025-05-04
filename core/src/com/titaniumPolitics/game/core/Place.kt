@@ -3,7 +3,6 @@ package com.titaniumPolitics.game.core
 import com.titaniumPolitics.game.core.ReadOnly.const
 import com.titaniumPolitics.game.core.ReadOnly.dt
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.Transient
 import kotlinx.serialization.json.float
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
@@ -61,7 +60,7 @@ class Place : GameStateElement()
     var volume = 1000f //Volume in m^3.
     val currentWorker: Int get() = apparatuses.sumOf { it.currentWorker }
     val workForce: Int
-        get() = characters.filter { it.contains("Anon") && it.contains(responsibleParty) }
+        get() = characters.filter { it.contains("Anon") && it.contains(responsibleDivision) }
             .sumOf { parent.characters[it]!!.reliant }
     val outOfBudget: Boolean
         get() = false //TODO
@@ -123,7 +122,7 @@ class Place : GameStateElement()
     }
 
     var characters = hashSetOf<String>()
-    var responsibleParty = "" //Determines which party is responsible for the place.
+    var responsibleDivision = "" //Determines which party is responsible for the place.
     var isAccidentScene =
         false //If true, the place is closed and no one can enter. Can be cleared by clearAccidentScene.
     var accidentInformationKeys =

@@ -281,7 +281,7 @@ class GameEngine(val gameState: GameState)
                 } else
                     gameState.setPartyMutuality(
                         party.key,
-                        gameState.places[it.value.tgtPlace]!!.responsibleParty,
+                        gameState.places[it.value.tgtPlace]!!.responsibleDivision,
                         -it.value.amount * gameState.publicity(
                             it.key,
                             party.key
@@ -298,7 +298,7 @@ class GameEngine(val gameState: GameState)
                     //party loses mutuality toward the responsible party. TODO: consider affecting the individual mutuality toward the perpetrator.
                     //TODO: item value must be put into consideration
                     gameState.setPartyMutuality(
-                        party.key, gameState.places[it.value.tgtPlace]!!.responsibleParty, -log(
+                        party.key, gameState.places[it.value.tgtPlace]!!.responsibleDivision, -log(
                             it.value.amount.toDouble() + 1, 2.0
                         ) * gameState.publicity(
                             it.key,
@@ -479,7 +479,7 @@ class GameEngine(val gameState: GameState)
     {
         val dth = 3600
         gameState.places.forEach { entry ->
-            if (entry.value.responsibleParty == "") return
+            if (entry.value.responsibleDivision == "") return@forEach
             val worker = gameState.characters.values.first {
                 it.name.contains("Anon") && it.name.contains(
                     entry.key
@@ -501,7 +501,7 @@ class GameEngine(val gameState: GameState)
                     return@app //If there is not enough resources, no one works.
                 //-----------------------------------------------------------------------------------------------------
                 apparatus.currentProduction.forEach {
-                    entry.value.resources[it.key] = (entry.value.resources[it.key]) + it.value * dth
+                    entry.value.resources[it.key] += it.value * dth
                 }
                 val waterConsumption = min(
                     (apparatus.currentWorker * dth * const("WorkerWaterConsumptionRate")),
@@ -570,17 +570,17 @@ class GameEngine(val gameState: GameState)
                 ) > const("CriticalCarbonDioxideRatio")
             )
             {
-                if (place.responsibleParty == "") return//TODO: currently oxygen deaths don't happen in places without responsibleParty.
+                if (place.responsibleDivision == "") return//TODO: currently oxygen deaths don't happen in places without responsibleParty.
                 val death =
                     place.currentTotalPop / 100 + 1//TODO: adjust deaths. Also, productivity starts to drop when oxygen is low. Use the gas system.
                 place.apply {
-                    gameState.parties[responsibleParty]!!.causeDeaths(death)
+                    gameState.parties[responsibleDivision]!!.causeDeaths(death)
                     println("Casualties: at most $death, due to suffocation at $placeName. Pop left: ${gameState.pop}")
                     createRumor(tgtState).apply {
                         type = InformationType.CASUALTY
                         tgtPlace = placeName
                         amount = death
-                        auxParty = responsibleParty
+                        auxParty = responsibleDivision
                     }
                 }
             }
@@ -601,13 +601,13 @@ class GameEngine(val gameState: GameState)
     {
         //Generate casualties.
         val death = tgtPlace.currentWorker / 100 + 1 //TODO: what about injuries?
-        tgtState.parties[tgtPlace.responsibleParty]!!.causeDeaths(death)//TODO: we are assuming that all deaths are from the responsible party.
+        tgtState.parties[tgtPlace.responsibleDivision]!!.causeDeaths(death)//TODO: we are assuming that all deaths are from the responsible party.
         Information(
             author = "",
             creationTime = tgtState.time,
             type = InformationType.CASUALTY,
             tgtPlace = tgtPlace.name,
-            auxParty = tgtPlace.responsibleParty,
+            auxParty = tgtPlace.responsibleDivision,
             amount = death
         )/*store info*/.also {
             gameState.informations[it.generateName()] = it
@@ -676,13 +676,13 @@ class GameEngine(val gameState: GameState)
     {
         //Generate casualties.
         val death = tgtPlace.currentWorker / 5 + 1 //TODO: what about injuries?
-        tgtState.parties[tgtPlace.responsibleParty]!!.causeDeaths(death)
+        tgtState.parties[tgtPlace.responsibleDivision]!!.causeDeaths(death)
         Information(
             author = "",
             creationTime = tgtState.time,
             type = InformationType.CASUALTY,
             tgtPlace = tgtPlace.name,
-            auxParty = tgtPlace.responsibleParty,
+            auxParty = tgtPlace.responsibleDivision,
             amount = death
         )/*store info*/.also {
             gameState.informations[it.generateName()] = it
@@ -761,7 +761,7 @@ class GameEngine(val gameState: GameState)
                 entry.value.health -= dt / const("SuffocationTau") * const("HealthMax")
                 //If in a workplace, party integrity decreases, if I am not the leader
                 entry.value.division?.also {
-                    if (entry.value.place.responsibleParty == it.name && it.leader != entry.key)
+                    if (entry.value.place.responsibleDivision == it.name && it.leader != entry.key)
                         gameState.setPartyMutuality(
                             it.name,
                             delta = -dt / const("SuffocationTau") * const("mutualityMax")
@@ -778,7 +778,7 @@ class GameEngine(val gameState: GameState)
 //                )//TODO: balance this
                 //If in a workplace, party integrity decreases, if I am not the leader
                 entry.value.division?.also {
-                    if (entry.value.place.responsibleParty == it.name && it.leader != entry.key)
+                    if (entry.value.place.responsibleDivision == it.name && it.leader != entry.key)
                         gameState.setPartyMutuality(
                             it.name,
                             delta = -dt / const("TemperatureDamageTau") * const("mutualityMax")
@@ -1005,7 +1005,7 @@ class GameEngine(val gameState: GameState)
                 actions.add("Talk")
             if (placeObj.isAccidentScene)
             {
-                if (placeObj.responsibleParty != "" && gameState.parties[placeObj.responsibleParty]!!.members.contains(
+                if (placeObj.responsibleDivision != "" && gameState.parties[placeObj.responsibleDivision]!!.members.contains(
                         character
                     )
                 )//Only the responsible party members can clear the accident scene.
@@ -1032,7 +1032,7 @@ class GameEngine(val gameState: GameState)
             {
                 //actions.add("InfoAnnounce") Only the leader of the internal division can announce.
             }
-            if (placeObj.responsibleParty != "" && gameState.parties[placeObj.responsibleParty]!!.members.contains(
+            if (placeObj.responsibleDivision != "" && gameState.parties[placeObj.responsibleDivision]!!.members.contains(
                     character
                 )
             )

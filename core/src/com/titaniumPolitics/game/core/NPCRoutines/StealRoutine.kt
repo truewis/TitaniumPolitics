@@ -14,7 +14,7 @@ class StealRoutine() : Routine()
     fun findResource(name: String): Place?
     {
         return gState.places.values.filter {
-            it.responsibleParty != "" && gState.parties[it.responsibleParty]!!.members.contains(
+            it.responsibleDivision != "" && gState.parties[it.responsibleDivision]!!.members.contains(
                 name
             )
         }.maxByOrNull { it.resources[variables["stealResource"]!!] }

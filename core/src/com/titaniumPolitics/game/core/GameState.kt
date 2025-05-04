@@ -8,8 +8,6 @@ import kotlinx.serialization.json.Json
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.math.abs
-import kotlin.math.roundToInt
 
 @Serializable
 class GameState
@@ -143,7 +141,7 @@ class GameState
                         try
                         {
 
-                            this.livingBy = places.filter { it.value.responsibleParty == party.name }.keys.random()
+                            this.livingBy = places.filter { it.value.responsibleDivision == party.name }.keys.random()
 
                         } catch (e: Exception)
                         {
@@ -166,7 +164,7 @@ class GameState
         characters.forEach { char ->
             //Create home for each character.
             places["home_" + char.key] = Place().apply {
-                responsibleParty = ""
+                responsibleDivision = ""
                 //Connect the new home to the place specified in the character.
                 connectedPlaces.add(this@GameState.characters[char.key]!!.livingBy)
             }

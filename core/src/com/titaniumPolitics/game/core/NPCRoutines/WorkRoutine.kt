@@ -1,6 +1,5 @@
 package com.titaniumPolitics.game.core.NPCRoutines
 
-import com.titaniumPolitics.game.core.AgendaType
 import com.titaniumPolitics.game.core.GameEngine
 import com.titaniumPolitics.game.core.InformationType
 import com.titaniumPolitics.game.core.Place
@@ -21,7 +20,7 @@ class WorkRoutine() : Routine()
 
         //If an accident happened in the place of my control, investigate and clear it.
         gState.places.values.firstOrNull {
-            it.responsibleParty != "" && gState.parties[it.responsibleParty]!!.members.contains(
+            it.responsibleDivision != "" && gState.parties[it.responsibleDivision]!!.members.contains(
                 name
             ) && it.isAccidentScene
         }?.also {
@@ -173,7 +172,7 @@ class WorkRoutine() : Routine()
                 {
                     val resplace =
                         gState.places.values.filter {
-                            it.responsibleParty != "" && gState.parties[it.responsibleParty]!!.members.contains(
+                            it.responsibleDivision != "" && gState.parties[it.responsibleDivision]!!.members.contains(
                                 name
                             )
                         }

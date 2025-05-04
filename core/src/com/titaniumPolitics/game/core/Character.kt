@@ -104,7 +104,7 @@ class Character : GameStateElement()
             creationTime = parent.time,
             type = InformationType.CASUALTY,
             tgtPlace = place.name,
-            auxParty = place.responsibleParty,
+            auxParty = place.responsibleDivision,
             amount = num
         ).also {
             parent.informations[it.generateName()] = it //cpy.publicity = 5
@@ -149,7 +149,7 @@ class Character : GameStateElement()
         //TODO: Action to acquire resources is more valuable.
 
         //Action to repair the character's apparatus is more valuable.
-        if (action.javaClass.simpleName == "repair" && parent.parties[parent.places[action.tgtPlace]!!.responsibleParty]?.members?.contains(
+        if (action.javaClass.simpleName == "repair" && parent.parties[parent.places[action.tgtPlace]!!.responsibleDivision]?.members?.contains(
                 name
             ) == true
         )

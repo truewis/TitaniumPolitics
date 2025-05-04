@@ -25,7 +25,7 @@ class Party : GameStateElement()
         get() = parent.getPartyMutuality(this.name, this.name)
 
     val places: Collection<Place>
-        get() = parent.places.filter { it.value.responsibleParty == name }.values
+        get() = parent.places.filter { it.value.responsibleDivision == name }.values
 
     val currentWorker: Int
         get() = places.sumOf { it.currentWorker }

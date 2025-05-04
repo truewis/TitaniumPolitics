@@ -9,8 +9,8 @@ class BudgetProposal(override val sbjCharacter: String, override val tgtPlace: S
     {
         //TODO: set up the budget proposal
         parent.places.forEach {
-            if (it.key == "home" || it.value.responsibleParty == "") return@forEach else budget[it.value.responsibleParty] =
-                (budget[it.value.responsibleParty]
+            if (it.key == "home" || it.value.responsibleDivision == "") return@forEach else budget[it.value.responsibleDivision] =
+                (budget[it.value.responsibleDivision]
                     ?: .0) + it.value.plannedWorker * (it.value.workHoursEnd - it.value.workHoursStart) * 15.0
         }
     }
