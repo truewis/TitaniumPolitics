@@ -17,6 +17,10 @@ class GameState
     private var _time = 0
 
     var idlePop = 0
+    val laborValuePerHour
+        get() =
+            ReadOnly.const("mutualityMax") * 1e-2 * (pop - idlePop) / pop//TODO: must scale with cost of living
+        
     var time: Int
         get() = _time
         set(value)
@@ -124,7 +128,7 @@ class GameState
 
                             } catch (e: Exception)
                             {
-                                this.livingBy = "SquareNorth"//TODO: This is a temporary solution.
+                                this.livingBy = Place.publicPlaces.random()
                             }
                             this.resources = Resources("ration" to 1000.0, "water" to 1000.0)
                             this.health = 100.0

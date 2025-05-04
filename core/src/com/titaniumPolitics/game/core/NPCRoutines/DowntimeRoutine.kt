@@ -1,5 +1,6 @@
 package com.titaniumPolitics.game.core.NPCRoutines
 
+import com.titaniumPolitics.game.core.Place
 import com.titaniumPolitics.game.core.ReadOnly.const
 import com.titaniumPolitics.game.core.gameActions.GameAction
 import com.titaniumPolitics.game.core.gameActions.JoinMeeting
@@ -15,9 +16,9 @@ class DowntimeRoutine() : Routine()
         val char = gState.characters[name]!!
         if (char.trait.contains("extrovert"))
         {
-            if (place != "squareSouth")
+            if (place !in Place.publicPlaces)
                 return MoveRoutine().apply {
-                    variables["movePlace"] = "squareSouth"
+                    variables["movePlace"] = Place.publicPlaces.random()
                 }//Add a move routine with higher priority.
             else
                 return AttendMeetingRoutine().apply {

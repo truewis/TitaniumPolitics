@@ -1,5 +1,6 @@
 package com.titaniumPolitics.game.core.NPCRoutines
 
+import com.titaniumPolitics.game.core.Place
 import com.titaniumPolitics.game.core.gameActions.GameAction
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
@@ -11,8 +12,8 @@ class WanderRoutine() : Routine()
     {
         return MoveRoutine().apply {
             variables["movePlace"] =
-                this@WanderRoutine.gState.places.values.filter { it.name != place && !it.name.contains("home") }//Should not wander into other people's homes.
-                    .random().name
+                Place.publicPlaces//Should not wander into other people's homes.
+                    .random()
         }//Add a move routine with higher priority.
     }
 

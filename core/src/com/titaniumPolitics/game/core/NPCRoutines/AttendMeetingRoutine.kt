@@ -1,12 +1,14 @@
 package com.titaniumPolitics.game.core.NPCRoutines
 
 import com.titaniumPolitics.game.core.AgendaType
+import com.titaniumPolitics.game.core.Apparatus
 import com.titaniumPolitics.game.core.MeetingAgenda
 import com.titaniumPolitics.game.core.ReadOnly
 import com.titaniumPolitics.game.core.Request
 import com.titaniumPolitics.game.core.Resources
 import com.titaniumPolitics.game.core.gameActions.*
 import kotlinx.serialization.Serializable
+import kotlin.math.max
 
 @Serializable
 class AttendMeetingRoutine : Routine(), IMeetingRoutine
@@ -233,17 +235,17 @@ class AttendMeetingRoutine : Routine(), IMeetingRoutine
                     //If division leader, TODO: sometimes NPCs denounce even when themselves are not the leader.
                     else
                     {
-                        //Pay the salary if not paid yet.
+                        //1. Pay the salary if not paid yet.
                         if (!party.isSalaryPaid)
                         {
                             return Salary(name, place)
                         }
-                        //request information about the commands issued today, by putting ProofOfWork agenda forward.
+                        //2. request information about the commands issued today, by putting ProofOfWork agenda forward.
                         if (!conf.agendas.any { it.type == AgendaType.PROOF_OF_WORK })
                             return NewAgenda(name, place).also {
                                 it.agenda = MeetingAgenda(AgendaType.PROOF_OF_WORK, name)
                             }
-                        //Praise or criticize the division members, if there is any relevant information.
+                        //3. Praise or criticize the division members, if there is any relevant information.
                         //It should be noted that the content of the information is not checked here. Think about this later.
                         party.members.forEach { member ->
                             if (member != name && gState.informations.values.any {
@@ -276,10 +278,10 @@ class AttendMeetingRoutine : Routine(), IMeetingRoutine
                                 }
                             }//TODO: there must be a cooldown, stored in party class.
                         }
-                        //If it is not covered above, if the division is short of resources, share the information about the resource shortage.
+                        //4. If it is not covered above, if the division is short of resources, share the information about the resource shortage.
                         //However, right now, the resource information is available to everyone immediately, no need to share.
 
-                        //Criticize the common enemies of the division. It is determined by the party with the low mutuality with the division.
+                        //5. Criticize the common enemies of the division. It is determined by the party with the low mutuality with the division.
                         val enemyParty = gState.parties.values.filter { it.name != conf.involvedParty }
                             .minBy { gState.getPartyMutuality(it.name, conf.involvedParty) }.name
                         if (gState.getPartyMutuality(
@@ -292,6 +294,10 @@ class AttendMeetingRoutine : Routine(), IMeetingRoutine
                                     it.subjectParams["party"] = enemyParty
                                 }
                             }
+                        //6. If the world is short of resources and we have an apparatus producing that, increase the production. //TODO: this decision must depend on a personal parameter
+                        adjustResourceProd(name, place)?.also { return it }
+
+                        //7. Gossip
                         gossip(name, place)?.also { return it }
 
                     }
@@ -383,6 +389,84 @@ class AttendMeetingRoutine : Routine(), IMeetingRoutine
         else Wait(name, place)
         //TODO: do something in the meeting. Leave the meeting if nothing to do.
 
+    }
+
+    fun productivity(toWhom: String, apparatus: Apparatus): Double
+    {
+        return apparatus.currentProduction.entries.sumOf { (key, value) -> gState.characters[toWhom]!!.itemValue(key) * value } / apparatus.currentWorker
+    }
+
+    fun adjustResourceProd(name: String, place: String): GameAction?
+    {
+        val charObj = gState.characters[name]!!
+        //1. If the party is short of workers, reduce the production of the section which has the minimum productivity per worker hour
+        val minProdApp = charObj
+            .party!!.places.flatMap { it.apparatuses }.filter { it.currentWorker != 0 }.minBy {
+                productivity(name, it)
+            }
+        if (productivity(name, minProdApp) < gState.laborValuePerHour)
+        {
+            val reductionAmount = max(minProdApp.plannedWorker / 5, 1)
+            val wantPlace = gState.getApparatusPlace(minProdApp.ID)
+            //Fill in the agenda based on variables in the routine, resource and character.
+            val agenda = MeetingAgenda(AgendaType.REQUEST, name).apply {
+                attachedRequest = Request(
+                    SetWorkers(
+                        wantPlace.manager,
+                        tgtPlace = wantPlace.name
+                    ).apply {
+                        workers = minProdApp.plannedWorker - reductionAmount
+                    }//Created a command to transfer the resource.
+                    ,
+                    issuedTo = hashSetOf(wantPlace.manager)
+                ).apply {
+                    executeTime = gState.time
+                    issuedBy = hashSetOf(name)
+                }
+            }
+            return NewAgenda(name, place).also {
+                it.agenda = agenda
+            }
+
+        }
+
+        //2. Increase the production of the section which has the maximum productivity per worker hour. The productivity must be higher than the labor cost.
+        val maxProdApp = charObj
+            .party!!.places.flatMap { it.apparatuses }.filter { it.currentWorker != 0 }.maxBy {
+                productivity(name, it)
+            }
+        if (productivity(name, maxProdApp) > gState.laborValuePerHour)
+        {
+            val increaseAmount = max(maxProdApp.plannedWorker / 5, 1)
+            val wantPlace = gState.getApparatusPlace(maxProdApp.ID)
+            //Fill in the agenda based on variables in the routine, resource and character.
+            val agenda = MeetingAgenda(AgendaType.REQUEST, name).apply {
+                attachedRequest = Request(
+                    SetWorkers(
+                        wantPlace.manager,
+                        tgtPlace = wantPlace.name
+                    ).apply {
+                        workers = maxProdApp.plannedWorker + increaseAmount
+                    }//Created a command to transfer the resource.
+                    ,
+                    issuedTo = hashSetOf(wantPlace.manager)
+                ).apply {
+                    executeTime = gState.time
+                    issuedBy = hashSetOf(name)
+                }
+            }
+            return NewAgenda(name, place).also {
+                it.agenda = agenda
+            }
+
+        }
+        return null
+    }
+
+    fun partyProductions(name: String): List<String>
+    {
+        return gState.characters[name]!!
+            .party!!.places.flatMap { it.apparatuses.flatMap { it.idealProduction.keys } }
     }
 
     fun gossip(name: String, place: String): GameAction?

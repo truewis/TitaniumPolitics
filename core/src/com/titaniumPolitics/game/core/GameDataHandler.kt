@@ -40,6 +40,11 @@ class GameDataHandler(val directoryName: String)
     {
         resourceMap["temperature"] = GameDataFrame("$directoryName/temperature.csv")
         resourceMap["health"] = GameDataFrame("$directoryName/health.csv")
+        resourceMap["currentWorkerPerPlace"] = GameDataFrame("$directoryName/currentWorkerPerPlace.csv")
+        resourceMap["plannedWorkerPerPlace"] = GameDataFrame("$directoryName/plannedWorkerPerPlace.csv")
+        resourceMap["currentWorkerPerParty"] = GameDataFrame("$directoryName/currentWorkerPerParty.csv")
+        resourceMap["plannedWorkerPerParty"] = GameDataFrame("$directoryName/plannedWorkerPerParty.csv")
+        resourceMap["currentPop"] = GameDataFrame("$directoryName/currentPop.csv")
 
     }
 
@@ -57,6 +62,26 @@ class GameDataHandler(val directoryName: String)
         resourceMap["health"]!![gState.time] = hashMapOf(*(gState.characters.map { (cName, char) ->
             cName to char.health.toFloat()
         }.filter { !it.first.contains("Anon") }.toTypedArray()))
+
+        resourceMap["currentWorkerPerPlace"]!![gState.time] = hashMapOf(*(gState.places.map { (pName, place) ->
+            pName to place.currentWorker.toFloat()
+        }.filter { !it.first.contains("home") }.toTypedArray()))
+        resourceMap["plannedWorkerPerPlace"]!![gState.time] = hashMapOf(*(gState.places.map { (pName, place) ->
+            pName to place.plannedWorker.toFloat()
+        }.filter { !it.first.contains("home") }.toTypedArray()))
+
+        resourceMap["currentWorkerPerParty"]!![gState.time] = hashMapOf(*(gState.parties.map { (pName, party) ->
+            pName to party.currentWorker.toFloat()
+        }.toTypedArray()))
+        resourceMap["plannedWorkerPerParty"]!![gState.time] = hashMapOf(*(gState.parties.map { (pName, party) ->
+            pName to party.plannedWorker.toFloat()
+        }.toTypedArray()))
+
+
+        resourceMap["currentPop"]!![gState.time] = hashMapOf(*(gState.places.map { (pName, place) ->
+            pName to place.currentTotalPop.toFloat()
+        }.filter { !it.first.contains("home") }.toTypedArray()))
+
         gState.existingResourceList.forEach {
             createIfNull("${it}Storage")
             resourceMap["${it}Storage"]!![gState.time] = hashMapOf(*(gState.places.map { (pName, place) ->
@@ -139,6 +164,28 @@ data class GameDataFrame(var fName: String)
             var values = rows[i].split(',')
             if (values[0] == "keys") continue
             res[values[0].toInt()] = values[keyColumn].toFloat()
+        }
+
+
+
+
+        writer = file.bufferedWriter()
+        return res
+    }
+
+    fun columnSum(): HashMap<Int, Float>
+    {
+        writer.close()
+
+        val res = hashMapOf<Int, Float>()
+        val s = file.readText()
+        val rows = s.split('\n')
+
+        for (i in 1..rows.size)
+        {
+            var values = rows[i].split(',')
+            if (values[0] == "keys") continue
+            res[values[0].toInt()] = values.takeLast(values.size - 1).sumOf { it.toDouble() }.toFloat()
         }
 
 

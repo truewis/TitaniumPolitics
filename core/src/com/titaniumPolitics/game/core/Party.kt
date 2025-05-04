@@ -1,5 +1,6 @@
 package com.titaniumPolitics.game.core
 
+import com.titaniumPolitics.game.debugTools.Logger
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -22,6 +23,15 @@ class Party : GameStateElement()
     var resources = hashMapOf<String, Int>()
     val integrity: Double
         get() = parent.getPartyMutuality(this.name, this.name)
+
+    val places: Collection<Place>
+        get() = parent.places.filter { it.value.responsibleParty == name }.values
+
+    val currentWorker: Int
+        get() = places.sumOf { it.currentWorker }
+
+    val plannedWorker: Int
+        get() = places.sumOf { it.plannedWorker }
 
     fun causeDeaths(num: Int)
     {
@@ -81,6 +91,6 @@ class Party : GameStateElement()
             }
         }
         if (remaining > 0)
-            println("There are not enough anonymous members to kill in $name.")
+            Logger.warning("There are not enough anonymous members to reduce in $name.")
     }
 }

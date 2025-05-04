@@ -1013,6 +1013,7 @@ class GameEngine(val gameState: GameState)
         fun availableActions(gameState: GameState, place: String, character: String): ArrayList<String>
         {
             val actions = arrayListOf<String>()
+            val placeObj = gameState.places[place]!!
             if (gameState.ongoingMeetings.any { it.value.currentCharacters.contains(character) })
             {
                 val conf = gameState.ongoingMeetings.filter {
@@ -1038,8 +1039,6 @@ class GameEngine(val gameState: GameState)
                         actions.add("Resign") //Only leaders can resign right now. Resign is one of the few actions that can be done without an agenda.
                         if (subject == "divisionDailyConference")
                         {
-                            actions.add("SetWorkers")
-                            actions.add("SetWorkHours")
                             if (!gameState.parties[conf.involvedParty]!!.isSalaryPaid)
                                 actions.add("Salary") //Salary is distributed in a divisionDailyConference.
                         }
@@ -1066,11 +1065,12 @@ class GameEngine(val gameState: GameState)
                 actions.add("LeaveMeeting")
                 return actions
             }
-            if (gameState.places[place]!!.characters.count() > 1)
+            ////////////////////////////////////////////////////MEETING ACTIONS//////////////////////////////////////////////////////////
+            if (placeObj.characters.count() > 1)
                 actions.add("Talk")
-            if (gameState.places[place]!!.isAccidentScene)
+            if (placeObj.isAccidentScene)
             {
-                if (gameState.places[place]!!.responsibleParty != "" && gameState.parties[gameState.places[place]!!.responsibleParty]!!.members.contains(
+                if (placeObj.responsibleParty != "" && gameState.parties[placeObj.responsibleParty]!!.members.contains(
                         character
                     )
                 )//Only the responsible party members can clear the accident scene.
@@ -1081,6 +1081,11 @@ class GameEngine(val gameState: GameState)
             actions.add("Examine")
             //actions.add("radio")
             actions.add("Wait")
+            if (placeObj.manager == character)
+            {
+                actions.add("SetWorkers")
+                actions.add("SetWorkHours")
+            }
             if (place.contains("home"))
             {
                 actions.add("Sleep")
@@ -1092,7 +1097,7 @@ class GameEngine(val gameState: GameState)
             {
                 //actions.add("InfoAnnounce") Only the leader of the internal division can announce.
             }
-            if (gameState.places[place]!!.responsibleParty != "" && gameState.parties[gameState.places[place]!!.responsibleParty]!!.members.contains(
+            if (placeObj.responsibleParty != "" && gameState.parties[placeObj.responsibleParty]!!.members.contains(
                     character
                 )
             )

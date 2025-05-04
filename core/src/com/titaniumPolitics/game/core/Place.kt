@@ -37,6 +37,7 @@ class Place : GameStateElement()
                 return name.substringAfter("home_")
             return null
         }
+    var manager = ""
     var gasResources = Resources("oxygen" to 20000.0, "carbonDioxide" to 100.0)
     fun gasPressure(gasName: String): Double =
         gasResources[gasName] / ((ReadOnly.gasJson[gasName]!!.jsonObject["density"]!!.jsonPrimitive.float)) * (temperature / 273.15) / volume * 101325
@@ -72,6 +73,9 @@ class Place : GameStateElement()
                             it.value.responsibleParty == responsibleParty && it.key != name
                         }.values.sumOf { it.currentWorker }//If this place is a guildhall, all workers stay here when they are not working. TODO: this is a simplification.
             else return currentWorker
+
+
+            //return characters.filter { it } + currentWorker + idler +
         }
     val maxResources: Resources
         get()
@@ -170,6 +174,7 @@ class Place : GameStateElement()
 
     companion object
     {
+        val publicPlaces = setOf<String>("market", "squareNorth", "squareSouth")
         fun timeBetweenPlaces(place1: String, place2: String): Int
         {
             if (place1 == place2) return 0
