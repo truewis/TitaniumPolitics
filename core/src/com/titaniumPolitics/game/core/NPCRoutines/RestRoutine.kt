@@ -24,7 +24,10 @@ class RestRoutine() : Routine()
 
     override fun endCondition(name: String, place: String): Boolean
     {
-        return (gState.hour in 8..18)
+        if (variables["workPlace"] == null)
+            return (gState.hour in 8..18)
+        else
+            return (gState.hour in gState.places[variables["workPlace"]!!]!!.workHours)
     }
 
     @Transient

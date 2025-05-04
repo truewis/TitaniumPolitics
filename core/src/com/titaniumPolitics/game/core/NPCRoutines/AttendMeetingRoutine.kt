@@ -401,72 +401,68 @@ class AttendMeetingRoutine : Routine(), IMeetingRoutine
         val charObj = gState.characters[name]!!
         //1. If the party is short of workers, reduce the production of the section which has the minimum productivity per worker hour
         val minProdApp = charObj
-            .party!!.places.flatMap { it.apparatuses }.filter { it.currentWorker != 0 }.minBy {
+            .division!!.places.flatMap { it.apparatuses }.filter { it.currentWorker != 0 }.minByOrNull {
                 productivity(name, it)
             }
-        if (productivity(name, minProdApp) < gState.laborValuePerHour)
-        {
-            val reductionAmount = max(minProdApp.plannedWorker / 5, 1)
-            val wantPlace = gState.getApparatusPlace(minProdApp.ID)
-            //Fill in the agenda based on variables in the routine, resource and character.
-            val agenda = MeetingAgenda(AgendaType.REQUEST, name).apply {
-                attachedRequest = Request(
-                    SetWorkers(
-                        wantPlace.manager,
-                        tgtPlace = wantPlace.name
+        if (minProdApp != null)
+            if (productivity(name, minProdApp) < gState.laborValuePerHour)
+            {
+                val reductionAmount = max(minProdApp.plannedWorker / 5, 1)
+                val wantPlace = gState.getApparatusPlace(minProdApp.ID)
+                //Fill in the agenda based on variables in the routine, resource and character.
+                val agenda = MeetingAgenda(AgendaType.REQUEST, name).apply {
+                    attachedRequest = Request(
+                        SetWorkers(
+                            wantPlace.manager,
+                            tgtPlace = wantPlace.name
+                        ).apply {
+                            workers = minProdApp.plannedWorker - reductionAmount
+                        }//Created a command to transfer the resource.
+                        ,
+                        issuedTo = hashSetOf(wantPlace.manager)
                     ).apply {
-                        workers = minProdApp.plannedWorker - reductionAmount
-                    }//Created a command to transfer the resource.
-                    ,
-                    issuedTo = hashSetOf(wantPlace.manager)
-                ).apply {
-                    executeTime = gState.time
-                    issuedBy = hashSetOf(name)
+                        executeTime = gState.time
+                        issuedBy = hashSetOf(name)
+                    }
                 }
-            }
-            return NewAgenda(name, place).also {
-                it.agenda = agenda
-            }
+                return NewAgenda(name, place).also {
+                    it.agenda = agenda
+                }
 
-        }
+            }
 
         //2. Increase the production of the section which has the maximum productivity per worker hour. The productivity must be higher than the labor cost.
         val maxProdApp = charObj
-            .party!!.places.flatMap { it.apparatuses }.filter { it.currentWorker != 0 }.maxBy {
+            .division!!.places.flatMap { it.apparatuses }.filter { it.currentWorker != 0 }.maxByOrNull {
                 productivity(name, it)
             }
-        if (productivity(name, maxProdApp) > gState.laborValuePerHour)
-        {
-            val increaseAmount = max(maxProdApp.plannedWorker / 5, 1)
-            val wantPlace = gState.getApparatusPlace(maxProdApp.ID)
-            //Fill in the agenda based on variables in the routine, resource and character.
-            val agenda = MeetingAgenda(AgendaType.REQUEST, name).apply {
-                attachedRequest = Request(
-                    SetWorkers(
-                        wantPlace.manager,
-                        tgtPlace = wantPlace.name
+        if (maxProdApp != null)
+            if (productivity(name, maxProdApp) > gState.laborValuePerHour)
+            {
+                val increaseAmount = max(maxProdApp.plannedWorker / 5, 1)
+                val wantPlace = gState.getApparatusPlace(maxProdApp.ID)
+                //Fill in the agenda based on variables in the routine, resource and character.
+                val agenda = MeetingAgenda(AgendaType.REQUEST, name).apply {
+                    attachedRequest = Request(
+                        SetWorkers(
+                            wantPlace.manager,
+                            tgtPlace = wantPlace.name
+                        ).apply {
+                            workers = maxProdApp.plannedWorker + increaseAmount
+                        }//Created a command to transfer the resource.
+                        ,
+                        issuedTo = hashSetOf(wantPlace.manager)
                     ).apply {
-                        workers = maxProdApp.plannedWorker + increaseAmount
-                    }//Created a command to transfer the resource.
-                    ,
-                    issuedTo = hashSetOf(wantPlace.manager)
-                ).apply {
-                    executeTime = gState.time
-                    issuedBy = hashSetOf(name)
+                        executeTime = gState.time
+                        issuedBy = hashSetOf(name)
+                    }
                 }
-            }
-            return NewAgenda(name, place).also {
-                it.agenda = agenda
-            }
+                return NewAgenda(name, place).also {
+                    it.agenda = agenda
+                }
 
-        }
+            }
         return null
-    }
-
-    fun partyProductions(name: String): List<String>
-    {
-        return gState.characters[name]!!
-            .party!!.places.flatMap { it.apparatuses.flatMap { it.idealProduction.keys } }
     }
 
     fun gossip(name: String, place: String): GameAction?

@@ -128,7 +128,7 @@ class AnonAgent : Agent()
             return
         } else
         //When not work hours, rest
-            routines.add(RestRoutine())
+            routines.add(RestRoutine().also { it.variables["workPlace"] = workPlace })
     }
 
     @Deprecated("This function is not used anymore because we don't have trade action anymore.")

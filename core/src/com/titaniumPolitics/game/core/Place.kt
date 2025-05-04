@@ -114,6 +114,8 @@ class Place : GameStateElement()
 
     var workHoursStart = 0
     var workHoursEnd = 0
+    val workHours: IntRange
+        get() = workHoursStart..workHoursEnd
     var apparatuses = hashSetOf<Apparatus>()
     fun getApparatus(ID: String): Apparatus
     {

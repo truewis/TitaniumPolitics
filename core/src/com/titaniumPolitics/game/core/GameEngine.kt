@@ -760,7 +760,7 @@ class GameEngine(val gameState: GameState)
             {
                 entry.value.health -= dt / const("SuffocationTau") * const("HealthMax")
                 //If in a workplace, party integrity decreases, if I am not the leader
-                entry.value.party?.also {
+                entry.value.division?.also {
                     if (entry.value.place.responsibleParty == it.name && it.leader != entry.key)
                         gameState.setPartyMutuality(
                             it.name,
@@ -777,7 +777,7 @@ class GameEngine(val gameState: GameState)
 //                    "HealthMax"
 //                )//TODO: balance this
                 //If in a workplace, party integrity decreases, if I am not the leader
-                entry.value.party?.also {
+                entry.value.division?.also {
                     if (entry.value.place.responsibleParty == it.name && it.leader != entry.key)
                         gameState.setPartyMutuality(
                             it.name,

@@ -63,8 +63,8 @@ class Character : GameStateElement()
 
     val currentMeeting
         get() = parent.ongoingMeetings.values.firstOrNull { it.currentCharacters.contains(name) }
-    val party
-        get() = parent.parties.values.find { it.members.contains(name) }
+    val division
+        get() = parent.parties.values.find { it.members.contains(name) && it.type == "division" }
     var assistants =
         hashSetOf<String>()//TODO: Think about utilizing assistants. How do we pay them? How is it different from requests between free individuals?
 

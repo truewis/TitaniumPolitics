@@ -1,6 +1,5 @@
 package com.titaniumPolitics.game.core.gameActions
 
-import com.titaniumPolitics.game.core.Place
 import com.titaniumPolitics.game.core.Resources
 import kotlinx.serialization.Serializable
 
@@ -32,7 +31,7 @@ class OfficialResourceTransfer(override val sbjCharacter: String, override val t
         if (parent.places[toWhere]!!.responsibleParty != "")
         {
             val rparty = parent.places[toWhere]!!.responsibleParty
-            sbjCharObj.party?.also {
+            sbjCharObj.division?.also {
                 val partyLeader = parent.characters[parent.parties[rparty]!!.leader]
                 parent.setPartyMutuality(rparty, it.name, (partyLeader?.itemValue(resources) ?: .0))
             }
@@ -45,7 +44,7 @@ class OfficialResourceTransfer(override val sbjCharacter: String, override val t
     {
         //Can't send to the same place
         if (toWhere == tgtPlace) return false
-        return parent.places[tgtPlace]!!.responsibleParty == sbjCharObj.party?.name && parent.places[tgtPlace]!!.resources.contains(
+        return parent.places[tgtPlace]!!.responsibleParty == sbjCharObj.division?.name && parent.places[tgtPlace]!!.resources.contains(
             resources
         )
     }
