@@ -36,9 +36,8 @@ class GameState
         get() = _time / ReadOnly.constInt("lengthOfDay")
 
 
-    @Transient
-            /*Old time is the time before the change. New time is the time after the change.*/
-    var timeChanged =
+    /*Old time is the time before the change. New time is the time after the change.*/
+    val timeChanged =
         arrayListOf<(Int, Int) -> Unit>()
     val pop: Int
         get() = parties.values.sumOf { it.size } + idlePop
@@ -55,15 +54,12 @@ class GameState
             return characters.values.filter { it.alive }.random()
         }
 
-    @Transient
-    var popChanged = arrayListOf<(Int, Int) -> Unit>()
+    val popChanged = arrayListOf<() -> Unit>()
 
-    @Transient
-    var updateUI = arrayListOf<(GameState) -> Unit>()
+    val updateUI = arrayListOf<(GameState) -> Unit>()
 
     //This is a list of functions that will be called when the game starts.
-    @Transient
-    var onStart = arrayListOf<() -> Unit>()
+    val onStart = arrayListOf<() -> Unit>()
     var _alertLevel = 0
     var places = hashMapOf<String, Place>()
     var characters = hashMapOf<String, Character>()

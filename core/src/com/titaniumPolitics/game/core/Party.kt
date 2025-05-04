@@ -27,23 +27,25 @@ class Party : GameStateElement()
     {
         if (anonymousMembers.sum() >= num)
         {
-            reduceAnonMembers(num)
+            reduceAnonMembers(num) //If there are anon members left, kill them first.
+        } else if (num >= size)
+        {
+            reduceAnonMembers(anonymousMembers.sum())
+            members.forEach { parent.characters[it]!!.alive = false }
         } else
         {
             //kill members
             for (i in 0..<num - anonymousMembers.sum())
-                if (members.count { parent.characters[it]!!.alive } > num - anonymousMembers.sum())
-                    members.filter { parent.characters[it]!!.alive }.random()
-                        .let { parent.characters[it]!!.alive = false }//kill num - anonymousMembers members
-                else
-                    members.filter { parent.characters[it]!!.alive }
-                        .forEach { parent.characters[it]!!.alive = false }//kill all members
+                members.filter { parent.characters[it]!!.alive }.random()
+                    .let { parent.characters[it]!!.alive = false }//kill num - anonymousMembers members
 
             reduceAnonMembers(anonymousMembers.sum())
         }
+        parent.popChanged.forEach { it() }
 
     }
 
+    //Used in mutuality calculation
     fun getMultiplier(char: String): Int
     {
         return if (members.contains(char))
