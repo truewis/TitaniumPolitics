@@ -21,18 +21,12 @@ sealed class EventObject(var name: String, val oneTime: Boolean)
     }
 
     abstract fun exec(a: Int, b: Int)
-
-    //This event will be triggered by the game. Subscribe to events here.
-    open fun activate()
-    {
-        parent.timeChanged += this::exec
-    }
+    
 
     //This event will not be triggered by the game. Unsubscribe from events here.
-    open fun deactivate()
+    fun deactivate()
     {
         completed = true
-        parent.timeChanged -= this::exec
     }
 
     open fun displayEmoji(who: String): Boolean

@@ -47,7 +47,8 @@ class GameState
         get() = _time / ReadOnly.constInt("lengthOfDay")
 
 
-    /*Old time is the time before the change. New time is the time after the change.*/
+    @Transient
+            /*Old time is the time before the change. New time is the time after the change.*/
     val timeChanged =
         arrayListOf<(Int, Int) -> Unit>()
     val pop: Int
@@ -177,7 +178,7 @@ class GameState
             setMutuality(char.key, char.key, 50.0)
         }
         eventSystem.injectParent(this)
-        //eventSystem.newGame()
+        eventSystem.newGame()
         injectDependency()
         println("Game state initialized successfully.")
     }

@@ -29,8 +29,9 @@ class EventSystem : GameStateElement()
         super.injectParent(gameState)
         dataBase.forEach {
             it.injectParent(gameState)
-            if (!it.completed)
-                it.activate()//If loaded from disk, all events are unsubscribed, hence we have to subscribe them again.
+        }
+        gameState.timeChanged += { a, b ->
+            dataBase.forEach { if (!it.completed) it.exec(a, b) }
         }
 
     }
@@ -39,12 +40,11 @@ class EventSystem : GameStateElement()
     {
         dataBase.add(event)
         event.injectParent(parent)
-        event.activate()
     }
 
     fun displayEmoji(who: String): Boolean
     {
-        return dataBase.any { it.displayEmoji(who) }
+        return dataBase.any { !it.completed && it.displayEmoji(who) }
     }
 
     companion object

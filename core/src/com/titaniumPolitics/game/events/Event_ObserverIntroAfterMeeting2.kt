@@ -17,17 +17,4 @@ class Event_ObserverIntroAfterMeeting2 : EventObject("Mysterious orders from the
             deactivate()
         }
     }
-
-    override fun activate()
-    {
-        //Play dialogue right after the meeting
-        //TODO: check if the player has followed the orders.
-        parent.timeChanged += this::exec
-    }
-
-    override fun deactivate()
-    {
-        completed = true
-        parent.timeChanged -= this::exec
-    }
 }
