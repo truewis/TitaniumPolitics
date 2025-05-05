@@ -4,6 +4,7 @@ import com.titaniumPolitics.game.core.ReadOnly.const
 import com.titaniumPolitics.game.core.gameActions.GameAction
 import com.titaniumPolitics.game.core.gameActions.NewAgenda
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.Transient
 import kotlin.math.max
 
 @Serializable
@@ -19,16 +20,25 @@ class Character : GameStateElement()
         get() = parent.characters.filter { it.value == this }.keys.first()
     var alive = true
     var trait = hashSetOf<String>()
-    var resources = Resources()
+
+    var resources: Resources
+        get() =
+            parent.places["home_$name"]!!.resources
+        set(value)
+        {
+            parent.places["home_$name"]!!.resources = value
+        }
+
     var preparedInfoKeys =
         arrayListOf<String>()//Information that can be presented in meetings. Note that preparing the information prevents it from expiring.
     var health = .0
         set(value)
         {
             field = if (value < const("HealthMax")) value else const("HealthMax")//Max health is 100.
-            if (field < const("HealthMax") * 0.5 && (hunger > const("ungerThreshold") || thirst > const("thirstThreshold")))
+            if (field < const("CriticalHealth") && (hunger > const("hungerThreshold") || thirst > const("thirstThreshold")))
             {
-                killReliant(max(reliant / 10, 1))
+                if (reliant > 1)
+                    killReliant(max(reliant / 10, 1))
             }
         }
     var hunger = .0

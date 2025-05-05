@@ -58,9 +58,9 @@ class GameEngine(val gameState: GameState)
                     it.frozen--
                     if (!it.trait.contains("robot"))
                     {//Robots don't need to eat.
-                        it.health -= dt / const("HealthConsumptionTau")
-                        it.hunger += dt / const("HungerConsumptionTau")
-                        it.thirst += dt / const("ThirstConsumptionTau")
+                        it.health -= dt / const("HealthConsumptionTau") * const("HealthMax")
+                        it.hunger += dt / const("HungerConsumptionTau") * const("HungerMax")
+                        it.thirst += dt / const("ThirstConsumptionTau") * const("ThirstMax")
                         with(ReadOnly) {
                             if (it.hunger > const("hungerThreshold")) it.health -= (const("HungerMax") - const(
                                 "hungerThreshold"

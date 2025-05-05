@@ -17,20 +17,7 @@ class Place : GameStateElement()
     override val name: String
         get() = parent.places.filter { it.value == this }.keys.first()
     var resources = Resources()
-        get()
-        {
-            //If the place is a home, return the resources of the character living there.
-            if (name.contains("home_"))
-                return parent.characters[name.substringAfter("home_")]!!.resources
-            return field
-        }
-        set(value)
-        {
-            //If the place is a home, set the resources of the character living there.
-            if (name.contains("home_"))
-                parent.characters[name.substringAfter("home_")]!!.resources = value
-            field = value
-        }
+
     val connectedHomes: List<String>
         get()
         {
