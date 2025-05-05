@@ -1,5 +1,6 @@
 package com.titaniumPolitics.game.core
 
+import com.titaniumPolitics.game.core.GameEngine.Companion.onAccident
 import com.titaniumPolitics.game.core.ReadOnly.const
 import com.titaniumPolitics.game.core.ReadOnly.dt
 import kotlinx.serialization.Serializable
@@ -8,6 +9,7 @@ import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
 import java.util.*
 import kotlin.math.exp
+import kotlin.math.min
 
 @Serializable
 class Place : GameStateElement()
@@ -69,8 +71,6 @@ class Place : GameStateElement()
     val workForce: Int
         get() = characters.filter { it.contains("Anon") && it.contains(responsibleDivision) }
             .sumOf { parent.characters[it]!!.reliant }
-    val outOfBudget: Boolean
-        get() = false //TODO
 
     val currentTotalPop: Int
         //This number must be conserved.
@@ -186,6 +186,275 @@ class Place : GameStateElement()
         }
 
 
+    }
+
+    //Workers are assigned to apparatuses. If there is not enough workers, some apparatuses are not worked.
+    fun distributeWorkers()
+    {
+        if (isAccidentScene)
+        {
+            apparatuses.forEach { it.currentWorker = 0 }
+            return
+        } //If there is an accident, no one works until it is resolved.
+        val workableApparatus = apparatuses.filter {
+            resourceShortOfHourly(it) == null && gasResourceShortOfHourly(it) == null && it.durability > 0
+        }
+        apparatuses.forEach {
+            it.currentWorker = 0
+        }//Reset the currentWorkers. Note that this must come after the condition check, because wages are included in required resources.
+        val idealWorker = workableApparatus.sumOf { apparatus -> apparatus.idealWorker }
+        var sum = 0
+        workableApparatus.forEachIndexed lambda@{ index, apparatus ->
+            if (index == workableApparatus.size - 1)//If last apparatus in the place, we have to allocate the rest of the worker.
+            {
+                apparatus.currentWorker = workForce - sum
+            } else
+            {
+                if (idealWorker != 0)
+                    apparatus.currentWorker =
+                        workForce * apparatus.idealWorker / idealWorker//Distribute workers according to ideal worker
+                sum += apparatus.currentWorker
+            }
+        }
+    }
+
+    fun workApparatusHourly()
+    {
+        val dth = 3600
+        if (responsibleDivision == "") return //TODO: Is this true?
+        if (isAccidentScene) return //If there is an accident, no one works until it is resolved.
+        val worker = parent.characters.values.first {
+            it.name.contains("Anon") && it.name.contains(
+                name
+            )
+        }
+        apparatuses.forEach app@{ apparatus ->
+            //Consume durability, no matter it is currently being worked or not.
+            apparatus.durability -= dth * const("DurabilityMax") / const("DurabilityTau")//Apparatuses are damaged over time. TODO: get rid of unexpected behaviors, if any
+            //Check if it is workable------------------------------------------------------------------------------
+            if (apparatus.durability <= .0)
+            {
+                apparatus.durability = .0
+                return@app //Cannot work broken apparatus
+            }
+
+
+            apparatus.currentProduction.forEach {
+                if ((resources[it.key]) + it.value > (maxResources[it.key]))
+                    return@app //If the resource is full, no one works.
+            }
+            if (resourceShortOfHourly(apparatus) != null || gasResourceShortOfHourly(apparatus) != null)
+                return@app //If there is not enough resources, no one works.
+            //-----------------------------------------------------------------------------------------------------
+            apparatus.currentProduction.forEach {
+                resources[it.key] += it.value * dth
+            }
+            apparatus.currentConsumption.forEach {
+                resources[it.key] = (resources[it.key]) - it.value * dth
+            }
+            apparatus.currentDistribution.forEach {
+                worker.resources[it.key] += it.value * dth
+            }
+            apparatus.currentAbsorption.forEach {
+                gasResources[it.key] -= it.value * dth
+            }
+            addHeat(apparatus.currentHeatProduction * dth)
+
+            if (apparatus.currentGraveDanger > GameEngine.random.nextDouble())
+            {
+                //Catastrophic accident occurred.
+                println("Catastrophic accident occurred at: ${name}")
+                isAccidentScene = true
+                generateCatastrophicAccidents()
+
+            } else if (apparatus.currentDanger > GameEngine.random.nextDouble())
+            {
+                //Accident occurred.
+                println("Accident occurred at: ${name}")
+                isAccidentScene = true
+                generateAccidents()
+
+            }
+            if (apparatus.name in Apparatus.storages
+            )
+            {
+                apparatus.durability += dth * const("DurabilityMax") / const("DurabilityTau")//Storages are repaired if they are worked.
+            }
+        }
+    }
+
+    fun resourceShortOfHourly(app: Apparatus): String?
+    {
+        val dth = 3600
+        app.currentConsumption.forEach {
+            if ((resources[it.key]) < it.value * dth)
+                return it.key //If the resource is less than an hour worth of consumption, return the resource name.
+        }
+        app.currentAbsorption.forEach {
+            if ((gasResources[it.key]) < it.value * dth)
+                return it.key //If the resource is less than a unit time worth of consumption, return the resource name.
+        }
+        return null
+
+    }
+
+    fun gasResourceShortOfHourly(app: Apparatus): String?
+    {
+        val dth = 3600
+        app.currentAbsorption.forEach {
+            if ((gasResources[it.key]) < it.value * dth)
+                return it.key //If the resource is less than a unit time worth of consumption, return the resource name.
+        }
+        return null
+
+    }
+
+    fun generateAccidents()
+    {
+        //Generate casualties.
+        val death = currentWorker / 100 + 1 //TODO: what about injuries?
+        parent.parties[responsibleDivision]!!.causeDeaths(death)//TODO: we are assuming that all deaths are from the responsible party.
+        Information(
+            author = "",
+            creationTime = parent.time,
+            type = InformationType.CASUALTY,
+            tgtPlace = name,
+            auxParty = responsibleDivision,
+            amount = death
+        )/*store info*/.also {
+            parent.informations[it.generateName()] = it
+            //Add all people in the place to the known list.
+            it.knownTo.addAll(characters)
+            accidentInformationKeys += it.name
+        }
+        resources["corpse"] = (resources["corpse"]) + death
+
+        //Generate resource loss.
+        val loss = min(50.0, resources["water"])
+        resources["water"] = (resources["water"]) - loss
+        Information(
+            author = "",
+            creationTime = parent.time,
+            type = InformationType.LOST_RESOURCES,
+            tgtPlace = name,
+            resources = Resources("water" to loss)
+        )/*store info*/.also {
+            parent.informations[it.generateName()] = it
+            //Add all people in the place to the known list.
+            it.knownTo.addAll(characters)
+            accidentInformationKeys += it.name
+        }
+
+        //Generate apparatus damage.
+        apparatuses.forEach { app ->
+            val tmp = maxResources
+            app.durability -= 30
+            if (app.durability <= 0)
+            {
+                app.durability = .0
+                //If storage durability = 0, lose resources.
+                if (app.name in Apparatus.storages
+                )
+                {
+                    //TODO: resources should be stored in storages, not in places.
+                    val resourceName = app.storageType
+                    resources[resourceName] = (resources[resourceName]
+                            ) * (maxResources[resourceName]) / tmp[resourceName]
+                    //For example, unbroken storage number 8->7 then lose 1/8 of the resource.
+                    //TODO: generate information about the resource loss.
+                }
+
+                Information(
+                    author = "",
+                    creationTime = parent.time,
+                    type = InformationType.DAMAGED_APPARATUS,
+                    tgtPlace = name,
+                    amount = death,
+                    tgtApparatus = app.name
+                )/*store info*/.also {
+                    parent.informations[it.generateName()] = it
+                    //Add all people in the place to the known list.
+                    it.knownTo.addAll(characters)
+                    accidentInformationKeys += it.name
+                }
+            }
+            onAccident.forEach { it(name, death) }
+        }//TODO: spread rumors. But think if it is a good game design.
+
+
+    }
+
+    fun generateCatastrophicAccidents()
+    {
+        //Generate casualties.
+        val death = currentWorker / 5 + 1 //TODO: what about injuries?
+        parent.parties[responsibleDivision]!!.causeDeaths(death)
+        Information(
+            author = "",
+            creationTime = parent.time,
+            type = InformationType.CASUALTY,
+            tgtPlace = name,
+            auxParty = responsibleDivision,
+            amount = death
+        )/*store info*/.also {
+            parent.informations[it.generateName()] = it
+            //Add all people in the place to the known list.
+            it.knownTo.addAll(characters)
+            accidentInformationKeys += it.name
+        }
+        resources["corpse"] = (resources["corpse"]) + death
+
+        //Generate resource loss.
+        val loss = min(50.0, resources["water"])
+        resources["water"] = (resources["water"]) - loss
+        Information(
+            author = "",
+            creationTime = parent.time,
+            type = InformationType.LOST_RESOURCES,
+            tgtPlace = name,
+            resources = Resources("water" to loss)
+        )/*store info*/.also {
+            parent.informations[it.generateName()] = it
+            //Add all people in the place to the known list.
+            it.knownTo.addAll(characters)
+            accidentInformationKeys += it.name
+        }
+
+        //Generate apparatus damage.
+        apparatuses.forEach { app ->
+            val tmp = maxResources
+            app.durability -= 75
+            if (app.durability <= 0)
+            {
+                app.durability = .0
+                //If storage durability = 0, lose resources.
+                if (app.name in Apparatus.storages
+                )
+                {
+                    val resourceName = app.storageType
+                    resources[resourceName] =
+                        (resources[resourceName]
+                                ) * maxResources[resourceName] / tmp[resourceName]
+                    //For example, unbroken storage number 8->7 then lose 1/8 of the resource.
+                    //TODO: generate information about the resource loss.
+                }
+
+                Information(
+                    author = "",
+                    creationTime = parent.time,
+                    type = InformationType.DAMAGED_APPARATUS,
+                    tgtPlace = name,
+                    tgtApparatus = app.name
+                )/*store info*/.also {
+                    parent.informations[it.generateName()] = it
+                    //Add all people in the place to the known list.
+                    it.knownTo.addAll(characters)
+                    accidentInformationKeys += it.name
+                }
+            }
+        }
+        onAccident.forEach { it(name, death) }
+        //TODO: spread rumors. But think if it is a good game design.
     }
 
     companion object

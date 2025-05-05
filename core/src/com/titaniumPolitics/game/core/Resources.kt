@@ -43,17 +43,30 @@ class Resources()
         return _resources.all { it.value >= r1[it.key] }
     }
 
-    fun plus(r1: Resources, r2: Resources): Resources
+    operator fun plus(r1: Resources): Resources
     {
         val result = Resources()
         r1._resources.forEach { (key, value) ->
-            result[key] = value + r2[key]
+            result[key] = value
         }
-        r2._resources.forEach { (key, value) ->
-            if (!result.containsKey(key))
-            {
-                result[key] = value
-            }
+        _resources.forEach { (key, value) ->
+            result[key] += value
+        }
+        return result
+    }
+
+    operator fun plusAssign(r1: Resources)
+    {
+        r1._resources.forEach { (key, value) ->
+            this[key] += value
+        }
+    }
+
+    operator fun times(r: Double): Resources
+    {
+        val result = Resources()
+        _resources.forEach { (key, value) ->
+            result[key] += value * r
         }
         return result
     }

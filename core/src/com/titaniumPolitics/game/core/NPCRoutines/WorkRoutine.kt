@@ -166,8 +166,8 @@ class WorkRoutine() : Routine()
         //TODO: when pathfinding fails, skip.
         gState.places.values.forEach { place1 -> //TODO: right now, supply resource to any place regardless of the division. In the future, agents will not supply resources to hostile divisions.
             place1.apparatuses.forEach { apparatus ->
-                val res = GameEngine.resourceShortOf(apparatus, place1) //Type of resource that is short of.
-                if (res != "")
+                val res = place1.resourceShortOfHourly(apparatus) //Type of resource that is short of.
+                if (res != null)
                 //if there is a place within my division with the resource
                 {
                     val resplace =
