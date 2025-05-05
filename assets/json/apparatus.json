@@ -154,7 +154,7 @@
     ],
     "idealWorker": 5,
     "variables": {
-      "storageType": "metal",
+      "storageType": "lightMetal",
       "storageAmount": 3e4
     }
   },

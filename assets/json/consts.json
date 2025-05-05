@@ -69,7 +69,7 @@
   "WaitDeltaWill": -1,
   "WorkMeetingWillTau": -6000,
   "ChillMeetingWillTau": 6000,
-  "GlobalAccidentRate": 0,
+  "GlobalAccidentTau": 1e7,
   "ExecuteCommandRoutineInvalidActionTimeout": 4,
   "GasDiffusionTau": 10000,
   "TemperatureDiffusionTau": 10000,

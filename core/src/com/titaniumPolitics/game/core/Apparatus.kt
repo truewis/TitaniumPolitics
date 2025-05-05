@@ -36,9 +36,22 @@ class Apparatus
             field = when
             {
                 value > const("DurabilityMax") -> const("DurabilityMax")
-                value < 0 -> 0.0
+                value <= 0 -> 0.0//Damaged Apparatus Information is only stored in case of an accident.
                 else -> value
             }
+        }
+    val isStorage
+        get() = jsonData.jsonObject["variables"]?.jsonObject?.get("storageType") != null
+    val storageType: Pair<String, Double>
+        get()
+        {
+            if (!isStorage)
+            {
+                Logger.warning("$name is not a storage apparatus.")
+                throw Exception("$name is not a storage apparatus.")
+            }
+            return jsonData.jsonObject["variables"]!!.jsonObject["storageType"]!!.jsonPrimitive.toString() to
+                    jsonData.jsonObject["variables"]!!.jsonObject["storageAmount"]!!.jsonPrimitive.double
         }
     private val jsonData
         get() = ReadOnly.appJson[name] ?: throw Exception("$name not found in apparatus file.")
@@ -92,16 +105,6 @@ class Apparatus
     val idealWorker
         get() = jsonData.jsonObject["idealWorker"]?.jsonPrimitive?.int ?: 0
 
-    val storageType: String
-        get()
-        {
-            if (name !in storages)
-            {
-                Logger.warning("$name is not a storage apparatus.")
-                throw Exception("$name is not a storage apparatus.")
-            }
-            return name.substring(0, name.length - 7)
-        }
     val currentProduction: Map<String, Double>
         get()
         {
@@ -208,9 +211,9 @@ class Apparatus
             return if (currentWorker == 0 || idealWorker == 0) 0.0 else if (durability == .0) 0.0 else
             {
                 if (currentWorker <= idealWorker)
-                    baseDanger * (2 - currentWorker / idealWorker) * 100 / durability * const("GlobalAccidentRate")
+                    baseDanger * (2 - currentWorker / idealWorker) * 100 / durability / const("GlobalAccidentTau")
                 else
-                    baseDanger * (2 * currentWorker / idealWorker - 1) * 100 / durability * const("GlobalAccidentRate")//Danger increases when overcrewed or undercrewed.
+                    baseDanger * (2 * currentWorker / idealWorker - 1) * 100 / durability / const("GlobalAccidentTau")//Danger increases when overcrewed or undercrewed.
             }
         }
     val currentGraveDanger: Double
@@ -219,9 +222,9 @@ class Apparatus
             return if (currentWorker == 0 || idealWorker == 0) 0.0
             else if (durability == .0) 0.0
             else if (currentWorker <= idealWorker * 4 / 5)
-                baseDanger * (0.2 - currentWorker / 4 / idealWorker) * 100 / durability * const("GlobalAccidentRate")
+                baseDanger * (0.2 - currentWorker / 4 / idealWorker) * 100 / durability / const("GlobalAccidentTau")
             else if (currentWorker >= idealWorker * 6 / 5)
-                baseDanger * (2 * currentWorker / 3 / idealWorker - 0.8) * 100 / durability * const("GlobalAccidentRate") //Nonzero only when very overcrewed or undercrewed.
+                baseDanger * (2 * currentWorker / 3 / idealWorker - 0.8) * 100 / durability / const("GlobalAccidentTau") //Nonzero only when very overcrewed or undercrewed.
             else
                 0.0
         }
@@ -229,18 +232,6 @@ class Apparatus
     override fun toString(): String
     {
         return "Apparatus(name='$name', durability=$durability, baseDanger=$baseDanger, idealProduction=$idealProduction, idealWorker=$idealWorker, currentWorker=$currentWorker, currentProduction=$currentProduction, currentDanger=$currentDanger, currentGraveDanger=$currentGraveDanger)"
-    }
-
-    companion object
-    {
-        val storages = listOf(
-            "waterStorage",
-            "oxygenStorage",
-            "lightMetalStorage",
-            "componentStorage",
-            "rationStorage",
-            "energyStorage"
-        )
     }
 
 }
