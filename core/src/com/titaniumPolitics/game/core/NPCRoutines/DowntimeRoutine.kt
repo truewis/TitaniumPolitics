@@ -1,6 +1,7 @@
 package com.titaniumPolitics.game.core.NPCRoutines
 
 import com.titaniumPolitics.game.core.Place
+import com.titaniumPolitics.game.core.ReadOnly
 import com.titaniumPolitics.game.core.ReadOnly.const
 import com.titaniumPolitics.game.core.gameActions.GameAction
 import com.titaniumPolitics.game.core.gameActions.JoinMeeting
@@ -42,7 +43,11 @@ class DowntimeRoutine() : Routine()
 
     override fun endCondition(name: String, place: String): Boolean
     {
-        return (gState.hour in 8..18)
+        if (gState.getMutuality(name) < const("DowntimeWill")) return false
+        if (variables["workPlace"] == null)
+            return (gState.hour in 8..18)
+        else
+            return (gState.hour in gState.places[variables["workPlace"]!!]!!.workHours)
     }
 
     @Transient

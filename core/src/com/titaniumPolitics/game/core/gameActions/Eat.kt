@@ -5,10 +5,11 @@ import kotlinx.serialization.Serializable
 @Serializable
 class Eat(override val sbjCharacter: String, override val tgtPlace: String) : GameAction()
 {
+    val amount get() = sbjCharObj.reliant * 1.0
 
     override fun execute()
     {
-        val amount = sbjCharObj.reliant * 1.0
+
         if (sbjCharObj.resources["ration"] > amount && sbjCharObj.resources["water"] > amount
         )
         {
@@ -27,19 +28,19 @@ class Eat(override val sbjCharacter: String, override val tgtPlace: String) : Ga
 
     override fun isValid(): Boolean
     {
-        //TODO: Check if the character is in a place where it can eat, and has the resources to eat.
-        return tgtPlace.contains("home") && sbjCharObj.resources["ration"] > 0 && sbjCharObj.resources["water"] > 0
+        return tgtPlace.contains("home") && sbjCharObj.resources["ration"] > amount && sbjCharObj.resources["water"] > amount
     }
 
     override fun deltaWill(): Double
     {
         var w = super.deltaWill()
+        w += 7
         if (sbjCharObj.hunger < 50)
             w -= 5
         if (sbjCharObj.thirst < 50)
             w -= 5
         if (sbjCharObj.trait.contains("gourmand"))
-            w += 10
+            w += 5
         return w
     }
 

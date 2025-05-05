@@ -1,5 +1,6 @@
 package com.titaniumPolitics.game.core.NPCRoutines
 
+import com.titaniumPolitics.game.core.ReadOnly
 import com.titaniumPolitics.game.core.gameActions.GameAction
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
@@ -24,6 +25,7 @@ class RestRoutine() : Routine()
 
     override fun endCondition(name: String, place: String): Boolean
     {
+        if (gState.characters[name]!!.health < ReadOnly.const("CriticalHealth")) return false
         if (variables["workPlace"] == null)
             return (gState.hour in 8..18)
         else

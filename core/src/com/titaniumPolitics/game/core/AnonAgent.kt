@@ -67,7 +67,31 @@ class AnonAgent : Agent()
         }
 
         //Anonymous characters does not have downtime when they are not working. They are always having downtime.
+        //If health is low, rest
+        if (character.health < ReadOnly.const("TiredHealth"))
+        {
+            if (routines.none { it is RestRoutine })
+            {
+                routines.add(RestRoutine().apply {
+                    priority = pri
+                    intVariables["routineStartTime"] = parent.time
+                })//Add a routine, priority higher than work.
+                return
+            }
+        }
 
+        //If will is low, downTime.
+        if (parent.getMutuality(name) < ReadOnly.const("DowntimeWill"))
+        {
+            if (routines.none { it is DowntimeRoutine })
+            {
+                routines.add(DowntimeRoutine().apply {
+                    priority = pri
+                    intVariables["routineStartTime"] = parent.time
+                })//Add a routine, priority higher than work.
+                return
+            }
+        }
 
     }
 

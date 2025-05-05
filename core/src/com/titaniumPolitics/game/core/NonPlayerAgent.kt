@@ -35,9 +35,9 @@ class NonPlayerAgent : Agent()
     private fun selectRoutine()
     {
         var pri = 10
+        routines.sortByDescending { it.priority }
         if (!routines.isEmpty())
             pri = routines[0].priority + 10
-        routines.sortByDescending { it.priority }
         //Force start meeting routing if the character is in a meeting. Note that the character will leave the meeting immediately if nothing interests it.
         //Note that even if the character has a higher priority routine, this block will not trigger.
         if (parent.ongoingMeetings.any { it.value.currentCharacters.contains(name) } && routines.none { it is AttendMeetingRoutine })
@@ -84,7 +84,7 @@ class NonPlayerAgent : Agent()
             }
         }
         //If health is low, rest
-        if (parent.getMutuality(name) < ReadOnly.const("HealthMax") * 0.3)
+        if (character.health < ReadOnly.const("TiredHealth"))
         {
             if (routines.none { it is RestRoutine })
             {
@@ -97,7 +97,7 @@ class NonPlayerAgent : Agent()
         }
 
         //If will is low, downTime.
-        if (parent.getMutuality(name) < ReadOnly.const("mutualityMax") * 0.3)
+        if (parent.getMutuality(name) < ReadOnly.const("DowntimeWill"))
         {
             if (routines.none { it is DowntimeRoutine })
             {

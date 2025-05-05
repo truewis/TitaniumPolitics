@@ -55,7 +55,7 @@ class GameEngineTest
         while (gameState.time < days * ReadOnly.const("lengthOfDay"))
         {
             gameLoop()
-            if (gameState.time % 120 == 0)
+            if (gameState.time % 60 == 0)
                 gdh.writeEveryTurn(gState)
         }
     }

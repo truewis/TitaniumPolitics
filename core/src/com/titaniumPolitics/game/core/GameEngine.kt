@@ -61,14 +61,13 @@ class GameEngine(val gameState: GameState)
                         it.health -= dt / const("HealthConsumptionTau") * const("HealthMax")
                         it.hunger += dt / const("HungerConsumptionTau") * const("HungerMax")
                         it.thirst += dt / const("ThirstConsumptionTau") * const("ThirstMax")
-                        with(ReadOnly) {
-                            if (it.hunger > const("hungerThreshold")) it.health -= (const("HungerMax") - const(
-                                "hungerThreshold"
-                            )) / (const("HungerMax") + 1 - it.hunger)
-                            if (it.thirst > const("thirstThreshold")) it.health -= (const("ThirstMax") - const(
-                                "thirstThreshold"
-                            )) / (const("ThirstMax") + 1 - it.thirst)
-                        }
+                        if (it.hunger > const("hungerThreshold")) it.health -= dt / const("HealthConsumptionTau") * const(
+                            "HealthMax"
+                        )
+                        if (it.thirst > const("thirstThreshold")) it.health -= dt / const("HealthConsumptionTau") * const(
+                            "HealthMax"
+                        )
+
                     }
                 }
                 while (it.frozen == 0)
@@ -276,7 +275,7 @@ class GameEngine(val gameState: GameState)
                 if (it.value.author == "") factor *= 2.0//rumors affect the approval negatively.
                 if (it.value.auxParty == party.key) factor *= 2.0//If the casualty is in our party, approval of the responsible party drops even more.
                 //If casualty is not localized, does not affect mutualities.
-                if (it.value.tgtPlace == "everywhere")
+                if (it.value.tgtPlace == "everywhere" || gameState.places[it.value.tgtPlace]!!.responsibleDivision == "")
                 {
                     //Do nothing
                 } else
@@ -533,6 +532,7 @@ class GameEngine(val gameState: GameState)
                             delta = -dt / const("SuffocationTau") * const("mutualityMax")
                         )
                 }
+                println("${entry.key} is suffocating!")
 
             }
             //If temperature is extreme, take damage.
@@ -550,11 +550,12 @@ class GameEngine(val gameState: GameState)
                             delta = -dt / const("TemperatureDamageTau") * const("mutualityMax")
                         )
                 }
+                println("${entry.key} is under extreme temperature!")
             }
             if (entry.value.alive && entry.value.health <= 0)
             {
-                println("${entry.value.name} died.")
-                //TODO: Do we need to gameState.pop -= 1
+                println("${entry.key} died.")
+                gameState.places.values.find { it.characters.contains(entry.key) }!!.characters -= entry.key
                 entry.value.alive = false
             }
         }

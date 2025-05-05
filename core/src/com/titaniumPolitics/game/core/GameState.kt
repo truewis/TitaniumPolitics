@@ -112,22 +112,24 @@ class GameState
         val name = "Anon-idle"
         characters[name] =
             Character().apply {
+                this.injectParent(this@GameState)
                 this.livingBy = Place.publicPlaces.random()
                 this.health = 100.0
                 this.reliant = idlePop
             } //TODO: anonymous characters get resource from market.
-        nonPlayerAgents[name] = AnonAgent().also { it.workPlace = Place.publicPlaces.random() }
+        nonPlayerAgents[name] = AnonAgent().also {
+            it.injectParent(this@GameState)
+            it.workPlace = Place.publicPlaces.random()
+        }
     }
 
     fun initialize()
     {
         println("Initializing game state...")
-
-        places.forEach { it.value.injectParent(this) }
+        injectDependency()
         //Gain party anonymous member size from work place requirements.
         parties.forEach {
             val party = it.value
-            party.injectParent(this)
             it.value.places.sumOf { it.apparatuses.sumOf { it.idealWorker } }
 
             //Create anonymous characters if the party is big enough.
@@ -138,6 +140,7 @@ class GameState
                 characters[name] =
                     Character().apply {
                         //They live by one of their work places.
+                        this.injectParent(this@GameState)
                         try
                         {
 
@@ -150,9 +153,11 @@ class GameState
 
                         this.health = 100.0
                         this.reliant = place.plannedWorker
-                        this.resources = Resources("ration" to 100.0 * this.reliant, "water" to 100.0 * this.reliant)
                     }
-                nonPlayerAgents[name] = AnonAgent().also { it.workPlace = place.name }
+                nonPlayerAgents[name] = AnonAgent().also {
+                    it.injectParent(this@GameState)
+                    it.workPlace = place.name
+                }
                 //TODO: Give traits to the anonymous characters.
                 party.members.add(name)
 
@@ -164,6 +169,7 @@ class GameState
         characters.forEach { char ->
             //Create home for each character.
             places["home_" + char.key] = Place().apply {
+                this.injectParent(this@GameState)
                 responsibleDivision = ""
                 //Connect the new home to the place specified in the character.
                 val liveBy = this@GameState.characters[char.key]!!.livingBy
@@ -176,10 +182,11 @@ class GameState
 
             //Set Will to 50 for all characters.
             setMutuality(char.key, char.key, 50.0)
+
+            char.value.resources =
+                Resources("ration" to 100.0 * char.value.reliant, "water" to 100.0 * char.value.reliant)
         }
-        eventSystem.injectParent(this)
         eventSystem.newGame()
-        injectDependency()
         println("Game state initialized successfully.")
     }
 

@@ -78,12 +78,6 @@
         "old",
         "bargainer"
       ],
-      "resources": {
-        "_resources": {
-          "water": 10,
-          "ration": 10
-        }
-      },
       "health": 80,
       "livingBy": "constructionYardNorth"
     },
@@ -95,12 +89,6 @@
         "bargainer",
         "entertainer"
       ],
-      "resources": {
-        "_resources": {
-          "water": 10,
-          "ration": 10
-        }
-      },
       "health": 80,
       "reliant": 3,
       "livingBy": "mainControlRoom"
@@ -113,12 +101,6 @@
         "bargainer",
         "soldier"
       ],
-      "resources": {
-        "_resources": {
-          "water": 10,
-          "ration": 10
-        }
-      },
       "health": 80,
       "livingBy": "mainControlRoom"
     },
@@ -130,12 +112,6 @@
         "thief",
         "engineer"
       ],
-      "resources": {
-        "_resources": {
-          "water": 10,
-          "ration": 10
-        }
-      },
       "health": 80,
       "livingBy": "mainControlRoom"
     },
@@ -146,12 +122,6 @@
         "miningMinister",
         "thief"
       ],
-      "resources": {
-        "_resources": {
-          "water": 10,
-          "ration": 10
-        }
-      },
       "health": 80,
       "livingBy": "mainControlRoom"
     },
@@ -163,12 +133,6 @@
         "bargainer",
         "teacher"
       ],
-      "resources": {
-        "_resources": {
-          "water": 10,
-          "ration": 10
-        }
-      },
       "health": 80,
       "reliant": 3,
       "livingBy": "mainControlRoom"
@@ -181,12 +145,6 @@
         "thief",
         "organizer"
       ],
-      "resources": {
-        "_resources": {
-          "water": 10,
-          "ration": 10
-        }
-      },
       "health": 80,
       "livingBy": "mainControlRoom"
     },
@@ -197,12 +155,6 @@
         "thief",
         "organizer"
       ],
-      "resources": {
-        "_resources": {
-          "water": 10,
-          "ration": 10
-        }
-      },
       "health": 80,
       "reliant": 3,
       "livingBy": "mainControlRoom"
@@ -215,12 +167,6 @@
         "bargainer",
         "organizer"
       ],
-      "resources": {
-        "_resources": {
-          "water": 10,
-          "ration": 10
-        }
-      },
       "reliant": 3,
       "health": 80,
       "livingBy": "mainControlRoom"
@@ -232,12 +178,6 @@
         "engineer",
         "bargainer"
       ],
-      "resources": {
-        "_resources": {
-          "water": 10,
-          "ration": 10
-        }
-      },
       "health": 80,
       "livingBy": "constructionYardNorth"
     },
@@ -247,12 +187,6 @@
         "emotionless",
         "engineer"
       ],
-      "resources": {
-        "_resources": {
-          "water": 10,
-          "ration": 10
-        }
-      },
       "health": 80,
       "livingBy": "constructionYardNorth"
     },
@@ -262,12 +196,6 @@
         "emotionless",
         "engineer"
       ],
-      "resources": {
-        "_resources": {
-          "water": 10,
-          "ration": 10
-        }
-      },
       "health": 80,
       "livingBy": "constructionYardNorth"
     },
@@ -277,12 +205,6 @@
         "emotionless",
         "engineer"
       ],
-      "resources": {
-        "_resources": {
-          "water": 10,
-          "ration": 10
-        }
-      },
       "health": 80,
       "reliant": 2,
       "livingBy": "constructionYardNorth"
@@ -293,12 +215,6 @@
         "emotionless",
         "engineer"
       ],
-      "resources": {
-        "_resources": {
-          "water": 10,
-          "ration": 10
-        }
-      },
       "health": 80,
       "livingBy": "constructionYardNorth"
     },
@@ -307,12 +223,6 @@
         "workaholic",
         "emotionless"
       ],
-      "resources": {
-        "_resources": {
-          "water": 10,
-          "ration": 10
-        }
-      },
       "health": 80,
       "livingBy": "excavationShaftA"
     },
@@ -321,12 +231,6 @@
         "workaholic",
         "emotionless"
       ],
-      "resources": {
-        "_resources": {
-          "water": 10,
-          "ration": 10
-        }
-      },
       "health": 80,
       "livingBy": "excavationShaftB"
     },
@@ -336,12 +240,6 @@
         "emotionless",
         "doctor"
       ],
-      "resources": {
-        "_resources": {
-          "water": 10,
-          "ration": 10
-        }
-      },
       "health": 80,
       "livingBy": "welfareStationWest"
     },
@@ -351,12 +249,6 @@
         "emotionless",
         "doctor"
       ],
-      "resources": {
-        "_resources": {
-          "water": 10,
-          "ration": 10
-        }
-      },
       "health": 80,
       "reliant": 3,
       "livingBy": "welfareStationEast"
@@ -367,13 +259,6 @@
         "emotionless",
         "organizer"
       ],
-      "resources": {
-        "_resources": {
-          "water": 50,
-          "ration": 300,
-          "organics": 100
-        }
-      },
       "health": 80,
       "livingBy": "market"
     },
@@ -383,22 +268,6 @@
         "emotionless",
         "organizer"
       ],
-      "resources": {
-        "_resources": {
-          "water": 10,
-          "ration": 10,
-          "tank": 10,
-          "beam": 10,
-          "axle": 10,
-          "transmission": 5,
-          "bearing": 5,
-          "piston": 5,
-          "wire": 10,
-          "optics": 5,
-          "lamp": 5,
-          "vacuumTube": 5
-        }
-      },
       "health": 80,
       "livingBy": "market"
     },
@@ -406,11 +275,6 @@
       "trait": [
         "robot"
       ],
-      "resources": {
-        "_resources": {
-          "water": 100
-        }
-      },
       "health": 100,
       "livingBy": "mainControlRoom"
     },
@@ -418,11 +282,6 @@
       "trait": [
         "robot"
       ],
-      "resources": {
-        "_resources": {
-          "water": 100
-        }
-      },
       "health": 100,
       "livingBy": "observatory"
     }
