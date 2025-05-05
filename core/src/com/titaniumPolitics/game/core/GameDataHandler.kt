@@ -79,8 +79,9 @@ class GameDataHandler(val directoryName: String)
 
 
         resourceMap["currentPop"]!![gState.time] = hashMapOf(*(gState.places.map { (pName, place) ->
-            pName to place.currentTotalPop.toFloat()
+            pName to place.currentTotalPop.toFloat() + place.connectedHomes.sumOf { gState.places[it]!!.currentTotalPop }
         }.filter { !it.first.contains("home") }.toTypedArray()))
+        //For the current pop display, we add the population of all homes in the place.
 
         gState.existingResourceList.forEach {
             createIfNull("${it}Storage")
@@ -90,9 +91,9 @@ class GameDataHandler(val directoryName: String)
                 .toTypedArray()))//Do not save anonymous character's data: there are too many
         }
         gState.existingGasList.forEach {
-            createIfNull("${it}GasStorage")
-            resourceMap["${it}GasStorage"]!![gState.time] = hashMapOf(*(gState.places.map { (pName, place) ->
-                pName to place.gasResources[it].toFloat()//TODO: store pressure instead?
+            createIfNull("${it}GasPressure")
+            resourceMap["${it}GasPressure"]!![gState.time] = hashMapOf(*(gState.places.map { (pName, place) ->
+                pName to place.gasPressure(it).toFloat()//TODO: store pressure instead?
             }.filter { !it.first.contains("Anon") }.toTypedArray()))
         }
     }

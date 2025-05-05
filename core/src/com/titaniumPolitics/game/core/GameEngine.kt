@@ -206,7 +206,7 @@ class GameEngine(val gameState: GameState)
             }
 
         }
-        char.history[gameState.time] = action.javaClass.simpleName
+        char.history.add(action.javaClass.simpleName)
         val place = gameState.places.values.find {
             it.characters.contains(
                 char.name

@@ -72,7 +72,7 @@ class Character : GameStateElement()
     //You can hire specialists to write you various reports, which appears as separate UIs as well.
     var mercenaries = hashSetOf<String>()
 
-    val history = hashMapOf<Int, String>()
+    val history = arrayListOf<String>()
     val finishedRequests =
         HashSet<String>() //Requests that this character thinks are finished. The recipient of the request may not be aware of this yet.
 

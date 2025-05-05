@@ -166,7 +166,9 @@ class GameState
             places["home_" + char.key] = Place().apply {
                 responsibleDivision = ""
                 //Connect the new home to the place specified in the character.
-                connectedPlaces.add(this@GameState.characters[char.key]!!.livingBy)
+                val liveBy = this@GameState.characters[char.key]!!.livingBy
+                connectedPlaces.add(liveBy)
+                coordinates = this@GameState.places[liveBy]!!.coordinates
             }
             places[this@GameState.characters[char.key]!!.livingBy]!!.connectedPlaces.add("home_" + char.key)
             if (places.none { it.value.characters.contains(char.key) })

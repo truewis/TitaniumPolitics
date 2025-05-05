@@ -29,6 +29,13 @@ class Place : GameStateElement()
                 parent.characters[name.substringAfter("home_")]!!.resources = value
             field = value
         }
+    val connectedHomes: List<String>
+        get()
+        {
+            if (name.contains("home"))
+                return listOf<String>()
+            return connectedPlaces.filter { !it.contains("home") }
+        }
     val whoseHome: String?
         get()
         {
