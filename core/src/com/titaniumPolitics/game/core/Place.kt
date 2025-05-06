@@ -207,16 +207,26 @@ class Place : GameStateElement()
             if (apparatus.durability <= .0)
             {
                 apparatus.durability = .0
+                println("${apparatus.name} in $name is broken and cannot function.")
                 return@app //Cannot work broken apparatus
             }
 
 
             apparatus.currentProduction.forEach {
-                if (resources[it.key] + it.value > maxResources[it.key])
+                if (maxResources[it.key] != 0.0 && resources[it.key] + it.value > maxResources[it.key])//If maxResources is zero, there are no limit on how much resource you can store.
+                {
+                    println("${apparatus.name} in $name is cannot produce ${it.key} because it is full and cannot function.")
                     return@app //If the resource is full, no one works.
+                }
             }
-            if (resourceShortOfHourly(apparatus) != null || gasResourceShortOfHourly(apparatus) != null)
+            resourceShortOfHourly(apparatus)?.also {
+                println("${apparatus.name} in $name is short of $it and cannot function.")
                 return@app //If there is not enough resources, no one works.
+            }
+            gasResourceShortOfHourly(apparatus)?.also {
+                println("${apparatus.name} in $name is short of $it gas and cannot function.")
+                return@app //If there is not enough resources, no one works.
+            }
             //-----------------------------------------------------------------------------------------------------
             apparatus.currentProduction.forEach {
                 resources[it.key] += it.value * dth
@@ -235,14 +245,14 @@ class Place : GameStateElement()
             if (apparatus.currentGraveDanger * dth > GameEngine.random.nextDouble())
             {
                 //Catastrophic accident occurred.
-                println("Catastrophic accident occurred at: ${name}")
+                println("!Catastrophic accident occurred at: ${name}")
                 isAccidentScene = true
                 generateCatastrophicAccident()
 
             } else if (apparatus.currentDanger * dth > GameEngine.random.nextDouble())
             {
                 //Accident occurred.
-                println("Accident occurred at: ${name}")
+                println("!Accident occurred at: ${name}")
                 isAccidentScene = true
                 generateAccident()
 

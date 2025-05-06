@@ -11,6 +11,7 @@ class EventSystem : GameStateElement()
     override val name: String
         get() = "EventSystem" //There is only one EventSystem object in the game.
     private val dataBase = arrayListOf<EventObject>()
+    private val tmpdataBase = arrayListOf<EventObject>()
 
 
     //Utility function called once when a new game starts.
@@ -32,13 +33,15 @@ class EventSystem : GameStateElement()
         }
         gameState.timeChanged += { a, b ->
             dataBase.forEach { if (!it.completed) it.exec(a, b) }
+            tmpdataBase.forEach { dataBase += it }
+            tmpdataBase.clear()
         }
 
     }
 
     fun add(event: EventObject)
     {
-        dataBase.add(event)
+        tmpdataBase.add(event)
         event.injectParent(parent)
     }
 

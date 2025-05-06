@@ -296,8 +296,8 @@
       "resources": {
         "_resources": {
           "oxygen": 100,
-          "water": 15000,
-          "ration": 100
+          "water": 1500,
+          "ration": 1000
         }
       },
       "connectedPlaces": [
@@ -348,8 +348,8 @@
       "resources": {
         "_resources": {
           "oxygen": 50,
-          "water": 15000,
-          "ration": 50
+          "water": 1500,
+          "ration": 500
         }
       },
       "connectedPlaces": [
@@ -400,8 +400,8 @@
       "resources": {
         "_resources": {
           "oxygen": 50,
-          "water": 15000,
-          "ration": 50
+          "water": 1500,
+          "ration": 500
         }
       },
       "connectedPlaces": [
@@ -457,8 +457,8 @@
       "resources": {
         "_resources": {
           "oxygen": 50,
-          "water": 15000,
-          "ration": 50,
+          "water": 1500,
+          "ration": 500,
           "metal": 100,
           "component": 50
         }
@@ -522,8 +522,8 @@
       "resources": {
         "_resources": {
           "oxygen": 50,
-          "water": 15000,
-          "ration": 50,
+          "water": 1500,
+          "ration": 500,
           "lightMetal": 100,
           "component": 50
         }
@@ -586,8 +586,8 @@
       "resources": {
         "_resources": {
           "oxygen": 50,
-          "water": 15000,
-          "ration": 50,
+          "water": 1500,
+          "ration": 500,
           "metal": 100,
           "component": 50
         }
@@ -1209,8 +1209,8 @@
       "resources": {
         "_resources": {
           "oxygen": 50,
-          "water": 15000,
-          "ration": 50
+          "water": 1500,
+          "ration": 500
         }
       },
       "connectedPlaces": [
@@ -1257,8 +1257,8 @@
       "resources": {
         "_resources": {
           "oxygen": 50,
-          "water": 15000,
-          "ration": 50
+          "water": 1500,
+          "ration": 500
         }
       },
       "connectedPlaces": [
@@ -1302,7 +1302,7 @@
       "resources": {
         "_resources": {
           "oxygen": 100,
-          "water": 15000,
+          "water": 1500,
           "ration": 500
         }
       },
@@ -1354,8 +1354,8 @@
       "resources": {
         "_resources": {
           "oxygen": 100,
-          "water": 15000,
-          "ration": 100
+          "water": 1500,
+          "ration": 1000
         }
       },
       "connectedPlaces": [
@@ -1405,8 +1405,8 @@
       "resources": {
         "_resources": {
           "oxygen": 100,
-          "water": 15000,
-          "ration": 100
+          "water": 1500,
+          "ration": 1000
         }
       },
       "connectedPlaces": [
@@ -1456,8 +1456,8 @@
       "resources": {
         "_resources": {
           "oxygen": 100,
-          "water": 15000,
-          "ration": 100
+          "water": 1500,
+          "ration": 1000
         }
       },
       "connectedPlaces": [
@@ -1505,8 +1505,8 @@
       "resources": {
         "_resources": {
           "oxygen": 100,
-          "water": 15000,
-          "ration": 100
+          "water": 1500,
+          "ration": 1000
         }
       },
       "connectedPlaces": [
@@ -1550,8 +1550,8 @@
       "resources": {
         "_resources": {
           "oxygen": 100,
-          "water": 15000,
-          "ration": 100
+          "water": 1500,
+          "ration": 1000
         }
       },
       "connectedPlaces": [
@@ -1596,8 +1596,8 @@
       "resources": {
         "_resources": {
           "oxygen": 100,
-          "water": 15000,
-          "ration": 100
+          "water": 1500,
+          "ration": 1000
         }
       },
       "connectedPlaces": [
@@ -1641,8 +1641,8 @@
       },
       "resources": {
         "_resources": {
-          "water": 15000,
-          "ration": 100
+          "water": 1500,
+          "ration": 1000
         }
       },
       "connectedPlaces": [
@@ -1690,8 +1690,8 @@
       },
       "resources": {
         "_resources": {
-          "water": 15000,
-          "ration": 100
+          "water": 1500,
+          "ration": 1000
         }
       },
       "connectedPlaces": [
@@ -1736,8 +1736,8 @@
       },
       "resources": {
         "_resources": {
-          "water": 15000,
-          "ration": 100
+          "water": 1500,
+          "ration": 1000
         }
       },
       "connectedPlaces": [
