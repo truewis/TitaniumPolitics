@@ -581,7 +581,7 @@
       "coordinates": {
         "x": 12,
         "y": 0,
-        "z": 10
+        "z": 17
       },
       "resources": {
         "_resources": {
@@ -593,7 +593,7 @@
         }
       },
       "connectedPlaces": [
-        "rescueStationNorth"
+        "outerBarrierEast"
       ],
       "apparatuses": [
         {
@@ -643,7 +643,7 @@
       "coordinates": {
         "x": -12,
         "y": 0,
-        "z": 15
+        "z": 17
       },
       "resources": {
         "_resources": {
@@ -652,8 +652,7 @@
         }
       },
       "connectedPlaces": [
-        "recycleFacilityWest",
-        "spacePort"
+        "outerBarrierWest"
       ],
       "apparatuses": [
         {
@@ -671,6 +670,110 @@
       ],
       "characters": [
         "observer"
+      ],
+      "responsibleDivision": "infrastructure",
+      "workHoursStart": 0,
+      "workHoursEnd": 24
+    },
+    "outerBarrierWest": {
+      "coordinates": {
+        "x": -12,
+        "y": 0,
+        "z": 15
+      },
+      "resources": {
+        "_resources": {
+          "oxygen": 50,
+          "water": 15000
+        }
+      },
+      "connectedPlaces": [
+        "recycleFacilityWest",
+        "observatory",
+        "outerBarrierCenter"
+      ],
+      "apparatuses": [
+        {
+          "name": "barrier",
+          "durability": 100
+        },
+        {
+          "name": "energyStorage",
+          "durability": 95
+        },
+        {
+          "name": "cooler",
+          "durability": 95
+        }
+      ],
+      "responsibleDivision": "infrastructure",
+      "workHoursStart": 0,
+      "workHoursEnd": 24
+    },
+    "outerBarrierEast": {
+      "coordinates": {
+        "x": 12,
+        "y": 0,
+        "z": 15
+      },
+      "resources": {
+        "_resources": {
+          "oxygen": 50,
+          "water": 15000
+        }
+      },
+      "connectedPlaces": [
+        "outerBarrierCenter",
+        "asteroidMine"
+      ],
+      "apparatuses": [
+        {
+          "name": "barrier",
+          "durability": 100
+        },
+        {
+          "name": "energyStorage",
+          "durability": 95
+        },
+        {
+          "name": "cooler",
+          "durability": 95
+        }
+      ],
+      "responsibleDivision": "infrastructure",
+      "workHoursStart": 0,
+      "workHoursEnd": 24
+    },
+    "outerBarrierCenter": {
+      "coordinates": {
+        "x": 0,
+        "y": 0,
+        "z": 16
+      },
+      "resources": {
+        "_resources": {
+          "oxygen": 50,
+          "water": 15000
+        }
+      },
+      "connectedPlaces": [
+        "outerBarrierEast",
+        "outerBarrierWest",
+        "spacePort"
+      ],
+      "apparatuses": [
+        {
+          "name": "barrier",
+          "durability": 100
+        },
+        {
+          "name": "energyStorage",
+          "durability": 95
+        },
+        {
+          "name": "cooler",
+          "durability": 95
+        }
       ],
       "responsibleDivision": "infrastructure",
       "workHoursStart": 0,
@@ -750,9 +853,9 @@
     },
     "spacePort": {
       "coordinates": {
-        "x": -10,
+        "x": -5,
         "y": 0,
-        "z": 15
+        "z": 18
       },
       "resources": {
         "_resources": {
@@ -762,7 +865,7 @@
         }
       },
       "connectedPlaces": [
-        "observatory"
+        "outerBarrierCenter"
       ],
       "apparatuses": [
         {
@@ -866,7 +969,7 @@
         }
       },
       "connectedPlaces": [
-        "observatory",
+        "outerBarrierWest",
         "electrolysisStationNorth",
         "squareNorth"
       ],
@@ -1359,7 +1462,7 @@
         }
       },
       "connectedPlaces": [
-        "asteroidMine",
+        "outerBarrierEast",
         "market",
         "recycleFacilityEast",
         "securityCheckEast"

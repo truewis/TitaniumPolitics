@@ -77,6 +77,34 @@
       "storageAmount": 3e4
     }
   },
+  "barrier": {
+    "durabilityTau": 8.64e7,
+    "baseDanger": 3.0E-4,
+    "requiredResourcePerRepair": [
+      {
+        "_resources": {
+          "structure": 2500
+        }
+      },
+      {
+        "_resources": {
+          "component": 500,
+          "structure": 5000
+        }
+      },
+      {
+        "_resources": {
+          "structure": 10000,
+          "plumbing": 200
+        }
+      }
+    ],
+    "idealWorker": 50,
+    "variables": {
+      "storageType": "water",
+      "storageAmount": 3e5
+    }
+  },
   "oxygenStorage": {
     "durabilityTau": 8.64e6,
     "baseDanger": 3.0E-4,
