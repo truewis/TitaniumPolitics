@@ -9,7 +9,7 @@ import kotlinx.serialization.Serializable
 class ExecuteCommandRoutine() : Routine()
 {
     var err = false
-    val executableRequest = gState.requests[variables["request"]!!]!!
+    val executableRequest get() = gState.requests[variables["request"]!!]!!
     var timeout = ReadOnly.const("ExecuteCommandRoutineInvalidActionTimeout")
 
     override fun newRoutineCondition(name: String, place: String): Routine?
