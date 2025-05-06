@@ -738,7 +738,7 @@
     "idealConsumption": {
       "energy": 1e7
     },
-    "idealHeatProduction": -4e7,
+    "idealHeatProduction": -8e7,
     "requiredResourcePerRepair": [
       {
         "_resources": {

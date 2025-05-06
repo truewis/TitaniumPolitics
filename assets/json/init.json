@@ -10,6 +10,21 @@
     "Astinomis": {
       "type": "com.titaniumPolitics.game.core.NonPlayerAgent"
     },
+    "Muos": {
+      "type": "com.titaniumPolitics.game.core.NonPlayerAgent"
+    },
+    "Kae": {
+      "type": "com.titaniumPolitics.game.core.NonPlayerAgent"
+    },
+    "Kaea": {
+      "type": "com.titaniumPolitics.game.core.NonPlayerAgent"
+    },
+    "Kaeb": {
+      "type": "com.titaniumPolitics.game.core.NonPlayerAgent"
+    },
+    "Kaec": {
+      "type": "com.titaniumPolitics.game.core.NonPlayerAgent"
+    },
     "Alina": {
       "type": "com.titaniumPolitics.game.core.NonPlayerAgent"
     },
@@ -94,6 +109,61 @@
       "livingBy": "mainControlRoom"
     },
     "Astinomis": {
+      "trait": [
+        "workaholic",
+        "emotionless",
+        "safetyMinister",
+        "bargainer",
+        "soldier"
+      ],
+      "health": 80,
+      "livingBy": "mainControlRoom"
+    },
+    "Muos": {
+      "trait": [
+        "workaholic",
+        "emotionless",
+        "safetyMinister",
+        "bargainer",
+        "soldier"
+      ],
+      "health": 80,
+      "livingBy": "mainControlRoom"
+    },
+    "Kae": {
+      "trait": [
+        "workaholic",
+        "emotionless",
+        "safetyMinister",
+        "bargainer",
+        "soldier"
+      ],
+      "health": 80,
+      "livingBy": "mainControlRoom"
+    },
+    "Kaea": {
+      "trait": [
+        "workaholic",
+        "emotionless",
+        "safetyMinister",
+        "bargainer",
+        "soldier"
+      ],
+      "health": 80,
+      "livingBy": "mainControlRoom"
+    },
+    "Kaeb": {
+      "trait": [
+        "workaholic",
+        "emotionless",
+        "safetyMinister",
+        "bargainer",
+        "soldier"
+      ],
+      "health": 80,
+      "livingBy": "mainControlRoom"
+    },
+    "Kaec": {
       "trait": [
         "workaholic",
         "emotionless",
@@ -336,6 +406,7 @@
         "ctrler"
       ],
       "responsibleDivision": "interior",
+      "manager": "Charles",
       "workHoursStart": 0,
       "workHoursEnd": 24
     },
@@ -388,6 +459,7 @@
       "characters": [
       ],
       "responsibleDivision": "bioengineering",
+      "manager": "DrPaik",
       "workHoursStart": 0,
       "workHoursEnd": 24
     },
@@ -445,6 +517,7 @@
       "characters": [
       ],
       "responsibleDivision": "bioengineering",
+      "manager": "DrHess",
       "workHoursStart": 0,
       "workHoursEnd": 24
     },
@@ -505,11 +578,16 @@
         {
           "name": "energyStorage",
           "durability": 95
+        },
+        {
+          "name": "cooler",
+          "durability": 95
         }
       ],
       "characters": [
       ],
       "responsibleDivision": "mining",
+      "manager": "mini",
       "workHoursStart": 9,
       "workHoursEnd": 17
     },
@@ -569,11 +647,16 @@
         {
           "name": "energyStorage",
           "durability": 95
+        },
+        {
+          "name": "cooler",
+          "durability": 95
         }
       ],
       "characters": [
       ],
       "responsibleDivision": "mining",
+      "manager": "Metros",
       "workHoursStart": 9,
       "workHoursEnd": 17
     },
@@ -631,11 +714,16 @@
         {
           "name": "energyStorage",
           "durability": 95
+        },
+        {
+          "name": "cooler",
+          "durability": 95
         }
       ],
       "characters": [
       ],
       "responsibleDivision": "mining",
+      "manager": "Dias",
       "workHoursStart": 9,
       "workHoursEnd": 17
     },
@@ -707,6 +795,7 @@
         }
       ],
       "responsibleDivision": "infrastructure",
+      "manager": "Alina",
       "workHoursStart": 0,
       "workHoursEnd": 24
     },
@@ -741,6 +830,7 @@
         }
       ],
       "responsibleDivision": "infrastructure",
+      "manager": "Rui",
       "workHoursStart": 0,
       "workHoursEnd": 24
     },
@@ -820,7 +910,8 @@
       ],
       "characters": [
       ],
-      "responsibleDivision": "infrastructure",
+      "responsibleDivision": "industry",
+      "manager": "Hiroshi",
       "workHoursStart": 9,
       "workHoursEnd": 17
     },
@@ -1006,6 +1097,7 @@
       "characters": [
       ],
       "responsibleDivision": "infrastructure",
+      "manager": "Krailin",
       "workHoursStart": 0,
       "workHoursEnd": 24
     },
@@ -1071,6 +1163,7 @@
       "characters": [
       ],
       "responsibleDivision": "infrastructure",
+      "manager": "Vaeme",
       "workHoursStart": 0,
       "workHoursEnd": 24
     },
@@ -1129,6 +1222,7 @@
       "characters": [
       ],
       "responsibleDivision": "infrastructure",
+      "manager": "Mentor",
       "workHoursStart": 0,
       "workHoursEnd": 24
     },
@@ -1186,6 +1280,7 @@
       "characters": [
       ],
       "responsibleDivision": "infrastructure",
+      "manager": "Salvor",
       "workHoursStart": 0,
       "workHoursEnd": 24
     },
@@ -1445,6 +1540,7 @@
       "characters": [
       ],
       "responsibleDivision": "bioengineering",
+      "manager": "Evan",
       "workHoursStart": 9,
       "workHoursEnd": 17
     },
@@ -1496,6 +1592,7 @@
       "characters": [
       ],
       "responsibleDivision": "safety",
+      "manager": "Astinomis",
       "workHoursStart": 0,
       "workHoursEnd": 24
     },
@@ -1547,6 +1644,7 @@
       "characters": [
       ],
       "responsibleDivision": "safety",
+      "manager": "Muos",
       "workHoursStart": 0,
       "workHoursEnd": 24
     },
@@ -1596,6 +1694,7 @@
       "characters": [
       ],
       "responsibleDivision": "safety",
+      "manager": "Kae",
       "workHoursStart": 0,
       "workHoursEnd": 24
     },
@@ -1641,6 +1740,7 @@
       "characters": [
       ],
       "responsibleDivision": "safety",
+      "manager": "Kaea",
       "workHoursStart": 0,
       "workHoursEnd": 24
     },
@@ -1687,6 +1787,7 @@
       "characters": [
       ],
       "responsibleDivision": "safety",
+      "manager": "Kaeb",
       "workHoursStart": 0,
       "workHoursEnd": 24
     },
@@ -1733,6 +1834,7 @@
       "characters": [
       ],
       "responsibleDivision": "safety",
+      "manager": "Kaec",
       "workHoursStart": 0,
       "workHoursEnd": 24
     },
@@ -1920,7 +2022,8 @@
       ],
       "characters": [
       ],
-      "responsibleDivision": "infrastructure",
+      "responsibleDivision": "industry",
+      "manager": "Indu",
       "workHoursStart": 9,
       "workHoursEnd": 17
     },
@@ -2053,13 +2156,18 @@
         "Hiroshi",
         "Indu"
       ],
-      "home": "farm"
+      "home": "constructionYardSouth"
     },
     "safety": {
       "type": "division",
       "leader": "Astinomis",
       "members": [
-        "Astinomis"
+        "Astinomis",
+        "Muos",
+        "Kae",
+        "Kaea",
+        "Kaeb",
+        "Kaec"
       ],
       "home": "rescueStationNorth"
     },
@@ -2071,7 +2179,7 @@
         "DrPaik",
         "DrHess"
       ],
-      "home": "welfareStationEast"
+      "home": "farm"
     },
     "infrastructure": {
       "type": "division",
@@ -2084,7 +2192,7 @@
         "Mentor",
         "Salvor"
       ],
-      "home": "constructionYardNorth"
+      "home": "outerBarrierWest"
     }
   },
   "eventSystem": {
