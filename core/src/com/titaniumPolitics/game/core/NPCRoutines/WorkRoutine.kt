@@ -2,7 +2,6 @@ package com.titaniumPolitics.game.core.NPCRoutines
 
 import com.titaniumPolitics.game.core.GameEngine
 import com.titaniumPolitics.game.core.InformationType
-import com.titaniumPolitics.game.core.Place
 import com.titaniumPolitics.game.core.ReadOnly
 import com.titaniumPolitics.game.core.gameActions.GameAction
 import com.titaniumPolitics.game.core.gameActions.JoinMeeting
@@ -59,23 +58,12 @@ class WorkRoutine() : Routine()
                 }
             }
         }
-        if (gState.scheduledMeetings.any {
-                it.value.scheduledCharacters.contains(name) && it.value.time - gState.time in -ReadOnly.constInt(
-                    "MeetingStartTolerance"
-                ) + Place.timeBetweenPlaces(
-                    it.value.place,
-                    place
-                )..ReadOnly.constInt("MeetingStartTolerance") + Place.timeBetweenPlaces(it.value.place, place)
-            })//If a Meeting is soon
-        {
-            val conf = gState.scheduledMeetings.filter {
-                it.value.scheduledCharacters.contains(name) && it.value.time - gState.time in -ReadOnly.constInt(
-                    "MeetingStartTolerance"
-                ) + Place.timeBetweenPlaces(
-                    it.value.place,
-                    place
-                )..ReadOnly.constInt("MeetingStartTolerance") + Place.timeBetweenPlaces(it.value.place, place)
-            }.values.first()
+        gState.scheduledMeetings.values.firstOrNull {
+            val eta = gState.places[it.place]!!.shortestPathAndTimeTo(place)?.second ?: return@firstOrNull false
+            return@firstOrNull it.scheduledCharacters.contains(name) && it.time - gState.time in -ReadOnly.constInt(
+                "MeetingStartTolerance"
+            ) + eta..ReadOnly.constInt("MeetingStartTolerance") + eta
+        }?.also { conf ->
             //----------------------------------------------------------------------------------Move to the Meeting
             if (place != conf.place)
             {
@@ -138,14 +126,12 @@ class WorkRoutine() : Routine()
         //If there is a command that is within the set time window, issued party is trusted enough, and seems to be executable at some place(AvailableActions), start execution routine.
         //Note that the command may not be valid even if it in AvailableActions list. For example, if the character is already at the place, move command is not valid.
 
-        val request = gState.requests.values.firstOrNull {
-            (it.executeTime in gState.time - ReadOnly.constInt("CommandExecuteTolerance") + Place.timeBetweenPlaces(
-                it.action.tgtPlace,
-                place
-            )..gState.time + ReadOnly.constInt("CommandExecuteTolerance") + Place.timeBetweenPlaces(
-                it.action.tgtPlace,
-                place
-            ) || it.executeTime == 0) && (it.issuedBy.isEmpty() || it.issuedBy.sumOf {
+        gState.requests.values.firstOrNull {
+            val eta =
+                gState.places[it.action.tgtPlace]!!.shortestPathAndTimeTo(place)?.second ?: return@firstOrNull false
+            return@firstOrNull (it.executeTime in gState.time - ReadOnly.constInt("CommandExecuteTolerance") + eta..gState.time + ReadOnly.constInt(
+                "CommandExecuteTolerance"
+            ) + eta || it.executeTime == 0) && (it.issuedBy.isEmpty() || it.issuedBy.sumOf {
                 gState.getMutuality(
                     name,
                     it
@@ -156,14 +142,11 @@ class WorkRoutine() : Routine()
                 name
             )
                 .contains(it.action.javaClass.simpleName) //Here, we can move to other places to execute the command, so we do not check if the place is here.
-        }
-        if (request != null)
-        {
+        }?.also { request ->
             return ExecuteCommandRoutine().also { it.variables["request"] = request.name }
         }
 
         //Supply resource
-        //TODO: when pathfinding fails, skip.
         gState.places.values.forEach { place1 -> //TODO: right now, supply resource to any place regardless of the division. In the future, agents will not supply resources to hostile divisions.
             place1.apparatuses.forEach { apparatus ->
                 val res = place1.resourceShortOfHourly(apparatus) //Type of resource that is short of.
@@ -174,7 +157,7 @@ class WorkRoutine() : Routine()
                         gState.places.values.filter {
                             it.responsibleDivision != "" && gState.parties[it.responsibleDivision]!!.members.contains(
                                 name
-                            )
+                            ) && it.shortestPathAndTimeTo(place) != null
                         }
                             .maxByOrNull { it.resources[res] }
                     if (resplace != null && place1.name != resplace.name)
@@ -189,15 +172,13 @@ class WorkRoutine() : Routine()
 
         //If there is some time, prepare information
         if (gState.scheduledMeetings.none {
+                val eta =
+                    gState.places[it.value.place]!!.shortestPathAndTimeTo(place)?.second ?: return@none false
                 it.value.scheduledCharacters.contains(name) && it.value.time - gState.time in -ReadOnly.constInt(
                     "MeetingStartTolerance"
-                ) + Place.timeBetweenPlaces(
-                    it.value.place,
-                    place
-                ) + ReadOnly.constInt("PrepareInfoDuration")..ReadOnly.constInt("MeetingStartTolerance") + Place.timeBetweenPlaces(
-                    it.value.place,
-                    place
-                ) + ReadOnly.constInt("PrepareInfoDuration")
+                ) + eta + ReadOnly.constInt("PrepareInfoDuration")..ReadOnly.constInt("MeetingStartTolerance") + eta + ReadOnly.constInt(
+                    "PrepareInfoDuration"
+                )
             })//If a Meeting is not soon
         {
             //If we haven't prapared info recently

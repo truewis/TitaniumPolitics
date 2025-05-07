@@ -14,33 +14,22 @@ class MoveRoutine() : Routine()
 
     override fun execute(name: String, place: String): GameAction
     {
-        val livingBy = gState.characters[name]!!.livingBy
-        if (variables["movePlace"] == "home_$name")
-        {
-            if (place != livingBy)
-            {
-                return Move(name, place).also {
-                    it.placeTo = livingBy
-                }//If player is far from the home, go outside the home.
-            } else
-            {
-                return Move(name, place).also {
-                    it.placeTo = "home_$name"
-                }//If player is outside the home, go inside.
-            }
-        } else
-        {
-            if (place == "home")//If the character is at home, go outside.
-                return Move(name, place).also { it.placeTo = livingBy }
-            return Move(name, place).also { it.placeTo = variables["movePlace"]!! }
+        return Move(name, place).also {
+            it.placeTo = gState.places[place]!!.shortestPathAndTimeTo(variables["movePlace"]!!)!!.first[1]
         }
-
-        //TODO: implement pathfinding. For now, just teleport to the place
     }
 
     override fun endCondition(name: String, place: String): Boolean
     {
-        return place == variables["movePlace"]
-        //TODO: when pathfinding fails, return true.
+        if (place == variables["movePlace"])
+        {
+            executeDone = true
+            return true
+        } else if (gState.places[place]!!.shortestPathAndTimeTo(variables["movePlace"]!!) == null)
+        {
+            executeDone = false
+            return true
+        }
+        return false
     }
 }

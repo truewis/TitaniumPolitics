@@ -7,6 +7,7 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.float
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
+import java.util.PriorityQueue
 import kotlin.math.exp
 import kotlin.math.min
 
@@ -386,14 +387,67 @@ class Place : GameStateElement()
         //TODO: spread rumors. But think if it is a good game design.
     }
 
+    fun distanceTo(targetName: String): Int?
+    {
+        return if (connectedPlaces.contains(targetName)) 1 else null
+    }
+
+    fun shortestPathAndTimeTo(targetName: String): Pair<List<String>, Int>?
+    {
+        val distances = mutableMapOf<String, Int>().withDefault { Int.MAX_VALUE }
+        val previous = mutableMapOf<String, String?>()
+        val visited = mutableSetOf<String>()
+
+        val comparator = compareBy<Pair<String, Int>> { it.second }
+        val queue = PriorityQueue(comparator)
+
+        distances[this.name] = 0
+        queue.add(this.name to 0)
+
+        while (queue.isNotEmpty())
+        {
+            val (currentName, currentDistance) = queue.poll()
+
+            if (currentName in visited) continue
+            visited.add(currentName)
+
+            if (currentName == targetName) break
+
+            val currentPlace = parent.places[currentName] ?: continue
+
+            for (neighborName in currentPlace.connectedPlaces)
+            {
+                if (neighborName in visited) continue
+
+                val weight = currentPlace.distanceTo(neighborName) ?: continue
+                val newDistance = currentDistance + weight
+
+                if (newDistance < distances.getValue(neighborName))
+                {
+                    distances[neighborName] = newDistance
+                    previous[neighborName] = currentName
+                    queue.add(neighborName to newDistance)
+                }
+            }
+        }
+
+        val finalCost = distances.getValue(targetName)
+        if (finalCost == Int.MAX_VALUE) return null
+
+        val path = mutableListOf<String>()
+        var current: String? = targetName
+        while (current != null)
+        {
+            path.add(0, current)
+            current = previous[current]
+        }
+
+        return path to finalCost * ReadOnly.constInt("MoveDuration")
+    }
+
     companion object
     {
         val publicPlaces = setOf<String>("market", "squareNorth", "squareSouth")
-        fun timeBetweenPlaces(place1: String, place2: String): Int
-        {
-            if (place1 == place2) return 0
-            return ReadOnly.constInt("MoveDuration")
-        }
 
         fun whoseHome(place: String): String?
         {

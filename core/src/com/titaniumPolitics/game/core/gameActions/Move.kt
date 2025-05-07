@@ -13,7 +13,7 @@ class Move(override val sbjCharacter: String, override val tgtPlace: String) : G
     }
 
     override fun isValid(): Boolean =
-        placeTo != "" && sbjCharObj.currentMeeting == null //You cannot move during meeting; you have to end meeting first.
+        tgtPlaceObj.connectedPlaces.contains(placeTo) && sbjCharObj.currentMeeting == null //You cannot move during meeting; you have to end meeting first.
 
     override fun execute()
     {
