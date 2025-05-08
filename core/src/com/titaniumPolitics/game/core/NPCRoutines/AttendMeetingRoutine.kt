@@ -417,6 +417,7 @@ class AttendMeetingRoutine : Routine(), IMeetingRoutine
                             tgtPlace = wantPlace.name
                         ).apply {
                             workers = minProdApp.plannedWorker - reductionAmount
+                            apparatusID = minProdApp.ID
                         }//Created a command to transfer the resource.
                         ,
                         issuedTo = hashSetOf(wantPlace.manager)
@@ -449,6 +450,7 @@ class AttendMeetingRoutine : Routine(), IMeetingRoutine
                             tgtPlace = wantPlace.name
                         ).apply {
                             workers = maxProdApp.plannedWorker + increaseAmount
+                            apparatusID = maxProdApp.ID
                         }//Created a command to transfer the resource.
                         ,
                         issuedTo = hashSetOf(wantPlace.manager)

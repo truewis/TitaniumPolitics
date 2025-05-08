@@ -76,7 +76,7 @@ class GameEngineTest
     {
 
         scheduledMeetings.filter {
-            it.value.time > time + ReadOnly.constInt("MeetingStartTolerance") && !missedMeetings.contains(
+            it.value.time + ReadOnly.constInt("MeetingStartTolerance") < time && !missedMeetings.contains(
                 it.key
             )
         }.forEach {

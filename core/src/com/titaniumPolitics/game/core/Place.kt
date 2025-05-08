@@ -441,7 +441,7 @@ class Place : GameStateElement()
             path.add(0, current)
             current = previous[current]
         }
-
+        //println("The shortest path from $name to $targetName: $path")
         return path to finalCost * ReadOnly.constInt("MoveDuration")
     }
 

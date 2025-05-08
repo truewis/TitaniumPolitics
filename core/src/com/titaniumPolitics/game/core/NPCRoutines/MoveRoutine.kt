@@ -7,6 +7,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 class MoveRoutine() : Routine()
 {
+    var nextStop = ""
     override fun newRoutineCondition(name: String, place: String): Routine?
     {
         return null
@@ -15,7 +16,7 @@ class MoveRoutine() : Routine()
     override fun execute(name: String, place: String): GameAction
     {
         return Move(name, place).also {
-            it.placeTo = gState.places[place]!!.shortestPathAndTimeTo(variables["movePlace"]!!)!!.first[1]
+            it.placeTo = nextStop
         }
     }
 
@@ -25,11 +26,21 @@ class MoveRoutine() : Routine()
         {
             executeDone = true
             return true
-        } else if (gState.places[place]!!.shortestPathAndTimeTo(variables["movePlace"]!!) == null)
+        } else
         {
-            executeDone = false
-            return true
+            if (gState.places[place]!!.shortestPathAndTimeTo(variables["movePlace"]!!)?.also {
+                    nextStop = it.first[1]
+                } == null)
+            {
+
+                println("There is no path from $place to ${variables["movePlace"]}! Terminating moveRoutine...")
+                executeDone = false
+                return true
+
+            }
+
         }
+
         return false
     }
 }

@@ -43,7 +43,7 @@ class DowntimeRoutine() : Routine()
 
     override fun endCondition(name: String, place: String): Boolean
     {
-        if (gState.getMutuality(name) < const("DowntimeWill")) return false
+        if (gState.getMutuality(name) > const("DowntimeWill")) return true
         if (variables["workPlace"] == null)
             return (gState.hour in 8..18)
         else
