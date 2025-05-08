@@ -20,7 +20,7 @@ import kotlinx.serialization.Serializable
 class NonPlayerAgent : Agent()
 {
 
-    private var routines =
+    var routines =
         arrayListOf<Routine>()//Routines are sorted by priority. The first element is the current routine. All other routines are executed when the current routine is finished.
 
     override fun chooseAction(): GameAction
@@ -206,11 +206,15 @@ class NonPlayerAgent : Agent()
         //When work hours, work
         if (parent.hour in 8..18)
         {
-            routines.add(WorkRoutine())
+            routines.add(WorkRoutine().also {
+                it.intVariables["routineStartTime"] = parent.time
+            })
             return
         } else
         //When not work hours, rest
-            routines.add(RestRoutine())
+            routines.add(RestRoutine().also {
+                it.intVariables["routineStartTime"] = parent.time
+            })
     }
 
     @Deprecated("This function is not used anymore because we don't have trade action anymore.")

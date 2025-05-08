@@ -48,7 +48,7 @@
   "InvestigateAccidentSceneDuration": 30,
   "JoinConferenceDuration": 3,
   "JoinMeetingDuration": 3,
-  "MeetingStartTolerance": 60,
+  "MeetingStartTolerance": 120,
   "CommandExecuteTolerance": 60,
   "LeaveMeetingDuration": 3,
   "MoveDuration": 15,

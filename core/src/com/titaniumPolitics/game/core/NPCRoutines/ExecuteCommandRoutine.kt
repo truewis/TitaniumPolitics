@@ -29,6 +29,7 @@ class ExecuteCommandRoutine() : Routine()
     {
         if (place == executableRequest.action.tgtPlace)
         {
+            executableRequest.action.injectParent(gState)
             if (executableRequest.action.isValid())
             {
                 println("$name: The request ${executableRequest.action} is valid. Executing...")

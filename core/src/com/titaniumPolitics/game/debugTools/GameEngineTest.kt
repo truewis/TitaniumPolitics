@@ -5,6 +5,8 @@ import com.titaniumPolitics.game.core.GameEngine
 import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.core.NonPlayerAgent
 import com.titaniumPolitics.game.core.ReadOnly
+import com.titaniumPolitics.game.core.ReadOnly.const
+import com.titaniumPolitics.game.core.ReadOnly.dt
 import kotlinx.serialization.json.Json
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Test
@@ -53,7 +55,7 @@ class GameEngineTest
         //Start the game.
         println("Game started. Time: ${gameState.time}. Starting main loop.")
         //Main loop
-        while (gameState.time < days * ReadOnly.const("lengthOfDay"))
+        while (gameState.time < days * const("lengthOfDay"))
         {
             gameLoop()
             gameState.debug()
@@ -81,9 +83,15 @@ class GameEngineTest
             missedMeetings.add(it.key)
             println("////////////////////////////////////////////////")
             println("!Missed meeting:${it.key} at ${it.value.place}.")
-            println("!What people are doing:")
+            println("Scheduled: ${GameState.formatTime(it.value.time)}")
+            println("What people are doing:")
             it.value.scheduledCharacters.forEach { ch ->
-                println("$ch:${characters[ch]!!.place.name}, doing ${characters[ch]!!.history.last()}")//, under ${(nonPlayerAgents[ch] as NonPlayerAgent)?.routine}
+                println("\t$ch:${characters[ch]!!.place.name}, doing ${characters[ch]!!.history.last()}")
+                if (nonPlayerAgents[ch] is NonPlayerAgent)
+                {
+                    println("\t\tunder ${(nonPlayerAgents[ch] as NonPlayerAgent).routines[0]::class.java.simpleName}")
+                    println("\t\troutine started: ${GameState.formatTime((nonPlayerAgents[ch] as NonPlayerAgent).routines[0].intVariables["routineStartTime"] ?: 0)}")
+                }
             }
             println("////////////////////////////////////////////////")
         }
@@ -97,6 +105,34 @@ class GameEngineTest
                 }
                 println("////////////////////////////////////////////////")
             }
+
+        if (time % 60 == 0)
+        {
+            val suffocating = characters.filter { entry ->
+                entry.value.place.gasPressure("oxygen") < const("CriticalOxygenPressure") || entry.value.place.gasPressure(
+                    "carbonDioxide"
+                ) / entry.value.place.gasPressure(
+                    "oxygen"
+                ) > const("CriticalCarbonDioxideRatio")
+            }.keys
+            if (!suffocating.isEmpty())
+            {
+                println("!${suffocating} is suffocating")
+
+            }
+            val hot = characters.filter { entry ->
+                entry.value.place.temperature - 300 /*[K]*/ !in -const("TemperatureDifferenceTolerance")..const("TemperatureDifferenceTolerance")
+            }.keys
+
+            //If temperature is extreme, take damage.
+            if (!hot.isEmpty()
+            )
+            {
+//
+                println("!${hot} is under extreme temperature!")
+            }
+
+        }
     }
 
 

@@ -532,7 +532,6 @@ class GameEngine(val gameState: GameState)
                             delta = -dt / const("SuffocationTau") * const("mutualityMax")
                         )
                 }
-                println("${entry.key} is suffocating!")
 
             }
             //If temperature is extreme, take damage.
@@ -550,7 +549,6 @@ class GameEngine(val gameState: GameState)
                             delta = -dt / const("TemperatureDamageTau") * const("mutualityMax")
                         )
                 }
-                println("${entry.key} is under extreme temperature!")
             }
             if (entry.value.alive && entry.value.health <= 0)
             {

@@ -317,11 +317,21 @@ class GameState
 
     fun formatTime(): String
     {
-        val mm =
-            ((time % ReadOnly.constInt("lengthOfDay") - hour * (ReadOnly.const("lengthOfDay") / 24.0)) / (ReadOnly.const(
-                "lengthOfDay"
-            ) / (24.0 * 60))).toInt()
-        return "${hour.toString().padStart(2, '0')}:${mm.toString().padStart(2, '0')}"
+        return formatTime(time)
+    }
+
+    companion object
+    {
+        fun formatTime(time: Int): String
+        {
+            val hour = (time % ReadOnly.constInt("lengthOfDay") / (ReadOnly.const("lengthOfDay") / 24.0)).toInt()
+            val day = time / ReadOnly.constInt("lengthOfDay")
+            val mm =
+                ((time % ReadOnly.constInt("lengthOfDay") - hour * (ReadOnly.const("lengthOfDay") / 24.0)) / (ReadOnly.const(
+                    "lengthOfDay"
+                ) / (24.0 * 60))).toInt()
+            return "$day:${hour.toString().padStart(2, '0')}:${mm.toString().padStart(2, '0')}"
+        }
     }
 
 

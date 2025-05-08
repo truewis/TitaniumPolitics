@@ -263,7 +263,7 @@ class AttendMeetingRoutine : Routine(), IMeetingRoutine
                                             MeetingAgenda(
                                                 AgendaType.PRAISE,
                                                 name,
-                                                subjectParams = hashMapOf("who" to member)
+                                                subjectParams = hashMapOf("character" to member)
                                             )
                                     }
                                 } else if (mutuality < 20)
@@ -272,7 +272,7 @@ class AttendMeetingRoutine : Routine(), IMeetingRoutine
                                         it.agenda =
                                             MeetingAgenda(
                                                 AgendaType.DENOUNCE, name,
-                                                subjectParams = hashMapOf("who" to member)
+                                                subjectParams = hashMapOf("character" to member)
                                             )
                                     }
                                 }
