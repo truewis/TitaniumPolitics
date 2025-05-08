@@ -416,6 +416,11 @@ class GameEngine(val gameState: GameState)
         gameState.scheduledMeetings["conference-${gameState.parties["triumvirate"]!!.home}-triumvirate-${gameState.time}"] =
             conference2
 
+        //Garbage removal for performance.
+        gameState.scheduledMeetings.filter { it.value.time + ReadOnly.constInt("MeetingStartTolerance") < gameState.time }.keys.forEach {
+            gameState.scheduledMeetings.remove(it)
+        }
+
     }
 
     fun distributeResourcesHourly()
