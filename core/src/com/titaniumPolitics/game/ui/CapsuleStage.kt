@@ -25,7 +25,7 @@ class CapsuleStage(val gameState: GameState) : Stage(FitViewport(1920F, 1080F))
     var hud: HeadUpInterface
     val rootStack = Stack()
     val charactersView = CharacterPortraitsUI(gameState)
-    val meeting = MeetingUI(gameState)
+    val meetingUI = MeetingUI(gameState)
     val assetManager = AssetManager()
     val onMouseClick = ArrayList<(Float, Float) -> Unit>()
     val onMouseDown = ArrayList<(Float, Float) -> Unit>()
@@ -53,7 +53,7 @@ class CapsuleStage(val gameState: GameState) : Stage(FitViewport(1920F, 1080F))
         rootStack.setFillParent(true)
         rootStack.add(background)
         rootStack.add(charactersView)
-        rootStack.add(meeting)
+        rootStack.add(meetingUI)
         background.setFillParent(true)
 
         addActor(rootStack)
@@ -73,11 +73,12 @@ class CapsuleStage(val gameState: GameState) : Stage(FitViewport(1920F, 1080F))
             }
             if (it.player.currentMeeting != null)
             {
-                meeting.isVisible = true
+                meetingUI.isVisible = true
+                meetingUI.newMeeting(it.player.currentMeeting!!)
                 charactersView.isVisible = false
             } else
             {
-                meeting.isVisible = false
+                meetingUI.isVisible = false
                 charactersView.isVisible = true
             }
         }

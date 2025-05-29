@@ -4,6 +4,10 @@ import com.titaniumPolitics.game.core.ReadOnly.const
 import com.titaniumPolitics.game.core.ReadOnly.dt
 import com.titaniumPolitics.game.debugTools.Logger
 import kotlinx.serialization.Serializable
+import kotlin.div
+import kotlin.math.roundToInt
+import kotlin.text.get
+import kotlin.times
 
 /*
 *  This class represents a meeting in the game. It is used to represent meetings that are scheduled to happen in the future.
@@ -24,6 +28,8 @@ class Meeting(
     var currentSpeaker = ""
     var currentAttention = 0
     var agendas = arrayListOf<MeetingAgenda>()
+    var voteResults = hashMapOf<String, Int>()
+    var onVoteResults = ArrayList<() -> Unit>()
 
     fun endMeeting(gameState: GameState)
     {
@@ -41,19 +47,22 @@ class Meeting(
                     Logger.warning("The leader of the party $involvedParty exists as ${party.leader}, but the election is still happening.")
                     throw IllegalStateException("The leader of the party $involvedParty exists as ${party.leader}, but the election is still happening.")
                 }
-                val leader = party.members.filter { char ->
-                    agendas.any {
-                        //In order to be a candidate, the character has to be nominated first.
-                        it.type == AgendaType.NOMINATE && it.subjectParams["character"] == char
-                    }
-                }.maxByOrNull { s ->
-                    (party.members.sumOf {
-                        gameState.getMutuality(
-                            it,
-                            s
-                        ) * party.getMultiplier(it)
-                    }).also { println("The average support of $s is ${it / party.size}.") }
-                }!!//TODO: This logic has to be more thorough. display the actual election process.
+                voteResults = party.members
+                    .filter { char ->
+                        agendas.any {
+                            it.type == AgendaType.NOMINATE && it.subjectParams["character"] == char
+                        }
+                    }.associateWith { candidate ->
+                        val score = party.members.sumOf {
+                            gameState.getMutuality(it, candidate) * party.getMultiplier(it)
+                        }
+                        println("The average support of $candidate is ${score / party.size}.")
+                        score.roundToInt()
+                    } as HashMap<String, Int>//TODO: This logic has to be more thorough. display the actual election process.
+                onVoteResults.forEach { it() }
+
+                val leader = voteResults.maxByOrNull { it.value }?.key ?: ""
+
                 gameState.parties[involvedParty]!!.leader = leader
                 println("The leader of the party $involvedParty is elected as $leader.")
             }
@@ -62,7 +71,7 @@ class Meeting(
             {
                 if (agendas.any { it.type == AgendaType.FIRE_MANAGER })
                 {
-                    //TODO: This logic has to be more thorough. display the actual election process.
+                    //TODO:
                 }
             }
         }

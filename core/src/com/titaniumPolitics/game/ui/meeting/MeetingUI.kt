@@ -94,6 +94,22 @@ class MeetingUI(var gameState: GameState) : Table(defaultSkin), KTable
 
         currentAttention.setText(meeting.currentAttention.toString())
         attentionMeter.color = Color(meeting.currentAttention.toFloat() / 100, 0f, 0f, 1f)
+
+
+    }
+
+    fun newMeeting(meeting: Meeting)
+    {
+        //If the meeting is a division leader election, add vote results to the stage if the meeting is over.
+        if (meeting.type == "divisionLeaderElection")
+        {
+            meeting.onVoteResults+={
+                val voteResultsTable = VoteResultWindowUI(meeting)
+                CapsuleStage.instance.addActor(voteResultsTable)
+                voteResultsTable.setPosition(CapsuleStage.instance.width / 2 - voteResultsTable.width / 2,
+                    CapsuleStage.instance.height / 2 - voteResultsTable.height / 2)
+            }
+        }
     }
 
     private fun addCharacterPortrait(characterName: String)
