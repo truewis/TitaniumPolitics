@@ -15,12 +15,12 @@ class ClockUI(gameState: GameState) : Table(defaultSkin)
 
     init
     {
-        l = Label((gameState.formatTime()), defaultSkin, "console")
+        l = Label((gameState.formatClock()), defaultSkin, "console")
         l.setFontScale(4f)
         add(l).growX()
 
         gameState.timeChanged += { _, y ->
-            Gdx.app.postRunnable { l.setText(gameState.formatTime()) }
+            Gdx.app.postRunnable { l.setText(gameState.formatClock()) }
         }
     }
 

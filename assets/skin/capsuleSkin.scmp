@@ -3,7 +3,7 @@ atlasData: {
 	atlasCurrent: true
 	drawables: [
 		{
-			file: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/capsuleSkin_data/capsuleDevArrowAux.png
+			file: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/capsuleSkin_data/capsuleDevArrowAux.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -23,7 +23,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/capsuleSkin_data/capsuleDevArrowIn.png
+			file: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/capsuleSkin_data/capsuleDevArrowIn.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -43,7 +43,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/capsuleSkin_data/capsuleDevArrowOut.png
+			file: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/capsuleSkin_data/capsuleDevArrowOut.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -63,7 +63,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/capsuleSkin_data/capsuleDevDial1.png
+			file: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/capsuleSkin_data/capsuleDevDial1.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -83,7 +83,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/capsuleSkin_data/capsuleDevDial2.png
+			file: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/capsuleSkin_data/capsuleDevDial2.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -103,7 +103,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/capsuleSkin_data/capsuleDevDial3.png
+			file: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/capsuleSkin_data/capsuleDevDial3.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -123,7 +123,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/capsuleSkin_data/capsuleDevDial4.png
+			file: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/capsuleSkin_data/capsuleDevDial4.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -143,7 +143,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/capsuleSkin_data/capsuleDevExecButton.png
+			file: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/capsuleSkin_data/capsuleDevExecButton.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -163,7 +163,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/capsuleSkin_data/capsuleDevLabel1.png
+			file: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/capsuleSkin_data/capsuleDevLabel1.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -183,7 +183,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/capsuleSkin_data/capsuleDevLamp1.png
+			file: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/capsuleSkin_data/capsuleDevLamp1.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -203,7 +203,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/capsuleSkin_data/capsuleDevLamp2.png
+			file: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/capsuleSkin_data/capsuleDevLamp2.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -223,7 +223,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/capsuleSkin_data/capsuleDevLamp3.png
+			file: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/capsuleSkin_data/capsuleDevLamp3.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -243,7 +243,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/capsuleSkin_data/capsuleDevLamp4.png
+			file: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/capsuleSkin_data/capsuleDevLamp4.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -263,7 +263,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/capsuleSkin_data/capsuleDevLever1.png
+			file: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/capsuleSkin_data/capsuleDevLever1.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -283,7 +283,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/capsuleSkin_data/capsuleDevLever2.png
+			file: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/capsuleSkin_data/capsuleDevLever2.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -303,7 +303,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/capsuleSkin_data/capsuleDevMeter1.png
+			file: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/capsuleSkin_data/capsuleDevMeter1.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -323,7 +323,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/capsuleSkin_data/capsuleDevMeter2.png
+			file: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/capsuleSkin_data/capsuleDevMeter2.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -343,7 +343,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/capsuleSkin_data/capsuleDevMeter3.png
+			file: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/capsuleSkin_data/capsuleDevMeter3.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -363,7 +363,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/capsuleSkin_data/capsuleDevMeter4.png
+			file: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/capsuleSkin_data/capsuleDevMeter4.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -383,7 +383,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/capsuleSkin_data/capsuleDevMeter5.png
+			file: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/capsuleSkin_data/capsuleDevMeter5.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -403,7 +403,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/capsuleSkin_data/capsuleDevMeter6.png
+			file: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/capsuleSkin_data/capsuleDevMeter6.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -423,7 +423,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/capsuleSkin_data/capsuleDevMeter7.png
+			file: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/capsuleSkin_data/capsuleDevMeter7.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -443,7 +443,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/capsuleSkin_data/capsuleDevRedButton.png
+			file: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/capsuleSkin_data/capsuleDevRedButton.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -463,7 +463,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/capsuleSkin_data/capsuleDevRedButton2.png
+			file: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/capsuleSkin_data/capsuleDevRedButton2.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -483,7 +483,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/capsuleSkin_data/capsuleDevReplyInfo.png
+			file: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/capsuleSkin_data/capsuleDevReplyInfo.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -503,7 +503,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/capsuleSkin_data/capsuleDevRunButton.png
+			file: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/capsuleSkin_data/capsuleDevRunButton.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -523,7 +523,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/capsuleSkin_data/capsuleDevDangerRedButton.png
+			file: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/capsuleSkin_data/capsuleDevDangerRedButton.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -543,7 +543,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/capsuleSkin_data/capsuleDevDangerRedButton2.png
+			file: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/capsuleSkin_data/capsuleDevDangerRedButton2.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -563,7 +563,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/capsuleSkin_data/capsuleDevDanger.png
+			file: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/capsuleSkin_data/capsuleDevDanger.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -583,7 +583,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/capsuleSkin_data/capsuleDevStick1.png
+			file: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/capsuleSkin_data/capsuleDevStick1.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -603,7 +603,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/capsuleSkin_data/capsuleDevStick2.png
+			file: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/capsuleSkin_data/capsuleDevStick2.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -623,7 +623,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/capsuleSkin_data/capsuleDevStick3.png
+			file: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/capsuleSkin_data/capsuleDevStick3.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -643,7 +643,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/capsuleSkin_data/capsuleDevStick4.png
+			file: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/capsuleSkin_data/capsuleDevStick4.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -663,7 +663,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/capsuleSkin_data/capsuleSpriteDiamondF.png
+			file: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/capsuleSkin_data/capsuleSpriteDiamondF.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -683,7 +683,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/capsuleSkin_data/capsuleSpriteWeirdTriangleF.png
+			file: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/capsuleSkin_data/capsuleSpriteWeirdTriangleF.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -703,7 +703,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/capsuleSkin_data/sketchSpriteHexagonF.png
+			file: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/capsuleSkin_data/sketchSpriteHexagonF.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -723,7 +723,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/capsuleSkin_data/bar-selector.png
+			file: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/capsuleSkin_data/bar-selector.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -743,7 +743,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/capsuleSkin_data/button.9.png
+			file: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/capsuleSkin_data/button.9.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -763,7 +763,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/capsuleSkin_data/button-down.png
+			file: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/capsuleSkin_data/button-down.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -783,7 +783,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/capsuleSkin_data/button-down-pressed.png
+			file: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/capsuleSkin_data/button-down-pressed.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -803,7 +803,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/capsuleSkin_data/button-pressed.9.png
+			file: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/capsuleSkin_data/button-pressed.9.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -823,7 +823,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/capsuleSkin_data/button-up.png
+			file: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/capsuleSkin_data/button-up.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -843,7 +843,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/capsuleSkin_data/button-up-pressed.png
+			file: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/capsuleSkin_data/button-up-pressed.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -863,7 +863,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/capsuleSkin_data/check.png
+			file: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/capsuleSkin_data/check.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -883,7 +883,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/capsuleSkin_data/check-radio.png
+			file: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/capsuleSkin_data/check-radio.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -903,7 +903,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/capsuleSkin_data/checkbox.png
+			file: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/capsuleSkin_data/checkbox.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -923,7 +923,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/capsuleSkin_data/checkbox-checked.png
+			file: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/capsuleSkin_data/checkbox-checked.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -943,7 +943,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/capsuleSkin_data/checkbox-checked-pressed.png
+			file: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/capsuleSkin_data/checkbox-checked-pressed.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -963,7 +963,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/capsuleSkin_data/checkbox-pressed.png
+			file: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/capsuleSkin_data/checkbox-pressed.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -983,7 +983,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/capsuleSkin_data/default.png
+			file: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/capsuleSkin_data/default.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -1003,7 +1003,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/capsuleSkin_data/expand-drop-down.png
+			file: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/capsuleSkin_data/expand-drop-down.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -1023,7 +1023,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/capsuleSkin_data/font-small.png
+			file: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/capsuleSkin_data/font-small.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -1043,7 +1043,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/capsuleSkin_data/icon-arrow-1.png
+			file: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/capsuleSkin_data/icon-arrow-1.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -1063,7 +1063,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/capsuleSkin_data/icon-arrow-2.png
+			file: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/capsuleSkin_data/icon-arrow-2.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -1083,7 +1083,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/capsuleSkin_data/icon-brush.png
+			file: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/capsuleSkin_data/icon-brush.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -1103,7 +1103,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/capsuleSkin_data/icon-close.png
+			file: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/capsuleSkin_data/icon-close.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -1123,7 +1123,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/capsuleSkin_data/icon-drive.png
+			file: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/capsuleSkin_data/icon-drive.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -1143,7 +1143,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/capsuleSkin_data/icon-file-audio.png
+			file: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/capsuleSkin_data/icon-file-audio.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -1163,7 +1163,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/capsuleSkin_data/icon-file-image.png
+			file: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/capsuleSkin_data/icon-file-image.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -1183,7 +1183,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/capsuleSkin_data/icon-file-pdf.png
+			file: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/capsuleSkin_data/icon-file-pdf.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -1203,7 +1203,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/capsuleSkin_data/icon-file-text.png
+			file: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/capsuleSkin_data/icon-file-text.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -1223,7 +1223,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/capsuleSkin_data/icon-folder.png
+			file: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/capsuleSkin_data/icon-folder.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -1243,7 +1243,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/capsuleSkin_data/icon-folder-new.png
+			file: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/capsuleSkin_data/icon-folder-new.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -1263,7 +1263,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/capsuleSkin_data/icon-folder-parent.png
+			file: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/capsuleSkin_data/icon-folder-parent.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -1283,7 +1283,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/capsuleSkin_data/icon-folder-star.png
+			file: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/capsuleSkin_data/icon-folder-star.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -1303,7 +1303,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/capsuleSkin_data/icon-left.png
+			file: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/capsuleSkin_data/icon-left.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -1323,7 +1323,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/capsuleSkin_data/icon-pencil.png
+			file: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/capsuleSkin_data/icon-pencil.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -1343,7 +1343,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/capsuleSkin_data/icon-rect.png
+			file: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/capsuleSkin_data/icon-rect.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -1363,7 +1363,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/capsuleSkin_data/icon-refresh.png
+			file: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/capsuleSkin_data/icon-refresh.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -1383,7 +1383,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/capsuleSkin_data/icon-right.png
+			file: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/capsuleSkin_data/icon-right.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -1403,7 +1403,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/capsuleSkin_data/icon-settings.png
+			file: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/capsuleSkin_data/icon-settings.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -1423,7 +1423,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/capsuleSkin_data/icon-star.png
+			file: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/capsuleSkin_data/icon-star.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -1443,7 +1443,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/capsuleSkin_data/icon-star-outline.png
+			file: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/capsuleSkin_data/icon-star-outline.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -1463,7 +1463,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/capsuleSkin_data/icon-trash.png
+			file: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/capsuleSkin_data/icon-trash.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -1483,7 +1483,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/capsuleSkin_data/list.9.png
+			file: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/capsuleSkin_data/list.9.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -1503,7 +1503,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/capsuleSkin_data/menu.9.png
+			file: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/capsuleSkin_data/menu.9.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -1523,7 +1523,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/capsuleSkin_data/menu-bar.9.png
+			file: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/capsuleSkin_data/menu-bar.9.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -1543,7 +1543,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/capsuleSkin_data/menu-button-over.9.png
+			file: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/capsuleSkin_data/menu-button-over.9.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -1563,7 +1563,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/capsuleSkin_data/menu-button.9.png
+			file: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/capsuleSkin_data/menu-button.9.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -1583,7 +1583,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/capsuleSkin_data/menu-button-down.9.png
+			file: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/capsuleSkin_data/menu-button-down.9.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -1603,7 +1603,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/capsuleSkin_data/panel.9.png
+			file: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/capsuleSkin_data/panel.9.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -1623,7 +1623,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/capsuleSkin_data/panel2.9.png
+			file: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/capsuleSkin_data/panel2.9.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -1643,7 +1643,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/capsuleSkin_data/progress-bar-horizontal.9.png
+			file: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/capsuleSkin_data/progress-bar-horizontal.9.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -1663,7 +1663,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/capsuleSkin_data/progress-bar-knob-horizontal.png
+			file: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/capsuleSkin_data/progress-bar-knob-horizontal.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -1683,7 +1683,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/capsuleSkin_data/progress-bar-knob-vertical.png
+			file: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/capsuleSkin_data/progress-bar-knob-vertical.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -1703,7 +1703,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/capsuleSkin_data/progress-bar-vertical.9.png
+			file: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/capsuleSkin_data/progress-bar-vertical.9.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -1723,7 +1723,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/capsuleSkin_data/radio.png
+			file: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/capsuleSkin_data/radio.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -1743,7 +1743,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/capsuleSkin_data/radio-checked.png
+			file: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/capsuleSkin_data/radio-checked.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -1763,7 +1763,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/capsuleSkin_data/radio-checked-pressed.png
+			file: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/capsuleSkin_data/radio-checked-pressed.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -1783,7 +1783,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/capsuleSkin_data/radio-pressed.png
+			file: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/capsuleSkin_data/radio-pressed.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -1803,7 +1803,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/capsuleSkin_data/scrollbar-horizontal.9.png
+			file: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/capsuleSkin_data/scrollbar-horizontal.9.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -1823,7 +1823,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/capsuleSkin_data/scrollbar-vertical.9.png
+			file: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/capsuleSkin_data/scrollbar-vertical.9.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -1843,7 +1843,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/capsuleSkin_data/select-box.9.png
+			file: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/capsuleSkin_data/select-box.9.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -1863,7 +1863,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/capsuleSkin_data/select-box-pressed.9.png
+			file: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/capsuleSkin_data/select-box-pressed.9.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -1883,7 +1883,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/capsuleSkin_data/selection.9.png
+			file: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/capsuleSkin_data/selection.9.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -1903,7 +1903,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/capsuleSkin_data/slider-knob-horizontal.png
+			file: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/capsuleSkin_data/slider-knob-horizontal.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -1923,7 +1923,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/capsuleSkin_data/slider-knob-pressed-horizontal.png
+			file: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/capsuleSkin_data/slider-knob-pressed-horizontal.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -1943,7 +1943,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/capsuleSkin_data/slider-knob-pressed-vertical.png
+			file: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/capsuleSkin_data/slider-knob-pressed-vertical.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -1963,7 +1963,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/capsuleSkin_data/slider-knob-vertical.png
+			file: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/capsuleSkin_data/slider-knob-vertical.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -1983,7 +1983,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/capsuleSkin_data/spinner-down.png
+			file: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/capsuleSkin_data/spinner-down.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -2003,7 +2003,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/capsuleSkin_data/spinner-up.png
+			file: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/capsuleSkin_data/spinner-up.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -2023,7 +2023,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/capsuleSkin_data/splitpane-horizontal.png
+			file: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/capsuleSkin_data/splitpane-horizontal.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -2043,7 +2043,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/capsuleSkin_data/splitpane-horizontal-pressed.png
+			file: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/capsuleSkin_data/splitpane-horizontal-pressed.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -2063,7 +2063,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/capsuleSkin_data/splitpane-vertical.png
+			file: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/capsuleSkin_data/splitpane-vertical.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -2083,7 +2083,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/capsuleSkin_data/splitpane-vertical-pressed.png
+			file: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/capsuleSkin_data/splitpane-vertical-pressed.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -2103,7 +2103,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/capsuleSkin_data/tab.9.png
+			file: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/capsuleSkin_data/tab.9.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -2123,7 +2123,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/capsuleSkin_data/tab-pressed.9.png
+			file: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/capsuleSkin_data/tab-pressed.9.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -2143,7 +2143,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/capsuleSkin_data/textfield.9.png
+			file: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/capsuleSkin_data/textfield.9.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -2163,7 +2163,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/capsuleSkin_data/textfield-pressed.9.png
+			file: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/capsuleSkin_data/textfield-pressed.9.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -2183,7 +2183,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/capsuleSkin_data/title-bg.9.png
+			file: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/capsuleSkin_data/title-bg.9.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -2203,7 +2203,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/capsuleSkin_data/touchpad.png
+			file: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/capsuleSkin_data/touchpad.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -2223,7 +2223,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/capsuleSkin_data/touchpad-knob.png
+			file: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/capsuleSkin_data/touchpad-knob.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -2243,7 +2243,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/capsuleSkin_data/tree-minus.png
+			file: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/capsuleSkin_data/tree-minus.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -2263,7 +2263,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/capsuleSkin_data/tree-plus.png
+			file: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/capsuleSkin_data/tree-plus.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -2283,7 +2283,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/capsuleSkin_data/white.png
+			file: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/capsuleSkin_data/white.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -2303,7 +2303,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/capsuleSkin_data/window.9.png
+			file: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/capsuleSkin_data/window.9.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -2323,7 +2323,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/capsuleSkin_data/white.png
+			file: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/capsuleSkin_data/white.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -2343,7 +2343,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/capsuleSkin_data/white.png
+			file: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/capsuleSkin_data/white.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -2363,7 +2363,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/capsuleSkin_data/textfield-pressed.9.png
+			file: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/capsuleSkin_data/textfield-pressed.9.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -2383,7 +2383,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/capsuleSkin_data/white.png
+			file: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/capsuleSkin_data/white.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -2403,7 +2403,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/capsuleSkin_data/white.png
+			file: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/capsuleSkin_data/white.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -2423,7 +2423,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/capsuleSkin_data/white.png
+			file: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/capsuleSkin_data/white.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -2443,7 +2443,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/capsuleSkin_data/sketchSpriteHexagonF.png
+			file: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/capsuleSkin_data/sketchSpriteHexagonF.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -2463,7 +2463,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/capsuleSkin_data/sketchSpriteHexagonF.png
+			file: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/capsuleSkin_data/sketchSpriteHexagonF.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -2483,7 +2483,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/capsuleSkin_data/capsuleSpriteWeirdTriangleF.png
+			file: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/capsuleSkin_data/capsuleSpriteWeirdTriangleF.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -2503,7 +2503,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/capsuleSkin_data/capsuleSpriteWeirdTriangleF.png
+			file: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/capsuleSkin_data/capsuleSpriteWeirdTriangleF.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -2523,7 +2523,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/capsuleSkin_data/capsuleSpriteDiamondF.png
+			file: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/capsuleSkin_data/capsuleSpriteDiamondF.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -2543,7 +2543,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/capsuleSkin_data/capsuleSpriteDiamondF.png
+			file: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/capsuleSkin_data/capsuleSpriteDiamondF.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -2583,7 +2583,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/squarewb.9.png
+			file: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/squarewb.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -2603,7 +2603,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/squarewb.9.png
+			file: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/squarewb.9.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -2623,7 +2623,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/squarew.png
+			file: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/squarew.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -2643,7 +2643,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/squarew.png
+			file: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/squarew.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -2663,7 +2663,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/squarew.png
+			file: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/squarew.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -2683,7 +2683,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/dropdownw.9.png
+			file: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/dropdownw.9.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -2703,7 +2703,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/dropdownw.9.png
+			file: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/dropdownw.9.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -2743,7 +2743,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/logical_hex.png
+			file: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/logical_hex.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -2763,7 +2763,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/logical_sqr.png
+			file: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/logical_sqr.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -2783,7 +2783,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/logical_tri.png
+			file: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/logical_tri.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -2803,7 +2803,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/piece_marker1.png
+			file: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/piece_marker1.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -2823,7 +2823,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/piece_marker2.png
+			file: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/piece_marker2.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -2843,7 +2843,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/piece1.png
+			file: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/piece1.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -2863,7 +2863,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/piece2.png
+			file: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/piece2.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -2883,7 +2883,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/slot_light1.png
+			file: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/slot_light1.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -2903,7 +2903,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/slot_light2.png
+			file: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/slot_light2.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -2923,7 +2923,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/slot_light3.png
+			file: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/slot_light3.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -2943,7 +2943,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/slot1.png
+			file: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/slot1.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -2963,7 +2963,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/slot2.png
+			file: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/slot2.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -2983,7 +2983,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/slot3.png
+			file: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/slot3.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -3003,7 +3003,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/slot4.png
+			file: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/slot4.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -3023,7 +3023,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/slot5.png
+			file: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/slot5.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -3043,7 +3043,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/slot6.png
+			file: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/slot6.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -3063,7 +3063,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/cir64.png
+			file: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/cir64.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -3083,7 +3083,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/ecir64.png
+			file: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/ecir64.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -3103,7 +3103,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/esqr64.png
+			file: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/esqr64.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -3123,7 +3123,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/etri64.png
+			file: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/etri64.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -3143,7 +3143,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/panel3.png
+			file: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/panel3.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -3163,7 +3163,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/sqr64.png
+			file: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/sqr64.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -3183,7 +3183,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/tri64.png
+			file: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/tri64.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -3203,7 +3203,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/rec64d.png
+			file: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/rec64d.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -3223,7 +3223,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/rec64l.png
+			file: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/rec64l.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -3243,7 +3243,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/rec64r.png
+			file: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/rec64r.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -3263,7 +3263,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/rec64u.png
+			file: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/rec64u.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -3283,7 +3283,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/keyboard.png
+			file: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/keyboard.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -3303,7 +3303,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/num1.png
+			file: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/num1.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -3323,7 +3323,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/num2.png
+			file: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/num2.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -3343,7 +3343,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/num3.png
+			file: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/num3.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -3363,7 +3363,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/num4.png
+			file: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/num4.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -3383,7 +3383,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/num5.png
+			file: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/num5.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -3405,7 +3405,7 @@ atlasData: {
 	]
 	fontDrawables: [
 		{
-			file: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/capsuleSkin_data/font-export.png
+			file: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/capsuleSkin_data/font-export.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -3425,7 +3425,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/capsuleSkin_data/font-title-export.png
+			file: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/capsuleSkin_data/font-title-export.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -3576,7 +3576,7 @@ jsonData: {
 			flip: false
 			markupEnabled: false
 			scaling: -1
-			file: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/capsuleSkin_data/font-export.fnt
+			file: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/capsuleSkin_data/font-export.fnt
 		}
 		{
 			class: com.ray3k.skincomposer.data.FontData
@@ -3584,7 +3584,7 @@ jsonData: {
 			flip: false
 			markupEnabled: false
 			scaling: -1
-			file: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/capsuleSkin_data/font-title-export.fnt
+			file: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/capsuleSkin_data/font-title-export.fnt
 		}
 	]
 	freeTypeFonts: [
@@ -3618,143 +3618,6 @@ jsonData: {
 		}
 	]
 	classStyleMap: {
-		com.badlogic.gdx.scenes.scene2d.ui.ScrollPane: [
-			{
-				class: com.ray3k.skincomposer.data.StyleData
-				name: default
-				clazz: com.badlogic.gdx.scenes.scene2d.ui.ScrollPane
-				properties: {
-					background: {
-						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
-						name: background
-						optional: true
-						value: null
-					}
-					corner: {
-						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
-						name: corner
-						optional: true
-						value: null
-					}
-					hScroll: {
-						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
-						name: hScroll
-						optional: true
-						value: squarewbg
-					}
-					hScrollKnob: {
-						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
-						name: hScrollKnob
-						optional: true
-						value: squarewg
-					}
-					vScroll: {
-						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
-						name: vScroll
-						optional: true
-						value: squarewbg
-					}
-					vScrollKnob: {
-						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
-						name: vScrollKnob
-						optional: true
-						value: squarewg
-					}
-				}
-				deletable: false
-				parent: null
-			}
-			{
-				class: com.ray3k.skincomposer.data.StyleData
-				name: list
-				clazz: com.badlogic.gdx.scenes.scene2d.ui.ScrollPane
-				properties: {
-					background: {
-						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
-						name: background
-						optional: true
-						value: null
-					}
-					corner: {
-						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
-						name: corner
-						optional: true
-						value: null
-					}
-					hScroll: {
-						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
-						name: hScroll
-						optional: true
-						value: null
-					}
-					hScrollKnob: {
-						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
-						name: hScrollKnob
-						optional: true
-						value: scrollbar-horizontal
-					}
-					vScroll: {
-						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
-						name: vScroll
-						optional: true
-						value: null
-					}
-					vScrollKnob: {
-						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
-						name: vScrollKnob
-						optional: true
-						value: scrollbar-vertical
-					}
-				}
-				deletable: true
-				parent: null
-			}
-			{
-				class: com.ray3k.skincomposer.data.StyleData
-				name: select-box
-				clazz: com.badlogic.gdx.scenes.scene2d.ui.ScrollPane
-				properties: {
-					background: {
-						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
-						name: background
-						optional: true
-						value: list
-					}
-					corner: {
-						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
-						name: corner
-						optional: true
-						value: null
-					}
-					hScroll: {
-						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
-						name: hScroll
-						optional: true
-						value: null
-					}
-					hScrollKnob: {
-						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
-						name: hScrollKnob
-						optional: true
-						value: scrollbar-horizontal
-					}
-					vScroll: {
-						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
-						name: vScroll
-						optional: true
-						value: null
-					}
-					vScrollKnob: {
-						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
-						name: vScrollKnob
-						optional: true
-						value: scrollbar-vertical
-					}
-				}
-				deletable: true
-				parent: null
-			}
-		]
 		com.badlogic.gdx.scenes.scene2d.ui.SplitPane: [
 			{
 				class: com.ray3k.skincomposer.data.StyleData
@@ -3781,6 +3644,256 @@ jsonData: {
 						name: handle
 						optional: false
 						value: splitpane-vertical
+					}
+				}
+				deletable: false
+				parent: null
+			}
+		]
+		com.badlogic.gdx.scenes.scene2d.ui.List: [
+			{
+				class: com.ray3k.skincomposer.data.StyleData
+				name: default
+				clazz: com.badlogic.gdx.scenes.scene2d.ui.List
+				properties: {
+					font: {
+						type: com.badlogic.gdx.graphics.g2d.BitmapFont
+						name: font
+						optional: false
+						value: fixedsys
+					}
+					fontColorSelected: {
+						type: com.badlogic.gdx.graphics.Color
+						name: fontColorSelected
+						optional: false
+						value: console
+					}
+					fontColorUnselected: {
+						type: com.badlogic.gdx.graphics.Color
+						name: fontColorUnselected
+						optional: false
+						value: console
+					}
+					selection: {
+						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+						name: selection
+						optional: false
+						value: selection
+					}
+					down: {
+						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+						name: down
+						optional: true
+						value: null
+					}
+					over: {
+						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+						name: over
+						optional: true
+						value: null
+					}
+					background: {
+						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+						name: background
+						optional: true
+						value: null
+					}
+				}
+				deletable: false
+				parent: null
+			}
+		]
+		com.badlogic.gdx.scenes.scene2d.ui.CheckBox: [
+			{
+				class: com.ray3k.skincomposer.data.StyleData
+				name: default
+				clazz: com.badlogic.gdx.scenes.scene2d.ui.CheckBox
+				properties: {
+					checkboxOn: {
+						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+						name: checkboxOn
+						optional: false
+						value: checkbox-checked
+					}
+					checkboxOff: {
+						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+						name: checkboxOff
+						optional: false
+						value: checkbox
+					}
+					checkboxOnOver: {
+						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+						name: checkboxOnOver
+						optional: true
+						value: null
+					}
+					checkboxOver: {
+						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+						name: checkboxOver
+						optional: true
+						value: null
+					}
+					checkboxOnDisabled: {
+						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+						name: checkboxOnDisabled
+						optional: true
+						value: null
+					}
+					checkboxOffDisabled: {
+						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+						name: checkboxOffDisabled
+						optional: true
+						value: null
+					}
+					font: {
+						type: com.badlogic.gdx.graphics.g2d.BitmapFont
+						name: font
+						optional: false
+						value: body
+					}
+					fontColor: {
+						type: com.badlogic.gdx.graphics.Color
+						name: fontColor
+						optional: true
+						value: null
+					}
+					downFontColor: {
+						type: com.badlogic.gdx.graphics.Color
+						name: downFontColor
+						optional: true
+						value: null
+					}
+					overFontColor: {
+						type: com.badlogic.gdx.graphics.Color
+						name: overFontColor
+						optional: true
+						value: null
+					}
+					focusedFontColor: {
+						type: com.badlogic.gdx.graphics.Color
+						name: focusedFontColor
+						optional: true
+						value: null
+					}
+					disabledFontColor: {
+						type: com.badlogic.gdx.graphics.Color
+						name: disabledFontColor
+						optional: true
+						value: null
+					}
+					checkedFontColor: {
+						type: com.badlogic.gdx.graphics.Color
+						name: checkedFontColor
+						optional: true
+						value: null
+					}
+					checkedDownFontColor: {
+						type: com.badlogic.gdx.graphics.Color
+						name: checkedDownFontColor
+						optional: true
+						value: null
+					}
+					checkedOverFontColor: {
+						type: com.badlogic.gdx.graphics.Color
+						name: checkedOverFontColor
+						optional: true
+						value: null
+					}
+					checkedFocusedFontColor: {
+						type: com.badlogic.gdx.graphics.Color
+						name: checkedFocusedFontColor
+						optional: true
+						value: null
+					}
+					up: {
+						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+						name: up
+						optional: true
+						value: null
+					}
+					down: {
+						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+						name: down
+						optional: true
+						value: null
+					}
+					over: {
+						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+						name: over
+						optional: true
+						value: null
+					}
+					focused: {
+						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+						name: focused
+						optional: true
+						value: null
+					}
+					disabled: {
+						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+						name: disabled
+						optional: true
+						value: null
+					}
+					checked: {
+						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+						name: checked
+						optional: true
+						value: null
+					}
+					checkedOver: {
+						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+						name: checkedOver
+						optional: true
+						value: null
+					}
+					checkedDown: {
+						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+						name: checkedDown
+						optional: true
+						value: null
+					}
+					checkedFocused: {
+						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+						name: checkedFocused
+						optional: true
+						value: null
+					}
+					pressedOffsetX: {
+						type: float
+						name: pressedOffsetX
+						optional: true
+						value: 0
+					}
+					pressedOffsetY: {
+						type: float
+						name: pressedOffsetY
+						optional: true
+						value: 0
+					}
+					unpressedOffsetX: {
+						type: float
+						name: unpressedOffsetX
+						optional: true
+						value: 0
+					}
+					unpressedOffsetY: {
+						type: float
+						name: unpressedOffsetY
+						optional: true
+						value: 0
+					}
+					checkedOffsetX: {
+						type: float
+						name: checkedOffsetX
+						optional: true
+						value: 0
+					}
+					checkedOffsetY: {
+						type: float
+						name: checkedOffsetY
+						optional: true
+						value: 0
 					}
 				}
 				deletable: false
@@ -3990,69 +4103,292 @@ jsonData: {
 				parent: null
 			}
 		]
-		com.badlogic.gdx.scenes.scene2d.ui.SelectBox: [
+		com.badlogic.gdx.scenes.scene2d.ui.ProgressBar: [
+			{
+				class: com.ray3k.skincomposer.data.StyleData
+				name: default-horizontal
+				clazz: com.badlogic.gdx.scenes.scene2d.ui.ProgressBar
+				properties: {
+					background: {
+						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+						name: background
+						optional: false
+						value: progress-bar-horizontal
+					}
+					disabledBackground: {
+						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+						name: disabledBackground
+						optional: true
+						value: null
+					}
+					knob: {
+						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+						name: knob
+						optional: true
+						value: null
+					}
+					disabledKnob: {
+						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+						name: disabledKnob
+						optional: true
+						value: null
+					}
+					knobBefore: {
+						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+						name: knobBefore
+						optional: true
+						value: progress-bar-knob-horizontal
+					}
+					disabledKnobBefore: {
+						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+						name: disabledKnobBefore
+						optional: true
+						value: null
+					}
+					knobAfter: {
+						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+						name: knobAfter
+						optional: true
+						value: null
+					}
+					disabledKnobAfter: {
+						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+						name: disabledKnobAfter
+						optional: true
+						value: null
+					}
+				}
+				deletable: false
+				parent: null
+			}
+			{
+				class: com.ray3k.skincomposer.data.StyleData
+				name: default-vertical
+				clazz: com.badlogic.gdx.scenes.scene2d.ui.ProgressBar
+				properties: {
+					background: {
+						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+						name: background
+						optional: false
+						value: progress-bar-vertical
+					}
+					disabledBackground: {
+						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+						name: disabledBackground
+						optional: true
+						value: null
+					}
+					knob: {
+						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+						name: knob
+						optional: true
+						value: null
+					}
+					disabledKnob: {
+						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+						name: disabledKnob
+						optional: true
+						value: null
+					}
+					knobBefore: {
+						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+						name: knobBefore
+						optional: true
+						value: progress-bar-knob-vertical
+					}
+					disabledKnobBefore: {
+						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+						name: disabledKnobBefore
+						optional: true
+						value: null
+					}
+					knobAfter: {
+						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+						name: knobAfter
+						optional: true
+						value: null
+					}
+					disabledKnobAfter: {
+						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+						name: disabledKnobAfter
+						optional: true
+						value: null
+					}
+				}
+				deletable: false
+				parent: null
+			}
+		]
+		com.badlogic.gdx.scenes.scene2d.ui.ImageButton: [
 			{
 				class: com.ray3k.skincomposer.data.StyleData
 				name: default
-				clazz: com.badlogic.gdx.scenes.scene2d.ui.SelectBox
+				clazz: com.badlogic.gdx.scenes.scene2d.ui.ImageButton
 				properties: {
-					font: {
-						type: com.badlogic.gdx.graphics.g2d.BitmapFont
-						name: font
-						optional: false
-						value: fixedsys
-					}
-					fontColor: {
-						type: com.badlogic.gdx.graphics.Color
-						name: fontColor
-						optional: false
-						value: white
-					}
-					overFontColor: {
-						type: com.badlogic.gdx.graphics.Color
-						name: overFontColor
+					imageUp: {
+						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+						name: imageUp
 						optional: true
 						value: null
 					}
-					disabledFontColor: {
-						type: com.badlogic.gdx.graphics.Color
-						name: disabledFontColor
+					imageDown: {
+						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+						name: imageDown
 						optional: true
 						value: null
 					}
+					imageOver: {
+						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+						name: imageOver
+						optional: true
+						value: null
+					}
+					imageDisabled: {
+						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+						name: imageDisabled
+						optional: true
+						value: null
+					}
+					imageChecked: {
+						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+						name: imageChecked
+						optional: true
+						value: null
+					}
+					imageCheckedDown: {
+						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+						name: imageCheckedDown
+						optional: true
+						value: null
+					}
+					imageCheckedOver: {
+						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+						name: imageCheckedOver
+						optional: true
+						value: null
+					}
+					up: {
+						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+						name: up
+						optional: true
+						value: button
+					}
+					down: {
+						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+						name: down
+						optional: true
+						value: button-pressed
+					}
+					over: {
+						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+						name: over
+						optional: true
+						value: null
+					}
+					focused: {
+						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+						name: focused
+						optional: true
+						value: null
+					}
+					disabled: {
+						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+						name: disabled
+						optional: true
+						value: null
+					}
+					checked: {
+						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+						name: checked
+						optional: true
+						value: null
+					}
+					checkedOver: {
+						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+						name: checkedOver
+						optional: true
+						value: null
+					}
+					checkedDown: {
+						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+						name: checkedDown
+						optional: true
+						value: null
+					}
+					checkedFocused: {
+						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+						name: checkedFocused
+						optional: true
+						value: null
+					}
+					pressedOffsetX: {
+						type: float
+						name: pressedOffsetX
+						optional: true
+						value: 0
+					}
+					pressedOffsetY: {
+						type: float
+						name: pressedOffsetY
+						optional: true
+						value: 0
+					}
+					unpressedOffsetX: {
+						type: float
+						name: unpressedOffsetX
+						optional: true
+						value: 0
+					}
+					unpressedOffsetY: {
+						type: float
+						name: unpressedOffsetY
+						optional: true
+						value: 0
+					}
+					checkedOffsetX: {
+						type: float
+						name: checkedOffsetX
+						optional: true
+						value: 0
+					}
+					checkedOffsetY: {
+						type: float
+						name: checkedOffsetY
+						optional: true
+						value: 0
+					}
+				}
+				deletable: false
+				parent: null
+			}
+		]
+		com.badlogic.gdx.scenes.scene2d.ui.Window: [
+			{
+				class: com.ray3k.skincomposer.data.StyleData
+				name: default
+				clazz: com.badlogic.gdx.scenes.scene2d.ui.Window
+				properties: {
 					background: {
 						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
 						name: background
 						optional: true
-						value: dropdownwg
+						value: window
 					}
-					scrollStyle: {
-						type: com.badlogic.gdx.scenes.scene2d.ui.ScrollPane$ScrollPaneStyle
-						name: scrollStyle
+					titleFont: {
+						type: com.badlogic.gdx.graphics.g2d.BitmapFont
+						name: titleFont
 						optional: false
-						value: default
+						value: body
 					}
-					listStyle: {
-						type: com.badlogic.gdx.scenes.scene2d.ui.List$ListStyle
-						name: listStyle
-						optional: false
-						value: default
-					}
-					backgroundOver: {
-						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
-						name: backgroundOver
+					titleFontColor: {
+						type: com.badlogic.gdx.graphics.Color
+						name: titleFontColor
 						optional: true
 						value: null
 					}
-					backgroundOpen: {
+					stageBackground: {
 						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
-						name: backgroundOpen
-						optional: true
-						value: null
-					}
-					backgroundDisabled: {
-						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
-						name: backgroundDisabled
+						name: stageBackground
 						optional: true
 						value: null
 					}
@@ -4381,12 +4717,558 @@ jsonData: {
 				parent: null
 			}
 		]
-		com.badlogic.gdx.scenes.scene2d.ui.ProgressBar: [
+		com.badlogic.gdx.scenes.scene2d.ui.Tree: [
+			{
+				class: com.ray3k.skincomposer.data.StyleData
+				name: default
+				clazz: com.badlogic.gdx.scenes.scene2d.ui.Tree
+				properties: {
+					plus: {
+						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+						name: plus
+						optional: false
+						value: tree-plus
+					}
+					minus: {
+						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+						name: minus
+						optional: false
+						value: tree-minus
+					}
+					plusOver: {
+						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+						name: plusOver
+						optional: true
+						value: null
+					}
+					minusOver: {
+						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+						name: minusOver
+						optional: true
+						value: null
+					}
+					over: {
+						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+						name: over
+						optional: true
+						value: null
+					}
+					selection: {
+						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+						name: selection
+						optional: true
+						value: null
+					}
+					background: {
+						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+						name: background
+						optional: true
+						value: null
+					}
+				}
+				deletable: false
+				parent: null
+			}
+		]
+		com.badlogic.gdx.scenes.scene2d.ui.Touchpad: [
+			{
+				class: com.ray3k.skincomposer.data.StyleData
+				name: default
+				clazz: com.badlogic.gdx.scenes.scene2d.ui.Touchpad
+				properties: {
+					background: {
+						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+						name: background
+						optional: true
+						value: touchpad
+					}
+					knob: {
+						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+						name: knob
+						optional: true
+						value: touchpad-knob
+					}
+				}
+				deletable: false
+				parent: null
+			}
+		]
+		com.badlogic.gdx.scenes.scene2d.ui.Label: [
+			{
+				class: com.ray3k.skincomposer.data.StyleData
+				name: default
+				clazz: com.badlogic.gdx.scenes.scene2d.ui.Label
+				properties: {
+					font: {
+						type: com.badlogic.gdx.graphics.g2d.BitmapFont
+						name: font
+						optional: false
+						value: body
+					}
+					fontColor: {
+						type: com.badlogic.gdx.graphics.Color
+						name: fontColor
+						optional: true
+						value: black
+					}
+					background: {
+						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+						name: background
+						optional: true
+						value: button
+					}
+				}
+				deletable: false
+				parent: null
+			}
+			{
+				class: com.ray3k.skincomposer.data.StyleData
+				name: menuitem-shortcut
+				clazz: com.badlogic.gdx.scenes.scene2d.ui.Label
+				properties: {
+					font: {
+						type: com.badlogic.gdx.graphics.g2d.BitmapFont
+						name: font
+						optional: false
+						value: body
+					}
+					fontColor: {
+						type: com.badlogic.gdx.graphics.Color
+						name: fontColor
+						optional: true
+						value: null
+					}
+					background: {
+						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+						name: background
+						optional: true
+						value: null
+					}
+				}
+				deletable: true
+				parent: null
+			}
+			{
+				class: com.ray3k.skincomposer.data.StyleData
+				name: small
+				clazz: com.badlogic.gdx.scenes.scene2d.ui.Label
+				properties: {
+					font: {
+						type: com.badlogic.gdx.graphics.g2d.BitmapFont
+						name: font
+						optional: false
+						value: null
+					}
+					fontColor: {
+						type: com.badlogic.gdx.graphics.Color
+						name: fontColor
+						optional: true
+						value: null
+					}
+					background: {
+						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+						name: background
+						optional: true
+						value: null
+					}
+				}
+				deletable: true
+				parent: null
+			}
+			{
+				class: com.ray3k.skincomposer.data.StyleData
+				name: title
+				clazz: com.badlogic.gdx.scenes.scene2d.ui.Label
+				properties: {
+					font: {
+						type: com.badlogic.gdx.graphics.g2d.BitmapFont
+						name: font
+						optional: false
+						value: null
+					}
+					fontColor: {
+						type: com.badlogic.gdx.graphics.Color
+						name: fontColor
+						optional: true
+						value: white
+					}
+					background: {
+						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+						name: background
+						optional: true
+						value: null
+					}
+				}
+				deletable: true
+				parent: null
+			}
+			{
+				class: com.ray3k.skincomposer.data.StyleData
+				name: console
+				clazz: com.badlogic.gdx.scenes.scene2d.ui.Label
+				properties: {
+					font: {
+						type: com.badlogic.gdx.graphics.g2d.BitmapFont
+						name: font
+						optional: false
+						value: fixedsys
+					}
+					fontColor: {
+						type: com.badlogic.gdx.graphics.Color
+						name: fontColor
+						optional: true
+						value: console
+					}
+					background: {
+						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+						name: background
+						optional: true
+						value: squarewbb
+					}
+				}
+				deletable: true
+				parent: null
+			}
+			{
+				class: com.ray3k.skincomposer.data.StyleData
+				name: trnsprtConsole
+				clazz: com.badlogic.gdx.scenes.scene2d.ui.Label
+				properties: {
+					font: {
+						type: com.badlogic.gdx.graphics.g2d.BitmapFont
+						name: font
+						optional: false
+						value: fixedsys
+					}
+					fontColor: {
+						type: com.badlogic.gdx.graphics.Color
+						name: fontColor
+						optional: true
+						value: console
+					}
+					background: {
+						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+						name: background
+						optional: true
+						value: null
+					}
+				}
+				deletable: true
+				parent: null
+			}
+			{
+				class: com.ray3k.skincomposer.data.StyleData
+				name: consoleWhite
+				clazz: com.badlogic.gdx.scenes.scene2d.ui.Label
+				properties: {
+					font: {
+						type: com.badlogic.gdx.graphics.g2d.BitmapFont
+						name: font
+						optional: false
+						value: fixedsys
+					}
+					fontColor: {
+						type: com.badlogic.gdx.graphics.Color
+						name: fontColor
+						optional: true
+						value: white
+					}
+					background: {
+						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+						name: background
+						optional: true
+						value: null
+					}
+				}
+				deletable: true
+				parent: null
+			}
+			{
+				class: com.ray3k.skincomposer.data.StyleData
+				name: squareGreen
+				clazz: com.badlogic.gdx.scenes.scene2d.ui.Label
+				properties: {
+					font: {
+						type: com.badlogic.gdx.graphics.g2d.BitmapFont
+						name: font
+						optional: false
+						value: fixedsys
+					}
+					fontColor: {
+						type: com.badlogic.gdx.graphics.Color
+						name: fontColor
+						optional: true
+						value: console
+					}
+					background: {
+						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+						name: background
+						optional: true
+						value: squarewbg
+					}
+				}
+				deletable: true
+				parent: null
+			}
+			{
+				class: com.ray3k.skincomposer.data.StyleData
+				name: consolePhysical
+				clazz: com.badlogic.gdx.scenes.scene2d.ui.Label
+				properties: {
+					font: {
+						type: com.badlogic.gdx.graphics.g2d.BitmapFont
+						name: font
+						optional: false
+						value: fixedsys
+					}
+					fontColor: {
+						type: com.badlogic.gdx.graphics.Color
+						name: fontColor
+						optional: true
+						value: link
+					}
+					background: {
+						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+						name: background
+						optional: true
+						value: button-pressed
+					}
+				}
+				deletable: true
+				parent: null
+			}
+		]
+		com.badlogic.gdx.scenes.scene2d.ui.TextField: [
+			{
+				class: com.ray3k.skincomposer.data.StyleData
+				name: default
+				clazz: com.badlogic.gdx.scenes.scene2d.ui.TextField
+				properties: {
+					font: {
+						type: com.badlogic.gdx.graphics.g2d.BitmapFont
+						name: font
+						optional: false
+						value: body
+					}
+					fontColor: {
+						type: com.badlogic.gdx.graphics.Color
+						name: fontColor
+						optional: false
+						value: white
+					}
+					focusedFontColor: {
+						type: com.badlogic.gdx.graphics.Color
+						name: focusedFontColor
+						optional: true
+						value: black
+					}
+					disabledFontColor: {
+						type: com.badlogic.gdx.graphics.Color
+						name: disabledFontColor
+						optional: true
+						value: null
+					}
+					background: {
+						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+						name: background
+						optional: true
+						value: textfield
+					}
+					focusedBackground: {
+						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+						name: focusedBackground
+						optional: true
+						value: textfield-pressed
+					}
+					disabledBackground: {
+						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+						name: disabledBackground
+						optional: true
+						value: null
+					}
+					cursor: {
+						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+						name: cursor
+						optional: true
+						value: black
+					}
+					selection: {
+						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+						name: selection
+						optional: true
+						value: gray
+					}
+					messageFont: {
+						type: com.badlogic.gdx.graphics.g2d.BitmapFont
+						name: messageFont
+						optional: true
+						value: null
+					}
+					messageFontColor: {
+						type: com.badlogic.gdx.graphics.Color
+						name: messageFontColor
+						optional: true
+						value: null
+					}
+				}
+				deletable: false
+				parent: null
+			}
+		]
+		com.badlogic.gdx.scenes.scene2d.ui.SelectBox: [
+			{
+				class: com.ray3k.skincomposer.data.StyleData
+				name: default
+				clazz: com.badlogic.gdx.scenes.scene2d.ui.SelectBox
+				properties: {
+					font: {
+						type: com.badlogic.gdx.graphics.g2d.BitmapFont
+						name: font
+						optional: false
+						value: fixedsys
+					}
+					fontColor: {
+						type: com.badlogic.gdx.graphics.Color
+						name: fontColor
+						optional: false
+						value: white
+					}
+					overFontColor: {
+						type: com.badlogic.gdx.graphics.Color
+						name: overFontColor
+						optional: true
+						value: null
+					}
+					disabledFontColor: {
+						type: com.badlogic.gdx.graphics.Color
+						name: disabledFontColor
+						optional: true
+						value: null
+					}
+					background: {
+						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+						name: background
+						optional: true
+						value: dropdownwg
+					}
+					scrollStyle: {
+						type: com.badlogic.gdx.scenes.scene2d.ui.ScrollPane$ScrollPaneStyle
+						name: scrollStyle
+						optional: false
+						value: default
+					}
+					listStyle: {
+						type: com.badlogic.gdx.scenes.scene2d.ui.List$ListStyle
+						name: listStyle
+						optional: false
+						value: default
+					}
+					backgroundOver: {
+						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+						name: backgroundOver
+						optional: true
+						value: null
+					}
+					backgroundOpen: {
+						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+						name: backgroundOpen
+						optional: true
+						value: null
+					}
+					backgroundDisabled: {
+						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+						name: backgroundDisabled
+						optional: true
+						value: null
+					}
+				}
+				deletable: false
+				parent: null
+			}
+		]
+		com.badlogic.gdx.scenes.scene2d.ui.TextTooltip: [
+			{
+				class: com.ray3k.skincomposer.data.StyleData
+				name: default
+				clazz: com.badlogic.gdx.scenes.scene2d.ui.TextTooltip
+				properties: {
+					label: {
+						type: com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle
+						name: label
+						optional: false
+						value: default
+					}
+					background: {
+						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+						name: background
+						optional: true
+						value: button
+					}
+					wrapWidth: {
+						type: float
+						name: wrapWidth
+						optional: true
+						value: 0
+					}
+				}
+				deletable: false
+				parent: null
+			}
+		]
+		com.badlogic.gdx.scenes.scene2d.ui.Slider: [
 			{
 				class: com.ray3k.skincomposer.data.StyleData
 				name: default-horizontal
-				clazz: com.badlogic.gdx.scenes.scene2d.ui.ProgressBar
+				clazz: com.badlogic.gdx.scenes.scene2d.ui.Slider
 				properties: {
+					backgroundOver: {
+						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+						name: backgroundOver
+						optional: true
+						value: null
+					}
+					backgroundDown: {
+						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+						name: backgroundDown
+						optional: true
+						value: null
+					}
+					knobOver: {
+						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+						name: knobOver
+						optional: true
+						value: null
+					}
+					knobDown: {
+						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+						name: knobDown
+						optional: true
+						value: slider-knob-pressed-horizontal
+					}
+					knobBeforeOver: {
+						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+						name: knobBeforeOver
+						optional: true
+						value: null
+					}
+					knobBeforeDown: {
+						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+						name: knobBeforeDown
+						optional: true
+						value: null
+					}
+					knobAfterOver: {
+						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+						name: knobAfterOver
+						optional: true
+						value: null
+					}
+					knobAfterDown: {
+						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+						name: knobAfterDown
+						optional: true
+						value: null
+					}
 					background: {
 						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
 						name: background
@@ -4403,7 +5285,7 @@ jsonData: {
 						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
 						name: knob
 						optional: true
-						value: null
+						value: slider-knob-horizontal
 					}
 					disabledKnob: {
 						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
@@ -4442,8 +5324,56 @@ jsonData: {
 			{
 				class: com.ray3k.skincomposer.data.StyleData
 				name: default-vertical
-				clazz: com.badlogic.gdx.scenes.scene2d.ui.ProgressBar
+				clazz: com.badlogic.gdx.scenes.scene2d.ui.Slider
 				properties: {
+					backgroundOver: {
+						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+						name: backgroundOver
+						optional: true
+						value: null
+					}
+					backgroundDown: {
+						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+						name: backgroundDown
+						optional: true
+						value: null
+					}
+					knobOver: {
+						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+						name: knobOver
+						optional: true
+						value: null
+					}
+					knobDown: {
+						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+						name: knobDown
+						optional: true
+						value: slider-knob-pressed-vertical
+					}
+					knobBeforeOver: {
+						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+						name: knobBeforeOver
+						optional: true
+						value: null
+					}
+					knobBeforeDown: {
+						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+						name: knobBeforeDown
+						optional: true
+						value: null
+					}
+					knobAfterOver: {
+						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+						name: knobAfterOver
+						optional: true
+						value: null
+					}
+					knobAfterDown: {
+						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+						name: knobAfterDown
+						optional: true
+						value: null
+					}
 					background: {
 						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
 						name: background
@@ -4460,7 +5390,7 @@ jsonData: {
 						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
 						name: knob
 						optional: true
-						value: null
+						value: slider-knob-vertical
 					}
 					disabledKnob: {
 						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
@@ -4491,320 +5421,6 @@ jsonData: {
 						name: disabledKnobAfter
 						optional: true
 						value: null
-					}
-				}
-				deletable: false
-				parent: null
-			}
-		]
-		com.badlogic.gdx.scenes.scene2d.ui.Window: [
-			{
-				class: com.ray3k.skincomposer.data.StyleData
-				name: default
-				clazz: com.badlogic.gdx.scenes.scene2d.ui.Window
-				properties: {
-					background: {
-						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
-						name: background
-						optional: true
-						value: window
-					}
-					titleFont: {
-						type: com.badlogic.gdx.graphics.g2d.BitmapFont
-						name: titleFont
-						optional: false
-						value: body
-					}
-					titleFontColor: {
-						type: com.badlogic.gdx.graphics.Color
-						name: titleFontColor
-						optional: true
-						value: null
-					}
-					stageBackground: {
-						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
-						name: stageBackground
-						optional: true
-						value: null
-					}
-				}
-				deletable: false
-				parent: null
-			}
-		]
-		com.badlogic.gdx.scenes.scene2d.ui.List: [
-			{
-				class: com.ray3k.skincomposer.data.StyleData
-				name: default
-				clazz: com.badlogic.gdx.scenes.scene2d.ui.List
-				properties: {
-					font: {
-						type: com.badlogic.gdx.graphics.g2d.BitmapFont
-						name: font
-						optional: false
-						value: fixedsys
-					}
-					fontColorSelected: {
-						type: com.badlogic.gdx.graphics.Color
-						name: fontColorSelected
-						optional: false
-						value: console
-					}
-					fontColorUnselected: {
-						type: com.badlogic.gdx.graphics.Color
-						name: fontColorUnselected
-						optional: false
-						value: console
-					}
-					selection: {
-						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
-						name: selection
-						optional: false
-						value: selection
-					}
-					down: {
-						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
-						name: down
-						optional: true
-						value: null
-					}
-					over: {
-						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
-						name: over
-						optional: true
-						value: null
-					}
-					background: {
-						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
-						name: background
-						optional: true
-						value: null
-					}
-				}
-				deletable: false
-				parent: null
-			}
-		]
-		com.badlogic.gdx.scenes.scene2d.ui.TextTooltip: [
-			{
-				class: com.ray3k.skincomposer.data.StyleData
-				name: default
-				clazz: com.badlogic.gdx.scenes.scene2d.ui.TextTooltip
-				properties: {
-					label: {
-						type: com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle
-						name: label
-						optional: false
-						value: default
-					}
-					background: {
-						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
-						name: background
-						optional: true
-						value: button
-					}
-					wrapWidth: {
-						type: float
-						name: wrapWidth
-						optional: true
-						value: 0
-					}
-				}
-				deletable: false
-				parent: null
-			}
-		]
-		com.badlogic.gdx.scenes.scene2d.ui.CheckBox: [
-			{
-				class: com.ray3k.skincomposer.data.StyleData
-				name: default
-				clazz: com.badlogic.gdx.scenes.scene2d.ui.CheckBox
-				properties: {
-					checkboxOn: {
-						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
-						name: checkboxOn
-						optional: false
-						value: checkbox-checked
-					}
-					checkboxOff: {
-						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
-						name: checkboxOff
-						optional: false
-						value: checkbox
-					}
-					checkboxOnOver: {
-						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
-						name: checkboxOnOver
-						optional: true
-						value: null
-					}
-					checkboxOver: {
-						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
-						name: checkboxOver
-						optional: true
-						value: null
-					}
-					checkboxOnDisabled: {
-						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
-						name: checkboxOnDisabled
-						optional: true
-						value: null
-					}
-					checkboxOffDisabled: {
-						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
-						name: checkboxOffDisabled
-						optional: true
-						value: null
-					}
-					font: {
-						type: com.badlogic.gdx.graphics.g2d.BitmapFont
-						name: font
-						optional: false
-						value: body
-					}
-					fontColor: {
-						type: com.badlogic.gdx.graphics.Color
-						name: fontColor
-						optional: true
-						value: null
-					}
-					downFontColor: {
-						type: com.badlogic.gdx.graphics.Color
-						name: downFontColor
-						optional: true
-						value: null
-					}
-					overFontColor: {
-						type: com.badlogic.gdx.graphics.Color
-						name: overFontColor
-						optional: true
-						value: null
-					}
-					focusedFontColor: {
-						type: com.badlogic.gdx.graphics.Color
-						name: focusedFontColor
-						optional: true
-						value: null
-					}
-					disabledFontColor: {
-						type: com.badlogic.gdx.graphics.Color
-						name: disabledFontColor
-						optional: true
-						value: null
-					}
-					checkedFontColor: {
-						type: com.badlogic.gdx.graphics.Color
-						name: checkedFontColor
-						optional: true
-						value: null
-					}
-					checkedDownFontColor: {
-						type: com.badlogic.gdx.graphics.Color
-						name: checkedDownFontColor
-						optional: true
-						value: null
-					}
-					checkedOverFontColor: {
-						type: com.badlogic.gdx.graphics.Color
-						name: checkedOverFontColor
-						optional: true
-						value: null
-					}
-					checkedFocusedFontColor: {
-						type: com.badlogic.gdx.graphics.Color
-						name: checkedFocusedFontColor
-						optional: true
-						value: null
-					}
-					up: {
-						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
-						name: up
-						optional: true
-						value: null
-					}
-					down: {
-						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
-						name: down
-						optional: true
-						value: null
-					}
-					over: {
-						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
-						name: over
-						optional: true
-						value: null
-					}
-					focused: {
-						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
-						name: focused
-						optional: true
-						value: null
-					}
-					disabled: {
-						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
-						name: disabled
-						optional: true
-						value: null
-					}
-					checked: {
-						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
-						name: checked
-						optional: true
-						value: null
-					}
-					checkedOver: {
-						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
-						name: checkedOver
-						optional: true
-						value: null
-					}
-					checkedDown: {
-						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
-						name: checkedDown
-						optional: true
-						value: null
-					}
-					checkedFocused: {
-						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
-						name: checkedFocused
-						optional: true
-						value: null
-					}
-					pressedOffsetX: {
-						type: float
-						name: pressedOffsetX
-						optional: true
-						value: 0
-					}
-					pressedOffsetY: {
-						type: float
-						name: pressedOffsetY
-						optional: true
-						value: 0
-					}
-					unpressedOffsetX: {
-						type: float
-						name: unpressedOffsetX
-						optional: true
-						value: 0
-					}
-					unpressedOffsetY: {
-						type: float
-						name: unpressedOffsetY
-						optional: true
-						value: 0
-					}
-					checkedOffsetX: {
-						type: float
-						name: checkedOffsetX
-						optional: true
-						value: 0
-					}
-					checkedOffsetY: {
-						type: float
-						name: checkedOffsetY
-						optional: true
-						value: 0
 					}
 				}
 				deletable: false
@@ -5506,756 +6122,140 @@ jsonData: {
 				parent: null
 			}
 		]
-		com.badlogic.gdx.scenes.scene2d.ui.ImageButton: [
+		com.badlogic.gdx.scenes.scene2d.ui.ScrollPane: [
 			{
 				class: com.ray3k.skincomposer.data.StyleData
 				name: default
-				clazz: com.badlogic.gdx.scenes.scene2d.ui.ImageButton
-				properties: {
-					imageUp: {
-						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
-						name: imageUp
-						optional: true
-						value: null
-					}
-					imageDown: {
-						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
-						name: imageDown
-						optional: true
-						value: null
-					}
-					imageOver: {
-						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
-						name: imageOver
-						optional: true
-						value: null
-					}
-					imageDisabled: {
-						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
-						name: imageDisabled
-						optional: true
-						value: null
-					}
-					imageChecked: {
-						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
-						name: imageChecked
-						optional: true
-						value: null
-					}
-					imageCheckedDown: {
-						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
-						name: imageCheckedDown
-						optional: true
-						value: null
-					}
-					imageCheckedOver: {
-						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
-						name: imageCheckedOver
-						optional: true
-						value: null
-					}
-					up: {
-						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
-						name: up
-						optional: true
-						value: button
-					}
-					down: {
-						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
-						name: down
-						optional: true
-						value: button-pressed
-					}
-					over: {
-						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
-						name: over
-						optional: true
-						value: null
-					}
-					focused: {
-						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
-						name: focused
-						optional: true
-						value: null
-					}
-					disabled: {
-						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
-						name: disabled
-						optional: true
-						value: null
-					}
-					checked: {
-						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
-						name: checked
-						optional: true
-						value: null
-					}
-					checkedOver: {
-						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
-						name: checkedOver
-						optional: true
-						value: null
-					}
-					checkedDown: {
-						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
-						name: checkedDown
-						optional: true
-						value: null
-					}
-					checkedFocused: {
-						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
-						name: checkedFocused
-						optional: true
-						value: null
-					}
-					pressedOffsetX: {
-						type: float
-						name: pressedOffsetX
-						optional: true
-						value: 0
-					}
-					pressedOffsetY: {
-						type: float
-						name: pressedOffsetY
-						optional: true
-						value: 0
-					}
-					unpressedOffsetX: {
-						type: float
-						name: unpressedOffsetX
-						optional: true
-						value: 0
-					}
-					unpressedOffsetY: {
-						type: float
-						name: unpressedOffsetY
-						optional: true
-						value: 0
-					}
-					checkedOffsetX: {
-						type: float
-						name: checkedOffsetX
-						optional: true
-						value: 0
-					}
-					checkedOffsetY: {
-						type: float
-						name: checkedOffsetY
-						optional: true
-						value: 0
-					}
-				}
-				deletable: false
-				parent: null
-			}
-		]
-		com.badlogic.gdx.scenes.scene2d.ui.TextField: [
-			{
-				class: com.ray3k.skincomposer.data.StyleData
-				name: default
-				clazz: com.badlogic.gdx.scenes.scene2d.ui.TextField
-				properties: {
-					font: {
-						type: com.badlogic.gdx.graphics.g2d.BitmapFont
-						name: font
-						optional: false
-						value: body
-					}
-					fontColor: {
-						type: com.badlogic.gdx.graphics.Color
-						name: fontColor
-						optional: false
-						value: white
-					}
-					focusedFontColor: {
-						type: com.badlogic.gdx.graphics.Color
-						name: focusedFontColor
-						optional: true
-						value: black
-					}
-					disabledFontColor: {
-						type: com.badlogic.gdx.graphics.Color
-						name: disabledFontColor
-						optional: true
-						value: null
-					}
-					background: {
-						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
-						name: background
-						optional: true
-						value: textfield
-					}
-					focusedBackground: {
-						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
-						name: focusedBackground
-						optional: true
-						value: textfield-pressed
-					}
-					disabledBackground: {
-						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
-						name: disabledBackground
-						optional: true
-						value: null
-					}
-					cursor: {
-						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
-						name: cursor
-						optional: true
-						value: black
-					}
-					selection: {
-						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
-						name: selection
-						optional: true
-						value: gray
-					}
-					messageFont: {
-						type: com.badlogic.gdx.graphics.g2d.BitmapFont
-						name: messageFont
-						optional: true
-						value: null
-					}
-					messageFontColor: {
-						type: com.badlogic.gdx.graphics.Color
-						name: messageFontColor
-						optional: true
-						value: null
-					}
-				}
-				deletable: false
-				parent: null
-			}
-		]
-		com.badlogic.gdx.scenes.scene2d.ui.Touchpad: [
-			{
-				class: com.ray3k.skincomposer.data.StyleData
-				name: default
-				clazz: com.badlogic.gdx.scenes.scene2d.ui.Touchpad
+				clazz: com.badlogic.gdx.scenes.scene2d.ui.ScrollPane
 				properties: {
 					background: {
 						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
 						name: background
 						optional: true
-						value: touchpad
+						value: null
 					}
-					knob: {
+					corner: {
 						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
-						name: knob
-						optional: true
-						value: touchpad-knob
-					}
-				}
-				deletable: false
-				parent: null
-			}
-		]
-		com.badlogic.gdx.scenes.scene2d.ui.Label: [
-			{
-				class: com.ray3k.skincomposer.data.StyleData
-				name: default
-				clazz: com.badlogic.gdx.scenes.scene2d.ui.Label
-				properties: {
-					font: {
-						type: com.badlogic.gdx.graphics.g2d.BitmapFont
-						name: font
-						optional: false
-						value: body
-					}
-					fontColor: {
-						type: com.badlogic.gdx.graphics.Color
-						name: fontColor
-						optional: true
-						value: black
-					}
-					background: {
-						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
-						name: background
-						optional: true
-						value: button
-					}
-				}
-				deletable: false
-				parent: null
-			}
-			{
-				class: com.ray3k.skincomposer.data.StyleData
-				name: menuitem-shortcut
-				clazz: com.badlogic.gdx.scenes.scene2d.ui.Label
-				properties: {
-					font: {
-						type: com.badlogic.gdx.graphics.g2d.BitmapFont
-						name: font
-						optional: false
-						value: body
-					}
-					fontColor: {
-						type: com.badlogic.gdx.graphics.Color
-						name: fontColor
+						name: corner
 						optional: true
 						value: null
 					}
-					background: {
+					hScroll: {
 						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
-						name: background
-						optional: true
-						value: null
-					}
-				}
-				deletable: true
-				parent: null
-			}
-			{
-				class: com.ray3k.skincomposer.data.StyleData
-				name: small
-				clazz: com.badlogic.gdx.scenes.scene2d.ui.Label
-				properties: {
-					font: {
-						type: com.badlogic.gdx.graphics.g2d.BitmapFont
-						name: font
-						optional: false
-						value: null
-					}
-					fontColor: {
-						type: com.badlogic.gdx.graphics.Color
-						name: fontColor
-						optional: true
-						value: null
-					}
-					background: {
-						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
-						name: background
-						optional: true
-						value: null
-					}
-				}
-				deletable: true
-				parent: null
-			}
-			{
-				class: com.ray3k.skincomposer.data.StyleData
-				name: title
-				clazz: com.badlogic.gdx.scenes.scene2d.ui.Label
-				properties: {
-					font: {
-						type: com.badlogic.gdx.graphics.g2d.BitmapFont
-						name: font
-						optional: false
-						value: null
-					}
-					fontColor: {
-						type: com.badlogic.gdx.graphics.Color
-						name: fontColor
-						optional: true
-						value: white
-					}
-					background: {
-						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
-						name: background
-						optional: true
-						value: null
-					}
-				}
-				deletable: true
-				parent: null
-			}
-			{
-				class: com.ray3k.skincomposer.data.StyleData
-				name: console
-				clazz: com.badlogic.gdx.scenes.scene2d.ui.Label
-				properties: {
-					font: {
-						type: com.badlogic.gdx.graphics.g2d.BitmapFont
-						name: font
-						optional: false
-						value: fixedsys
-					}
-					fontColor: {
-						type: com.badlogic.gdx.graphics.Color
-						name: fontColor
-						optional: true
-						value: console
-					}
-					background: {
-						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
-						name: background
-						optional: true
-						value: squarewbb
-					}
-				}
-				deletable: true
-				parent: null
-			}
-			{
-				class: com.ray3k.skincomposer.data.StyleData
-				name: trnsprtConsole
-				clazz: com.badlogic.gdx.scenes.scene2d.ui.Label
-				properties: {
-					font: {
-						type: com.badlogic.gdx.graphics.g2d.BitmapFont
-						name: font
-						optional: false
-						value: fixedsys
-					}
-					fontColor: {
-						type: com.badlogic.gdx.graphics.Color
-						name: fontColor
-						optional: true
-						value: console
-					}
-					background: {
-						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
-						name: background
-						optional: true
-						value: null
-					}
-				}
-				deletable: true
-				parent: null
-			}
-			{
-				class: com.ray3k.skincomposer.data.StyleData
-				name: consoleWhite
-				clazz: com.badlogic.gdx.scenes.scene2d.ui.Label
-				properties: {
-					font: {
-						type: com.badlogic.gdx.graphics.g2d.BitmapFont
-						name: font
-						optional: false
-						value: fixedsys
-					}
-					fontColor: {
-						type: com.badlogic.gdx.graphics.Color
-						name: fontColor
-						optional: true
-						value: white
-					}
-					background: {
-						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
-						name: background
-						optional: true
-						value: null
-					}
-				}
-				deletable: true
-				parent: null
-			}
-			{
-				class: com.ray3k.skincomposer.data.StyleData
-				name: squareGreen
-				clazz: com.badlogic.gdx.scenes.scene2d.ui.Label
-				properties: {
-					font: {
-						type: com.badlogic.gdx.graphics.g2d.BitmapFont
-						name: font
-						optional: false
-						value: fixedsys
-					}
-					fontColor: {
-						type: com.badlogic.gdx.graphics.Color
-						name: fontColor
-						optional: true
-						value: console
-					}
-					background: {
-						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
-						name: background
+						name: hScroll
 						optional: true
 						value: squarewbg
 					}
+					hScrollKnob: {
+						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+						name: hScrollKnob
+						optional: true
+						value: squarewg
+					}
+					vScroll: {
+						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+						name: vScroll
+						optional: true
+						value: squarewbg
+					}
+					vScrollKnob: {
+						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+						name: vScrollKnob
+						optional: true
+						value: squarewg
+					}
+				}
+				deletable: false
+				parent: null
+			}
+			{
+				class: com.ray3k.skincomposer.data.StyleData
+				name: list
+				clazz: com.badlogic.gdx.scenes.scene2d.ui.ScrollPane
+				properties: {
+					background: {
+						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+						name: background
+						optional: true
+						value: null
+					}
+					corner: {
+						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+						name: corner
+						optional: true
+						value: null
+					}
+					hScroll: {
+						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+						name: hScroll
+						optional: true
+						value: null
+					}
+					hScrollKnob: {
+						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+						name: hScrollKnob
+						optional: true
+						value: scrollbar-horizontal
+					}
+					vScroll: {
+						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+						name: vScroll
+						optional: true
+						value: null
+					}
+					vScrollKnob: {
+						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+						name: vScrollKnob
+						optional: true
+						value: scrollbar-vertical
+					}
 				}
 				deletable: true
 				parent: null
 			}
 			{
 				class: com.ray3k.skincomposer.data.StyleData
-				name: consolePhysical
-				clazz: com.badlogic.gdx.scenes.scene2d.ui.Label
+				name: select-box
+				clazz: com.badlogic.gdx.scenes.scene2d.ui.ScrollPane
 				properties: {
-					font: {
-						type: com.badlogic.gdx.graphics.g2d.BitmapFont
-						name: font
-						optional: false
-						value: fixedsys
-					}
-					fontColor: {
-						type: com.badlogic.gdx.graphics.Color
-						name: fontColor
-						optional: true
-						value: link
-					}
 					background: {
 						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
 						name: background
 						optional: true
-						value: button-pressed
+						value: list
+					}
+					corner: {
+						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+						name: corner
+						optional: true
+						value: null
+					}
+					hScroll: {
+						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+						name: hScroll
+						optional: true
+						value: null
+					}
+					hScrollKnob: {
+						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+						name: hScrollKnob
+						optional: true
+						value: scrollbar-horizontal
+					}
+					vScroll: {
+						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+						name: vScroll
+						optional: true
+						value: null
+					}
+					vScrollKnob: {
+						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+						name: vScrollKnob
+						optional: true
+						value: scrollbar-vertical
 					}
 				}
 				deletable: true
-				parent: null
-			}
-		]
-		com.badlogic.gdx.scenes.scene2d.ui.Tree: [
-			{
-				class: com.ray3k.skincomposer.data.StyleData
-				name: default
-				clazz: com.badlogic.gdx.scenes.scene2d.ui.Tree
-				properties: {
-					plus: {
-						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
-						name: plus
-						optional: false
-						value: tree-plus
-					}
-					minus: {
-						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
-						name: minus
-						optional: false
-						value: tree-minus
-					}
-					plusOver: {
-						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
-						name: plusOver
-						optional: true
-						value: null
-					}
-					minusOver: {
-						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
-						name: minusOver
-						optional: true
-						value: null
-					}
-					over: {
-						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
-						name: over
-						optional: true
-						value: null
-					}
-					selection: {
-						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
-						name: selection
-						optional: true
-						value: null
-					}
-					background: {
-						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
-						name: background
-						optional: true
-						value: null
-					}
-				}
-				deletable: false
-				parent: null
-			}
-		]
-		com.badlogic.gdx.scenes.scene2d.ui.Slider: [
-			{
-				class: com.ray3k.skincomposer.data.StyleData
-				name: default-horizontal
-				clazz: com.badlogic.gdx.scenes.scene2d.ui.Slider
-				properties: {
-					backgroundOver: {
-						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
-						name: backgroundOver
-						optional: true
-						value: null
-					}
-					backgroundDown: {
-						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
-						name: backgroundDown
-						optional: true
-						value: null
-					}
-					knobOver: {
-						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
-						name: knobOver
-						optional: true
-						value: null
-					}
-					knobDown: {
-						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
-						name: knobDown
-						optional: true
-						value: slider-knob-pressed-horizontal
-					}
-					knobBeforeOver: {
-						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
-						name: knobBeforeOver
-						optional: true
-						value: null
-					}
-					knobBeforeDown: {
-						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
-						name: knobBeforeDown
-						optional: true
-						value: null
-					}
-					knobAfterOver: {
-						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
-						name: knobAfterOver
-						optional: true
-						value: null
-					}
-					knobAfterDown: {
-						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
-						name: knobAfterDown
-						optional: true
-						value: null
-					}
-					background: {
-						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
-						name: background
-						optional: false
-						value: progress-bar-horizontal
-					}
-					disabledBackground: {
-						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
-						name: disabledBackground
-						optional: true
-						value: null
-					}
-					knob: {
-						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
-						name: knob
-						optional: true
-						value: slider-knob-horizontal
-					}
-					disabledKnob: {
-						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
-						name: disabledKnob
-						optional: true
-						value: null
-					}
-					knobBefore: {
-						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
-						name: knobBefore
-						optional: true
-						value: progress-bar-knob-horizontal
-					}
-					disabledKnobBefore: {
-						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
-						name: disabledKnobBefore
-						optional: true
-						value: null
-					}
-					knobAfter: {
-						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
-						name: knobAfter
-						optional: true
-						value: null
-					}
-					disabledKnobAfter: {
-						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
-						name: disabledKnobAfter
-						optional: true
-						value: null
-					}
-				}
-				deletable: false
-				parent: null
-			}
-			{
-				class: com.ray3k.skincomposer.data.StyleData
-				name: default-vertical
-				clazz: com.badlogic.gdx.scenes.scene2d.ui.Slider
-				properties: {
-					backgroundOver: {
-						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
-						name: backgroundOver
-						optional: true
-						value: null
-					}
-					backgroundDown: {
-						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
-						name: backgroundDown
-						optional: true
-						value: null
-					}
-					knobOver: {
-						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
-						name: knobOver
-						optional: true
-						value: null
-					}
-					knobDown: {
-						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
-						name: knobDown
-						optional: true
-						value: slider-knob-pressed-vertical
-					}
-					knobBeforeOver: {
-						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
-						name: knobBeforeOver
-						optional: true
-						value: null
-					}
-					knobBeforeDown: {
-						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
-						name: knobBeforeDown
-						optional: true
-						value: null
-					}
-					knobAfterOver: {
-						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
-						name: knobAfterOver
-						optional: true
-						value: null
-					}
-					knobAfterDown: {
-						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
-						name: knobAfterDown
-						optional: true
-						value: null
-					}
-					background: {
-						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
-						name: background
-						optional: false
-						value: progress-bar-vertical
-					}
-					disabledBackground: {
-						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
-						name: disabledBackground
-						optional: true
-						value: null
-					}
-					knob: {
-						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
-						name: knob
-						optional: true
-						value: slider-knob-vertical
-					}
-					disabledKnob: {
-						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
-						name: disabledKnob
-						optional: true
-						value: null
-					}
-					knobBefore: {
-						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
-						name: knobBefore
-						optional: true
-						value: progress-bar-knob-vertical
-					}
-					disabledKnobBefore: {
-						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
-						name: disabledKnobBefore
-						optional: true
-						value: null
-					}
-					knobAfter: {
-						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
-						name: knobAfter
-						optional: true
-						value: null
-					}
-					disabledKnobAfter: {
-						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
-						name: disabledKnobAfter
-						optional: true
-						value: null
-					}
-				}
-				deletable: false
 				parent: null
 			}
 		]
@@ -6276,7 +6276,7 @@ preferences: {
 	}
 	last-import-export-path: {
 		class: java.lang.String
-		value: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/capsuleSkin.json
+		value: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/titaniumSkin.json
 	}
 	resources-relative: {
 		class: java.lang.Boolean
@@ -6287,8 +6287,8 @@ preferences: {
 		value: 30
 	}
 }
-saveFile: C:/Users/Jinseo Park/IdeaProjects/Capsule/core/assets/skin/capsuleSkin.scmp
-version: 56
+saveFile: C:/Users/park/IdeaProjects/TitaniumPolitics/assets/skin/capsuleSkin.scmp
+version: 58
 sceneComposer: {
 	children: [
 		{

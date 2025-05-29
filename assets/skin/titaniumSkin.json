@@ -1,425 +1,431 @@
 {
-"com.badlogic.gdx.graphics.Color": {
-	"ButtonHighlightedColor": {
-		"r": 0.49803922,
-		"g": 0.40784314,
-		"b": 0,
-		"a": 1
-	},
-	"ButtonNormalColor": {
-		"r": 0.49803922,
-		"g": 0.36078432,
-		"b": 0.03529412,
-		"a": 1
-	},
-	"ButtonPressedColor": {
-		"r": 0.3019608,
-		"g": 0.22352941,
-		"b": 0.019607844,
-		"a": 1
-	},
-	"Console": {
-		"r": 0.023529412,
-		"g": 0.627451,
-		"b": 0,
-		"a": 1
-	},
-	"DisabledColor": {
-		"r": 0.5254902,
-		"g": 0.5254902,
-		"b": 0.5254902,
-		"a": 1
-	},
-	"RGBA_0_0_0_177": {
-		"r": 0,
-		"g": 0,
-		"b": 0,
-		"a": 0.6966292
-	},
-	"RGBA_0_0_0_255": {
-		"r": 0,
-		"g": 0,
-		"b": 0,
-		"a": 1
-	},
-	"RGBA_255_255_255_255": {
-		"r": 1,
-		"g": 1,
-		"b": 1,
-		"a": 1
+com.badlogic.gdx.graphics.Color: {
+	ButtonHighlightedColor: {
+		r: 0.49803922
+		g: 0.40784314
+		b: 0
+		a: 1
 	}
-},
-"com.badlogic.gdx.scenes.scene2d.ui.Skin$TintedDrawable": {
-	"SliderVerticalDefault": {
-		"name": "SliderVertical",
-		"color": "RGBA_0_0_0_177"
-	},
-	"icon_store_1_Normal": {
-		"name": "icon_store_1",
-		"color": "ButtonNormalColor"
-	},
-	"icon_store_1_Pressed": {
-		"name": "icon_store_1",
-		"color": "ButtonPressedColor"
-	},
-	"icon_store_1_Highlighted": {
-		"name": "icon_store_1",
-		"color": "ButtonHighlightedColor"
-	},
-	"icon_store_1_Disabled": {
-		"name": "icon_store_1",
-		"color": "DisabledColor"
-	},
-	"BlackPx": {
-		"name": "white-pixel",
-		"color": "RGBA_0_0_0_255"
+	ButtonNormalColor: {
+		r: 0.49803922
+		g: 0.36078432
+		b: 0.03529412
+		a: 1
 	}
-},
-"com.ray3k.tenpatch.TenPatchDrawable": {
-	"ButtonRegularBgDisabled": {
-		"region": "ButtonRegularBg",
-		"color": "DisabledColor",
-		"horizontalStretchAreas": [ 14, 743 ],
-		"verticalStretchAreas": [ 14, 133 ],
-		"tiling": false,
-		"minWidth": 758,
-		"minHeight": 148,
-		"rightWidth": 14,
-		"leftWidth": 14,
-		"bottomHeight": 14,
-		"topHeight": 14,
-		"offsetX": 0,
-		"offsetY": 0,
-		"offsetXspeed": 0,
-		"offsetYspeed": 0,
-		"frameDuration": 0.03,
-		"regions": [],
-		"playMode": 2,
-		"crushMode": 0
-	},
-	"SliderHorizontalNormal": {
-		"region": "SliderHorizontal",
-		"color": "RGBA_0_0_0_177",
-		"horizontalStretchAreas": [ 0, 599 ],
-		"verticalStretchAreas": [ 0, 20 ],
-		"tiling": false,
-		"minWidth": 600,
-		"minHeight": 21,
-		"rightWidth": 0,
-		"leftWidth": 0,
-		"bottomHeight": 0,
-		"topHeight": 0,
-		"offsetX": 0,
-		"offsetY": 0,
-		"offsetXspeed": 0,
-		"offsetYspeed": 0,
-		"frameDuration": 0.03,
-		"regions": [],
-		"playMode": 2,
-		"crushMode": 0
-	},
-	"SliderHandleHorizontalNormal": {
-		"region": "SliderHandleHorizontal",
-		"color": "ButtonPressedColor",
-		"horizontalStretchAreas": [ 0, 651 ],
-		"verticalStretchAreas": [ 0, 73 ],
-		"tiling": false,
-		"minWidth": 652,
-		"minHeight": 74,
-		"rightWidth": 0,
-		"leftWidth": 0,
-		"bottomHeight": 0,
-		"topHeight": 0,
-		"offsetX": 0,
-		"offsetY": 0,
-		"offsetXspeed": 0,
-		"offsetYspeed": 0,
-		"frameDuration": 0.03,
-		"regions": [],
-		"playMode": 2,
-		"crushMode": 0
-	},
-	"SliderHandleVerticalNormal": {
-		"region": "SliderHandleVertical",
-		"color": "ButtonPressedColor",
-		"horizontalStretchAreas": [ 0, 73 ],
-		"verticalStretchAreas": [ 0, 651 ],
-		"tiling": false,
-		"minWidth": 74,
-		"minHeight": 652,
-		"rightWidth": 0,
-		"leftWidth": 0,
-		"bottomHeight": 0,
-		"topHeight": 0,
-		"offsetX": 0,
-		"offsetY": 0,
-		"offsetXspeed": 0,
-		"offsetYspeed": 0,
-		"frameDuration": 0.03,
-		"regions": [],
-		"playMode": 2,
-		"crushMode": 0
-	},
-	"BarSimpleFillVitals": {
-		"region": "BarSimpleFill",
-		"color": "Console",
-		"horizontalStretchAreas": [ 23, 1062 ],
-		"verticalStretchAreas": [ 28, 46 ],
-		"tiling": true,
-		"minWidth": 1088,
-		"minHeight": 74,
-		"rightWidth": 25,
-		"leftWidth": 23,
-		"bottomHeight": 28,
-		"topHeight": 27,
-		"offsetX": 0,
-		"offsetY": 0,
-		"offsetXspeed": 0,
-		"offsetYspeed": 0,
-		"frameDuration": 0.03,
-		"regions": [],
-		"playMode": 2,
-		"crushMode": 0
-	},
-	"DropdownDefault": {
-		"region": "Dropdown",
-		"color": "RGBA_0_0_0_177",
-		"horizontalStretchAreas": [ 423, 423 ],
-		"verticalStretchAreas": [ 59, 59 ],
-		"tiling": false,
-		"minWidth": 847,
-		"minHeight": 120,
-		"rightWidth": 0,
-		"leftWidth": 0,
-		"bottomHeight": 0,
-		"topHeight": 0,
-		"offsetX": 0,
-		"offsetY": 0,
-		"offsetXspeed": 0,
-		"offsetYspeed": 0,
-		"frameDuration": 0.03,
-		"regions": [],
-		"playMode": 2,
-		"crushMode": 0
-	},
-	"ButtonRegularBgNormal": {
-		"region": "ButtonRegularBg",
-		"color": "ButtonHighlightedColor",
-		"horizontalStretchAreas": [ 14, 743 ],
-		"verticalStretchAreas": [ 14, 133 ],
-		"tiling": false,
-		"minWidth": 758,
-		"minHeight": 148,
-		"rightWidth": 14,
-		"leftWidth": 14,
-		"bottomHeight": 14,
-		"topHeight": 14,
-		"offsetX": 0,
-		"offsetY": 0,
-		"offsetXspeed": 0,
-		"offsetYspeed": 0,
-		"frameDuration": 0.03,
-		"regions": [],
-		"playMode": 2,
-		"crushMode": 0
-	},
-	"ButtonRegularBgHighlighted": {
-		"region": "ButtonRegularBg",
-		"color": "ButtonNormalColor",
-		"horizontalStretchAreas": [ 14, 743 ],
-		"verticalStretchAreas": [ 14, 133 ],
-		"tiling": false,
-		"minWidth": 758,
-		"minHeight": 148,
-		"rightWidth": 14,
-		"leftWidth": 14,
-		"bottomHeight": 14,
-		"topHeight": 14,
-		"offsetX": 0,
-		"offsetY": 0,
-		"offsetXspeed": 0,
-		"offsetYspeed": 0,
-		"frameDuration": 0.03,
-		"regions": [],
-		"playMode": 2,
-		"crushMode": 0
-	},
-	"ButtonRegularBgPressed": {
-		"region": "ButtonRegularBg",
-		"color": "ButtonPressedColor",
-		"horizontalStretchAreas": [ 14, 743 ],
-		"verticalStretchAreas": [ 14, 133 ],
-		"tiling": false,
-		"minWidth": 758,
-		"minHeight": 148,
-		"rightWidth": 14,
-		"leftWidth": 14,
-		"bottomHeight": 14,
-		"topHeight": 14,
-		"offsetX": 0,
-		"offsetY": 0,
-		"offsetXspeed": 0,
-		"offsetYspeed": 0,
-		"frameDuration": 0.03,
-		"regions": [],
-		"playMode": 2,
-		"crushMode": 0
-	},
-	"BarSimpleBgTiledNormal": {
-		"region": "BarSimpleBg",
-		"color": "RGBA_0_0_0_177",
-		"horizontalStretchAreas": [ 0, 1040 ],
-		"verticalStretchAreas": [ 0, 20 ],
-		"tiling": true,
-		"minWidth": 1041,
-		"minHeight": 21,
-		"rightWidth": 0,
-		"leftWidth": 0,
-		"bottomHeight": 0,
-		"topHeight": 0,
-		"offsetX": 0,
-		"offsetY": 0,
-		"offsetXspeed": 0,
-		"offsetYspeed": 0,
-		"frameDuration": 0.03,
-		"regions": [],
-		"playMode": 2,
-		"crushMode": 0
-	},
-	"TooltipShadow10p": {
-		"region": "TooltipShadow",
-		"horizontalStretchAreas": [ 86, 935 ],
-		"verticalStretchAreas": [ 86, 885 ],
-		"tiling": false,
-		"minWidth": 1022,
-		"minHeight": 972,
-		"rightWidth": 86,
-		"leftWidth": 86,
-		"bottomHeight": 86,
-		"topHeight": 86,
-		"offsetX": 0,
-		"offsetY": 0,
-		"offsetXspeed": 0,
-		"offsetYspeed": 0,
-		"frameDuration": 0.03,
-		"regions": [],
-		"playMode": 2,
-		"crushMode": 0
-	},
-	"SliderFillTiled": {
-		"region": "SliderFill",
-		"horizontalStretchAreas": [ 0, 1474 ],
-		"verticalStretchAreas": [ 0, 78 ],
-		"tiling": true,
-		"minWidth": 1475,
-		"minHeight": 79,
-		"rightWidth": 0,
-		"leftWidth": 0,
-		"bottomHeight": 0,
-		"topHeight": 0,
-		"offsetX": 0,
-		"offsetY": 0,
-		"offsetXspeed": 0,
-		"offsetYspeed": 0,
-		"frameDuration": 0.03,
-		"regions": [],
-		"playMode": 2,
-		"crushMode": 0
+	ButtonPressedColor: {
+		r: 0.3019608
+		g: 0.22352941
+		b: 0.019607844
+		a: 1
 	}
-},
-"com.badlogic.gdx.scenes.scene2d.ui.Button$ButtonStyle": {
-	"default": {
-		"up": "ButtonRegularBgNormal",
-		"down": "ButtonRegularBgPressed",
-		"over": "ButtonRegularBgHighlighted",
-		"disabled": "ButtonRegularBgDisabled"
-	},
-	"diamond": {
-		"up": "icon_store_1_Normal",
-		"down": "icon_store_1_Pressed",
-		"over": "icon_store_1_Highlighted",
-		"disabled": "icon_store_1_Disabled"
+	Console: {
+		r: 0.023529412
+		g: 0.627451
+		b: 0
+		a: 1
 	}
-},
-"com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle": {
-	"default": {
-		"font": "fixedsys"
-	},
-	"trnsprtConsole": {
-		"font": "fixedsys",
-		"fontColor": "RGBA_255_255_255_255"
-	},
-	"console": {
-		"font": "fixedsys",
-		"fontColor": "Console",
-		"background": "BlackPx"
-	},
-	"consoleWhite": {
-		"font": "fixedsys",
-		"fontColor": "RGBA_255_255_255_255",
-		"background": "BlackPx"
-	},
-	"black": {
-		"font": "fixedsys",
-		"fontColor": "RGBA_0_0_0_255"
+	ConsoleHighlight: {
+		r: 0
+		g: 0.8039216
+		b: 0.21960784
+		a: 1
 	}
-},
-"com.badlogic.gdx.scenes.scene2d.ui.List$ListStyle": {
-	"default": {
-		"font": "fixedsys",
-		"fontColorSelected": "ButtonHighlightedColor",
-		"fontColorUnselected": "RGBA_255_255_255_255",
-		"selection": "Check"
+	DisabledColor: {
+		r: 0.5254902
+		g: 0.5254902
+		b: 0.5254902
+		a: 1
 	}
-},
-"com.badlogic.gdx.scenes.scene2d.ui.ProgressBar$ProgressBarStyle": {
-	"default-horizontal": {
-		"background": "BarSimpleBgTiledNormal",
-		"knobBefore": "BarSimpleFillVitals"
+	RGBA_0_0_0_177: {
+		r: 0
+		g: 0
+		b: 0
+		a: 0.6966292
 	}
-},
-"com.badlogic.gdx.scenes.scene2d.ui.ScrollPane$ScrollPaneStyle": {
-	"default": {
-		"hScroll": "SliderHorizontalNormal",
-		"hScrollKnob": "SliderHandleHorizontalNormal",
-		"vScroll": "SliderVerticalDefault",
-		"vScrollKnob": "SliderHandleVerticalNormal"
+	RGBA_0_0_0_255: {
+		r: 0
+		g: 0
+		b: 0
+		a: 1
 	}
-},
-"com.badlogic.gdx.scenes.scene2d.ui.SelectBox$SelectBoxStyle": {
-	"default": {
-		"font": "fixedsys",
-		"fontColor": "RGBA_255_255_255_255",
-		"background": "DropdownDefault",
-		"scrollStyle": "default",
-		"listStyle": "default"
+	RGBA_255_255_255_255: {
+		r: 1
+		g: 1
+		b: 1
+		a: 1
 	}
-},
-"com.badlogic.gdx.scenes.scene2d.ui.Slider$SliderStyle": {
-	"default-horizontal": {
-		"background": "SliderHorizontalNormal",
-		"knob": "SliderHandleHorizontalNormal"
+}
+com.badlogic.gdx.scenes.scene2d.ui.Skin$TintedDrawable: {
+	SliderVerticalDefault: {
+		name: SliderVertical
+		color: RGBA_0_0_0_177
 	}
-},
-"com.badlogic.gdx.scenes.scene2d.ui.TextButton$TextButtonStyle": {
-	"default": {
-		"font": "fixedsys",
-		"fontColor": "ButtonNormalColor",
-		"downFontColor": "ButtonPressedColor",
-		"overFontColor": "ButtonHighlightedColor",
-		"disabledFontColor": "DisabledColor",
-		"disabled": "ButtonRegularBgDisabled"
+	icon_store_1_Normal: {
+		name: icon_store_1
+		color: ButtonNormalColor
 	}
-},
-"com.badlogic.gdx.scenes.scene2d.ui.TextTooltip$TextTooltipStyle": {
-	"default": {
-		"label": "default"
+	icon_store_1_Pressed: {
+		name: icon_store_1
+		color: ButtonPressedColor
 	}
-},
-"com.badlogic.gdx.scenes.scene2d.ui.Window$WindowStyle": {
-	"default": {
-		"background": "NoiseBackground",
-		"titleFont": "fixedsys"
+	icon_store_1_Highlighted: {
+		name: icon_store_1
+		color: ButtonHighlightedColor
+	}
+	icon_store_1_Disabled: {
+		name: icon_store_1
+		color: DisabledColor
+	}
+	BlackPx: {
+		name: white-pixel
+		color: RGBA_0_0_0_255
+	}
+}
+com.ray3k.tenpatch.TenPatchDrawable: {
+	ButtonRegularBgDisabled: {
+		region: ButtonRegularBg
+		color: DisabledColor
+		horizontalStretchAreas: [ 14, 743 ]
+		verticalStretchAreas: [ 14, 133 ]
+		tiling: false
+		minWidth: 758
+		minHeight: 148
+		rightWidth: 14
+		leftWidth: 14
+		bottomHeight: 14
+		topHeight: 14
+		offsetX: 0
+		offsetY: 0
+		offsetXspeed: 0
+		offsetYspeed: 0
+		frameDuration: 0.03
+		regions: []
+		playMode: 2
+		crushMode: 0
+	}
+	SliderHorizontalNormal: {
+		region: SliderHorizontal
+		color: RGBA_0_0_0_177
+		horizontalStretchAreas: [ 0, 599 ]
+		verticalStretchAreas: [ 0, 20 ]
+		tiling: false
+		minWidth: 600
+		minHeight: 21
+		rightWidth: 0
+		leftWidth: 0
+		bottomHeight: 0
+		topHeight: 0
+		offsetX: 0
+		offsetY: 0
+		offsetXspeed: 0
+		offsetYspeed: 0
+		frameDuration: 0.03
+		regions: []
+		playMode: 2
+		crushMode: 0
+	}
+	SliderHandleHorizontalNormal: {
+		region: SliderHandleHorizontal
+		color: ButtonPressedColor
+		horizontalStretchAreas: [ 0, 651 ]
+		verticalStretchAreas: [ 0, 73 ]
+		tiling: false
+		minWidth: 652
+		minHeight: 74
+		rightWidth: 0
+		leftWidth: 0
+		bottomHeight: 0
+		topHeight: 0
+		offsetX: 0
+		offsetY: 0
+		offsetXspeed: 0
+		offsetYspeed: 0
+		frameDuration: 0.03
+		regions: []
+		playMode: 2
+		crushMode: 0
+	}
+	SliderHandleVerticalNormal: {
+		region: SliderHandleVertical
+		color: ButtonPressedColor
+		horizontalStretchAreas: [ 0, 73 ]
+		verticalStretchAreas: [ 0, 651 ]
+		tiling: false
+		minWidth: 74
+		minHeight: 652
+		rightWidth: 0
+		leftWidth: 0
+		bottomHeight: 0
+		topHeight: 0
+		offsetX: 0
+		offsetY: 0
+		offsetXspeed: 0
+		offsetYspeed: 0
+		frameDuration: 0.03
+		regions: []
+		playMode: 2
+		crushMode: 0
+	}
+	BarSimpleFillVitals: {
+		region: BarSimpleFill
+		color: Console
+		horizontalStretchAreas: [ 23, 1062 ]
+		verticalStretchAreas: [ 28, 46 ]
+		tiling: true
+		minWidth: 1088
+		minHeight: 74
+		rightWidth: 25
+		leftWidth: 23
+		bottomHeight: 28
+		topHeight: 27
+		offsetX: 0
+		offsetY: 0
+		offsetXspeed: 0
+		offsetYspeed: 0
+		frameDuration: 0.03
+		regions: []
+		playMode: 2
+		crushMode: 0
+	}
+	DropdownDefault: {
+		region: Dropdown
+		color: RGBA_0_0_0_177
+		horizontalStretchAreas: [ 423, 423 ]
+		verticalStretchAreas: [ 59, 59 ]
+		tiling: false
+		minWidth: 847
+		minHeight: 120
+		rightWidth: 0
+		leftWidth: 0
+		bottomHeight: 0
+		topHeight: 0
+		offsetX: 0
+		offsetY: 0
+		offsetXspeed: 0
+		offsetYspeed: 0
+		frameDuration: 0.03
+		regions: []
+		playMode: 2
+		crushMode: 0
+	}
+	ButtonRegularBgNormal: {
+		region: ButtonRegularBg
+		color: RGBA_0_0_0_255
+		horizontalStretchAreas: [ 14, 743 ]
+		verticalStretchAreas: [ 14, 133 ]
+		tiling: false
+		minWidth: 758
+		minHeight: 148
+		rightWidth: 14
+		leftWidth: 14
+		bottomHeight: 14
+		topHeight: 14
+		offsetX: 0
+		offsetY: 0
+		offsetXspeed: 0
+		offsetYspeed: 0
+		frameDuration: 0.03
+		regions: []
+		playMode: 2
+		crushMode: 0
+	}
+	ButtonRegularBgHighlighted: {
+		region: ButtonRegularBg
+		color: Console
+		horizontalStretchAreas: [ 14, 743 ]
+		verticalStretchAreas: [ 14, 133 ]
+		tiling: false
+		minWidth: 758
+		minHeight: 148
+		rightWidth: 14
+		leftWidth: 14
+		bottomHeight: 14
+		topHeight: 14
+		offsetX: 0
+		offsetY: 0
+		offsetXspeed: 0
+		offsetYspeed: 0
+		frameDuration: 0.03
+		regions: []
+		playMode: 2
+		crushMode: 0
+	}
+	ButtonRegularBgPressed: {
+		region: ButtonRegularBg
+		color: ConsoleHighlight
+		horizontalStretchAreas: [ 14, 743 ]
+		verticalStretchAreas: [ 14, 133 ]
+		tiling: false
+		minWidth: 758
+		minHeight: 148
+		rightWidth: 14
+		leftWidth: 14
+		bottomHeight: 14
+		topHeight: 14
+		offsetX: 0
+		offsetY: 0
+		offsetXspeed: 0
+		offsetYspeed: 0
+		frameDuration: 0.03
+		regions: []
+		playMode: 2
+		crushMode: 0
+	}
+	BarSimpleBgTiledNormal: {
+		region: BarSimpleBg
+		color: RGBA_0_0_0_177
+		horizontalStretchAreas: [ 0, 1040 ]
+		verticalStretchAreas: [ 0, 20 ]
+		tiling: true
+		minWidth: 1041
+		minHeight: 21
+		rightWidth: 0
+		leftWidth: 0
+		bottomHeight: 0
+		topHeight: 0
+		offsetX: 0
+		offsetY: 0
+		offsetXspeed: 0
+		offsetYspeed: 0
+		frameDuration: 0.03
+		regions: []
+		playMode: 2
+		crushMode: 0
+	}
+	TooltipShadow10p: {
+		region: TooltipShadow
+		horizontalStretchAreas: [ 86, 935 ]
+		verticalStretchAreas: [ 86, 885 ]
+		tiling: false
+		minWidth: 1022
+		minHeight: 972
+		rightWidth: 86
+		leftWidth: 86
+		bottomHeight: 86
+		topHeight: 86
+		offsetX: 0
+		offsetY: 0
+		offsetXspeed: 0
+		offsetYspeed: 0
+		frameDuration: 0.03
+		regions: []
+		playMode: 2
+		crushMode: 0
+	}
+	SliderFillTiled: {
+		region: SliderFill
+		horizontalStretchAreas: [ 0, 1474 ]
+		verticalStretchAreas: [ 0, 78 ]
+		tiling: true
+		minWidth: 1475
+		minHeight: 79
+		rightWidth: 0
+		leftWidth: 0
+		bottomHeight: 0
+		topHeight: 0
+		offsetX: 0
+		offsetY: 0
+		offsetXspeed: 0
+		offsetYspeed: 0
+		frameDuration: 0.03
+		regions: []
+		playMode: 2
+		crushMode: 0
+	}
+}
+com.badlogic.gdx.scenes.scene2d.ui.Button$ButtonStyle: {
+	default: {
+		up: ButtonRegularBgNormal
+		down: ButtonRegularBgPressed
+		over: ButtonRegularBgHighlighted
+		disabled: ButtonRegularBgDisabled
+	}
+	diamond: {
+		up: icon_store_1_Normal
+		down: icon_store_1_Pressed
+		over: icon_store_1_Highlighted
+		disabled: icon_store_1_Disabled
+	}
+}
+com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle: {
+	default: {
+		font: fixedsys
+	}
+	trnsprtConsole: {
+		font: fixedsys
+		fontColor: RGBA_255_255_255_255
+	}
+	consoleWhite: {
+		font: fixedsys
+		fontColor: RGBA_255_255_255_255
+		background: BlackPx
+	}
+	black: {
+		font: fixedsys
+		fontColor: RGBA_0_0_0_255
+	}
+	console: {
+		font: fixedsys
+		fontColor: Console
+		background: BlackPx
+	}
+}
+com.badlogic.gdx.scenes.scene2d.ui.List$ListStyle: {
+	default: {
+		font: fixedsys
+		fontColorSelected: ButtonHighlightedColor
+		fontColorUnselected: RGBA_255_255_255_255
+		selection: Check
+	}
+}
+com.badlogic.gdx.scenes.scene2d.ui.ProgressBar$ProgressBarStyle: {
+	default-horizontal: {
+		background: BarSimpleBgTiledNormal
+		knobBefore: BarSimpleFillVitals
+	}
+}
+com.badlogic.gdx.scenes.scene2d.ui.ScrollPane$ScrollPaneStyle: {
+	default: {
+		hScroll: SliderHorizontalNormal
+		hScrollKnob: SliderHandleHorizontalNormal
+		vScroll: SliderVerticalDefault
+		vScrollKnob: SliderHandleVerticalNormal
+	}
+}
+com.badlogic.gdx.scenes.scene2d.ui.SelectBox$SelectBoxStyle: {
+	default: {
+		font: fixedsys
+		fontColor: RGBA_255_255_255_255
+		background: DropdownDefault
+		scrollStyle: default
+		listStyle: default
+	}
+}
+com.badlogic.gdx.scenes.scene2d.ui.Slider$SliderStyle: {
+	default-horizontal: {
+		background: SliderHorizontalNormal
+		knob: SliderHandleHorizontalNormal
+	}
+}
+com.badlogic.gdx.scenes.scene2d.ui.TextButton$TextButtonStyle: {
+	default: {
+		font: fixedsys
+		fontColor: ButtonNormalColor
+		downFontColor: ButtonPressedColor
+		overFontColor: ButtonHighlightedColor
+		disabledFontColor: DisabledColor
+		disabled: ButtonRegularBgDisabled
+	}
+}
+com.badlogic.gdx.scenes.scene2d.ui.TextTooltip$TextTooltipStyle: {
+	default: {
+		label: default
+	}
+}
+com.badlogic.gdx.scenes.scene2d.ui.Window$WindowStyle: {
+	default: {
+		background: NoiseBackground
+		titleFont: fixedsys
 	}
 }
 }

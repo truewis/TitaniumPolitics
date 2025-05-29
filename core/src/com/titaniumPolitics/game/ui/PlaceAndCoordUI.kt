@@ -11,16 +11,21 @@ class PlaceAndCoordUI(gameState: GameState) : Table(defaultSkin)
 {
     var l: Label
     var c: Label
+    var t: Label
 
     init
     {
-        l = Label(formatTime(gameState.time), defaultSkin, "console")
+        l = Label("", defaultSkin, "console")
         l.setFontScale(2f)
-        c = Label(formatTime(gameState.time), defaultSkin, "console")
-        c.setFontScale(2f)
+        c = Label("", defaultSkin, "console")
+        c.setFontScale(1f)
+        t = Label("", defaultSkin, "console")
+        t.setFontScale(1f)
         add(l).growX()
         row()
         add(c).growX()
+        row()
+        add(t).growX()
 
         gameState.updateUI += { x ->
             Gdx.app.postRunnable {
@@ -33,19 +38,11 @@ class PlaceAndCoordUI(gameState: GameState) : Table(defaultSkin)
                     l.setText(ReadOnly.prop(x.player.place.name))
                     c.setText(x.player.place.coordinates.toString())
                 }
+                //Display temperature with two decimal places
+                t.setText("%.2f°C".format(x.player.place.temperature))
 
             }
         }
     }
 
-    companion object
-    {
-        fun formatTime(time: Int): String
-        {
-            val t1 = time / 48
-            val t2 = (time - t1 * 48) / 2
-            val t3 = if (time % 2 == 0) "00" else "30"
-            return "${t1}D ${t2.toString().padStart(2, '0')}:${t3}"
-        }
-    }
 }
