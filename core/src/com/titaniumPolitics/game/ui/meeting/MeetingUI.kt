@@ -1,6 +1,9 @@
 package com.titaniumPolitics.game.ui.meeting
 
 import com.badlogic.gdx.graphics.Color
+import com.badlogic.gdx.scenes.scene2d.Action
+import com.badlogic.gdx.scenes.scene2d.actions.Actions
+import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction
 import com.badlogic.gdx.scenes.scene2d.ui.Container
 import com.badlogic.gdx.scenes.scene2d.ui.Image
 import com.badlogic.gdx.scenes.scene2d.ui.Label
@@ -14,6 +17,7 @@ import com.titaniumPolitics.game.ui.PortraitUI
 import com.titaniumPolitics.game.ui.SimplePortraitUI
 import ktx.scene2d.*
 import ktx.scene2d.Scene2DSkin.defaultSkin
+import kotlin.collections.remove
 import kotlin.math.cos
 import kotlin.math.sin
 
@@ -28,6 +32,7 @@ class MeetingUI(var gameState: GameState) : Table(defaultSkin), KTable
     val currentAttention = Label("0", defaultSkin, "trnsprtConsole")
     val discussionTable: Stack
     val attentionMeter: Image = image("BadgeRound")
+    var previousMutualities = mutableMapOf<Pair<String, String>, Double>()
 
     init
     {
@@ -57,6 +62,14 @@ class MeetingUI(var gameState: GameState) : Table(defaultSkin), KTable
     //This function can be used for both meetings and conferences
     fun refresh(meeting: Meeting)
     {
+        val newMutualities = meeting.scheduledCharacters.flatMap { char1 ->
+            meeting.currentCharacters.mapNotNull { char2 ->
+                if (char1 != char2) {
+                    val mutuality = gameState.getMutuality(char1, char2)
+                    Pair(char1, char2) to mutuality
+                } else null
+            }
+        }.toMap().toMutableMap()
         meeting.currentCharacters.forEach {
             if (portraits.none { portrait -> portrait.tgtCharacter == it })
             {
@@ -95,7 +108,55 @@ class MeetingUI(var gameState: GameState) : Table(defaultSkin), KTable
         currentAttention.setText(meeting.currentAttention.toString())
         attentionMeter.color = Color(meeting.currentAttention.toFloat() / 100, 0f, 0f, 1f)
 
+        //show mutuality arrows if there are any changes.
+        val mutualityChanges = newMutualities.filter { (pair, value) ->
+            previousMutualities[pair]?.let { it != value } ?: true
+        }
+        if (mutualityChanges.isNotEmpty())
+        {
+            showMutualityArrows(mutualityChanges)
+            previousMutualities = newMutualities
+        }
 
+
+    }
+
+    val mutualityArrows = mutableListOf<MutualityArrowUI>()
+
+    fun showMutualityArrows(mutualityChanges: Map<Pair<String, String>, Double>) {
+        // 기존 화살표 제거(화면에서만)
+        mutualityArrows.forEach { it.remove() }
+
+        // 새 화살표 생성 및 애니메이션
+        mutualityChanges.forEach { (pair, delta) ->
+            val fromPortrait = portraits.find { it.tgtCharacter == pair.first } ?: return@forEach
+            val toPortrait = portraits.find { it.tgtCharacter == pair.second } ?: return@forEach
+            val arrow = MutualityArrowUI(fromPortrait, toPortrait, delta.toFloat())
+            mutualityArrows.add(arrow)
+            addActor(arrow)
+            arrow.addAction(
+                SequenceAction(
+                    Actions.alpha(1f),
+                    Actions.delay(2f),
+                    Actions.alpha(0f),
+                    Actions.run { arrow.visibleForReplay = false }
+                )
+            )
+        }
+    }
+
+    fun replayMutualityArrows() {
+        mutualityArrows.filter { it.visibleForReplay }.forEach { arrow ->
+            arrow.clearActions()
+            arrow.addAction(
+                SequenceAction(
+                    Actions.alpha(1f),
+                    Actions.delay(2f),
+                    Actions.alpha(0f)
+                )
+            )
+            addActor(arrow)
+        }
     }
 
     fun newMeeting(meeting: Meeting)
@@ -110,6 +171,15 @@ class MeetingUI(var gameState: GameState) : Table(defaultSkin), KTable
                     CapsuleStage.instance.height / 2 - voteResultsTable.height / 2)
             }
         }
+
+        previousMutualities = meeting.scheduledCharacters.flatMap { char1 ->
+            meeting.currentCharacters.mapNotNull { char2 ->
+                if (char1 != char2) {
+                    val mutuality = gameState.getMutuality(char1, char2)
+                    Pair(char1, char2) to mutuality
+                } else null
+            }
+        }.toMap().toMutableMap()
     }
 
     private fun addCharacterPortrait(characterName: String)
