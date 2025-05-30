@@ -369,6 +369,11 @@ com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle: {
 		fontColor: Console
 		background: BlackPx
 	}
+	consoleHighlight: {
+		font: fixedsys
+		fontColor: ConsoleHighlight
+		background: BlackPx
+	}
 }
 com.badlogic.gdx.scenes.scene2d.ui.List$ListStyle: {
 	default: {
