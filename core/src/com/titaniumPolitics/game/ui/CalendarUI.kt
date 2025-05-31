@@ -1,12 +1,10 @@
 package com.titaniumPolitics.game.ui
-import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.utils.Align
 import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.core.ReadOnly
-import kotlin.text.get
 
 class CalendarUI(val gameState: GameState) : WindowUI("CalendarTitle") {
     private val dataTable = Table(skin)
@@ -22,6 +20,13 @@ class CalendarUI(val gameState: GameState) : WindowUI("CalendarTitle") {
         scrollPane.setScrollingDisabled(true, false) // 수직 스크롤만 허용
         content.add(dayTable).growX().padBottom(10f).row()
         content.add(scrollPane).grow()
+
+        //Mark the calendar button When new meeting is scheduled within the next 5 days.
+        //Also check AssistantUI for the button blinking condition.
+        gameState.onAddScheduledMeeting += { meeting ->
+            if (meeting.scheduledCharacters.contains(gameState.playerName))
+                addEntry(meeting.time, ReadOnly.prop(meeting.type), meeting.place, "A new meeting has been scheduled at ${meeting.time}H in ${meeting.place}.")
+        }
     }
 
     fun addEntry(time: Int, title: String, place: String, description: String) {
@@ -55,7 +60,7 @@ class CalendarUI(val gameState: GameState) : WindowUI("CalendarTitle") {
             val dayLabel = Label("D${i + gameState.day}", skin, style)
             dayLabel.setFontScale(6f)
             dayLabel.setAlignment(Align.center)
-            dayTable.add(dayLabel).center().padBottom(8f).width(300f)
+            dayTable.add(dayLabel).center().padBottom(8f).width(350f)
         }
         dayTable.layout()
 
@@ -77,19 +82,11 @@ class CalendarUI(val gameState: GameState) : WindowUI("CalendarTitle") {
             // 각 날짜별 미팅 정보
             for (dayOffset in 0 until DAYS) {
                 val day = gameState.day + dayOffset
-                val meetingsAtThisHour = gameState.scheduledMeetings.filter { entry ->
-                    val meeting = entry.value
-                    val meetingDay = meeting.time / ReadOnly.const("lengthOfDay").toInt()
-                    val meetingHour = meeting.time % ReadOnly.const("lengthOfDay").toInt()
-                    meetingDay == day &&
-                            meetingHour == hour &&
-                            meeting.scheduledCharacters.contains(gameState.playerName)
-                }
-                if (meetingsAtThisHour.isNotEmpty()) {
+                val entriesAtThisHour = entries.filter { ReadOnly.toHours(it.time) == hour }
+                if (entriesAtThisHour.isNotEmpty()) {
                     val cellTable = Table()
-                    meetingsAtThisHour.forEach { entry ->
-                        val meeting = entry.value
-                        val meetingLabel = Label("Meeting: ${meeting.place}", skin)
+                    entriesAtThisHour.forEach { entry ->
+                        val meetingLabel = Label("Meeting: ${entry.place}", skin)
                         meetingLabel.setFontScale(2f)
                         cellTable.add(meetingLabel).left()
                         cellTable.row()
@@ -109,7 +106,7 @@ class CalendarUI(val gameState: GameState) : WindowUI("CalendarTitle") {
         dataTable.invalidate()
         scrollPane.layout()
         val rowHeight = dataTable.cells[DAYS + 1].actor.height // 첫 시간 라벨의 높이
-        scrollPane.scrollTo(0f, scrollPane.height - rowHeight * (currentHour-2), 10f, rowHeight)
+        scrollPane.scrollTo(0f, dataTable.height - rowHeight * (currentHour-2), 10f, rowHeight)
     }
 
     data class calendarEntry(

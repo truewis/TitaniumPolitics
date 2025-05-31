@@ -59,6 +59,11 @@ object ReadOnly
 
     //A timestep in seconds.
     val dt = (86400 / const("lengthOfDay")).toInt()
+    fun toHours(time:Int):Int=
+        (time % constInt("lengthOfDay") / (const("lengthOfDay") / 24.0)).toInt()
+    fun toDays(time:Int):Int=
+        (time / const("lengthOfDay")).toInt()
+
 
     val mutualityScale = const("mutualityMax") - const("mutualityMin")
 

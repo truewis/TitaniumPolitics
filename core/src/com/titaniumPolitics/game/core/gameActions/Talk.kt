@@ -23,7 +23,8 @@ class Talk(override val sbjCharacter: String, override val tgtPlace: String) : G
     {
         if (parent.characters[who]!!.currentMeeting == null)
         {
-            parent.addOngoingMeeting(Meeting(parent.time, tgtPlace, scheduledCharacters = hashSetOf(who, sbjCharacter), tgtPlace).also { it.currentCharacters.addAll(
+            parent.addOngoingMeeting(Meeting(parent.time, "talk", scheduledCharacters = hashSetOf(who, sbjCharacter), tgtPlace).also { it.currentCharacters.addAll(
+
                 listOf(sbjCharacter, who)
             ) })
 

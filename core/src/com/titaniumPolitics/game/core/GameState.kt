@@ -40,9 +40,9 @@ class GameState
             } //Clone the list to prevent concurrent modification.
         }
     val hour: Int
-        get() = (_time % ReadOnly.constInt("lengthOfDay") / (ReadOnly.const("lengthOfDay") / 24.0)).toInt()
+        get() = ReadOnly.toHours(_time)
     val day: Int
-        get() = _time / ReadOnly.constInt("lengthOfDay")
+        get() = ReadOnly.toDays(_time)
 
 
     @Transient
@@ -66,11 +66,14 @@ class GameState
             return characters.values.filter { it.alive }.random()
         }
 
+    @Transient
     val popChanged = arrayListOf<() -> Unit>()
 
+    @Transient
     val updateUI = arrayListOf<(GameState) -> Unit>()
 
     //This is a list of functions that will be called when the game starts.
+    @Transient
     val onStart = arrayListOf<() -> Unit>()
     var _alertLevel = 0
     var places = hashMapOf<String, Place>()
@@ -88,6 +91,8 @@ class GameState
 
     private var _scheduledMeetings = hashMapOf<String, Meeting>()
     val scheduledMeetings: Map<String, Meeting> = Collections.unmodifiableMap(_scheduledMeetings)
+
+    @Transient
     val onAddScheduledMeeting: ArrayList<(Meeting) -> Unit> = arrayListOf()
     fun addScheduledMeeting(
         meeting: Meeting
@@ -105,6 +110,7 @@ class GameState
 
     private var _ongoingMeetings = hashMapOf<String, Meeting>()
     val ongoingMeetings: Map<String, Meeting> = Collections.unmodifiableMap(_ongoingMeetings)
+    @Transient
     val onAddOngoingMeeting: ArrayList<(Meeting) -> Unit> = arrayListOf()
     fun addOngoingMeeting(
         meeting: Meeting
@@ -124,6 +130,7 @@ class GameState
     var isBudgetResolved = false
     private var _informations = hashMapOf<String, Information>()
     val informations: Map<String, Information> = Collections.unmodifiableMap<String, Information>(_informations)
+    @Transient
     val onAddInfo: ArrayList<(Information) -> Unit> = arrayListOf()
     fun addInformation(
         info: Information

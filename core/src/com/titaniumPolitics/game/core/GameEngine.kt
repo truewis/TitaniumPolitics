@@ -697,7 +697,7 @@ class GameEngine(val gameState: GameState)
                     )
                 }
                 val subject = conf.type
-                if (subject == "")
+                if (subject == "talk")
                 {//If there is no subject, i.e. casual talk
                 } else
                     if (character == gameState.parties[conf.involvedParty]!!.leader)//Only the leader can do below actions.
