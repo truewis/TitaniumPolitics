@@ -100,7 +100,7 @@ class CalendarUI : WindowUI("CalendarTitle") {
         dataTable.invalidate()
         scrollPane.layout()
         val rowHeight = dataTable.cells[DAYS + 1].actor.height // 첫 시간 라벨의 높이
-        scrollPane.scrollTo(0f, scrollPane.height - rowHeight * currentHour, 10f, rowHeight)
+        scrollPane.scrollTo(0f, scrollPane.height - rowHeight * (currentHour-2), 10f, rowHeight)
     }
 
     companion object {

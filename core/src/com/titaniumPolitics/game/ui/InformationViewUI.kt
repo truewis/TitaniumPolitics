@@ -2,6 +2,7 @@ package com.titaniumPolitics.game.ui
 
 import com.badlogic.gdx.scenes.scene2d.ui.*
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
+import com.badlogic.gdx.utils.Align
 import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.core.Information
 import com.titaniumPolitics.game.core.InformationType
@@ -64,9 +65,7 @@ class InformationViewUI : WindowUI("InformationViewTitle")
         {
             val firstInformation = informationList.first()
             firstInformation::class.java.declaredFields.forEach { field ->
-                if (field.name == "Companion" || field.name == "knownTo" || field.name == "\$childSerializers")
-                { //We don't want to show these fields.
-                } else
+                if  (field.name == "author" || field.name == "creationTime" || field.name == "type" || field.name == "tgtTime" || field.name == "tgtPlace" || field.name == "tgtCharacter" || field.name == "amount")
                 {
                     val button = scene2d.button {
                         label(field.name, "trnsprtConsole") {
@@ -86,48 +85,51 @@ class InformationViewUI : WindowUI("InformationViewTitle")
             informationTable.row()
             informationList.forEach { information ->
                 information::class.java.declaredFields.forEach { field ->
-                    if (field.name == "name" || field.name == "Companion" || field.name == "knownTo" || field.name == "\$childSerializers")
-                    { //We don't want to show these fields.
-                    } else
+                    //Only show fields that are relevant to the information.
+                    if (field.name == "author" || field.name == "creationTime" || field.name == "type" || field.name == "tgtTime" || field.name == "tgtPlace" || field.name == "tgtCharacter" || field.name == "amount")
                     {
                         field.isAccessible = true
-                        val label =
-                            Label(field.get(information)?.toString() ?: "null", defaultSkin, "trnsprtConsole").also {
-                                it.setFontScale(2f)
-                                it.addListener(object : ClickListener()
+                        val label = Label(
+                            "${field.get(information)?.toString() ?: "null"}",
+                            defaultSkin,
+                            "trnsprtConsole"
+                        ).also {
+                            it.setAlignment(Align.center)
+                            it.setFontScale(2f)
+                            it.addListener(object : ClickListener()
+                            {
+                                //When clicked, open the information in a new window, depending on the type of information.
+                                override fun clicked(
+                                    event: com.badlogic.gdx.scenes.scene2d.InputEvent?,
+                                    x: Float,
+                                    y: Float
+                                )
                                 {
-                                    //When clicked, open the information in a new window, depending on the type of information.
-                                    override fun clicked(
-                                        event: com.badlogic.gdx.scenes.scene2d.InputEvent?,
-                                        x: Float,
-                                        y: Float
-                                    )
+                                    when (information.type)
                                     {
-                                        when (information.type)
+                                        InformationType.RESOURCES ->
                                         {
-                                            InformationType.RESOURCES ->
-                                            {
-                                                //Open resource window
-                                                ResourceInfoUI.instance.isVisible = true
-                                                ResourceInfoUI.instance.refresh(information)
-                                            }
+                                            //Open resource window
+                                            ResourceInfoUI.instance.isVisible = true
+                                            ResourceInfoUI.instance.refresh(information)
+                                        }
 
-                                            InformationType.APPARATUS_DURABILITY ->
-                                            {
-                                                //Open apparatus window
-                                                ApparatusInfoUI.instance.isVisible = true
-                                                ApparatusInfoUI.instance.refresh(information)
-                                            }
+                                        InformationType.APPARATUS_DURABILITY ->
+                                        {
+                                            //Open apparatus window
+                                            ApparatusInfoUI.instance.isVisible = true
+                                            ApparatusInfoUI.instance.refresh(information)
+                                        }
 
-                                            else ->
-                                            {
-                                                //Do nothing
-                                            }
+                                        else ->
+                                        {
+                                            //Do nothing
                                         }
                                     }
-                                })
-                            }
-                        informationTable.add(label)
+                                }
+                            })
+                        }
+                        informationTable.add(label).growX()
                     }
                 }
                 informationTable.row()
