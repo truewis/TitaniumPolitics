@@ -100,7 +100,7 @@
       "trait": [
         "workaholic",
         "emotionless",
-        "interiorMinister",
+        "interiorDivisionLeader",
         "bargainer",
         "entertainer"
       ],
@@ -112,7 +112,7 @@
       "trait": [
         "workaholic",
         "emotionless",
-        "safetyMinister",
+        "safetyDivisionLeader",
         "bargainer",
         "soldier"
       ],
@@ -123,7 +123,6 @@
       "trait": [
         "workaholic",
         "emotionless",
-        "safetyMinister",
         "bargainer",
         "soldier"
       ],
@@ -134,7 +133,6 @@
       "trait": [
         "workaholic",
         "emotionless",
-        "safetyMinister",
         "bargainer",
         "soldier"
       ],
@@ -145,7 +143,6 @@
       "trait": [
         "workaholic",
         "emotionless",
-        "safetyMinister",
         "bargainer",
         "soldier"
       ],
@@ -156,7 +153,6 @@
       "trait": [
         "workaholic",
         "emotionless",
-        "safetyMinister",
         "bargainer",
         "soldier"
       ],
@@ -167,7 +163,6 @@
       "trait": [
         "workaholic",
         "emotionless",
-        "safetyMinister",
         "bargainer",
         "soldier"
       ],
@@ -178,7 +173,7 @@
       "trait": [
         "workaholic",
         "emotionless",
-        "infraMinister",
+        "infrastructureDivisionLeader",
         "thief",
         "engineer"
       ],
@@ -189,7 +184,7 @@
       "trait": [
         "workaholic",
         "emotionless",
-        "miningMinister",
+        "miningDivisionLeader",
         "thief"
       ],
       "health": 80,
@@ -199,7 +194,7 @@
       "trait": [
         "workaholic",
         "emotionless",
-        "eduMinister",
+        "educationDivisionLeader",
         "bargainer",
         "teacher"
       ],
@@ -211,7 +206,7 @@
       "trait": [
         "workaholic",
         "emotionless",
-        "industryMinister",
+        "industryDivisionLeader",
         "thief",
         "organizer"
       ],
@@ -233,7 +228,7 @@
       "trait": [
         "workaholic",
         "emotionless",
-        "bioMinister",
+        "bioengineeringDivisionLeader",
         "bargainer",
         "organizer"
       ],

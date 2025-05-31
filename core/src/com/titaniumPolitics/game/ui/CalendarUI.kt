@@ -99,9 +99,6 @@ class CalendarUI(val gameState: GameState) : WindowUI("CalendarTitle") {
             dataTable.row()
         }
 
-        dayTable.debug()
-        dataTable.debug()
-
         // 현재 시간 행으로 스크롤
         dataTable.invalidate()
         scrollPane.layout()

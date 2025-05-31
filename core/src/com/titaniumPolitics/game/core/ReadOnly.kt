@@ -57,6 +57,11 @@ object ReadOnly
             ?: 0.also { throw Exception("Could not find constant $constName") }
     }
 
+    fun charName(charId: String): String
+    {
+        return charJson.jsonObject[charId]?.jsonObject?.get("name")?.jsonPrimitive?.content ?: charId
+    }
+
     //A timestep in seconds.
     val dt = (86400 / const("lengthOfDay")).toInt()
     fun toHours(time:Int):Int=
