@@ -8,10 +8,12 @@ import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.core.ReadOnly
 import kotlin.text.get
 
-class CalendarUI : WindowUI("CalendarTitle") {
+class CalendarUI(val gameState: GameState) : WindowUI("CalendarTitle") {
     private val dataTable = Table(skin)
     private val dayTable = Table(skin)
     private lateinit var scrollPane: ScrollPane
+    val entries = mutableListOf<calendarEntry>()
+    val newEntries = mutableListOf<calendarEntry>()
 
     init {
         isVisible = false
@@ -22,9 +24,16 @@ class CalendarUI : WindowUI("CalendarTitle") {
         content.add(scrollPane).grow()
     }
 
+    fun addEntry(time: Int, title: String, place: String, description: String) {
+        val entry = calendarEntry(time, title, place, description)
+        newEntries.add(entry)
+    }
+
     fun refresh(gameState: GameState) {
         val DAYS = 5
         val HOURS = 24
+        entries.addAll(newEntries)
+        newEntries.clear()
         dataTable.clear()
         dataTable.defaults().pad(2f)
         dayTable.clear()
@@ -102,6 +111,13 @@ class CalendarUI : WindowUI("CalendarTitle") {
         val rowHeight = dataTable.cells[DAYS + 1].actor.height // 첫 시간 라벨의 높이
         scrollPane.scrollTo(0f, scrollPane.height - rowHeight * (currentHour-2), 10f, rowHeight)
     }
+
+    data class calendarEntry(
+        val time: Int,
+        val title: String,
+        val place: String,
+        val description: String
+    )
 
     companion object {
         lateinit var instance: CalendarUI

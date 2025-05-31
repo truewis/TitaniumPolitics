@@ -12,7 +12,7 @@ import ktx.scene2d.*
 import ktx.scene2d.Scene2DSkin.defaultSkin
 
 //Human Resource Management is currently done without information. The report is instant.
-class PoliticiansInfoUI : WindowUI("PoliticiansOverviewTitle")
+class PoliticiansInfoUI(val gameState: Gamestate) : WindowUI("PoliticiansOverviewTitle")
 {
     private val dataTable = Table()
 
@@ -27,7 +27,7 @@ class PoliticiansInfoUI : WindowUI("PoliticiansOverviewTitle")
 
     }
 
-    fun refresh(gameState: GameState)
+    fun refresh()
     {
         dataTable.clear()
         dataTable.apply {

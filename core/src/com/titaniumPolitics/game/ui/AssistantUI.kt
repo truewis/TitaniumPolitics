@@ -123,7 +123,11 @@ class AssistantUI(gameState: GameState) : Table(defaultSkin), KTable
 
 
         gameState.timeChanged += { _, y ->
-            Gdx.app.postRunnable { calendarLabel.setText((gameState.day).toString()) } // Current Date.
+            Gdx.app.postRunnable {
+
+                calendarLabel.setText((gameState.day).toString()) // Current Date.
+
+            }
         }
     }
 
