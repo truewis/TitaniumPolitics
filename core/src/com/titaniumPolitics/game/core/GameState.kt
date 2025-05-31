@@ -86,12 +86,61 @@ class GameState
     @Serializable
     private var _mutuality = hashMapOf<String, HashMap<String, Double>>()
 
-    var scheduledMeetings = hashMapOf<String, Meeting>()
-    var ongoingMeetings = hashMapOf<String, Meeting>()
+    private var _scheduledMeetings = hashMapOf<String, Meeting>()
+    val scheduledMeetings: Map<String, Meeting> = Collections.unmodifiableMap(_scheduledMeetings)
+    val onAddScheduledMeeting: ArrayList<(Meeting) -> Unit> = arrayListOf()
+    fun addScheduledMeeting(
+        meeting: Meeting
+    ) {
+        if (_scheduledMeetings.containsValue(meeting)) throw Exception("Scheduled meeting $meeting already exists.")
+        _scheduledMeetings["conference-${meeting.place}-${meeting.time}"] = meeting
+        onAddScheduledMeeting.forEach { it(meeting) }
+    }
+    fun removeScheduledMeeting(
+        key: String
+    ) {
+        if (!_scheduledMeetings.containsKey(key)) throw Exception("Scheduled meeting with key $key does not exist.")
+        _scheduledMeetings.remove(key)
+    }
+
+    private var _ongoingMeetings = hashMapOf<String, Meeting>()
+    val ongoingMeetings: Map<String, Meeting> = Collections.unmodifiableMap(_ongoingMeetings)
+    val onAddOngoingMeeting: ArrayList<(Meeting) -> Unit> = arrayListOf()
+    fun addOngoingMeeting(
+        meeting: Meeting
+    ) {
+        if (_ongoingMeetings.containsValue(meeting)) throw Exception("Ongoing meeting $meeting already exists.")
+        _ongoingMeetings["conference-${meeting.place}-${meeting.time}"] = meeting
+        onAddOngoingMeeting.forEach { it(meeting) }
+    }
+    fun removeOngoingMeeting(
+        key: String
+    ) {
+        if (!_ongoingMeetings.containsKey(key)) throw Exception("Ongoing meeting with key $key does not exist.")
+        _ongoingMeetings.remove(key)
+    }
     var budget = hashMapOf<String, Double>()//Party name to budget
     var isBudgetProposed = false
     var isBudgetResolved = false
-    var informations = hashMapOf<String, Information>()
+    private var _informations = hashMapOf<String, Information>()
+    val informations: Map<String, Information> = Collections.unmodifiableMap<String, Information>(_informations)
+    val onAddInfo: ArrayList<(Information) -> Unit> = arrayListOf()
+    fun addInformation(
+        info: Information
+    )
+    {
+        if (_informations.containsValue(info)) throw Exception("Information $info already exists.")
+        _informations[info.generateName()] = info
+        onAddInfo.forEach { it(info) }
+    }
+    fun removeInformation(
+        key: String
+    )
+    {
+        if (!_informations.containsKey(key)) throw Exception("Information with key $key does not exist.")
+        _informations.remove(key)
+    }
+
     var eventSystem = EventSystem()
     val realCharList get() = characters.keys.filter { !it.contains("Anon") && characters[it]!!.alive }
     val existingResourceList get() = places.values.map { it.resources.keys }.flatten().toHashSet()

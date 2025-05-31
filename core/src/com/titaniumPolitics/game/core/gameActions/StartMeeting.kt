@@ -23,8 +23,8 @@ class StartMeeting(override val sbjCharacter: String, override val tgtPlace: Str
     //Also refer to Talk.execute()
     override fun execute()
     {
-        parent.ongoingMeetings[meetingName] = parent.scheduledMeetings[meetingName]!!
-        parent.scheduledMeetings.remove(meetingName)
+        parent.addOngoingMeeting(parent.scheduledMeetings[meetingName]!!)
+        parent.removeScheduledMeeting(meetingName)
         parent.ongoingMeetings[meetingName]!!.currentCharacters.add(sbjCharacter)
         // Interrupt other required characters and add them to the meeting.
         val meeting = parent.ongoingMeetings[meetingName]!!

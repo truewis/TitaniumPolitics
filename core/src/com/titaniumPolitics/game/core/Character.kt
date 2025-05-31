@@ -117,7 +117,7 @@ class Character : GameStateElement()
             auxParty = place.responsibleDivision,
             amount = num
         ).also {
-            parent.informations[it.generateName()] = it //cpy.publicity = 5
+            parent.addInformation(it) //cpy.publicity = 5
             it.knownTo += name
         }
 

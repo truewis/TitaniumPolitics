@@ -226,7 +226,7 @@ class GameEngine(val gameState: GameState)
                 action = action
             ).also {
                 it.knownTo.addAll(char.place.characters)//All characters from the same place know about the action.
-                gameState.informations[it.generateName()] = it
+                gameState.addInformation(it)
             }
         }
         action.execute()
@@ -262,7 +262,7 @@ class GameEngine(val gameState: GameState)
             if (it.value.life <= 0 && it.value.rememberedBy.isEmpty())
                 removed.add(it.key)
         }
-        removed.forEach { gameState.informations.remove(it) }
+        removed.forEach { gameState.removeInformation(it) }
     }
 
     //TODO: optimize this function.
@@ -379,7 +379,7 @@ class GameEngine(val gameState: GameState)
                     scheduledCharacters = party.members
                 ).also { it.involvedParty = party.name }
 
-                gameState.scheduledMeetings["conference-${party.home}-${party.name}-${gameState.time}"] = conference
+                gameState.addScheduledMeeting(conference)
             } else
             {
                 //If the division leader is not assigned, the conference for electing the division leader is scheduled.
@@ -389,7 +389,7 @@ class GameEngine(val gameState: GameState)
                     place = party.home,
                     scheduledCharacters = (setOf("ctrler") + party.members).toHashSet()
                 ).also { it.involvedParty = party.name }
-                gameState.scheduledMeetings["conference-${party.home}-${party.name}-${gameState.time}"] = conference
+                gameState.addScheduledMeeting(conference)
             }
         }
 
@@ -402,8 +402,7 @@ class GameEngine(val gameState: GameState)
             scheduledCharacters = gameState.parties["cabinet"]!!.members
         ).also { it.involvedParty = "cabinet" }
 
-        gameState.scheduledMeetings["conference-${gameState.parties["cabinet"]!!.home}-cabinet-${gameState.time}"] =
-            conference
+        gameState.addScheduledMeeting(conference)
 
 
         val conference2 = Meeting(
@@ -413,13 +412,12 @@ class GameEngine(val gameState: GameState)
             scheduledCharacters = gameState.parties["triumvirate"]!!.members
         ).also { it.involvedParty = "triumvirate" }
 
-        gameState.scheduledMeetings["conference-${gameState.parties["triumvirate"]!!.home}-triumvirate-${gameState.time}"] =
-            conference2
+        gameState.addScheduledMeeting(conference2)
 
         //Garbage removal for performance.
-        gameState.scheduledMeetings.filter { it.value.time + ReadOnly.constInt("MeetingStartTolerance") < gameState.time }.keys.forEach {
-            gameState.scheduledMeetings.remove(it)
-        }
+//        gameState.scheduledMeetings.filter { it.value.time + ReadOnly.constInt("MeetingStartTolerance") < gameState.time }.keys.forEach {
+//            gameState.scheduledMeetings.remove(it)
+//        }
 
     }
 
@@ -511,7 +509,7 @@ class GameEngine(val gameState: GameState)
         author = "",
         creationTime = tgtState.time
     ).also { /*spread rumor*/
-        tgtState.informations[it.generateName()] = it //cpy.publicity = 5
+        tgtState.addInformation(it) //cpy.publicity = 5
         it.knownTo += tgtState.pickRandomCharacter.name
     }
 

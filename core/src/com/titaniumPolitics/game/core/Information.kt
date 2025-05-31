@@ -11,7 +11,7 @@ import kotlin.math.min
 * Information can be used to make a decision. It can be used to blame or blackmail someone.
 * */
 @Serializable
-class Information(//If there is no author, it is a rumor.
+data class Information(//If there is no author, it is a rumor.
     var author: String = "",
     var creationTime: Int = 0,
     var type: InformationType = InformationType.ACTION,

@@ -33,7 +33,7 @@ class AssistantUI(gameState: GameState) : Table(defaultSkin), KTable
                     else
                     {
                         PoliticiansInfoUI.instance.isVisible = !PoliticiansInfoUI.instance.isVisible
-                        PoliticiansInfoUI.instance.refresh(gameState)
+                        PoliticiansInfoUI.instance.refresh()
                     }
                 }
             }

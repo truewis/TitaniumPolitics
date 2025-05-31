@@ -20,8 +20,8 @@ class AppointMeeting(override val sbjCharacter: String, override val tgtPlace: S
 
     override fun execute()
     {
-        parent.scheduledMeetings["meeting-${where}-${sbjCharacter}-${meetingTime}"] =
-            Meeting(meetingTime, "informal", who, where)
+        parent.addScheduledMeeting(
+            Meeting(meetingTime, "informal", who, where))
 
     }
 

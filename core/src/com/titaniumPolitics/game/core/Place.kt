@@ -320,7 +320,7 @@ class Place : GameStateElement()
                 amount = 30,
                 tgtApparatus = app.name
             )/*store info*/.also {
-                parent.informations[it.generateName()] = it
+                parent.addInformation(it)
                 //Add all people in the place to the known list.
                 it.knownTo.addAll(characters)
                 accidentInformationKeys += it.name
@@ -348,7 +348,7 @@ class Place : GameStateElement()
             tgtPlace = name,
             resources = Resources(resourceType to loss)
         )/*store info*/.also {
-            parent.informations[it.generateName()] = it
+            parent.addInformation(it)
             //Add all people in the place to the known list.
             it.knownTo.addAll(characters)
             accidentInformationKeys += it.name
@@ -377,7 +377,7 @@ class Place : GameStateElement()
                 amount = 75,
                 tgtApparatus = app.name
             )/*store info*/.also {
-                parent.informations[it.generateName()] = it
+                parent.addInformation(it)
                 //Add all people in the place to the known list.
                 it.knownTo.addAll(characters)
                 accidentInformationKeys += it.name

@@ -23,11 +23,9 @@ class Talk(override val sbjCharacter: String, override val tgtPlace: String) : G
     {
         if (parent.characters[who]!!.currentMeeting == null)
         {
-            parent.ongoingMeetings["meeting-$tgtPlace-$sbjCharacter-${parent.time}"] =
-                Meeting(parent.time, tgtPlace, scheduledCharacters = hashSetOf(who, sbjCharacter), tgtPlace)
-            parent.ongoingMeetings["meeting-$tgtPlace-$sbjCharacter-${parent.time}"]!!.currentCharacters.addAll(
+            parent.addOngoingMeeting(Meeting(parent.time, tgtPlace, scheduledCharacters = hashSetOf(who, sbjCharacter), tgtPlace).also { it.currentCharacters.addAll(
                 listOf(sbjCharacter, who)
-            )
+            ) })
 
 
             super.execute()

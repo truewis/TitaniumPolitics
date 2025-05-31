@@ -78,7 +78,7 @@ class Meeting(
         //Remove the meeting from the ongoingMeetings.
         if (gameState.ongoingMeetings.containsValue(this))
         {
-            gameState.ongoingMeetings.remove(gameState.ongoingMeetings.filter { it.value == this }.keys.first())
+            gameState.removeOngoingMeeting(gameState.ongoingMeetings.filter { it.value == this }.keys.first())
         } else
         {
             Logger.warning("Meeting $this is not found in the ongoingMeetings.")
