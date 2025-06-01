@@ -47,6 +47,9 @@ class CapsuleStage(val gameState: GameState) : Stage(FitViewport(1920F, 1080F))
         ReadOnly.charJson.forEach {
             assetManager.load(it.value.jsonObject["image"]!!.jsonPrimitive.content, Texture::class.java)
         }
+        ReadOnly.appJson.forEach {
+            assetManager.load(it.value.jsonObject["image"]!!.jsonPrimitive.content, Texture::class.java)
+        }
         println("Explicit asset imports successful.")
         assetManager.finishLoading()
 

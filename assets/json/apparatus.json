@@ -1,5 +1,6 @@
 {
   "rescueEquipment": {
+    "image": "defaultApparatus.png",
     "durabilityTau": 8.64e7,
     "baseDanger": 1.0E-4,
     "requiredResourcePerRepair": [
@@ -22,6 +23,7 @@
     "idealWorker": 25
   },
   "energyStorage": {
+    "image": "defaultApparatus.png",
     "durabilityTau": 8.64e7,
     "baseDanger": 2.0E-4,
     "requiredResourcePerRepair": [
@@ -50,6 +52,7 @@
     }
   },
   "waterStorage": {
+    "image": "defaultApparatus.png",
     "durabilityTau": 8.64e7,
     "baseDanger": 3.0E-4,
     "requiredResourcePerRepair": [
@@ -78,6 +81,7 @@
     }
   },
   "barrier": {
+    "image": "defaultApparatus.png",
     "durabilityTau": 8.64e7,
     "baseDanger": 3.0E-4,
     "requiredResourcePerRepair": [
@@ -106,6 +110,7 @@
     }
   },
   "oxygenStorage": {
+    "image": "defaultApparatus.png",
     "durabilityTau": 8.64e6,
     "baseDanger": 3.0E-4,
     "requiredResourcePerRepair": [
@@ -135,6 +140,7 @@
     }
   },
   "rationStorage": {
+    "image": "defaultApparatus.png",
     "durabilityTau": 8.64e8,
     "baseDanger": 1.0E-4,
     "requiredResourcePerRepair": [
@@ -161,6 +167,7 @@
     }
   },
   "metalStorage": {
+    "image": "defaultApparatus.png",
     "durabilityTau": 8.64e7,
     "baseDanger": 1.0E-4,
     "requiredResourcePerRepair": [
@@ -187,6 +194,7 @@
     }
   },
   "componentStorage": {
+    "image": "defaultApparatus.png",
     "durabilityTau": 8.64e7,
     "baseDanger": 1.0E-4,
     "requiredResourcePerRepair": [
@@ -213,6 +221,7 @@
     }
   },
   "reactor": {
+    "image": "defaultApparatus.png",
     "durabilityTau": 8.64e8,
     "baseDanger": 6e-4,
     "idealWorker": 50,
@@ -239,6 +248,7 @@
     ]
   },
   "componentWorkshop": {
+    "image": "defaultApparatus.png",
     "durabilityTau": 8.64e7,
     "baseDanger": 6e-4,
     "idealWorker": 5,
@@ -271,6 +281,7 @@
     ]
   },
   "electricianWorkshop": {
+    "image": "defaultApparatus.png",
     "durabilityTau": 8.64e7,
     "baseDanger": 6e-4,
     "idealWorker": 5,
@@ -304,6 +315,7 @@
     ]
   },
   "plumberWorkshop": {
+    "image": "defaultApparatus.png",
     "durabilityTau": 8.64e7,
     "baseDanger": 6e-4,
     "idealWorker": 5,
@@ -337,6 +349,7 @@
     ]
   },
   "steelPlant": {
+    "image": "defaultApparatus.png",
     "durabilityTau": 8.64e6,
     "baseDanger": 10e-4,
     "idealWorker": 500,
@@ -371,6 +384,7 @@
     ]
   },
   "exchangePost": {
+    "image": "defaultApparatus.png",
     "durabilityTau": 8.64e7,
     "baseDanger": 1e-4,
     "idealWorker": 100,
@@ -401,6 +415,7 @@
     ]
   },
   "pressureDoor": {
+    "image": "defaultApparatus.png",
     "durabilityTau": 8.64e7,
     "baseDanger": 1e-4,
     "idealWorker": 8,
@@ -427,6 +442,7 @@
     ]
   },
   "farmArray": {
+    "image": "defaultApparatus.png",
     "durabilityTau": 8.64e6,
     "baseDanger": 4e-4,
     "idealWorker": 100,
@@ -460,6 +476,7 @@
     ]
   },
   "classroom": {
+    "image": "defaultApparatus.png",
     "durabilityTau": 8.64e7,
     "baseDanger": 2e-4,
     "idealWorker": 50,
@@ -484,6 +501,7 @@
     ]
   },
   "electrolysisArray": {
+    "image": "defaultApparatus.png",
     "durabilityTau": 8.64e6,
     "baseDanger": 8e-4,
     "idealWorker": 5,
@@ -522,6 +540,7 @@
     ]
   },
   "oxygenDistributor": {
+    "image": "defaultApparatus.png",
     "durabilityTau": 8.64e7,
     "baseDanger": 8e-4,
     "idealWorker": 5,
@@ -557,6 +576,7 @@
     ]
   },
   "corpseRecycle": {
+    "image": "defaultApparatus.png",
     "durabilityTau": 8.64e5,
     "baseDanger": 6e-4,
     "idealWorker": 5,
@@ -589,6 +609,7 @@
     ]
   },
   "waterRecycle": {
+    "image": "defaultApparatus.png",
     "durabilityTau": 8.64e6,
     "baseDanger": 6e-4,
     "idealWorker": 5,
@@ -623,6 +644,7 @@
     ]
   },
   "co2Recycle": {
+    "image": "defaultApparatus.png",
     "durabilityTau": 8.64e6,
     "baseDanger": 6e-4,
     "idealWorker": 5,
@@ -661,6 +683,7 @@
     ]
   },
   "launchPad": {
+    "image": "defaultApparatus.png",
     "durabilityTau": 8.64e7,
     "baseDanger": 6e-4,
     "idealWorker": 0,
@@ -683,6 +706,7 @@
     ]
   },
   "graves": {
+    "image": "defaultApparatus.png",
     "durabilityTau": 8.64e7,
     "baseDanger": 6e-4,
     "idealWorker": 0,
@@ -705,6 +729,7 @@
     ]
   },
   "telescope": {
+    "image": "defaultApparatus.png",
     "durabilityTau": 8.64e7,
     "baseDanger": 0,
     "idealWorker": 0,
@@ -731,6 +756,7 @@
     ]
   },
   "cooler": {
+    "image": "defaultApparatus.png",
     "durabilityTau": 8.64e6,
     "baseDanger": 6e-4,
     "idealWorker": 100,
@@ -760,6 +786,7 @@
     ]
   },
   "metalShaft": {
+    "image": "defaultApparatus.png",
     "durabilityTau": 8.64e6,
     "baseDanger": 8e-4,
     "idealWorker": 160,
@@ -795,6 +822,7 @@
     ]
   },
   "liquidShaft": {
+    "image": "defaultApparatus.png",
     "durabilityTau": 8.64e6,
     "baseDanger": 10e-4,
     "idealWorker": 160,
@@ -828,6 +856,7 @@
     ]
   },
   "glassShaft": {
+    "image": "defaultApparatus.png",
     "durabilityTau": 8.64e6,
     "baseDanger": 10e-4,
     "idealWorker": 160,
@@ -861,6 +890,7 @@
     ]
   },
   "beds": {
+    "image": "defaultApparatus.png",
     "durabilityTau": 8.64e7,
     "baseDanger": 1e-4,
     "idealWorker": 20,
@@ -887,6 +917,7 @@
     ]
   },
   "wiredCommunicationDevice": {
+    "image": "defaultApparatus.png",
     "durabilityTau": 8.64e7,
     "baseDanger": 2e-4,
     "idealWorker": 32,

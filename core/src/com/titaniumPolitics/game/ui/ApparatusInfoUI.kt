@@ -1,13 +1,18 @@
 package com.titaniumPolitics.game.ui
 
 
+import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.scenes.scene2d.ui.*
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable
 
 import com.badlogic.gdx.utils.Align
 
 import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.core.Information
+import com.titaniumPolitics.game.core.ReadOnly
+import kotlinx.serialization.json.jsonObject
+import kotlinx.serialization.json.jsonPrimitive
 
 import ktx.scene2d.*
 import ktx.scene2d.Scene2DSkin.defaultSkin
@@ -15,7 +20,7 @@ import ktx.scene2d.Scene2DSkin.defaultSkin
 
 class ApparatusInfoUI : WindowUI("ApparatusInfoTitle")
 {
-    private val dataTable = Table()
+    private val dataTable = scene2d.table()
 
     init
     {
@@ -32,27 +37,45 @@ class ApparatusInfoUI : WindowUI("ApparatusInfoTitle")
     {
         dataTable.clear()
         dataTable.apply {
+            this.image("CogGrunge"){
+                it.size(200f, 200f)
+                try
+                {
+                    drawable = TextureRegionDrawable(
+                        CapsuleStage.instance.assetManager.get( //TODO: Temporary solution for portrait image loading. PortraitUI does not have a stage.
+                            ReadOnly.appJson[information.tgtApparatus]!!.jsonObject["image"]!!.jsonPrimitive.content,
+                            Texture::class.java
+                        )!!
+                    )
+                } catch (e: Exception)
+                {
+                    println("Portrait Image Error: ${information.tgtApparatus}")
+                }
+            }
+            this.row()
 
-            add(label("Author: ${information.author}") {
-                setAlignment(Align.center)
-                setFontScale(2f)
-            })
-            row()
-            add(label("Creation Time: ${information.creationTime}") {
-                setAlignment(Align.center)
-                setFontScale(2f)
-            })
 
-            row()
-            add(label("Apparatus Name: ${information.tgtApparatus}") {
+            this.label("Apparatus Name: ${information.tgtApparatus}") {
+                setAlignment(Align.center)
+                setFontScale(3f)
+            }
+            this.row()
+            this.label("Durability: ${information.amount}") {
+                setAlignment(Align.center)
+                setFontScale(3f)
+            }
+
+            this.row()
+            this.label("Author: ${information.author}") {
                 setAlignment(Align.center)
                 setFontScale(2f)
-            })
-            row()
-            add(label("Durability: ${information.amount}") {
+            }
+            this.row()
+            this.label("Creation Time: ${information.creationTime}") {
                 setAlignment(Align.center)
                 setFontScale(2f)
-            })
+            }
+
         }
 
     }
