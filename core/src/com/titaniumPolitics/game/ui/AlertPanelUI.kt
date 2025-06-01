@@ -64,6 +64,9 @@ class AlertPanelUI(var type: String, action: () -> Unit, val docList: Group, var
                     "apparatus" -> image("CogGrunge") {
                         it.size(36f).fill()
                     }
+                    "alarm" -> image("ClockGrunge") {
+                        it.size(36f).fill()
+                    }
                 }
                 when (this@AlertPanelUI.type)
                 {

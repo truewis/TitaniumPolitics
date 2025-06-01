@@ -17,7 +17,6 @@ import ktx.scene2d.*
 class AlertUI(var gameState: GameState) : Table(defaultSkin)
 {
     private val docList = VerticalGroup()
-    private val previousInformation = hashSetOf<String>()
     private var newInformation = hashSetOf<String>()
 
     init
@@ -27,8 +26,14 @@ class AlertUI(var gameState: GameState) : Table(defaultSkin)
         docList.grow()
 
         add(docScr).grow()
-        gameState.timeChanged += { old, new -> if (old != new) refreshList() }
+        gameState.onAddInfo += {it->newInformation.add(it.name)}
         gameState.updateUI += { _ -> displayAlerts(); }
+        gameState.onPlayerAction += {
+            //Remove all alerts.
+            docList.children.forEach {
+                it.remove()
+            }
+        }
     }
 
     fun addAlert(type: String, vararg params: String, action: () -> Unit = {})
@@ -43,35 +48,8 @@ class AlertUI(var gameState: GameState) : Table(defaultSkin)
             isVisible = true
     }
 
-    //Sort which information is new and which is old.
-    fun refreshList()
-    {
-        //New Information
-        if (previousInformation.isEmpty())
-            previousInformation.addAll(gameState.informations.keys.filter {
-                gameState.informations[it]!!.knownTo.contains(
-                    gameState.playerName
-                )
-            }.toHashSet()) //TODO: this is a temporary solution. It has to work when the game loads.
-        else
-        {
-            newInformation = gameState.informations.keys.filter {
-                gameState.informations[it]!!.knownTo.contains(
-                    gameState.playerName
-                )
-            }.toHashSet()
-            newInformation.removeAll(previousInformation)
-            previousInformation.addAll(newInformation)
-        }
-
-    }
-
     fun displayAlerts()
     {
-        //Remove all alerts.
-        docList.children.forEach {
-            it.remove()
-        }
 
         newInformation.forEach {
             //Decide whether to show the alert based on the type of information.
@@ -145,7 +123,8 @@ class AlertUI(var gameState: GameState) : Table(defaultSkin)
         if (gameState.player.will < ReadOnly.const("CriticalWill"))
             addAlert("will")
 
-        isVisible = !docList.children.isEmpty
+        newInformation.clear()
+
     }
 
     companion object

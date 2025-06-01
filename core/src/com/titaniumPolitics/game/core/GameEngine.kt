@@ -150,8 +150,10 @@ class GameEngine(val gameState: GameState)
             {
                 action = acquire("Action", hashMapOf("actionList" to actionList))
                 action.injectParent(gameState)
-                if (action.isValid())
+                if (action.isValid()) {
+                    gameState.onPlayerAction.forEach { it() }
                     break
+                }
                 else
                     println(
                         "Invalid action: ${action.javaClass.simpleName} by ${char.name} at ${

@@ -49,6 +49,9 @@ class GameState
             /*Old time is the time before the change. New time is the time after the change.*/
     val timeChanged =
         arrayListOf<(Int, Int) -> Unit>()
+
+    @Transient
+    val onPlayerAction = arrayListOf<() -> Unit>() //This is called when the player ends their turn.
     val pop: Int
         get() = places.values.sumOf { it.currentTotalPop }
     val totalAnonPop: Int

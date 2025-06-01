@@ -10,8 +10,8 @@ class CalendarUI(val gameState: GameState) : WindowUI("CalendarTitle") {
     private val dataTable = Table(skin)
     private val dayTable = Table(skin)
     private lateinit var scrollPane: ScrollPane
-    val entries = mutableListOf<calendarEntry>()
-    val newEntries = mutableListOf<calendarEntry>()
+    val entries = mutableListOf<CalendarEntry>()
+    val newEntries = mutableListOf<CalendarEntry>()
 
     init {
         isVisible = false
@@ -27,10 +27,22 @@ class CalendarUI(val gameState: GameState) : WindowUI("CalendarTitle") {
             if (meeting.scheduledCharacters.contains(gameState.playerName))
                 addEntry(meeting.time, ReadOnly.prop(meeting.type), meeting.place, "A new meeting has been scheduled at ${meeting.time}H in ${meeting.place}.")
         }
+
+        gameState.timeChanged+={
+            _, time ->
+            // Check if there is an entry within the next hour
+            entries.firstOrNull { it.time - time in 0..3600/ ReadOnly.dt && !it.hasAlerted }?.let {
+                it.hasAlerted = true // Mark as alerted
+                AlertUI.instance.addAlert("alarm") {
+                    isVisible = true
+                }
+            }
+
+        }
     }
 
     fun addEntry(time: Int, title: String, place: String, description: String) {
-        val entry = calendarEntry(time, title, place, description)
+        val entry = CalendarEntry(time, title, place, description)
         newEntries.add(entry)
     }
 
@@ -106,11 +118,12 @@ class CalendarUI(val gameState: GameState) : WindowUI("CalendarTitle") {
         scrollPane.scrollTo(0f, dataTable.height - rowHeight * (currentHour-2), 10f, rowHeight)
     }
 
-    data class calendarEntry(
+    data class CalendarEntry(
         val time: Int,
         val title: String,
         val place: String,
-        val description: String
+        val description: String,
+        var hasAlerted: Boolean = false
     )
 
     companion object {
