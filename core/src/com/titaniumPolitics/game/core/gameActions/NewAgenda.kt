@@ -42,9 +42,9 @@ class NewAgenda(override val sbjCharacter: String, override val tgtPlace: String
             //You have to choose which command you are responding to. The character who issued the command must be present in the meeting.
             //Other people may add supporting or disapproving information.
             AgendaType.BUDGET_PROPOSAL -> return mt.involvedParty == "cabinet" && !parent.isBudgetProposed
-            //TODO: this is done by the mandatory cabinet election, which is separate from meetings.
+            //TODO: this is done by the mandatory cabinet voting.
             AgendaType.BUDGET_RESOLUTION -> return mt.involvedParty == "triumvirate" && !parent.isBudgetResolved
-            //TODO: this is done by the mandatory triumvirate election, which is separate from meetings.
+            //TODO: this is done by the mandatory triumvirate voting.
             AgendaType.PRAISE -> return true
 
             AgendaType.DENOUNCE -> return true

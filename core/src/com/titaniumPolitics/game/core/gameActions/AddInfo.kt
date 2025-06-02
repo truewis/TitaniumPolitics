@@ -78,6 +78,7 @@ class AddInfo(override val sbjCharacter: String, override val tgtPlace: String) 
             AgendaType.BUDGET_PROPOSAL -> TODO()
             AgendaType.BUDGET_RESOLUTION -> TODO()
             AgendaType.APPOINT_MEETING -> return 0.0
+            AgendaType.FIRE_MANAGER -> return -parent.characters[agenda.subjectParams["character"]]!!.infoPreference(info)
             else -> return 0.0
         }
         return 0.0
@@ -89,7 +90,6 @@ class AddInfo(override val sbjCharacter: String, override val tgtPlace: String) 
         agenda.informationKeys.add(infoKey)
 
         //The amount of attention spent can be modified here.
-        //TODO: each prepared information can only be presented once in a meeting.
         //Attention is consumed.
         val newsDegree =
             1.0 - meeting.currentCharacters.intersect(info.knownTo).size / (.0 + meeting.currentCharacters.size)
