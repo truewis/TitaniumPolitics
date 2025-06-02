@@ -1,5 +1,6 @@
 package com.titaniumPolitics.game.ui.map
 
+import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.titaniumPolitics.game.core.GameEngine
 import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.core.ReadOnly
@@ -12,9 +13,11 @@ import ktx.scene2d.scene2d
 class PlaceMarkerWindowUI(var gameState: GameState, var owner: MapUI) : FloatingWindowUI()
 {
     var placeDisplayed = ""
+    val distance get() = (gameState.player.place.shortestPathAndTimeTo(placeDisplayed)?.second ?: 0) * ReadOnly.dt / 60
     var mode = ""
+    lateinit var moveLabel: Label
     private val moveButton = scene2d.button {
-        label("Move to Place") {
+        this@PlaceMarkerWindowUI.moveLabel = label("Move to Place: "+ this@PlaceMarkerWindowUI.distance+"m") {
             setFontScale(2f)
         }
 
@@ -82,6 +85,7 @@ class PlaceMarkerWindowUI(var gameState: GameState, var owner: MapUI) : Floating
                     row()
                 } else
                 {
+                    moveLabel.setText("Move to Place: ${distance}min")
                     //Disable the button if the player is already in the place. Calling place property will throw an exception when the game is first loaded.
                     if (gameState.characters[gameState.playerName]!!.place.connectedPlaces.contains(placeDisplayed))
                     {

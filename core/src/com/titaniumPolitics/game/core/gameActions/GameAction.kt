@@ -52,7 +52,6 @@ sealed class GameAction()
     //Some gameActions have more complicated freezing mechanism, so they don't call this function.
     open fun execute()
     {
-        sbjCharObj.frozen += ReadOnly.constInt(this::class.simpleName!! + "Duration")
 
         //Execution time penalty when the will is low.
         if (parent.getMutuality(sbjCharacter) < ReadOnly.const("CriticalWill"))
@@ -64,11 +63,10 @@ sealed class GameAction()
             //TODO: Reduce health every turn?
         } else if (parent.getMutuality(sbjCharacter) < ReadOnly.const("DowntimeWill"))
         {
-            if (this is NewAgenda || this is Intercept || this is InvestigateAccidentScene || this is ClearAccidentScene || this is PrepareInfo)
-                sbjCharObj.frozen += 2 * ReadOnly.constInt(this::class.simpleName!! + "Duration")
+                sbjCharObj.frozen += 3 * ReadOnly.constInt(this::class.simpleName!! + "Duration") / 2
 
         } else
-            sbjCharObj.frozen += 2 * ReadOnly.constInt(this::class.simpleName!! + "Duration")
+            sbjCharObj.frozen += ReadOnly.constInt(this::class.simpleName!! + "Duration")
     }
 
     open fun deltaWill(): Double
