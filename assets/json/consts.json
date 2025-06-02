@@ -40,6 +40,7 @@
   "CriticalWill": 30,
   "AddInfoDuration": 3,
   "ClearAccidentSceneDuration": 90,
+  "SetWorkersDuration": 30,
   "EatDuration": 30,
   "EndMeetingDuration": 3,
   "EndSpeechDuration": 3,

@@ -7,13 +7,13 @@ import com.badlogic.gdx.scenes.scene2d.ui.Button
 import com.titaniumPolitics.game.core.GameState
 import ktx.scene2d.Scene2DSkin.defaultSkin
 
-open class PlaceMarker(var gameState: GameState, var owner: MapUI, place: String) : Button()
+open class PlaceMarker(var gameState: GameState, var owner: MapUI, var place: String) : Button()
 {
     init
     {
         //Set style of the button to the default skin.
         style = defaultSkin.get("diamond", ButtonStyle::class.java)
-        val start: Pair<Float, Float> = MapUI.instance.convertToScreenCoords(
+        val start: Pair<Float, Float> = owner.convertToScreenCoords(
             gameState.places[place]!!.coordinates.x.toFloat(),
             gameState.places[place]!!.coordinates.z.toFloat()
         )
@@ -22,6 +22,7 @@ open class PlaceMarker(var gameState: GameState, var owner: MapUI, place: String
         {
             color = Color.RED
         }
+        owner.dataTable.addActor(this)
         //Set the size of the connection to the length of the line.
         this.setSize(30f, 30f)
         //Set the position of the connection to the start of the line.
