@@ -2,6 +2,7 @@ package com.titaniumPolitics.game.core.gameActions
 
 import com.titaniumPolitics.game.core.GameEngine
 import com.titaniumPolitics.game.core.Meeting
+import com.titaniumPolitics.game.core.ReadOnly
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -26,7 +27,9 @@ class Talk(override val sbjCharacter: String, override val tgtPlace: String) : G
             parent.addOngoingMeeting(Meeting(parent.time, "talk", scheduledCharacters = hashSetOf(who, sbjCharacter), tgtPlace).also { it.currentCharacters.addAll(
 
                 listOf(sbjCharacter, who)
-            ) })
+            )
+            it.currentSpeaker = sbjCharacter
+            })
 
 
             super.execute()
@@ -35,6 +38,8 @@ class Talk(override val sbjCharacter: String, override val tgtPlace: String) : G
             parent.characters[who]!!.currentMeeting!!.currentCharacters.add(sbjCharacter)
             super.execute()
         }
+        //The person's mutuality toward the subject character decreases.
+        parent.setMutuality(who, sbjCharacter, -ReadOnly.const("talkMutualityDecrease"))
     }
 
     override fun isValid(): Boolean

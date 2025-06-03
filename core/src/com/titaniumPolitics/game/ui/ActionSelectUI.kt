@@ -169,7 +169,7 @@ class ActionSelectUI(var gameState: GameState, override var actionCallback: (Gam
                 //TODO: When the player press the submit button of the actionUI, the action is ready to go.
                 //docList.buttonGroup.uncheckAll()
             }
-            docList.addActor(t)
+            docList.add(t).size(150f).fill()
         }
         isVisible = !docList.children.isEmpty
 

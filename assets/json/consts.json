@@ -33,6 +33,7 @@
   "EnemyMutualityThreshold": 25,
   "SpeakerInterceptMutualityThreshold": 40,
   "RequestFinishDeltaMutuality": 7,
+  "talkMutualityDecrease": -7,
   "RequestFinishDeltaWill": 5,
   "TiredHealth": 50,
   "CriticalHealth": 20,

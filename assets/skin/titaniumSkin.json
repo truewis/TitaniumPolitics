@@ -347,6 +347,15 @@ com.badlogic.gdx.scenes.scene2d.ui.Button$ButtonStyle: {
 		disabled: icon_store_1_Disabled
 	}
 }
+com.badlogic.gdx.scenes.scene2d.ui.CheckBox$CheckBoxStyle: {
+	default: {
+		checkboxOn: ButtonRegularBgPressed
+		checkboxOff: ButtonRegularBgNormal
+		checkboxOnDisabled: ButtonRegularBgDisabled
+		checkboxOffDisabled: ButtonRegularBgDisabled
+		font: fixedsys
+	}
+}
 com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle: {
 	default: {
 		font: fixedsys
