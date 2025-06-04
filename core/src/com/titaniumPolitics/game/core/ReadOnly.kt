@@ -6,8 +6,7 @@ import java.io.File
 import java.io.FileInputStream
 import java.util.*
 
-object ReadOnly
-{
+object ReadOnly {
     //Boltzmann constant in J/K
     val KB = 1.380649e-23
 
@@ -45,35 +44,32 @@ object ReadOnly
     } ?: Properties().apply { load(FileInputStream(File("../assets/texts/DefaultCharacter.properties"))) }
 
 
-    fun const(constName: String): Double
-    {
+    fun const(constName: String): Double {
         return constJson[constName]?.jsonPrimitive?.double
             ?: .0.also { throw Exception("Could not find constant $constName") }
     }
 
-    fun constInt(constName: String): Int
-    {
+    fun constInt(constName: String): Int {
         return constJson[constName]?.jsonPrimitive?.int
             ?: 0.also { throw Exception("Could not find constant $constName") }
     }
 
-    fun charName(charId: String): String
-    {
-        return charJson.jsonObject[charId]?.jsonObject?.get("name")?.jsonPrimitive?.content ?: charId
+    fun charName(charId: String): String {
+        return prop(charId)
     }
 
     //A timestep in seconds.
     val dt = (86400 / const("lengthOfDay")).toInt()
-    fun toHours(time:Int):Int=
+    fun toHours(time: Int): Int =
         (time % constInt("lengthOfDay") / (const("lengthOfDay") / 24.0)).toInt()
-    fun toDays(time:Int):Int=
+
+    fun toDays(time: Int): Int =
         (time / const("lengthOfDay")).toInt()
 
 
     val mutualityScale = const("mutualityMax") - const("mutualityMin")
 
-    fun prop(key: String, obj: Any? = null): String
-    {
+    fun prop(key: String, obj: Any? = null): String {
 
         return if (obj != null)
             (props.getProperty(key)?.replacePlaceholders(obj))
@@ -82,8 +78,7 @@ object ReadOnly
             (props.getProperty(key)) ?: "Unknown".also { println("Warning: Could not find property $key") }
     }
 
-    fun script(key: String, obj: Any? = null): String
-    {
+    fun script(key: String, obj: Any? = null): String {
         return if (obj != null)
             (script.getProperty(key)?.replacePlaceholders(obj))
                 ?: "Unknown".also { println("Warning: Could not find property $key") }
@@ -92,8 +87,7 @@ object ReadOnly
 
     }
 
-    private fun String.replacePlaceholders(source: Any): String
-    {
+    private fun String.replacePlaceholders(source: Any): String {
         val regex = "\\{VAR=([A-Za-z0-9_]+)}".toRegex()
         val kClass = source::class
         val propsByName = kClass.members.associateBy { it.name }
