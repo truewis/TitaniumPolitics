@@ -103,7 +103,7 @@ class AnonAgent : Agent() {
             routines.forEach {
                 if (it.endCondition(name, place))
                     endRoutine(it)
-                it.newRoutineCondition(name, place)?.let { v ->
+                it.newRoutineCondition(name, place, routines)?.let { v ->
                     v.injectParent(parent)
                     it.subroutines += v
                     routines += v

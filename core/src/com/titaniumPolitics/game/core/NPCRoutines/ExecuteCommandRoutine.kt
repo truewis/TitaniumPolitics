@@ -6,18 +6,15 @@ import com.titaniumPolitics.game.core.gameActions.Wait
 import kotlinx.serialization.Serializable
 
 @Serializable
-class ExecuteCommandRoutine() : Routine()
-{
+class ExecuteCommandRoutine() : Routine() {
     var err = false
     val executableRequest get() = gState.requests[variables["request"]!!]!!
     var timeout = ReadOnly.const("ExecuteCommandRoutineInvalidActionTimeout")
 
-    override fun newRoutineCondition(name: String, place: String): Routine?
-    {
+    override fun newRoutineCondition(name: String, place: String, routines: List<Routine>): Routine? {
         println("$name is executing the command ${executableRequest}.")
 
-        if (place != executableRequest.action.tgtPlace)
-        {
+        if (place != executableRequest.action.tgtPlace) {
             return MoveRoutine().apply {
                 variables["movePlace"] = executableRequest.action.tgtPlace
             }//Add a move routine with higher priority.
@@ -25,22 +22,17 @@ class ExecuteCommandRoutine() : Routine()
         return null
     }
 
-    override fun execute(name: String, place: String): GameAction
-    {
-        if (place == executableRequest.action.tgtPlace)
-        {
+    override fun execute(name: String, place: String): GameAction {
+        if (place == executableRequest.action.tgtPlace) {
             executableRequest.action.injectParent(gState)
-            if (executableRequest.action.isValid())
-            {
+            if (executableRequest.action.isValid()) {
                 println("$name: The request ${executableRequest.action} is valid. Executing...")
                 executeDone = true
                 return executableRequest.action
-            } else
-            {
+            } else {
                 timeout -= 1
                 //Wait a bit to see if the action gets valid
-                if (timeout <= 0)
-                {
+                if (timeout <= 0) {
                     err = true
                     //TODO: executableRequest callback
                 }
@@ -54,8 +46,7 @@ class ExecuteCommandRoutine() : Routine()
         return Wait(name, place)
     }
 
-    override fun endCondition(name: String, place: String): Boolean
-    {
+    override fun endCondition(name: String, place: String): Boolean {
         return executeDone || err
     }
 

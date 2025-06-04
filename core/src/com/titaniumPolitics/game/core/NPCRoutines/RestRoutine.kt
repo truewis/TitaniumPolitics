@@ -6,10 +6,8 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 
 @Serializable
-class RestRoutine() : Routine()
-{
-    override fun newRoutineCondition(name: String, place: String): Routine?
-    {
+class RestRoutine() : Routine() {
+    override fun newRoutineCondition(name: String, place: String, routines: List<Routine>): Routine? {
 
         if (place != "home_$name")
             return MoveRoutine().apply {
@@ -18,13 +16,11 @@ class RestRoutine() : Routine()
         return null
     }
 
-    override fun execute(name: String, place: String): GameAction
-    {
+    override fun execute(name: String, place: String): GameAction {
         return pickAction(name, place)
     }
 
-    override fun endCondition(name: String, place: String): Boolean
-    {
+    override fun endCondition(name: String, place: String): Boolean {
         if (gState.characters[name]!!.health < ReadOnly.const("CriticalHealth")) return false
         if (variables["workPlace"] == null)
             return (gState.hour in 8..18)

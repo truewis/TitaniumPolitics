@@ -24,7 +24,7 @@ sealed class Routine() {
         this.gState = gState
     }
 
-    abstract fun newRoutineCondition(name: String, place: String): Routine?
+    abstract fun newRoutineCondition(name: String, place: String, routines: List<Routine>): Routine?
     abstract fun execute(name: String, place: String): GameAction
     abstract fun endCondition(name: String, place: String): Boolean
 

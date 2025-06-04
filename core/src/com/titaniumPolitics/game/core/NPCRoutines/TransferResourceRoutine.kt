@@ -7,23 +7,19 @@ import com.titaniumPolitics.game.core.gameActions.Wait
 import kotlinx.serialization.Serializable
 
 @Serializable
-class TransferResourceRoutine() : Routine()
-{
+class TransferResourceRoutine() : Routine() {
     var res = ""
     var source = ""
     var dest = ""
-    override fun newRoutineCondition(name: String, place: String): Routine?
-    {
+    override fun newRoutineCondition(name: String, place: String, routines: List<Routine>): Routine? {
 
-        if (place != source)
-        {
+        if (place != source) {
             return MoveRoutine().apply { variables["movePlace"] = source }
         }
         return null
     }
 
-    override fun execute(name: String, place: String): GameAction
-    {
+    override fun execute(name: String, place: String): GameAction {
         executeDone = true
         if (place == source)
             OfficialResourceTransfer(name, place).also {
@@ -35,8 +31,7 @@ class TransferResourceRoutine() : Routine()
             return Wait(name, place)
     }
 
-    override fun endCondition(name: String, place: String): Boolean
-    {
+    override fun endCondition(name: String, place: String): Boolean {
         return executeDone
         //TODO: when pathfinding fails, return true.
     }

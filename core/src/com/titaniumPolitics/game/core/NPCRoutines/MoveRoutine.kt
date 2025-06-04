@@ -5,33 +5,26 @@ import com.titaniumPolitics.game.core.gameActions.Move
 import kotlinx.serialization.Serializable
 
 @Serializable
-class MoveRoutine() : Routine()
-{
+class MoveRoutine() : Routine() {
     var nextStop = ""
-    override fun newRoutineCondition(name: String, place: String): Routine?
-    {
+    override fun newRoutineCondition(name: String, place: String, routines: List<Routine>): Routine? {
         return null
     }
 
-    override fun execute(name: String, place: String): GameAction
-    {
+    override fun execute(name: String, place: String): GameAction {
         return Move(name, place).also {
             it.placeTo = nextStop
         }
     }
 
-    override fun endCondition(name: String, place: String): Boolean
-    {
-        if (place == variables["movePlace"])
-        {
+    override fun endCondition(name: String, place: String): Boolean {
+        if (place == variables["movePlace"]) {
             executeDone = true
             return true
-        } else
-        {
+        } else {
             if (gState.places[place]!!.shortestPathAndTimeTo(variables["movePlace"]!!)?.also {
                     nextStop = it.first[1]
-                } == null)
-            {
+                } == null) {
 
                 println("There is no path from $place to ${variables["movePlace"]}! Terminating moveRoutine...")
                 executeDone = false

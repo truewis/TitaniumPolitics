@@ -11,10 +11,8 @@ import com.titaniumPolitics.game.core.gameActions.Wait
 import kotlinx.serialization.Serializable
 
 @Serializable
-class WorkRoutine() : Routine()
-{
-    override fun newRoutineCondition(name: String, place: String): Routine?
-    {
+class WorkRoutine() : Routine() {
+    override fun newRoutineCondition(name: String, place: String, routines: List<Routine>): Routine? {
         val character = gState.characters[name]!!
 
         //If an accident happened in the place of my control, investigate and clear it.
@@ -40,13 +38,11 @@ class WorkRoutine() : Routine()
                 )
             }.values.first()
             //----------------------------------------------------------------------------------Move to the Meeting
-            if (place != conf.place)
-            {
+            if (place != conf.place) {
                 return MoveRoutine().apply {
                     variables["movePlace"] = conf.place
                 }
-            } else
-            {
+            } else {
                 return AttendMeetingRoutine().apply {
                     actionDelegated = JoinMeeting(name, place).also {
                         it.meetingName = this@WorkRoutine.gState.ongoingMeetings.filter {
@@ -65,16 +61,13 @@ class WorkRoutine() : Routine()
             ) + eta..ReadOnly.constInt("MeetingStartTolerance") + eta
         }?.also { conf ->
             //----------------------------------------------------------------------------------Move to the Meeting
-            if (place != conf.place)
-            {
+            if (place != conf.place) {
                 return MoveRoutine().apply {
                     variables["movePlace"] = conf.place
                 }
-            } else
-            {
+            } else {
                 //if this character is the leader and there are enough members, start the Meeting.
-                if (gState.parties[conf.involvedParty]!!.leader == name && conf.scheduledCharacters.intersect(gState.places[place]!!.characters).size >= 2)
-                {
+                if (gState.parties[conf.involvedParty]!!.leader == name && conf.scheduledCharacters.intersect(gState.places[place]!!.characters).size >= 2) {
                     return AttendMeetingRoutine().apply {
                         actionDelegated = StartMeeting(name, place).apply {
                             meetingName =
@@ -85,8 +78,7 @@ class WorkRoutine() : Routine()
                     if (name == "ctrler" && conf.type == "divisionLeaderElection" && conf.scheduledCharacters.intersect(
                             gState.places[place]!!.characters
                         ).size >= 2
-                    )
-                    {
+                    ) {
                         return AttendMeetingRoutine().apply {
                             actionDelegated = StartMeeting(name, place).apply {
                                 meetingName =
@@ -100,8 +92,7 @@ class WorkRoutine() : Routine()
         //Corruption for power: If the character is the leader of a party, and a party member is short of resources, steal resources from workplace to party member's home
         //Only attempted once a day or once a work, whichever is shorter.
         if (gState.time - (intVariables["corruptionTimer"] ?: 0) > ReadOnly.constInt("CorruptionTau") / ReadOnly.dt)
-            if (gState.parties.values.any { it.leader == name })
-            {
+            if (gState.parties.values.any { it.leader == name }) {
                 val party = gState.parties.values.find { it.leader == name }!!
                 val rationThreshold =
                     ReadOnly.const("StealAmountMultiplier")//TODO: threshold change depending on member's trait and need
@@ -109,8 +100,7 @@ class WorkRoutine() : Routine()
                 val member = party.members.find {
                     gState.characters[it]!!.resources["ration"] <= rationThreshold * (gState.characters[it]!!.reliant) || gState.characters[it]!!.resources["water"] <= waterThreshold * (gState.characters[it]!!.reliant)
                 }
-                if (member != null)
-                {
+                if (member != null) {
                     //The resource to steal is what the member is short of, either ration or water.
                     val wantedResource =
                         if (character.resources["ration"] <= rationThreshold * (character.reliant)
@@ -187,8 +177,7 @@ class WorkRoutine() : Routine()
                             && gState.time - information.creationTime > ReadOnly.constInt("lengthOfDay") * 2
                 })
             //If we haven't tried this branch in the current routine
-                if (intVariables["try_prepare_info"] != 1)
-                {
+                if (intVariables["try_prepare_info"] != 1) {
                     intVariables["try_prepare_info"] = 1
                     return PrepareInfoRoutine()
                 }
@@ -197,13 +186,11 @@ class WorkRoutine() : Routine()
 
         //If there is nothing above to do, move to a place that is the home of one of the parties of the character.
         //If already at home, wait.
-        if (gState.parties.values.any { party -> party.home == place && party.members.contains(name) })
-        {
+        if (gState.parties.values.any { party -> party.home == place && party.members.contains(name) }) {
         } else
         //Move to a place that is the home of one of the parties of the character.
         {
-            try
-            {
+            try {
                 return MoveRoutine().apply {
                     gState = this@WorkRoutine.gState
                     variables["movePlace"] = gState.places.values.filter { place ->
@@ -214,8 +201,7 @@ class WorkRoutine() : Routine()
                         }
                     }.random().name
                 }
-            } catch (e: NoSuchElementException)
-            {
+            } catch (e: NoSuchElementException) {
                 println("Warning: No place to commute found for $name")
             }
 
@@ -224,19 +210,16 @@ class WorkRoutine() : Routine()
         return null
     }
 
-    override fun execute(name: String, place: String): GameAction
-    {
+    override fun execute(name: String, place: String): GameAction {
         //TODO: If there is nothing above to do, move to a place that is the home of one of the parties of the character.
         //If already at home, wait.
-        if (gState.parties.values.any { party -> party.home == place && party.members.contains(name) })
-        {
+        if (gState.parties.values.any { party -> party.home == place && party.members.contains(name) }) {
             return Wait(name, place)
         }
         return Wait(name, place)
     }
 
-    override fun endCondition(name: String, place: String): Boolean
-    {
+    override fun endCondition(name: String, place: String): Boolean {
         //If work hours are over, rest. Also, if the character is too hungry, thirsty, or sick, rest. (Which is checked earlier.)
         return (gState.hour !in 8..18)
     }

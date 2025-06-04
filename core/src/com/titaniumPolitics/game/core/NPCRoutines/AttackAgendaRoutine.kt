@@ -7,35 +7,28 @@ import com.titaniumPolitics.game.core.gameActions.Wait
 import kotlinx.serialization.Serializable
 
 @Serializable
-class AttackAgendaRoutine() : Routine(), IMeetingRoutine
-{
-    override fun newRoutineCondition(name: String, place: String): Routine?
-    {
+class AttackAgendaRoutine() : Routine(), IMeetingRoutine {
+    override fun newRoutineCondition(name: String, place: String, routines: List<Routine>): Routine? {
         return null
     }
 
     //TODO: Also check SupportAgendaRoutine.
-    override fun execute(name: String, place: String): GameAction
-    {
+    override fun execute(name: String, place: String): GameAction {
         executeDone = true
         val character = gState.characters[name]!!
         val conf =
             character.currentMeeting!!
-        if (conf.currentSpeaker != name)
-        {
+        if (conf.currentSpeaker != name) {
             return Wait(name, place)
         } else //If it is my turn to speak
         {
-            when (variables["agenda"])
-            {
+            when (variables["agenda"]) {
 
-                "proofOfWork" ->
-                {
+                "proofOfWork" -> {
                     //if there is any attacking information, add it.
                 }
 
-                "nomination", "praise" ->
-                {
+                "nomination", "praise" -> {
                     //if there is any attacking information, add it.
                     character.preparedInfoKeys.filter { key ->
                         gState.informations[key]!!.tgtCharacter == conf.agendas[intVariables["agendaIndex"]!!].subjectParams["character"]
@@ -52,8 +45,7 @@ class AttackAgendaRoutine() : Routine(), IMeetingRoutine
                     }
                 }
 
-                "denounce" ->
-                {
+                "denounce" -> {
                     //if there is any attacking information, add it.
                     character.preparedInfoKeys.filter { key ->
                         gState.informations[key]!!.tgtCharacter == conf.agendas[intVariables["agendaIndex"]!!].subjectParams["character"]
@@ -79,8 +71,7 @@ class AttackAgendaRoutine() : Routine(), IMeetingRoutine
     }
 
     //TODO: Also check SupportAgendaRoutine.
-    override fun endCondition(name: String, place: String): Boolean
-    {
+    override fun endCondition(name: String, place: String): Boolean {
         return executeDone
         //TODO: when pathfinding fails, return true.
     }

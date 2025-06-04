@@ -6,13 +6,10 @@ import com.titaniumPolitics.game.core.gameActions.InvestigateAccidentScene
 import kotlinx.serialization.Serializable
 
 @Serializable
-class InvestigateAndClearAccidentRoutine() : Routine()
-{
+class InvestigateAndClearAccidentRoutine() : Routine() {
     var investigated = false
-    override fun newRoutineCondition(name: String, place: String): Routine?
-    {
-        if (place != variables["place"]!!)
-        {
+    override fun newRoutineCondition(name: String, place: String, routines: List<Routine>): Routine? {
+        if (place != variables["place"]!!) {
             return MoveRoutine().also {
                 it.variables["movePlace"] = variables["place"]!!
             }
@@ -20,19 +17,16 @@ class InvestigateAndClearAccidentRoutine() : Routine()
         return null
     }
 
-    override fun execute(name: String, place: String): GameAction
-    {
+    override fun execute(name: String, place: String): GameAction {
         executeDone = true
-        if (!investigated)
-        {
+        if (!investigated) {
             investigated = true
             return InvestigateAccidentScene(name, place)
         }
         return ClearAccidentScene(name, place)
     }
 
-    override fun endCondition(name: String, place: String): Boolean
-    {
+    override fun endCondition(name: String, place: String): Boolean {
         return executeDone || !gState.places[place]!!.isAccidentScene
     }
 }

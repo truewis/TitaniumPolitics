@@ -9,10 +9,8 @@ import kotlinx.serialization.Serializable
 import kotlin.math.min
 
 @Serializable
-class StealRoutine() : Routine()
-{
-    fun findResource(name: String): Place?
-    {
+class StealRoutine() : Routine() {
+    fun findResource(name: String): Place? {
         return gState.places.values.filter {
             it.responsibleDivision != "" && gState.parties[it.responsibleDivision]!!.members.contains(
                 name
@@ -20,12 +18,10 @@ class StealRoutine() : Routine()
         }.maxByOrNull { it.resources[variables["stealResource"]!!] }
     }
 
-    override fun newRoutineCondition(name: String, place: String): Routine?
-    {
+    override fun newRoutineCondition(name: String, place: String, routines: List<Routine>): Routine? {
 
         val resplace = findResource(name)?.name ?: return null
-        if (place != resplace)
-        {
+        if (place != resplace) {
             return MoveRoutine().apply {
                 variables["movePlace"] = resplace
             }//Add a move routine with higher priority.
@@ -33,8 +29,7 @@ class StealRoutine() : Routine()
         return null
     }
 
-    override fun execute(name: String, place: String): GameAction
-    {
+    override fun execute(name: String, place: String): GameAction {
         executeDone = true
         val resplace = gState.places[place]!!
         val character = gState.characters[name]!!
@@ -51,8 +46,7 @@ class StealRoutine() : Routine()
 
     }
 
-    override fun endCondition(name: String, place: String): Boolean
-    {
+    override fun endCondition(name: String, place: String): Boolean {
         return executeDone || findResource(name) == null
     }
 }

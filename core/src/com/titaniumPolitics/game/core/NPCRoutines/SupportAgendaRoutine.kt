@@ -10,30 +10,24 @@ import com.titaniumPolitics.game.core.gameActions.Wait
 import kotlinx.serialization.Serializable
 
 @Serializable
-class SupportAgendaRoutine() : Routine(), IMeetingRoutine
-{
-    override fun newRoutineCondition(name: String, place: String): Routine?
-    {
+class SupportAgendaRoutine() : Routine(), IMeetingRoutine {
+    override fun newRoutineCondition(name: String, place: String, routines: List<Routine>): Routine? {
         return null
     }
 
     //TODO: Also check AttackAgendaRoutine.
-    override fun execute(name: String, place: String): GameAction
-    {
+    override fun execute(name: String, place: String): GameAction {
         executeDone = true
         val character = gState.characters[name]!!
         val conf =
             character.currentMeeting!!
-        if (conf.currentSpeaker != name)
-        {
+        if (conf.currentSpeaker != name) {
             return Wait(name, place)
         } else //If it is my turn to speak
         {
-            when (conf.agendas[intVariables["agendaIndex"]!!].type)
-            {
+            when (conf.agendas[intVariables["agendaIndex"]!!].type) {
 
-                AgendaType.PROOF_OF_WORK ->
-                {
+                AgendaType.PROOF_OF_WORK -> {
                     //if there is any supporting information, add it.
                     character.preparedInfoKeys.filter { key ->
                         gState.informations[key]!!.type == InformationType.ACTION
@@ -75,8 +69,7 @@ class SupportAgendaRoutine() : Routine(), IMeetingRoutine
 
                 }
 
-                AgendaType.NOMINATE, AgendaType.PRAISE ->
-                {
+                AgendaType.NOMINATE, AgendaType.PRAISE -> {
                     //if there is any supporting information, add it.
                     character.preparedInfoKeys.filter { key ->
                         gState.informations[key]!!.tgtCharacter == conf.agendas[intVariables["agendaIndex"]!!].subjectParams["character"]
@@ -93,8 +86,7 @@ class SupportAgendaRoutine() : Routine(), IMeetingRoutine
                     }
                 }
 
-                AgendaType.DENOUNCE, AgendaType.FIRE_MANAGER ->
-                {
+                AgendaType.DENOUNCE, AgendaType.FIRE_MANAGER -> {
                     //if there is any supporting information, add it.
                     character.preparedInfoKeys.filter { key ->
                         gState.informations[key]!!.tgtCharacter == conf.agendas[intVariables["agendaIndex"]!!].subjectParams["character"]
@@ -127,8 +119,7 @@ class SupportAgendaRoutine() : Routine(), IMeetingRoutine
     }
 
     //TODO: Also check AttackAgendaRoutine.
-    override fun endCondition(name: String, place: String): Boolean
-    {
+    override fun endCondition(name: String, place: String): Boolean {
         return executeDone
         //TODO: when pathfinding fails, return true.
     }

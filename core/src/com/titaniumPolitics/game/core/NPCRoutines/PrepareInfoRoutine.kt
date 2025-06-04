@@ -6,14 +6,11 @@ import com.titaniumPolitics.game.core.gameActions.Wait
 import kotlinx.serialization.Serializable
 
 @Serializable
-class PrepareInfoRoutine() : Routine()
-{
+class PrepareInfoRoutine() : Routine() {
     var err = false
 
-    override fun newRoutineCondition(name: String, place: String): Routine?
-    {
-        if (place != "home_${name}")
-        {
+    override fun newRoutineCondition(name: String, place: String, routines: List<Routine>): Routine? {
+        if (place != "home_${name}") {
             return MoveRoutine().apply {
                 variables["movePlace"] = "home_${name}"
             }//Add a move routine with higher priority.
@@ -21,10 +18,8 @@ class PrepareInfoRoutine() : Routine()
         return null
     }
 
-    override fun execute(name: String, place: String): GameAction
-    {
-        if (place == "home_${name}")
-        {
+    override fun execute(name: String, place: String): GameAction {
+        if (place == "home_${name}") {
             executeDone = true
             return PrepareInfo(name, place).also {
                 it.injectParent(gState)
@@ -36,8 +31,7 @@ class PrepareInfoRoutine() : Routine()
         return Wait(name, place)
     }
 
-    override fun endCondition(name: String, place: String): Boolean
-    {
+    override fun endCondition(name: String, place: String): Boolean {
         return executeDone || err
     }
 
