@@ -13,13 +13,11 @@ import kotlinx.serialization.json.jsonPrimitive
 import ktx.scene2d.*
 import ktx.scene2d.Scene2DSkin.defaultSkin
 
-class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable
-{
+class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable {
     private val docList = HorizontalGroup()
     val options: ExamineUI
 
-    init
-    {
+    init {
 
 
         options = ExamineUI(this@AvailableActionsUI.gameState)
@@ -43,8 +41,7 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable
     }
 
     //TODO: also make changes to NewAgendaUI.kt.
-    fun refreshList()
-    {
+    fun refreshList() {
         docList.clear()
         GameEngine.availableActions(
             gameState,
@@ -52,8 +49,7 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable
             gameState.playerName
         ).forEach { tobj ->
             //We do not create buttons for these actions, as they are accessible through the main UI.
-            if (listOf("Move", "Talk").contains(tobj))
-            {
+            if (listOf("Move", "Talk").contains(tobj)) {
                 return@forEach
             }
             val t = scene2d.button {
@@ -61,21 +57,17 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable
                 image("Help") {
                     it.size(100f)
 
-                    when (tobj)
-                    {
+                    when (tobj) {
 
 
-                        "Examine" ->
-                        {
+                        "Examine" -> {
                             this.setDrawable(defaultSkin, "SearchGrunge")
-                            this@button.addListener(object : ClickListener()
-                            {
+                            this@button.addListener(object : ClickListener() {
                                 override fun clicked(
                                     event: com.badlogic.gdx.scenes.scene2d.InputEvent?,
                                     x: Float,
                                     y: Float
-                                )
-                                {
+                                ) {
                                     this@AvailableActionsUI.options.isVisible =
                                         !this@AvailableActionsUI.options.isVisible
                                 }
@@ -83,17 +75,14 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable
                             )
                         }
 
-                        "Wait" ->
-                        {
+                        "Wait" -> {
                             this.setDrawable(defaultSkin, "DotsGrunge")
-                            this@button.addListener(object : ClickListener()
-                            {
+                            this@button.addListener(object : ClickListener() {
                                 override fun clicked(
                                     event: com.badlogic.gdx.scenes.scene2d.InputEvent?,
                                     x: Float,
                                     y: Float
-                                )
-                                {
+                                ) {
                                     val sound =
                                         Gdx.audio.newSound(Gdx.files.internal(ReadOnly.actionJson["Wait"]!!.jsonObject["sound"]!!.jsonPrimitive.content))
                                     sound.play()
@@ -109,17 +98,14 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable
                             )
                         }
 
-                        "Eat" ->
-                        {
+                        "Eat" -> {
                             this.setDrawable(defaultSkin, "AppleGrunge")
-                            this@button.addListener(object : ClickListener()
-                            {
+                            this@button.addListener(object : ClickListener() {
                                 override fun clicked(
                                     event: com.badlogic.gdx.scenes.scene2d.InputEvent?,
                                     x: Float,
                                     y: Float
-                                )
-                                {
+                                ) {
                                     val sound =
                                         Gdx.audio.newSound(Gdx.files.internal(ReadOnly.actionJson["Eat"]!!.jsonObject["sound"]!!.jsonPrimitive.content))
                                     sound.play()
@@ -134,17 +120,14 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable
                             )
                         }
 
-                        "Sleep" ->
-                        {
+                        "Sleep" -> {
                             this.setDrawable(defaultSkin, "icon_activity_117")
-                            this@button.addListener(object : ClickListener()
-                            {
+                            this@button.addListener(object : ClickListener() {
                                 override fun clicked(
                                     event: com.badlogic.gdx.scenes.scene2d.InputEvent?,
                                     x: Float,
                                     y: Float
-                                )
-                                {
+                                ) {
                                     GameEngine.acquireCallback(
                                         Sleep(
                                             this@AvailableActionsUI.gameState.playerName,
@@ -155,17 +138,14 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable
                             })
                         }
 
-                        "Repair" ->
-                        {
+                        "Repair" -> {
                             this.setDrawable(defaultSkin, "CogGrunge")
-                            this@button.addListener(object : ClickListener()
-                            {
+                            this@button.addListener(object : ClickListener() {
                                 override fun clicked(
                                     event: com.badlogic.gdx.scenes.scene2d.InputEvent?,
                                     x: Float,
                                     y: Float
-                                )
-                                {
+                                ) {
                                     GameEngine.acquireCallback(
                                         Repair(
                                             this@AvailableActionsUI.gameState.playerName,
@@ -176,17 +156,14 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable
                             })
                         }
 
-                        "UnofficialResourceTransfer" ->
-                        {
+                        "UnofficialResourceTransfer" -> {
                             this.setDrawable(defaultSkin, "TilesGrunge")
-                            this@button.addListener(object : ClickListener()
-                            {
+                            this@button.addListener(object : ClickListener() {
                                 override fun clicked(
                                     event: com.badlogic.gdx.scenes.scene2d.InputEvent?,
                                     x: Float,
                                     y: Float
-                                )
-                                {
+                                ) {
                                     ResourceTransferUI.primary.isVisible = true
                                     ResourceTransferUI.primary.refresh(
                                         "unofficial",
@@ -197,17 +174,14 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable
                             })
                         }
 
-                        "OfficialResourceTransfer" ->
-                        {
+                        "OfficialResourceTransfer" -> {
                             this.setDrawable(defaultSkin, "TilesGrunge")
-                            this@button.addListener(object : ClickListener()
-                            {
+                            this@button.addListener(object : ClickListener() {
                                 override fun clicked(
                                     event: com.badlogic.gdx.scenes.scene2d.InputEvent?,
                                     x: Float,
                                     y: Float
-                                )
-                                {
+                                ) {
                                     ResourceTransferUI.primary.isVisible = true
                                     ResourceTransferUI.primary.refresh(
                                         "official",
@@ -219,17 +193,14 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable
                         }
 
 
-                        "AddInfo" ->
-                        {
+                        "AddInfo" -> {
                             this.setDrawable(defaultSkin, "TilesGrunge")
-                            this@button.addListener(object : ClickListener()
-                            {
+                            this@button.addListener(object : ClickListener() {
                                 override fun clicked(
                                     event: com.badlogic.gdx.scenes.scene2d.InputEvent?,
                                     x: Float,
                                     y: Float
-                                )
-                                {
+                                ) {
                                     //TODO
 //                                    AddInfoUI.instance.isVisible = true
 //                                    AddInfoUI.instance.refresh(
@@ -241,17 +212,14 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable
                             })
                         }
 
-                        "InvestigateAccidentScene" ->
-                        {
+                        "InvestigateAccidentScene" -> {
                             this.setDrawable(defaultSkin, "TilesGrunge")
-                            this@button.addListener(object : ClickListener()
-                            {
+                            this@button.addListener(object : ClickListener() {
                                 override fun clicked(
                                     event: com.badlogic.gdx.scenes.scene2d.InputEvent?,
                                     x: Float,
                                     y: Float
-                                )
-                                {
+                                ) {
                                     GameEngine.acquireCallback(
                                         InvestigateAccidentScene(
                                             this@AvailableActionsUI.gameState.playerName,
@@ -262,17 +230,14 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable
                             })
                         }
 
-                        "ClearAccidentScene" ->
-                        {
+                        "ClearAccidentScene" -> {
                             this.setDrawable(defaultSkin, "TilesGrunge")
-                            this@button.addListener(object : ClickListener()
-                            {
+                            this@button.addListener(object : ClickListener() {
                                 override fun clicked(
                                     event: com.badlogic.gdx.scenes.scene2d.InputEvent?,
                                     x: Float,
                                     y: Float
-                                )
-                                {
+                                ) {
                                     GameEngine.acquireCallback(
                                         ClearAccidentScene(
                                             this@AvailableActionsUI.gameState.playerName,
@@ -283,17 +248,14 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable
                             })
                         }
 
-                        "EndSpeech" ->
-                        {
+                        "EndSpeech" -> {
                             this.setDrawable(defaultSkin, "TilesGrunge")
-                            this@button.addListener(object : ClickListener()
-                            {
+                            this@button.addListener(object : ClickListener() {
                                 override fun clicked(
                                     event: com.badlogic.gdx.scenes.scene2d.InputEvent?,
                                     x: Float,
                                     y: Float
-                                )
-                                {
+                                ) {
                                     //TODO
 //                                    AddInfoUI.instance.isVisible = true
 //                                    AddInfoUI.instance.refresh(
@@ -305,17 +267,14 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable
                             })
                         }
 
-                        "Intercept" ->
-                        {
+                        "Intercept" -> {
                             this.setDrawable(defaultSkin, "TilesGrunge")
-                            this@button.addListener(object : ClickListener()
-                            {
+                            this@button.addListener(object : ClickListener() {
                                 override fun clicked(
                                     event: com.badlogic.gdx.scenes.scene2d.InputEvent?,
                                     x: Float,
                                     y: Float
-                                )
-                                {
+                                ) {
                                     GameEngine.acquireCallback(
                                         Intercept(
                                             this@AvailableActionsUI.gameState.playerName,
@@ -326,17 +285,14 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable
                             })
                         }
 
-                        "Resign" ->
-                        {
+                        "Resign" -> {
                             this.setDrawable(defaultSkin, "TilesGrunge")
-                            this@button.addListener(object : ClickListener()
-                            {
+                            this@button.addListener(object : ClickListener() {
                                 override fun clicked(
                                     event: com.badlogic.gdx.scenes.scene2d.InputEvent?,
                                     x: Float,
                                     y: Float
-                                )
-                                {
+                                ) {
                                     GameEngine.acquireCallback(
                                         Resign(
                                             this@AvailableActionsUI.gameState.playerName,
@@ -347,17 +303,14 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable
                             })
                         }
 
-                        "Salary" ->
-                        {
+                        "Salary" -> {
                             this.setDrawable(defaultSkin, "TilesGrunge")
-                            this@button.addListener(object : ClickListener()
-                            {
+                            this@button.addListener(object : ClickListener() {
                                 override fun clicked(
                                     event: com.badlogic.gdx.scenes.scene2d.InputEvent?,
                                     x: Float,
                                     y: Float
-                                )
-                                {
+                                ) {
                                     GameEngine.acquireCallback(
                                         Salary(
                                             this@AvailableActionsUI.gameState.playerName,
@@ -368,17 +321,14 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable
                             })
                         }
 
-                        "PrepareInfo" ->
-                        {
+                        "PrepareInfo" -> {
                             this.setDrawable(defaultSkin, "TilesGrunge")
-                            this@button.addListener(object : ClickListener()
-                            {
+                            this@button.addListener(object : ClickListener() {
                                 override fun clicked(
                                     event: com.badlogic.gdx.scenes.scene2d.InputEvent?,
                                     x: Float,
                                     y: Float
-                                )
-                                {
+                                ) {
                                     //TODO
 //                                    AddInfoUI.instance.isVisible = true
 //                                    AddInfoUI.instance.refresh(
@@ -391,17 +341,14 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable
                         }
 
 
-                        "JoinMeeting" ->
-                        {
+                        "JoinMeeting" -> {
                             this.setDrawable(defaultSkin, "ChatGrunge")
-                            this@button.addListener(object : ClickListener()
-                            {
+                            this@button.addListener(object : ClickListener() {
                                 override fun clicked(
                                     event: com.badlogic.gdx.scenes.scene2d.InputEvent?,
                                     x: Float,
                                     y: Float
-                                )
-                                {
+                                ) {
                                     GameEngine.acquireCallback(
                                         JoinMeeting(
                                             this@AvailableActionsUI.gameState.playerName,
@@ -416,35 +363,51 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable
                             })
                         }
 
-
-                        "NewAgenda" ->
-                        {
-                            this.setDrawable(defaultSkin, "PlusGrunge")
-                            this@button.addListener(object : ClickListener()
-                            {
+                        "StartMeeting" -> {
+                            this.setDrawable(defaultSkin, "ChatGrunge")
+                            this@button.addListener(object : ClickListener() {
                                 override fun clicked(
                                     event: com.badlogic.gdx.scenes.scene2d.InputEvent?,
                                     x: Float,
                                     y: Float
-                                )
-                                {
+                                ) {
+                                    GameEngine.acquireCallback(
+                                        StartMeeting(
+                                            this@AvailableActionsUI.gameState.playerName,
+                                            this@AvailableActionsUI.gameState.player.place.name
+                                        ).also {
+                                            it.meetingName = this@AvailableActionsUI.gameState.ongoingMeetings.filter {
+                                                it.value.scheduledCharacters.contains(this@AvailableActionsUI.gameState.playerName) && it.value.place == this@AvailableActionsUI.gameState.player.place.name
+                                            }.keys.first()
+                                        }
+                                    )
+                                }
+                            })
+                        }
+
+
+                        "NewAgenda" -> {
+                            this.setDrawable(defaultSkin, "PlusGrunge")
+                            this@button.addListener(object : ClickListener() {
+                                override fun clicked(
+                                    event: com.badlogic.gdx.scenes.scene2d.InputEvent?,
+                                    x: Float,
+                                    y: Float
+                                ) {
                                     NewAgendaUI.primary.isVisible = true
                                     NewAgendaUI.primary.refresh(this@AvailableActionsUI.gameState)
                                 }
                             })
                         }
 
-                        "LeaveMeeting" ->
-                        {
+                        "LeaveMeeting" -> {
                             this.setDrawable(defaultSkin, "XGrunge")
-                            this@button.addListener(object : ClickListener()
-                            {
+                            this@button.addListener(object : ClickListener() {
                                 override fun clicked(
                                     event: com.badlogic.gdx.scenes.scene2d.InputEvent?,
                                     x: Float,
                                     y: Float
-                                )
-                                {
+                                ) {
                                     GameEngine.acquireCallback(
                                         LeaveMeeting(
                                             this@AvailableActionsUI.gameState.playerName,
@@ -456,8 +419,7 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable
                             })
                         }
                         //TODO: also make changes to NewAgendaUI.kt, ActionSelectUI.kt
-                        else ->
-                        {
+                        else -> {
                             this.setDrawable(defaultSkin, "Help")
 
                         }
@@ -473,15 +435,12 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable
 
     }
 
-    companion object
-    {
+    companion object {
         var actionCallbackIntercept: ((GameAction) -> Unit)? = null
 
         //Singleton
-        fun gameActionCallback(action: GameAction)
-        {
-            if (actionCallbackIntercept != null)
-            {
+        fun gameActionCallback(action: GameAction) {
+            if (actionCallbackIntercept != null) {
                 actionCallbackIntercept!!(action)
                 return
             }

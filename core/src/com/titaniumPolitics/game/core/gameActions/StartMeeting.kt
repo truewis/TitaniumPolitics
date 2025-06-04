@@ -5,11 +5,9 @@ import com.titaniumPolitics.game.core.ReadOnly
 import kotlinx.serialization.Serializable
 
 @Serializable
-class StartMeeting(override val sbjCharacter: String, override val tgtPlace: String) : GameAction()
-{
+class StartMeeting(override val sbjCharacter: String, override val tgtPlace: String) : GameAction() {
     var meetingName = ""
-    override fun chooseParams()
-    {
+    override fun chooseParams() {
         meetingName =
             GameEngine.acquire(parent.scheduledMeetings.filter {
                 it.value.time - parent.time in -ReadOnly.constInt("MeetingStartTolerance")..ReadOnly.constInt(
@@ -21,8 +19,7 @@ class StartMeeting(override val sbjCharacter: String, override val tgtPlace: Str
     }
 
     //Also refer to Talk.execute()
-    override fun execute()
-    {
+    override fun execute() {
         parent.addOngoingMeeting(parent.scheduledMeetings[meetingName]!!)
         parent.removeScheduledMeeting(meetingName)
         parent.ongoingMeetings[meetingName]!!.currentCharacters.add(sbjCharacter)
@@ -40,8 +37,7 @@ class StartMeeting(override val sbjCharacter: String, override val tgtPlace: Str
 
     }
 
-    override fun isValid(): Boolean
-    {
+    override fun isValid(): Boolean {
         val targetMeeting =
             parent.scheduledMeetings.filter {
                 it.value.time - parent.time in -ReadOnly.constInt("MeetingStartTolerance")..ReadOnly.constInt(
@@ -53,6 +49,8 @@ class StartMeeting(override val sbjCharacter: String, override val tgtPlace: Str
         return if (targetMeeting == null) false else
         //Check if there are at least 2 characters to join.
             parent.scheduledMeetings[targetMeeting]!!.scheduledCharacters.intersect(parent.places[tgtPlace]!!.characters).size >= 2
+
+        //NOTICE: The subject character need not be the leader of the party. This way meetings are more flexible and can be initiated by any character who is scheduled to attend the meeting.
     }
 
 }
