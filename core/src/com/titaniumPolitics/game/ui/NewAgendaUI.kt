@@ -35,6 +35,10 @@ class NewAgendaUI(gameState: GameState, override var actionCallback: (GameAction
 
     private lateinit var agendaSelectBox: Table
     private val praiseTable = scene2d.table {
+        label(ReadOnly.prop("praise")) {
+            setFontScale(3f)
+        }
+        row()
         label("Target:", "trnsprtConsole") { setFontScale(3f) }
         //Select character to perform the request.
         selectBox<String> {
@@ -50,6 +54,10 @@ class NewAgendaUI(gameState: GameState, override var actionCallback: (GameAction
         }.inCell.size(300f, 100f)
     }
     private val denounceTable = scene2d.table {
+        label(ReadOnly.prop("denounce")) {
+            setFontScale(3f)
+        }
+        row()
         label("Target:", "trnsprtConsole") { setFontScale(3f) }
         //Select character to perform the request.
         selectBox<String> {
@@ -65,6 +73,10 @@ class NewAgendaUI(gameState: GameState, override var actionCallback: (GameAction
         }.inCell.size(300f, 100f)
     }
     private val praisePartyTable = scene2d.table {
+        label(ReadOnly.prop("praiseParty")) {
+            setFontScale(3f)
+        }
+        row()
         label("Target:", "trnsprtConsole") { setFontScale(3f) }
         //Select character to perform the request.
         selectBox<String> {
@@ -80,6 +92,10 @@ class NewAgendaUI(gameState: GameState, override var actionCallback: (GameAction
         }.inCell.size(300f, 100f)
     }
     private val denouncePartyTable = scene2d.table {
+        label(ReadOnly.prop("denounceParty")) {
+            setFontScale(3f)
+        }
+        row()
         label("Target:", "trnsprtConsole") { setFontScale(3f) }
         //Select character to perform the request.
         selectBox<String> {
@@ -100,6 +116,10 @@ class NewAgendaUI(gameState: GameState, override var actionCallback: (GameAction
     }
 
     private val requestTable = scene2d.table {
+        label(ReadOnly.prop("request")) {
+            setFontScale(3f)
+        }
+        row()
         button {
             it.colspan(2).growX().size(300f, 100f)
             val placeLabel = label("Request Place:", "trnsprtConsole") { setFontScale(3f) }
