@@ -14,19 +14,17 @@ import ktx.scene2d.Scene2DSkin.defaultSkin
 import ktx.scene2d.scene2d
 import ktx.scene2d.*
 
-class AlertUI(var gameState: GameState) : Table(defaultSkin)
-{
+class AlertUI(var gameState: GameState) : Table(defaultSkin) {
     private val docList = VerticalGroup()
     private var newInformation = hashSetOf<String>()
 
-    init
-    {
+    init {
         instance = this
         val docScr = ScrollPane(docList)
         docList.grow()
 
         add(docScr).grow()
-        gameState.onAddInfo += {it->newInformation.add(it.name)}
+        gameState.onAddInfo += { it -> newInformation.add(it.name) }
         gameState.updateUI += { _ -> displayAlerts(); }
         gameState.onPlayerAction += {
             //Remove all alerts.
@@ -36,8 +34,7 @@ class AlertUI(var gameState: GameState) : Table(defaultSkin)
         }
     }
 
-    fun addAlert(type: String, vararg params: String, action: () -> Unit = {})
-    {
+    fun addAlert(type: String, vararg params: String, action: () -> Unit = {}) {
         if (type in listOf("vital", "hunger", "thirst", "will") && docList.children.none {
                 (it as AlertPanelUI).type == type
             })//Only one alert of each type is visible at a time.
@@ -48,25 +45,21 @@ class AlertUI(var gameState: GameState) : Table(defaultSkin)
             isVisible = true
     }
 
-    fun displayAlerts()
-    {
+    fun displayAlerts() {
 
         newInformation.forEach {
             //Decide whether to show the alert based on the type of information.
             val info = gameState.informations[it]!!
             if (info.tgtCharacter.contains("Anon")) return@forEach //Never show information about anonymous characters.
-            when (info.type)
-            {
-                InformationType.CASUALTY ->
-                {
+            when (info.type) {
+                InformationType.CASUALTY -> {
                     addAlert("accident") {
-                        InformationViewUI.instance.refresh(gameState, "creationTime")
+                        InformationViewUI.instance.refresh("creationTime")
                         InformationViewUI.instance.isVisible = true
                     }
                 }
 
-                InformationType.ACTION ->
-                {
+                InformationType.ACTION -> {
                     if (info.tgtCharacter == gameState.playerName//Ignore my actions, they are not surprising.
                         || setOf(
 
@@ -84,11 +77,10 @@ class AlertUI(var gameState: GameState) : Table(defaultSkin)
                                 ReadOnly.prop((info.action as Move).placeTo)
                             )
                         ) {
-                            InformationViewUI.instance.refresh(gameState, "creationTime")
+                            InformationViewUI.instance.refresh("creationTime")
                             InformationViewUI.instance.isVisible = true
                         }
-                    } else
-                    {
+                    } else {
                         //TODO: Anything else are hidden for now. Display action alerts that are important for the player.
 //                        addAlert("newInfo") {
 //                            InformationViewUI.instance.refresh(gameState, "creationTime")
@@ -98,16 +90,14 @@ class AlertUI(var gameState: GameState) : Table(defaultSkin)
 
                 }
 
-                InformationType.APPARATUS_DURABILITY ->
-                {
+                InformationType.APPARATUS_DURABILITY -> {
                     addAlert("apparatus") {
                         ApparatusInfoUI.instance.refresh(info)
                         ApparatusInfoUI.instance.isVisible = true
                     }
                 }
 
-                else ->
-                {
+                else -> {
                     //Do nothing.
                 }
             }
@@ -127,8 +117,7 @@ class AlertUI(var gameState: GameState) : Table(defaultSkin)
 
     }
 
-    companion object
-    {
+    companion object {
         lateinit var instance: AlertUI
     }
 

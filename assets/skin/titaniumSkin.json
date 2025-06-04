@@ -349,8 +349,8 @@ com.badlogic.gdx.scenes.scene2d.ui.Button$ButtonStyle: {
 }
 com.badlogic.gdx.scenes.scene2d.ui.CheckBox$CheckBoxStyle: {
 	default: {
-		checkboxOn: ButtonRegularBgPressed
-		checkboxOff: ButtonRegularBgNormal
+		checkboxOn: Star
+		checkboxOff: StarOutline
 		checkboxOnDisabled: ButtonRegularBgDisabled
 		checkboxOffDisabled: ButtonRegularBgDisabled
 		font: fixedsys

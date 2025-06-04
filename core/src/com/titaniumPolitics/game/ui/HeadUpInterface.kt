@@ -9,14 +9,12 @@ import com.titaniumPolitics.game.ui.map.PlaceSelectionUI
 import com.titaniumPolitics.game.ui.widget.CharacterSelectUI
 import ktx.scene2d.*
 
-class HeadUpInterface(val gameState: GameState) : Table(Scene2DSkin.defaultSkin), KTable
-{
+class HeadUpInterface(val gameState: GameState) : Table(Scene2DSkin.defaultSkin), KTable {
     val mapUI = MapUI(gameState = this@HeadUpInterface.gameState)
     val calendarUI = CalendarUI(gameState)
     val politiciansInfoUI = PoliticiansInfoUI(gameState)
 
-    init
-    {
+    init {
         instance = this
         addActor(CharacterInteractionWindowUI(gameState = this@HeadUpInterface.gameState))
         stack { cell ->
@@ -29,7 +27,7 @@ class HeadUpInterface(val gameState: GameState) : Table(Scene2DSkin.defaultSkin)
             add(this@HeadUpInterface.mapUI)
             add(this@HeadUpInterface.calendarUI)
             add(this@HeadUpInterface.politiciansInfoUI)
-            add(InformationViewUI())
+            add(InformationViewUI(this@HeadUpInterface.gameState))
             add(ResourceInfoUI())
             add(HumanResourceInfoUI())
             add(ApparatusInfoUI())
@@ -76,8 +74,7 @@ class HeadUpInterface(val gameState: GameState) : Table(Scene2DSkin.defaultSkin)
 
     }
 
-    companion object
-    {
+    companion object {
         //Singleton
         lateinit var instance: HeadUpInterface
     }
