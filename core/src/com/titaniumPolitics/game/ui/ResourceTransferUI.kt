@@ -11,6 +11,7 @@ import com.titaniumPolitics.game.core.gameActions.GameAction
 import com.titaniumPolitics.game.core.gameActions.OfficialResourceTransfer
 import com.titaniumPolitics.game.core.gameActions.UnofficialResourceTransfer
 import com.titaniumPolitics.game.ui.map.PlaceSelectionUI
+import com.titaniumPolitics.game.ui.widget.PlaceSelectButton
 
 import ktx.scene2d.*
 
@@ -45,23 +46,11 @@ class ResourceTransferUI(gameState: GameState, override var actionCallback: (Gam
             table {
                 this@ResourceTransferUI.modeLabel = label("Transfer Mode", "trnsprtConsole") { setFontScale(3f) }
                 row()
+                label("Transfer resources to"){setFontScale(3f)}
                 //Select place to transfer resources to.
-                this@ResourceTransferUI.placeButton = button {
-                    it.colspan(2).growX()
-                    val placeLabel = label("Transfer Resource To:", "trnsprtConsole") { setFontScale(3f) }
-                    addListener(object : ClickListener()
-                    {
-                        override fun clicked(event: com.badlogic.gdx.scenes.scene2d.InputEvent?, x: Float, y: Float)
-                        {
-                            PlaceSelectionUI.instance.isVisible = true
-                            PlaceSelectionUI.instance.refresh()
-                            PlaceSelectionUI.instance.selectedPlaceCallback = {
-                                placeLabel.setText("Transfer Resource To: $it")
-                                this@ResourceTransferUI.toWhere = it
-                            }
-                        }
-                    })
-                }
+                this@ResourceTransferUI.placeButton = PlaceSelectButton(skin, { this@ResourceTransferUI.toWhere =it})
+                add(this@ResourceTransferUI.placeButton).growX()
+
                 row()
                 add(currentResourcePane)
                 add(targetResourcePane)

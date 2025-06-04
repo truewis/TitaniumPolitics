@@ -1,17 +1,29 @@
-package com.titaniumPolitics.game.ui
+package com.titaniumPolitics.game.ui.widget
 
 import com.badlogic.gdx.scenes.scene2d.InputEvent
-import com.badlogic.gdx.scenes.scene2d.ui.*
+import com.badlogic.gdx.scenes.scene2d.ui.Container
+import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane
+import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.badlogic.gdx.utils.Align
-import com.titaniumPolitics.game.core.GameEngine
 import com.titaniumPolitics.game.core.GameState
-import com.titaniumPolitics.game.core.gameActions.*
-import ktx.scene2d.*
-import ktx.scene2d.Scene2DSkin.defaultSkin
+import com.titaniumPolitics.game.core.gameActions.GameAction
+import com.titaniumPolitics.game.ui.ActionTooltipUI
+import com.titaniumPolitics.game.ui.ActionUI
+import com.titaniumPolitics.game.ui.ExamineUI
+import com.titaniumPolitics.game.ui.NewAgendaUI
+import com.titaniumPolitics.game.ui.ResourceTransferUI
+import com.titaniumPolitics.game.ui.WindowUI
+import ktx.scene2d.KTable
+import ktx.scene2d.Scene2DSkin
+import ktx.scene2d.button
+import ktx.scene2d.buttonGroup
+import ktx.scene2d.container
+import ktx.scene2d.image
+import ktx.scene2d.scene2d
 
 //Select action for e.g. request in this dialogue.
-class ActionSelectUI(var gameState: GameState, override var actionCallback: (GameAction) -> Unit) : Table(defaultSkin),
+class ActionSelectUI(var gameState: GameState, override var actionCallback: (GameAction) -> Unit) : Table(Scene2DSkin.defaultSkin),
     KTable, ActionUI
 {
     private val docList = scene2d.buttonGroup(0, 1)
@@ -83,12 +95,12 @@ class ActionSelectUI(var gameState: GameState, override var actionCallback: (Gam
 
                             "Repair" ->
                             {
-                                this.setDrawable(defaultSkin, "CogGrunge")
+                                this.setDrawable(Scene2DSkin.defaultSkin, "CogGrunge")
                             }
 
                             "UnofficialResourceTransfer" ->
                             {
-                                this.setDrawable(defaultSkin, "TilesGrunge")
+                                this.setDrawable(Scene2DSkin.defaultSkin, "TilesGrunge")
                                 this@button.addListener(object : ClickListener()
                                 {
                                     override fun clicked(
@@ -112,7 +124,7 @@ class ActionSelectUI(var gameState: GameState, override var actionCallback: (Gam
 
                             "OfficialResourceTransfer" ->
                             {
-                                this.setDrawable(defaultSkin, "TilesGrunge")
+                                this.setDrawable(Scene2DSkin.defaultSkin, "TilesGrunge")
                                 this@button.addListener(object : ClickListener()
                                 {
                                     override fun clicked(
@@ -157,7 +169,7 @@ class ActionSelectUI(var gameState: GameState, override var actionCallback: (Gam
                             //TODO: also make changes to NewAgendaUI.kt.
                             else ->
                             {
-                                this.setDrawable(defaultSkin, "Help")
+                                this.setDrawable(Scene2DSkin.defaultSkin, "Help")
 
                             }
                         }

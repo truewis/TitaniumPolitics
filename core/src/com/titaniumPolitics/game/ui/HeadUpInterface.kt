@@ -6,6 +6,7 @@ import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.core.gameActions.GameAction
 import com.titaniumPolitics.game.ui.map.MapUI
 import com.titaniumPolitics.game.ui.map.PlaceSelectionUI
+import com.titaniumPolitics.game.ui.widget.CharacterSelectUI
 import ktx.scene2d.*
 
 class HeadUpInterface(val gameState: GameState) : Table(Scene2DSkin.defaultSkin), KTable
@@ -41,6 +42,7 @@ class HeadUpInterface(val gameState: GameState) : Table(Scene2DSkin.defaultSkin)
 
             //We draw the following UIs above any other UIs, as they have to appear on top of everything else.
             add(PlaceSelectionUI(this@HeadUpInterface.gameState))
+            add(CharacterSelectUI(this@HeadUpInterface.gameState))
 
             //We draw the following UIs above any other UIs.
             table {

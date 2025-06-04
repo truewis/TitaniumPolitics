@@ -11,7 +11,8 @@ import com.badlogic.gdx.utils.Array
 import com.badlogic.gdx.utils.Align
 import com.titaniumPolitics.game.core.*
 import com.titaniumPolitics.game.core.gameActions.*
-import com.titaniumPolitics.game.ui.map.PlaceSelectionUI
+import com.titaniumPolitics.game.ui.widget.ActionSelectUI
+import com.titaniumPolitics.game.ui.widget.PlaceSelectButton
 
 import ktx.scene2d.*
 import ktx.scene2d.Scene2DSkin.defaultSkin
@@ -120,22 +121,8 @@ class NewAgendaUI(gameState: GameState, override var actionCallback: (GameAction
             setFontScale(3f)
         }
         row()
-        button {
-            it.colspan(2).growX().size(300f, 100f)
-            val placeLabel = label("Request Place:", "trnsprtConsole") { setFontScale(3f) }
-            addListener(object : ClickListener()
-            {
-                override fun clicked(event: com.badlogic.gdx.scenes.scene2d.InputEvent?, x: Float, y: Float)
-                {
-                    PlaceSelectionUI.instance.isVisible = true
-                    PlaceSelectionUI.instance.refresh()
-                    PlaceSelectionUI.instance.selectedPlaceCallback = {
-                        placeLabel.setText("Request Place: $it")
-                        this@NewAgendaUI.actionSelUI.changeTgtPlace(it)
-                    }
-                }
-            })
-        }
+        label("Transfer resources to"){setFontScale(3f)}
+        add(PlaceSelectButton(skin, { this@NewAgendaUI.actionSelUI.changeTgtPlace(it)})).growX()
         row()
         label("Request to:", "trnsprtConsole") { setFontScale(3f) }
         //Select character to perform the request.
