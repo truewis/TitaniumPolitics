@@ -9,19 +9,18 @@ import kotlinx.serialization.Transient
 //Trying implementing design pattern with function call stack is a bad idea because it is hard to debug.
 //Routine was designed to be independent of the gameState, but it is not the case anymore.
 @Serializable
-sealed class Routine()
-{
+sealed class Routine() {
     @Transient
     lateinit var gState: GameState
     var priority: Int = 0
+    val subroutines = arrayListOf<Routine>()
     val variables: HashMap<String, String> = hashMapOf()
     val intVariables: HashMap<String, Int> = hashMapOf()
     val doubleVariables: HashMap<String, Double> = hashMapOf()
     var executeDone =
         false //This is used to check if the routine execution is successful. Otherwise, there is a problem executing the routine and the parent routine should be notified.
 
-    fun injectParent(gState: GameState)
-    {
+    fun injectParent(gState: GameState) {
         this.gState = gState
     }
 
@@ -54,8 +53,7 @@ sealed class Routine()
     //TODO: it isn't clear at this moment how we pick between actions and routines. Shall we only pick between routines?
     //Just like the player pick actions at his will, NPC doesn't have to follow the gradient of will always. We just have to implement the penalty when the will is low in the game system.
     //Will based behaviour can be implemented in a different agent.
-    fun pickAction(name: String, place: String): GameAction
-    {
+    fun pickAction(name: String, place: String): GameAction {
 
         return availableActions.intersect(GameEngine.availableActions(gState, place, name).toSet()).map {
             (Class.forName("com.titaniumPolitics.game.core.gameActions.$it")
