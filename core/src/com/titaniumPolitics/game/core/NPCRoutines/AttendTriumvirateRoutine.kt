@@ -55,7 +55,7 @@ class AttendTriumvirateRoutine : Routine(), IMeetingRoutine {
             JoinMeeting(name, place).apply {
                 injectParent(gState)
                 meetingName =
-                    gState.ongoingMeetings.filter { it.value.type == Meeting.MeetingType.CABINET_DAILY_CONFERENCE && it.value.place == place }
+                    gState.ongoingMeetings.filter { it.value.type == Meeting.MeetingType.TRIUMVIRATE_DAILY_CONFERENCE && it.value.place == place }
                         .keys.firstOrNull()
                         ?: return@apply
                 if (isValid())
@@ -64,7 +64,7 @@ class AttendTriumvirateRoutine : Routine(), IMeetingRoutine {
             StartMeeting(name, place).apply {
                 injectParent(gState)
                 meetingName =
-                    gState.scheduledMeetings.filter { it.value.type == Meeting.MeetingType.CABINET_DAILY_CONFERENCE && it.value.place == place }
+                    gState.scheduledMeetings.filter { it.value.type == Meeting.MeetingType.TRIUMVIRATE_DAILY_CONFERENCE && it.value.place == place }
                         .keys.firstOrNull()
                         ?: return@apply
                 if (isValid())
@@ -99,7 +99,7 @@ class AttendTriumvirateRoutine : Routine(), IMeetingRoutine {
                 return NewAgenda(name, place).also {
                     it.agenda = MeetingAgenda(AgendaType.PROOF_OF_WORK, name)
                 }
-            //3. Praise or criticize the cabinet members, if there is any relevant information.
+            //3. Praise or criticize the members, if there is any relevant information.
             //It should be noted that the content of the information is not checked here. Think about this later.
             party.members.forEach { member ->
                 if (member != name && gState.informations.values.any {
