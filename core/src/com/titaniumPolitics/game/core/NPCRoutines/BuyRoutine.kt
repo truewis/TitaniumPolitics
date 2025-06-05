@@ -28,9 +28,10 @@ class BuyRoutine() : Routine() {
         //FindCharacter
         // if the character is not in the same place.
         if (place != gState.places.values.find { it.characters.contains(tradeCharacter) }!!.name) {
-            return FindCharacterRoutine().apply {
-                variables["character"] = tradeCharacter
-            }
+            if (routines.none { it is FindCharacterRoutine })
+                return FindCharacterRoutine().apply {
+                    variables["character"] = tradeCharacter
+                }
         } else {
             //If the character is in the same place, start a conversation first
             if (gState.ongoingMeetings.none {
@@ -41,17 +42,15 @@ class BuyRoutine() : Routine() {
                         )
                     )
                 }) {
-                return AttendMeetingRoutine().apply {
-                    variables["intention"] = "requestResource"
-                    variables["requestResourceType"] = variables["wantedResource"]!!
-                    doubleVariables["requestResourceAmount"] =
-                        gState.characters[name]!!.reliant * 1.0 //The amount of resource to request is proportional to the number of reliants.
-                    //TODO: the amount of resource to request should be determined by the character's trait.
-                    variables["requestTo"] = tradeCharacter
-                    actionDelegated = Talk(name, place).apply {
-                        who = tradeCharacter
+                if (routines.none { it is TalkRoutine })
+                    return TalkRoutine().apply {
+                        intention = "requestResource"
+                        variables["requestResourceType"] = variables["wantedResource"]!!
+                        doubleVariables["requestResourceAmount"] =
+                            gState.characters[name]!!.reliant * 1.0 //The amount of resource to request is proportional to the number of reliants.
+                        //TODO: the amount of resource to request should be determined by the character's trait.
+                        variables["requestTo"] = tradeCharacter
                     }
-                }
                 //Since this is a request, the success of this routine cannot be known because it is up to tradeCharacter whether they send resource or not.
             }
         }

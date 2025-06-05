@@ -1,4 +1,5 @@
 package com.titaniumPolitics.game.ui
+
 import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane
 import com.badlogic.gdx.scenes.scene2d.ui.Table
@@ -25,13 +26,17 @@ class CalendarUI(val gameState: GameState) : WindowUI("CalendarTitle") {
         //Also check AssistantUI for the button blinking condition.
         gameState.onAddScheduledMeeting += { meeting ->
             if (meeting.scheduledCharacters.contains(gameState.playerName))
-                addEntry(meeting.time, ReadOnly.prop(meeting.type), meeting.place, "A new meeting has been scheduled at ${meeting.time}H in ${meeting.place}.")
+                addEntry(
+                    meeting.time,
+                    ReadOnly.prop(meeting.type.toString()),
+                    meeting.place,
+                    "A new meeting has been scheduled at ${meeting.time}H in ${meeting.place}."
+                )
         }
 
-        gameState.timeChanged+={
-            _, time ->
+        gameState.timeChanged += { _, time ->
             // Check if there is an entry within the next hour
-            entries.firstOrNull { it.time - time in 0..3600/ ReadOnly.dt && !it.hasAlerted }?.let {
+            entries.firstOrNull { it.time - time in 0..3600 / ReadOnly.dt && !it.hasAlerted }?.let {
                 it.hasAlerted = true // Mark as alerted
                 AlertUI.instance.addAlert("alarm") {
                     isVisible = true
@@ -63,9 +68,11 @@ class CalendarUI(val gameState: GameState) : WindowUI("CalendarTitle") {
 
         // 헤더: 시간/요일
         dayTable.add(Label("H\\D", skin, "default").also {
-            it.setFontScale(6f)}) // 왼쪽 상단 빈 칸
+            it.setFontScale(6f)
+        }) // 왼쪽 상단 빈 칸
         for (i in 0 until DAYS) {
-            val style = if (i == 0) {"console"
+            val style = if (i == 0) {
+                "console"
             } else {
                 "default"
             }
@@ -93,7 +100,7 @@ class CalendarUI(val gameState: GameState) : WindowUI("CalendarTitle") {
 
             // 각 날짜별 미팅 정보
             for (dayOffset in 0 until DAYS) {
-                val day = gameState.day + dayOffset
+                gameState.day + dayOffset
                 val entriesAtThisHour = entries.filter { ReadOnly.toHours(it.time) == hour }
                 if (entriesAtThisHour.isNotEmpty()) {
                     val cellTable = Table()
@@ -115,7 +122,7 @@ class CalendarUI(val gameState: GameState) : WindowUI("CalendarTitle") {
         dataTable.invalidate()
         scrollPane.layout()
         val rowHeight = dataTable.cells[DAYS + 1].actor.height // 첫 시간 라벨의 높이
-        scrollPane.scrollTo(0f, dataTable.height - rowHeight * (currentHour-2), 10f, rowHeight)
+        scrollPane.scrollTo(0f, dataTable.height - rowHeight * (currentHour - 2), 10f, rowHeight)
     }
 
     data class CalendarEntry(

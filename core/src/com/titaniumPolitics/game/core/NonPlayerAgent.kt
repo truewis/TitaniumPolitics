@@ -21,6 +21,10 @@ class NonPlayerAgent : Agent() {
 
     var routines =
         arrayListOf<Routine>()//Routines are sorted by priority. The first element is the current routine. All other routines are executed when the current routine is finished.
+    private val removeList =
+        arrayListOf<Routine>() //Routines that are to be removed after the current routine is executed.
+    private val addList =
+        arrayListOf<Routine>() //Routines that are to be added after the current routine is executed.
 
     override fun chooseAction(): GameAction {
         //1. High priority routine change
@@ -33,19 +37,13 @@ class NonPlayerAgent : Agent() {
     private fun selectRoutine() {
         var pri = 10
         routines.sortByDescending { it.priority }
+
+        //Remove all meeting routines if the character is not in a meeting.
+        if (character.currentMeeting == null)
+            routines.removeAll { it is IMeetingRoutine }
+
         if (!routines.isEmpty())
             pri = routines[0].priority + 10
-        //Force start meeting routing if the character is in a meeting. Note that the character will leave the meeting immediately if nothing interests it.
-        //Note that even if the character has a higher priority routine, this block will not trigger.
-        if (parent.ongoingMeetings.any { it.value.currentCharacters.contains(name) } && routines.none { it is AttendMeetingRoutine }) {
-            routines.add(
-                AttendMeetingRoutine().apply {
-                    priority = pri
-                    intVariables["routineStartTime"] = parent.time
-                }
-            )
-            return
-        }
         //If there is almost no food or water, stop all activities and try to get some. ----------------------------------------------------------------------------
         if (parent.characters[name]!!.resources["ration"] <= (parent.characters[name]!!.reliant) || parent.characters[name]!!.resources["water"] <= (parent.characters[name]!!.reliant)
         ) {
@@ -56,6 +54,7 @@ class NonPlayerAgent : Agent() {
                 //Find a place within my division with maximum res.
                 if (routines.none { it is StealRoutine }) {
                     routines.add(StealRoutine().apply {
+
                         priority = pri
                         variables["stealResource"] = wantedResource
                         intVariables["routineStartTime"] = parent.time
@@ -66,6 +65,7 @@ class NonPlayerAgent : Agent() {
             } else if (parent.characters[name]!!.trait.contains("bargainer")) {
                 if (routines.none { it is BuyRoutine }) {
                     routines.add(BuyRoutine().apply {
+
                         priority = pri
                         variables["wantedResource"] = wantedResource
                         intVariables["routineStartTime"] = parent.time
@@ -78,6 +78,7 @@ class NonPlayerAgent : Agent() {
         if (character.health < ReadOnly.const("TiredHealth")) {
             if (routines.none { it is RestRoutine }) {
                 routines.add(RestRoutine().apply {
+
                     priority = pri
                     intVariables["routineStartTime"] = parent.time
                 })//Add a routine, priority higher than work.
@@ -89,6 +90,7 @@ class NonPlayerAgent : Agent() {
         if (parent.getMutuality(name) < ReadOnly.const("DowntimeWill")) {
             if (routines.none { it is DowntimeRoutine }) {
                 routines.add(DowntimeRoutine().apply {
+
                     priority = pri
                     intVariables["routineStartTime"] = parent.time
                 })//Add a routine, priority higher than work.
@@ -109,6 +111,7 @@ class NonPlayerAgent : Agent() {
             if (request != null) {
                 routines.add(
                     ExecuteCommandRoutine().apply {
+
                         priority = pri
                         variables["request"] = request.name
                         intVariables["routineStartTime"] = parent.time
@@ -123,6 +126,37 @@ class NonPlayerAgent : Agent() {
 
     //This is a recursive function. It returns the action to be executed.
     private fun executeRoutine(): GameAction {
+        routines.sortByDescending { it.priority }
+
+        var routineSettled = false
+        while (!routineSettled) {
+            routineSettled = true
+            routines.forEach {
+                it.injectParent(parent)
+            }
+            routines.forEach {
+                if (it.endCondition(name, place)) {
+                    routineSettled = false
+                    endRoutine(it)
+                }
+            }
+            routines.removeAll(removeList)
+            routines.forEach { routine -> routine.subroutines.removeIf { s -> routines.none { it.ID == s } } } //Remove the subroutines that were removed.
+            removeList.clear()
+            routines.forEach {
+                it.newRoutineCondition(name, place, routines)?.let { v ->
+                    if (v.priority == 0)//Initial priority
+                        v.priority = it.priority + 10 //Set the priority to be higher than the current routine.
+                    it.subroutines += v.ID
+                    addList += v
+                    v.intVariables["routineStartTime"] = parent.time
+                    routineSettled = false
+                }
+            }
+            routines += addList
+            addList.clear()
+        }
+
         if (routines.isEmpty()) {
             whenIdle()
             if (routines.isEmpty()) {
@@ -130,22 +164,8 @@ class NonPlayerAgent : Agent() {
                 return Wait(name, place)
             }
         }
-        routines.sortByDescending { it.priority }
-
-        var routineSettled = false
-        while (!routineSettled) {
-            routineSettled = true
-            routines.forEach {
-                if (it.endCondition(name, place))
-                    endRoutine(it)
-                it.newRoutineCondition(name, place, routines)?.let { v ->
-                    v.injectParent(parent)
-                    it.subroutines += v
-                    routines += v
-                    v.intVariables["routineStartTime"] = parent.time
-                    routineSettled = false
-                }
-            }
+        routines.forEach {
+            it.injectParent(parent)
         }
         blockExecution()?.also { return it }
 
@@ -156,8 +176,8 @@ class NonPlayerAgent : Agent() {
 
     //Recursively stop the routine and all its subroutines.
     fun endRoutine(routine: Routine) {
-        routine.subroutines.forEach { endRoutine(it) }
-        routines.remove(routine)
+        routine.subroutines.forEach { id -> endRoutine(routines.first { it.ID == id }) }
+        removeList += (routine)
     }
 
     //Any action that has to be executed before executing the current routine.
@@ -166,6 +186,7 @@ class NonPlayerAgent : Agent() {
         //This allows the character to leave the meeting if it has a higher priority routine.
         //In this case, attendMeetingRoutine is still alive in the queue,
         //but it will be removed immediately when it becomes the current routine, as the character is not in a meeting.
+        if (routines.isEmpty()) return null
         if ((routines[0] !is IMeetingRoutine && character.currentMeeting != null)) {
             return LeaveMeeting(name, place)
         }

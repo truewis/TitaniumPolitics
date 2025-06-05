@@ -23,8 +23,7 @@ import kotlin.math.sin
 
 
 //This UI is used for both meetings and conferences
-class MeetingUI(var gameState: GameState) : Table(defaultSkin), KTable
-{
+class MeetingUI(var gameState: GameState) : Table(defaultSkin), KTable {
     val portraits = arrayListOf<SimplePortraitUI>()
     val speakerPortrait = PortraitUI("", gameState, 1f)
     val deployedInfos = arrayListOf<InfoBubbleUI>()
@@ -34,8 +33,7 @@ class MeetingUI(var gameState: GameState) : Table(defaultSkin), KTable
     val attentionMeter: Image = image("BadgeRound")
     var previousMutualities = mutableMapOf<Pair<String, String>, Double>()
 
-    init
-    {
+    init {
         instance = this
         currentAttention.setColor(0f, 0f, 0f, 1f)
         currentAttention.setFontScale(3f)
@@ -43,8 +41,7 @@ class MeetingUI(var gameState: GameState) : Table(defaultSkin), KTable
 
 
         gameState.updateUI.add {
-            if (it.player.currentMeeting != null)
-            {
+            if (it.player.currentMeeting != null) {
                 println("MeetingUI: Refreshing meeting ${it.player.currentMeeting!!}")
                 refresh(it.player.currentMeeting!!)
             }
@@ -60,8 +57,7 @@ class MeetingUI(var gameState: GameState) : Table(defaultSkin), KTable
     }
 
     //This function can be used for both meetings and conferences
-    fun refresh(meeting: Meeting)
-    {
+    fun refresh(meeting: Meeting) {
         val newMutualities = meeting.scheduledCharacters.flatMap { char1 ->
             meeting.currentCharacters.mapNotNull { char2 ->
                 if (char1 != char2) {
@@ -71,18 +67,15 @@ class MeetingUI(var gameState: GameState) : Table(defaultSkin), KTable
             }
         }.toMap().toMutableMap()
         meeting.currentCharacters.forEach {
-            if (portraits.none { portrait -> portrait.tgtCharacter == it })
-            {
+            if (portraits.none { portrait -> portrait.tgtCharacter == it }) {
                 //Player can see themselves.
                 addCharacterPortrait(it)
             }
         }
         val iterator = portraits.iterator()
-        while (iterator.hasNext())
-        {
+        while (iterator.hasNext()) {
             val portrait = iterator.next()
-            if (!meeting.currentCharacters.contains(portrait.tgtCharacter))
-            {
+            if (!meeting.currentCharacters.contains(portrait.tgtCharacter)) {
                 portrait.remove()
                 iterator.remove()
             }
@@ -112,8 +105,7 @@ class MeetingUI(var gameState: GameState) : Table(defaultSkin), KTable
         val mutualityChanges = newMutualities.filter { (pair, value) ->
             previousMutualities[pair]?.let { it != value } ?: true
         }
-        if (mutualityChanges.isNotEmpty())
-        {
+        if (mutualityChanges.isNotEmpty()) {
             showMutualityArrows(mutualityChanges)
             previousMutualities = newMutualities
         }
@@ -159,16 +151,16 @@ class MeetingUI(var gameState: GameState) : Table(defaultSkin), KTable
         }
     }
 
-    fun newMeeting(meeting: Meeting)
-    {
+    fun newMeeting(meeting: Meeting) {
         //If the meeting is a division leader election, add vote results to the stage if the meeting is over.
-        if (meeting.type == "divisionLeaderElection")
-        {
-            meeting.onVoteResults+={
+        if (meeting.type == Meeting.MeetingType.DIVISION_LEADER_ELECTION) {
+            meeting.onVoteResults += {
                 val voteResultsTable = VoteResultWindowUI(meeting)
                 CapsuleStage.instance.addActor(voteResultsTable)
-                voteResultsTable.setPosition(CapsuleStage.instance.width / 2 - voteResultsTable.width / 2,
-                    CapsuleStage.instance.height / 2 - voteResultsTable.height / 2)
+                voteResultsTable.setPosition(
+                    CapsuleStage.instance.width / 2 - voteResultsTable.width / 2,
+                    CapsuleStage.instance.height / 2 - voteResultsTable.height / 2
+                )
             }
         }
 
@@ -182,8 +174,7 @@ class MeetingUI(var gameState: GameState) : Table(defaultSkin), KTable
         }.toMap().toMutableMap()
     }
 
-    private fun addCharacterPortrait(characterName: String)
-    {
+    private fun addCharacterPortrait(characterName: String) {
 
         val portrait = SimplePortraitUI(characterName, gameState, 0.2f)
         portraits.add(portrait)
@@ -193,12 +184,10 @@ class MeetingUI(var gameState: GameState) : Table(defaultSkin), KTable
     }
 
     //Cf. the same function in CharacterPortraitsUI
-    private fun placeCharacterPortrait()
-    {
+    private fun placeCharacterPortrait() {
 
         //reorder portraits so that the speaker is always on a different position.
-        if (speakerPortrait.tgtCharacter != gameState.player.currentMeeting!!.currentSpeaker)
-        {
+        if (speakerPortrait.tgtCharacter != gameState.player.currentMeeting!!.currentSpeaker) {
             val oldSpeakerPortrait =
                 portraits.find { it.tgtCharacter == gameState.player.currentMeeting!!.currentSpeaker }!!
             val oldCharacter = oldSpeakerPortrait.tgtCharacter
@@ -222,8 +211,7 @@ class MeetingUI(var gameState: GameState) : Table(defaultSkin), KTable
 
     }
 
-    fun placeBubbles()
-    {
+    fun placeBubbles() {
         //Place bubbles in a circle. Agenda bubbles are placed in the inner circle.
         val radius = 200f
         val centerX = discussionTable.x + discussionTable.width / 2
@@ -251,8 +239,7 @@ class MeetingUI(var gameState: GameState) : Table(defaultSkin), KTable
 
     }
 
-    fun removeBubbles()
-    {
+    fun removeBubbles() {
         currentAgendas.forEach {
             it.remove()
         }
@@ -261,8 +248,7 @@ class MeetingUI(var gameState: GameState) : Table(defaultSkin), KTable
         }
     }
 
-    companion object
-    {
+    companion object {
         lateinit var instance: MeetingUI
     }
 }

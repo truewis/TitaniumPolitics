@@ -9,25 +9,27 @@ import kotlinx.serialization.Transient
 
 @Serializable
 class DowntimeRoutine() : Routine() {
+    init {
+        priority = PRIORITY_REST
+    }
+
     override fun newRoutineCondition(name: String, place: String, routines: List<Routine>): Routine? {
         val char = gState.characters[name]!!
         if (char.trait.contains("extrovert")) {
             if (place !in Place.publicPlaces)
-                return MoveRoutine().apply {
-                    variables["movePlace"] = Place.publicPlaces.random()
-                }//Add a move routine with higher priority.
-            else
-                return AttendMeetingRoutine().apply {
-                    actionDelegated = Talk(name, place)
-                }
+                if (routines.none { it is MoveRoutine })
+                    return MoveRoutine().apply {
+                        variables["movePlace"] = Place.publicPlaces.random()
+                    }//Add a move routine with higher priority.
 
         }
 
         //Otherwise, go home
         if (place != "home_$name")
-            return MoveRoutine().apply {
-                variables["movePlace"] = "home_$name"
-            }//Add a move routine with higher priority.
+            if (routines.none { it is MoveRoutine })
+                return MoveRoutine().apply {
+                    variables["movePlace"] = "home_$name"
+                }//Add a move routine with higher priority.
         return null
     }
 
@@ -36,7 +38,9 @@ class DowntimeRoutine() : Routine() {
     }
 
     override fun endCondition(name: String, place: String): Boolean {
-        if (gState.getMutuality(name) > const("DowntimeWill")) return true
+        //Pay attention to the condition checking order.
+        //return false must be checked first, otherwise the routine will be created again.
+        if (gState.getMutuality(name) < const("DowntimeWill")) return false
         if (variables["workPlace"] == null)
             return (gState.hour in 8..18)
         else

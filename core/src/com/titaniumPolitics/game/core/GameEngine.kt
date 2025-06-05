@@ -22,19 +22,16 @@ import kotlin.system.exitProcess
 *
 *
 * */
-class GameEngine(val gameState: GameState)
-{
+class GameEngine(val gameState: GameState) {
 
     //Let UI or other monitors to come in and read gamestate.
     var onObserverCall = arrayListOf<(GameState) -> Unit>()
 
-    init
-    {
+    init {
         Logger.gState = gameState
     }
 
-    fun startGame()
-    {
+    fun startGame() {
         //Start the game.
 
         onObserverCall.forEach { it(gameState) }
@@ -42,22 +39,17 @@ class GameEngine(val gameState: GameState)
         //Main loop
 
 
-        while (true)
-        {
+        while (true) {
             gameLoop()
         }
     }
 
-    fun gameLoop()
-    {
+    fun gameLoop() {
         gameState.characters.values.sortedByDescending { if (it == gameState.player) 1 else 0 }.forEach {
-            if (it.alive)
-            {
-                if (it.frozen > 0)
-                {
+            if (it.alive) {
+                if (it.frozen > 0) {
                     it.frozen--
-                    if (!it.trait.contains("robot"))
-                    {//Robots don't need to eat.
+                    if (!it.trait.contains("robot")) {//Robots don't need to eat.
                         it.health -= dt / const("HealthConsumptionTau") * const("HealthMax")
                         it.hunger += dt / const("HungerConsumptionTau") * const("HungerMax")
                         it.thirst += dt / const("ThirstConsumptionTau") * const("ThirstMax")
@@ -70,8 +62,7 @@ class GameEngine(val gameState: GameState)
 
                     }
                 }
-                while (it.frozen == 0)
-                {
+                while (it.frozen == 0) {
                     performAction(it)
                     //if the action took any amount of time, exit the loop.
                 }
@@ -90,8 +81,7 @@ class GameEngine(val gameState: GameState)
         }
     }
 
-    private fun hourlyProgression()
-    {
+    private fun hourlyProgression() {
         distributeResourcesHourly()
         workApparatusesHourly()
         ageInformationHourly()
@@ -99,16 +89,14 @@ class GameEngine(val gameState: GameState)
         checkMarketResourcesHourly(gameState)
     }
 
-    private fun dailyProgression()
-    {
+    private fun dailyProgression() {
         partySizeAdjust()
         scheduleDailyConferences()
     }
 
 
     //This function is called at the end of each turn, after all the characters have performed their actions.
-    fun progression()
-    {
+    fun progression() {
         gameState.time += 1
         println("[${gameState.formatTime()}]")
         gameState.places.forEach {
@@ -136,8 +124,7 @@ class GameEngine(val gameState: GameState)
 
     }
 
-    fun performAction(char: Character)
-    {
+    fun performAction(char: Character) {
         var action: GameAction
         val actionList = availableActions(
             this.gameState, gameState.places.values.find { it.characters.contains(char.name) }!!.name,
@@ -146,15 +133,13 @@ class GameEngine(val gameState: GameState)
         if (gameState.nonPlayerAgents[char.name] == null && char.name == gameState.playerName)//If the player character agent exists, the game does not wait for player input.
         //This is for automatic progression and test purposes.
         {
-            do
-            {
+            do {
                 action = acquire("Action", hashMapOf("actionList" to actionList))
                 action.injectParent(gameState)
                 if (action.isValid()) {
                     gameState.onPlayerAction.forEach { it() }
                     break
-                }
-                else
+                } else
                     println(
                         "Invalid action: ${action.javaClass.simpleName} by ${char.name} at ${
                             gameState.places.values.find {
@@ -167,8 +152,7 @@ class GameEngine(val gameState: GameState)
             } while (true)
 
 
-        } else
-        {
+        } else {
             action = gameState.nonPlayerAgents[char.name]?.chooseAction()
                 ?: throw Exception("Non player character ${char.name} does not have a nonPlayerAgent.")
             action.injectParent(gameState)
@@ -178,8 +162,7 @@ class GameEngine(val gameState: GameState)
                         char.place.name
                     }, time=${gameState.formatTime()}, which is not in the action list. This may be a bug."
                 )
-            if (!action.isValid())
-            {
+            if (!action.isValid()) {
                 Logger.warning(
                     "Non player character ${char.name} is performing ${action.javaClass.simpleName} at ${
                         char.place.name
@@ -188,8 +171,7 @@ class GameEngine(val gameState: GameState)
                 println(Json.encodeToString(GameAction.serializer(), action))
                 throw Exception("Non player character ${char.name} is performing an invalid action.")
             }
-            if (action.sbjCharacter != char.name)
-            {
+            if (action.sbjCharacter != char.name) {
                 Logger.warning(
                     "Non player character ${char.name} is performing ${action.javaClass.simpleName} at ${
                         char.place.name
@@ -197,8 +179,7 @@ class GameEngine(val gameState: GameState)
                 )
                 println(Json.encodeToString(GameAction.serializer(), action))
             }
-            if (action.tgtPlace != char.place.name)
-            {
+            if (action.tgtPlace != char.place.name) {
                 Logger.warning(
                     "Non player character ${char.name} is performing ${action.javaClass.simpleName} at ${
                         char.place.name
@@ -215,8 +196,7 @@ class GameEngine(val gameState: GameState)
             )
         }!!.name
         //Unless the information is wait and move. I think wait and move info is useless. It adds a lot of overhead, and the info that a character saw someone can be obtained by talking to them instead.
-        if (action !is Wait && action !is Move)
-        {
+        if (action !is Wait && action !is Move) {
             //Add information to the character so that they can report back.
             Information(
                 char.name,
@@ -236,8 +216,7 @@ class GameEngine(val gameState: GameState)
 
     }
 
-    private fun calculateMutuality()
-    {
+    private fun calculateMutuality() {
         //Wealth display effect: opportunists mutuality to more wealthy character increases. to less wealthy character decreases.
 
         //If there are meetings where some characters are missing, all the characters in the meeting lose mutuality toward the missing characters.
@@ -256,8 +235,7 @@ class GameEngine(val gameState: GameState)
     }
 
     // information does not affect the approval after some time.
-    private fun ageInformationHourly()
-    {
+    private fun ageInformationHourly() {
         val removed = arrayListOf<String>()
         gameState.informations.forEach {
             it.value.life -= dt
@@ -268,8 +246,7 @@ class GameEngine(val gameState: GameState)
     }
 
     //TODO: optimize this function.
-    private fun spreadPublicInfo()
-    {
+    private fun spreadPublicInfo() {
         gameState.parties.forEach { party ->
             //bad news affect the approval. casualty, stolen resource, TODO: low water ration oxygen, high wealth, crimes
             gameState.informations.filter { it.value.type == InformationType.CASUALTY }.forEach {
@@ -277,8 +254,7 @@ class GameEngine(val gameState: GameState)
                 if (it.value.author == "") factor *= 2.0//rumors affect the approval negatively.
                 if (it.value.auxParty == party.key) factor *= 2.0//If the casualty is in our party, approval of the responsible party drops even more.
                 //If casualty is not localized, does not affect mutualities.
-                if (it.value.tgtPlace == "everywhere" || gameState.places[it.value.tgtPlace]!!.responsibleDivision == "")
-                {
+                if (it.value.tgtPlace == "everywhere" || gameState.places[it.value.tgtPlace]!!.responsibleDivision == "") {
                     //Do nothing
                 } else
                     gameState.setPartyMutuality(
@@ -341,8 +317,7 @@ class GameEngine(val gameState: GameState)
     //Each department is also its own party. At this time, the head of the party is the head of the department.
     //In this case, the number of people in the party is equal to the number of employees in the department. As the number of employees decreases, more unnamed people leave the party, and as the number of employees increases, more unnamed people come in.
     //However, if the total number of people at the station is insufficient, unnamed people may not come in, and fewer people than the target number may come to work.
-    fun partySizeAdjust()
-    {
+    fun partySizeAdjust() {
 //        gameState.parties.values.filter { it.type == "division" }.forEach {
 //            val targetSize = it.plannedWorker
 //            if (it.size < targetSize)
@@ -368,26 +343,23 @@ class GameEngine(val gameState: GameState)
 
     }
 
-    fun scheduleDailyConferences()
-    {
+    fun scheduleDailyConferences() {
         //Each division has a conference every day. The conference is attended by the head of the division and the members of the division.
         gameState.parties.values.filter { it.type == "division" }.forEach { party ->
-            if (party.leader != "")
-            {
+            if (party.leader != "") {
                 val conference = Meeting(
                     gameState.time + 9 * 3600 / dt /*9 in the morning*/,
-                    "divisionDailyConference",
+                    Meeting.MeetingType.DIVISION_DAILY_CONFERENCE,
                     place = party.home,
                     scheduledCharacters = party.members
                 ).also { it.involvedParty = party.name }
 
                 gameState.addScheduledMeeting(conference)
-            } else
-            {
+            } else {
                 //If the division leader is not assigned, the conference for electing the division leader is scheduled.
                 val conference = Meeting(
                     gameState.time + 9 * 3600 / dt /*9 in the morning*/,
-                    "divisionLeaderElection",
+                    Meeting.MeetingType.DIVISION_LEADER_ELECTION,
                     place = party.home,
                     scheduledCharacters = (setOf("ctrler") + party.members).toHashSet()
                 ).also { it.involvedParty = party.name }
@@ -399,7 +371,7 @@ class GameEngine(val gameState: GameState)
 
         val conference = Meeting(
             gameState.time + 12 * 3600 / dt /*12 in the afternoon*/,
-            "cabinetDailyConference",
+            Meeting.MeetingType.CABINET_DAILY_CONFERENCE,
             place = gameState.parties["cabinet"]!!.home,
             scheduledCharacters = gameState.parties["cabinet"]!!.members
         ).also { it.involvedParty = "cabinet" }
@@ -409,7 +381,7 @@ class GameEngine(val gameState: GameState)
 
         val conference2 = Meeting(
             gameState.time + 15 * 3600 / dt /*3 in the afternoon*/,
-            "triumvirateDailyConference",
+            Meeting.MeetingType.TRIUMVIRATE_DAILY_CONFERENCE,
             place = gameState.parties["triumvirate"]!!.home,
             scheduledCharacters = gameState.parties["triumvirate"]!!.members
         ).also { it.involvedParty = "triumvirate" }
@@ -423,8 +395,7 @@ class GameEngine(val gameState: GameState)
 
     }
 
-    fun distributeResourcesHourly()
-    {
+    fun distributeResourcesHourly() {
         val dth = 3600
         //Some resources are scheduled to be distributed to other places. Other resources are distributed manually.
         //Distribute energy. Each energy storage value slowly moves to the average of all energy storage values.
@@ -443,20 +414,17 @@ class GameEngine(val gameState: GameState)
             }
     }
 
-    fun diffuseGas()
-    {
+    fun diffuseGas() {
         gameState.places.forEach {
             it.value.diffuseGasAndTemp()
         }
     }
 
-    fun workApparatusesHourly()
-    {
+    fun workApparatusesHourly() {
         gameState.places.forEach { it.value.workApparatusHourly() }
     }
 
-    fun checkMarketResourcesHourly(tgtState: GameState)
-    {
+    fun checkMarketResourcesHourly(tgtState: GameState) {
         val dth = 3600
         gameState.places.forEach { place ->
             place.value.gasResources.forEach { place.value.gasResources[it.key] = it.value * 0.999 }
@@ -466,16 +434,14 @@ class GameEngine(val gameState: GameState)
             if (place.gasResources["oxygen"] < place.currentTotalPop * const("MarketOxygenConsumptionRate") * 86400)//TODO: Migrate to gas system.
                 println("Less than 24 hours of oxygen out in $placeName")
             val consumptionOxygen = (place.currentTotalPop * const("MarketOxygenConsumptionRate") * dth)
-            if (place.gasResources["oxygen"] > consumptionOxygen)
-            {
+            if (place.gasResources["oxygen"] > consumptionOxygen) {
                 place.gasResources["oxygen"] -= consumptionOxygen //0.5kg/day consumption.
                 place.gasResources["carbonDioxide"] += consumptionOxygen * 96 / 64 //Oxygen is converted to carbonDioxide.
             }
             if (place.gasPressure("oxygen") < const("CriticalOxygenPressure") || place.gasPressure("carbonDioxide") / place.gasPressure(
                     "oxygen"
                 ) > const("CriticalCarbonDioxideRatio")
-            )
-            {
+            ) {
                 if (place.responsibleDivision == "") return//TODO: currently oxygen deaths don't happen in places without responsibleParty.
                 val death =
                     place.currentTotalPop / 100 + 1//TODO: adjust deaths. Also, productivity starts to drop when oxygen is low. Use the gas system.
@@ -517,8 +483,7 @@ class GameEngine(val gameState: GameState)
 
 
     //TODO: Check for win/lose/interrupt conditions
-    fun conditionCheck()
-    {
+    fun conditionCheck() {
         gameState.characters.forEach { entry ->
             //If air is not breathable, take damage.
             if (entry.value.place.gasPressure("oxygen") < const("CriticalOxygenPressure") || entry.value.place.gasPressure(
@@ -526,8 +491,7 @@ class GameEngine(val gameState: GameState)
                 ) / entry.value.place.gasPressure(
                     "oxygen"
                 ) > const("CriticalCarbonDioxideRatio")
-            )
-            {
+            ) {
                 entry.value.health -= dt / const("SuffocationTau") * const("HealthMax")
                 //If in a workplace, party integrity decreases, if I am not the leader
                 entry.value.division?.also {
@@ -541,8 +505,7 @@ class GameEngine(val gameState: GameState)
             }
             //If temperature is extreme, take damage.
             if (entry.value.place.temperature - 300 /*[K]*/ !in -const("TemperatureDifferenceTolerance")..const("TemperatureDifferenceTolerance")
-            )
-            {
+            ) {
 //                entry.value.health -= dt / const("TemperatureDamageTau") * abs(entry.value.place.temperature / 300 /*[K]*/ - 1) * const(
 //                    "HealthMax"
 //                )//TODO: balance this
@@ -555,30 +518,26 @@ class GameEngine(val gameState: GameState)
                         )
                 }
             }
-            if (entry.value.alive && entry.value.health <= 0)
-            {
+            if (entry.value.alive && entry.value.health <= 0) {
                 println("${entry.key} died.")
                 gameState.places.values.find { it.characters.contains(entry.key) }!!.characters -= entry.key
                 entry.value.alive = false
             }
         }
         val l = gameState.characters.filter { it.value.alive && !it.value.trait.contains("robot") }
-        if (!l.contains(gameState.playerName))
-        {
+        if (!l.contains(gameState.playerName)) {
 
             println("You died. Game over.")
             gameState.dump()
             exitProcess(0)
 
-        } else if (l.size == 1)
-        {
+        } else if (l.size == 1) {
             println("You are the last survivor.")
             gameState.dump()
             exitProcess(0)
         }
 
-        if (gameState.time % (ReadOnly.constInt("lengthOfDay") * 15) == 0)
-        { //Every 15 days, reset the budget.
+        if (gameState.time % (ReadOnly.constInt("lengthOfDay") * 15) == 0) { //Every 15 days, reset the budget.
             gameState.isBudgetProposed = false
             gameState.isBudgetResolved = false
             //Since the party is division, it pays out the salary of the members.
@@ -586,8 +545,7 @@ class GameEngine(val gameState: GameState)
                 party.isSalaryPaid = false
             }
         }
-        if (gameState.time % ReadOnly.constInt("lengthOfDay") == 0)
-        { //Every day, we used to inform the infrastructure minister about total resource.
+        if (gameState.time % ReadOnly.constInt("lengthOfDay") == 0) { //Every day, we used to inform the infrastructure minister about total resource.
 //            val infraName = gameState.parties.values.find { it.name == "infrastructure" }!!.leader
 //            if (infraName != "")
 //            {
@@ -626,8 +584,7 @@ class GameEngine(val gameState: GameState)
 
     }
 
-    companion object
-    {
+    companion object {
         var acquireCallback: (Any) -> Unit = {}
         var acquireEvent = arrayListOf<(AcquireParams) -> Unit>()
         val onAccident = ArrayList<(String, Int) -> Unit>()//Place and Casualty
@@ -657,11 +614,9 @@ class GameEngine(val gameState: GameState)
                 Gdx.app.postRunnable {
                     acquireEvent.forEach { it(AcquireParams(dataType, params)) }
                     acquireCallback = { x ->
-                        try
-                        {
+                        try {
                             wanted = x as T
-                        } catch (e: Exception)
-                        {
+                        } catch (e: Exception) {
                             Logger.warning("Acquire failed: Wanted type: ${T::class}, Acquired type: ${x::class}")
                             throw e
                         }
@@ -678,19 +633,16 @@ class GameEngine(val gameState: GameState)
         }
 
         //When someone else requests an action, request class will check isValid function of the action, not this function.
-        fun availableActions(gameState: GameState, place: String, character: String): ArrayList<String>
-        {
+        fun availableActions(gameState: GameState, place: String, character: String): ArrayList<String> {
             val actions = arrayListOf<String>()
             val placeObj = gameState.places[place]!!
-            if (gameState.ongoingMeetings.any { it.value.currentCharacters.contains(character) })
-            {
+            if (gameState.ongoingMeetings.any { it.value.currentCharacters.contains(character) }) {
                 val conf = gameState.ongoingMeetings.filter {
                     it.value.currentCharacters.contains(
                         character
                     )
                 }.values.first()
-                if (character == gameState.playerName)
-                {
+                if (character == gameState.playerName) {
                     println("You are in a meeting.")
                     println(
                         "Attendees: ${
@@ -699,14 +651,12 @@ class GameEngine(val gameState: GameState)
                     )
                 }
                 val subject = conf.type
-                if (subject == "talk")
-                {//If there is no subject, i.e. casual talk
+                if (subject == Meeting.MeetingType.TALK) {//If there is no subject, i.e. casual talk
                 } else
                     if (character == gameState.parties[conf.involvedParty]!!.leader)//Only the leader can do below actions.
                     {
                         actions.add("Resign") //Only leaders can resign right now. Resign is one of the few actions that can be done without an agenda.
-                        if (subject == "divisionDailyConference")
-                        {
+                        if (subject == Meeting.MeetingType.DIVISION_DAILY_CONFERENCE) {
                             if (!gameState.parties[conf.involvedParty]!!.isSalaryPaid)
                                 actions.add("Salary") //Salary is distributed in a divisionDailyConference.
                         }
@@ -717,14 +667,12 @@ class GameEngine(val gameState: GameState)
 //                {
 //                    actions.add("Command")
 //                }
-                if (conf.currentSpeaker == character)
-                {
+                if (conf.currentSpeaker == character) {
                     actions.add("NewAgenda")
                     actions.add("AddInfo")
                     actions.add("EndMeeting")
                     actions.add("EndSpeech")
-                } else
-                {
+                } else {
                     actions.add("Wait")
                     actions.add("Intercept")
 
@@ -736,8 +684,7 @@ class GameEngine(val gameState: GameState)
             ////////////////////////////////////////////////////MEETING ACTIONS//////////////////////////////////////////////////////////
             if (placeObj.characters.count() > 1)
                 actions.add("Talk")
-            if (placeObj.isAccidentScene)
-            {
+            if (placeObj.isAccidentScene) {
                 if (placeObj.responsibleDivision != "" && gameState.parties[placeObj.responsibleDivision]!!.members.contains(
                         character
                     )
@@ -749,39 +696,33 @@ class GameEngine(val gameState: GameState)
             actions.add("Examine")
             //actions.add("radio")
             actions.add("Wait")
-            if (placeObj.manager == character)
-            {
+            if (placeObj.manager == character) {
                 actions.add("SetWorkers")
                 actions.add("SetWorkHours")
             }
-            if (place.contains("home"))
-            {
+            if (place.contains("home")) {
                 actions.add("Sleep")
                 actions.add("Eat")
                 actions.add("PrepareInfo")
             }
 
-            if (place == "mainControlRoom" || place == "market" || place == "squareNorth" || place == "squareSouth")
-            {
+            if (place == "mainControlRoom" || place == "market" || place == "squareNorth" || place == "squareSouth") {
                 //actions.add("InfoAnnounce") Only the leader of the internal division can announce.
             }
             if (placeObj.responsibleDivision != "" && gameState.parties[placeObj.responsibleDivision]!!.members.contains(
                     character
                 )
-            )
-            {
+            ) {
                 actions.add("UnofficialResourceTransfer")//can only steal from their own division.
                 actions.add("OfficialResourceTransfer")//can only move resources from their own division.
             }
-            if (place == "home_$character")
-            {
+            if (place == "home_$character") {
                 actions.add("UnofficialResourceTransfer")//can only move resources from their home.
             }
             val availableMeetings =
                 gameState.scheduledMeetings.filter {
-                    it.value.time - gameState.time in -ReadOnly.constInt("MeetingStartTolerance")..ReadOnly.constInt(
-                        "MeetingStartTolerance"
-                    ) && it.value.place == place
+                    it.value.isValidTimeToStart(gameState.time)
+                            && it.value.place == place
                 }
                     .filter { !gameState.ongoingMeetings.containsKey(it.key) }
                     .filter { it.value.scheduledCharacters.contains(character) }
@@ -790,26 +731,17 @@ class GameEngine(val gameState: GameState)
             val meetingsToJoin = gameState.ongoingMeetings.filter {
                 it.value.scheduledCharacters.contains(character) && !it.value.currentCharacters.contains(character) && it.value.place == place
             }
-            if (meetingsToJoin.isNotEmpty())
-            {
-                val subject = gameState.ongoingMeetings.firstNotNullOf { entry ->
+            if (meetingsToJoin.isNotEmpty()) {
+                gameState.ongoingMeetings.firstNotNullOf { entry ->
                     entry.value.type.takeIf {
                         entry.value.scheduledCharacters.contains(character) && !entry.value.currentCharacters.contains(
                             character
                         ) && entry.value.place == place
                     }
                 }
-                if (gameState.playerName == character)
-                {
-                    when (subject)
-                    {
-                        "Talk" -> println("Someone wants to talk to you.")//TODO: there must be a way to know NPC's intention to talk
-                    }
-                }
                 actions.add("JoinMeeting")
             }
-            if (gameState.characters[character]!!.trait.contains("technician") && !place.contains("home"))
-            {
+            if (gameState.characters[character]!!.trait.contains("technician") && !place.contains("home")) {
                 actions.add("Repair")
             }
             return actions

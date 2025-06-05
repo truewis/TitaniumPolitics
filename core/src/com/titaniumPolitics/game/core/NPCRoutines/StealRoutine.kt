@@ -22,9 +22,10 @@ class StealRoutine() : Routine() {
 
         val resplace = findResource(name)?.name ?: return null
         if (place != resplace) {
-            return MoveRoutine().apply {
-                variables["movePlace"] = resplace
-            }//Add a move routine with higher priority.
+            if (routines.none { it is MoveRoutine })
+                return MoveRoutine().apply {
+                    variables["movePlace"] = resplace
+                }//Add a move routine with higher priority.
         }
         return null
     }

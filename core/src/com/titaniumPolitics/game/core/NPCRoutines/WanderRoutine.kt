@@ -8,11 +8,13 @@ import kotlinx.serialization.Transient
 @Serializable
 class WanderRoutine() : Routine() {
     override fun newRoutineCondition(name: String, place: String, routines: List<Routine>): Routine? {
-        return MoveRoutine().apply {
-            variables["movePlace"] =
-                Place.publicPlaces//Should not wander into other people's homes.
-                    .random()
-        }//Add a move routine with higher priority.
+        if (routines.none { it is MoveRoutine })
+            return MoveRoutine().apply {
+                variables["movePlace"] =
+                    Place.publicPlaces//Should not wander into other people's homes.
+                        .random()
+            }//Add a move routine with higher priority.
+        return null
     }
 
     override fun execute(name: String, place: String): GameAction {

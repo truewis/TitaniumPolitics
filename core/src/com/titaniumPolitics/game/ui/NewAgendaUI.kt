@@ -20,8 +20,7 @@ import ktx.scene2d.buttonGroup
 
 
 class NewAgendaUI(gameState: GameState, override var actionCallback: (GameAction) -> Unit) : WindowUI("NewAgendaTitle"),
-    ActionUI
-{
+    ActionUI {
     private var subject = gameState.playerName
     val sbjObject = gameState.characters[subject]!!
 
@@ -29,8 +28,7 @@ class NewAgendaUI(gameState: GameState, override var actionCallback: (GameAction
     private var availableAgendas = arrayOf<AgendaType>()
     val agendaDetailStack: Stack
     private val actionSelUI = ActionSelectUI(gameState, this::setRequestAction)
-    fun setRequestAction(action: GameAction)
-    {
+    fun setRequestAction(action: GameAction) {
         agenda.attachedRequest = Request(action, hashSetOf(action.sbjCharacter))
     }
 
@@ -44,10 +42,8 @@ class NewAgendaUI(gameState: GameState, override var actionCallback: (GameAction
         //Select character to perform the request.
         selectBox<String> {
             items = Array(gameState.characters.keys.toTypedArray())
-            addListener(object : ChangeListener()
-            {
-                override fun changed(event: ChangeEvent?, actor: Actor?)
-                {
+            addListener(object : ChangeListener() {
+                override fun changed(event: ChangeEvent?, actor: Actor?) {
                     this@NewAgendaUI.agenda =
                         MeetingAgenda(AgendaType.PRAISE, this@NewAgendaUI.subject, hashMapOf("character" to selected))
                 }
@@ -63,10 +59,8 @@ class NewAgendaUI(gameState: GameState, override var actionCallback: (GameAction
         //Select character to perform the request.
         selectBox<String> {
             items = Array(gameState.characters.keys.toTypedArray())
-            addListener(object : ChangeListener()
-            {
-                override fun changed(event: ChangeEvent?, actor: Actor?)
-                {
+            addListener(object : ChangeListener() {
+                override fun changed(event: ChangeEvent?, actor: Actor?) {
                     this@NewAgendaUI.agenda =
                         MeetingAgenda(AgendaType.DENOUNCE, this@NewAgendaUI.subject, hashMapOf("character" to selected))
                 }
@@ -82,10 +76,8 @@ class NewAgendaUI(gameState: GameState, override var actionCallback: (GameAction
         //Select character to perform the request.
         selectBox<String> {
             items = Array(gameState.parties.keys.toTypedArray())
-            addListener(object : ChangeListener()
-            {
-                override fun changed(event: ChangeEvent?, actor: Actor?)
-                {
+            addListener(object : ChangeListener() {
+                override fun changed(event: ChangeEvent?, actor: Actor?) {
                     this@NewAgendaUI.agenda =
                         MeetingAgenda(AgendaType.PRAISE_PARTY, this@NewAgendaUI.subject, hashMapOf("party" to selected))
                 }
@@ -101,10 +93,8 @@ class NewAgendaUI(gameState: GameState, override var actionCallback: (GameAction
         //Select character to perform the request.
         selectBox<String> {
             items = Array(gameState.parties.keys.toTypedArray())
-            addListener(object : ChangeListener()
-            {
-                override fun changed(event: ChangeEvent?, actor: Actor?)
-                {
+            addListener(object : ChangeListener() {
+                override fun changed(event: ChangeEvent?, actor: Actor?) {
                     this@NewAgendaUI.agenda =
                         MeetingAgenda(
                             AgendaType.DENOUNCE_PARTY,
@@ -121,17 +111,15 @@ class NewAgendaUI(gameState: GameState, override var actionCallback: (GameAction
             setFontScale(3f)
         }
         row()
-        label("Transfer resources to"){setFontScale(3f)}
-        add(PlaceSelectButton(skin, { this@NewAgendaUI.actionSelUI.changeTgtPlace(it)})).growX()
+        label("Transfer resources to") { setFontScale(3f) }
+        add(PlaceSelectButton(skin, { this@NewAgendaUI.actionSelUI.changeTgtPlace(it) })).growX()
         row()
         label("Request to:", "trnsprtConsole") { setFontScale(3f) }
         //Select character to perform the request.
         selectBox<String> {//TODO: Replace with Character Selection UI
             items = Array(gameState.characters.keys.toTypedArray())
-            addListener(object : ChangeListener()
-            {
-                override fun changed(event: ChangeEvent?, actor: Actor?)
-                {
+            addListener(object : ChangeListener() {
+                override fun changed(event: ChangeEvent?, actor: Actor?) {
                     this@NewAgendaUI.actionSelUI.changeSubject(selected)
                 }
             })
@@ -165,10 +153,8 @@ class NewAgendaUI(gameState: GameState, override var actionCallback: (GameAction
                     setAlignment(Align.center)
 
                 }
-                addListener(object : ClickListener()
-                {
-                    override fun clicked(event: com.badlogic.gdx.scenes.scene2d.InputEvent?, x: Float, y: Float)
-                    {
+                addListener(object : ClickListener() {
+                    override fun clicked(event: InputEvent?, x: Float, y: Float) {
                         this@NewAgendaUI.actionCallback(
                             NewAgenda(
                                 this@NewAgendaUI.subject,
@@ -195,8 +181,8 @@ class NewAgendaUI(gameState: GameState, override var actionCallback: (GameAction
 //            }
         }
     }
-    init
-    {
+
+    init {
         isVisible = false
 
         content.add(st).grow()
@@ -205,8 +191,7 @@ class NewAgendaUI(gameState: GameState, override var actionCallback: (GameAction
 
     }
 
-    fun hideAllAgendaDetailsTable()
-    {
+    fun hideAllAgendaDetailsTable() {
         praiseTable.isVisible = false
         denounceTable.isVisible = false
         praisePartyTable.isVisible = false
@@ -215,8 +200,7 @@ class NewAgendaUI(gameState: GameState, override var actionCallback: (GameAction
     }
 
 
-    fun refresh(gameState: GameState)
-    {
+    fun refresh(gameState: GameState) {
         refreshAvailableAgendaList(gameState)
         actionSelUI.refreshList(listOf("UnofficialResourceTransfer", "OfficialResourceTransfer"))
         availableAgendas.forEach { tobj ->
@@ -229,183 +213,160 @@ class NewAgendaUI(gameState: GameState, override var actionCallback: (GameAction
                     image("Help") {
 
 
-                        when (tobj)
-                        {
+                        when (tobj) {
                             //TODO: also make changes to NewAgendaUI.kt.
-                            AgendaType.PROOF_OF_WORK ->
-                            {
+                            AgendaType.PROOF_OF_WORK -> {
                                 this.setDrawable(defaultSkin, "icon_app_147")
-                                this@button.addListener(object : ClickListener()
-                                {
+                                this@button.addListener(object : ClickListener() {
                                     override fun clicked(
                                         event: InputEvent?,
                                         x: Float,
                                         y: Float
-                                    )
-                                    {
+                                    ) {
                                         this@NewAgendaUI.hideAllAgendaDetailsTable()
                                     }
                                 })
                             }
-                            AgendaType.NOMINATE ->
-                            {
+
+                            AgendaType.NOMINATE -> {
                                 this.setDrawable(defaultSkin, "icon_app_8")
-                                this@button.addListener(object : ClickListener()
-                                {
+                                this@button.addListener(object : ClickListener() {
                                     override fun clicked(
                                         event: InputEvent?,
                                         x: Float,
                                         y: Float
-                                    )
-                                    {
+                                    ) {
                                         this@NewAgendaUI.hideAllAgendaDetailsTable()
                                     }
                                 })
                             }
-                            AgendaType.REQUEST ->
-                            {
+
+                            AgendaType.REQUEST -> {
                                 this.setDrawable(defaultSkin, "icon_gesture_58")
-                                this@button.addListener(object : ClickListener()
-                                {
+                                this@button.addListener(object : ClickListener() {
                                     override fun clicked(
                                         event: InputEvent?,
                                         x: Float,
                                         y: Float
-                                    )
-                                    {
+                                    ) {
                                         this@NewAgendaUI.hideAllAgendaDetailsTable()
                                         this@NewAgendaUI.requestTable.isVisible = true
                                     }
                                 })
                             }
-                            AgendaType.PRAISE ->
-                            {
+
+                            AgendaType.PRAISE -> {
                                 this.setDrawable(defaultSkin, "icon_gesture_1")
-                                this@button.addListener(object : ClickListener()
-                                {
+                                this@button.addListener(object : ClickListener() {
                                     override fun clicked(
                                         event: InputEvent?,
                                         x: Float,
                                         y: Float
-                                    )
-                                    {
+                                    ) {
                                         this@NewAgendaUI.hideAllAgendaDetailsTable()
                                         this@NewAgendaUI.praiseTable.isVisible = true
                                     }
                                 })
                             }
-                            AgendaType.DENOUNCE ->
-                            {
+
+                            AgendaType.DENOUNCE -> {
                                 this.setDrawable(defaultSkin, "icon_gesture_2")
-                                this@button.addListener(object : ClickListener()
-                                {
+                                this@button.addListener(object : ClickListener() {
                                     override fun clicked(
                                         event: InputEvent?,
                                         x: Float,
                                         y: Float
-                                    )
-                                    {
+                                    ) {
                                         this@NewAgendaUI.hideAllAgendaDetailsTable()
                                         this@NewAgendaUI.denounceTable.isVisible = true
                                     }
                                 })
                             }
-                            AgendaType.PRAISE_PARTY ->
-                            {
+
+                            AgendaType.PRAISE_PARTY -> {
                                 this.setDrawable(defaultSkin, "icon_gesture_1")
-                                this@button.addListener(object : ClickListener()
-                                {
+                                this@button.addListener(object : ClickListener() {
                                     override fun clicked(
                                         event: InputEvent?,
                                         x: Float,
                                         y: Float
-                                    )
-                                    {
+                                    ) {
                                         this@NewAgendaUI.hideAllAgendaDetailsTable()
                                         this@NewAgendaUI.praisePartyTable.isVisible = true
                                     }
                                 })
                             }
-                            AgendaType.DENOUNCE_PARTY ->
-                            {
+
+                            AgendaType.DENOUNCE_PARTY -> {
                                 this.setDrawable(defaultSkin, "icon_gesture_2")
-                                this@button.addListener(object : ClickListener()
-                                {
+                                this@button.addListener(object : ClickListener() {
                                     override fun clicked(
                                         event: InputEvent?,
                                         x: Float,
                                         y: Float
-                                    )
-                                    {
+                                    ) {
                                         this@NewAgendaUI.hideAllAgendaDetailsTable()
                                         this@NewAgendaUI.denouncePartyTable.isVisible = true
                                     }
                                 })
                             }
-                            AgendaType.BUDGET_PROPOSAL ->
-                            {
+
+                            AgendaType.BUDGET_PROPOSAL -> {
                                 this.setDrawable(defaultSkin, "icon_app_104")
-                                this@button.addListener(object : ClickListener()
-                                {
+                                this@button.addListener(object : ClickListener() {
                                     override fun clicked(
                                         event: InputEvent?,
                                         x: Float,
                                         y: Float
-                                    )
-                                    {
+                                    ) {
                                         this@NewAgendaUI.hideAllAgendaDetailsTable()
                                         this@NewAgendaUI.denouncePartyTable.isVisible = true
                                     }
                                 })
                             }
-                            AgendaType.BUDGET_RESOLUTION ->
-                            {
+
+                            AgendaType.BUDGET_RESOLUTION -> {
                                 this.setDrawable(defaultSkin, "icon_app_105")
-                                this@button.addListener(object : ClickListener()
-                                {
+                                this@button.addListener(object : ClickListener() {
                                     override fun clicked(
                                         event: InputEvent?,
                                         x: Float,
                                         y: Float
-                                    )
-                                    {
+                                    ) {
                                         this@NewAgendaUI.hideAllAgendaDetailsTable()
                                         this@NewAgendaUI.denouncePartyTable.isVisible = true
                                     }
                                 })
                             }
-                            AgendaType.APPOINT_MEETING ->
-                            {
+
+                            AgendaType.APPOINT_MEETING -> {
                                 this.setDrawable(defaultSkin, "icon_app_18")
-                                this@button.addListener(object : ClickListener()
-                                {
+                                this@button.addListener(object : ClickListener() {
                                     override fun clicked(
                                         event: InputEvent?,
                                         x: Float,
                                         y: Float
-                                    )
-                                    {
+                                    ) {
                                         this@NewAgendaUI.hideAllAgendaDetailsTable()
                                         this@NewAgendaUI.denouncePartyTable.isVisible = true
                                     }
                                 })
                             }
-                            AgendaType.FIRE_MANAGER ->{
+
+                            AgendaType.FIRE_MANAGER -> {
                                 this.setDrawable(defaultSkin, "icon_app_7")
-                                this@button.addListener(object : ClickListener()
-                                {
+                                this@button.addListener(object : ClickListener() {
                                     override fun clicked(
                                         event: InputEvent?,
                                         x: Float,
                                         y: Float
-                                    )
-                                    {
+                                    ) {
                                         this@NewAgendaUI.hideAllAgendaDetailsTable()
                                     }
                                 })
                             }
-                            else ->
-                            {
+
+                            else -> {
                                 this.setDrawable(defaultSkin, "Help")
 
                             }
@@ -418,8 +379,7 @@ class NewAgendaUI(gameState: GameState, override var actionCallback: (GameAction
         }
     }
 
-    fun refreshAvailableAgendaList(gameState: GameState)
-    {
+    fun refreshAvailableAgendaList(gameState: GameState) {
         availableAgendas =
             arrayOf(
                 AgendaType.PROOF_OF_WORK,
@@ -433,25 +393,23 @@ class NewAgendaUI(gameState: GameState, override var actionCallback: (GameAction
         if (this@NewAgendaUI.sbjObject.currentMeeting == null)
             throw Exception("Player is not in a meeting.")
         val mt = this@NewAgendaUI.sbjObject.currentMeeting!!
-        if (mt.type == "divisionLeaderElection")
+        if (mt.type == Meeting.MeetingType.DIVISION_LEADER_ELECTION)
             availableAgendas += AgendaType.NOMINATE
         if (mt.involvedParty == "cabinet" && !gameState.isBudgetProposed)
             availableAgendas += AgendaType.BUDGET_PROPOSAL
         if (mt.involvedParty == "triumvirate" && !gameState.isBudgetResolved)
-            availableAgendas +=  AgendaType.BUDGET_RESOLUTION
+            availableAgendas += AgendaType.BUDGET_RESOLUTION
         //If the player is a division leader, they can fire managers.
-        if (mt.type == "divisionDailyConference" && gameState.parties[mt.involvedParty]!!.leader == subject)
+        if (mt.type == Meeting.MeetingType.DIVISION_DAILY_CONFERENCE && gameState.parties[mt.involvedParty]!!.leader == subject)
             availableAgendas += AgendaType.FIRE_MANAGER
         //TODO: Also update NewAgenda.kt
     }
 
-    override fun changeSubject(charName: String)
-    {
+    override fun changeSubject(charName: String) {
         subject = charName
     }
 
-    companion object
-    {
+    companion object {
         //Singleton
         lateinit var primary: NewAgendaUI
     }

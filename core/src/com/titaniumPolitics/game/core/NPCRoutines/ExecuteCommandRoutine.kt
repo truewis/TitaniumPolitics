@@ -15,9 +15,10 @@ class ExecuteCommandRoutine() : Routine() {
         println("$name is executing the command ${executableRequest}.")
 
         if (place != executableRequest.action.tgtPlace) {
-            return MoveRoutine().apply {
-                variables["movePlace"] = executableRequest.action.tgtPlace
-            }//Add a move routine with higher priority.
+            if (routines.none { it is MoveRoutine })
+                return MoveRoutine().apply {
+                    variables["movePlace"] = executableRequest.action.tgtPlace
+                }//Add a move routine with higher priority.
         }
         return null
     }

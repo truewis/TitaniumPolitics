@@ -21,10 +21,12 @@ class FindCharacterRoutine() : Routine() {
             return null
         }
 
-        return MoveRoutine().also {
-            it.variables["movePlace"] =
-                gState.places.values.find { it.characters.contains(variables["character"]) }!!.name
-        }
+        if (routines.none { it is MoveRoutine })
+            return MoveRoutine().also {
+                it.variables["movePlace"] =
+                    gState.places.values.find { it.characters.contains(variables["character"]) }!!.name
+            }
+        return null
     }
 
     override fun execute(name: String, place: String): GameAction {

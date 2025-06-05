@@ -5,6 +5,7 @@ import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.core.gameActions.GameAction
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
+import java.util.UUID
 
 //Trying implementing design pattern with function call stack is a bad idea because it is hard to debug.
 //Routine was designed to be independent of the gameState, but it is not the case anymore.
@@ -12,11 +13,15 @@ import kotlinx.serialization.Transient
 sealed class Routine() {
     @Transient
     lateinit var gState: GameState
+    val ID = UUID.randomUUID().toString()
     var priority: Int = 0
-    val subroutines = arrayListOf<Routine>()
+    val subroutines = arrayListOf<String>() //Store the IDs of subroutines that are currently running.
     val variables: HashMap<String, String> = hashMapOf()
     val intVariables: HashMap<String, Int> = hashMapOf()
     val doubleVariables: HashMap<String, Double> = hashMapOf()
+    val PRIORITY_WORK = 1000
+    val PRIORITY_REST = 0
+    val PRIORITY_LIFE_SUPPORT = 2000
     var executeDone =
         false //This is used to check if the routine execution is successful. Otherwise, there is a problem executing the routine and the parent routine should be notified.
 

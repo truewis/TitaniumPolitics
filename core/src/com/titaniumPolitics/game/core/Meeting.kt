@@ -1,6 +1,7 @@
 package com.titaniumPolitics.game.core
 
 import com.titaniumPolitics.game.core.ReadOnly.const
+import com.titaniumPolitics.game.core.ReadOnly.constInt
 import com.titaniumPolitics.game.core.ReadOnly.dt
 import com.titaniumPolitics.game.debugTools.Logger
 import kotlinx.serialization.Serializable
@@ -18,12 +19,11 @@ import kotlin.times
 @Serializable
 class Meeting(
     var time: Int,
-    var type: String,
+    var type: MeetingType,
     var scheduledCharacters: HashSet<String>,
     var place: String,
     var currentCharacters: HashSet<String> = hashSetOf()
-)
-{
+) {
     var involvedParty: String = ""
     var currentSpeaker = ""
     var currentAttention = 0
@@ -31,19 +31,15 @@ class Meeting(
     var voteResults = hashMapOf<String, Int>()
     var onVoteResults = ArrayList<() -> Unit>()
 
-    fun endMeeting(gameState: GameState)
-    {
+    fun endMeeting(gameState: GameState) {
         //If this is an election, elect the leader from the mutuality matrix.
-        when (type)
-        {
-            "divisionLeaderElection" ->
-            {
+        when (type) {
+            MeetingType.DIVISION_LEADER_ELECTION -> {
 
                 //involvedParty is not empty for divisionLeaderElections.
                 val party = gameState.parties[involvedParty]!!
 
-                if (party.leader != "")
-                {
+                if (party.leader != "") {
                     Logger.warning("The leader of the party $involvedParty exists as ${party.leader}, but the election is still happening.")
                     throw IllegalStateException("The leader of the party $involvedParty exists as ${party.leader}, but the election is still happening.")
                 }
@@ -67,20 +63,18 @@ class Meeting(
                 println("The leader of the party $involvedParty is elected as $leader.")
             }
 
-            "divisionDailyConference" ->
-            {
-                if (agendas.any { it.type == AgendaType.FIRE_MANAGER })
-                {
+            MeetingType.DIVISION_DAILY_CONFERENCE -> {
+                if (agendas.any { it.type == AgendaType.FIRE_MANAGER }) {
                     //TODO:
                 }
             }
+
+            else -> {}
         }
         //Remove the meeting from the ongoingMeetings.
-        if (gameState.ongoingMeetings.containsValue(this))
-        {
+        if (gameState.ongoingMeetings.containsValue(this)) {
             gameState.removeOngoingMeeting(gameState.ongoingMeetings.filter { it.value == this }.keys.first())
-        } else
-        {
+        } else {
             Logger.warning("Meeting $this is not found in the ongoingMeetings.")
             throw IllegalStateException("Meeting $this is not found in the ongoingMeetings.")
         }
@@ -89,17 +83,14 @@ class Meeting(
 
     //Agreement change is computed every turn based on deltaAgreement, rather than changing once when information are added.
     //This is to prevent the meeting going nowhere when there isn't enough supporting information.
-    fun onTimeChange(gameState: GameState)
-    {
+    fun onTimeChange(gameState: GameState) {
 
-        if (type == "")
-        {
+        if (type == MeetingType.TALK) {
             //Chill meeting
             currentCharacters.forEach {
                 gameState.setMutuality(it, delta = dt / const("ChillMeetingWillTau") * const("mutualityMax"))
             }
-        } else
-        {
+        } else {
             //Work meeting
             currentCharacters.forEach {
                 gameState.setMutuality(it, delta = dt / const("WorkMeetingWillTau") * const("mutualityMax"))
@@ -109,5 +100,14 @@ class Meeting(
 
 
         }
+    }
+
+    fun isValidTimeToStart(tgtTime: Int): Boolean {
+        //Check if the meeting is scheduled in the future.
+        return tgtTime - time in -constInt("MeetingStartTolerance")..constInt("MeetingStartTolerance")
+    }
+
+    enum class MeetingType {
+        TALK, DIVISION_LEADER_ELECTION, DIVISION_DAILY_CONFERENCE, BUDGET_PROPOSAL, BUDGET_RESOLUTION, CABINET_DAILY_CONFERENCE, TRIUMVIRATE_DAILY_CONFERENCE
     }
 }

@@ -3,6 +3,7 @@ package com.titaniumPolitics.game.core.NPCRoutines
 import com.titaniumPolitics.game.core.gameActions.GameAction
 import com.titaniumPolitics.game.core.gameActions.PrepareInfo
 import com.titaniumPolitics.game.core.gameActions.Wait
+import com.titaniumPolitics.game.debugTools.Logger
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -11,9 +12,10 @@ class PrepareInfoRoutine() : Routine() {
 
     override fun newRoutineCondition(name: String, place: String, routines: List<Routine>): Routine? {
         if (place != "home_${name}") {
-            return MoveRoutine().apply {
-                variables["movePlace"] = "home_${name}"
-            }//Add a move routine with higher priority.
+            if (routines.none { it is MoveRoutine })
+                return MoveRoutine().apply {
+                    variables["movePlace"] = "home_${name}"
+                }//Add a move routine with higher priority.
         }
         return null
     }
@@ -26,7 +28,7 @@ class PrepareInfoRoutine() : Routine() {
                 it.recommendKeys()
             }
         }
-        println("$name: Cannot move to home_${name} to prepare info ${variables["infoKey"]!!}. Terminating the routine......")
+        Logger.warning("$name: Cannot move to home_${name}. Terminating the prepareInfoRoutine......")
         err = true
         return Wait(name, place)
     }

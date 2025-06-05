@@ -72,7 +72,13 @@ class AttackAgendaRoutine() : Routine(), IMeetingRoutine {
 
     //TODO: Also check SupportAgendaRoutine.
     override fun endCondition(name: String, place: String): Boolean {
+        // If I have no prepared information not presented in the meeting, end the routine.
+        val character = gState.characters[name]!!
+        val conf = character.currentMeeting!!
+        if (character.preparedInfoKeys.none { key ->
+                (conf.currentCharacters - gState.informations[key]!!.knownTo).isNotEmpty()
+            })
+            return true
         return executeDone
-        //TODO: when pathfinding fails, return true.
     }
 }

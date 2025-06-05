@@ -10,9 +10,10 @@ class InvestigateAndClearAccidentRoutine() : Routine() {
     var investigated = false
     override fun newRoutineCondition(name: String, place: String, routines: List<Routine>): Routine? {
         if (place != variables["place"]!!) {
-            return MoveRoutine().also {
-                it.variables["movePlace"] = variables["place"]!!
-            }
+            if (routines.none { it is MoveRoutine })
+                return MoveRoutine().also {
+                    it.variables["movePlace"] = variables["place"]!!
+                }
         }
         return null
     }

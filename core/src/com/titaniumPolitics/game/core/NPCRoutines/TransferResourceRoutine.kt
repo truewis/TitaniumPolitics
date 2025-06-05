@@ -14,7 +14,8 @@ class TransferResourceRoutine() : Routine() {
     override fun newRoutineCondition(name: String, place: String, routines: List<Routine>): Routine? {
 
         if (place != source) {
-            return MoveRoutine().apply { variables["movePlace"] = source }
+            if (routines.none { it is MoveRoutine })
+                return MoveRoutine().apply { variables["movePlace"] = source }
         }
         return null
     }

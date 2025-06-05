@@ -1,6 +1,7 @@
 package com.titaniumPolitics.game.core.gameActions
 
 import com.titaniumPolitics.game.core.GameEngine
+import com.titaniumPolitics.game.core.Meeting
 import com.titaniumPolitics.game.core.ReadOnly
 import kotlinx.serialization.Serializable
 
@@ -10,9 +11,8 @@ class StartMeeting(override val sbjCharacter: String, override val tgtPlace: Str
     override fun chooseParams() {
         meetingName =
             GameEngine.acquire(parent.scheduledMeetings.filter {
-                it.value.time - parent.time in -ReadOnly.constInt("MeetingStartTolerance")..ReadOnly.constInt(
-                    "MeetingStartTolerance"
-                ) && it.value.place == tgtPlace
+                it.value.isValidTimeToStart(parent.time)
+                        && it.value.place == tgtPlace
             }
                 .filter { !parent.ongoingMeetings.containsKey(it.key) }
                 .filter { it.value.scheduledCharacters.contains(sbjCharacter) }.keys.toList())
@@ -40,15 +40,15 @@ class StartMeeting(override val sbjCharacter: String, override val tgtPlace: Str
     override fun isValid(): Boolean {
         val targetMeeting =
             parent.scheduledMeetings.filter {
-                it.value.time - parent.time in -ReadOnly.constInt("MeetingStartTolerance")..ReadOnly.constInt(
-                    "MeetingStartTolerance"
-                ) && it.value.place == tgtPlace
+                it.value.isValidTimeToStart(parent.time)
+                        && it.value.place == tgtPlace
             }
                 .filter { !parent.ongoingMeetings.containsKey(it.key) }
                 .filter { it.value.scheduledCharacters.contains(sbjCharacter) }.keys.firstOrNull()
-        return if (targetMeeting == null) false else
-        //Check if there are at least 2 characters to join.
-            parent.scheduledMeetings[targetMeeting]!!.scheduledCharacters.intersect(parent.places[tgtPlace]!!.characters).size >= 2
+        return targetMeeting != null &&
+                parent.scheduledMeetings[targetMeeting]!!.scheduledCharacters.intersect(parent.places[tgtPlace]!!.characters).size >= 2 &&
+                (parent.scheduledMeetings[targetMeeting]!!.type != Meeting.MeetingType.DIVISION_LEADER_ELECTION || //Beware that division leader elections can only be started by the controller.
+                        sbjCharacter == "ctrler")
 
         //NOTICE: The subject character need not be the leader of the party. This way meetings are more flexible and can be initiated by any character who is scheduled to attend the meeting.
     }
