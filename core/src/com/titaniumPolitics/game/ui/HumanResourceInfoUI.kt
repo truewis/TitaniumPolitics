@@ -12,12 +12,10 @@ import ktx.scene2d.*
 import ktx.scene2d.Scene2DSkin.defaultSkin
 
 //Human Resource Management is currently done without information. The report is instant.
-class HumanResourceInfoUI : WindowUI("HumanResourceInfoTitle")
-{
+class HumanResourceInfoUI : WindowUI("HumanResourcesInfoTitle") {
     private val dataTable = Table()
 
-    init
-    {
+    init {
         isVisible = false
         instance = this
         val informationPane = ScrollPane(dataTable)
@@ -27,8 +25,7 @@ class HumanResourceInfoUI : WindowUI("HumanResourceInfoTitle")
 
     }
 
-    fun refresh(place: Place, reportTime: Int)
-    {
+    fun refresh(place: Place, reportTime: Int) {
         dataTable.clear()
         dataTable.apply {
 
@@ -46,8 +43,7 @@ class HumanResourceInfoUI : WindowUI("HumanResourceInfoTitle")
 
     }
 
-    companion object
-    {
+    companion object {
         //Singleton
         lateinit var instance: HumanResourceInfoUI
     }
