@@ -15,8 +15,7 @@ import kotlinx.serialization.Transient
 *  The server then checks the parameters for validity and then executes the action.
 * */
 @Serializable
-sealed class GameAction()
-{
+sealed class GameAction() {
     abstract val sbjCharacter: String
 
     //This can be different from the current place of the subject, in case of a hypothetical action.
@@ -25,58 +24,54 @@ sealed class GameAction()
     val sbjCharObj get() = parent.characters[sbjCharacter]!!
     val tgtPlaceObj get() = parent.places[tgtPlace]!!
 
+
+    //This is used to store why the action is invalid, used by the UI elements to display the reason why the action cannot be performed.
+    @Transient
+    var invalidReason = ""
+
     @Transient
     lateinit var parent: GameState
-    fun injectParent(parent: GameState)
-    {
+    fun injectParent(parent: GameState) {
         this.parent = parent
     }
 
-    open fun chooseParams()
-    {
+    open fun chooseParams() {
     }
 
     //Return all declared properties.
-    fun returnParams()
-    {
+    fun returnParams() {
 
     }
 
     //This is a test function to check if the action is valid. It is called before execute. You can insert conditions to check here.
     //The execute function is still called even if this function returns false, but the engine throws a warning.
-    open fun isValid(): Boolean
-    {
+    open fun isValid(): Boolean {
         return true
     }
 
     //Some gameActions have more complicated freezing mechanism, so they don't call this function.
-    open fun execute()
-    {
+    open fun execute() {
 
         //Execution time penalty when the will is low.
-        if (parent.getMutuality(sbjCharacter) < ReadOnly.const("CriticalWill"))
-        {
+        if (parent.getMutuality(sbjCharacter) < ReadOnly.const("CriticalWill")) {
             if (this is NewAgenda || this is Intercept || this is InvestigateAccidentScene || this is ClearAccidentScene || this is PrepareInfo)
                 sbjCharObj.frozen += 3 * ReadOnly.constInt(this::class.simpleName!! + "Duration")
             else if (this is Sleep || this is Move)
                 sbjCharObj.frozen += 2 * ReadOnly.constInt(this::class.simpleName!! + "Duration")
             //TODO: Reduce health every turn?
-        } else if (parent.getMutuality(sbjCharacter) < ReadOnly.const("DowntimeWill"))
-        {
-                sbjCharObj.frozen += 3 * ReadOnly.constInt(this::class.simpleName!! + "Duration") / 2
+        } else if (parent.getMutuality(sbjCharacter) < ReadOnly.const("DowntimeWill")) {
+            sbjCharObj.frozen += 3 * ReadOnly.constInt(this::class.simpleName!! + "Duration") / 2
 
         } else
             sbjCharObj.frozen += ReadOnly.constInt(this::class.simpleName!! + "Duration")
     }
 
-    open fun deltaWill(): Double
-    {
+    open fun deltaWill(): Double {
         return .0
     }
 
     //This function is used by agents to pick the best action they want.
-    open fun optimizeWill(): Double
-    {
+    open fun optimizeWill(): Double {
         return deltaWill()
     }
 

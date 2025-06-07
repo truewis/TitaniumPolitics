@@ -726,8 +726,11 @@ class GameEngine(val gameState: GameState) {
                 }
                     .filter { !gameState.ongoingMeetings.containsKey(it.key) }
                     .filter { it.value.scheduledCharacters.contains(character) }
-            if (availableMeetings.isNotEmpty())
-                actions.add("StartMeeting")
+            if (availableMeetings.isNotEmpty() && availableMeetings.values.first().scheduledCharacters.intersect(
+                    gameState.places[place]!!.characters
+                ).size >= 2
+            )
+                actions.add("StartMeeting")//If there are more than one character scheduled to attend the meeting, you can start it.
             val meetingsToJoin = gameState.ongoingMeetings.filter {
                 it.value.scheduledCharacters.contains(character) && !it.value.currentCharacters.contains(character) && it.value.place == place
             }

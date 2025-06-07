@@ -376,9 +376,10 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable 
                                             this@AvailableActionsUI.gameState.playerName,
                                             this@AvailableActionsUI.gameState.player.place.name
                                         ).also {
-                                            it.meetingName = this@AvailableActionsUI.gameState.ongoingMeetings.filter {
-                                                it.value.scheduledCharacters.contains(this@AvailableActionsUI.gameState.playerName) && it.value.place == this@AvailableActionsUI.gameState.player.place.name
-                                            }.keys.first()
+                                            it.meetingName =
+                                                this@AvailableActionsUI.gameState.scheduledMeetings.filter {
+                                                    it.value.scheduledCharacters.contains(this@AvailableActionsUI.gameState.playerName) && it.value.place == this@AvailableActionsUI.gameState.player.place.name
+                                                }.keys.first()
                                         }
                                     )
                                 }
