@@ -53,7 +53,8 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable 
                 return@forEach
             }
             val t = scene2d.button {
-                addListener(ActionTooltipUI(tobj))
+                val tooltip = ActionTooltipUI(tobj)
+                addListener(tooltip)
                 image("Help") {
                     it.size(100f)
 
@@ -77,29 +78,37 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable 
 
                         "Wait" -> {
                             this.setDrawable(defaultSkin, "DotsGrunge")
+                            val action = Wait(
+                                this@AvailableActionsUI.gameState.playerName,
+                                this@AvailableActionsUI.gameState.player.place.name
+                            )
+                            action.injectParent(this@AvailableActionsUI.gameState); if (!action.isValid()) {
+                                this@button.isDisabled = true
+                                tooltip.displayInvalidReason(action.invalidReason)
+                            }
+
                             this@button.addListener(object : ClickListener() {
                                 override fun clicked(
                                     event: com.badlogic.gdx.scenes.scene2d.InputEvent?,
                                     x: Float,
                                     y: Float
                                 ) {
-                                    val sound =
-                                        Gdx.audio.newSound(Gdx.files.internal(ReadOnly.actionJson["Wait"]!!.jsonObject["sound"]!!.jsonPrimitive.content))
-                                    sound.play()
-
-                                    GameEngine.acquireCallback(
-                                        Wait(
-                                            this@AvailableActionsUI.gameState.playerName,
-                                            this@AvailableActionsUI.gameState.player.place.name
-                                        )
-                                    )
+                                    GameEngine.acquireCallback(action)
                                 }
-                            }
-                            )
+                            })
                         }
 
                         "Eat" -> {
                             this.setDrawable(defaultSkin, "AppleGrunge")
+                            val action = Eat(
+                                this@AvailableActionsUI.gameState.playerName,
+                                this@AvailableActionsUI.gameState.player.place.name
+                            )
+                            action.injectParent(this@AvailableActionsUI.gameState); if (!action.isValid()) {
+                                this@button.isDisabled = true
+                                tooltip.displayInvalidReason(action.invalidReason)
+                            }
+
                             this@button.addListener(object : ClickListener() {
                                 override fun clicked(
                                     event: com.badlogic.gdx.scenes.scene2d.InputEvent?,
@@ -109,49 +118,51 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable 
                                     val sound =
                                         Gdx.audio.newSound(Gdx.files.internal(ReadOnly.actionJson["Eat"]!!.jsonObject["sound"]!!.jsonPrimitive.content))
                                     sound.play()
-                                    GameEngine.acquireCallback(
-                                        Eat(
-                                            this@AvailableActionsUI.gameState.playerName,
-                                            this@AvailableActionsUI.gameState.player.place.name
-                                        )
-                                    )
+                                    GameEngine.acquireCallback(action)
                                 }
-                            }
-                            )
+                            })
                         }
 
                         "Sleep" -> {
                             this.setDrawable(defaultSkin, "icon_activity_117")
+                            val action = Sleep(
+                                this@AvailableActionsUI.gameState.playerName,
+                                this@AvailableActionsUI.gameState.player.place.name
+                            )
+                            action.injectParent(this@AvailableActionsUI.gameState); if (!action.isValid()) {
+                                this@button.isDisabled = true
+                                tooltip.displayInvalidReason(action.invalidReason)
+                            }
+
                             this@button.addListener(object : ClickListener() {
                                 override fun clicked(
                                     event: com.badlogic.gdx.scenes.scene2d.InputEvent?,
                                     x: Float,
                                     y: Float
                                 ) {
-                                    GameEngine.acquireCallback(
-                                        Sleep(
-                                            this@AvailableActionsUI.gameState.playerName,
-                                            this@AvailableActionsUI.gameState.player.place.name
-                                        )
-                                    )
+                                    GameEngine.acquireCallback(action)
                                 }
                             })
                         }
 
                         "Repair" -> {
                             this.setDrawable(defaultSkin, "CogGrunge")
+                            val action = Repair(
+                                this@AvailableActionsUI.gameState.playerName,
+                                this@AvailableActionsUI.gameState.player.place.name
+                            )
+                            action.injectParent(this@AvailableActionsUI.gameState); if (!action.isValid()) {
+                                this@button.isDisabled = true
+                                tooltip.displayInvalidReason(action.invalidReason)
+                            }
+
                             this@button.addListener(object : ClickListener() {
                                 override fun clicked(
                                     event: com.badlogic.gdx.scenes.scene2d.InputEvent?,
                                     x: Float,
                                     y: Float
                                 ) {
-                                    GameEngine.acquireCallback(
-                                        Repair(
-                                            this@AvailableActionsUI.gameState.playerName,
-                                            this@AvailableActionsUI.gameState.player.place.name
-                                        )
-                                    )
+                                    GameEngine.acquireCallback(action)
                                 }
                             })
                         }
@@ -214,36 +225,44 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable 
 
                         "InvestigateAccidentScene" -> {
                             this.setDrawable(defaultSkin, "TilesGrunge")
+                            val action = InvestigateAccidentScene(
+                                this@AvailableActionsUI.gameState.playerName,
+                                this@AvailableActionsUI.gameState.player.place.name
+                            )
+                            action.injectParent(this@AvailableActionsUI.gameState); if (!action.isValid()) {
+                                this@button.isDisabled = true
+                                tooltip.displayInvalidReason(action.invalidReason)
+                            }
+
                             this@button.addListener(object : ClickListener() {
                                 override fun clicked(
                                     event: com.badlogic.gdx.scenes.scene2d.InputEvent?,
                                     x: Float,
                                     y: Float
                                 ) {
-                                    GameEngine.acquireCallback(
-                                        InvestigateAccidentScene(
-                                            this@AvailableActionsUI.gameState.playerName,
-                                            this@AvailableActionsUI.gameState.player.place.name
-                                        )
-                                    )
+                                    GameEngine.acquireCallback(action)
                                 }
                             })
                         }
 
                         "ClearAccidentScene" -> {
                             this.setDrawable(defaultSkin, "TilesGrunge")
+                            val action = ClearAccidentScene(
+                                this@AvailableActionsUI.gameState.playerName,
+                                this@AvailableActionsUI.gameState.player.place.name
+                            )
+                            action.injectParent(this@AvailableActionsUI.gameState); if (!action.isValid()) {
+                                this@button.isDisabled = true
+                                tooltip.displayInvalidReason(action.invalidReason)
+                            }
+
                             this@button.addListener(object : ClickListener() {
                                 override fun clicked(
                                     event: com.badlogic.gdx.scenes.scene2d.InputEvent?,
                                     x: Float,
                                     y: Float
                                 ) {
-                                    GameEngine.acquireCallback(
-                                        ClearAccidentScene(
-                                            this@AvailableActionsUI.gameState.playerName,
-                                            this@AvailableActionsUI.gameState.player.place.name
-                                        )
-                                    )
+                                    GameEngine.acquireCallback(action)
                                 }
                             })
                         }
@@ -269,54 +288,66 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable 
 
                         "Intercept" -> {
                             this.setDrawable(defaultSkin, "TilesGrunge")
+                            val action = Intercept(
+                                this@AvailableActionsUI.gameState.playerName,
+                                this@AvailableActionsUI.gameState.player.place.name
+                            )
+                            action.injectParent(this@AvailableActionsUI.gameState); if (!action.isValid()) {
+                                this@button.isDisabled = true
+                                tooltip.displayInvalidReason(action.invalidReason)
+                            }
+
                             this@button.addListener(object : ClickListener() {
                                 override fun clicked(
                                     event: com.badlogic.gdx.scenes.scene2d.InputEvent?,
                                     x: Float,
                                     y: Float
                                 ) {
-                                    GameEngine.acquireCallback(
-                                        Intercept(
-                                            this@AvailableActionsUI.gameState.playerName,
-                                            this@AvailableActionsUI.gameState.player.place.name
-                                        )
-                                    )
+                                    GameEngine.acquireCallback(action)
                                 }
                             })
                         }
 
                         "Resign" -> {
                             this.setDrawable(defaultSkin, "TilesGrunge")
+                            val action = Resign(
+                                this@AvailableActionsUI.gameState.playerName,
+                                this@AvailableActionsUI.gameState.player.place.name
+                            )
+                            action.injectParent(this@AvailableActionsUI.gameState); if (!action.isValid()) {
+                                this@button.isDisabled = true
+                                tooltip.displayInvalidReason(action.invalidReason)
+                            }
+
                             this@button.addListener(object : ClickListener() {
                                 override fun clicked(
                                     event: com.badlogic.gdx.scenes.scene2d.InputEvent?,
                                     x: Float,
                                     y: Float
                                 ) {
-                                    GameEngine.acquireCallback(
-                                        Resign(
-                                            this@AvailableActionsUI.gameState.playerName,
-                                            this@AvailableActionsUI.gameState.player.place.name
-                                        )
-                                    )
+                                    GameEngine.acquireCallback(action)
                                 }
                             })
                         }
 
                         "Salary" -> {
                             this.setDrawable(defaultSkin, "TilesGrunge")
+                            val action = Salary(
+                                this@AvailableActionsUI.gameState.playerName,
+                                this@AvailableActionsUI.gameState.player.place.name
+                            )
+                            action.injectParent(this@AvailableActionsUI.gameState); if (!action.isValid()) {
+                                this@button.isDisabled = true
+                                tooltip.displayInvalidReason(action.invalidReason)
+                            }
+
                             this@button.addListener(object : ClickListener() {
                                 override fun clicked(
                                     event: com.badlogic.gdx.scenes.scene2d.InputEvent?,
                                     x: Float,
                                     y: Float
                                 ) {
-                                    GameEngine.acquireCallback(
-                                        Salary(
-                                            this@AvailableActionsUI.gameState.playerName,
-                                            this@AvailableActionsUI.gameState.player.place.name
-                                        )
-                                    )
+                                    GameEngine.acquireCallback(action)
                                 }
                             })
                         }
@@ -396,6 +427,7 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable 
                                     y: Float
                                 ) {
                                     NewAgendaUI.primary.isVisible = true
+                                    NewAgendaUI.primary.actionCallback = GameEngine.acquireCallback
                                     NewAgendaUI.primary.refresh(this@AvailableActionsUI.gameState)
                                 }
                             })
@@ -403,19 +435,22 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable 
 
                         "LeaveMeeting" -> {
                             this.setDrawable(defaultSkin, "XGrunge")
+                            val action = LeaveMeeting(
+                                this@AvailableActionsUI.gameState.playerName,
+                                this@AvailableActionsUI.gameState.player.place.name
+                            )
+                            action.injectParent(this@AvailableActionsUI.gameState); if (!action.isValid()) {
+                                this@button.isDisabled = true
+                                tooltip.displayInvalidReason(action.invalidReason)
+                            }
+
                             this@button.addListener(object : ClickListener() {
                                 override fun clicked(
                                     event: com.badlogic.gdx.scenes.scene2d.InputEvent?,
                                     x: Float,
                                     y: Float
                                 ) {
-                                    GameEngine.acquireCallback(
-                                        LeaveMeeting(
-                                            this@AvailableActionsUI.gameState.playerName,
-                                            this@AvailableActionsUI.gameState.player.place.name
-                                        )
-
-                                    )
+                                    GameEngine.acquireCallback(action)
                                 }
                             })
                         }

@@ -2,6 +2,7 @@ package com.titaniumPolitics.game.ui
 
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.scenes.scene2d.Touchable
+import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.ui.TextTooltip
 import com.badlogic.gdx.scenes.scene2d.ui.Tooltip
@@ -50,19 +51,30 @@ class ActionTooltipUI(actionName: String) : Tooltip<Table>(scene2d.table {
             }
             row()
             label(ReadOnly.prop("$actionName-description")) {
-                it.size(350f, 300f)
+                it.size(350f, 200f)
                 setFontScale(2f)
+                setAlignment(Align.topLeft)
+                wrap = true
+            }
+            row()
+            label("") {
+                it.size(350f, 100f)
+                name = "reasonText"
+                setFontScale(2f)
+                color = Color.RED
                 setAlignment(Align.topLeft)
                 wrap = true
             }
         }
     }
 
-})
-{
-    init
-    {
+}) {
+    init {
         manager.initialTime = 0.5f
+    }
+
+    fun displayInvalidReason(reason: String) {
+        container.findActor<Label>("reasonText").setText(reason)
     }
 
 }
