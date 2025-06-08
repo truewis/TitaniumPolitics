@@ -100,8 +100,8 @@ class CalendarUI(val gameState: GameState) : WindowUI("CalendarTitle") {
 
             // 각 날짜별 미팅 정보
             for (dayOffset in 0 until DAYS) {
-                gameState.day + dayOffset
-                val entriesAtThisHour = entries.filter { ReadOnly.toHours(it.time) == hour }
+                val entriesAtThisHour =
+                    entries.filter { ReadOnly.toHours(it.time) == hour && ReadOnly.toDays(it.time) == gameState.day + dayOffset }
                 if (entriesAtThisHour.isNotEmpty()) {
                     val cellTable = Table()
                     entriesAtThisHour.forEach { entry ->
