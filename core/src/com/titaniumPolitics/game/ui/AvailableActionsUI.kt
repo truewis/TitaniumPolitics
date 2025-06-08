@@ -93,7 +93,9 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable 
                                     x: Float,
                                     y: Float
                                 ) {
-                                    GameEngine.acquireCallback(action)
+                                    WaitUI.primary.isVisible = true
+                                    WaitUI.primary.actionCallback = GameEngine.acquireCallback
+                                    WaitUI.primary.refresh(WaitUIMode.WAIT)
                                 }
                             })
                         }
@@ -140,7 +142,9 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable 
                                     x: Float,
                                     y: Float
                                 ) {
-                                    GameEngine.acquireCallback(action)
+                                    WaitUI.primary.isVisible = true
+                                    WaitUI.primary.actionCallback = GameEngine.acquireCallback
+                                    WaitUI.primary.refresh(WaitUIMode.SLEEP)
                                 }
                             })
                         }

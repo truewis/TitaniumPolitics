@@ -4,26 +4,23 @@ import com.titaniumPolitics.game.core.ReadOnly
 import kotlinx.serialization.Serializable
 
 @Serializable
-class Sleep(override val sbjCharacter: String, override val tgtPlace: String) : GameAction()
-{
+class Sleep(override val sbjCharacter: String, override val tgtPlace: String) : GameAction() {
 
-    override fun execute()
-    {
+    override fun execute() {
         println("$sbjCharacter slept.")
         if (parent.characters[sbjCharacter]!!.trait.contains("old"))
-            parent.characters[sbjCharacter]!!.health += 40
+            parent.characters[sbjCharacter]!!.health += 6
         else
-            parent.characters[sbjCharacter]!!.health += 50
-        super.execute()
+            parent.characters[sbjCharacter]!!.health += 8
+        //Not affected by the will of the character, so no need to call super.execute()
+        sbjCharObj.frozen += ReadOnly.constInt("SleepDuration")
     }
 
-    override fun isValid(): Boolean
-    {
+    override fun isValid(): Boolean {
         return tgtPlace == "home_$sbjCharacter"
     }
 
-    override fun deltaWill(): Double
-    {
+    override fun deltaWill(): Double {
         var w = super.deltaWill()
         if (parent.characters[sbjCharacter]!!.health < ReadOnly.const("CriticalHealth"))
             w += 10

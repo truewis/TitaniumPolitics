@@ -46,6 +46,9 @@ class HeadUpInterface(val gameState: GameState) : Table(Scene2DSkin.defaultSkin)
             add(EndSpeechUI(this@HeadUpInterface.gameState, {}).also {
                 EndSpeechUI.primary = it
             })
+            add(WaitUI(this@HeadUpInterface.gameState, {}).also {
+                WaitUI.primary = it
+            })
 
             //We draw the following UIs above any other UIs, as they have to appear on top of everything else.
             add(PlaceSelectionUI(this@HeadUpInterface.gameState))

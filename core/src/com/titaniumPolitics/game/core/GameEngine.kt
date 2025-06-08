@@ -611,19 +611,31 @@ class GameEngine(val gameState: GameState) {
 
             // Use coroutine to suspend until the acquisition is complete
             suspendCoroutine { continuation ->
-                Gdx.app.postRunnable {
-                    acquireEvent.forEach { it(AcquireParams(dataType, params)) }
-                    acquireCallback = { x ->
-                        try {
-                            wanted = x as T
-                        } catch (e: Exception) {
-                            Logger.warning("Acquire failed: Wanted type: ${T::class}, Acquired type: ${x::class}")
-                            throw e
-                        }
-                        // Resume the coroutine to signal completion
-                        acquireCallback = {}
-                        continuation.resume(Unit)
+                acquireCallback = { x ->
+                    try {
+                        wanted = x as T
+                    } catch (e: Exception) {
+                        Logger.warning("Acquire failed: Wanted type: ${T::class}, Acquired type: ${x::class}")
+                        throw e
                     }
+                    // Resume the coroutine to signal completion
+                    acquireCallback = {
+                        Logger.warning("Acquire callback was called again with type: ${it::class}")
+                    }
+                    //println("Acquire callback resumed.")
+                    continuation.resume(Unit)
+                }
+                //println("acquireCallback set.")
+                Gdx.app.postRunnable {
+                    //println("Acquiring $dataType with params: $params")
+                    (acquireEvent).toList().forEach {
+                        it(
+                            AcquireParams(
+                                dataType,
+                                params
+                            )
+                        )
+                    }//Shallow copy of the list to avoid concurrent modification.
                 }
             }
 
