@@ -23,9 +23,9 @@ import ktx.scene2d.image
 import ktx.scene2d.scene2d
 
 //Select action for e.g. request in this dialogue.
-class ActionSelectUI(var gameState: GameState, override var actionCallback: (GameAction) -> Unit) : Table(Scene2DSkin.defaultSkin),
-    KTable, ActionUI
-{
+class ActionSelectUI(var gameState: GameState, override var actionCallback: (GameAction) -> Unit) :
+    Table(Scene2DSkin.defaultSkin),
+    KTable, ActionUI {
     private val docList = scene2d.buttonGroup(0, 1)
     private var subject = gameState.playerName
     private var tgtPlace = gameState.player.place.name
@@ -35,8 +35,7 @@ class ActionSelectUI(var gameState: GameState, override var actionCallback: (Gam
     private val actionDialogue = Container<Table>()
     val options: ExamineUI
 
-    init
-    {
+    init {
 
 
         options = ExamineUI(this@ActionSelectUI.gameState)
@@ -60,12 +59,10 @@ class ActionSelectUI(var gameState: GameState, override var actionCallback: (Gam
         refreshList(listOf("UnofficialResourceTransfer", "OfficialResourceTransfer"))
     }
 
-    fun refreshList(actionUIList: List<String>)
-    {
+    fun refreshList(actionUIList: List<String>) {
         docList.clear()
         actionUIList.forEach { tobj ->
-            val table: WindowUI = when (tobj)
-            {
+            val table: WindowUI = when (tobj) {
                 "NewAgenda" -> NewAgendaUI(gameState, actionCallback)
                 "OfficialResourceTransfer" -> ResourceTransferUI(gameState, actionCallback)
                 "UnofficialResourceTransfer" -> ResourceTransferUI(gameState, actionCallback).also {
@@ -89,26 +86,40 @@ class ActionSelectUI(var gameState: GameState, override var actionCallback: (Gam
                     image("Help") {
 
 
-                        when (tobj)
-                        {
+                        when (tobj) {
 
 
-                            "Repair" ->
-                            {
+                            "Repair" -> {
                                 this.setDrawable(Scene2DSkin.defaultSkin, "CogGrunge")
                             }
 
-                            "UnofficialResourceTransfer" ->
-                            {
+                            "Salary" -> {
                                 this.setDrawable(Scene2DSkin.defaultSkin, "TilesGrunge")
-                                this@button.addListener(object : ClickListener()
-                                {
+                            }
+
+                            "Examine" -> {
+                                this.setDrawable(Scene2DSkin.defaultSkin, "SearchGrunge")
+                                this@button.addListener(object : ClickListener() {
                                     override fun clicked(
                                         event: InputEvent?,
                                         x: Float,
                                         y: Float
-                                    )
-                                    {
+                                    ) {
+                                        this@ActionSelectUI.options.isVisible =
+                                            !this@ActionSelectUI.options.isVisible
+                                    }
+                                }
+                                )
+                            }
+
+                            "UnofficialResourceTransfer" -> {
+                                this.setDrawable(Scene2DSkin.defaultSkin, "TilesGrunge")
+                                this@button.addListener(object : ClickListener() {
+                                    override fun clicked(
+                                        event: InputEvent?,
+                                        x: Float,
+                                        y: Float
+                                    ) {
                                         with(table as ResourceTransferUI) {
                                             isVisible = true
                                             refresh(
@@ -122,17 +133,14 @@ class ActionSelectUI(var gameState: GameState, override var actionCallback: (Gam
                                 })
                             }
 
-                            "OfficialResourceTransfer" ->
-                            {
+                            "OfficialResourceTransfer" -> {
                                 this.setDrawable(Scene2DSkin.defaultSkin, "TilesGrunge")
-                                this@button.addListener(object : ClickListener()
-                                {
+                                this@button.addListener(object : ClickListener() {
                                     override fun clicked(
                                         event: InputEvent?,
                                         x: Float,
                                         y: Float
-                                    )
-                                    {
+                                    ) {
                                         with(table as ResourceTransferUI) {
                                             isVisible = true
                                             refresh(
@@ -167,8 +175,7 @@ class ActionSelectUI(var gameState: GameState, override var actionCallback: (Gam
 //                            }
 
                             //TODO: also make changes to NewAgendaUI.kt.
-                            else ->
-                            {
+                            else -> {
                                 this.setDrawable(Scene2DSkin.defaultSkin, "Help")
 
                             }
@@ -187,14 +194,12 @@ class ActionSelectUI(var gameState: GameState, override var actionCallback: (Gam
 
     }
 
-    override fun changeSubject(charName: String)
-    {
+    override fun changeSubject(charName: String) {
         subject = charName
         tgtPlace = sbjObject.place.name
     }
 
-    fun changeTgtPlace(placeName: String)
-    {
+    fun changeTgtPlace(placeName: String) {
         tgtPlace = placeName
     }
 

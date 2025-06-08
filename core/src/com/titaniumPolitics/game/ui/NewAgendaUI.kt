@@ -12,6 +12,8 @@ import com.badlogic.gdx.utils.Align
 import com.titaniumPolitics.game.core.*
 import com.titaniumPolitics.game.core.gameActions.*
 import com.titaniumPolitics.game.ui.widget.ActionSelectUI
+import com.titaniumPolitics.game.ui.widget.CharacterSelectButton
+import com.titaniumPolitics.game.ui.widget.CharacterSelectUI
 import com.titaniumPolitics.game.ui.widget.PlaceSelectButton
 
 import ktx.scene2d.*
@@ -40,15 +42,10 @@ class NewAgendaUI(gameState: GameState, override var actionCallback: (GameAction
         row()
         label("Target:", "trnsprtConsole") { setFontScale(3f) }
         //Select character to perform the request.
-        selectBox<String> {
-            items = Array(gameState.characters.keys.toTypedArray())
-            addListener(object : ChangeListener() {
-                override fun changed(event: ChangeEvent?, actor: Actor?) {
-                    this@NewAgendaUI.agenda =
-                        MeetingAgenda(AgendaType.PRAISE, this@NewAgendaUI.subject, hashMapOf("character" to selected))
-                }
-            })
-        }.inCell.size(300f, 100f)
+        add(CharacterSelectButton(skin, { char ->
+            this@NewAgendaUI.agenda =
+                MeetingAgenda(AgendaType.PRAISE, this@NewAgendaUI.subject, hashMapOf("character" to char))
+        })).size(150f, 150f)
     }
     private val denounceTable = scene2d.table {
         label(ReadOnly.prop("denounce")) {
@@ -57,15 +54,10 @@ class NewAgendaUI(gameState: GameState, override var actionCallback: (GameAction
         row()
         label("Target:", "trnsprtConsole") { setFontScale(3f) }
         //Select character to perform the request.
-        selectBox<String> {
-            items = Array(gameState.characters.keys.toTypedArray())
-            addListener(object : ChangeListener() {
-                override fun changed(event: ChangeEvent?, actor: Actor?) {
-                    this@NewAgendaUI.agenda =
-                        MeetingAgenda(AgendaType.DENOUNCE, this@NewAgendaUI.subject, hashMapOf("character" to selected))
-                }
-            })
-        }.inCell.size(300f, 100f)
+        add(CharacterSelectButton(skin, { char ->
+            this@NewAgendaUI.agenda =
+                MeetingAgenda(AgendaType.DENOUNCE, this@NewAgendaUI.subject, hashMapOf("character" to char))
+        })).size(150f, 150f)
     }
     private val praisePartyTable = scene2d.table {
         label(ReadOnly.prop("praiseParty")) {
@@ -73,7 +65,7 @@ class NewAgendaUI(gameState: GameState, override var actionCallback: (GameAction
         }
         row()
         label("Target:", "trnsprtConsole") { setFontScale(3f) }
-        //Select character to perform the request.
+        //Select party to perform the request.
         selectBox<String> {
             items = Array(gameState.parties.keys.toTypedArray())
             addListener(object : ChangeListener() {
@@ -90,7 +82,7 @@ class NewAgendaUI(gameState: GameState, override var actionCallback: (GameAction
         }
         row()
         label("Target:", "trnsprtConsole") { setFontScale(3f) }
-        //Select character to perform the request.
+        //Select party to perform the request.
         selectBox<String> {
             items = Array(gameState.parties.keys.toTypedArray())
             addListener(object : ChangeListener() {
@@ -108,22 +100,15 @@ class NewAgendaUI(gameState: GameState, override var actionCallback: (GameAction
 
     private val requestTable = scene2d.table {
         label(ReadOnly.prop("request")) {
+            it.colspan(2)
             setFontScale(3f)
         }
         row()
-        label("Transfer resources to") { setFontScale(3f) }
-        add(PlaceSelectButton(skin, { this@NewAgendaUI.actionSelUI.changeTgtPlace(it) })).growX()
-        row()
-        label("Request to:", "trnsprtConsole") { setFontScale(3f) }
-        //Select character to perform the request.
-        selectBox<String> {//TODO: Replace with Character Selection UI
-            items = Array(gameState.characters.keys.toTypedArray())
-            addListener(object : ChangeListener() {
-                override fun changed(event: ChangeEvent?, actor: Actor?) {
-                    this@NewAgendaUI.actionSelUI.changeSubject(selected)
-                }
-            })
-        }.inCell.size(300f, 100f)
+        add(PlaceSelectButton(skin, { this@NewAgendaUI.actionSelUI.changeTgtPlace(it) })).size(300f, 150f)
+        add(CharacterSelectButton(skin, { char ->
+            this@NewAgendaUI.actionSelUI.changeSubject(char)
+        })).size(150f, 150f)
+
         row()
         //Select Action
         add(this@NewAgendaUI.actionSelUI).size(1700f, 600f)
@@ -201,6 +186,7 @@ class NewAgendaUI(gameState: GameState, override var actionCallback: (GameAction
 
 
     fun refresh(gameState: GameState) {
+        agendaSelectBox.clear()
         refreshAvailableAgendaList(gameState)
         actionSelUI.refreshList(listOf("UnofficialResourceTransfer", "OfficialResourceTransfer"))
         availableAgendas.forEach { tobj ->

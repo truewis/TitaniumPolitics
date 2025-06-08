@@ -176,7 +176,7 @@ class MeetingUI(var gameState: GameState) : Table(defaultSkin), KTable {
 
     private fun addCharacterPortrait(characterName: String) {
 
-        val portrait = SimplePortraitUI(characterName, gameState, 0.2f)
+        val portrait = SimplePortraitUI(characterName, 0.2f)
         portraits.add(portrait)
         addActor(portrait)
 

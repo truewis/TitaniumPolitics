@@ -176,6 +176,7 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable 
                                     y: Float
                                 ) {
                                     ResourceTransferUI.primary.isVisible = true
+                                    ResourceTransferUI.primary.actionCallback = GameEngine.acquireCallback
                                     ResourceTransferUI.primary.refresh(
                                         "unofficial",
                                         GameEngine.acquireCallback,
@@ -194,6 +195,7 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable 
                                     y: Float
                                 ) {
                                     ResourceTransferUI.primary.isVisible = true
+                                    ResourceTransferUI.primary.actionCallback = GameEngine.acquireCallback
                                     ResourceTransferUI.primary.refresh(
                                         "official",
                                         GameEngine.acquireCallback,
@@ -206,22 +208,42 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable 
 
                         "AddInfo" -> {
                             this.setDrawable(defaultSkin, "TilesGrunge")
+                            if (this@AvailableActionsUI.gameState.player.preparedInfoKeys.isEmpty()) {
+                                this@button.isDisabled = true
+                                tooltip.displayInvalidReason(ReadOnly.prop("addInfo-noPreparedInfo"))
+                            } else
+                                if ((this@AvailableActionsUI.gameState.player.preparedInfoKeys - this@AvailableActionsUI.gameState.player.currentMeeting!!.agendas.flatMap { it.informationKeys }).isEmpty()) {
+                                    this@button.isDisabled = true
+                                    tooltip.displayInvalidReason(ReadOnly.prop("addInfo-noAdditionalInfo"))
+                                }
                             this@button.addListener(object : ClickListener() {
                                 override fun clicked(
                                     event: com.badlogic.gdx.scenes.scene2d.InputEvent?,
                                     x: Float,
                                     y: Float
                                 ) {
-                                    //TODO
-//                                    AddInfoUI.instance.isVisible = true
-//                                    AddInfoUI.instance.refresh(
-//                                        "official",
-//                                        GameEngine.acquireCallback,
-//                                        this@AvailableActionsUI.gameState.player.place.resources.toHashMap()
-//                                    )
+                                    AddInfoUI.primary.isVisible = true
+                                    AddInfoUI.primary.actionCallback = GameEngine.acquireCallback
+                                    AddInfoUI.primary.refresh()
                                 }
                             })
                         }
+
+                        "EndSpeech" -> {
+                            this.setDrawable(defaultSkin, "TilesGrunge")
+                            this@button.addListener(object : ClickListener() {
+                                override fun clicked(
+                                    event: com.badlogic.gdx.scenes.scene2d.InputEvent?,
+                                    x: Float,
+                                    y: Float
+                                ) {
+                                    EndSpeechUI.primary.isVisible = true
+                                    EndSpeechUI.primary.actionCallback = GameEngine.acquireCallback
+                                    EndSpeechUI.primary.refresh()
+                                }
+                            })
+                        }
+
 
                         "InvestigateAccidentScene" -> {
                             this.setDrawable(defaultSkin, "TilesGrunge")
@@ -436,6 +458,28 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable 
                         "LeaveMeeting" -> {
                             this.setDrawable(defaultSkin, "XGrunge")
                             val action = LeaveMeeting(
+                                this@AvailableActionsUI.gameState.playerName,
+                                this@AvailableActionsUI.gameState.player.place.name
+                            )
+                            action.injectParent(this@AvailableActionsUI.gameState); if (!action.isValid()) {
+                                this@button.isDisabled = true
+                                tooltip.displayInvalidReason(action.invalidReason)
+                            }
+
+                            this@button.addListener(object : ClickListener() {
+                                override fun clicked(
+                                    event: com.badlogic.gdx.scenes.scene2d.InputEvent?,
+                                    x: Float,
+                                    y: Float
+                                ) {
+                                    GameEngine.acquireCallback(action)
+                                }
+                            })
+                        }
+
+                        "EndMeeting" -> {
+                            this.setDrawable(defaultSkin, "XGrunge")
+                            val action = EndMeeting(
                                 this@AvailableActionsUI.gameState.playerName,
                                 this@AvailableActionsUI.gameState.player.place.name
                             )

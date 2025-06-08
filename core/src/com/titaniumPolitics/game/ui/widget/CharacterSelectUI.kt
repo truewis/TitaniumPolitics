@@ -7,6 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.badlogic.gdx.utils.Align
 import com.titaniumPolitics.game.core.GameState
+import com.titaniumPolitics.game.core.ReadOnly
 import com.titaniumPolitics.game.ui.WindowUI
 import com.titaniumPolitics.game.ui.map.PlaceSelectionUI
 import ktx.scene2d.KTable
@@ -22,13 +23,13 @@ import ktx.scene2d.table
 //This UI is used to select a character as a parameter for an action.
 //It displays all characters in a table format, with division tab button.
 //TODO: Perhaps only allow to select known characters to the player?
-class CharacterSelectUI(val gameState: GameState) : WindowUI("CharacterSelectTitle"), KTable
-{
+class CharacterSelectUI(val gameState: GameState) : WindowUI("CharacterSelectTitle"), KTable {
 
     val charactersTable = scene2d.table()
     val scrollPane = ScrollPane(charactersTable)
     val divisionSelectionBox = scene2d.buttonGroup(0, 1)
     var selectedCharacterCallback: (String) -> Unit = {}
+
     init {
         instance = this
         isVisible = false
@@ -36,7 +37,15 @@ class CharacterSelectUI(val gameState: GameState) : WindowUI("CharacterSelectTit
         content.add(divisionSelectionBox).growX()
         content.row()
         content.add(scrollPane).grow()
-        listOf("infrastructure", "interior", "safety", "bioengineering", "mining", "education", "industry").forEach { tobj ->
+        listOf(
+            "infrastructure",
+            "interior",
+            "safety",
+            "bioengineering",
+            "mining",
+            "education",
+            "industry"
+        ).forEach { tobj ->
             val t = scene2d.button {
                 //TODO:Agenda Tooltip addListener(ActionTooltipUI(tobj))
                 container {
@@ -46,40 +55,37 @@ class CharacterSelectUI(val gameState: GameState) : WindowUI("CharacterSelectTit
                     image("Help") {
 
 
-                        when (tobj)
-                        {
+                        when (tobj) {
                             //TODO: also make changes to NewAgendaUI.kt.
-                            "infrastructure" ->
-                            {
+                            "infrastructure" -> {
                                 this.setDrawable(Scene2DSkin.defaultSkin, "icon_traffic_39")
                             }
-                            "interior" ->
-                            {
+
+                            "interior" -> {
                                 this.setDrawable(Scene2DSkin.defaultSkin, "icon_common_98")
                             }
-                            "safety" ->
-                            {
+
+                            "safety" -> {
                                 this.setDrawable(Scene2DSkin.defaultSkin, "Shield2Grunge")
                             }
-                            "bioengineering" ->
-                            {
+
+                            "bioengineering" -> {
                                 this.setDrawable(Scene2DSkin.defaultSkin, "icon_activity_110")
                             }
-                            "mining" ->
-                            {
+
+                            "mining" -> {
                                 this.setDrawable(Scene2DSkin.defaultSkin, "ShovelGrunge")
                             }
-                            "education" ->
-                            {
+
+                            "education" -> {
                                 this.setDrawable(Scene2DSkin.defaultSkin, "icon_tool_87")
                             }
-                            "industry" ->
-                            {
+
+                            "industry" -> {
                                 this.setDrawable(Scene2DSkin.defaultSkin, "icon_tool_11")
                             }
                             //Default case for any other division, or if no division is selected.
-                            else ->
-                            {
+                            else -> {
                                 this.setDrawable(Scene2DSkin.defaultSkin, "Help")
                             }
                         }
@@ -87,14 +93,12 @@ class CharacterSelectUI(val gameState: GameState) : WindowUI("CharacterSelectTit
 
                     }
                 }
-                this@button.addListener(object : ClickListener()
-                {
+                this@button.addListener(object : ClickListener() {
                     override fun clicked(
                         event: InputEvent?,
                         x: Float,
                         y: Float
-                    )
-                    {
+                    ) {
                         this@CharacterSelectUI.refresh(tobj)
                     }
                 })
@@ -102,12 +106,21 @@ class CharacterSelectUI(val gameState: GameState) : WindowUI("CharacterSelectTit
             divisionSelectionBox.add(t).size(150f).fill()
         }
     }
-    fun refresh(division:String = "")//This function refreshes the character selection UI based on the selected division. If no division is selected, it shows all characters.
+
+    fun refresh(
+        division: String = "",
+        characters: Set<String> = gameState.characters.filter { it.value.alive && !it.key.contains("Anon") }.keys
+    )//This function refreshes the character selection UI based on the selected division. If no division is selected, it shows all characters.
     {
+        divisionSelectionBox.isVisible =
+            characters.size > 10 //If there are more than 10 characters, show the division selection box.
+        //This is a hack to avoid showing the division selection box when there are only a few characters.
+        //This way, if the character set is not default, divisionSelectionBox would be hidden most of the time.
+
         charactersTable.clearChildren()
-        val characters = gameState.characters.filter { it.value.alive && !it.key.contains("Anon")}.filter { division == "" || it.value.division?.name == division }
+        val fcharacters = characters.filter { division == "" || gameState.characters[it]!!.division?.name == division }
         with(charactersTable) {
-            if (characters.isEmpty()) {
+            if (fcharacters.isEmpty()) {
                 label("No characters available", "trnsprtConsole") {
                     setFontScale(3f)
                     setAlignment(Align.center, Align.center)
@@ -115,7 +128,7 @@ class CharacterSelectUI(val gameState: GameState) : WindowUI("CharacterSelectTit
                 }
                 return
             }
-            characters.forEach { character ->
+            fcharacters.forEach { character ->
                 button {
                     it.fillX()
                     it.height(150f)
@@ -124,13 +137,13 @@ class CharacterSelectUI(val gameState: GameState) : WindowUI("CharacterSelectTit
                         it.fill()
                     }
                     row()
-                    label(character.key, "trnsprtConsole") {
+                    label(ReadOnly.prop(character), "trnsprtConsole") {
                         setFontScale(2f)
                         setAlignment(Align.center, Align.center)
                     }
                     addListener(object : ClickListener() {
                         override fun clicked(event: InputEvent?, x: Float, y: Float) {
-                            this@CharacterSelectUI.selectedCharacterCallback(character.key)
+                            this@CharacterSelectUI.selectedCharacterCallback(character)
                         }
                     })
 
@@ -145,8 +158,8 @@ class CharacterSelectUI(val gameState: GameState) : WindowUI("CharacterSelectTit
         }
 
     }
-    companion object
-    {
+
+    companion object {
         lateinit var instance: CharacterSelectUI
 
     }

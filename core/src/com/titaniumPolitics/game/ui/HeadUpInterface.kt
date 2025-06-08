@@ -1,7 +1,9 @@
 package com.titaniumPolitics.game.ui
 
+import com.badlogic.gdx.scenes.scene2d.ui.Stack
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.utils.Align
+import com.titaniumPolitics.game.core.GameEngine
 import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.core.gameActions.GameAction
 import com.titaniumPolitics.game.ui.map.MapUI
@@ -13,11 +15,12 @@ class HeadUpInterface(val gameState: GameState) : Table(Scene2DSkin.defaultSkin)
     val mapUI = MapUI(gameState = this@HeadUpInterface.gameState)
     val calendarUI = CalendarUI(gameState)
     val politiciansInfoUI = PoliticiansInfoUI(gameState)
+    val stack: Stack
 
     init {
         instance = this
         addActor(CharacterInteractionWindowUI(gameState = this@HeadUpInterface.gameState))
-        stack { cell ->
+        stack = stack { cell ->
             cell.size(1920f, 1080f)
 
             container {
@@ -31,11 +34,17 @@ class HeadUpInterface(val gameState: GameState) : Table(Scene2DSkin.defaultSkin)
             add(ResourceInfoUI())
             add(HumanResourceInfoUI())
             add(ApparatusInfoUI())
-            add(ResourceTransferUI(this@HeadUpInterface.gameState) { _: GameAction -> }.also {
+            add(ResourceTransferUI(this@HeadUpInterface.gameState, {}).also {
                 ResourceTransferUI.primary = it
             })
-            add(NewAgendaUI(this@HeadUpInterface.gameState) { _: GameAction -> }.also {
+            add(NewAgendaUI(this@HeadUpInterface.gameState, {}).also {
                 NewAgendaUI.primary = it
+            })
+            add(AddInfoUI(this@HeadUpInterface.gameState, {}).also {
+                AddInfoUI.primary = it
+            })
+            add(EndSpeechUI(this@HeadUpInterface.gameState, {}).also {
+                EndSpeechUI.primary = it
             })
 
             //We draw the following UIs above any other UIs, as they have to appear on top of everything else.

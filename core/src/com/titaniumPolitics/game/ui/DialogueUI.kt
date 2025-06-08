@@ -174,7 +174,7 @@ class DialogueUI(val gameState: GameState) : Table(defaultSkin), KTable {
         portraitsTable.clear()
         var prefwidth = 0f
         portraitsTable.add(
-            SimplePortraitUI(lineSpeaker, gameState, 1f)
+            SimplePortraitUI(lineSpeaker, 1f)
         ).expand().align(Align.bottom).prefHeight(800f).prefWidth(prefwidth)
     }
 

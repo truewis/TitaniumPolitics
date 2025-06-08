@@ -15,15 +15,12 @@ import kotlinx.serialization.json.jsonPrimitive
 import ktx.scene2d.*
 import ktx.scene2d.Scene2DSkin.defaultSkin
 
-class SimplePortraitUI(character: String, var gameState: GameState, scale: Float) : Table(defaultSkin), KTable
-{
+class SimplePortraitUI(character: String, scale: Float) : Table(defaultSkin), KTable {
 
 
     val portrait = scene2d.image("UserGrunge") {
-        addListener(object : com.badlogic.gdx.scenes.scene2d.utils.ClickListener()
-        {
-            override fun clicked(event: com.badlogic.gdx.scenes.scene2d.InputEvent?, x: Float, y: Float)
-            {
+        addListener(object : com.badlogic.gdx.scenes.scene2d.utils.ClickListener() {
+            override fun clicked(event: com.badlogic.gdx.scenes.scene2d.InputEvent?, x: Float, y: Float) {
                 //Open Character Marker UI
                 CharacterInteractionWindowUI.instance.isVisible = true
                 val coord = localToStageCoordinates(Vector2(x, y))
@@ -32,25 +29,21 @@ class SimplePortraitUI(character: String, var gameState: GameState, scale: Float
         })
     }
     var tgtCharacter = character
-        set(value)
-        {
+        set(value) {
             field = value
-            try
-            {
+            try {
                 portrait.drawable = TextureRegionDrawable(
                     CapsuleStage.instance.assetManager.get( //TODO: Temporary solution for portrait image loading. PortraitUI does not have a stage.
                         ReadOnly.charJson[tgtCharacter]!!.jsonObject["image"]!!.jsonPrimitive.content,
                         Texture::class.java
                     )!!
                 )
-            } catch (e: Exception)
-            {
+            } catch (e: Exception) {
                 println("Portrait Image Error: $value")
             }
         }
 
-    init
-    {
+    init {
         tgtCharacter = character
         add(portrait).size(500f * scale, 700f * scale)
     }
