@@ -28,6 +28,12 @@ sealed class GameAction() {
     //This is used to store why the action is invalid, used by the UI elements to display the reason why the action cannot be performed.
     @Transient
     var invalidReason = ""
+    fun reason(predicate: Boolean, reasonKey: String): Boolean {
+        if (!predicate) {
+            invalidReason = ReadOnly.prop(reasonKey)
+        }
+        return predicate
+    }
 
     @Transient
     lateinit var parent: GameState

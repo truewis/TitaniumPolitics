@@ -29,7 +29,7 @@ class WorkRoutine() : Routine() {
             return pickMeetingRoutine(name, character.currentMeeting!!)
         }
 
-        //If an accident happened in the place of my control, investigate and clear it.
+        //1. If an accident happened in the place of my control, investigate and clear it.
         gState.places.values.firstOrNull {
             it.responsibleDivision != "" && gState.parties[it.responsibleDivision]!!.members.contains(
                 name
@@ -43,7 +43,7 @@ class WorkRoutine() : Routine() {
             }
         }
 
-        //1. If missed a conference
+        //2. If missed a conference
         val missingMeeting = gState.ongoingMeetings.values
             .firstOrNull { it.scheduledCharacters.contains(name) && !it.currentCharacters.contains(name) }
 
@@ -61,7 +61,7 @@ class WorkRoutine() : Routine() {
             }
         }
 
-        //2. If a conference is scheduled
+        //3. If a conference is scheduled
         gState.scheduledMeetings.values.firstOrNull {
             val eta = gState.places[it.place]!!.shortestPathAndTimeTo(place)?.second ?: return@firstOrNull false
             return@firstOrNull it.scheduledCharacters.contains(name) && it.isValidTimeToStart(gState.time + eta)
@@ -77,7 +77,7 @@ class WorkRoutine() : Routine() {
             }
         }
 
-        //3. Corruption for power: If the character is the leader of a party, and a party member is short of resources, steal resources from workplace to party member's home
+        //4. Corruption for power: If the character is the leader of a party, and a party member is short of resources, steal resources from workplace to party member's home
         //Only attempted once a day or once a work, whichever is shorter.
         if (gState.time - (intVariables["corruptionTimer"] ?: 0) > ReadOnly.constInt("CorruptionTau") / ReadOnly.dt)
             if (gState.parties.values.any { it.leader == name }) {
@@ -100,7 +100,7 @@ class WorkRoutine() : Routine() {
                 }
             }
 
-        //4. Execute a command if there is any. Here, we can move to the place actively if the command is not in the current place.
+        //5. Execute a command if there is any. Here, we can move to the place actively if the command is not in the current place.
         //If there is a command that is within the set time window, issued party is trusted enough, and seems to be executable at some place(AvailableActions), start execution routine.
         //Note that the command may not be valid even if it in AvailableActions list. For example, if the character is already at the place, move command is not valid.
 
@@ -125,7 +125,7 @@ class WorkRoutine() : Routine() {
                 return ExecuteCommandRoutine().also { it.variables["request"] = request.name }
         }
 
-        //5. Supply resource
+        //6. Supply resource
         gState.places.values.forEach { place1 -> //TODO: right now, supply resource to any place regardless of the division. In the future, agents will not supply resources to hostile divisions.
             place1.apparatuses.forEach { apparatus ->
                 val res = place1.resourceShortOfHourly(apparatus) //Type of resource that is short of.
@@ -151,7 +151,7 @@ class WorkRoutine() : Routine() {
             }
         }
 
-        //6. If there is some time, prepare information
+        //7. If there is some time, prepare information
         if (gState.scheduledMeetings.none {
                 val eta =
                     gState.places[it.value.place]!!.shortestPathAndTimeTo(place)?.second ?: return@none false
@@ -173,7 +173,7 @@ class WorkRoutine() : Routine() {
         }
 
 
-        //7. If there is nothing above to do, move to a place that is the home of one of the parties of the character.
+        //8. If there is nothing above to do, move to a place that is the home of one of the parties of the character.
         //If already at home, wait.
         if (gState.parties.values.any { party -> party.home == place && party.members.contains(name) }) {
         } else

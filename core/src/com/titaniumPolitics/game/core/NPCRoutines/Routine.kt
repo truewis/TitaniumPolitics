@@ -16,10 +16,12 @@ sealed class Routine() {
     val ID = UUID.randomUUID().toString()
     var priority: Int = 0
     val subroutines = arrayListOf<String>() //Store the IDs of subroutines that are currently running.
+    var routineStartTime: Int = 0 //The time when the routine starts, used to calculate the duration of the routine.
     val variables: HashMap<String, String> = hashMapOf()
     val intVariables: HashMap<String, Int> = hashMapOf()
     val doubleVariables: HashMap<String, Double> = hashMapOf()
     val PRIORITY_WORK = 1000
+    val PRIORITY_MEETING = 1500
     val PRIORITY_REST = 0
     val PRIORITY_LIFE_SUPPORT = 2000
     var executeDone =

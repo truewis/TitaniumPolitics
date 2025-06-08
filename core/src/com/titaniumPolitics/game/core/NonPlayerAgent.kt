@@ -145,11 +145,11 @@ class NonPlayerAgent : Agent() {
             removeList.clear()
             routines.forEach {
                 it.newRoutineCondition(name, place, routines)?.let { v ->
+                    v.routineStartTime = parent.time
                     if (v.priority == 0)//Initial priority
                         v.priority = it.priority + 10 //Set the priority to be higher than the current routine.
                     it.subroutines += v.ID
                     addList += v
-                    v.intVariables["routineStartTime"] = parent.time
                     routineSettled = false
                 }
             }
@@ -167,9 +167,8 @@ class NonPlayerAgent : Agent() {
         routines.forEach {
             it.injectParent(parent)
         }
+        routines.sortByDescending { routine -> routine.priority }//WARNING: Soring must be done here, after the routines are updated and before the blockExecution.
         blockExecution()?.also { return it }
-
-        routines.sortByDescending { routine -> routine.priority }
         return routines[0].execute(name, place)
 
     }

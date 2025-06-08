@@ -5,11 +5,9 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 //This class is used to end a speech and nominate a new speaker. This action is used by the current speaker.
-class Intercept(override val sbjCharacter: String, override val tgtPlace: String) : GameAction()
-{
+class Intercept(override val sbjCharacter: String, override val tgtPlace: String) : GameAction() {
 
-    override fun execute()
-    {
+    override fun execute() {
         val meeting = parent.characters[sbjCharacter]!!.currentMeeting!!
 
         //The amount of attention gained can be modified here.
@@ -18,14 +16,15 @@ class Intercept(override val sbjCharacter: String, override val tgtPlace: String
         super.execute()
     }
 
-    override fun isValid(): Boolean
-    {
+    override fun isValid(): Boolean {
         val meeting = parent.characters[sbjCharacter]!!.currentMeeting!!
-        return meeting.currentSpeaker != sbjCharacter && meeting.currentAttention <= ReadOnly.const("maxAttentionIntercept")
+        return meeting.currentSpeaker != sbjCharacter && reason(
+            meeting.currentAttention <= ReadOnly.const("maxAttentionIntercept"),
+            "intercept-attention"
+        )
     }
 
-    override fun deltaWill(): Double
-    {
+    override fun deltaWill(): Double {
         val meeting = parent.characters[sbjCharacter]!!.currentMeeting!!
         val factor = if (parent.characters[sbjCharacter]!!.trait.contains("provoker")) -0.05 else -0.1
         return super.deltaWill() + parent.getMutuality(sbjCharacter, meeting.currentSpeaker) * factor

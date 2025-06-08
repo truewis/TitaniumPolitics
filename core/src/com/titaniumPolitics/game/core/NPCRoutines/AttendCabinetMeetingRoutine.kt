@@ -13,6 +13,10 @@ import kotlin.math.max
 
 @Serializable
 class AttendCabinetMeetingRoutine : Routine(), IMeetingRoutine {
+    init {
+        priority = PRIORITY_MEETING
+    }
+
     override fun newRoutineCondition(name: String, place: String, routines: List<Routine>): Routine? {
         val character = gState.characters[name]!!
         val conf =
@@ -120,6 +124,6 @@ class AttendCabinetMeetingRoutine : Routine(), IMeetingRoutine {
         //See NonPlayerAgent.selectRoutine()
         //If two hours has passed since the meeting started, leave the meeting. TODO: what if the meeting has started late?
         //TODO: stay in the meeting until I have something else to do, or the work hours are over.
-        return intVariables["routineStartTime"]!! + 7200 / ReadOnly.dt <= gState.time
+        return routineStartTime + 7200 / ReadOnly.dt <= gState.time
     }
 }
