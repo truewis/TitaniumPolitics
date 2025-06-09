@@ -115,7 +115,7 @@ class WaitUI(val gameState: GameState, override var actionCallback: (GameAction)
         }
         for (i in list) {
             with(timeSelector) {
-                button {
+                button("check") {
                     label(if (i < 60) "${i}m" else "${i / 60}h") {
                         setFontScale(2f)
                     }

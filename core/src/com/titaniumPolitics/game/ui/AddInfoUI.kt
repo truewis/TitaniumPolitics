@@ -83,7 +83,7 @@ class AddInfoUI(val gameState: GameState, override var actionCallback: (GameActi
         dataTable.apply {
             add(buttonGroup(1, 1) {
                 availableInfoKeys.forEach { key ->
-                    button {
+                    button("check") {
                         image("TilesGrunge")
                         isChecked = key == this@AddInfoUI.infoKey
                         this@button.addListener(object : ClickListener() {

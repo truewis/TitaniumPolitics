@@ -346,6 +346,13 @@ com.badlogic.gdx.scenes.scene2d.ui.Button$ButtonStyle: {
 		over: icon_store_1_Highlighted
 		disabled: icon_store_1_Disabled
 	}
+	check: {
+		up: ButtonRegularBgNormal
+		down: ButtonRegularBgPressed
+		over: ButtonRegularBgHighlighted
+		disabled: ButtonRegularBgDisabled
+		checked: ButtonRegularBgPressed
+	}
 }
 com.badlogic.gdx.scenes.scene2d.ui.CheckBox$CheckBoxStyle: {
 	default: {

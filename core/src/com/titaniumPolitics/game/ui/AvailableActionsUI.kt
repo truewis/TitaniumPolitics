@@ -62,6 +62,7 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable 
 
 
                         "Examine" -> {
+                            this@button.style = defaultSkin.get("check", Button.ButtonStyle::class.java)
                             this.setDrawable(defaultSkin, "SearchGrunge")
                             this@button.addListener(object : ClickListener() {
                                 override fun clicked(

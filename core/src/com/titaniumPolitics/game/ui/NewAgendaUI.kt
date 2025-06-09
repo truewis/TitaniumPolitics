@@ -115,7 +115,7 @@ class NewAgendaUI(gameState: GameState, override var actionCallback: (GameAction
     }
     val st = scene2d.stack {
         table {
-            this@NewAgendaUI.agendaSelectBox = buttonGroup(0, 1).also {
+            this@NewAgendaUI.agendaSelectBox = buttonGroup(1, 1).also {
                 it.inCell.size(600f, 150f)
             }
 
@@ -190,7 +190,7 @@ class NewAgendaUI(gameState: GameState, override var actionCallback: (GameAction
         refreshAvailableAgendaList(gameState)
         actionSelUI.refreshList(listOf("UnofficialResourceTransfer", "OfficialResourceTransfer"))
         availableAgendas.forEach { tobj ->
-            val t = scene2d.button {
+            val t = scene2d.button("check") {
                 //TODO:Agenda Tooltip addListener(ActionTooltipUI(tobj))
                 container {
                     it.size(150f)
@@ -243,6 +243,9 @@ class NewAgendaUI(gameState: GameState, override var actionCallback: (GameAction
 
                             AgendaType.PRAISE -> {
                                 this.setDrawable(defaultSkin, "icon_gesture_1")
+                                this@button.isChecked = true
+                                this@NewAgendaUI.hideAllAgendaDetailsTable()
+                                this@NewAgendaUI.praiseTable.isVisible = true
                                 this@button.addListener(object : ClickListener() {
                                     override fun clicked(
                                         event: InputEvent?,
