@@ -15,18 +15,19 @@ import kotlinx.serialization.json.jsonPrimitive
 import ktx.scene2d.*
 import ktx.scene2d.Scene2DSkin.defaultSkin
 
-class SimplePortraitUI(character: String, scale: Float) : Table(defaultSkin), KTable {
+class SimplePortraitUI(character: String, scale: Float, interactable: Boolean) : Table(defaultSkin), KTable {
 
 
     val portrait = scene2d.image("UserGrunge") {
-        addListener(object : com.badlogic.gdx.scenes.scene2d.utils.ClickListener() {
-            override fun clicked(event: com.badlogic.gdx.scenes.scene2d.InputEvent?, x: Float, y: Float) {
-                //Open Character Marker UI
-                CharacterInteractionWindowUI.instance.isVisible = true
-                val coord = localToStageCoordinates(Vector2(x, y))
-                CharacterInteractionWindowUI.instance.refresh(coord.x, coord.y, this@SimplePortraitUI.tgtCharacter)
-            }
-        })
+        if (interactable)
+            addListener(object : com.badlogic.gdx.scenes.scene2d.utils.ClickListener() {
+                override fun clicked(event: com.badlogic.gdx.scenes.scene2d.InputEvent?, x: Float, y: Float) {
+                    //Open Character Marker UI
+                    CharacterInteractionWindowUI.instance.isVisible = true
+                    val coord = localToStageCoordinates(Vector2(x, y))
+                    CharacterInteractionWindowUI.instance.refresh(coord.x, coord.y, this@SimplePortraitUI.tgtCharacter)
+                }
+            })
     }
     var tgtCharacter = character
         set(value) {

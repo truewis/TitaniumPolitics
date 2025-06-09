@@ -116,6 +116,42 @@
       0.4
     ]
   },
+  "outerBarrierWest": {
+    "image": "data/conYard.png",
+    "sound": "data/conYard.mp3",
+    "desc": "Center of the hexagonal frame.",
+    "ind": "capsuleMapIndCenter",
+    "light": [
+      0,
+      0,
+      0,
+      0.4
+    ]
+  },
+  "outerBarrierCenter": {
+    "image": "data/conYard.png",
+    "sound": "data/conYard.mp3",
+    "desc": "Center of the hexagonal frame.",
+    "ind": "capsuleMapIndCenter",
+    "light": [
+      0,
+      0,
+      0,
+      0.4
+    ]
+  },
+  "outerBarrierEast": {
+    "image": "data/conYard.png",
+    "sound": "data/conYard.mp3",
+    "desc": "Center of the hexagonal frame.",
+    "ind": "capsuleMapIndCenter",
+    "light": [
+      0,
+      0,
+      0,
+      0.4
+    ]
+  },
   "constructionYardNorth": {
     "image": "data/conYard.png",
     "sound": "data/conYard.mp3",

@@ -15,7 +15,7 @@ class CharacterSelectButton(skin: Skin, callback: (String) -> Unit) : Button(ski
     var availableCharacters: Set<String>? = null
 
     init {
-        charPortrait = SimplePortraitUI("", 0.15f)
+        charPortrait = SimplePortraitUI("", 0.15f, false)
         add(charPortrait).size(100f)
         row()
         charLabel = label("", "trnsprtConsole") { setFontScale(3f) }

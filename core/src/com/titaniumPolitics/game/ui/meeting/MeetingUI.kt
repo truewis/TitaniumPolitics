@@ -65,7 +65,9 @@ class MeetingUI(var gameState: GameState) : Table(defaultSkin), KTable {
         }.toMap().toMutableMap()
         //show mutuality arrows if there are any changes.
         val mutualityChanges = newMutualities.filter { (pair, value) ->
-            previousMutualities[pair]?.let { it != value } ?: true
+            previousMutualities[pair]?.let { it != value } ?: false
+        }.mapValues {
+            it.value - (previousMutualities[it.key] ?: 0.0)
         }
         if (mutualityChanges.isNotEmpty()) {
             showMutualityArrows(mutualityChanges)
@@ -118,7 +120,7 @@ class MeetingUI(var gameState: GameState) : Table(defaultSkin), KTable {
         mutualityChanges.forEach { (pair, delta) ->
             val fromPortrait = portraits.find { it.tgtCharacter == pair.first } ?: return@forEach
             val toPortrait = portraits.find { it.tgtCharacter == pair.second } ?: return@forEach
-            val arrow = MutualityArrowUI(fromPortrait, toPortrait, delta.toFloat())
+            val arrow = MutualityArrowUI(fromPortrait, toPortrait, delta.toFloat(), skin)
             mutualityArrows.add(arrow)
             addActor(arrow)
             arrow.addAction(
@@ -171,7 +173,7 @@ class MeetingUI(var gameState: GameState) : Table(defaultSkin), KTable {
 
     private fun addCharacterPortrait(characterName: String) {
 
-        val portrait = SimplePortraitUI(characterName, 0.2f)
+        val portrait = SimplePortraitUI(characterName, 0.2f, true)
         portraits.add(portrait)
         addActor(portrait)
 

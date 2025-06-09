@@ -6,6 +6,8 @@ import com.badlogic.gdx.scenes.scene2d.Action
 import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.actions.Actions
 import com.badlogic.gdx.scenes.scene2d.ui.Image
+import com.badlogic.gdx.scenes.scene2d.ui.Skin
+import ktx.scene2d.scene2d
 import kotlin.math.abs
 import kotlin.math.atan2
 import kotlin.math.log
@@ -14,8 +16,9 @@ import kotlin.math.sqrt
 class MutualityArrowUI(
     val from: Actor,
     val to: Actor,
-    val delta: Float
-) : Image() {
+    val delta: Float,
+    val skin: Skin
+) : Image(skin, "white-pixel") {
     init {
         color = if (delta > 0) Color.GREEN else Color.RED
         val startX = from.x + from.width / 2
@@ -25,14 +28,16 @@ class MutualityArrowUI(
         val angle = atan2(endY - startY, endX - startX)
         setPosition(startX, startY)
         rotation = Math.toDegrees(angle.toDouble()).toFloat()
-        height = log(abs(delta)+1, 2f) * 10f // 로그 스케일로 높이 조정
+        height = log(abs(delta) + 1, 2f) * 10f // 로그 스케일로 높이 조정
+        width = sqrt((endX - startX) * (endX - startX) + (endY - startY) * (endY - startY))
         addAction(
             Actions.sequence(
                 Actions.delay(1f),
-                Actions.run { isVisible = false}
+                Actions.run { isVisible = false }
             )
         )
     }
+
     var visibleForReplay: Boolean = true
 
 }
