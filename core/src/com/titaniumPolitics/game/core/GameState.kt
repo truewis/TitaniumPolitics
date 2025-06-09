@@ -10,15 +10,13 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 @Serializable
-class GameState
-{
+class GameState {
     private var _time = 0
     private var _idlePop = 0
 
     var idlePop: Int
         get() = _idlePop
-        set(value)
-        {
+        set(value) {
             _idlePop = value
             characters["Anon-idle"]!!.reliant = value
         }
@@ -28,8 +26,7 @@ class GameState
 
     var time: Int
         get() = _time
-        set(value)
-        {
+        set(value) {
             val old = _time
             _time = value
             (timeChanged.clone() as ArrayList<(Int, Int) -> Unit>).forEach {
@@ -57,14 +54,12 @@ class GameState
     val totalAnonPop: Int
         get() = characters.values.filter { it.name.contains("Anon") }.sumOf { it.reliant }
     val pickRandomParty: Party
-        get()
-        {
+        get() {
             //random party picker
             return parties.values.random()
         }
     val pickRandomCharacter: Character
-        get()
-        {
+        get() {
             //random party picker
             return characters.values.filter { it.alive }.random()
         }
@@ -104,6 +99,7 @@ class GameState
         _scheduledMeetings["conference-${meeting.place}-${meeting.time}"] = meeting
         onAddScheduledMeeting.forEach { it(meeting) }
     }
+
     fun removeScheduledMeeting(
         key: String
     ) {
@@ -113,6 +109,7 @@ class GameState
 
     private var _ongoingMeetings = hashMapOf<String, Meeting>()
     val ongoingMeetings: Map<String, Meeting> = Collections.unmodifiableMap(_ongoingMeetings)
+
     @Transient
     val onAddOngoingMeeting: ArrayList<(Meeting) -> Unit> = arrayListOf()
     fun addOngoingMeeting(
@@ -122,31 +119,33 @@ class GameState
         _ongoingMeetings["conference-${meeting.place}-${meeting.time}"] = meeting
         onAddOngoingMeeting.forEach { it(meeting) }
     }
+
     fun removeOngoingMeeting(
         key: String
     ) {
         if (!_ongoingMeetings.containsKey(key)) throw Exception("Ongoing meeting with key $key does not exist.")
         _ongoingMeetings.remove(key)
     }
+
     var budget = hashMapOf<String, Double>()//Party name to budget
     var isBudgetProposed = false
     var isBudgetResolved = false
     private var _informations = hashMapOf<String, Information>()
     val informations: Map<String, Information> = Collections.unmodifiableMap<String, Information>(_informations)
+
     @Transient
     val onAddInfo: ArrayList<(Information) -> Unit> = arrayListOf()
     fun addInformation(
         info: Information
-    )
-    {
+    ) {
         if (_informations.containsValue(info)) throw Exception("Information $info already exists.")
         _informations[info.generateName()] = info
         onAddInfo.forEach { it(info) }
     }
+
     fun removeInformation(
         key: String
-    )
-    {
+    ) {
         if (!_informations.containsKey(key)) throw Exception("Information with key $key does not exist.")
         _informations.remove(key)
     }
@@ -155,19 +154,16 @@ class GameState
     val realCharList get() = characters.keys.filter { !it.contains("Anon") && characters[it]!!.alive }
     val existingResourceList get() = places.values.map { it.resources.keys }.flatten().toHashSet()
     val existingGasList get() = places.values.map { it.gasResources.keys }.flatten().toHashSet()
-    fun getApparatus(apparatusID: String): Apparatus
-    {
+    fun getApparatus(apparatusID: String): Apparatus {
         places.values.forEach { it.apparatuses.find { it.ID == apparatusID }?.apply { return this } }
         throw Exception(apparatusID)
     }
 
-    fun getApparatusPlace(apparatusID: String): Place
-    {
+    fun getApparatusPlace(apparatusID: String): Place {
         return places.values.find { it.apparatuses.any { it.ID == apparatusID } }!!
     }
 
-    fun createIdleAnonAgent()
-    {
+    fun createIdleAnonAgent() {
         val name = "Anon-idle"
         characters[name] =
             Character().apply {
@@ -182,8 +178,7 @@ class GameState
         }
     }
 
-    fun initialize()
-    {
+    fun initialize() {
         println("Initializing game state...")
         injectDependency()
         //Gain party anonymous member size from work place requirements.
@@ -200,13 +195,11 @@ class GameState
                     Character().apply {
                         //They live by one of their work places.
                         this.injectParent(this@GameState)
-                        try
-                        {
+                        try {
 
                             this.livingBy = places.filter { it.value.responsibleDivision == party.name }.keys.random()
 
-                        } catch (e: Exception)
-                        {
+                        } catch (e: Exception) {
                             this.livingBy = Place.publicPlaces.random()
                         }
 
@@ -245,12 +238,32 @@ class GameState
             char.value.resources =
                 Resources("ration" to 100.0 * char.value.reliant, "water" to 100.0 * char.value.reliant)
         }
+        randomize()
         eventSystem.newGame()
         println("Game state initialized successfully.")
     }
 
-    fun getMutuality(a: String, b: String = a): Double
-    {
+    fun randomize() {
+        //randomize all mutualities by a certain range.
+        characters.keys.forEach { a ->
+            characters.keys.forEach { b ->
+                if (a != b) {
+                    setMutuality(a, b, (Math.random() * 40 - 20))
+                }
+            }
+        }
+        val randomTraits = listOf("gourmand", "old", "young", "psychopath", "charismatic", "shy")
+        // Assign random traits to characters
+        characters.forEach { (_, character) ->
+            if (Math.random() < 0.2) // 20% chance to get a random trait
+            {
+                val trait = randomTraits.random()
+                character.trait.add(trait)
+            }
+        }
+    }
+
+    fun getMutuality(a: String, b: String = a): Double {
         if (!characters.containsKey(a) || !characters.containsKey(b)) throw Exception("Getting mutuality $a -> $b invalid.")
         if (!_mutuality.containsKey(a))
             _mutuality[a] = hashMapOf()
@@ -259,8 +272,7 @@ class GameState
         return _mutuality[a]!![b]!!
     }
 
-    fun setMutuality(a: String, b: String = a, delta: Double)
-    {
+    fun setMutuality(a: String, b: String = a, delta: Double) {
         if (!characters.containsKey(a) || !characters.containsKey(b)) throw Exception("Setting mutuality $a -> $b invalid.")
         if (!_mutuality.containsKey(a))
             _mutuality[a] = hashMapOf()
@@ -271,8 +283,7 @@ class GameState
             ReadOnly.const("mutualityMin")
     }
 
-    fun getPartyMutuality(a: String, b: String = a): Double
-    {
+    fun getPartyMutuality(a: String, b: String = a): Double {
         if (!parties.containsKey(a) || !parties.containsKey(b)) throw Exception("Getting party mutuality $a -> $b invalid.")
         var totalMutuality = 0.0
         val count = parties[a]!!.size * parties[b]!!.size
@@ -280,18 +291,14 @@ class GameState
         val membersA = parties[a]?.members ?: emptyList()
         val membersB = parties[b]?.members ?: emptyList()
 
-        for (memberA in membersA)
-        {
-            for (memberB in membersB)
-            {
-                try
-                {
+        for (memberA in membersA) {
+            for (memberB in membersB) {
+                try {
                     val mutuality = getMutuality(memberA, memberB)
                     totalMutuality += mutuality * parties[a]!!.getMultiplier(memberA) * parties[b]!!.getMultiplier(
                         memberB
                     )
-                } catch (e: Exception)
-                {
+                } catch (e: Exception) {
                     // Handle cases where mutuality cannot be retrieved, e.g., one of the members does not exist.
                     throw Exception("Getting party mutuality $memberA -> $memberB invalid.")
                 }
@@ -301,20 +308,15 @@ class GameState
         return if (count > 0) totalMutuality / count else 0.0
     }
 
-    fun setPartyMutuality(a: String, b: String = a, delta: Double)
-    {
+    fun setPartyMutuality(a: String, b: String = a, delta: Double) {
         if (!parties.containsKey(a) || !parties.containsKey(b)) throw Exception("Setting party mutuality $a -> $b invalid.")
         val membersA = parties[a]?.members ?: emptyList()
         val membersB = parties[b]?.members ?: emptyList()
-        for (memberA in membersA)
-        {
-            for (memberB in membersB)
-            {
-                try
-                {
+        for (memberA in membersA) {
+            for (memberB in membersB) {
+                try {
                     setMutuality(memberA, memberB, delta)
-                } catch (e: Exception)
-                {
+                } catch (e: Exception) {
                     // Handle cases where mutuality cannot be set, e.g., one of the members does not exist.
                     throw Exception("Setting party mutuality $memberA -> $memberB invalid.")
                 }
@@ -322,8 +324,10 @@ class GameState
         }
     }
 
-    fun publicity(infoKey: String, party: String): Int
-    { //Number of people knowing this info in the party, based on anonymous people
+    fun publicity(
+        infoKey: String,
+        party: String
+    ): Int { //Number of people knowing this info in the party, based on anonymous people
 
         with(informations[infoKey]!!)
         {
@@ -334,8 +338,7 @@ class GameState
     }
 
     //Injects the parent gameState to all elements in the gameState. This function should be called exactly once after the gameState is created.
-    fun injectDependency()
-    {
+    fun injectDependency() {
         log.injectParent(this)
         places.forEach { it.value.injectParent(this) }
         characters.forEach { it.value.injectParent(this) }
@@ -346,16 +349,14 @@ class GameState
     }
 
 
-    fun dump(): String
-    {
+    fun dump(): String {
         val fName = "save${Calendar.getInstance().time.toString("YYYYMMdd_HHmmss")}_${System.currentTimeMillis()}.json"
         dump(fName)
         return fName
     }
 
     @OptIn(ExperimentalSerializationApi::class)
-    fun dump(fileName: String)
-    {
+    fun dump(fileName: String) {
         val prettyJson = Json { // this returns the JsonBuilder
             prettyPrint = true
             allowSpecialFloatingPointValues = true
@@ -368,25 +369,21 @@ class GameState
         println("Save File Dumped.")
     }
 
-    private fun Date.toString(format: String, locale: Locale = Locale.getDefault()): String
-    {
+    private fun Date.toString(format: String, locale: Locale = Locale.getDefault()): String {
         val formatter = SimpleDateFormat(format, locale)
         return formatter.format(this)
     }
 
-    fun formatTime(): String
-    {
+    fun formatTime(): String {
         return formatTime(time)
     }
-    fun formatClock(): String
-    {
+
+    fun formatClock(): String {
         return formatClock(time)
     }
 
-    companion object
-    {
-        fun formatTime(time: Int): String
-        {
+    companion object {
+        fun formatTime(time: Int): String {
             val hour = (time % ReadOnly.constInt("lengthOfDay") / (ReadOnly.const("lengthOfDay") / 24.0)).toInt()
             val day = time / ReadOnly.constInt("lengthOfDay")
             val mm =
@@ -395,10 +392,10 @@ class GameState
                 ) / (24.0 * 60))).toInt()
             return "$day:${hour.toString().padStart(2, '0')}:${mm.toString().padStart(2, '0')}"
         }
-        fun formatClock(time: Int): String
-        {
+
+        fun formatClock(time: Int): String {
             val hour = (time % ReadOnly.constInt("lengthOfDay") / (ReadOnly.const("lengthOfDay") / 24.0)).toInt()
-            val day = time / ReadOnly.constInt("lengthOfDay")
+            time / ReadOnly.constInt("lengthOfDay")
             val mm =
                 ((time % ReadOnly.constInt("lengthOfDay") - hour * (ReadOnly.const("lengthOfDay") / 24.0)) / (ReadOnly.const(
                     "lengthOfDay"
