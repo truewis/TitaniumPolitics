@@ -3,64 +3,62 @@ package com.titaniumPolitics.game.ui
 import com.badlogic.gdx.scenes.scene2d.ui.Stack
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.utils.Align
-import com.titaniumPolitics.game.core.GameEngine
 import com.titaniumPolitics.game.core.GameState
-import com.titaniumPolitics.game.core.gameActions.GameAction
 import com.titaniumPolitics.game.ui.map.MapUI
 import com.titaniumPolitics.game.ui.map.PlaceSelectionUI
 import com.titaniumPolitics.game.ui.widget.CharacterSelectUI
 import ktx.scene2d.*
 
-class HeadUpInterface(val gameState: GameState) : Table(Scene2DSkin.defaultSkin), KTable {
-    val mapUI = MapUI(gameState = this@HeadUpInterface.gameState)
+class InterfaceRoot(val gameState: GameState) : Table(Scene2DSkin.defaultSkin), KTable {
+    val mapUI = MapUI(gameState = this@InterfaceRoot.gameState)
     val calendarUI = CalendarUI(gameState)
     val politiciansInfoUI = PoliticiansInfoUI(gameState)
     val stack: Stack
 
     init {
         instance = this
-        addActor(CharacterInteractionWindowUI(gameState = this@HeadUpInterface.gameState))
+        addActor(CharacterInteractionWindowUI(gameState = this@InterfaceRoot.gameState))
         stack = stack { cell ->
             cell.size(1920f, 1080f)
 
             container {
                 align(Align.bottom)
-                addActor(AvailableActionsUI(this@HeadUpInterface.gameState))
+                addActor(AvailableActionsUI(this@InterfaceRoot.gameState))
             }
-            add(this@HeadUpInterface.mapUI)
-            add(this@HeadUpInterface.calendarUI)
-            add(this@HeadUpInterface.politiciansInfoUI)
-            add(InformationViewUI(this@HeadUpInterface.gameState))
+            add(this@InterfaceRoot.mapUI)
+            add(this@InterfaceRoot.calendarUI)
+            add(this@InterfaceRoot.politiciansInfoUI)
+            add(InformationViewUI(this@InterfaceRoot.gameState))
             add(ResourceInfoUI())
             add(HumanResourceInfoUI())
             add(ApparatusInfoUI())
-            add(ResourceTransferUI(this@HeadUpInterface.gameState, {}).also {
+            add(ResourceTransferUI(this@InterfaceRoot.gameState, {}).also {
                 ResourceTransferUI.primary = it
             })
-            add(NewAgendaUI(this@HeadUpInterface.gameState, {}).also {
+            add(NewAgendaUI(this@InterfaceRoot.gameState, {}).also {
                 NewAgendaUI.primary = it
             })
-            add(AddInfoUI(this@HeadUpInterface.gameState, {}).also {
+            add(AddInfoUI(this@InterfaceRoot.gameState, {}).also {
                 AddInfoUI.primary = it
             })
-            add(EndSpeechUI(this@HeadUpInterface.gameState, {}).also {
+            add(EndSpeechUI(this@InterfaceRoot.gameState, {}).also {
                 EndSpeechUI.primary = it
             })
-            add(WaitUI(this@HeadUpInterface.gameState, {}).also {
+            add(WaitUI(this@InterfaceRoot.gameState, {}).also {
                 WaitUI.primary = it
             })
 
             //We draw the following UIs above any other UIs, as they have to appear on top of everything else.
-            add(PlaceSelectionUI(this@HeadUpInterface.gameState))
-            add(CharacterSelectUI(this@HeadUpInterface.gameState))
+            add(PlaceSelectionUI(this@InterfaceRoot.gameState))
+            add(CharacterSelectUI(this@InterfaceRoot.gameState))
 
             //We draw the following UIs above any other UIs.
             table {
                 val leftSeparator = table {
                     it.fill()
-                    add(AlertUI(this@HeadUpInterface.gameState)).align(Align.bottomLeft).expandY()
+                    add(AlertUI(this@InterfaceRoot.gameState)).align(Align.bottomLeft).expandY()
                     row()
-                    add(AssistantUI(this@HeadUpInterface.gameState)).align(Align.bottomLeft)
+                    add(AssistantUI(this@InterfaceRoot.gameState)).align(Align.bottomLeft)
                 }
 
                 val centerSeparator = table {
@@ -69,16 +67,16 @@ class HeadUpInterface(val gameState: GameState) : Table(Scene2DSkin.defaultSkin)
                 }
                 val rightSeparator = table {
                     it.fill()
-                    add(CharStatusUI(this@HeadUpInterface.gameState)).align(Align.bottomRight).expandY()
+                    add(CharStatusUI(this@InterfaceRoot.gameState)).align(Align.bottomRight).expandY()
                 }
             }
             container {
                 align(Align.topLeft)
-                addActor(QuickSave(this@HeadUpInterface.gameState))
+                addActor(QuickSave(this@InterfaceRoot.gameState))
             }
 
             //We draw the following UIs above any other UIs.
-            add(DialogueUI(this@HeadUpInterface.gameState))
+            add(DialogueUI(this@InterfaceRoot.gameState))
 
 
         }
@@ -88,7 +86,7 @@ class HeadUpInterface(val gameState: GameState) : Table(Scene2DSkin.defaultSkin)
 
     companion object {
         //Singleton
-        lateinit var instance: HeadUpInterface
+        lateinit var instance: InterfaceRoot
     }
 
 }

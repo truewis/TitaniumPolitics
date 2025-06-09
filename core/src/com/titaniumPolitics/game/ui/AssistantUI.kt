@@ -89,10 +89,10 @@ class AssistantUI(gameState: GameState) : Table(defaultSkin), KTable {
                         this@AssistantUI.unmarkButton(it)
                     }
                     //Open Calendar UI
-                    if (HeadUpInterface.instance.calendarUI.isVisible) this@AssistantUI.closeAll()
+                    if (InterfaceRoot.instance.calendarUI.isVisible) this@AssistantUI.closeAll()
                     else {
-                        HeadUpInterface.instance.calendarUI.refresh(gameState)
-                        HeadUpInterface.instance.calendarUI.isVisible = !HeadUpInterface.instance.calendarUI.isVisible
+                        InterfaceRoot.instance.calendarUI.refresh(gameState)
+                        InterfaceRoot.instance.calendarUI.isVisible = !InterfaceRoot.instance.calendarUI.isVisible
                     }
                 }
             }
@@ -113,10 +113,10 @@ class AssistantUI(gameState: GameState) : Table(defaultSkin), KTable {
                 override fun clicked(event: com.badlogic.gdx.scenes.scene2d.InputEvent?, x: Float, y: Float) {
 
                     //Open Map UI
-                    if (HeadUpInterface.instance.mapUI.isVisible) this@AssistantUI.closeAll()
+                    if (InterfaceRoot.instance.mapUI.isVisible) this@AssistantUI.closeAll()
                     else {
-                        HeadUpInterface.instance.mapUI.refresh()
-                        HeadUpInterface.instance.mapUI.isVisible = !HeadUpInterface.instance.mapUI.isVisible
+                        InterfaceRoot.instance.mapUI.refresh()
+                        InterfaceRoot.instance.mapUI.isVisible = !InterfaceRoot.instance.mapUI.isVisible
                     }
                 }
             }
@@ -196,9 +196,9 @@ class AssistantUI(gameState: GameState) : Table(defaultSkin), KTable {
 
     fun closeAll() {
         InformationViewUI.instance.isVisible = false
-        HeadUpInterface.instance.mapUI.isVisible = false
-        HeadUpInterface.instance.calendarUI.isVisible = false
-        HeadUpInterface.instance.politiciansInfoUI.isVisible = false
+        InterfaceRoot.instance.mapUI.isVisible = false
+        InterfaceRoot.instance.calendarUI.isVisible = false
+        InterfaceRoot.instance.politiciansInfoUI.isVisible = false
         PlaceSelectionUI.instance.isVisible = false
         CharacterSelectUI.instance.isVisible = false
         ResourceInfoUI.instance.isVisible = false
