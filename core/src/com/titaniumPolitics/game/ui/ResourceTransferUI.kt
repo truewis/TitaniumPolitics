@@ -1,7 +1,9 @@
 package com.titaniumPolitics.game.ui
 
 
+import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.ui.*
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 
 import com.badlogic.gdx.utils.Align
@@ -17,8 +19,7 @@ import ktx.scene2d.*
 
 
 class ResourceTransferUI(gameState: GameState, override var actionCallback: (GameAction) -> Unit) :
-    WindowUI("ResourceTransferTitle"), ActionUI
-{
+    WindowUI("ResourceTransferTitle"), ActionUI {
     private val dataTable = Table()
     private val targetTable = Table()
 
@@ -32,9 +33,9 @@ class ResourceTransferUI(gameState: GameState, override var actionCallback: (Gam
     var toWhere = ""
     var modeLabel: Label
     var placeButton: Button
+    val submitButton: Button
 
-    init
-    {
+    init {
         isVisible = false
         val currentResourcePane = ScrollPane(dataTable)
         currentResourcePane.setScrollingDisabled(false, false)
@@ -46,27 +47,28 @@ class ResourceTransferUI(gameState: GameState, override var actionCallback: (Gam
             table {
                 this@ResourceTransferUI.modeLabel = label("Transfer Mode", "trnsprtConsole") { setFontScale(3f) }
                 row()
-                label("Transfer resources to"){setFontScale(3f)}
+                label("Transfer resources to") { setFontScale(3f) }
                 //Select place to transfer resources to.
-                this@ResourceTransferUI.placeButton = PlaceSelectButton(skin, { this@ResourceTransferUI.toWhere =it})
+                this@ResourceTransferUI.placeButton = PlaceSelectButton(skin, {
+                    this@ResourceTransferUI.toWhere = it
+                    this@ResourceTransferUI.submitButton.isDisabled = false
+                })
                 add(this@ResourceTransferUI.placeButton).growX()
 
                 row()
                 add(currentResourcePane)
                 add(targetResourcePane)
                 row()
-                button {
+                this@ResourceTransferUI.submitButton = button {
+                    isDisabled = true//Disabled until a place is selected.
                     it.fill()
                     label("Transfer") {
                         setAlignment(Align.center)
                         setFontScale(3f)
                     }
-                    addListener(object : ClickListener()
-                    {
-                        override fun clicked(event: com.badlogic.gdx.scenes.scene2d.InputEvent?, x: Float, y: Float)
-                        {
-                            if (this@ResourceTransferUI.mode == "official")
-                            {
+                    addListener(object : ChangeListener() {
+                        override fun changed(event: ChangeEvent?, actor: Actor?) {
+                            if (this@ResourceTransferUI.mode == "official") {
                                 this@ResourceTransferUI.actionCallback(
                                     OfficialResourceTransfer(
                                         this@ResourceTransferUI.subject,
@@ -76,8 +78,7 @@ class ResourceTransferUI(gameState: GameState, override var actionCallback: (Gam
                                         this.toWhere = this@ResourceTransferUI.toWhere
                                     }
                                 )
-                            } else if (this@ResourceTransferUI.mode == "unofficial")
-                            {
+                            } else if (this@ResourceTransferUI.mode == "unofficial") {
                                 this@ResourceTransferUI.actionCallback(
                                     UnofficialResourceTransfer(
                                         this@ResourceTransferUI.subject,
@@ -87,8 +88,7 @@ class ResourceTransferUI(gameState: GameState, override var actionCallback: (Gam
                                         this.toWhere = this@ResourceTransferUI.toWhere
                                     }
                                 )
-                            } else if (this@ResourceTransferUI.mode == "private")
-                            {
+                            } else if (this@ResourceTransferUI.mode == "private") {
                                 this@ResourceTransferUI.actionCallback(
                                     UnofficialResourceTransfer(
                                         this@ResourceTransferUI.subject,
@@ -111,10 +111,8 @@ class ResourceTransferUI(gameState: GameState, override var actionCallback: (Gam
                         setFontScale(3f)
 
                     }
-                    addListener(object : ClickListener()
-                    {
-                        override fun clicked(event: com.badlogic.gdx.scenes.scene2d.InputEvent?, x: Float, y: Float)
-                        {
+                    addListener(object : ClickListener() {
+                        override fun clicked(event: com.badlogic.gdx.scenes.scene2d.InputEvent?, x: Float, y: Float) {
                             this@ResourceTransferUI.isVisible = false
                         }
                     })
@@ -132,8 +130,7 @@ class ResourceTransferUI(gameState: GameState, override var actionCallback: (Gam
         action: (GameAction) -> Unit,
         current: HashMap<String, Double>,
         target: HashMap<String, Double> = hashMapOf(),
-    )
-    {
+    ) {
         this.actionCallback = action
         this.current = current
         this.target = target
@@ -144,19 +141,16 @@ class ResourceTransferUI(gameState: GameState, override var actionCallback: (Gam
         dataTable.apply {
             add(table {
                 current.forEach { (resourceName, resourceAmount) ->
-                    if (resourceAmount > .0)
-                    {
+                    if (resourceAmount > .0) {
                         label("$resourceName: $resourceAmount", "trnsprtConsole") {
                             setFontScale(2f)
                             setAlignment(Align.center)
-                            addListener(object : ClickListener()
-                            {
+                            addListener(object : ClickListener() {
                                 override fun clicked(
                                     event: com.badlogic.gdx.scenes.scene2d.InputEvent?,
                                     x: Float,
                                     y: Float
-                                )
-                                {
+                                ) {
                                     current[resourceName] = current[resourceName]!! - 1
                                     target[resourceName] = (target[resourceName] ?: .0) + 1
                                     this@ResourceTransferUI.refresh(mode, action, current, target)
@@ -173,19 +167,16 @@ class ResourceTransferUI(gameState: GameState, override var actionCallback: (Gam
         targetTable.apply {
             add(table {
                 target.forEach { (resourceName, resourceAmount) ->
-                    if (resourceAmount > .0)
-                    {
+                    if (resourceAmount > .0) {
                         label("$resourceName: $resourceAmount", "trnsprtConsole") {
                             setFontScale(2f)
                             setAlignment(Align.center)
-                            addListener(object : ClickListener()
-                            {
+                            addListener(object : ClickListener() {
                                 override fun clicked(
                                     event: com.badlogic.gdx.scenes.scene2d.InputEvent?,
                                     x: Float,
                                     y: Float
-                                )
-                                {
+                                ) {
                                     target[resourceName] = target[resourceName]!! - 1
                                     current[resourceName] = (current[resourceName] ?: .0) + 1
                                     this@ResourceTransferUI.refresh(mode, action, current, target)
@@ -199,13 +190,11 @@ class ResourceTransferUI(gameState: GameState, override var actionCallback: (Gam
         }
     }
 
-    override fun changeSubject(charName: String)
-    {
+    override fun changeSubject(charName: String) {
         subject = charName
     }
 
-    companion object
-    {
+    companion object {
         //Singleton
         lateinit var primary: ResourceTransferUI
     }
