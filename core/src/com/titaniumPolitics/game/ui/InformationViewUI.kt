@@ -10,15 +10,47 @@ import com.titaniumPolitics.game.core.ReadOnly
 import ktx.scene2d.*
 import ktx.scene2d.Scene2DSkin.defaultSkin
 
+enum class InformationViewMode {
+    SIMPLE, SELECT
+}
+
 class InformationViewUI(var gameState: GameState) : WindowUI("InformationViewTitle") {
     private val informationTable = Table()
+    private var mode = InformationViewMode.SIMPLE
+
+    //Only used in SELECT mode.
+    val selectedInfos = arrayListOf<String>()
+
     val toggleButton = scene2d.checkBox("Advanced") {
         isChecked = false
         label.setFontScale(2f)
         addListener(object : ClickListener() {
             //When clicked, toggle the view between simple and advanced.
             override fun clicked(event: com.badlogic.gdx.scenes.scene2d.InputEvent?, x: Float, y: Float) {
-                this@InformationViewUI.refresh(sortBy = "creationTime")
+                this@InformationViewUI.refresh(
+                    sortBy = "creationTime", this@InformationViewUI.mode,
+                    this@InformationViewUI.submitCallback
+                )
+            }
+        })
+    }
+    private var submitCallback = { selectedInfos: List<String> ->
+        //Default callback, does nothing.
+    }
+
+    val submitButton = scene2d.button {
+        label("Submit Selected") {
+            setAlignment(Align.center)
+            setFontScale(2f)
+        }
+        addListener(object : ClickListener() {
+            //When clicked, submit the selected informations.
+            override fun clicked(event: com.badlogic.gdx.scenes.scene2d.InputEvent?, x: Float, y: Float) {
+                this@InformationViewUI.submitCallback(this@InformationViewUI.selectedInfos)
+                this@InformationViewUI.submitCallback = { selectedInfos: List<String> ->
+                    //Default callback, does nothing.
+                }
+                this@InformationViewUI.isVisible = false
             }
         })
     }
@@ -31,12 +63,22 @@ class InformationViewUI(var gameState: GameState) : WindowUI("InformationViewTit
         content.add(toggleButton).align(Align.right).pad(10f).size(200f, 50f)
         content.row()
         content.add(informationPane).grow().pad(100f)
+        content.row()
+        content.add(submitButton).align(Align.right).size(200f, 50f)
         //Add a toggle button to show/hide the simple information view.
 
     }
 
-    fun refresh(sortBy: String) {
+    fun refresh(
+        sortBy: String,
+        mode: InformationViewMode = InformationViewMode.SIMPLE,
+        callback: (List<String>) -> Unit = { }
+    ) {
         informationTable.clear()
+        selectedInfos.clear()
+        this.mode = mode
+        submitButton.isVisible = mode == InformationViewMode.SELECT
+        submitCallback = callback
         val informationList: List<Information>
         val knownInfos = gameState.informations.values.filter { it.knownTo.contains(gameState.playerName) }
         if (knownInfos.isEmpty()) {
@@ -48,6 +90,12 @@ class InformationViewUI(var gameState: GameState) : WindowUI("InformationViewTit
         }
         if (!toggleButton.isChecked)//Simple view
         {
+            if (mode == InformationViewMode.SELECT) {
+                informationTable.add(scene2d.label("Prep", "trnsprtConsole") {
+                    setFontScale(2f)
+                    setAlignment(Align.left)
+                }).size(100f, 100f).left()
+            }
             informationTable.add(scene2d.label("Time", "trnsprtConsole") {
                 setFontScale(2f)
                 setAlignment(Align.left)
@@ -65,6 +113,10 @@ class InformationViewUI(var gameState: GameState) : WindowUI("InformationViewTit
                 ).also {
                     it.setAlignment(Align.left)
                     it.setFontScale(2f)
+                    if (gameState.player.preparedInfoKeys.contains(information.name))
+                        it.color = com.badlogic.gdx.graphics.Color.GREEN
+                    else
+                        it.color = com.badlogic.gdx.graphics.Color.WHITE
                 }
                 val label = scene2d.label(
                     information.simpleDescription(),
@@ -72,6 +124,10 @@ class InformationViewUI(var gameState: GameState) : WindowUI("InformationViewTit
                 ).also {
                     it.setAlignment(Align.left)
                     it.setFontScale(2f)
+                    if (gameState.player.preparedInfoKeys.contains(information.name))
+                        it.color = com.badlogic.gdx.graphics.Color.GREEN
+                    else
+                        it.color = com.badlogic.gdx.graphics.Color.WHITE
                     it.addListener(object : ClickListener() {
                         //When clicked, open the information in a new window, depending on the type of information.
                         override fun clicked(
@@ -98,6 +154,24 @@ class InformationViewUI(var gameState: GameState) : WindowUI("InformationViewTit
                             }
                         }
                     })
+                }
+                if (mode == InformationViewMode.SELECT) {
+                    informationTable.add(scene2d.button("check") {
+                        isChecked = this@InformationViewUI.selectedInfos.contains(information.name)
+                        addListener(object : ClickListener() {
+                            override fun clicked(
+                                event: com.badlogic.gdx.scenes.scene2d.InputEvent?,
+                                x: Float,
+                                y: Float
+                            ) {
+                                //Toggle the selection of the information.
+                                if (isChecked)
+                                    this@InformationViewUI.selectedInfos.add(information.name)
+                                else
+                                    this@InformationViewUI.selectedInfos.remove(information.name)
+                            }
+                        })
+                    }).size(100f, 100f).left()
                 }
                 informationTable.add(timeLabel).size(200f, 100f).left()
                 informationTable.add(label).growX().left()
@@ -132,6 +206,13 @@ class InformationViewUI(var gameState: GameState) : WindowUI("InformationViewTit
             }
             if (informationList.isNotEmpty()) {
 
+                if (mode == InformationViewMode.SELECT) {
+                    informationTable.add(scene2d.label("Prep", "trnsprtConsole") {
+                        setFontScale(2f)
+                        setAlignment(Align.left)
+                    }).size(100f, 100f).left()
+                }
+
                 val firstInformation = informationList.first()
                 firstInformation::class.java.declaredFields.forEach { field ->
                     if (field.name == "author" || field.name == "creationTime" || field.name == "type" || field.name == "tgtTime" || field.name == "tgtPlace" || field.name == "tgtCharacter" || field.name == "amount") {
@@ -145,7 +226,7 @@ class InformationViewUI(var gameState: GameState) : WindowUI("InformationViewTit
                                     x: Float,
                                     y: Float
                                 ) {
-                                    this@InformationViewUI.refresh(field.name)
+                                    this@InformationViewUI.refresh(field.name, mode, callback)
                                 }
                             })
                         }
@@ -154,6 +235,24 @@ class InformationViewUI(var gameState: GameState) : WindowUI("InformationViewTit
                 }
                 informationTable.row()
                 informationList.forEach { information ->
+                    if (mode == InformationViewMode.SELECT) {
+                        informationTable.add(scene2d.button("check") {
+                            isChecked = this@InformationViewUI.selectedInfos.contains(information.name)
+                            addListener(object : ClickListener() {
+                                override fun clicked(
+                                    event: com.badlogic.gdx.scenes.scene2d.InputEvent?,
+                                    x: Float,
+                                    y: Float
+                                ) {
+                                    //Toggle the selection of the information.
+                                    if (isChecked)
+                                        this@InformationViewUI.selectedInfos.add(information.name)
+                                    else
+                                        this@InformationViewUI.selectedInfos.remove(information.name)
+                                }
+                            })
+                        }).size(100f, 100f).left()
+                    }
                     information::class.java.declaredFields.forEach { field ->
                         //Only show fields that are relevant to the information.
                         if (field.name == "author" || field.name == "creationTime" || field.name == "type" || field.name == "tgtTime" || field.name == "tgtPlace" || field.name == "tgtCharacter" || field.name == "amount") {
@@ -165,6 +264,11 @@ class InformationViewUI(var gameState: GameState) : WindowUI("InformationViewTit
                             ).also {
                                 it.setAlignment(Align.center)
                                 it.setFontScale(2f)
+
+                                if (gameState.player.preparedInfoKeys.contains(information.name))
+                                    it.color = com.badlogic.gdx.graphics.Color.GREEN
+                                else
+                                    it.color = com.badlogic.gdx.graphics.Color.WHITE
                                 it.addListener(object : ClickListener() {
                                     //When clicked, open the information in a new window, depending on the type of information.
                                     override fun clicked(

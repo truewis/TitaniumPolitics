@@ -25,6 +25,24 @@ class InterfaceRoot(val gameState: GameState) : Table(Scene2DSkin.defaultSkin), 
                 align(Align.bottom)
                 addActor(AvailableActionsUI(this@InterfaceRoot.gameState))
             }
+            //We draw the following UIs above any other UIs.
+            table {
+                val leftSeparator = table {
+                    it.fill()
+                    add(AlertUI(this@InterfaceRoot.gameState)).align(Align.bottomLeft).expandY()
+                    row()
+                    add(AssistantUI(this@InterfaceRoot.gameState)).align(Align.bottomLeft)
+                }
+
+                val centerSeparator = table {
+                    it.grow()
+
+                }
+                val rightSeparator = table {
+                    it.fill()
+                    add(CharStatusUI(this@InterfaceRoot.gameState)).align(Align.bottomRight).expandY()
+                }
+            }
             add(this@InterfaceRoot.mapUI)
             add(this@InterfaceRoot.calendarUI)
             add(this@InterfaceRoot.politiciansInfoUI)
@@ -57,24 +75,6 @@ class InterfaceRoot(val gameState: GameState) : Table(Scene2DSkin.defaultSkin), 
             add(PlaceSelectionUI(this@InterfaceRoot.gameState))
             add(CharacterSelectUI(this@InterfaceRoot.gameState))
 
-            //We draw the following UIs above any other UIs.
-            table {
-                val leftSeparator = table {
-                    it.fill()
-                    add(AlertUI(this@InterfaceRoot.gameState)).align(Align.bottomLeft).expandY()
-                    row()
-                    add(AssistantUI(this@InterfaceRoot.gameState)).align(Align.bottomLeft)
-                }
-
-                val centerSeparator = table {
-                    it.grow()
-
-                }
-                val rightSeparator = table {
-                    it.fill()
-                    add(CharStatusUI(this@InterfaceRoot.gameState)).align(Align.bottomRight).expandY()
-                }
-            }
             container {
                 align(Align.topLeft)
                 addActor(QuickSave(this@InterfaceRoot.gameState))
