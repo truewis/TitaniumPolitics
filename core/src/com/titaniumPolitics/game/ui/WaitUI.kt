@@ -50,6 +50,12 @@ class WaitUI(val gameState: GameState, override var actionCallback: (GameAction)
                             this@WaitUI.interrupted = false
                             GameEngine.acquireEvent += this@WaitUI::spendTime
                             this@WaitUI.spendTime(AcquireParams("", hashMapOf()))
+                            if (this@WaitUI.mode == WaitUIMode.SLEEP) {
+                                ProgressBackgroundUI.instance.text = ReadOnly.prop("Sleeping")
+                            } else {
+                                ProgressBackgroundUI.instance.text = ReadOnly.prop("Waiting")
+                            }
+                            ProgressBackgroundUI.instance.setVisibleWithFade(true)
                         }
                     })
                 }
@@ -65,11 +71,13 @@ class WaitUI(val gameState: GameState, override var actionCallback: (GameAction)
         if (interrupted) {
             this.isVisible = false
             GameEngine.acquireEvent -= this::spendTime
+            ProgressBackgroundUI.instance.setVisibleWithFade(false)
             return
         }
         if (amount <= 0) {
             this.isVisible = false
             GameEngine.acquireEvent -= this::spendTime
+            ProgressBackgroundUI.instance.setVisibleWithFade(false)
             return
         }
         if (mode == WaitUIMode.SLEEP) {

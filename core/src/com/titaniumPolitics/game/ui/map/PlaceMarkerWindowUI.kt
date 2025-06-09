@@ -6,25 +6,23 @@ import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.core.ReadOnly
 import com.titaniumPolitics.game.core.gameActions.Move
 import com.titaniumPolitics.game.ui.FloatingWindowUI
+import com.titaniumPolitics.game.ui.ProgressBackgroundUI
 import ktx.scene2d.button
 import ktx.scene2d.label
 import ktx.scene2d.scene2d
 
-class PlaceMarkerWindowUI(var gameState: GameState, var owner: MapUI) : FloatingWindowUI()
-{
+class PlaceMarkerWindowUI(var gameState: GameState, var owner: MapUI) : FloatingWindowUI() {
     var placeDisplayed = ""
     val distance get() = (gameState.player.place.shortestPathAndTimeTo(placeDisplayed)?.second ?: 0) * ReadOnly.dt / 60
     var mode = ""
     lateinit var moveLabel: Label
     private val moveButton = scene2d.button {
-        this@PlaceMarkerWindowUI.moveLabel = label("Move to Place: "+ this@PlaceMarkerWindowUI.distance+"m") {
+        this@PlaceMarkerWindowUI.moveLabel = label("Move to Place: " + this@PlaceMarkerWindowUI.distance + "m") {
             setFontScale(2f)
         }
 
-        addListener(object : com.badlogic.gdx.scenes.scene2d.utils.ClickListener()
-        {
-            override fun clicked(event: com.badlogic.gdx.scenes.scene2d.InputEvent?, x: Float, y: Float)
-            {
+        addListener(object : com.badlogic.gdx.scenes.scene2d.utils.ClickListener() {
+            override fun clicked(event: com.badlogic.gdx.scenes.scene2d.InputEvent?, x: Float, y: Float) {
                 //Move to place.
                 val action = Move(
                     this@PlaceMarkerWindowUI.gameState.playerName,
@@ -34,6 +32,10 @@ class PlaceMarkerWindowUI(var gameState: GameState, var owner: MapUI) : Floating
                 action.injectParent(this@PlaceMarkerWindowUI.gameState)
                 this@PlaceMarkerWindowUI.owner.isVisible = false
                 this@PlaceMarkerWindowUI.isVisible = false
+
+                ProgressBackgroundUI.instance.text = ReadOnly.prop("Moving")
+                ProgressBackgroundUI.instance.setVisibleWithFade(true)
+
                 GameEngine.acquireCallback(action)
             }
         })
@@ -44,10 +46,8 @@ class PlaceMarkerWindowUI(var gameState: GameState, var owner: MapUI) : Floating
             setFontScale(2f)
         }
 
-        addListener(object : com.badlogic.gdx.scenes.scene2d.utils.ClickListener()
-        {
-            override fun clicked(event: com.badlogic.gdx.scenes.scene2d.InputEvent?, x: Float, y: Float)
-            {
+        addListener(object : com.badlogic.gdx.scenes.scene2d.utils.ClickListener() {
+            override fun clicked(event: com.badlogic.gdx.scenes.scene2d.InputEvent?, x: Float, y: Float) {
                 //Select place.
                 PlaceSelectionUI.instance.selectedPlaceCallback(this@PlaceMarkerWindowUI.placeDisplayed)
                 this@PlaceMarkerWindowUI.owner.isVisible = false
@@ -56,16 +56,13 @@ class PlaceMarkerWindowUI(var gameState: GameState, var owner: MapUI) : Floating
         )
     }
 
-    fun refresh(x: Float, y: Float, placeName: String)
-    {
+    fun refresh(x: Float, y: Float, placeName: String) {
         //If the window is already visible, hide it.
-        if (placeDisplayed == placeName && isVisible)
-        {
+        if (placeDisplayed == placeName && isVisible) {
             isVisible = false
             placeDisplayed = ""
 
-        } else
-        {
+        } else {
             val XOFFSET = 10f
             val YOFFSET = 10f
             setPosition(x + XOFFSET, y + YOFFSET)
@@ -79,16 +76,13 @@ class PlaceMarkerWindowUI(var gameState: GameState, var owner: MapUI) : Floating
             content.apply {
                 clear()
                 //If place selection mode is active, add the selection button and nothing else.
-                if (mode == "PlaceSelection")
-                {
+                if (mode == "PlaceSelection") {
                     add(selectButton).size(200f, 50f).fill()
                     row()
-                } else
-                {
+                } else {
                     moveLabel.setText("Move to Place: ${distance}min")
                     //Disable the button if the player is already in the place. Calling place property will throw an exception when the game is first loaded.
-                    if (gameState.characters[gameState.playerName]!!.place.connectedPlaces.contains(placeDisplayed))
-                    {
+                    if (gameState.characters[gameState.playerName]!!.place.connectedPlaces.contains(placeDisplayed)) {
                         add(moveButton).size(200f, 50f).fill()
                         row()
                     }

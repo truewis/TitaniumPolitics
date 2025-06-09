@@ -48,6 +48,11 @@ class InterfaceRoot(val gameState: GameState) : Table(Scene2DSkin.defaultSkin), 
                 WaitUI.primary = it
             })
 
+            //TODO: Place UI here
+
+
+            add(ProgressBackgroundUI(this@InterfaceRoot.gameState, this@InterfaceRoot.skin))
+
             //We draw the following UIs above any other UIs, as they have to appear on top of everything else.
             add(PlaceSelectionUI(this@InterfaceRoot.gameState))
             add(CharacterSelectUI(this@InterfaceRoot.gameState))
