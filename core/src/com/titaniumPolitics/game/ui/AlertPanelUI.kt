@@ -101,7 +101,7 @@ class AlertPanelUI(var type: String, action: () -> Unit, val docList: Group, var
                             })
                         }
 
-                    "interrupt" -> {
+                    "interrupted" -> {
                         label(ReadOnly.prop(this@AlertPanelUI.type).format(params[0]), "trnsprtConsole") {
                             it.growX()
                             setFontScale(1.5f)

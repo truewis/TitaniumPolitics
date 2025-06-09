@@ -58,14 +58,19 @@ class MeetingUI(var gameState: GameState) : Table(defaultSkin), KTable {
 
     //This function can be used for both meetings and conferences
     fun refresh(meeting: Meeting) {
-        val newMutualities = meeting.scheduledCharacters.flatMap { char1 ->
-            meeting.currentCharacters.mapNotNull { char2 ->
-                if (char1 != char2) {
-                    val mutuality = gameState.getMutuality(char1, char2)
-                    Pair(char1, char2) to mutuality
-                } else null
+        val newMutualities = meeting.currentCharacters.flatMap { char1 ->
+            meeting.currentCharacters.map { char2 ->
+                Pair(char1, char2) to gameState.getMutuality(char1, char2)
             }
         }.toMap().toMutableMap()
+        //show mutuality arrows if there are any changes.
+        val mutualityChanges = newMutualities.filter { (pair, value) ->
+            previousMutualities[pair]?.let { it != value } ?: true
+        }
+        if (mutualityChanges.isNotEmpty()) {
+            showMutualityArrows(mutualityChanges)
+            previousMutualities = newMutualities
+        }
         meeting.currentCharacters.forEach {
             if (portraits.none { portrait -> portrait.tgtCharacter == it }) {
                 //Player can see themselves.
@@ -100,16 +105,6 @@ class MeetingUI(var gameState: GameState) : Table(defaultSkin), KTable {
 
         currentAttention.setText(meeting.currentAttention.toString())
         attentionMeter.color = Color(meeting.currentAttention.toFloat() / 100, 0f, 0f, 1f)
-
-        //show mutuality arrows if there are any changes.
-        val mutualityChanges = newMutualities.filter { (pair, value) ->
-            previousMutualities[pair]?.let { it != value } ?: true
-        }
-        if (mutualityChanges.isNotEmpty()) {
-            showMutualityArrows(mutualityChanges)
-            previousMutualities = newMutualities
-        }
-
 
     }
 

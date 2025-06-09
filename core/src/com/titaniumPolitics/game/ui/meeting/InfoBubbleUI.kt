@@ -7,44 +7,37 @@ import ktx.scene2d.KTable
 import ktx.scene2d.image
 import ktx.scene2d.stack
 
-class InfoBubbleUI(val info: Information) : Table(), KTable
-{
-    init
-    {
+class InfoBubbleUI(val info: Information) : Table(), KTable {
+    init {
         with(info) {
             stack {
                 it.size(100f, 100f).fill()
                 image("BadgeRound") {
 
                 }
-                if (tgtCharacter != "")
-                {
-                    image(tgtCharacter) {
-                    }
+                if (tgtCharacter != "") {
+                    //TODO: want to display the character's image here, but we don't have space for it.
+//                    image(tgtCharacter) {
+//                    }
                 }
-                when (type)
-                {
-                    InformationType.ACTION ->
-                    {
+                when (type) {
+                    InformationType.ACTION -> {
                         image("HelpGrunge") {
                         }
                     }
 
-                    InformationType.RESOURCES ->
-                    {
+                    InformationType.RESOURCES -> {
                         image("HeartGrunge") {
                         }
                     }
 
-                    InformationType.CASUALTY ->
-                    {
+                    InformationType.CASUALTY -> {
                         image("LightGrunge") {
                         }
 
                     }
 
-                    else ->
-                    {
+                    else -> {
 
                     }
                 }
