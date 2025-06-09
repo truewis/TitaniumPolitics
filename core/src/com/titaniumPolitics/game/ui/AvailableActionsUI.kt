@@ -94,9 +94,18 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable 
                                     x: Float,
                                     y: Float
                                 ) {
-                                    WaitUI.primary.isVisible = true
-                                    WaitUI.primary.actionCallback = GameEngine.acquireCallback
-                                    WaitUI.primary.refresh(WaitUIMode.WAIT)
+                                    if (this@AvailableActionsUI.gameState.player.currentMeeting != null) {
+                                        GameEngine.acquireCallback(
+                                            Wait(
+                                                this@AvailableActionsUI.gameState.playerName,
+                                                this@AvailableActionsUI.gameState.player.place.name
+                                            )
+                                        )
+                                    } else {
+                                        WaitUI.primary.isVisible = true
+                                        WaitUI.primary.actionCallback = GameEngine.acquireCallback
+                                        WaitUI.primary.refresh(WaitUIMode.WAIT)
+                                    }
                                 }
                             })
                         }
@@ -220,6 +229,9 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable 
                                 if ((this@AvailableActionsUI.gameState.player.preparedInfoKeys - this@AvailableActionsUI.gameState.player.currentMeeting!!.agendas.flatMap { it.informationKeys }).isEmpty()) {
                                     this@button.isDisabled = true
                                     tooltip.displayInvalidReason(ReadOnly.prop("addInfo-noAdditionalInfo"))
+                                } else if ((this@AvailableActionsUI.gameState.player.currentMeeting!!.agendas.isEmpty())) {
+                                    this@button.isDisabled = true
+                                    tooltip.displayInvalidReason(ReadOnly.prop("addInfo-noAgendas"))
                                 }
                             this@button.addListener(object : ClickListener() {
                                 override fun clicked(

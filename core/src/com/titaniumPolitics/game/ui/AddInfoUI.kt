@@ -6,42 +6,45 @@ import com.badlogic.gdx.scenes.scene2d.ui.*
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 
 import com.badlogic.gdx.utils.Align
-import com.titaniumPolitics.game.core.GameEngine
 import com.titaniumPolitics.game.core.GameState
-import com.titaniumPolitics.game.core.Resources
+import com.titaniumPolitics.game.core.MeetingAgenda
 import com.titaniumPolitics.game.core.gameActions.AddInfo
 import com.titaniumPolitics.game.core.gameActions.GameAction
-import com.titaniumPolitics.game.core.gameActions.OfficialResourceTransfer
-import com.titaniumPolitics.game.core.gameActions.UnofficialResourceTransfer
-import com.titaniumPolitics.game.ui.map.PlaceSelectionUI
-import com.titaniumPolitics.game.ui.widget.PlaceSelectButton
+import com.titaniumPolitics.game.ui.meeting.AgendaBubbleUI
 
 import ktx.scene2d.*
-import ktx.scene2d.Scene2DSkin.defaultSkin
 
 
 class AddInfoUI(val gameState: GameState, override var actionCallback: (GameAction) -> Unit) :
     WindowUI("AddInfoTitle"), ActionUI {
     private val dataTable = Table()
     private var targetTable = Table()
+    private var agendaTable = scene2d.buttonGroup(1, 1)
 
     private var subject = gameState.playerName
     private val sbjChar = gameState.characters[subject]!!
     var infoKey = ""
+    lateinit var agenda: MeetingAgenda
 
     init {
         isVisible = false
-        val currentResourcePane = ScrollPane(dataTable)
-        currentResourcePane.setScrollingDisabled(true, false)
+        val agendaSelectPane = ScrollPane(agendaTable)
+        agendaSelectPane.setScrollingDisabled(false, true)
 
-        val targetResourcePane = ScrollPane(targetTable)
-        targetResourcePane.setScrollingDisabled(false, true)
+        val infoSelectPane = ScrollPane(dataTable)
+        infoSelectPane.setScrollingDisabled(true, false)
+
+        val infoDescPane = ScrollPane(targetTable)
+        infoDescPane.setScrollingDisabled(false, true)
 
         val st = stack {
             it.grow()
             table {
-                add(currentResourcePane)
-                add(targetResourcePane)
+                add(agendaSelectPane)
+                row()
+                add(infoSelectPane)
+                row()
+                add(infoDescPane)
                 row()
                 button {
                     it.fill()
@@ -58,6 +61,8 @@ class AddInfoUI(val gameState: GameState, override var actionCallback: (GameActi
                                     this@AddInfoUI.sbjChar.place.name
                                 ).apply {
                                     infoKey = this@AddInfoUI.infoKey
+                                    agendaIndex =
+                                        this@AddInfoUI.gameState.player.currentMeeting!!.agendas.indexOf(this@AddInfoUI.agenda)
                                 }
                             )
 
@@ -73,6 +78,25 @@ class AddInfoUI(val gameState: GameState, override var actionCallback: (GameActi
     }
 
     fun refresh() {
+        agenda = sbjChar.currentMeeting!!.agendas.first()
+        agendaTable.apply {
+            clear()
+            this@AddInfoUI.sbjChar.currentMeeting?.agendas?.forEach { agenda ->
+                button("check") {
+                    isChecked = agenda == this@AddInfoUI.agenda
+                    add(AgendaBubbleUI(agenda))
+                    addListener(object : ClickListener() {
+                        override fun clicked(
+                            event: InputEvent?,
+                            x: Float,
+                            y: Float
+                        ) {
+                            this@AddInfoUI.agenda = agenda
+                        }
+                    })
+                }
+            }
+        }
 
         val availableInfoKeys = sbjChar.preparedInfoKeys.filter { key ->
             !sbjChar.currentMeeting!!.agendas.flatMap { it.informationKeys }

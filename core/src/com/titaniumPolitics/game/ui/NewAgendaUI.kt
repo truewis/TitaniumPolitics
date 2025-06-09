@@ -210,6 +210,9 @@ class NewAgendaUI(gameState: GameState, override var actionCallback: (GameAction
                                         y: Float
                                     ) {
                                         this@NewAgendaUI.hideAllAgendaDetailsTable()
+                                        this@NewAgendaUI.agenda = MeetingAgenda(
+                                            AgendaType.PROOF_OF_WORK, gameState.playerName
+                                        )
                                     }
                                 })
                             }
