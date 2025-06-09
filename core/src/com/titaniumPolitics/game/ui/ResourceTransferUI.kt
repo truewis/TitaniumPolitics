@@ -33,7 +33,50 @@ class ResourceTransferUI(gameState: GameState, override var actionCallback: (Gam
     var toWhere = ""
     var modeLabel: Label
     var placeButton: Button
-    val submitButton: Button
+    val submitButton: Button = scene2d.button {
+        isDisabled = true//Disabled until a place is selected.
+        label("Transfer") {
+            setAlignment(Align.center)
+            setFontScale(3f)
+        }
+        addListener(object : ChangeListener() {
+            override fun changed(event: ChangeEvent?, actor: Actor?) {
+                if (this@ResourceTransferUI.mode == "official") {
+                    this@ResourceTransferUI.actionCallback(
+                        OfficialResourceTransfer(
+                            this@ResourceTransferUI.subject,
+                            this@ResourceTransferUI.sbjChar.place.name
+                        ).apply {
+                            this.resources = Resources(this@ResourceTransferUI.target)
+                            this.toWhere = this@ResourceTransferUI.toWhere
+                        }
+                    )
+                } else if (this@ResourceTransferUI.mode == "unofficial") {
+                    this@ResourceTransferUI.actionCallback(
+                        UnofficialResourceTransfer(
+                            this@ResourceTransferUI.subject,
+                            this@ResourceTransferUI.sbjChar.place.name
+                        ).apply {
+                            this.resources = Resources(this@ResourceTransferUI.target)
+                            this.toWhere = this@ResourceTransferUI.toWhere
+                        }
+                    )
+                } else if (this@ResourceTransferUI.mode == "private") {
+                    this@ResourceTransferUI.actionCallback(
+                        UnofficialResourceTransfer(
+                            this@ResourceTransferUI.subject,
+                            this@ResourceTransferUI.sbjChar.place.name
+                        ).apply {
+                            this.resources = Resources(this@ResourceTransferUI.target)
+                            this.toWhere = this@ResourceTransferUI.toWhere
+                            this.fromHome = true
+                        }
+                    )
+                }
+                this@ResourceTransferUI.isVisible = false
+            }
+        })
+    }
 
     init {
         isVisible = false
@@ -59,51 +102,7 @@ class ResourceTransferUI(gameState: GameState, override var actionCallback: (Gam
                 add(currentResourcePane)
                 add(targetResourcePane)
                 row()
-                this@ResourceTransferUI.submitButton = button {
-                    isDisabled = true//Disabled until a place is selected.
-                    it.fill()
-                    label("Transfer") {
-                        setAlignment(Align.center)
-                        setFontScale(3f)
-                    }
-                    addListener(object : ChangeListener() {
-                        override fun changed(event: ChangeEvent?, actor: Actor?) {
-                            if (this@ResourceTransferUI.mode == "official") {
-                                this@ResourceTransferUI.actionCallback(
-                                    OfficialResourceTransfer(
-                                        this@ResourceTransferUI.subject,
-                                        this@ResourceTransferUI.sbjChar.place.name
-                                    ).apply {
-                                        this.resources = Resources(this@ResourceTransferUI.target)
-                                        this.toWhere = this@ResourceTransferUI.toWhere
-                                    }
-                                )
-                            } else if (this@ResourceTransferUI.mode == "unofficial") {
-                                this@ResourceTransferUI.actionCallback(
-                                    UnofficialResourceTransfer(
-                                        this@ResourceTransferUI.subject,
-                                        this@ResourceTransferUI.sbjChar.place.name
-                                    ).apply {
-                                        this.resources = Resources(this@ResourceTransferUI.target)
-                                        this.toWhere = this@ResourceTransferUI.toWhere
-                                    }
-                                )
-                            } else if (this@ResourceTransferUI.mode == "private") {
-                                this@ResourceTransferUI.actionCallback(
-                                    UnofficialResourceTransfer(
-                                        this@ResourceTransferUI.subject,
-                                        this@ResourceTransferUI.sbjChar.place.name
-                                    ).apply {
-                                        this.resources = Resources(this@ResourceTransferUI.target)
-                                        this.toWhere = this@ResourceTransferUI.toWhere
-                                        this.fromHome = true
-                                    }
-                                )
-                            }
-                            this@ResourceTransferUI.isVisible = false
-                        }
-                    })
-                }
+                add(this@ResourceTransferUI.submitButton).fill()//TODO: official transfer is only to my division
                 button {
                     it.fill()
                     label("Cancel") {

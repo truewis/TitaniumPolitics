@@ -116,10 +116,13 @@ class AddInfoUI(val gameState: GameState, override var actionCallback: (GameActi
                                 x: Float,
                                 y: Float
                             ) {
-                                this@AddInfoUI.targetTable = scene2d.table {
-                                    label(this@AddInfoUI.gameState.informations[key]!!.simpleDescription())
-
-                                }
+                                this@AddInfoUI.targetTable.clear()
+                                this@AddInfoUI.targetTable.add(
+                                    scene2d.label(this@AddInfoUI.gameState.informations[key]!!.simpleDescription()) {
+                                        setFontScale(2f)
+                                        setAlignment(Align.center)
+                                        wrap = true
+                                    }).grow()
                             }
                         })
                     }
