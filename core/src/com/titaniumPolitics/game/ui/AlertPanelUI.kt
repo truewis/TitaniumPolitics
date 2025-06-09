@@ -13,11 +13,9 @@ import ktx.scene2d.Scene2DSkin.defaultSkin
 import ktx.scene2d.scene2d
 import ktx.scene2d.*
 
-class AlertPanelUI(var type: String, action: () -> Unit, val docList: Group, vararg params: String) : Table(), KTable
-{
+class AlertPanelUI(var type: String, action: () -> Unit, val docList: Group, vararg params: String) : Table(), KTable {
 
-    init
-    {
+    init {
         stack {
             it.size(400f, 75f)
             image("GradientBottom") {
@@ -27,8 +25,7 @@ class AlertPanelUI(var type: String, action: () -> Unit, val docList: Group, var
 
 
             table {
-                when (this@AlertPanelUI.type)
-                {
+                when (this@AlertPanelUI.type) {
                     "newInfo" -> image("icon_activity_66") {
                         it.size(36f).fill()
                     }
@@ -64,21 +61,27 @@ class AlertPanelUI(var type: String, action: () -> Unit, val docList: Group, var
                     "apparatus" -> image("CogGrunge") {
                         it.size(36f).fill()
                     }
+
                     "alarm" -> image("ClockGrunge") {
                         it.size(36f).fill()
                     }
+
+                    "interrupt" -> image("Help") {
+                        it.size(36f).fill()
+                    }
+
+                    else -> image("Help") {
+                        it.size(36f).fill()
+                    }
                 }
-                when (this@AlertPanelUI.type)
-                {
+                when (this@AlertPanelUI.type) {
                     "moved" ->
                         label(ReadOnly.prop(this@AlertPanelUI.type).format(params[0], params[1]), "trnsprtConsole") {
                             it.growX()
                             setFontScale(1.5f)
                             wrap = true
-                            this@label.addListener(object : ClickListener()
-                            {
-                                override fun clicked(event: InputEvent?, x: Float, y: Float)
-                                {
+                            this@label.addListener(object : ClickListener() {
+                                override fun clicked(event: InputEvent?, x: Float, y: Float) {
                                     super.clicked(event, x, y)
                                     action()
                                 }
@@ -90,24 +93,34 @@ class AlertPanelUI(var type: String, action: () -> Unit, val docList: Group, var
                             it.growX()
                             setFontScale(2f)
                             color = Color.RED
-                            this@label.addListener(object : ClickListener()
-                            {
-                                override fun clicked(event: InputEvent?, x: Float, y: Float)
-                                {
+                            this@label.addListener(object : ClickListener() {
+                                override fun clicked(event: InputEvent?, x: Float, y: Float) {
                                     super.clicked(event, x, y)
                                     action()
                                 }
                             })
                         }
 
+                    "interrupt" -> {
+                        label(ReadOnly.prop(this@AlertPanelUI.type).format(params[0]), "trnsprtConsole") {
+                            it.growX()
+                            setFontScale(1.5f)
+                            wrap = true
+                            this@label.addListener(object : ClickListener() {
+                                override fun clicked(event: InputEvent?, x: Float, y: Float) {
+                                    super.clicked(event, x, y)
+                                    action()
+                                }
+                            })
+                        }
+                    }
+
                     else ->
                         label(ReadOnly.prop(this@AlertPanelUI.type), "trnsprtConsole") {
                             it.growX()
                             setFontScale(2f)
-                            this@label.addListener(object : ClickListener()
-                            {
-                                override fun clicked(event: InputEvent?, x: Float, y: Float)
-                                {
+                            this@label.addListener(object : ClickListener() {
+                                override fun clicked(event: InputEvent?, x: Float, y: Float) {
                                     super.clicked(event, x, y)
                                     action()
                                 }
@@ -119,10 +132,8 @@ class AlertPanelUI(var type: String, action: () -> Unit, val docList: Group, var
                     image("XGrunge") {
                         it.size(36f)
                     }
-                    this@button.addListener(object : ClickListener()
-                    {
-                        override fun clicked(event: InputEvent?, x: Float, y: Float)
-                        {
+                    this@button.addListener(object : ClickListener() {
+                        override fun clicked(event: InputEvent?, x: Float, y: Float) {
                             super.clicked(event, x, y)
                             this@AlertPanelUI.docList.removeActor(this@AlertPanelUI)
                             if (this@AlertPanelUI.docList.children.isEmpty)

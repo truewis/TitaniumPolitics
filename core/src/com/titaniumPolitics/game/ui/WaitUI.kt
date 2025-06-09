@@ -64,7 +64,6 @@ class WaitUI(val gameState: GameState, override var actionCallback: (GameAction)
         this.actionCallback = GameEngine.acquireCallback
         if (interrupted) {
             this.isVisible = false
-            AlertUI.instance.addAlert("interrupted")
             GameEngine.acquireEvent -= this::spendTime
             return
         }
@@ -130,9 +129,11 @@ class WaitUI(val gameState: GameState, override var actionCallback: (GameAction)
 
     private fun waitInterruptCondition(info: Information) {
         //Interrupt if a character performs an action other than wait in this place.
-        if (info.tgtPlace == gameState.player.place.name && info.author != gameState.playerName &&
-            !(info.type == InformationType.ACTION && info.action is Wait)
+        if (info.tgtPlace == gameState.player.place.name && info.tgtCharacter != gameState.playerName &&
+            !(info.type == InformationType.ACTION && info.action is Wait) && info.knownTo.contains(gameState.playerName)
         ) {
+
+            AlertUI.instance.addAlert("interrupted", ReadOnly.prop(info.tgtCharacter))
             interrupted = true
             println("WaitUI: Wait interrupted by ${info.author} at ${info.tgtPlace}")
         }
