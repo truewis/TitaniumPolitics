@@ -36,8 +36,8 @@ class QuestUI(var gameState: GameState) : Table(defaultSkin) {
         row()
         add(docScr).grow()
 
-        gameState.eventSystem.onUpdateQuest += { it ->
-            refreshDocList(it.toList())
+        gameState.updateUI += { it ->
+            refreshDocList(it.eventSystem.quests.toList())
         }
     }
 

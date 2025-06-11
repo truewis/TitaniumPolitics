@@ -12,9 +12,7 @@ class EventSystem : GameStateElement() {
         get() = "EventSystem" //There is only one EventSystem object in the game.
     private val dataBase = arrayListOf<EventObject>()
     private val tmpdataBase = arrayListOf<EventObject>()
-    private val quests = hashSetOf<Quest>()
-
-    val onUpdateQuest = arrayListOf<(Set<Quest>) -> Unit>()
+    val quests = hashSetOf<Quest>()
 
     //Utility function called once when a new game starts.
     fun newGame() {
@@ -24,14 +22,10 @@ class EventSystem : GameStateElement() {
         //dataBase.add(Event_ObserverIntro())
         add(Event_AlinaIllTheory1())
         add(Event_SalvorElection())
-        parent.updateUI += {
-            onUpdateQuest.forEach { it(quests) }
-        }
     }
 
     fun updateQuest(quest: Quest) {
         quests.add(quest)
-        onUpdateQuest.forEach { it(quests) }
     }
 
     override fun injectParent(gameState: GameState) {
