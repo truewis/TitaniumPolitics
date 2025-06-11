@@ -9,33 +9,35 @@ import kotlinx.serialization.Transient
  *
  */
 @Serializable
-sealed class EventObject(var name: String, val oneTime: Boolean)
-{
+sealed class EventObject(var name: String, val oneTime: Boolean) {
     @Transient
     lateinit var parent: GameState
 
     var completed = false
-    open fun injectParent(gameState: GameState)
-    {
+    open fun injectParent(gameState: GameState) {
         parent = gameState
+        if (this is IQuestEventObject) {
+            parent.eventSystem.updateQuest(quest)
+        }
     }
 
     abstract fun exec(a: Int, b: Int)
-    
+
 
     //This event will not be triggered by the game. Unsubscribe from events here.
-    fun deactivate()
-    {
+    fun deactivate() {
         completed = true
+        if (this is IQuestEventObject) {
+            quest.isCompleted = true
+            parent.eventSystem.updateQuest(quest)
+        }
     }
 
-    open fun displayEmoji(who: String): Boolean
-    {
+    open fun displayEmoji(who: String): Boolean {
         return false
     }
 
-    fun onPlayDialogue(dialogueKey: String)
-    {
+    fun onPlayDialogue(dialogueKey: String) {
         EventSystem.onPlayDialogue.forEach { it(dialogueKey) }
     }
 

@@ -8,6 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextTooltip
 import com.badlogic.gdx.scenes.scene2d.ui.Tooltip
 import com.badlogic.gdx.utils.Align
 import com.titaniumPolitics.game.core.ReadOnly
+import com.titaniumPolitics.game.ui.widget.TimeAmountUI
 import ktx.scene2d.*
 import ktx.scene2d.Scene2DSkin.defaultSkin
 
@@ -40,13 +41,7 @@ class ActionTooltipUI(actionName: String) : Tooltip<Table>(scene2d.table {
                         it.growX()
                         setFontScale(2f)
                     }
-                    image("ClockGrunge") {
-                        it.size(50f)
-                        color = Color.BLACK
-                    }
-                    label("${ReadOnly.constInt(actionName + "Duration") * ReadOnly.dt / 60}m", "black") {
-                        setFontScale(2f)
-                    }
+                    add(TimeAmountUI(ReadOnly.constInt(actionName + "Duration"))).fill()
                 }
             }
             row()

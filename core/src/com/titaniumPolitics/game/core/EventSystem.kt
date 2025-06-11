@@ -1,32 +1,40 @@
 package com.titaniumPolitics.game.core
 
 import com.titaniumPolitics.game.events.*
+import com.titaniumPolitics.game.ui.Quest
 import kotlinx.serialization.Serializable
 
 
 //Events are quests that never expire. Some can be triggered many times, some only once.
 @Serializable
-class EventSystem : GameStateElement()
-{
+class EventSystem : GameStateElement() {
     override val name: String
         get() = "EventSystem" //There is only one EventSystem object in the game.
     private val dataBase = arrayListOf<EventObject>()
     private val tmpdataBase = arrayListOf<EventObject>()
+    private val quests = hashSetOf<Quest>()
 
+    val onUpdateQuest = arrayListOf<(Set<Quest>) -> Unit>()
 
     //Utility function called once when a new game starts.
-    fun newGame()
-    {
+    fun newGame() {
         add(Event_PrologueInfDivLeaderSpeech())
         add(Event_BribeDoctor1())
         add(Event_BoyFindingMom())
         //dataBase.add(Event_ObserverIntro())
         add(Event_AlinaIllTheory1())
         add(Event_SalvorElection())
+        parent.updateUI += {
+            onUpdateQuest.forEach { it(quests) }
+        }
     }
 
-    override fun injectParent(gameState: GameState)
-    {
+    fun updateQuest(quest: Quest) {
+        quests.add(quest)
+        onUpdateQuest.forEach { it(quests) }
+    }
+
+    override fun injectParent(gameState: GameState) {
         super.injectParent(gameState)
         dataBase.forEach {
             it.injectParent(gameState)
@@ -39,19 +47,16 @@ class EventSystem : GameStateElement()
 
     }
 
-    fun add(event: EventObject)
-    {
+    fun add(event: EventObject) {
         tmpdataBase.add(event)
         event.injectParent(parent)
     }
 
-    fun displayEmoji(who: String): Boolean
-    {
+    fun displayEmoji(who: String): Boolean {
         return dataBase.any { !it.completed && it.displayEmoji(who) }
     }
 
-    companion object
-    {
+    companion object {
         val onPlayDialogue = arrayListOf<(String) -> Unit>()
     }
 

@@ -29,7 +29,9 @@ class InterfaceRoot(val gameState: GameState) : Table(Scene2DSkin.defaultSkin), 
             table {
                 val leftSeparator = table {
                     it.fill()
-                    add(AlertUI(this@InterfaceRoot.gameState)).align(Align.bottomLeft).expandY()
+                    add(QuestUI(this@InterfaceRoot.gameState)).align(Align.bottomLeft).expandY().fill()
+                    row()
+                    add(AlertUI(this@InterfaceRoot.gameState)).align(Align.bottomLeft).expandY().fill()
                     row()
                     add(AssistantUI(this@InterfaceRoot.gameState)).align(Align.bottomLeft)
                 }

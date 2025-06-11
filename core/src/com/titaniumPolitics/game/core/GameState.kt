@@ -248,7 +248,7 @@ class GameState {
         characters.keys.forEach { a ->
             characters.keys.forEach { b ->
                 if (a != b) {
-                    setMutuality(a, b, (Math.random() * 40 - 20))
+                    setMutuality(a, b, (Math.random() * 50 - 25))
                 }
             }
         }

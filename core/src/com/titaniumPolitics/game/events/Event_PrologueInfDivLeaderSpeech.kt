@@ -2,20 +2,29 @@ package com.titaniumPolitics.game.events
 
 import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.ui.DialogueUI
+import com.titaniumPolitics.game.ui.Quest
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 
 @Serializable
-class Event_PrologueInfDivLeaderSpeech : EventObject("Introduction of Alina.", true)
-{
+class Event_PrologueInfDivLeaderSpeech : EventObject("Introduction of Alina.", true), IQuestEventObject {
 
-    override fun exec(a: Int, b: Int)
-    {
+    override val quest = Quest(
+        "PrologueInfDivLeaderSpeech",
+        "Alina's speech",
+        "Alina is giving a speech to the Infrastructure Division."
+    )
+
+    override fun injectParent(gameState: GameState) {
+        super.injectParent(gameState)
+        parent.eventSystem.updateQuest(quest)
+    }
+
+    override fun exec(a: Int, b: Int) {
         if (parent.player.currentMeeting != null && parent.parties["infrastructure"]!!.leader == "Alina" && parent.player.currentMeeting!!.currentCharacters.containsAll(
                 listOf("Alina", "Krailin")
             )
-        )
-        {
+        ) {
             onPlayDialogue("PrologueInfDivLeaderSpeech")
             parent.eventSystem.add(Event_AlinaResign())
             parent.eventSystem.add(Event_ObserverIntroAfterMeeting1())
@@ -24,8 +33,7 @@ class Event_PrologueInfDivLeaderSpeech : EventObject("Introduction of Alina.", t
     }
 
 
-    override fun displayEmoji(who: String): Boolean
-    {
+    override fun displayEmoji(who: String): Boolean {
         return who == "Alina" && parent.player.place.name == parent.parties["infrastructure"]!!.home && parent.characters["Alina"]!!.currentMeeting != null
     }
 }
