@@ -10,15 +10,11 @@ import kotlinx.serialization.Transient
 class Event_PrologueInfDivLeaderSpeech : EventObject("Introduction of Alina.", true), IQuestEventObject {
 
     override val quest = Quest(
-        "PrologueInfDivLeaderSpeech",
         "Alina's speech",
-        "Alina is giving a speech to the Infrastructure Division."
+        "Alina is giving a speech to the Infrastructure Division.",
+        tgtMeeting = "conference-outerBarrierWest-1980",
+        tgtPlace = "outerBarrierWest"
     )
-
-    override fun injectParent(gameState: GameState) {
-        super.injectParent(gameState)
-        parent.eventSystem.updateQuest(quest)
-    }
 
     override fun exec(a: Int, b: Int) {
         if (parent.player.currentMeeting != null && parent.parties["infrastructure"]!!.leader == "Alina" && parent.player.currentMeeting!!.currentCharacters.containsAll(

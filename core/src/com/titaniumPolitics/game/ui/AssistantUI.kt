@@ -91,7 +91,7 @@ class AssistantUI(gameState: GameState) : Table(defaultSkin), KTable {
                     //Open Calendar UI
                     if (InterfaceRoot.instance.calendarUI.isVisible) this@AssistantUI.closeAll()
                     else {
-                        InterfaceRoot.instance.calendarUI.refresh(gameState)
+                        InterfaceRoot.instance.calendarUI.refresh()
                         InterfaceRoot.instance.calendarUI.isVisible = !InterfaceRoot.instance.calendarUI.isVisible
                     }
                 }

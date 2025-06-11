@@ -7,6 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions
 import com.badlogic.gdx.scenes.scene2d.ui.*
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.badlogic.gdx.utils.Align
+import com.titaniumPolitics.game.core.EventSystem
 import com.titaniumPolitics.game.core.GameEngine
 import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.core.InformationType
@@ -47,7 +48,7 @@ class QuestUI(var gameState: GameState) : Table(defaultSkin) {
         quests.forEach { quest ->
             docList.addActor(scene2d.table {
                 //Number label with icon
-                add(QuestMarker(quests.indexOf(quest) + 1, skin)).size(50f)
+                add(QuestMarker(quest)).size(50f)
                 table {
                     it.size(300f, 50f)
                     it.fill()
@@ -85,14 +86,14 @@ class QuestUI(var gameState: GameState) : Table(defaultSkin) {
         isVisible = quests.isNotEmpty()
     }
 
-    class QuestMarker(qnumber: Int, skin: Skin) : Table(skin), KTable {
+    class QuestMarker(quest: Quest) : Table(defaultSkin), KTable {
         init {
             stack {
                 it.size(50f, 50f)
                 image("icon_simpleshape_45") {
                     setColor(Color.GREEN)
                 }
-                label((qnumber).toString()) {
+                label((quest.index).toString()) {
                     setColor(Color.WHITE)
                     setAlignment(Align.center)
                     setFontScale(2f)
@@ -116,7 +117,12 @@ data class Quest(
     val description: String,
     val tgtPlace: String? = null,
     val tgtCharacter: String? = null,
+    val tgtMeeting: String? = null,
     val dueTime: Int? = null,
 ) {
+    lateinit var parent: GameState
     var isCompleted: Boolean = false
+    val index: Int
+        get() = parent.eventSystem.quests.indexOf(this) + 1
+
 }

@@ -30,7 +30,8 @@ class CalendarUI(val gameState: GameState) : WindowUI("CalendarTitle") {
                     meeting.time,
                     ReadOnly.prop(meeting.type.toString()),
                     meeting.place,
-                    "A new meeting has been scheduled at ${meeting.time}H in ${meeting.place}."
+                    "A new meeting has been scheduled at ${meeting.time}H in ${meeting.place}.",
+                    gameState.scheduledMeetings.entries.find { it.value == meeting }?.key
                 )
         }
 
@@ -46,16 +47,25 @@ class CalendarUI(val gameState: GameState) : WindowUI("CalendarTitle") {
         }
     }
 
-    fun addEntry(time: Int, title: String, place: String, description: String) {
-        val entry = CalendarEntry(time, title, place, description)
+    fun addEntry(time: Int, title: String, place: String, description: String, associatedMeeting: String? = null) {
+        val entry = CalendarEntry(time, title, place, description, associatedMeeting)
         newEntries.add(entry)
     }
 
-    fun refresh(gameState: GameState) {
-        val DAYS = 5
-        val HOURS = 24
+    fun refreshEntries() {
         entries.addAll(newEntries)
         newEntries.clear()
+        gameState.eventSystem.quests.forEach { quest ->
+            entries.firstOrNull { it.associatedMeeting?.equals(quest.tgtMeeting) ?: false }?.associatedQuestName =
+                quest.name
+        }
+    }
+
+    fun refresh() {
+        val DAYS = 5
+        val HOURS = 24
+
+        refreshEntries()
         dataTable.clear()
         dataTable.defaults().pad(2f)
         dayTable.clear()
@@ -105,6 +115,14 @@ class CalendarUI(val gameState: GameState) : WindowUI("CalendarTitle") {
                 if (entriesAtThisHour.isNotEmpty()) {
                     val cellTable = Table()
                     entriesAtThisHour.forEach { entry ->
+                        //if there is a quest, add a quest label
+                        if (entry.associatedQuestName != null) {
+                            cellTable.add(
+                                QuestUI.QuestMarker(
+                                    gameState.eventSystem.quests.first { it.name == entry.associatedQuestName }
+                                )
+                            ).size(50f)
+                        }
                         val meetingLabel = Label("Meeting: ${entry.place}", skin)
                         meetingLabel.setFontScale(2f)
                         cellTable.add(meetingLabel).left()
@@ -130,6 +148,8 @@ class CalendarUI(val gameState: GameState) : WindowUI("CalendarTitle") {
         val title: String,
         val place: String,
         val description: String,
+        var associatedMeeting: String? = null,
+        var associatedQuestName: String? = null,
         var hasAlerted: Boolean = false
     )
 
