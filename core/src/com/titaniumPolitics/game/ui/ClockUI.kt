@@ -9,13 +9,10 @@ import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.core.ReadOnly
 import ktx.scene2d.Scene2DSkin.defaultSkin
 
-class ClockUI(gameState: GameState) : Table(defaultSkin)
-{
-    var l: Label
+class ClockUI(gameState: GameState) : Table(defaultSkin) {
+    val l: Label = Label((gameState.formatClock()), defaultSkin, "console")
 
-    init
-    {
-        l = Label((gameState.formatClock()), defaultSkin, "console")
+    init {
         l.setFontScale(4f)
         add(l).growX()
 

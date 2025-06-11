@@ -29,26 +29,34 @@ class ProgressBackgroundUI(var gameState: GameState, skin: Skin) : Table(skin), 
             image("white-pixel") {
                 color = Color.BLACK
             }
-            label("Loading...", "trnsprtConsole") {
-                setFontScale(3f)
-                setColor(Color.WHITE)
-                setAlignment(Align.center)
-                addAction(
-                    Actions.forever(
-                        Actions.sequence(
-                            Actions.run {
-                                (it as Label).setText(this@ProgressBackgroundUI.text + ".")
-                            }, Actions.delay(0.2f),
-                            Actions.run {
-                                (it as Label).setText(this@ProgressBackgroundUI.text + "..")
-                            }, Actions.delay(0.2f),
-                            Actions.run {
-                                (it as Label).setText(this@ProgressBackgroundUI.text + "...")
-                            }, Actions.delay(0.2f)
+            table {
+                add(ClockUI(this@ProgressBackgroundUI.gameState).apply {
+                    cells.first().center()
+                    l.setAlignment(Align.center)
+                }).size(300f, 100f)
+                row()
 
+                label("Loading...", "trnsprtConsole") {
+                    setFontScale(3f)
+                    setColor(Color.WHITE)
+                    setAlignment(Align.center)
+                    addAction(
+                        Actions.forever(
+                            Actions.sequence(
+                                Actions.run {
+                                    setText(this@ProgressBackgroundUI.text + ".")
+                                }, Actions.delay(0.2f),
+                                Actions.run {
+                                    setText(this@ProgressBackgroundUI.text + "..")
+                                }, Actions.delay(0.2f),
+                                Actions.run {
+                                    setText(this@ProgressBackgroundUI.text + "...")
+                                }, Actions.delay(0.2f)
+
+                            )
                         )
                     )
-                )
+                }
             }
         }
 
