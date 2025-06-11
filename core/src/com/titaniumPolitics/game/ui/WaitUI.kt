@@ -56,6 +56,7 @@ class WaitUI(val gameState: GameState, override var actionCallback: (GameAction)
                                 ProgressBackgroundUI.instance.text = ReadOnly.prop("Waiting")
                             }
                             ProgressBackgroundUI.instance.setVisibleWithFade(true)
+                            this@WaitUI.isVisible = false
                         }
                     })
                 }
@@ -69,13 +70,11 @@ class WaitUI(val gameState: GameState, override var actionCallback: (GameAction)
     fun spendTime(AcquireParams: GameEngine.Companion.AcquireParams) {
         this.actionCallback = GameEngine.acquireCallback
         if (interrupted) {
-            this.isVisible = false
             GameEngine.acquireEvent -= this::spendTime
             ProgressBackgroundUI.instance.setVisibleWithFade(false)
             return
         }
         if (amount <= 0) {
-            this.isVisible = false
             GameEngine.acquireEvent -= this::spendTime
             ProgressBackgroundUI.instance.setVisibleWithFade(false)
             return

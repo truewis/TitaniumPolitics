@@ -19,7 +19,7 @@ class ProgressBackgroundUI(var gameState: GameState, skin: Skin) : Table(skin), 
         GameEngine.acquireEvent += {
             // If the action is moving, PlaceMarkerWindowUI set this text to "Moving", and shows this UI.
             // We want to hide this UI when next turn starts, so we check the text.
-            if (text == ReadOnly.prop("Moving")) {
+            if (text != ReadOnly.prop("Waiting") || text != ReadOnly.prop("Sleeping")) {//TODO: This is a temporary fix, should be replaced with a better solution.
                 setVisibleWithFade(false)
             }
         }
@@ -66,9 +66,9 @@ class ProgressBackgroundUI(var gameState: GameState, skin: Skin) : Table(skin), 
     fun setVisibleWithFade(visible: Boolean) {
         if (visible) {
             isVisible = true
-            addAction(Actions.fadeIn(0.2f))
+            addAction(Actions.fadeIn(0f))
         } else {
-            addAction(Actions.sequence(Actions.fadeOut(0.2f), Actions.run { isVisible = false }))
+            addAction(Actions.sequence(Actions.fadeOut(0.5f), Actions.run { isVisible = false }))
         }
     }
 
