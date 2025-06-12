@@ -115,7 +115,7 @@ open class MapUI(val gameState: GameState) : WindowUI("MapTitle") {
                     dataTable.addActor(marker)
                     val coords = currentMarkers.first { it.place == quest.tgtPlace }
                     marker.setPosition(
-                        coords.x,
+                        coords.x + 50f,//Offset the marker so it does not overlap with the place marker.
                         coords.y
                     )
                 }

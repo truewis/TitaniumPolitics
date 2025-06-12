@@ -116,7 +116,7 @@ class AlertPanelUI(var type: String, action: () -> Unit, val docList: Group, var
                     }
 
                     else ->
-                        label(ReadOnly.prop(this@AlertPanelUI.type), "trnsprtConsole") {
+                        label(ReadOnly.prop(this@AlertPanelUI.type).format(*params), "trnsprtConsole") {
                             it.growX()
                             setFontScale(2f)
                             this@label.addListener(object : ClickListener() {

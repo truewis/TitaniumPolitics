@@ -35,14 +35,16 @@ class AlertUI(var gameState: GameState) : Table(defaultSkin) {
     }
 
     fun addAlert(type: String, vararg params: String, action: () -> Unit = {}) {
-        if (type in listOf("vital", "hunger", "thirst", "will") && docList.children.none {
-                (it as AlertPanelUI).type == type
-            })//Only one alert of each type is visible at a time.
-            docList.addActor(AlertPanelUI(type, action, docList, *params))
-        else if (type !in listOf("vital", "hunger", "thirst", "will"))
-            docList.addActor(AlertPanelUI(type, action, docList, *params))
-        if (!isVisible)
-            isVisible = true
+        Gdx.app.postRunnable {//This function is often called from the main thread, so we need to post it to the UI thread.
+            if (type in listOf("vital", "hunger", "thirst", "will") && docList.children.none {
+                    (it as AlertPanelUI).type == type
+                })//Only one alert of each type is visible at a time.
+                docList.addActor(AlertPanelUI(type, action, docList, *params))
+            else if (type !in listOf("vital", "hunger", "thirst", "will"))
+                docList.addActor(AlertPanelUI(type, action, docList, *params))
+            if (!isVisible)
+                isVisible = true
+        }
     }
 
     fun displayAlerts() {
