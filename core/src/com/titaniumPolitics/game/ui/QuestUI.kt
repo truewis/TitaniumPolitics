@@ -50,7 +50,7 @@ class QuestUI(var gameState: GameState) : Table(defaultSkin) {
                 //Number label with icon
                 add(QuestMarker(quest)).size(50f)
                 table {
-                    it.size(300f, 50f)
+                    it.size(500f, 50f)
                     it.fill()
                     label(quest.name, "trnsprtConsole") {
                         it.left()

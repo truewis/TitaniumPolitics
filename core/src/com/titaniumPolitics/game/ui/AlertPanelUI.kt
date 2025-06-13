@@ -17,7 +17,7 @@ class AlertPanelUI(var type: String, action: () -> Unit, val docList: Group, var
 
     init {
         stack {
-            it.size(400f, 75f)
+            it.size(500f, 75f)
             image("GradientBottom") {
                 color = Color.BLACK
             }
