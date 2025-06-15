@@ -42,6 +42,8 @@ class CapsuleStage(val gameState: GameState) : Stage(FitViewport(1920F, 1080F)) 
         }
         assetManager.load("data/dev/capsuleDevBoxCheck.png", Texture::class.java)
         assetManager.load("data/dev/capsuleDevBox.png", Texture::class.java)
+        assetManager.load("document_small_contrast.png", Texture::class.java)
+        assetManager.load("idcard_contrast.png", Texture::class.java)
         ReadOnly.charJson.forEach {
             assetManager.load(it.value.jsonObject["image"]!!.jsonPrimitive.content, Texture::class.java)
         }

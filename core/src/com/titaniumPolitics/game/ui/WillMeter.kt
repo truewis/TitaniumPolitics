@@ -9,24 +9,20 @@ import ktx.scene2d.Scene2DSkin.defaultSkin
 import ktx.scene2d.progressBar
 import ktx.scene2d.scene2d
 
-class WillMeter(gameState: GameState) : Table(defaultSkin)
-{
-    val bar = scene2d.progressBar(0f, 1f, 0.01f, false, "default-horizontal")
+class WillMeter(gameState: GameState) : Table(defaultSkin) {
+    val bar = MeterUI()
 
-    init
-    {
-        val b = Image(defaultSkin, "confused-line-icon")
+    init {
+        val b = Image(defaultSkin, "EmoticonSeriousGrunge")
         b.color = Color.WHITE
-        add(b).size(50f)
-        add(bar).growX()
+        add(b).size(40f)
+        add(bar).size(200f, 50f).fill()
         gameState.updateUI += { y ->
-            setValue(y.getMutuality(gameState.playerName, gameState.playerName).toInt())
+            setValue(y.player.will.toInt())
         }
     }
 
-    fun setValue(value: Int)
-    {
-        bar.value = value.toFloat() / 100
-        bar.updateVisualValue()
+    fun setValue(value: Int) {
+        bar.setValue(value.toFloat() / 100)
     }
 }

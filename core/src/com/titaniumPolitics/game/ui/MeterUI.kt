@@ -10,23 +10,27 @@ import ktx.scene2d.container
 import ktx.scene2d.image
 import ktx.scene2d.stack
 
-class MeterUI : Table(), KTable
-{
+class MeterUI : Table(), KTable {
+
+    // Size is chosen to be used with BarSimpleFillVitals and BarSimpleBgTiledNormal.
     var cont: Container<Actor>
 
     var fill = 0f
     var vertical = false
+    val PADDING = 25f
 
-    init
-    {
+    init {
+        debug()
         stack {
+            it.fill()
             container {
-                fillX()
+                fill()
                 image("BarSimpleBgTiledNormal") {
 
                 }
             }
             this@MeterUI.cont = container {
+                pad(-this@MeterUI.PADDING)
                 image("BarSimpleFillVitals") {
                 }
                 align(Align.bottomLeft)
@@ -34,13 +38,16 @@ class MeterUI : Table(), KTable
         }
     }
 
-    fun setValue(value: Float)
-    {
+    fun setValue(value: Float) {
         this.fill = value
-        if (this.vertical)
+
+        if (this.vertical) {
+            this.cont.width
             this.cont.fill(1f, this.fill)
-        else
+        } else {
+            this.cont.height
             this.cont.fill(this.fill, 1f)
+        }
         this.cont.layout()
     }
 

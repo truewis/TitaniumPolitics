@@ -9,23 +9,20 @@ import ktx.scene2d.Scene2DSkin.defaultSkin
 import ktx.scene2d.progressBar
 import ktx.scene2d.scene2d
 
-class HealthMeter(gameState: GameState) : Table(defaultSkin)
-{
+class HealthMeter(gameState: GameState) : Table(defaultSkin) {
     val bar = MeterUI()
 
-    init
-    {
+    init {
         val b = Image(defaultSkin, "AidGrunge")
         b.color = Color.WHITE
-        add(b).size(50f)
-        add(bar).size(250f, 75f).fill()
+        add(b).size(40f)
+        add(bar).size(200f, 50f).fill()
         gameState.updateUI += { y ->
             setValue(y.player.health.toInt())
         }
     }
 
-    fun setValue(value: Int)
-    {
+    fun setValue(value: Int) {
         bar.setValue(value.toFloat() / 100)
     }
 }
