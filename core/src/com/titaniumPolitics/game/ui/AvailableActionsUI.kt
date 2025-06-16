@@ -23,6 +23,10 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable 
     private val docList = HorizontalGroup()
     val options: ExamineUI = ExamineUI(this@AvailableActionsUI.gameState)
 
+    val dateLabel: Label
+    val timeLabel: Label
+    val placeLabel: Label
+
     init {
 
         options.isVisible = false
@@ -35,15 +39,14 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable 
             it.grow()
             container(image(CapsuleStage.instance.assetManager.get<Texture>("document_small_contrast.png"))) {
                 size(1300f, 1773f)
+                padLeft(-65f)
+                padRight(-35f)
             }
             container {
-                padLeft(50f)
-                padRight(50f)
                 top()
                 table {
                     table {
                         it.padTop(100f)
-                        it.padRight(100f)
                         it.fill()
                         it.expandX()
                         table {
@@ -77,13 +80,42 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable 
                             color = Color.BLACK
                             setAlignment(Align.center)
                         }
-                        label(this@AvailableActionsUI.gameState.formatDate(), "docTitle") {
+                        table {
                             it.right()
                             it.fill()
                             it.expandX()
-                            setFontScale(0.4f)
-                            color = Color.BLACK
-                            setAlignment(Align.right)
+                            this@AvailableActionsUI.dateLabel =
+                                label(this@AvailableActionsUI.gameState.formatDate(), "docTitle") {
+                                    it.right()
+                                    it.fill()
+                                    it.expandX
+                                    setFontScale(0.4f)
+                                    color = Color.BLACK
+                                    setAlignment(Align.right)
+
+                                }
+                            row()
+                            this@AvailableActionsUI.timeLabel =
+                                label(this@AvailableActionsUI.gameState.formatClock(), "docTitle") {
+                                    it.right()
+                                    it.fill()
+                                    it.expandX
+                                    setFontScale(0.4f)
+                                    color = Color.BLACK
+                                    setAlignment(Align.right)
+
+                                }
+                            row()
+                            this@AvailableActionsUI.placeLabel =
+                                label(ReadOnly.prop(this@AvailableActionsUI.gameState.player.place.name), "docTitle") {
+                                    it.right()
+                                    it.fill()
+                                    it.expandX
+                                    setFontScale(0.4f)
+                                    color = Color.BLACK
+                                    setAlignment(Align.right)
+
+                                }
                         }
                     }
                     row()
@@ -109,6 +141,9 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable 
     //TODO: also make changes to NewAgendaUI.kt.
     fun refreshList() {
         docList.clear()
+        dateLabel.setText(gameState.formatDate())
+        timeLabel.setText(gameState.formatClock())
+        placeLabel.setText(ReadOnly.prop(gameState.player.place.name))
         GameEngine.availableActions(
             gameState,
             gameState.player.place.name,

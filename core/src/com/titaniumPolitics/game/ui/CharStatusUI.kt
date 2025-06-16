@@ -18,6 +18,7 @@ class CharStatusUI(gameState: GameState) : Table(defaultSkin), KTable {
 
     init {
         stack {
+            it.right()
             container(
                 image(CapsuleStage.instance.assetManager.get<Texture>("idcard_contrast.png"))
             ) {
@@ -49,17 +50,9 @@ class CharStatusUI(gameState: GameState) : Table(defaultSkin), KTable {
                             setAlignment(com.badlogic.gdx.utils.Align.center)
                         }
                         row()
-                        label("Division", "docTitle")
-                        {
-                            it.left()
-                            setFontScale(0.3f)
-                            color = Color.BLACK
-                            setAlignment(com.badlogic.gdx.utils.Align.center)
-                        }
-                        row()
                         label(ReadOnly.prop(gameState.player.division!!.name), "docTitle") {
                             it.left()
-                            setFontScale(0.5f)
+                            setFontScale(0.3f)
                             color = Color.BLACK
                             setAlignment(com.badlogic.gdx.utils.Align.center)
                         }
