@@ -1,6 +1,7 @@
 package com.titaniumPolitics.game.ui
 
 import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.Group
 import com.badlogic.gdx.scenes.scene2d.ui.Label
@@ -17,15 +18,26 @@ import ktx.scene2d.Scene2DSkin.defaultSkin
 class AssistantUI(gameState: GameState) : Table(defaultSkin), KTable {
 
     init {
-        val buttonSize = 100f
-        button {
+        val buttonWidth = 100f
+        val buttonHeight = 193f
+        padLeft(-30f)
+        table {
             name = "politiciansInfoButton"
             it.fill()
-            it.size(buttonSize)
+            it.size(buttonWidth, buttonHeight + 10f)
             stack {
-                it.size(50f)
                 it.fill()
-                image("CrownGrunge") {
+                container(
+                    image("glass_tab") {
+                        setColor(1f, 1f, 1f, 0.5f) // Semi-transparent background
+                    }) {
+                    size(buttonWidth, buttonHeight)
+                }
+                container(
+                    image("CrownGrunge") {
+                        color = Color.BLACK
+                    }) {
+                    size(buttonWidth)
                 }
             }
             addListener(object : ClickListener() {
@@ -43,14 +55,23 @@ class AssistantUI(gameState: GameState) : Table(defaultSkin), KTable {
             )
         }
         row()
-        button {
+        table {
             name = "InformationButton"
             it.fill()
-            it.size(buttonSize)
+            it.size(buttonWidth, buttonHeight + 10f)
             stack {
-                it.size(50f)
                 it.fill()
-                image("icon_app_140") {
+                container(
+                    image("glass_tab") {
+                        setColor(1f, 1f, 1f, 0.5f) // Semi-transparent background
+                    }) {
+                    size(buttonWidth, buttonHeight)
+                }
+                container(
+                    image("icon_app_140") {
+                        color = Color.BLACK
+                    }) {
+                    size(buttonWidth)
                 }
             }
             addListener(object : ClickListener() {
@@ -69,17 +90,27 @@ class AssistantUI(gameState: GameState) : Table(defaultSkin), KTable {
         }
         row()
         val calendarLabel = Label("0", defaultSkin, "trnsprtConsole").also {
-            it.setFontScale(3f)
+            it.setFontScale(2f)
+            it.color = Color.BLACK
             it.setAlignment(Align.center, Align.center)
         }
-        button {
+        table {
             name = "CalendarButton"
             it.fill()
-            it.size(buttonSize)
+            it.size(buttonWidth, buttonHeight + 10f)
             stack {
-                it.size(50f)
                 it.fill()
-                image("icon_app_119") {
+                container(
+                    image("glass_tab") {
+                        setColor(1f, 1f, 1f, 0.5f) // Semi-transparent background
+                    }) {
+                    size(buttonWidth, buttonHeight)
+                }
+                container(
+                    image("icon_app_119") {
+                        color = Color.BLACK
+                    }) {
+                    size(buttonWidth)
                 }
                 add(calendarLabel)
             }
@@ -98,16 +129,27 @@ class AssistantUI(gameState: GameState) : Table(defaultSkin), KTable {
             }
             )
         }
-        add(ClockUI(gameState)).growX().align(Align.left)
 
         row()
 
-        button {
+        table {
             name = "MapButton"
             it.fill()
-            it.size(buttonSize)
-            image("icon_app_195") {
-                it.size(50f)
+            it.size(buttonWidth, buttonHeight + 10f)
+            stack {
+                it.fill()
+                container(
+                    image("glass_tab") {
+                        setColor(1f, 1f, 1f, 0.5f) // Semi-transparent background
+                    }) {
+                    size(buttonWidth, buttonHeight)
+                }
+                container(
+                    image("icon_app_195") {
+                        color = Color.BLACK
+                    }) {
+                    size(buttonWidth)
+                }
             }
             addListener(object : ClickListener() {
                 override fun clicked(event: com.badlogic.gdx.scenes.scene2d.InputEvent?, x: Float, y: Float) {
@@ -122,7 +164,6 @@ class AssistantUI(gameState: GameState) : Table(defaultSkin), KTable {
             }
             )
         }
-        add(PlaceAndCoordUI(gameState)).growX()
 
 
         gameState.timeChanged += { _, y ->
@@ -147,7 +188,7 @@ class AssistantUI(gameState: GameState) : Table(defaultSkin), KTable {
         }
     }
 
-    fun changeColorRecursively(actor: Actor, color: com.badlogic.gdx.graphics.Color) {
+    fun changeColorRecursively(actor: Actor, color: Color) {
         actor.color = color
         if (actor is Group) {
             actor.children.forEach { child ->
@@ -161,9 +202,9 @@ class AssistantUI(gameState: GameState) : Table(defaultSkin), KTable {
 
         if (actor.findActor<Actor>("GreenMarker_${actor.name}") != null)
             return //If the marker already exists, do not mark again.
-        changeColorRecursively(actor, com.badlogic.gdx.graphics.Color.GREEN)
+        changeColorRecursively(actor, Color.GREEN)
         actor.children.forEach { child ->
-            child.color = com.badlogic.gdx.graphics.Color.GREEN
+            child.color = Color.GREEN
         }
 
         actor.addAction(
@@ -176,7 +217,7 @@ class AssistantUI(gameState: GameState) : Table(defaultSkin), KTable {
         )
         val marker = scene2d.image("BadgeRound") {
             name = "GreenMarker_${actor.name}"
-            color = com.badlogic.gdx.graphics.Color.GREEN
+            color = Color.GREEN
             setSize(25f, 25f)
             setPosition(actor.width * 0.75f - width / 2, actor.height * 0.75f - height / 2)
         }
@@ -185,9 +226,9 @@ class AssistantUI(gameState: GameState) : Table(defaultSkin), KTable {
 
     //unmark the button, change the color to white.
     fun unmarkButton(actor: Group) {
-        changeColorRecursively(actor, com.badlogic.gdx.graphics.Color.WHITE)
+        changeColorRecursively(actor, Color.WHITE)
         actor.children.forEach { child ->
-            child.color = com.badlogic.gdx.graphics.Color.WHITE
+            child.color = Color.WHITE
         }
         actor.clearActions()
         actor.findActor<Actor>("GreenMarker_${actor.name}")?.remove() //Remove the marker if it exists.

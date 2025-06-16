@@ -76,9 +76,9 @@ class AlertPanelUI(var type: String, action: () -> Unit, val docList: Group, var
                 }
                 when (this@AlertPanelUI.type) {
                     "moved" ->
-                        label(ReadOnly.prop(this@AlertPanelUI.type).format(params[0], params[1]), "trnsprtConsole") {
+                        label(ReadOnly.prop(this@AlertPanelUI.type).format(params[0], params[1]), "description") {
                             it.growX()
-                            setFontScale(1.5f)
+                            setFontScale(0.4f)
                             wrap = true
                             this@label.addListener(object : ClickListener() {
                                 override fun clicked(event: InputEvent?, x: Float, y: Float) {
@@ -89,9 +89,9 @@ class AlertPanelUI(var type: String, action: () -> Unit, val docList: Group, var
                         }
 
                     "hunger", "thirst", "vital", "will" ->
-                        label(ReadOnly.prop(this@AlertPanelUI.type), "trnsprtConsole") {
+                        label(ReadOnly.prop(this@AlertPanelUI.type), "description") {
                             it.growX()
-                            setFontScale(2f)
+                            setFontScale(0.4f)
                             color = Color.RED
                             this@label.addListener(object : ClickListener() {
                                 override fun clicked(event: InputEvent?, x: Float, y: Float) {
@@ -102,9 +102,9 @@ class AlertPanelUI(var type: String, action: () -> Unit, val docList: Group, var
                         }
 
                     "interrupted" -> {
-                        label(ReadOnly.prop(this@AlertPanelUI.type).format(params[0]), "trnsprtConsole") {
+                        label(ReadOnly.prop(this@AlertPanelUI.type).format(params[0]), "description") {
                             it.growX()
-                            setFontScale(1.5f)
+                            setFontScale(0.4f)
                             wrap = true
                             this@label.addListener(object : ClickListener() {
                                 override fun clicked(event: InputEvent?, x: Float, y: Float) {
@@ -116,9 +116,9 @@ class AlertPanelUI(var type: String, action: () -> Unit, val docList: Group, var
                     }
 
                     else ->
-                        label(ReadOnly.prop(this@AlertPanelUI.type).format(*params), "trnsprtConsole") {
+                        label(ReadOnly.prop(this@AlertPanelUI.type).format(*params), "description") {
                             it.growX()
-                            setFontScale(2f)
+                            setFontScale(0.4f)
                             this@label.addListener(object : ClickListener() {
                                 override fun clicked(event: InputEvent?, x: Float, y: Float) {
                                     super.clicked(event, x, y)

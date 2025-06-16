@@ -29,9 +29,9 @@ class QuestUI(var gameState: GameState) : Table(defaultSkin) {
         isVisible = false
         val docScr = ScrollPane(docList)
         docList.grow()
-        add(scene2d.label("Tasks") {
+        add(scene2d.label("Tasks", "description") {
             setAlignment(Align.left)
-            setFontScale(3f)
+            setFontScale(0.5f)
             color = Color.WHITE
         }).left()
         row()
@@ -52,18 +52,18 @@ class QuestUI(var gameState: GameState) : Table(defaultSkin) {
                 table {
                     it.size(500f, 50f)
                     it.fill()
-                    label(quest.name, "trnsprtConsole") {
+                    label(quest.name, "description") {
                         it.left()
                         it.fill()
                         setAlignment(Align.left)
-                        setFontScale(1.5f)
+                        setFontScale(0.3f)
                     }
                     row()
-                    label(quest.description, "trnsprtConsole") {
+                    label(quest.description, "description") {
                         it.left()
                         it.fill()
                         setAlignment(Align.left)
-                        setFontScale(2f)
+                        setFontScale(0.4f)
                     }
                     addAction(
                         //Blinking effect for all quests, as an eyecatcher.
