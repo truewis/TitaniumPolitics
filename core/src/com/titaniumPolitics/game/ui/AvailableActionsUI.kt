@@ -1,11 +1,14 @@
 package com.titaniumPolitics.game.ui
 
 import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.Texture
+import com.badlogic.gdx.graphics.g2d.NinePatch
 import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.ui.*
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
+import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable
 import com.badlogic.gdx.utils.Align
 import com.titaniumPolitics.game.core.GameEngine
 import com.titaniumPolitics.game.core.GameState
@@ -34,11 +37,56 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable 
                 size(1300f, 1773f)
             }
             container {
-                pad(50f)
+                padLeft(50f)
+                padRight(50f)
                 top()
                 table {
-
-                    add(this@AvailableActionsUI.options)
+                    table {
+                        it.padTop(100f)
+                        it.padRight(100f)
+                        it.fill()
+                        it.expandX()
+                        table {
+                            it.grow()
+                            label("Form 28-1", "docTitle") {
+                                it.left()
+                                setFontScale(0.4f)
+                                color = Color.BLACK
+                                setAlignment(Align.left)
+                            }
+                            row()
+                            label("Rev. Megaros 23. 4. 1.", "docTitle") {
+                                it.left()
+                                setFontScale(0.2f)
+                                color = Color.BLACK
+                                setAlignment(Align.left)
+                            }
+                            row()
+                            label("Division of Internal Affairs", "docTitle") {
+                                it.left()
+                                setFontScale(0.2f)
+                                color = Color.BLACK
+                                setAlignment(Align.left)
+                            }
+                        }
+                        label("Administrative Action Report", "docTitle") {
+                            it.center()
+                            it.fill()
+                            it.expandX()
+                            setFontScale(0.5f)
+                            color = Color.BLACK
+                            setAlignment(Align.center)
+                        }
+                        label(this@AvailableActionsUI.gameState.formatDate(), "docTitle") {
+                            it.right()
+                            it.fill()
+                            it.expandX()
+                            setFontScale(0.4f)
+                            color = Color.BLACK
+                            setAlignment(Align.right)
+                        }
+                    }
+                    row()
 //        CapsuleStage.instance.onMouseDown.add { x, y ->
 //            //If x and y are not within the bounds of this UI, hide the option ui.
 //            val localpos = options.screenToLocalCoordinates(Vector2(x, y))
@@ -47,9 +95,10 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable 
 //                options.isVisible = false
 //            }
 //        }
-                    row()
 
                     add(docScr).size(1200f, 150f)
+                    row()
+                    add(this@AvailableActionsUI.options)
                 }
             }
         }
@@ -69,17 +118,18 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable 
             if (listOf("Move", "Talk").contains(tobj)) {
                 return@forEach
             }
-            val t = scene2d.button {
+            val t = scene2d.button("document") {
                 val tooltip = ActionTooltipUI(tobj)
                 addListener(tooltip)
                 image("Help") {
                     it.size(100f)
+                    color = Color.BLACK
 
                     when (tobj) {
 
 
                         "Examine" -> {
-                            this@button.style = defaultSkin.get("check", Button.ButtonStyle::class.java)
+                            this@button.style = defaultSkin.get("document", Button.ButtonStyle::class.java)
                             this.setDrawable(defaultSkin, "SearchGrunge")
                             this@button.addListener(object : ChangeListener() {
                                 override fun changed(event: ChangeEvent, actor: Actor) {

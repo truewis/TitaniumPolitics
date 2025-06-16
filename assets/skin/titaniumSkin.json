@@ -353,6 +353,12 @@ com.badlogic.gdx.scenes.scene2d.ui.Button$ButtonStyle: {
 		disabled: ButtonRegularBgDisabled
 		checked: ButtonRegularBgPressed
 	}
+	document: {
+		down: simpleBorder
+		over: simpleBorder
+		disabled: simpleBorderCrossed
+		checked: simpleBorder
+	}
 }
 com.badlogic.gdx.scenes.scene2d.ui.CheckBox$CheckBoxStyle: {
 	default: {

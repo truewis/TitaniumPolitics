@@ -378,6 +378,12 @@ class GameState {
         return formatTime(time)
     }
 
+    fun formatDate(): String {
+        val year = day / 90 + 27 // Assuming 90 days per year
+        val month = (day % 90) / 30 // Assuming 15 days per month
+        return "Megaros $year. ${month + 1}. ${day % 15 + 1}"
+    }
+
     fun formatClock(): String {
         return formatClock(time)
     }

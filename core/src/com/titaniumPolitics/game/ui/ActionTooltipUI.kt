@@ -37,25 +37,26 @@ class ActionTooltipUI(actionName: String) : Tooltip<Table>(scene2d.table {
                 it.size(350f, 50f)
                 image("TooltipTitle")
                 table {
-                    label(ReadOnly.prop(actionName), "black") {
+                    label(ReadOnly.prop(actionName), "description") {
                         it.growX()
-                        setFontScale(2f)
+                        setFontScale(0.4f)
+                        color = Color.BLACK
                     }
                     add(TimeAmountUI(ReadOnly.constInt(actionName + "Duration"))).fill()
                 }
             }
             row()
-            label(ReadOnly.prop("$actionName-description")) {
+            label(ReadOnly.prop("$actionName-description"), "description") {
                 it.size(350f, 200f)
-                setFontScale(2f)
+                setFontScale(0.25f)
                 setAlignment(Align.topLeft)
                 wrap = true
             }
             row()
-            label("") {
+            label("", "description") {
                 it.size(350f, 100f)
                 name = "reasonText"
-                setFontScale(2f)
+                setFontScale(0.25f)
                 color = Color.RED
                 setAlignment(Align.topLeft)
                 wrap = true

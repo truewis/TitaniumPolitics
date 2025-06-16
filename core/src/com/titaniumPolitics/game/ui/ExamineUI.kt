@@ -20,7 +20,7 @@ class ExamineUI(var gameState: GameState) : Table(defaultSkin) {
         row()
         docList.grow()
         docList.addActor(scene2d.container {
-            button {
+            button("document") {
                 image("UserGrunge") {
                     it.size(70f)
                     this@button.addListener(object : ClickListener() {
@@ -46,7 +46,7 @@ class ExamineUI(var gameState: GameState) : Table(defaultSkin) {
             size(100f, 100f)
         })
         docList.addActor(scene2d.container {
-            button {
+            button("document") {
                 image("CogGrunge") {
                     it.size(70f)
                     this@button.addListener(object : ClickListener() {
@@ -73,7 +73,7 @@ class ExamineUI(var gameState: GameState) : Table(defaultSkin) {
 
         })
         docList.addActor(scene2d.container {
-            button {
+            button("document") {
                 image("TilesGrunge") {
                     it.size(70f)
                     this@button.addListener(object : ClickListener() {
@@ -100,7 +100,7 @@ class ExamineUI(var gameState: GameState) : Table(defaultSkin) {
             size(100f, 100f)
         })
         docList.addActor(scene2d.container {
-            button {
+            button("document") {
                 image("X") {
                     it.size(70f)
                     this@button.addListener(object : ClickListener() {
