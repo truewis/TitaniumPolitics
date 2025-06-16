@@ -1,6 +1,7 @@
 package com.titaniumPolitics.game.ui
 
 import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.ui.*
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener
@@ -17,14 +18,27 @@ import ktx.scene2d.Scene2DSkin.defaultSkin
 
 class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable {
     private val docList = HorizontalGroup()
-    val options: ExamineUI
+    val options: ExamineUI = ExamineUI(this@AvailableActionsUI.gameState)
 
     init {
 
-
-        options = ExamineUI(this@AvailableActionsUI.gameState)
-        add(options)
         options.isVisible = false
+        gameState.updateUI += { _ -> refreshList(); }
+
+        val docScr = ScrollPane(docList)
+        docList.align(Align.center)
+        docList.grow()
+        stack {
+            it.grow()
+            container(image(CapsuleStage.instance.assetManager.get<Texture>("document_small_contrast.png"))) {
+                size(1300f, 1773f)
+            }
+            container {
+                pad(50f)
+                top()
+                table {
+
+                    add(this@AvailableActionsUI.options)
 //        CapsuleStage.instance.onMouseDown.add { x, y ->
 //            //If x and y are not within the bounds of this UI, hide the option ui.
 //            val localpos = options.screenToLocalCoordinates(Vector2(x, y))
@@ -33,13 +47,14 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable 
 //                options.isVisible = false
 //            }
 //        }
-        row()
-        val docScr = ScrollPane(docList)
-        docList.align(Align.center)
-        docList.grow()
+                    row()
 
-        add(docScr).size(1200f, 150f)
-        gameState.updateUI += { _ -> refreshList(); }
+                    add(docScr).size(1200f, 150f)
+                }
+            }
+        }
+
+
     }
 
     //TODO: also make changes to NewAgendaUI.kt.

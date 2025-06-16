@@ -18,13 +18,12 @@ class InterfaceRoot(val gameState: GameState) : Table(Scene2DSkin.defaultSkin), 
     init {
         instance = this
         addActor(CharacterInteractionWindowUI(gameState = this@InterfaceRoot.gameState))
+        val actions = AvailableActionsUI(this@InterfaceRoot.gameState)
+        addActor(actions)
+        actions.setPosition(1920f / 2 - actions.width / 2, -550f, Align.bottomLeft)
         stack = stack { cell ->
             cell.size(1920f, 1080f)
 
-            container {
-                align(Align.bottom)
-                addActor(AvailableActionsUI(this@InterfaceRoot.gameState))
-            }
             //We draw the following UIs above any other UIs.
             table {
                 val leftSeparator = table {

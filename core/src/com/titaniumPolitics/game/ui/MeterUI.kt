@@ -1,5 +1,6 @@
 package com.titaniumPolitics.game.ui
 
+import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.ui.Container
 import com.badlogic.gdx.scenes.scene2d.ui.Image
@@ -20,7 +21,6 @@ class MeterUI : Table(), KTable {
     val PADDING = 25f
 
     init {
-        debug()
         stack {
             it.fill()
             container {
@@ -36,6 +36,16 @@ class MeterUI : Table(), KTable {
                 align(Align.bottomLeft)
             }
         }
+    }
+
+    override fun setColor(color: Color?) {
+        super.setColor(color)
+        this.cont.actor.color = color ?: Color.WHITE
+    }
+
+    override fun setColor(r: Float, g: Float, b: Float, a: Float) {
+        super.setColor(r, g, b, a)
+        this.cont.actor.color.set(r, g, b, a)
     }
 
     fun setValue(value: Float) {

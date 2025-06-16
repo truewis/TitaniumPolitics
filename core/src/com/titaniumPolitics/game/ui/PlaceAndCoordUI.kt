@@ -7,20 +7,18 @@ import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.core.ReadOnly
 import ktx.scene2d.Scene2DSkin.defaultSkin
 
-class PlaceAndCoordUI(gameState: GameState) : Table(defaultSkin)
-{
+class PlaceAndCoordUI(gameState: GameState) : Table(defaultSkin) {
     var l: Label
     var c: Label
     var t: Label
 
-    init
-    {
+    init {
         l = Label("", defaultSkin, "console")
-        l.setFontScale(2f)
+        l.setFontScale(1f)
         c = Label("", defaultSkin, "console")
-        c.setFontScale(1f)
+        c.setFontScale(0.5f)
         t = Label("", defaultSkin, "console")
-        t.setFontScale(1f)
+        t.setFontScale(0.5f)
         add(l).growX()
         row()
         add(c).growX()
@@ -29,12 +27,10 @@ class PlaceAndCoordUI(gameState: GameState) : Table(defaultSkin)
 
         gameState.updateUI += { x ->
             Gdx.app.postRunnable {
-                if (x.player.place.name.contains("home"))
-                {
+                if (x.player.place.name.contains("home")) {
                     l.setText(ReadOnly.prop("home"))
                     c.setText(ReadOnly.prop("uncharted"))
-                } else
-                {
+                } else {
                     l.setText(ReadOnly.prop(x.player.place.name))
                     c.setText(x.player.place.coordinates.toString())
                 }

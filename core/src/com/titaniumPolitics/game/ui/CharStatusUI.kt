@@ -1,5 +1,6 @@
 package com.titaniumPolitics.game.ui
 
+import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.titaniumPolitics.game.core.GameState
@@ -21,6 +22,7 @@ class CharStatusUI(gameState: GameState) : Table(defaultSkin), KTable {
                 image(CapsuleStage.instance.assetManager.get<Texture>("idcard_contrast.png"))
             ) {
                 size(480f, 300f)
+                setColor(1f, 1f, 1f, 0.8f) // Semi-transparent background
             }
             container {
                 padRight(100f)
@@ -28,33 +30,37 @@ class CharStatusUI(gameState: GameState) : Table(defaultSkin), KTable {
                 padTop(40f)
                 padBottom(40f)
                 table {
-                    label("The Triumvirate of Titanium", "trnsprtConsole") {
+                    label("The Triumvirate of Titanium", "docTitle") {
                         it.colspan(3)
                         it.left()
-                        it.padLeft(80f)
-                        setFontScale(1f)
+                        it.padLeft(50f)
+                        setFontScale(0.2f)
+                        color = Color.BLACK
                         setAlignment(com.badlogic.gdx.utils.Align.center)
                     }
                     row()
                     add(SimplePortraitUI(gameState.player.name, 0.2f, false)).size(100f, 100f)
                         .align(com.badlogic.gdx.utils.Align.center)
                     table {
-                        label(gameState.player.name, "trnsprtConsole") {
+                        label(gameState.player.name, "docTitle") {
                             it.left()
-                            setFontScale(2f)
+                            setFontScale(0.7f)
+                            color = Color.BLACK
                             setAlignment(com.badlogic.gdx.utils.Align.center)
                         }
                         row()
-                        label("Division")
+                        label("Division", "docTitle")
                         {
                             it.left()
-                            setFontScale(1f)
+                            setFontScale(0.3f)
+                            color = Color.BLACK
                             setAlignment(com.badlogic.gdx.utils.Align.center)
                         }
                         row()
-                        label(ReadOnly.prop(gameState.player.division!!.name), "trnsprtConsole") {
+                        label(ReadOnly.prop(gameState.player.division!!.name), "docTitle") {
                             it.left()
-                            setFontScale(1.5f)
+                            setFontScale(0.5f)
+                            color = Color.BLACK
                             setAlignment(com.badlogic.gdx.utils.Align.center)
                         }
                         row()

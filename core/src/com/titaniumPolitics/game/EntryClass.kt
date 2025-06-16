@@ -14,21 +14,42 @@ import kotlinx.serialization.json.Json
 import ktx.scene2d.Scene2DSkin
 import kotlin.concurrent.thread
 
-class EntryClass : ApplicationAdapter()
-{
+class EntryClass : ApplicationAdapter() {
     lateinit var stage: Stage
     lateinit var skin: Skin
-    override fun create()
-    {
+    override fun create() {
 
-        val gen = FreeTypeFontGenerator(Gdx.files.internal("Fonts/LondrinaSolid-Regular.ttf"))
-        val parameter = FreeTypeFontGenerator.FreeTypeFontParameter()
-        parameter.size = 14
-        //Include the below line for Unicode support
-        //parameter.characters = Gdx.files.internal("korean2350.txt").readString("UTF-8")
-        val nanum = gen.generateFont(parameter)
-        fontMap.put("fixedsys", nanum)
-        gen.dispose()
+        run {
+            val gen = FreeTypeFontGenerator(Gdx.files.internal("Fonts/LondrinaSolid-Regular.ttf"))
+            val parameter = FreeTypeFontGenerator.FreeTypeFontParameter()
+            parameter.size = 20
+            //Include the below line for Unicode support
+            //parameter.characters = Gdx.files.internal("korean2350.txt").readString("UTF-8")
+            val nanum = gen.generateFont(parameter)
+            fontMap.put("fixedsys", nanum)
+            gen.dispose()
+        }
+        run {
+            val gen = FreeTypeFontGenerator(Gdx.files.internal("Fonts/GrotleyRegular-mLEWv.otf"))
+            val parameter = FreeTypeFontGenerator.FreeTypeFontParameter()
+            parameter.size = 75
+            //Include the below line for Unicode support
+            //parameter.characters = Gdx.files.internal("korean2350.txt").readString("UTF-8")
+            val nanum = gen.generateFont(parameter)
+            fontMap.put("GrotleyRegular", nanum)
+            gen.dispose()
+        }
+        run {
+            val gen = FreeTypeFontGenerator(Gdx.files.internal("Fonts/Martius-LV9L4.ttf"))
+            val parameter = FreeTypeFontGenerator.FreeTypeFontParameter()
+            parameter.size = 75
+            //Include the below line for Unicode support
+            //parameter.characters = Gdx.files.internal("korean2350.txt").readString("UTF-8")
+            val nanum = gen.generateFont(parameter)
+            fontMap.put("Martius", nanum)
+            gen.dispose()
+        }
+
         val param = SkinLoader.SkinParameter(fontMap)
         val assetManager = AssetManager()
         assetManager.load("skin/titaniumSkin.json", Skin::class.java, param)
@@ -39,25 +60,21 @@ class EntryClass : ApplicationAdapter()
         Gdx.input.inputProcessor = stage
     }
 
-    override fun render()
-    {
+    override fun render() {
         ScreenUtils.clear(0f, 0f, 0f, 1f)
         stage.act(Gdx.graphics.deltaTime)
         stage.draw()
     }
 
-    override fun dispose()
-    {
+    override fun dispose() {
         stage.dispose()
     }
 
-    override fun resize(width: Int, height: Int)
-    {
+    override fun resize(width: Int, height: Int) {
         stage.viewport.update(width, height, true)
     }
 
-    companion object
-    {
+    companion object {
 
         //--------------------------------------------------------------
         var fontMap = ObjectMap<String, Any>()

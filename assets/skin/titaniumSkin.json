@@ -390,6 +390,14 @@ com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle: {
 		fontColor: ConsoleHighlight
 		background: BlackPx
 	}
+	docTitle: {
+		font: Martius
+		fontColor: RGBA_255_255_255_255
+	}
+	description: {
+		font: GrotleyRegular
+		fontColor: RGBA_255_255_255_255
+	}
 }
 com.badlogic.gdx.scenes.scene2d.ui.List$ListStyle: {
 	default: {

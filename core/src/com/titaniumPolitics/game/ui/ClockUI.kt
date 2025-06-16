@@ -13,7 +13,7 @@ class ClockUI(gameState: GameState) : Table(defaultSkin) {
     val l: Label = Label((gameState.formatClock()), defaultSkin, "console")
 
     init {
-        l.setFontScale(4f)
+        l.setFontScale(2f)
         add(l).growX()
 
         gameState.timeChanged += { _, y ->

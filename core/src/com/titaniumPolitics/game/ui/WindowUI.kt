@@ -14,17 +14,15 @@ import ktx.scene2d.*
 import ktx.scene2d.Scene2DSkin.defaultSkin
 
 
-open class WindowUI(titleKey: String) : Table(defaultSkin), KTable
-{
-    val titleLabel = scene2d.label(ReadOnly.prop(titleKey), "trnsprtConsole") {
-        setFontScale(4f)
+open class WindowUI(titleKey: String) : Table(defaultSkin), KTable {
+    val titleLabel = scene2d.label(ReadOnly.prop(titleKey), "docTitle") {
+        setFontScale(1f)
         setAlignment(Align.center)
     }
     val onClose = ArrayList<() -> Unit>()
     val content = Table()
 
-    init
-    {
+    init {
         stack {
             it.grow()
             image("GradientBottom") {
@@ -37,10 +35,8 @@ open class WindowUI(titleKey: String) : Table(defaultSkin), KTable
                     it.fill()
                     it.size(70f)
                     image("XGrunge")
-                    addListener(object : ClickListener()
-                    {
-                        override fun clicked(event: com.badlogic.gdx.scenes.scene2d.InputEvent?, x: Float, y: Float)
-                        {
+                    addListener(object : ClickListener() {
+                        override fun clicked(event: com.badlogic.gdx.scenes.scene2d.InputEvent?, x: Float, y: Float) {
                             this@WindowUI.onClose.forEach { it() }
                             this@WindowUI.isVisible = false
                         }
