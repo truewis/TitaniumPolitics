@@ -20,7 +20,7 @@ class InterfaceRoot(val gameState: GameState) : Table(Scene2DSkin.defaultSkin), 
         addActor(CharacterInteractionWindowUI(gameState = this@InterfaceRoot.gameState))
         val actions = AvailableActionsUI(this@InterfaceRoot.gameState)
         addActor(actions)
-        actions.setPosition(1920f / 2 - actions.width / 2, -550f, Align.bottomLeft)
+        actions.setPosition(1920f / 2 - actions.width / 2, -350f, Align.bottomLeft)
         stack = stack { cell ->
             cell.size(1920f, 1080f)
 

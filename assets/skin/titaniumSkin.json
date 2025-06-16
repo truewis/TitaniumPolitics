@@ -168,7 +168,7 @@ com.ray3k.tenpatch.TenPatchDrawable: {
 	}
 	BarSimpleFillVitals: {
 		region: BarSimpleFill
-		color: Console
+		color: RGBA_255_255_255_255
 		horizontalStretchAreas: [ 23, 1062 ]
 		verticalStretchAreas: [ 28, 46 ]
 		tiling: true

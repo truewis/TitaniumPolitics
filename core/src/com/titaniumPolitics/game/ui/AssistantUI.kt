@@ -18,9 +18,9 @@ import ktx.scene2d.Scene2DSkin.defaultSkin
 class AssistantUI(gameState: GameState) : Table(defaultSkin), KTable {
 
     init {
-        val buttonWidth = 100f
-        val buttonHeight = 193f
-        padLeft(-30f)
+        val buttonWidth = 60f
+        val buttonHeight = 113f
+        padLeft(-20f)
         table {
             name = "politiciansInfoButton"
             it.fill()

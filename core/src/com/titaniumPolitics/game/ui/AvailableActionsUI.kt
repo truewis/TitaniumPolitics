@@ -38,7 +38,7 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable 
         stack {
             it.grow()
             container(image(CapsuleStage.instance.assetManager.get<Texture>("document_small_contrast.png"))) {
-                size(1300f, 1773f)
+                size(1000f, 1364f)
                 padLeft(-65f)
                 padRight(-35f)
             }
@@ -128,7 +128,7 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable 
 //            }
 //        }
 
-                    add(docScr).size(1200f, 150f)
+                    add(docScr).size(900f, 150f)
                     row()
                     add(this@AvailableActionsUI.options)
                 }
@@ -157,7 +157,7 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable 
                 val tooltip = ActionTooltipUI(tobj)
                 addListener(tooltip)
                 image("Help") {
-                    it.size(100f)
+                    it.size(80f)
                     color = Color.BLACK
 
                     when (tobj) {
