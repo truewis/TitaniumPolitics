@@ -47,30 +47,33 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable 
                 table {
                     table {
                         background = skin.getDrawable("simpleBorder")
+                        color = this@AvailableActionsUI.skin.getColor("BackgroundGray")
                         it.padTop(60f)
                         it.fill()
                         it.expandX()
                         table {
                             background = skin.getDrawable("simpleBorder")
+                            color = this@AvailableActionsUI.skin.getColor("BackgroundGray")
                             it.grow()
+                            it.left()
                             label("Form 28-1", "docTitle") {
                                 it.left()
                                 setFontScale(0.4f)
-                                color = Color.BLACK
+                                color = this@AvailableActionsUI.skin.getColor("BackgroundGray")
                                 setAlignment(Align.left)
                             }
                             row()
                             label("Rev. Megaros 23. 4. 1.", "docTitle") {
                                 it.left()
                                 setFontScale(0.2f)
-                                color = Color.BLACK
+                                color = this@AvailableActionsUI.skin.getColor("BackgroundGray")
                                 setAlignment(Align.left)
                             }
                             row()
                             label("Division of Internal Affairs", "docTitle") {
                                 it.left()
                                 setFontScale(0.2f)
-                                color = Color.BLACK
+                                color = this@AvailableActionsUI.skin.getColor("BackgroundGray")
                                 setAlignment(Align.left)
                             }
                         }
@@ -84,6 +87,7 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable 
                         }
                         table {
                             background = skin.getDrawable("simpleBorder")
+                            color = this@AvailableActionsUI.skin.getColor("BackgroundGray")
                             it.right()
                             it.fill()
                             it.expandX()
@@ -93,7 +97,7 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable 
                                     it.fill()
                                     it.expandX
                                     setFontScale(0.3f)
-                                    color = Color.BLACK
+                                    color = this@AvailableActionsUI.skin.getColor("BackgroundGray")
                                     setAlignment(Align.right)
 
                                 }
@@ -104,7 +108,7 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable 
                                     it.fill()
                                     it.expandX
                                     setFontScale(0.3f)
-                                    color = Color.BLACK
+                                    color = this@AvailableActionsUI.skin.getColor("BackgroundGray")
                                     setAlignment(Align.right)
 
                                 }
@@ -115,7 +119,7 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable 
                                     it.fill()
                                     it.expandX
                                     setFontScale(0.25f)
-                                    color = Color.BLACK
+                                    color = this@AvailableActionsUI.skin.getColor("BackgroundGray")
                                     setAlignment(Align.right)
                                     //TODO: overflow if the place name is too long.
 

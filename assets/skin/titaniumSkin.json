@@ -1,5 +1,11 @@
 {
 com.badlogic.gdx.graphics.Color: {
+	BackgroundGray: {
+		r: 0.22352941
+		g: 0.22352941
+		b: 0.22352941
+		a: 1
+	}
 	ButtonHighlightedColor: {
 		r: 0.49803922
 		g: 0.40784314

@@ -4733,6 +4733,22 @@ simpleBorderCrossed
   orig: 64, 64
   offset: 0, 0
   index: -1
+simpleBorderCrossedWhite
+  rotate: false
+  xy: 1669, 1319
+  size: 64, 64
+  split: 5, 5, 5, 5
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+simpleBorderWhite
+  rotate: false
+  xy: 1735, 1385
+  size: 64, 64
+  split: 4, 4, 4, 4
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
 Aid
   rotate: false
   xy: 1041, 1849

@@ -41,7 +41,7 @@ class CharStatusUI(gameState: GameState) : Table(defaultSkin), KTable {
                         it.left()
                         it.padLeft(10f)
                         setFontScale(0.15f)
-                        color = Color.BLACK
+                        color = this@CharStatusUI.skin.getColor("BackgroundGray")
                         setAlignment(com.badlogic.gdx.utils.Align.center)
                     }
                     row()
@@ -60,7 +60,7 @@ class CharStatusUI(gameState: GameState) : Table(defaultSkin), KTable {
                             it.left()
                             //it.padLeft(2f)
                             setFontScale(0.25f)
-                            color = Color.BLACK
+                            color = this@CharStatusUI.skin.getColor("BackgroundGray")
                             setAlignment(com.badlogic.gdx.utils.Align.center)
                         }
                         row()
@@ -68,7 +68,7 @@ class CharStatusUI(gameState: GameState) : Table(defaultSkin), KTable {
                             it.left()
                             //it.padLeft(2f)
                             setFontScale(0.20f)
-                            color = Color.BLACK
+                            color = this@CharStatusUI.skin.getColor("BackgroundGray")
                             setAlignment(com.badlogic.gdx.utils.Align.center)
                         }
                         row()
