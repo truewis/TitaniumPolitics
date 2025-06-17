@@ -16,6 +16,7 @@ import ktx.scene2d.image
 import ktx.scene2d.label
 import ktx.scene2d.stack
 import ktx.scene2d.table
+import java.util.UUID
 
 //This class is a UI element that displays the player's portrait and their health and will meters.
 class CharStatusUI(gameState: GameState) : Table(defaultSkin), KTable {
@@ -27,7 +28,7 @@ class CharStatusUI(gameState: GameState) : Table(defaultSkin), KTable {
                 image(CapsuleStage.instance.assetManager.get<Texture>("idcard_contrast.png"))
             ) {
                 size(480f, 300f)
-                setColor(1f, 1f, 1f, 0.7f) // Semi-transparent background
+                setColor(1f, 1f, 1f, 0.75f) // Semi-transparent background
             }
             container {
                 padRight(100f)
@@ -35,17 +36,17 @@ class CharStatusUI(gameState: GameState) : Table(defaultSkin), KTable {
                 padTop(40f)
                 padBottom(40f)
                 table {
-                    label("The Triumvirate of Titanium", "docTitle") {
+                    label("The Triumvirate of Titanium     " + UUID.randomUUID(), "docTitle") {
                         it.colspan(3)
                         it.left()
-                        it.padLeft(50f)
-                        setFontScale(0.2f)
+                        it.padLeft(10f)
+                        setFontScale(0.15f)
                         color = Color.BLACK
                         setAlignment(com.badlogic.gdx.utils.Align.center)
                     }
                     row()
                     add(SimpleHeadPortraitUI(gameState.player.name, 0.2f, false)).size(100f, 100f)
-                        .align(com.badlogic.gdx.utils.Align.center).padRight(5f)
+                        .align(com.badlogic.gdx.utils.Align.top).padRight(5f).padTop(10f)
                     table {
                         label(gameState.player.name, "docTitle") {
                             it.left()
@@ -63,7 +64,15 @@ class CharStatusUI(gameState: GameState) : Table(defaultSkin), KTable {
                             setAlignment(com.badlogic.gdx.utils.Align.center)
                         }
                         row()
-                        add(HealthMeter(gameState)).fill().padTop(50f)
+                        label("Director", "docTitle") {
+                            it.left()
+                            //it.padLeft(2f)
+                            setFontScale(0.20f)
+                            color = Color.BLACK
+                            setAlignment(com.badlogic.gdx.utils.Align.center)
+                        }
+                        row()
+                        add(HealthMeter(gameState)).fill().padTop(30f)
                         row()
                         add(WillMeter(gameState)).fill()
                         row()

@@ -21,7 +21,7 @@ class WillMeter(gameState: GameState) : Table(defaultSkin), KTable {
             label("Will", "docTitle") {
                 setFontScale(0.2f)
                 setAlignment(Align.topLeft)
-                color = Color.BLACK
+                color = Color.GRAY
             }
             container(this@WillMeter.bar) {
                 padTop(5f)

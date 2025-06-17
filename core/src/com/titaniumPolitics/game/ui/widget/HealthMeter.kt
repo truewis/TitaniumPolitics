@@ -21,7 +21,7 @@ class HealthMeter(gameState: GameState) : Table(defaultSkin), KTable {
             label("Health", "docTitle") {
                 setFontScale(0.2f)
                 setAlignment(Align.topLeft)
-                color = Color.BLACK
+                color = Color.GRAY
             }
             container(this@HealthMeter.bar) {
                 padTop(5f)

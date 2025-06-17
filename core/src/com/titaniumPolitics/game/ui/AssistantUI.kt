@@ -29,7 +29,7 @@ class AssistantUI(gameState: GameState) : Table(defaultSkin), KTable {
                 it.fill()
                 container(
                     image("glass_tab") {
-                        setColor(1f, 1f, 1f, 0.5f) // Semi-transparent background
+                        setColor(1f, 1f, 1f, 0.4f) // Semi-transparent background
                     }) {
                     size(buttonWidth, buttonHeight)
                 }
@@ -63,7 +63,7 @@ class AssistantUI(gameState: GameState) : Table(defaultSkin), KTable {
                 it.fill()
                 container(
                     image("glass_tab") {
-                        setColor(1f, 1f, 1f, 0.5f) // Semi-transparent background
+                        setColor(1f, 1f, 1f, 0.4f) // Semi-transparent background
                     }) {
                     size(buttonWidth, buttonHeight)
                 }
@@ -102,7 +102,7 @@ class AssistantUI(gameState: GameState) : Table(defaultSkin), KTable {
                 it.fill()
                 container(
                     image("glass_tab") {
-                        setColor(1f, 1f, 1f, 0.5f) // Semi-transparent background
+                        setColor(1f, 1f, 1f, 0.4f) // Semi-transparent background
                     }) {
                     size(buttonWidth, buttonHeight)
                 }
@@ -139,7 +139,7 @@ class AssistantUI(gameState: GameState) : Table(defaultSkin), KTable {
                 it.fill()
                 container(
                     image("glass_tab") {
-                        setColor(1f, 1f, 1f, 0.5f) // Semi-transparent background
+                        setColor(1f, 1f, 1f, 0.4f) // Semi-transparent background
                     }) {
                     size(buttonWidth, buttonHeight)
                 }
