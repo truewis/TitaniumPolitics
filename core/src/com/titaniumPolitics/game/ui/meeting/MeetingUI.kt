@@ -14,7 +14,7 @@ import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.core.Meeting
 import com.titaniumPolitics.game.ui.CapsuleStage
 import com.titaniumPolitics.game.ui.PortraitUI
-import com.titaniumPolitics.game.ui.SimplePortraitUI
+import com.titaniumPolitics.game.ui.widget.SimplePortraitUI
 import ktx.scene2d.*
 import ktx.scene2d.Scene2DSkin.defaultSkin
 import kotlin.collections.remove

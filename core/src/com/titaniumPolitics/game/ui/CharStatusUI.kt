@@ -6,6 +6,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.core.ReadOnly
 import com.titaniumPolitics.game.ui.widget.HealthMeter
+import com.titaniumPolitics.game.ui.widget.SimpleHeadPortraitUI
+import com.titaniumPolitics.game.ui.widget.SimplePortraitUI
 import com.titaniumPolitics.game.ui.widget.WillMeter
 import ktx.scene2d.KTable
 import ktx.scene2d.Scene2DSkin.defaultSkin
@@ -25,7 +27,7 @@ class CharStatusUI(gameState: GameState) : Table(defaultSkin), KTable {
                 image(CapsuleStage.instance.assetManager.get<Texture>("idcard_contrast.png"))
             ) {
                 size(480f, 300f)
-                setColor(1f, 1f, 1f, 0.8f) // Semi-transparent background
+                setColor(1f, 1f, 1f, 0.7f) // Semi-transparent background
             }
             container {
                 padRight(100f)
@@ -42,11 +44,12 @@ class CharStatusUI(gameState: GameState) : Table(defaultSkin), KTable {
                         setAlignment(com.badlogic.gdx.utils.Align.center)
                     }
                     row()
-                    add(SimplePortraitUI(gameState.player.name, 0.2f, false)).size(100f, 100f)
-                        .align(com.badlogic.gdx.utils.Align.center)
+                    add(SimpleHeadPortraitUI(gameState.player.name, 0.2f, false)).size(100f, 100f)
+                        .align(com.badlogic.gdx.utils.Align.center).padRight(5f)
                     table {
                         label(gameState.player.name, "docTitle") {
                             it.left()
+                            //it.padLeft(2f)
                             setFontScale(0.7f)
                             color = Color.BLACK
                             setAlignment(com.badlogic.gdx.utils.Align.center)
@@ -54,12 +57,13 @@ class CharStatusUI(gameState: GameState) : Table(defaultSkin), KTable {
                         row()
                         label(ReadOnly.prop(gameState.player.division!!.name), "docTitle") {
                             it.left()
-                            setFontScale(0.3f)
+                            //it.padLeft(2f)
+                            setFontScale(0.25f)
                             color = Color.BLACK
                             setAlignment(com.badlogic.gdx.utils.Align.center)
                         }
                         row()
-                        add(HealthMeter(gameState)).fill()
+                        add(HealthMeter(gameState)).fill().padTop(50f)
                         row()
                         add(WillMeter(gameState)).fill()
                         row()

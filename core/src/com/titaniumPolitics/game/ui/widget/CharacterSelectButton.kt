@@ -5,17 +5,17 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.titaniumPolitics.game.core.ReadOnly
-import com.titaniumPolitics.game.ui.SimplePortraitUI
+import com.titaniumPolitics.game.ui.widget.SimplePortraitUI
 import ktx.scene2d.KTable
 import ktx.scene2d.label
 
 class CharacterSelectButton(skin: Skin, callback: (String) -> Unit) : Button(skin, "default"), KTable {
-    val charPortrait: SimplePortraitUI
+    val charPortrait: SimpleHeadPortraitUI
     val charLabel: Label
     var availableCharacters: Set<String>? = null
 
     init {
-        charPortrait = SimplePortraitUI("", 0.15f, false)
+        charPortrait = SimpleHeadPortraitUI("", 0.15f, false)
         add(charPortrait).size(100f)
         row()
         charLabel = label("", "trnsprtConsole") { setFontScale(3f) }

@@ -114,7 +114,7 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable 
                                     it.right()
                                     it.fill()
                                     it.expandX
-                                    setFontScale(0.3f)
+                                    setFontScale(0.25f)
                                     color = Color.BLACK
                                     setAlignment(Align.right)
                                     //TODO: overflow if the place name is too long.
@@ -132,6 +132,13 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable 
 //            }
 //        }
 
+                    label("Action Performed", "docTitle") {
+                        it.center()
+                        setFontScale(0.25f)
+                        color = Color.BLACK
+                        setAlignment(Align.center)
+                    }
+                    row()
                     add(docScr).size(900f, 150f)
                     row()
                     add(this@AvailableActionsUI.options)
