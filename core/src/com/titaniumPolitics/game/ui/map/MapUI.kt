@@ -44,8 +44,7 @@ open class MapUI(val gameState: GameState) : WindowUI("MapTitle") {
             image("MapGrid") {
                 addListener(object : ClickListener() {
                     override fun clicked(event: com.badlogic.gdx.scenes.scene2d.InputEvent?, x: Float, y: Float) {
-                        //Close Place Marker UI
-                        this@MapUI.currentPlaceMarkerWindow.isVisible = false
+                        //Close Place Marker UI?
                     }
                 }
                 )
@@ -53,8 +52,8 @@ open class MapUI(val gameState: GameState) : WindowUI("MapTitle") {
         }
         dataTable.addActor(st)
         st.setPosition(PADDING, PADDING)
-        currentPlaceMarkerWindow.isVisible = false
-        dataTable.addActor(currentPlaceMarkerWindow)
+        currentPlaceMarkerWindow.isVisible = true
+        content.add(currentPlaceMarkerWindow).growY().fill().width(500f)
         dataTable.add().grow()
 
 
@@ -74,8 +73,6 @@ open class MapUI(val gameState: GameState) : WindowUI("MapTitle") {
             HEIGHT + PADDING * 2 //Add some padding
         )
         dataTable.pack()
-        //CurrentPlaceMarkerWindow is a window that shows up when a place marker is clicked. It should be removed and re-added to the stage to ensure it is on top.
-        dataTable.removeActor(currentPlaceMarkerWindow)
         currentConnections.forEach { dataTable.removeActor(it) }
         currentConnections.clear()
         //Draw connections between places
@@ -105,7 +102,6 @@ open class MapUI(val gameState: GameState) : WindowUI("MapTitle") {
                 }
             }
         }
-        dataTable.addActor(currentPlaceMarkerWindow)
 
         //Add quest markers.
         gameState.eventSystem.quests.forEach { quest ->

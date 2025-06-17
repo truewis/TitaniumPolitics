@@ -39,17 +39,19 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable 
             it.grow()
             container(image(CapsuleStage.instance.assetManager.get<Texture>("document_small_contrast.png"))) {
                 size(1000f, 1390f)
-                padLeft(-65f)
-                padRight(-35f)
+                padLeft(-55f)
+                padRight(-50f)
             }
             container {
                 top()
                 table {
                     table {
-                        it.padTop(80f)
+                        background = skin.getDrawable("simpleBorder")
+                        it.padTop(60f)
                         it.fill()
                         it.expandX()
                         table {
+                            background = skin.getDrawable("simpleBorder")
                             it.grow()
                             label("Form 28-1", "docTitle") {
                                 it.left()
@@ -81,6 +83,7 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable 
                             setAlignment(Align.center)
                         }
                         table {
+                            background = skin.getDrawable("simpleBorder")
                             it.right()
                             it.fill()
                             it.expandX()
@@ -89,7 +92,7 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable 
                                     it.right()
                                     it.fill()
                                     it.expandX
-                                    setFontScale(0.4f)
+                                    setFontScale(0.3f)
                                     color = Color.BLACK
                                     setAlignment(Align.right)
 
@@ -100,7 +103,7 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable 
                                     it.right()
                                     it.fill()
                                     it.expandX
-                                    setFontScale(0.4f)
+                                    setFontScale(0.3f)
                                     color = Color.BLACK
                                     setAlignment(Align.right)
 
@@ -111,9 +114,10 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable 
                                     it.right()
                                     it.fill()
                                     it.expandX
-                                    setFontScale(0.4f)
+                                    setFontScale(0.3f)
                                     color = Color.BLACK
                                     setAlignment(Align.right)
+                                    //TODO: overflow if the place name is too long.
 
                                 }
                         }
@@ -377,21 +381,6 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable 
                             })
                             ProgressBackgroundUI.instance.text = ReadOnly.prop("Clearing")
                             ProgressBackgroundUI.instance.setVisibleWithFade(true)
-                        }
-
-                        "EndSpeech" -> {
-                            this.setDrawable(defaultSkin, "TilesGrunge")
-                            this@button.addListener(object : ChangeListener() {
-                                override fun changed(event: ChangeEvent, actor: Actor) {
-                                    //TODO
-//                                    AddInfoUI.instance.isVisible = true
-//                                    AddInfoUI.instance.refresh(
-//                                        "official",
-//                                        GameEngine.acquireCallback,
-//                                        this@AvailableActionsUI.gameState.player.place.resources.toHashMap()
-//                                    )
-                                }
-                            })
                         }
 
                         "Intercept" -> {

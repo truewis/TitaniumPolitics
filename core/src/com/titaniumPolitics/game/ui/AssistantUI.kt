@@ -112,7 +112,6 @@ class AssistantUI(gameState: GameState) : Table(defaultSkin), KTable {
                     }) {
                     size(buttonWidth)
                 }
-                add(calendarLabel)
             }
             addListener(object : ClickListener() {
                 override fun clicked(event: com.badlogic.gdx.scenes.scene2d.InputEvent?, x: Float, y: Float) {

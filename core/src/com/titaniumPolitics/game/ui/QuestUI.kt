@@ -56,14 +56,14 @@ class QuestUI(var gameState: GameState) : Table(defaultSkin) {
                         it.left()
                         it.fill()
                         setAlignment(Align.left)
-                        setFontScale(0.3f)
+                        setFontScale(0.25f)
                     }
                     row()
                     label(quest.description, "description") {
                         it.left()
                         it.fill()
                         setAlignment(Align.left)
-                        setFontScale(0.4f)
+                        setFontScale(0.3f)
                     }
                     addAction(
                         //Blinking effect for all quests, as an eyecatcher.

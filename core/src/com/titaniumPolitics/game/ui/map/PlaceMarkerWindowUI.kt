@@ -1,7 +1,9 @@
 package com.titaniumPolitics.game.ui.map
 
+import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.ui.Label
+import com.badlogic.gdx.utils.Align
 import com.titaniumPolitics.game.core.GameEngine
 import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.core.Information
@@ -17,6 +19,7 @@ import com.titaniumPolitics.game.ui.WaitUIMode
 import ktx.scene2d.button
 import ktx.scene2d.label
 import ktx.scene2d.scene2d
+import ktx.scene2d.table
 
 class PlaceMarkerWindowUI(var gameState: GameState, var owner: MapUI) : FloatingWindowUI() {
     var placeDisplayed = ""
@@ -24,6 +27,7 @@ class PlaceMarkerWindowUI(var gameState: GameState, var owner: MapUI) : Floating
     var mode = ""
     var interrupted = false//Only used in move mode.
     var tgtDestination = ""//Only used in move mode.
+    private val onRefresh = mutableListOf<() -> Unit>()
 
     init {
         gameState.onAddInfo += this::moveInterruptCondition
@@ -48,7 +52,6 @@ class PlaceMarkerWindowUI(var gameState: GameState, var owner: MapUI) : Floating
                     action.placeTo = this@PlaceMarkerWindowUI.placeDisplayed
                     action.injectParent(this@PlaceMarkerWindowUI.gameState)
                     this@PlaceMarkerWindowUI.owner.isVisible = false
-                    this@PlaceMarkerWindowUI.isVisible = false
 
                     ProgressBackgroundUI.instance.text = ReadOnly.prop("Moving")
                     ProgressBackgroundUI.instance.setVisibleWithFade(true)
@@ -67,7 +70,6 @@ class PlaceMarkerWindowUI(var gameState: GameState, var owner: MapUI) : Floating
                     action.placeTo = this@PlaceMarkerWindowUI.placeDisplayed
                     action.injectParent(this@PlaceMarkerWindowUI.gameState)
                     this@PlaceMarkerWindowUI.owner.isVisible = false
-                    this@PlaceMarkerWindowUI.isVisible = false
 
                     ProgressBackgroundUI.instance.text = ReadOnly.prop("Moving")
                     ProgressBackgroundUI.instance.setVisibleWithFade(true)
@@ -91,6 +93,76 @@ class PlaceMarkerWindowUI(var gameState: GameState, var owner: MapUI) : Floating
             }
         }
         )
+    }
+
+
+    val resourceInformation = scene2d.table {
+        name = "resourceInformation"
+        it.height = 50f
+        label("Resource Information", "description") {
+            setFontScale(0.4f)
+            setAlignment(Align.center)
+            color = Color.WHITE
+        }
+        row()
+        val shortLabel = label("No resource information available", "description") {
+            setFontScale(0.25f)
+            setAlignment(Align.center)
+            color = Color.WHITE
+        }
+        this@PlaceMarkerWindowUI.onRefresh += {
+            //Update the resource information label with the most recent information about the place.
+            val gState = this@PlaceMarkerWindowUI.gameState
+            gState.informations.values.filter {
+                it.type == InformationType.RESOURCES && it.tgtPlace == this@PlaceMarkerWindowUI.placeDisplayed && it.knownTo.contains(
+                    gState.playerName
+                )
+            }.minByOrNull { it.tgtTime }?.let { info ->
+                val resources = info.resources
+                //TODO: resource display
+                shortLabel.setText("Most recent resource information: $resources")
+            }
+                ?: run {
+                    //If no information is available, display a message.
+                    shortLabel.setText(
+                        "No resource information available"
+                    )
+
+                }
+
+        }
+    }
+    val managementInformation = scene2d.table {
+        name = "managementInformation"
+        it.height = 50f
+        label("Management Information", "description") {
+            setFontScale(0.4f)
+            setAlignment(Align.center)
+            color = Color.WHITE
+        }
+        row()
+        val divisionLabel = label("Division: ", "description") {
+            setFontScale(0.25f)
+            setAlignment(Align.center)
+            color = Color.WHITE
+        }
+        row()
+        val managerLabel = label("Manager: ", "description") {
+            setFontScale(0.25f)
+            setAlignment(Align.center)
+            color = Color.WHITE
+        }
+        this@PlaceMarkerWindowUI.onRefresh += {
+            //Update the resource information label with the most recent information about the place.
+            val gState = this@PlaceMarkerWindowUI.gameState
+            divisionLabel.setText(
+                "Managed by " + ReadOnly.prop(gState.places[this@PlaceMarkerWindowUI.placeDisplayed]!!.responsibleDivision)
+            )
+            managerLabel.setText(
+                "Manager: " + ReadOnly.prop(gState.places[this@PlaceMarkerWindowUI.placeDisplayed]!!.manager)
+            )
+        }
+
     }
 
     private fun moveInterruptCondition(info: Information) {
@@ -141,13 +213,10 @@ class PlaceMarkerWindowUI(var gameState: GameState, var owner: MapUI) : Floating
     fun refresh(x: Float, y: Float, placeName: String) {
         //If the window is already visible, hide it.
         if (placeDisplayed == placeName && isVisible) {
-            isVisible = false
             placeDisplayed = ""
 
         } else {
-            val XOFFSET = 10f
-            val YOFFSET = 10f
-            setPosition(x + XOFFSET, y + YOFFSET)
+            //setPosition(x + XOFFSET, y + YOFFSET)
             isVisible = true
             if (placeName.contains("home")) this.titleLabel.setText(ReadOnly.prop("home"))
             else
@@ -169,10 +238,16 @@ class PlaceMarkerWindowUI(var gameState: GameState, var owner: MapUI) : Floating
                         row()
                     }
                 }
+                add(resourceInformation).fillX().expandX()
+                row()
+                add(managementInformation).fillX().expandX()
+                row()
 
                 add(closeButton).fill().size(200f, 50f)
             }
             setSize(350f, 50f + content.prefHeight)
+            //Update the resource information and management information tables.
+            onRefresh.forEach { it() }
         }
     }
 }
