@@ -38,7 +38,7 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable 
         stack {
             it.grow()
             container(image(CapsuleStage.instance.assetManager.get<Texture>("document_small_contrast.png"))) {
-                size(1000f, 1364f)
+                size(1000f, 1390f)
                 padLeft(-65f)
                 padRight(-35f)
             }
@@ -46,7 +46,7 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable 
                 top()
                 table {
                     table {
-                        it.padTop(100f)
+                        it.padTop(80f)
                         it.fill()
                         it.expandX()
                         table {
