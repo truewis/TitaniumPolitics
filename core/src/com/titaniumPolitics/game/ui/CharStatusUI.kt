@@ -45,8 +45,26 @@ class CharStatusUI(gameState: GameState) : Table(defaultSkin), KTable {
                         setAlignment(com.badlogic.gdx.utils.Align.center)
                     }
                     row()
-                    add(SimpleHeadPortraitUI(gameState.player.name, 0.2f, false)).size(100f, 100f)
-                        .align(com.badlogic.gdx.utils.Align.top).padRight(5f).padTop(10f)
+                    table {
+                        it.size(100f, 200f).top().padRight(5f).padTop(10f)
+                        add(SimpleHeadPortraitUI(gameState.player.name, 0.2f, false)).fillX().expandY().top()
+                        row()
+                        label("Verified", "docTitle") {
+                            it.center()
+                            //it.padLeft(2f)
+                            setFontScale(0.2f)
+                            color = this@CharStatusUI.skin.getColor("BackgroundGray")
+                        }
+                        row()
+                        label("18627101", "docTitle") {
+                            it.center()
+                            //it.padLeft(2f)
+                            setFontScale(0.3f)
+                            color = this@CharStatusUI.skin.getColor("BackgroundGray")
+                        }
+
+                    }
+
                     table {
                         label(gameState.player.name, "docTitle") {
                             it.left()

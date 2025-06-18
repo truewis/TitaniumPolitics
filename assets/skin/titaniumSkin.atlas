@@ -4717,6 +4717,13 @@ size: 2048, 2048
 format: RGBA8888
 filter: Linear, Linear
 repeat: none
+code1
+  rotate: false
+  xy: 1603, 1253
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
 simpleBorder
   rotate: false
   xy: 1801, 1451
