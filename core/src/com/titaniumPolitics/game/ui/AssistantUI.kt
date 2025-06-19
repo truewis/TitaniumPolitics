@@ -15,65 +15,80 @@ import com.titaniumPolitics.game.ui.widget.CharacterSelectUI
 import ktx.scene2d.*
 import ktx.scene2d.Scene2DSkin.defaultSkin
 
-class AssistantUI(gameState: GameState) : Table(defaultSkin), KTable {
+class AssistantUI(gameState: GameState) : Table(defaultSkin) {
 
     init {
-        val buttonWidth = 60f
-        val buttonHeight = 113f
+        val buttonWidth = 180f
+        val buttonHeight = 540f
+        val buttonGap = 70f
+        val buttonXGap = -7f
         padLeft(-20f)
-        table {
-            name = "politiciansInfoButton"
-            it.fill()
-            it.size(buttonWidth, buttonHeight + 10f)
+
+        val MapButton = scene2d.table {
+            name = "MapButton"
             stack {
                 it.fill()
                 container(
-                    image("glass_tab") {
-                        setColor(1f, 1f, 1f, 0.4f) // Semi-transparent background
+                    image("cabinetHandle") {
                     }) {
                     size(buttonWidth, buttonHeight)
                 }
-                container(
-                    image("CrownGrunge") {
-                        color = Color.BLACK
-                    }) {
-                    size(buttonWidth)
-                }
             }
+            val text = scene2d.container(
+                label("MAP", "docTitle") {
+                    setFontScale(0.4f)
+                    color = Color.DARK_GRAY
+                    setAlignment(Align.left)
+                }
+            ) {
+                fill()
+                size(100f, 30f)
+            }
+            addActor(text)
+            text.setPosition(160f, 140f)
+            text.isTransform = true // Enable transformations for the text actor
+            text.rotateBy(90f)
             addListener(object : ClickListener() {
                 override fun clicked(event: com.badlogic.gdx.scenes.scene2d.InputEvent?, x: Float, y: Float) {
-                    this@AssistantUI.findActor<Group>("politiciansInfoButton")?.also {
-                        this@AssistantUI.unmarkButton(it)
-                    }
-                    if (PoliticiansInfoUI.instance.isVisible) this@AssistantUI.closeAll()
+
+                    //Open Map UI
+                    if (InterfaceRoot.instance.mapUI.isVisible) this@AssistantUI.closeAll()
                     else {
-                        PoliticiansInfoUI.instance.isVisible = !PoliticiansInfoUI.instance.isVisible
-                        PoliticiansInfoUI.instance.refresh()
+                        InterfaceRoot.instance.mapUI.refresh()
+                        InterfaceRoot.instance.mapUI.isVisible = !InterfaceRoot.instance.mapUI.isVisible
                     }
                 }
             }
             )
         }
-        row()
-        table {
+        addActor(MapButton)
+        MapButton.setSize(buttonWidth, buttonHeight + 10f)
+        MapButton.setPosition(0f, 0f)
+
+        val InformationButton = scene2d.table {
             name = "InformationButton"
-            it.fill()
-            it.size(buttonWidth, buttonHeight + 10f)
             stack {
                 it.fill()
                 container(
-                    image("glass_tab") {
-                        setColor(1f, 1f, 1f, 0.4f) // Semi-transparent background
+                    image("cabinetHandle") {
                     }) {
                     size(buttonWidth, buttonHeight)
                 }
-                container(
-                    image("icon_app_140") {
-                        color = Color.BLACK
-                    }) {
-                    size(buttonWidth)
-                }
             }
+            val text = scene2d.container(
+                label("INFORMATION", "docTitle") {
+                    setFontScale(0.4f)
+                    color = Color.DARK_GRAY
+                    setAlignment(Align.left)
+                }
+            ) {
+                fill()
+                size(100f, 30f)
+            }
+            addActor(text)
+            text.setPosition(160f, 140f)
+            text.isTransform = true // Enable transformations for the text actor
+            text.rotateBy(90f)
             addListener(object : ClickListener() {
                 override fun clicked(event: com.badlogic.gdx.scenes.scene2d.InputEvent?, x: Float, y: Float) {
                     this@AssistantUI.findActor<Group>("InformationButton")?.also {
@@ -88,31 +103,38 @@ class AssistantUI(gameState: GameState) : Table(defaultSkin), KTable {
             }
             )
         }
-        row()
+        addActor(InformationButton)
+        InformationButton.setSize(buttonWidth, buttonHeight + 10f)
+        InformationButton.setPosition(buttonXGap, buttonGap)
         val calendarLabel = Label("0", defaultSkin, "trnsprtConsole").also {
             it.setFontScale(2f)
             it.color = Color.BLACK
             it.setAlignment(Align.center, Align.center)
         }
-        table {
+        val CalendarButton = scene2d.table {
             name = "CalendarButton"
-            it.fill()
-            it.size(buttonWidth, buttonHeight + 10f)
             stack {
                 it.fill()
                 container(
-                    image("glass_tab") {
-                        setColor(1f, 1f, 1f, 0.4f) // Semi-transparent background
+                    image("cabinetHandle") {
                     }) {
                     size(buttonWidth, buttonHeight)
                 }
-                container(
-                    image("icon_app_119") {
-                        color = Color.BLACK
-                    }) {
-                    size(buttonWidth)
-                }
             }
+            val text = scene2d.container(
+                label("CALENDAR", "docTitle") {
+                    setFontScale(0.4f)
+                    color = Color.DARK_GRAY
+                    setAlignment(Align.left)
+                }
+            ) {
+                fill()
+                size(100f, 30f)
+            }
+            addActor(text)
+            text.setPosition(160f, 140f)
+            text.isTransform = true // Enable transformations for the text actor
+            text.rotateBy(90f)
             addListener(object : ClickListener() {
                 override fun clicked(event: com.badlogic.gdx.scenes.scene2d.InputEvent?, x: Float, y: Float) {
                     this@AssistantUI.findActor<Group>("CalendarButton")?.also {
@@ -128,42 +150,52 @@ class AssistantUI(gameState: GameState) : Table(defaultSkin), KTable {
             }
             )
         }
+        addActor(CalendarButton)
+        CalendarButton.setSize(buttonWidth, buttonHeight + 10f)
+        CalendarButton.setPosition(2 * buttonXGap, 2 * buttonGap)
 
-        row()
-
-        table {
-            name = "MapButton"
-            it.fill()
-            it.size(buttonWidth, buttonHeight + 10f)
+        val politiciansInfoButton = scene2d.table {
+            name = "politiciansInfoButton"
             stack {
                 it.fill()
                 container(
-                    image("glass_tab") {
-                        setColor(1f, 1f, 1f, 0.4f) // Semi-transparent background
+                    image("cabinetHandle") {
                     }) {
                     size(buttonWidth, buttonHeight)
                 }
-                container(
-                    image("icon_app_195") {
-                        color = Color.BLACK
-                    }) {
-                    size(buttonWidth)
-                }
+
             }
+            val text = scene2d.container(
+                label("POLITICS", "docTitle") {
+                    setFontScale(0.4f)
+                    color = Color.DARK_GRAY
+                    setAlignment(Align.left)
+                }
+            ) {
+                fill()
+                size(100f, 30f)
+            }
+            addActor(text)
+            text.setPosition(160f, 140f)
+            text.isTransform = true // Enable transformations for the text actor
+            text.rotateBy(90f)
             addListener(object : ClickListener() {
                 override fun clicked(event: com.badlogic.gdx.scenes.scene2d.InputEvent?, x: Float, y: Float) {
-
-                    //Open Map UI
-                    if (InterfaceRoot.instance.mapUI.isVisible) this@AssistantUI.closeAll()
+                    this@AssistantUI.findActor<Group>("politiciansInfoButton")?.also {
+                        this@AssistantUI.unmarkButton(it)
+                    }
+                    if (PoliticiansInfoUI.instance.isVisible) this@AssistantUI.closeAll()
                     else {
-                        InterfaceRoot.instance.mapUI.refresh()
-                        InterfaceRoot.instance.mapUI.isVisible = !InterfaceRoot.instance.mapUI.isVisible
+                        PoliticiansInfoUI.instance.isVisible = !PoliticiansInfoUI.instance.isVisible
+                        PoliticiansInfoUI.instance.refresh()
                     }
                 }
             }
             )
         }
-
+        addActor(politiciansInfoButton)
+        politiciansInfoButton.setSize(buttonWidth, buttonHeight + 10f)
+        politiciansInfoButton.setPosition(3 * buttonXGap, 3 * buttonGap)
 
         gameState.timeChanged += { _, y ->
             Gdx.app.postRunnable {
