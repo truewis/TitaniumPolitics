@@ -7,8 +7,9 @@ import com.badlogic.gdx.utils.Align
 import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.core.ReadOnly
 import com.titaniumPolitics.game.ui.widget.WindowUI
+import ktx.scene2d.Scene2DSkin
 
-class CalendarUI(val gameState: GameState) : WindowUI("CalendarTitle") {
+class CalendarUI(val gameState: GameState) : Table(Scene2DSkin.defaultSkin) {
     private val dataTable = Table(skin)
     private val dayTable = Table(skin)
     private lateinit var scrollPane: ScrollPane
@@ -18,8 +19,9 @@ class CalendarUI(val gameState: GameState) : WindowUI("CalendarTitle") {
     init {
         scrollPane = ScrollPane(dataTable)
         scrollPane.setScrollingDisabled(true, false) // 수직 스크롤만 허용
-        content.add(dayTable).growX().padBottom(10f).row()
-        content.add(scrollPane).grow()
+        add(dayTable).growX().padBottom(10f).row()
+        add(scrollPane).grow()
+        debug()
 
         //Mark the calendar button When new meeting is scheduled within the next 5 days.
         //Also check AssistantUI for the button blinking condition.

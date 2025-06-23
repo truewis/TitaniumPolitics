@@ -56,6 +56,7 @@ class AssistantUI(gameState: GameState) : Table(defaultSkin) {
             addActor(UI)
             UI.setSize(CapsuleStage.instance.width, CapsuleStage.instance.height)
             UI.setPosition(-CapsuleStage.instance.width, 0f)
+            UI.layout()
             cabinetWindowUIs.add(UI) // Add the MapUI to the list of CabinetWindowUIs
 
             text.addListener(object : ClickListener() {
@@ -99,6 +100,7 @@ class AssistantUI(gameState: GameState) : Table(defaultSkin) {
             addActor(UI)
             UI.setSize(CapsuleStage.instance.width, CapsuleStage.instance.height)
             UI.setPosition(-CapsuleStage.instance.width, -buttonGap)
+            UI.layout()
             cabinetWindowUIs.add(UI) // Add the MapUI to the list of CabinetWindowUIs
 
             text.addListener(object : ClickListener() {
@@ -146,6 +148,7 @@ class AssistantUI(gameState: GameState) : Table(defaultSkin) {
             addActor(UI)
             UI.setSize(CapsuleStage.instance.width, CapsuleStage.instance.height)
             UI.setPosition(-CapsuleStage.instance.width, -2 * buttonGap)
+            UI.layout()
             cabinetWindowUIs.add(UI) // Add the MapUI to the list of CabinetWindowUIs
 
             text.addListener(object : ClickListener() {
@@ -190,6 +193,7 @@ class AssistantUI(gameState: GameState) : Table(defaultSkin) {
             addActor(UI)
             UI.setSize(CapsuleStage.instance.width, CapsuleStage.instance.height)
             UI.setPosition(-CapsuleStage.instance.width, -3 * buttonGap)
+            UI.layout()
             cabinetWindowUIs.add(UI) // Add the MapUI to the list of CabinetWindowUIs
 
             text.addListener(object : ClickListener() {
