@@ -4,15 +4,11 @@ import com.badlogic.gdx.scenes.scene2d.ui.Stack
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.utils.Align
 import com.titaniumPolitics.game.core.GameState
-import com.titaniumPolitics.game.ui.map.MapUI
 import com.titaniumPolitics.game.ui.map.PlaceSelectionUI
 import com.titaniumPolitics.game.ui.widget.CharacterSelectUI
 import ktx.scene2d.*
 
 class InterfaceRoot(val gameState: GameState) : Table(Scene2DSkin.defaultSkin), KTable {
-    val mapUI = MapUI(gameState = this@InterfaceRoot.gameState)
-    val calendarUI = CalendarUI(gameState)
-    val politiciansInfoUI = PoliticiansInfoUI(gameState)
     val stack: Stack
 
     init {
@@ -44,10 +40,6 @@ class InterfaceRoot(val gameState: GameState) : Table(Scene2DSkin.defaultSkin), 
                     add(CharStatusUI(this@InterfaceRoot.gameState)).align(Align.bottomRight).expandY()
                 }
             }
-            add(this@InterfaceRoot.mapUI)
-            add(this@InterfaceRoot.calendarUI)
-            add(this@InterfaceRoot.politiciansInfoUI)
-            add(InformationViewUI(this@InterfaceRoot.gameState))
             add(ResourceInfoUI())
             add(HumanResourceInfoUI())
             add(ApparatusInfoUI())

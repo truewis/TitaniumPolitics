@@ -6,13 +6,12 @@ import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.Batch
 import com.badlogic.gdx.graphics.g2d.BitmapFont
 import com.badlogic.gdx.graphics.g2d.TextureRegion
-import com.titaniumPolitics.game.ui.WindowUI
+import com.titaniumPolitics.game.ui.widget.WindowUI
 import space.earlygrey.shapedrawer.*
 import kotlin.math.abs
 
 
-class GraphScreen(private val data: HashMap<Int, Double>) : WindowUI("Graph")
-{
+class GraphScreen(private val data: HashMap<Int, Double>) : WindowUI("Graph") {
 
 
     private val font = BitmapFont()
@@ -23,8 +22,7 @@ class GraphScreen(private val data: HashMap<Int, Double>) : WindowUI("Graph")
     private var hoveredPoint: Pair<Float, Float>? = null
     private var hoveredLabel: String? = null
 
-    init
-    {
+    init {
         val pixmap = Pixmap(1, 1, Pixmap.Format.RGBA8888)
         pixmap.setColor(Color.WHITE)
         pixmap.drawPixel(0, 0)
@@ -33,10 +31,8 @@ class GraphScreen(private val data: HashMap<Int, Double>) : WindowUI("Graph")
         pixelTexture = TextureRegion(texture, 0, 0, 1, 1)
         setSize(800f, 600f)
 
-        Gdx.input.inputProcessor = object : InputAdapter()
-        {
-            override fun mouseMoved(screenX: Int, screenY: Int): Boolean
-            {
+        Gdx.input.inputProcessor = object : InputAdapter() {
+            override fun mouseMoved(screenX: Int, screenY: Int): Boolean {
                 hoveredPoint = null
                 hoveredLabel = null
 
@@ -55,8 +51,7 @@ class GraphScreen(private val data: HashMap<Int, Double>) : WindowUI("Graph")
                     val py = y.toFloat().map(minY.toFloat(), maxY.toFloat(), padding, height + padding)
 
                     val dist = 10f
-                    if (abs(screenX - px) < dist && abs(Gdx.graphics.height - screenY - py) < dist)
-                    {
+                    if (abs(screenX - px) < dist && abs(Gdx.graphics.height - screenY - py) < dist) {
                         hoveredPoint = px to py
                         hoveredLabel = "($x, ${"%.2f".format(y)})"
                     }
@@ -67,11 +62,9 @@ class GraphScreen(private val data: HashMap<Int, Double>) : WindowUI("Graph")
         }
     }
 
-    override fun draw(batch: Batch?, parentAlpha: Float)
-    {
+    override fun draw(batch: Batch?, parentAlpha: Float) {
         if (batch == null) return
-        if (!::drawer.isInitialized)
-        {
+        if (!::drawer.isInitialized) {
             drawer = ShapeDrawer(batch, pixelTexture)
         }
 
@@ -96,8 +89,7 @@ class GraphScreen(private val data: HashMap<Int, Double>) : WindowUI("Graph")
             val py = y.toFloat().map(minY.toFloat(), maxY.toFloat(), padding, height + padding)
 
             drawer.filledCircle(px, py, 4f)
-            if (prevX != null && prevY != null)
-            {
+            if (prevX != null && prevY != null) {
                 drawer.line(prevX!!, prevY!!, px, py, 2f)
             }
             prevX = px
@@ -117,15 +109,13 @@ class GraphScreen(private val data: HashMap<Int, Double>) : WindowUI("Graph")
     }
 
 
-    private fun getBounds(): Quadruple<Int, Int, Double, Double>
-    {
+    private fun getBounds(): Quadruple<Int, Int, Double, Double> {
         val xs = data.keys
         val ys = data.values
         return Quadruple(xs.minOrNull() ?: 0, xs.maxOrNull() ?: 1, ys.minOrNull() ?: 0.0, ys.maxOrNull() ?: 1.0)
     }
 
-    private fun Float.map(fromMin: Float, fromMax: Float, toMin: Float, toMax: Float): Float
-    {
+    private fun Float.map(fromMin: Float, fromMax: Float, toMin: Float, toMax: Float): Float {
         return ((this - fromMin) / (fromMax - fromMin)) * (toMax - toMin) + toMin
     }
 

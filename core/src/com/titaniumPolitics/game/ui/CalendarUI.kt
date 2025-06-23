@@ -6,6 +6,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.utils.Align
 import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.core.ReadOnly
+import com.titaniumPolitics.game.ui.widget.WindowUI
 
 class CalendarUI(val gameState: GameState) : WindowUI("CalendarTitle") {
     private val dataTable = Table(skin)
@@ -15,8 +16,6 @@ class CalendarUI(val gameState: GameState) : WindowUI("CalendarTitle") {
     val newEntries = mutableListOf<CalendarEntry>()
 
     init {
-        isVisible = false
-        instance = this
         scrollPane = ScrollPane(dataTable)
         scrollPane.setScrollingDisabled(true, false) // 수직 스크롤만 허용
         content.add(dayTable).growX().padBottom(10f).row()
@@ -153,7 +152,4 @@ class CalendarUI(val gameState: GameState) : WindowUI("CalendarTitle") {
         var hasAlerted: Boolean = false
     )
 
-    companion object {
-        lateinit var instance: CalendarUI
-    }
 }

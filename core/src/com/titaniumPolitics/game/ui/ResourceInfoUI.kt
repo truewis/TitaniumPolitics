@@ -2,22 +2,19 @@ package com.titaniumPolitics.game.ui
 
 
 import com.badlogic.gdx.scenes.scene2d.ui.*
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 
 import com.badlogic.gdx.utils.Align
 
 import com.titaniumPolitics.game.core.Information
+import com.titaniumPolitics.game.ui.widget.WindowUI
 
 import ktx.scene2d.*
-import ktx.scene2d.Scene2DSkin.defaultSkin
 
 
-class ResourceInfoUI : WindowUI("ResourceInfoTitle")
-{
+class ResourceInfoUI : WindowUI("ResourceInfoTitle") {
     private val dataTable = Table()
 
-    init
-    {
+    init {
         isVisible = false
         instance = this
         val informationPane = ScrollPane(dataTable)
@@ -27,8 +24,7 @@ class ResourceInfoUI : WindowUI("ResourceInfoTitle")
 
     }
 
-    fun refresh(information: Information)
-    {
+    fun refresh(information: Information) {
         dataTable.clear()
         dataTable.apply {
 
@@ -53,8 +49,7 @@ class ResourceInfoUI : WindowUI("ResourceInfoTitle")
 
     }
 
-    companion object
-    {
+    companion object {
         //Singleton
         lateinit var instance: ResourceInfoUI
     }

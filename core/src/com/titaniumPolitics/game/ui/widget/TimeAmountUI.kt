@@ -62,3 +62,4 @@ class TimeAmountUI(amount: Int) : Table(Scene2DSkin.defaultSkin), KTable {
     }
 
 }
+

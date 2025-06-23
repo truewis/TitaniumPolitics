@@ -11,6 +11,7 @@ import com.titaniumPolitics.game.core.MeetingAgenda
 import com.titaniumPolitics.game.core.gameActions.AddInfo
 import com.titaniumPolitics.game.core.gameActions.GameAction
 import com.titaniumPolitics.game.ui.meeting.AgendaBubbleUI
+import com.titaniumPolitics.game.ui.widget.WindowUI
 
 import ktx.scene2d.*
 

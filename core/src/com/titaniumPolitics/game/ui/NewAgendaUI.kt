@@ -13,8 +13,8 @@ import com.titaniumPolitics.game.core.*
 import com.titaniumPolitics.game.core.gameActions.*
 import com.titaniumPolitics.game.ui.widget.ActionSelectUI
 import com.titaniumPolitics.game.ui.widget.CharacterSelectButton
-import com.titaniumPolitics.game.ui.widget.CharacterSelectUI
 import com.titaniumPolitics.game.ui.widget.PlaceSelectButton
+import com.titaniumPolitics.game.ui.widget.WindowUI
 
 import ktx.scene2d.*
 import ktx.scene2d.Scene2DSkin.defaultSkin

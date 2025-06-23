@@ -3,6 +3,7 @@ package com.titaniumPolitics.game.ui.map
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.ui.Label
+import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.utils.Align
 import com.titaniumPolitics.game.core.GameEngine
 import com.titaniumPolitics.game.core.GameState
@@ -17,17 +18,23 @@ import com.titaniumPolitics.game.ui.FloatingWindowUI
 import com.titaniumPolitics.game.ui.ProgressBackgroundUI
 import com.titaniumPolitics.game.ui.WaitUIMode
 import ktx.scene2d.button
+import ktx.scene2d.image
 import ktx.scene2d.label
 import ktx.scene2d.scene2d
 import ktx.scene2d.table
 
-class PlaceMarkerWindowUI(var gameState: GameState, var owner: MapUI) : FloatingWindowUI() {
+class PlaceMarkerWindowUI(var gameState: GameState, var owner: MapUI) : Table() {
     var placeDisplayed = ""
     val distance get() = (gameState.player.place.shortestPathAndTimeTo(placeDisplayed)?.second ?: 0) * ReadOnly.dt / 60
     var mode = ""
     var interrupted = false//Only used in move mode.
     var tgtDestination = ""//Only used in move mode.
     private val onRefresh = mutableListOf<() -> Unit>()
+    val content = Table()
+    val titleLabel = scene2d.label("", "docTitle") {
+        setFontScale(1f)
+        setAlignment(Align.center)
+    }
 
     init {
         gameState.onAddInfo += this::moveInterruptCondition
@@ -51,7 +58,6 @@ class PlaceMarkerWindowUI(var gameState: GameState, var owner: MapUI) : Floating
                     )
                     action.placeTo = this@PlaceMarkerWindowUI.placeDisplayed
                     action.injectParent(this@PlaceMarkerWindowUI.gameState)
-                    this@PlaceMarkerWindowUI.owner.isVisible = false
 
                     ProgressBackgroundUI.instance.text = ReadOnly.prop("Moving")
                     ProgressBackgroundUI.instance.setVisibleWithFade(true)
@@ -69,7 +75,6 @@ class PlaceMarkerWindowUI(var gameState: GameState, var owner: MapUI) : Floating
                     )
                     action.placeTo = this@PlaceMarkerWindowUI.placeDisplayed
                     action.injectParent(this@PlaceMarkerWindowUI.gameState)
-                    this@PlaceMarkerWindowUI.owner.isVisible = false
 
                     ProgressBackgroundUI.instance.text = ReadOnly.prop("Moving")
                     ProgressBackgroundUI.instance.setVisibleWithFade(true)
@@ -89,7 +94,6 @@ class PlaceMarkerWindowUI(var gameState: GameState, var owner: MapUI) : Floating
             override fun changed(event: ChangeEvent?, actor: Actor?) {
                 //Select place.
                 PlaceSelectionUI.instance.selectedPlaceCallback(this@PlaceMarkerWindowUI.placeDisplayed)
-                this@PlaceMarkerWindowUI.owner.isVisible = false
             }
         }
         )
@@ -217,7 +221,6 @@ class PlaceMarkerWindowUI(var gameState: GameState, var owner: MapUI) : Floating
 
         } else {
             //setPosition(x + XOFFSET, y + YOFFSET)
-            isVisible = true
             if (placeName.contains("home")) this.titleLabel.setText(ReadOnly.prop("home"))
             else
                 this.titleLabel.setText(ReadOnly.prop(placeName))
@@ -241,9 +244,6 @@ class PlaceMarkerWindowUI(var gameState: GameState, var owner: MapUI) : Floating
                 add(resourceInformation).fillX().expandX()
                 row()
                 add(managementInformation).fillX().expandX()
-                row()
-
-                add(closeButton).fill().size(200f, 50f)
             }
             setSize(350f, 50f + content.prefHeight)
             //Update the resource information and management information tables.

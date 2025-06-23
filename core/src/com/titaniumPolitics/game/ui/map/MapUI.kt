@@ -1,22 +1,16 @@
 package com.titaniumPolitics.game.ui.map
 
-import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Color
-import com.badlogic.gdx.scenes.scene2d.Actor
-import com.badlogic.gdx.scenes.scene2d.Group
-import com.badlogic.gdx.scenes.scene2d.actions.Actions
-import com.badlogic.gdx.scenes.scene2d.actions.AlphaAction
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
-import com.badlogic.gdx.utils.Align
 import com.titaniumPolitics.game.core.GameState
-import com.titaniumPolitics.game.ui.CapsuleStage
 import com.titaniumPolitics.game.ui.QuestUI
-import com.titaniumPolitics.game.ui.WindowUI
+import com.titaniumPolitics.game.ui.widget.WindowUI
 import ktx.scene2d.*
+import ktx.scene2d.Scene2DSkin.defaultSkin
 
-open class MapUI(val gameState: GameState) : WindowUI("MapTitle") {
+open class MapUI(val gameState: GameState) : Table(defaultSkin) {
     val currentConnections = arrayListOf<Connection>()
     val currentMarkers = arrayListOf<PlaceMarker>()
     val currentPlaceMarkerWindow = PlaceMarkerWindowUI(gameState, this)
@@ -32,10 +26,10 @@ open class MapUI(val gameState: GameState) : WindowUI("MapTitle") {
 
 
     init {
-        isVisible = false
+        println(this::class.java.simpleName + " initialized.")
         scrollPane = ScrollPane(dataTable)
         scrollPane.setScrollingDisabled(false, false)
-        content.add(scrollPane).grow()
+        add(scrollPane).grow()
 
 
         val st = scene2d.stack {
@@ -53,7 +47,7 @@ open class MapUI(val gameState: GameState) : WindowUI("MapTitle") {
         dataTable.addActor(st)
         st.setPosition(PADDING, PADDING)
         currentPlaceMarkerWindow.isVisible = true
-        content.add(currentPlaceMarkerWindow).growY().fill().width(500f)
+        add(currentPlaceMarkerWindow).growY().fill().width(400f)
         dataTable.add().grow()
 
 

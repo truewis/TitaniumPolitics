@@ -12,8 +12,8 @@ import com.titaniumPolitics.game.core.Resources
 import com.titaniumPolitics.game.core.gameActions.GameAction
 import com.titaniumPolitics.game.core.gameActions.OfficialResourceTransfer
 import com.titaniumPolitics.game.core.gameActions.UnofficialResourceTransfer
-import com.titaniumPolitics.game.ui.map.PlaceSelectionUI
 import com.titaniumPolitics.game.ui.widget.PlaceSelectButton
+import com.titaniumPolitics.game.ui.widget.WindowUI
 
 import ktx.scene2d.*
 

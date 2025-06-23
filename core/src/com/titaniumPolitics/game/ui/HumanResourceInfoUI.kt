@@ -2,17 +2,17 @@ package com.titaniumPolitics.game.ui
 
 
 import com.badlogic.gdx.scenes.scene2d.ui.*
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 
 import com.badlogic.gdx.utils.Align
 
 import com.titaniumPolitics.game.core.Place
+import com.titaniumPolitics.game.ui.widget.WindowUI
 
 import ktx.scene2d.*
 import ktx.scene2d.Scene2DSkin.defaultSkin
 
 //Human Resource Management is currently done without information. The report is instant.
-class HumanResourceInfoUI : WindowUI("HumanResourcesInfoTitle") {
+class HumanResourceInfoUI : Table(defaultSkin) {
     private val dataTable = Table()
 
     init {
@@ -20,7 +20,7 @@ class HumanResourceInfoUI : WindowUI("HumanResourcesInfoTitle") {
         instance = this
         val informationPane = ScrollPane(dataTable)
         informationPane.setScrollingDisabled(false, false)
-        content.add(informationPane).grow()
+        add(informationPane).grow()
 
 
     }
@@ -29,16 +29,16 @@ class HumanResourceInfoUI : WindowUI("HumanResourcesInfoTitle") {
         dataTable.clear()
         dataTable.apply {
 
-            add(label("Report Time: $reportTime") { setAlignment(Align.center) })
+            add(scene2d.label("Report Time: $reportTime") { setAlignment(Align.center) })
 
             row()
-            add(label("Work Hours: ${place.workHoursStart} - ${place.workHoursEnd}") { setAlignment(Align.center) })
+            add(scene2d.label("Work Hours: ${place.workHoursStart} - ${place.workHoursEnd}") { setAlignment(Align.center) })
             row()
-            add(label("Planned Workers: ${place.plannedWorker}") { setAlignment(Align.center) })
+            add(scene2d.label("Planned Workers: ${place.plannedWorker}") { setAlignment(Align.center) })
             row()
-            add(label("Current Workers: ${place.currentWorker}") { setAlignment(Align.center) })
+            add(scene2d.label("Current Workers: ${place.currentWorker}") { setAlignment(Align.center) })
             row()
-            add(label("Ideal Workers: ${place.apparatuses.sumOf { it.idealWorker }}") { setAlignment(Align.center) })
+            add(scene2d.label("Ideal Workers: ${place.apparatuses.sumOf { it.idealWorker }}") { setAlignment(Align.center) })
         }
 
     }

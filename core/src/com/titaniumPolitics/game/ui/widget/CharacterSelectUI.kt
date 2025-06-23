@@ -3,13 +3,10 @@ package com.titaniumPolitics.game.ui.widget
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.scenes.scene2d.InputEvent
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane
-import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.badlogic.gdx.utils.Align
 import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.core.ReadOnly
-import com.titaniumPolitics.game.ui.WindowUI
-import com.titaniumPolitics.game.ui.map.PlaceSelectionUI
 import ktx.scene2d.KTable
 import ktx.scene2d.Scene2DSkin
 import ktx.scene2d.button

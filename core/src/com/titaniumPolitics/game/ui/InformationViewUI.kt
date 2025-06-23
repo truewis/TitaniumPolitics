@@ -6,7 +6,7 @@ import com.badlogic.gdx.utils.Align
 import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.core.Information
 import com.titaniumPolitics.game.core.InformationType
-import com.titaniumPolitics.game.core.ReadOnly
+import com.titaniumPolitics.game.ui.widget.WindowUI
 import ktx.scene2d.*
 import ktx.scene2d.Scene2DSkin.defaultSkin
 
@@ -14,7 +14,7 @@ enum class InformationViewMode {
     SIMPLE, SELECT
 }
 
-class InformationViewUI(var gameState: GameState) : WindowUI("InformationViewTitle") {
+class InformationViewUI(var gameState: GameState) : Table(defaultSkin) {
     private val informationTable = Table()
     private var mode = InformationViewMode.SIMPLE
 
@@ -56,15 +56,14 @@ class InformationViewUI(var gameState: GameState) : WindowUI("InformationViewTit
     }
 
     init {
-        isVisible = false
         instance = this
         val informationPane = ScrollPane(informationTable)
         informationPane.setScrollingDisabled(false, false)
-        content.add(toggleButton).align(Align.right).pad(10f).size(200f, 50f)
-        content.row()
-        content.add(informationPane).grow().pad(100f)
-        content.row()
-        content.add(submitButton).align(Align.right).size(200f, 50f)
+        add(toggleButton).align(Align.right).pad(10f).size(200f, 50f)
+        row()
+        add(informationPane).grow().pad(100f)
+        row()
+        add(submitButton).align(Align.right).size(400f, 75f)
         //Add a toggle button to show/hide the simple information view.
 
     }
@@ -306,7 +305,7 @@ class InformationViewUI(var gameState: GameState) : WindowUI("InformationViewTit
     }
 
     companion object {
-        lateinit var instance: InformationViewUI
+        lateinit var instance: InformationViewUI//TODO: remove this singleton pattern, use dependency injection instead.
     }
 
 }

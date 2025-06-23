@@ -10,12 +10,16 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.badlogic.gdx.utils.Align
 import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.core.ReadOnly
+import com.titaniumPolitics.game.ui.map.MapUI
 import com.titaniumPolitics.game.ui.map.PlaceSelectionUI
+import com.titaniumPolitics.game.ui.widget.CabinetWindowUI
 import com.titaniumPolitics.game.ui.widget.CharacterSelectUI
 import ktx.scene2d.*
 import ktx.scene2d.Scene2DSkin.defaultSkin
 
 class AssistantUI(gameState: GameState) : Table(defaultSkin) {
+
+    val cabinetWindowUIs = mutableListOf<CabinetWindowUI>()
 
     init {
         val buttonWidth = 180f
@@ -29,7 +33,7 @@ class AssistantUI(gameState: GameState) : Table(defaultSkin) {
             stack {
                 it.fill()
                 container(
-                    image("cabinetHandle") {
+                    image("cabinetHandleLight2") {
                     }) {
                     size(buttonWidth, buttonHeight)
                 }
@@ -48,15 +52,17 @@ class AssistantUI(gameState: GameState) : Table(defaultSkin) {
             text.setPosition(160f, 140f)
             text.isTransform = true // Enable transformations for the text actor
             text.rotateBy(90f)
-            addListener(object : ClickListener() {
+            val UI = CabinetWindowUI(this@table, MapUI(gameState), 0f)
+            addActor(UI)
+            UI.setSize(CapsuleStage.instance.width, CapsuleStage.instance.height)
+            UI.setPosition(-CapsuleStage.instance.width, 0f)
+            cabinetWindowUIs.add(UI) // Add the MapUI to the list of CabinetWindowUIs
+
+            text.addListener(object : ClickListener() {
                 override fun clicked(event: com.badlogic.gdx.scenes.scene2d.InputEvent?, x: Float, y: Float) {
 
                     //Open Map UI
-                    if (InterfaceRoot.instance.mapUI.isVisible) this@AssistantUI.closeAll()
-                    else {
-                        InterfaceRoot.instance.mapUI.refresh()
-                        InterfaceRoot.instance.mapUI.isVisible = !InterfaceRoot.instance.mapUI.isVisible
-                    }
+                    UI.changeOpenState(!UI.isOpen)
                 }
             }
             )
@@ -70,7 +76,7 @@ class AssistantUI(gameState: GameState) : Table(defaultSkin) {
             stack {
                 it.fill()
                 container(
-                    image("cabinetHandle") {
+                    image("cabinetHandleLight2") {
                     }) {
                     size(buttonWidth, buttonHeight)
                 }
@@ -89,16 +95,17 @@ class AssistantUI(gameState: GameState) : Table(defaultSkin) {
             text.setPosition(160f, 140f)
             text.isTransform = true // Enable transformations for the text actor
             text.rotateBy(90f)
-            addListener(object : ClickListener() {
+            val UI = CabinetWindowUI(this@table, InformationViewUI(gameState), buttonXGap)
+            addActor(UI)
+            UI.setSize(CapsuleStage.instance.width, CapsuleStage.instance.height)
+            UI.setPosition(-CapsuleStage.instance.width, -buttonGap)
+            cabinetWindowUIs.add(UI) // Add the MapUI to the list of CabinetWindowUIs
+
+            text.addListener(object : ClickListener() {
                 override fun clicked(event: com.badlogic.gdx.scenes.scene2d.InputEvent?, x: Float, y: Float) {
-                    this@AssistantUI.findActor<Group>("InformationButton")?.also {
-                        this@AssistantUI.unmarkButton(it)
-                    }
-                    if (InformationViewUI.instance.isVisible) this@AssistantUI.closeAll()
-                    else {
-                        InformationViewUI.instance.isVisible = !InformationViewUI.instance.isVisible
-                        InformationViewUI.instance.refresh("creationTime")
-                    }
+
+                    //Open Map UI
+                    UI.changeOpenState(!UI.isOpen)
                 }
             }
             )
@@ -116,7 +123,7 @@ class AssistantUI(gameState: GameState) : Table(defaultSkin) {
             stack {
                 it.fill()
                 container(
-                    image("cabinetHandle") {
+                    image("cabinetHandleLight2") {
                     }) {
                     size(buttonWidth, buttonHeight)
                 }
@@ -135,17 +142,17 @@ class AssistantUI(gameState: GameState) : Table(defaultSkin) {
             text.setPosition(160f, 140f)
             text.isTransform = true // Enable transformations for the text actor
             text.rotateBy(90f)
-            addListener(object : ClickListener() {
+            val UI = CabinetWindowUI(this@table, CalendarUI(gameState), 2 * buttonXGap)
+            addActor(UI)
+            UI.setSize(CapsuleStage.instance.width, CapsuleStage.instance.height)
+            UI.setPosition(-CapsuleStage.instance.width, -2 * buttonGap)
+            cabinetWindowUIs.add(UI) // Add the MapUI to the list of CabinetWindowUIs
+
+            text.addListener(object : ClickListener() {
                 override fun clicked(event: com.badlogic.gdx.scenes.scene2d.InputEvent?, x: Float, y: Float) {
-                    this@AssistantUI.findActor<Group>("CalendarButton")?.also {
-                        this@AssistantUI.unmarkButton(it)
-                    }
-                    //Open Calendar UI
-                    if (InterfaceRoot.instance.calendarUI.isVisible) this@AssistantUI.closeAll()
-                    else {
-                        InterfaceRoot.instance.calendarUI.refresh()
-                        InterfaceRoot.instance.calendarUI.isVisible = !InterfaceRoot.instance.calendarUI.isVisible
-                    }
+
+                    //Open Map UI
+                    UI.changeOpenState(!UI.isOpen)
                 }
             }
             )
@@ -159,7 +166,7 @@ class AssistantUI(gameState: GameState) : Table(defaultSkin) {
             stack {
                 it.fill()
                 container(
-                    image("cabinetHandle") {
+                    image("cabinetHandleLight2") {
                     }) {
                     size(buttonWidth, buttonHeight)
                 }
@@ -179,16 +186,17 @@ class AssistantUI(gameState: GameState) : Table(defaultSkin) {
             text.setPosition(160f, 140f)
             text.isTransform = true // Enable transformations for the text actor
             text.rotateBy(90f)
-            addListener(object : ClickListener() {
+            val UI = CabinetWindowUI(this@table, PoliticiansInfoUI(gameState), 3 * buttonXGap)
+            addActor(UI)
+            UI.setSize(CapsuleStage.instance.width, CapsuleStage.instance.height)
+            UI.setPosition(-CapsuleStage.instance.width, -3 * buttonGap)
+            cabinetWindowUIs.add(UI) // Add the MapUI to the list of CabinetWindowUIs
+
+            text.addListener(object : ClickListener() {
                 override fun clicked(event: com.badlogic.gdx.scenes.scene2d.InputEvent?, x: Float, y: Float) {
-                    this@AssistantUI.findActor<Group>("politiciansInfoButton")?.also {
-                        this@AssistantUI.unmarkButton(it)
-                    }
-                    if (PoliticiansInfoUI.instance.isVisible) this@AssistantUI.closeAll()
-                    else {
-                        PoliticiansInfoUI.instance.isVisible = !PoliticiansInfoUI.instance.isVisible
-                        PoliticiansInfoUI.instance.refresh()
-                    }
+
+                    //Open Map UI
+                    UI.changeOpenState(!UI.isOpen)
                 }
             }
             )
@@ -264,20 +272,6 @@ class AssistantUI(gameState: GameState) : Table(defaultSkin) {
         actor.clearActions()
         actor.findActor<Actor>("GreenMarker_${actor.name}")?.remove() //Remove the marker if it exists.
 
-    }
-
-    fun closeAll() {
-        InformationViewUI.instance.isVisible = false
-        InterfaceRoot.instance.mapUI.isVisible = false
-        InterfaceRoot.instance.calendarUI.isVisible = false
-        InterfaceRoot.instance.politiciansInfoUI.isVisible = false
-        PlaceSelectionUI.instance.isVisible = false
-        CharacterSelectUI.instance.isVisible = false
-        ResourceInfoUI.instance.isVisible = false
-        ApparatusInfoUI.instance.isVisible = false
-        HumanResourceInfoUI.instance.isVisible = false
-        ResourceTransferUI.primary.isVisible = false
-        NewAgendaUI.primary.isVisible = false
     }
 
 

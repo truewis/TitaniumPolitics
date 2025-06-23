@@ -1,20 +1,21 @@
-package com.titaniumPolitics.game.ui
-
+package com.titaniumPolitics.game.ui.widget
 
 import com.badlogic.gdx.graphics.Color
-import com.badlogic.gdx.scenes.scene2d.ui.*
+import com.badlogic.gdx.scenes.scene2d.InputEvent
+import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
-
 import com.badlogic.gdx.utils.Align
-
-import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.core.ReadOnly
+import ktx.scene2d.KTable
+import ktx.scene2d.Scene2DSkin
+import ktx.scene2d.button
+import ktx.scene2d.image
+import ktx.scene2d.label
+import ktx.scene2d.scene2d
+import ktx.scene2d.stack
+import ktx.scene2d.table
 
-import ktx.scene2d.*
-import ktx.scene2d.Scene2DSkin.defaultSkin
-
-
-open class WindowUI(titleKey: String) : Table(defaultSkin), KTable {
+open class WindowUI(titleKey: String) : Table(Scene2DSkin.defaultSkin), KTable {
     val titleLabel = scene2d.label(ReadOnly.prop(titleKey), "docTitle") {
         setFontScale(1f)
         setAlignment(Align.center)
@@ -36,7 +37,7 @@ open class WindowUI(titleKey: String) : Table(defaultSkin), KTable {
                     it.size(70f)
                     image("XGrunge")
                     addListener(object : ClickListener() {
-                        override fun clicked(event: com.badlogic.gdx.scenes.scene2d.InputEvent?, x: Float, y: Float) {
+                        override fun clicked(event: InputEvent?, x: Float, y: Float) {
                             this@WindowUI.onClose.forEach { it() }
                             this@WindowUI.isVisible = false
                         }

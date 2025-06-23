@@ -88,7 +88,8 @@ class CapsuleStage(val gameState: GameState) : Stage(FitViewport(1920F, 1080F)) 
     }
 
     fun playMusic() {
-        val music = Gdx.audio.newMusic(Gdx.files.internal("data/Capsule_old_lighthouse_loop.mp3"))
+        //val music = Gdx.audio.newMusic(Gdx.files.internal("data/Capsule_old_lighthouse_loop.mp3"))
+        val music = Gdx.audio.newMusic(Gdx.files.internal("data/TheAlters1.mp3"))
         music.isLooping = true
         music.play()
     }

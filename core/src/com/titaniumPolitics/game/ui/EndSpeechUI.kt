@@ -2,24 +2,16 @@ package com.titaniumPolitics.game.ui
 
 
 import com.badlogic.gdx.scenes.scene2d.InputEvent
-import com.badlogic.gdx.scenes.scene2d.ui.*
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 
 import com.badlogic.gdx.utils.Align
-import com.titaniumPolitics.game.core.GameEngine
 import com.titaniumPolitics.game.core.GameState
-import com.titaniumPolitics.game.core.Resources
-import com.titaniumPolitics.game.core.gameActions.AddInfo
 import com.titaniumPolitics.game.core.gameActions.EndSpeech
 import com.titaniumPolitics.game.core.gameActions.GameAction
-import com.titaniumPolitics.game.core.gameActions.OfficialResourceTransfer
-import com.titaniumPolitics.game.core.gameActions.UnofficialResourceTransfer
-import com.titaniumPolitics.game.ui.map.PlaceSelectionUI
 import com.titaniumPolitics.game.ui.widget.CharacterSelectButton
-import com.titaniumPolitics.game.ui.widget.PlaceSelectButton
+import com.titaniumPolitics.game.ui.widget.WindowUI
 
 import ktx.scene2d.*
-import ktx.scene2d.Scene2DSkin.defaultSkin
 
 
 class EndSpeechUI(val gameState: GameState, override var actionCallback: (GameAction) -> Unit) :

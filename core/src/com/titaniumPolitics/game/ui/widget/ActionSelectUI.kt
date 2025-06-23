@@ -13,7 +13,6 @@ import com.titaniumPolitics.game.ui.ActionUI
 import com.titaniumPolitics.game.ui.ExamineUI
 import com.titaniumPolitics.game.ui.NewAgendaUI
 import com.titaniumPolitics.game.ui.ResourceTransferUI
-import com.titaniumPolitics.game.ui.WindowUI
 import ktx.scene2d.KTable
 import ktx.scene2d.Scene2DSkin
 import ktx.scene2d.button
