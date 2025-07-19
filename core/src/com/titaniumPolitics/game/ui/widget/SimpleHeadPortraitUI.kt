@@ -44,7 +44,7 @@ class SimpleHeadPortraitUI(character: String, scale: Float, interactable: Boolea
             try {
                 portrait.drawable = TextureRegionDrawable(
                     CapsuleStage.Companion.instance.assetManager.get( //TODO: Temporary solution for portrait image loading. PortraitUI does not have a stage.
-                        ReadOnly.charJson[tgtCharacter]!!.jsonObject["image"]!!.jsonPrimitive.content,
+                        "portraits/${field}Head.png",
                         Texture::class.java
                     )!!
                 )
