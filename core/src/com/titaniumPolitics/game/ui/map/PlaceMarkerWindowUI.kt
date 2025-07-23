@@ -37,6 +37,7 @@ class PlaceMarkerWindowUI(var gameState: GameState, var owner: MapUI) : Table() 
     }
 
     init {
+        add(content).grow()
         gameState.onAddInfo += this::moveInterruptCondition
     }
 
@@ -215,39 +216,33 @@ class PlaceMarkerWindowUI(var gameState: GameState, var owner: MapUI) : Table() 
     }
 
     fun refresh(x: Float, y: Float, placeName: String) {
-        //If the window is already visible, hide it.
-        if (placeDisplayed == placeName && isVisible) {
-            placeDisplayed = ""
+        //setPosition(x + XOFFSET, y + YOFFSET)
+        if (placeName.contains("home")) this.titleLabel.setText(ReadOnly.prop("home"))
+        else
+            this.titleLabel.setText(ReadOnly.prop(placeName))
+        placeDisplayed = placeName
 
-        } else {
-            //setPosition(x + XOFFSET, y + YOFFSET)
-            if (placeName.contains("home")) this.titleLabel.setText(ReadOnly.prop("home"))
-            else
-                this.titleLabel.setText(ReadOnly.prop(placeName))
-            placeDisplayed = placeName
-
-            //Clear the list of any previous buttons.
-            content.apply {
-                clear()
-                //If place selection mode is active, add the selection button and nothing else.
-                if (mode == "PlaceSelection") {
-                    add(selectButton).size(200f, 50f).fill()
-                    row()
-                } else {
-                    moveLabel.setText("Move to Place: ${distance}min")
-                    //Disable the button if the player is already in the place. Calling place property will throw an exception when the game is first loaded.
-                    if (gameState.characters[gameState.playerName]!!.place.name != placeDisplayed) {
-                        add(moveButton).size(200f, 50f).fill()
-                        row()
-                    }
-                }
-                add(resourceInformation).fillX().expandX()
+        //Clear the list of any previous buttons.
+        content.apply {
+            clear()
+            //If place selection mode is active, add the selection button and nothing else.
+            if (mode == "PlaceSelection") {
+                add(selectButton).size(200f, 50f).fill()
                 row()
-                add(managementInformation).fillX().expandX()
+            } else {
+                moveLabel.setText("Move to Place: ${distance}min")
+                //Disable the button if the player is already in the place. Calling place property will throw an exception when the game is first loaded.
+                if (gameState.characters[gameState.playerName]!!.place.name != placeDisplayed) {
+                    add(moveButton).size(200f, 50f).fill()
+                    row()
+                }
             }
-            setSize(350f, 50f + content.prefHeight)
-            //Update the resource information and management information tables.
-            onRefresh.forEach { it() }
+            add(resourceInformation).fillX().expandX()
+            row()
+            add(managementInformation).fillX().expandX()
         }
+        setSize(350f, 50f + content.prefHeight)
+        //Update the resource information and management information tables.
+        onRefresh.forEach { it() }
     }
 }
