@@ -8,6 +8,7 @@ import com.badlogic.gdx.utils.Align
 import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.core.gameActions.EndSpeech
 import com.titaniumPolitics.game.core.gameActions.GameAction
+import com.titaniumPolitics.game.ui.widget.ActionSheetUI
 import com.titaniumPolitics.game.ui.widget.CharacterSelectButton
 import com.titaniumPolitics.game.ui.widget.WindowUI
 
@@ -15,7 +16,7 @@ import ktx.scene2d.*
 
 
 class EndSpeechUI(val gameState: GameState, override var actionCallback: (GameAction) -> Unit) :
-    WindowUI("EndSpeechTitle"), ActionUI {
+    ActionSheetUI("EndSpeechTitle"), ActionUI {
     private var subject = gameState.playerName
     private val sbjChar = gameState.characters[subject]!!
     private val charSelector = CharacterSelectButton(skin, { nextSpeaker = it })

@@ -11,13 +11,14 @@ import com.titaniumPolitics.game.core.MeetingAgenda
 import com.titaniumPolitics.game.core.gameActions.AddInfo
 import com.titaniumPolitics.game.core.gameActions.GameAction
 import com.titaniumPolitics.game.ui.meeting.AgendaBubbleUI
+import com.titaniumPolitics.game.ui.widget.ActionSheetUI
 import com.titaniumPolitics.game.ui.widget.WindowUI
 
 import ktx.scene2d.*
 
 
 class AddInfoUI(val gameState: GameState, override var actionCallback: (GameAction) -> Unit) :
-    WindowUI("AddInfoTitle"), ActionUI {
+    ActionSheetUI("AddInfoTitle"), ActionUI {
     private val dataTable = Table()
     private var targetTable = Table()
     private var agendaTable = scene2d.buttonGroup(1, 1)

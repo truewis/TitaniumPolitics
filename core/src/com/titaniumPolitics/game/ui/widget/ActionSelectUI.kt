@@ -61,7 +61,7 @@ class ActionSelectUI(var gameState: GameState, override var actionCallback: (Gam
     fun refreshList(actionUIList: List<String>) {
         docList.clear()
         actionUIList.forEach { tobj ->
-            val table: WindowUI = when (tobj) {
+            val table: ActionSheetUI = when (tobj) {
                 "NewAgenda" -> NewAgendaUI(gameState, actionCallback)
                 "OfficialResourceTransfer" -> ResourceTransferUI(gameState, actionCallback)
                 "UnofficialResourceTransfer" -> ResourceTransferUI(gameState, actionCallback).also {

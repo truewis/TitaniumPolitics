@@ -12,6 +12,7 @@ import com.badlogic.gdx.utils.Align
 import com.titaniumPolitics.game.core.*
 import com.titaniumPolitics.game.core.gameActions.*
 import com.titaniumPolitics.game.ui.widget.ActionSelectUI
+import com.titaniumPolitics.game.ui.widget.ActionSheetUI
 import com.titaniumPolitics.game.ui.widget.CharacterSelectButton
 import com.titaniumPolitics.game.ui.widget.PlaceSelectButton
 import com.titaniumPolitics.game.ui.widget.WindowUI
@@ -21,7 +22,7 @@ import ktx.scene2d.Scene2DSkin.defaultSkin
 import ktx.scene2d.buttonGroup
 
 
-class NewAgendaUI(gameState: GameState, override var actionCallback: (GameAction) -> Unit) : WindowUI("NewAgendaTitle"),
+class NewAgendaUI(gameState: GameState, override var actionCallback: (GameAction) -> Unit) : ActionSheetUI("NewAgendaTitle"),
     ActionUI {
     private var subject = gameState.playerName
     val sbjObject = gameState.characters[subject]!!

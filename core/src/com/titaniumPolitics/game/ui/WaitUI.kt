@@ -14,6 +14,7 @@ import com.titaniumPolitics.game.core.ReadOnly
 import com.titaniumPolitics.game.core.gameActions.GameAction
 import com.titaniumPolitics.game.core.gameActions.Sleep
 import com.titaniumPolitics.game.core.gameActions.Wait
+import com.titaniumPolitics.game.ui.widget.ActionSheetUI
 import com.titaniumPolitics.game.ui.widget.WindowUI
 
 import ktx.scene2d.*
@@ -23,7 +24,7 @@ enum class WaitUIMode {
 }
 
 class WaitUI(val gameState: GameState, override var actionCallback: (GameAction) -> Unit) :
-    WindowUI("EndSpeechTitle"), ActionUI {
+    ActionSheetUI("EndSpeechTitle"), ActionUI {
     private var subject = gameState.playerName
     private val sbjChar = gameState.characters[subject]!!
     var interrupted = false

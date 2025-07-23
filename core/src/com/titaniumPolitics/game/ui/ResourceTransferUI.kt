@@ -12,6 +12,7 @@ import com.titaniumPolitics.game.core.Resources
 import com.titaniumPolitics.game.core.gameActions.GameAction
 import com.titaniumPolitics.game.core.gameActions.OfficialResourceTransfer
 import com.titaniumPolitics.game.core.gameActions.UnofficialResourceTransfer
+import com.titaniumPolitics.game.ui.widget.ActionSheetUI
 import com.titaniumPolitics.game.ui.widget.PlaceSelectButton
 import com.titaniumPolitics.game.ui.widget.WindowUI
 
@@ -19,7 +20,7 @@ import ktx.scene2d.*
 
 
 class ResourceTransferUI(gameState: GameState, override var actionCallback: (GameAction) -> Unit) :
-    WindowUI("ResourceTransferTitle"), ActionUI {
+    ActionSheetUI("ResourceTransferTitle"), ActionUI {
     private val dataTable = Table()
     private val targetTable = Table()
 
