@@ -52,7 +52,8 @@ class AssistantUI(gameState: GameState) : Table(defaultSkin) {
             text.setPosition(160f, 140f)
             text.isTransform = true // Enable transformations for the text actor
             text.rotateBy(90f)
-            val UI = CabinetWindowUI(this@table, MapUI(gameState), 0f)
+            val map =  MapUI(gameState)
+            val UI = CabinetWindowUI(this@table, map, 0f, {map.refresh()})
             addActor(UI)
             UI.setSize(CapsuleStage.instance.width, CapsuleStage.instance.height)
             UI.setPosition(-CapsuleStage.instance.width, 0f)

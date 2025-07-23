@@ -19,7 +19,7 @@ import ktx.scene2d.scene2d
 import ktx.scene2d.stack
 import ktx.scene2d.table
 
-open class CabinetWindowUI(val parentActor: Group, val content: Actor, val xOffset: Float) :
+open class CabinetWindowUI(val parentActor: Group, val content: Actor, val xOffset: Float, val openAction : () -> Unit = {}) :
     Table(Scene2DSkin.defaultSkin), KTable {
     val onClose = ArrayList<() -> Unit>()
     var isOpen = false
@@ -63,6 +63,7 @@ open class CabinetWindowUI(val parentActor: Group, val content: Actor, val xOffs
         parentActor.actions.clear()
         otherCabinets.forEach { it.actions.clear() } // Close other cabinets
         if (open) {
+            openAction() // Call the open action if provided
             parentActor.addAction(
                 Actions.moveTo(
                     stage.width, //When open, move to the right side of the screen. It should not depend on the parent actor's x offset.
