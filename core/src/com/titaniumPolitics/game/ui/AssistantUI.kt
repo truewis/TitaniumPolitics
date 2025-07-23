@@ -97,7 +97,8 @@ class AssistantUI(gameState: GameState) : Table(defaultSkin) {
             text.setPosition(160f, 140f)
             text.isTransform = true // Enable transformations for the text actor
             text.rotateBy(90f)
-            val UI = CabinetWindowUI(this@table, InformationViewUI(gameState), buttonXGap)
+            val infoUI = InformationViewUI(gameState)
+            val UI = CabinetWindowUI(this@table, infoUI, buttonXGap, {infoUI.refresh("name")})
             addActor(UI)
             UI.setSize(CapsuleStage.instance.width, CapsuleStage.instance.height)
             UI.setPosition(-CapsuleStage.instance.width, -buttonGap)
@@ -145,7 +146,8 @@ class AssistantUI(gameState: GameState) : Table(defaultSkin) {
             text.setPosition(160f, 140f)
             text.isTransform = true // Enable transformations for the text actor
             text.rotateBy(90f)
-            val UI = CabinetWindowUI(this@table, CalendarUI(gameState), 2 * buttonXGap)
+            val calUI = CalendarUI(gameState)
+            val UI = CabinetWindowUI(this@table, calUI, 2 * buttonXGap, {calUI.refresh()})
             addActor(UI)
             UI.setSize(CapsuleStage.instance.width, CapsuleStage.instance.height)
             UI.setPosition(-CapsuleStage.instance.width, -2 * buttonGap)
@@ -190,7 +192,8 @@ class AssistantUI(gameState: GameState) : Table(defaultSkin) {
             text.setPosition(160f, 140f)
             text.isTransform = true // Enable transformations for the text actor
             text.rotateBy(90f)
-            val UI = CabinetWindowUI(this@table, PoliticiansInfoUI(gameState), 3 * buttonXGap)
+            val polUI = PoliticiansInfoUI(gameState)
+            val UI = CabinetWindowUI(this@table, polUI, 3 * buttonXGap, {polUI.refresh()})
             addActor(UI)
             UI.setSize(CapsuleStage.instance.width, CapsuleStage.instance.height)
             UI.setPosition(-CapsuleStage.instance.width, -3 * buttonGap)

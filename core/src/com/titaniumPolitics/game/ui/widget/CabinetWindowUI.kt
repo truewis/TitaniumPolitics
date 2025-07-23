@@ -48,7 +48,6 @@ open class CabinetWindowUI(val parentActor: Group, val content: Actor, val xOffs
 
                 row()
                 add(this@CabinetWindowUI.content).colspan(2).grow()
-                debug()
             }
         }
 
