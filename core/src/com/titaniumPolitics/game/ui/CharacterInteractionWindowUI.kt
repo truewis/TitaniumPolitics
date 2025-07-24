@@ -47,13 +47,15 @@ class CharacterInteractionWindowUI(var gameState: GameState) :
             override fun clicked(event: com.badlogic.gdx.scenes.scene2d.InputEvent?, x: Float, y: Float)
             {
                 this@CharacterInteractionWindowUI.isVisible = false
-                ResourceTransferUI.primary.isVisible = true
-                ResourceTransferUI.primary.toWhere = "home_${this@CharacterInteractionWindowUI.characterDisplayed}"
-                ResourceTransferUI.primary.refresh(
+                val resUI = ResourceTransferUI(this@CharacterInteractionWindowUI.gameState, GameEngine.acquireCallback)
+                resUI.toWhere = "home_${this@CharacterInteractionWindowUI.characterDisplayed}"
+                resUI.refresh(
                     "private",
                     GameEngine.acquireCallback,
                     this@CharacterInteractionWindowUI.gameState.player.resources.toHashMap()
                 )
+                InterfaceRoot.instance.actions.setActionSheet(resUI)
+
             }
         })
     }

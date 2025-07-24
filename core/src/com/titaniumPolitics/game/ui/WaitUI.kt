@@ -23,7 +23,7 @@ enum class WaitUIMode {
     WAIT, SLEEP
 }
 
-class WaitUI(val gameState: GameState, override var actionCallback: (GameAction) -> Unit) :
+class WaitUI(val gameState: GameState, override var actionCallback: (GameAction) -> Unit = {}) :
     ActionSheetUI("EndSpeechTitle"), ActionUI {
     private var subject = gameState.playerName
     private val sbjChar = gameState.characters[subject]!!
@@ -34,7 +34,6 @@ class WaitUI(val gameState: GameState, override var actionCallback: (GameAction)
     }
 
     init {
-        isVisible = false
         gameState.onAddInfo += this::waitInterruptCondition
         val st = stack {
             it.grow()
@@ -58,7 +57,7 @@ class WaitUI(val gameState: GameState, override var actionCallback: (GameAction)
                                 ProgressBackgroundUI.instance.text = ReadOnly.prop("Waiting")
                             }
                             ProgressBackgroundUI.instance.setVisibleWithFade(true)
-                            this@WaitUI.isVisible = false
+                            this@WaitUI.onClose.forEach { it() }
                         }
                     })
                 }
@@ -152,10 +151,6 @@ class WaitUI(val gameState: GameState, override var actionCallback: (GameAction)
 
     override fun changeSubject(charName: String) {
         subject = charName
-    }
-
-    companion object {
-        lateinit var primary: WaitUI
     }
 
 

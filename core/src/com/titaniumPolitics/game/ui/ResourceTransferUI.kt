@@ -74,13 +74,12 @@ class ResourceTransferUI(gameState: GameState, override var actionCallback: (Gam
                         }
                     )
                 }
-                this@ResourceTransferUI.isVisible = false
+                this@ResourceTransferUI.onClose.forEach { it() }
             }
         })
     }
 
     init {
-        isVisible = false
         val currentResourcePane = ScrollPane(dataTable)
         currentResourcePane.setScrollingDisabled(false, false)
 
@@ -113,7 +112,7 @@ class ResourceTransferUI(gameState: GameState, override var actionCallback: (Gam
                     }
                     addListener(object : ClickListener() {
                         override fun clicked(event: com.badlogic.gdx.scenes.scene2d.InputEvent?, x: Float, y: Float) {
-                            this@ResourceTransferUI.isVisible = false
+                            this@ResourceTransferUI.onClose.forEach { it() }
                         }
                     })
                 }
@@ -194,10 +193,6 @@ class ResourceTransferUI(gameState: GameState, override var actionCallback: (Gam
         subject = charName
     }
 
-    companion object {
-        //Singleton
-        lateinit var primary: ResourceTransferUI
-    }
 
 
 }

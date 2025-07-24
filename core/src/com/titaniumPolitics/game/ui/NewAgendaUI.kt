@@ -146,7 +146,7 @@ class NewAgendaUI(gameState: GameState, override var actionCallback: (GameAction
                                 this@NewAgendaUI.subject,
                                 this@NewAgendaUI.sbjObject.place.name
                             ).apply { agenda = this@NewAgendaUI.agenda })
-                        this@NewAgendaUI.isVisible = false
+                        this@NewAgendaUI.onClose.forEach { it() }
                     }
                 })
             }
@@ -169,7 +169,6 @@ class NewAgendaUI(gameState: GameState, override var actionCallback: (GameAction
     }
 
     init {
-        isVisible = false
 
         content.add(st).grow()
         hideAllAgendaDetailsTable()
@@ -402,10 +401,6 @@ class NewAgendaUI(gameState: GameState, override var actionCallback: (GameAction
         subject = charName
     }
 
-    companion object {
-        //Singleton
-        lateinit var primary: NewAgendaUI
-    }
 
 
 }

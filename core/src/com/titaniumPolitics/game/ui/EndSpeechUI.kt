@@ -46,7 +46,7 @@ class EndSpeechUI(val gameState: GameState, override var actionCallback: (GameAc
                                     nextSpeaker = this@EndSpeechUI.nextSpeaker
                                 }
                             )
-                            this@EndSpeechUI.isVisible = false
+                            this@EndSpeechUI.onClose.forEach { it() }
                         }
                     })
                 }
@@ -67,9 +67,6 @@ class EndSpeechUI(val gameState: GameState, override var actionCallback: (GameAc
         subject = charName
     }
 
-    companion object {
-        lateinit var primary: EndSpeechUI
-    }
 
 
 }

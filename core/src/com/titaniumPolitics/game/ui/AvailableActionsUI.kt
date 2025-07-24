@@ -3,17 +3,16 @@ package com.titaniumPolitics.game.ui
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.Texture
-import com.badlogic.gdx.graphics.g2d.NinePatch
 import com.badlogic.gdx.scenes.scene2d.Actor
+import com.badlogic.gdx.scenes.scene2d.actions.Actions
 import com.badlogic.gdx.scenes.scene2d.ui.*
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
-import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable
 import com.badlogic.gdx.utils.Align
 import com.titaniumPolitics.game.core.GameEngine
 import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.core.ReadOnly
 import com.titaniumPolitics.game.core.gameActions.*
+import com.titaniumPolitics.game.ui.widget.ActionSheetUI
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
 import ktx.scene2d.*
@@ -26,6 +25,7 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable 
     val dateLabel: Label
     val timeLabel: Label
     val placeLabel: Label
+    val actionSheetContainer = Container<ActionSheetUI>()
 
     init {
 
@@ -146,6 +146,8 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable 
                     add(docScr).size(900f, 150f)
                     row()
                     add(this@AvailableActionsUI.options)
+                    row()
+                    add(this@AvailableActionsUI.actionSheetContainer).size(900f, 800f).fill()
                 }
             }
         }
@@ -211,9 +213,9 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable 
                                             )
                                         )
                                     } else {
-                                        WaitUI.primary.isVisible = true
-                                        WaitUI.primary.actionCallback = GameEngine.acquireCallback
-                                        WaitUI.primary.refresh(WaitUIMode.WAIT)
+                                        val waitUI = WaitUI(this@AvailableActionsUI.gameState, GameEngine.acquireCallback)
+                                        this@AvailableActionsUI.setActionSheet(waitUI)
+                                        waitUI.refresh(WaitUIMode.WAIT)
                                     }
                                 }
                             })
@@ -255,9 +257,9 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable 
 
                             this@button.addListener(object : ChangeListener() {
                                 override fun changed(event: ChangeEvent, actor: Actor) {
-                                    WaitUI.primary.isVisible = true
-                                    WaitUI.primary.actionCallback = GameEngine.acquireCallback
-                                    WaitUI.primary.refresh(WaitUIMode.SLEEP)
+                                    val waitUI = WaitUI(this@AvailableActionsUI.gameState, GameEngine.acquireCallback)
+                                    this@AvailableActionsUI.setActionSheet(waitUI)
+                                    waitUI.refresh(WaitUIMode.SLEEP)
                                 }
                             })
                         }
@@ -286,8 +288,9 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable 
                             this.setDrawable(defaultSkin, "TilesGrunge")
                             this@button.addListener(object : ChangeListener() {
                                 override fun changed(event: ChangeEvent, actor: Actor) {
-                                    ResourceTransferUI.primary.isVisible = true
-                                    ResourceTransferUI.primary.refresh(
+                                    val resUI = ResourceTransferUI(this@AvailableActionsUI.gameState, GameEngine.acquireCallback)
+                                    this@AvailableActionsUI.setActionSheet(resUI)
+                                    resUI.refresh(
                                         "unofficial",
                                         {
                                             GameEngine.acquireCallback(it)
@@ -304,8 +307,9 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable 
                             this.setDrawable(defaultSkin, "TilesGrunge")
                             this@button.addListener(object : ChangeListener() {
                                 override fun changed(event: ChangeEvent, actor: Actor) {
-                                    ResourceTransferUI.primary.isVisible = true
-                                    ResourceTransferUI.primary.refresh(
+                                    val resUI = ResourceTransferUI(this@AvailableActionsUI.gameState, GameEngine.acquireCallback)
+                                    this@AvailableActionsUI.setActionSheet(resUI)
+                                    resUI.refresh(
                                         "official",
                                         {
                                             GameEngine.acquireCallback(it)
@@ -335,9 +339,9 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable 
                                 }
                             this@button.addListener(object : ChangeListener() {
                                 override fun changed(event: ChangeEvent, actor: Actor) {
-                                    AddInfoUI.primary.isVisible = true
-                                    AddInfoUI.primary.actionCallback = GameEngine.acquireCallback
-                                    AddInfoUI.primary.refresh()
+                                    val addInfoUI = AddInfoUI(this@AvailableActionsUI.gameState, GameEngine.acquireCallback)
+                                    this@AvailableActionsUI.setActionSheet(addInfoUI)
+                                    addInfoUI.refresh()
                                 }
                             })
                         }
@@ -346,9 +350,9 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable 
                             this.setDrawable(defaultSkin, "TilesGrunge")
                             this@button.addListener(object : ChangeListener() {
                                 override fun changed(event: ChangeEvent, actor: Actor) {
-                                    EndSpeechUI.primary.isVisible = true
-                                    EndSpeechUI.primary.actionCallback = GameEngine.acquireCallback
-                                    EndSpeechUI.primary.refresh()
+                                    val endSpeechUI = EndSpeechUI(this@AvailableActionsUI.gameState, GameEngine.acquireCallback)
+                                    this@AvailableActionsUI.setActionSheet(endSpeechUI)
+                                    endSpeechUI.refresh()
                                 }
                             })
                         }
@@ -516,9 +520,9 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable 
                             this.setDrawable(defaultSkin, "PlusGrunge")
                             this@button.addListener(object : ChangeListener() {
                                 override fun changed(event: ChangeEvent, actor: Actor) {
-                                    NewAgendaUI.primary.isVisible = true
-                                    NewAgendaUI.primary.actionCallback = GameEngine.acquireCallback
-                                    NewAgendaUI.primary.refresh(this@AvailableActionsUI.gameState)
+                                    val newAgendaUI = NewAgendaUI(this@AvailableActionsUI.gameState, GameEngine.acquireCallback)
+                                    this@AvailableActionsUI.setActionSheet(newAgendaUI)
+                                    newAgendaUI.refresh(this@AvailableActionsUI.gameState)
                                 }
                             })
                         }
@@ -573,6 +577,26 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable 
         }
         isVisible = !docList.children.isEmpty
 
+    }
+    fun setActionSheet(actionSheet: ActionSheetUI) {
+        this.actionSheetContainer.actor = actionSheet
+        actionSheet.onClose += this::close
+        addAction(
+            Actions.moveTo(
+                this.x, //When open, move to the right side of the screen. It should not depend on the parent actor's x offset.
+                350f,
+                0.5f
+            )
+        )
+    }
+    fun close(){
+        addAction(
+            Actions.moveTo(
+                this.x, //When open, move to the right side of the screen. It should not depend on the parent actor's x offset.
+                -350f,
+                0.5f
+            )
+        )
     }
 
     companion object {

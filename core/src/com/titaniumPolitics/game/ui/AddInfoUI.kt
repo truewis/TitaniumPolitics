@@ -67,8 +67,7 @@ class AddInfoUI(val gameState: GameState, override var actionCallback: (GameActi
                                         this@AddInfoUI.gameState.player.currentMeeting!!.agendas.indexOf(this@AddInfoUI.agenda)
                                 }
                             )
-
-                            this@AddInfoUI.isVisible = false
+                            this@AddInfoUI.onClose.forEach { it() }
                         }
                     })
                 }
@@ -137,9 +136,6 @@ class AddInfoUI(val gameState: GameState, override var actionCallback: (GameActi
         subject = charName
     }
 
-    companion object {
-        lateinit var primary: AddInfoUI
-    }
 
 
 }

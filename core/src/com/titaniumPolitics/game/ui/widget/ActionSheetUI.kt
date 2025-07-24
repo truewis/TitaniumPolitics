@@ -15,6 +15,7 @@ import ktx.scene2d.scene2d
 import ktx.scene2d.stack
 import ktx.scene2d.table
 
+//Action descriptions displayed under AvailableActionsUI.
 open class ActionSheetUI(titleKey: String) : Table(Scene2DSkin.defaultSkin), KTable {
     val titleLabel = scene2d.label(ReadOnly.prop(titleKey), "docTitle") {
         setFontScale(1f)

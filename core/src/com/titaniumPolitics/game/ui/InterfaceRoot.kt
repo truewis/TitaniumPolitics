@@ -10,11 +10,11 @@ import ktx.scene2d.*
 
 class InterfaceRoot(val gameState: GameState) : Table(Scene2DSkin.defaultSkin), KTable {
     val stack: Stack
-
+    val actions = AvailableActionsUI(this@InterfaceRoot.gameState)
     init {
         instance = this
         addActor(CharacterInteractionWindowUI(gameState = this@InterfaceRoot.gameState))
-        val actions = AvailableActionsUI(this@InterfaceRoot.gameState)
+
         addActor(actions)
         actions.setPosition(1920f / 2 - actions.width / 2, -350f, Align.bottomLeft)
         stack = stack { cell ->
@@ -43,21 +43,6 @@ class InterfaceRoot(val gameState: GameState) : Table(Scene2DSkin.defaultSkin), 
             add(ResourceInfoUI())
             add(HumanResourceInfoUI())
             add(ApparatusInfoUI())
-            add(ResourceTransferUI(this@InterfaceRoot.gameState, {}).also {
-                ResourceTransferUI.primary = it
-            })
-            add(NewAgendaUI(this@InterfaceRoot.gameState, {}).also {
-                NewAgendaUI.primary = it
-            })
-            add(AddInfoUI(this@InterfaceRoot.gameState, {}).also {
-                AddInfoUI.primary = it
-            })
-            add(EndSpeechUI(this@InterfaceRoot.gameState, {}).also {
-                EndSpeechUI.primary = it
-            })
-            add(WaitUI(this@InterfaceRoot.gameState, {}).also {
-                WaitUI.primary = it
-            })
 
             //TODO: Place UI here
 
