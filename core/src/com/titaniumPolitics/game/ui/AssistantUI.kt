@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.Group
+import com.badlogic.gdx.scenes.scene2d.Touchable
 import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
@@ -36,6 +37,7 @@ class AssistantUI(gameState: GameState) : Table(defaultSkin) {
                     image("cabinetHandleLight2") {
                     }) {
                     size(buttonWidth, buttonHeight)
+                    setTouchable(Touchable.disabled)//Want to touch the text, through the image.
                 }
             }
             val text = scene2d.container(
@@ -81,6 +83,7 @@ class AssistantUI(gameState: GameState) : Table(defaultSkin) {
                     image("cabinetHandleLight2") {
                     }) {
                     size(buttonWidth, buttonHeight)
+                    setTouchable(Touchable.disabled)
                 }
             }
             val text = scene2d.container(
@@ -130,6 +133,7 @@ class AssistantUI(gameState: GameState) : Table(defaultSkin) {
                     image("cabinetHandleLight2") {
                     }) {
                     size(buttonWidth, buttonHeight)
+                    setTouchable(Touchable.disabled)
                 }
             }
             val text = scene2d.container(
@@ -175,6 +179,7 @@ class AssistantUI(gameState: GameState) : Table(defaultSkin) {
                     image("cabinetHandleLight2") {
                     }) {
                     size(buttonWidth, buttonHeight)
+                    setTouchable(Touchable.disabled)
                 }
 
             }

@@ -21,7 +21,6 @@ class PoliticiansInfoUI(val gameState: GameState) : Table(defaultSkin) {
         val informationPane = ScrollPane(dataTable)
         informationPane.setScrollingDisabled(false, false)
         add(informationPane).grow()
-        debug()
 
 
     }
