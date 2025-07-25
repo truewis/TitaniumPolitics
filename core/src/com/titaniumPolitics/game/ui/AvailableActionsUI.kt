@@ -19,7 +19,7 @@ import ktx.scene2d.*
 import ktx.scene2d.Scene2DSkin.defaultSkin
 
 class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable {
-    private val docList = HorizontalGroup()
+    private val docList = scene2d.buttonGroup(0, 1)
     val options: ExamineUI = ExamineUI(this@AvailableActionsUI.gameState)
 
     val dateLabel: Label
@@ -34,7 +34,6 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable 
 
         val docScr = ScrollPane(docList)
         docList.align(Align.center)
-        docList.grow()
         stack {
             it.grow()
             container(image(CapsuleStage.instance.assetManager.get<Texture>("document_small_contrast.png"))) {
@@ -571,9 +570,14 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable 
 
                 }
             }
-            docList.addActor(scene2d.container(t) {
-                size(150f)
+            t.addListener(object : ChangeListener() {
+                override fun changed(event: ChangeEvent, actor: Actor) {
+                    if(docList.buttonGroup.checked==null){
+                        close()
+                    }
+                }
             })
+            docList.add(t).size(150f).fill()
         }
         isVisible = !docList.children.isEmpty
 
