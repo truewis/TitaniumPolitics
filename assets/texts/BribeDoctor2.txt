@@ -5,7 +5,6 @@ Rui: I heard that the hospital is planning to discharge her soon. Is that true?
 DrPaik: Who told you that?
 Rui: I am not sure why that matters. I just want to know if it's true.
 DrPaik: I don't know where you heard that from, but Sylvia is still under our care and we are trying our best to help her recover.
-Rui: Kind sir, you are not answering my question.
 {BELL}
 DrPaik: Sorry, but we just got a new patient. I have to go now. Bye.
 Rui: Wait! Can I do anything to help her recovery?
