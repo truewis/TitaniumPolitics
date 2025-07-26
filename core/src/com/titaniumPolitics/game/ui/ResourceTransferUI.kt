@@ -1,6 +1,7 @@
 package com.titaniumPolitics.game.ui
 
 
+import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.ui.*
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener
@@ -36,9 +37,9 @@ class ResourceTransferUI(gameState: GameState, override var actionCallback: (Gam
     var placeButton: Button
     val submitButton: Button = scene2d.button {
         isDisabled = true//Disabled until a place is selected.
-        label("Transfer") {
+        label("Transfer", "docTitle") {
             setAlignment(Align.center)
-            setFontScale(3f)
+            color = Color.BLACK
         }
         addListener(object : ChangeListener() {
             override fun changed(event: ChangeEvent?, actor: Actor?) {
@@ -88,9 +89,9 @@ class ResourceTransferUI(gameState: GameState, override var actionCallback: (Gam
         val st = stack {
             it.grow()
             table {
-                this@ResourceTransferUI.modeLabel = label("Transfer Mode", "trnsprtConsole") { setFontScale(3f) }
+                this@ResourceTransferUI.modeLabel = label("Transaction", "docTitle") {  color = Color.BLACK }
                 row()
-                label("Transfer resources to") { setFontScale(3f) }
+                label("Transfer resources to", "docTitle") { color = Color.BLACK }
                 //Select place to transfer resources to.
                 this@ResourceTransferUI.placeButton = PlaceSelectButton(skin, {
                     this@ResourceTransferUI.toWhere = it
@@ -105,10 +106,9 @@ class ResourceTransferUI(gameState: GameState, override var actionCallback: (Gam
                 add(this@ResourceTransferUI.submitButton).fill()//TODO: official transfer is only to my division
                 button {
                     it.fill()
-                    label("Cancel") {
+                    label("Cancel", "docTitle") {
                         setAlignment(Align.center)
-                        setFontScale(3f)
-
+                        color = Color.BLACK
                     }
                     addListener(object : ClickListener() {
                         override fun clicked(event: com.badlogic.gdx.scenes.scene2d.InputEvent?, x: Float, y: Float) {
@@ -134,15 +134,15 @@ class ResourceTransferUI(gameState: GameState, override var actionCallback: (Gam
         this.current = current
         this.target = target
         this.mode = mode
-        this.modeLabel.setText("Transfer: $mode")
+        this.modeLabel.setText("Transaction: $mode")
         placeButton.isVisible = mode != "private"
         dataTable.clear()
         dataTable.apply {
             add(table {
                 current.forEach { (resourceName, resourceAmount) ->
                     if (resourceAmount > .0) {
-                        label("$resourceName: $resourceAmount", "trnsprtConsole") {
-                            setFontScale(2f)
+                        label("$resourceName: $resourceAmount", "docTitle") {
+                            //TODO: Replace with icons
                             setAlignment(Align.center)
                             addListener(object : ClickListener() {
                                 override fun clicked(
@@ -167,8 +167,8 @@ class ResourceTransferUI(gameState: GameState, override var actionCallback: (Gam
             add(table {
                 target.forEach { (resourceName, resourceAmount) ->
                     if (resourceAmount > .0) {
-                        label("$resourceName: $resourceAmount", "trnsprtConsole") {
-                            setFontScale(2f)
+                        label("$resourceName: $resourceAmount", "docTitle") {
+                            //TODO: Replace with icons
                             setAlignment(Align.center)
                             addListener(object : ClickListener() {
                                 override fun clicked(
