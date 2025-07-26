@@ -32,19 +32,23 @@ class PlaceMarkerWindowUI(var gameState: GameState, var owner: MapUI) : Table() 
     private val onRefresh = mutableListOf<() -> Unit>()
     val content = Table()
     val titleLabel = scene2d.label("", "docTitle") {
-        setFontScale(1f)
+        setFontScale(0.5f)
         setAlignment(Align.center)
     }
 
     init {
+        add(titleLabel).growX().fill()
+        row()
         add(content).grow()
         gameState.onAddInfo += this::moveInterruptCondition
     }
 
     lateinit var moveLabel: Label
     private val moveButton = scene2d.button {
-        this@PlaceMarkerWindowUI.moveLabel = label("Move to Place: " + this@PlaceMarkerWindowUI.distance + "m") {
-            setFontScale(2f)
+        this@PlaceMarkerWindowUI.moveLabel = label("Move to Place: " + this@PlaceMarkerWindowUI.distance + "m", "description") {
+            setFontScale(0.4f)
+            setAlignment(Align.center)
+            color = Color.WHITE
         }
 
         addListener(object : com.badlogic.gdx.scenes.scene2d.utils.ChangeListener() {
@@ -87,7 +91,7 @@ class PlaceMarkerWindowUI(var gameState: GameState, var owner: MapUI) : Table() 
     }
 
     private val selectButton = scene2d.button {
-        label("Select Place") {
+        label("Select Place", "description") {
             setFontScale(2f)
         }
 
@@ -227,13 +231,13 @@ class PlaceMarkerWindowUI(var gameState: GameState, var owner: MapUI) : Table() 
             clear()
             //If place selection mode is active, add the selection button and nothing else.
             if (mode == "PlaceSelection") {
-                add(selectButton).size(200f, 50f).fill()
+                add(selectButton).size(400f, 75f).fill()
                 row()
             } else {
                 moveLabel.setText("Move to Place: ${distance}min")
                 //Disable the button if the player is already in the place. Calling place property will throw an exception when the game is first loaded.
                 if (gameState.characters[gameState.playerName]!!.place.name != placeDisplayed) {
-                    add(moveButton).size(200f, 50f).fill()
+                    add(moveButton).size(400f, 75f).fill()
                     row()
                 }
             }

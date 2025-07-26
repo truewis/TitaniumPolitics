@@ -1,6 +1,7 @@
 package com.titaniumPolitics.game.ui
 
 
+import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.InputEvent
 import com.badlogic.gdx.scenes.scene2d.ui.*
@@ -37,11 +38,11 @@ class NewAgendaUI(gameState: GameState, override var actionCallback: (GameAction
 
     private lateinit var agendaSelectBox: Table
     private val praiseTable = scene2d.table {
-        label(ReadOnly.prop("praise")) {
-            setFontScale(3f)
+        label(ReadOnly.prop("praise"), "docTitle") {
+            color = Color.BLACK
         }
         row()
-        label("Target:", "trnsprtConsole") { setFontScale(3f) }
+        label("Target:", "docTitle") { color = Color.BLACK }
         //Select character to perform the request.
         add(CharacterSelectButton(skin, { char ->
             this@NewAgendaUI.agenda =
@@ -49,11 +50,11 @@ class NewAgendaUI(gameState: GameState, override var actionCallback: (GameAction
         })).size(150f, 150f)
     }
     private val denounceTable = scene2d.table {
-        label(ReadOnly.prop("denounce")) {
-            setFontScale(3f)
+        label(ReadOnly.prop("denounce"), "docTitle") {
+            color = Color.BLACK
         }
         row()
-        label("Target:", "trnsprtConsole") { setFontScale(3f) }
+        label("Target:", "docTitle") { color = Color.BLACK }
         //Select character to perform the request.
         add(CharacterSelectButton(skin, { char ->
             this@NewAgendaUI.agenda =
@@ -61,11 +62,11 @@ class NewAgendaUI(gameState: GameState, override var actionCallback: (GameAction
         })).size(150f, 150f)
     }
     private val praisePartyTable = scene2d.table {
-        label(ReadOnly.prop("praiseParty")) {
-            setFontScale(3f)
+        label(ReadOnly.prop("praiseParty"), "docTitle") {
+            color = Color.BLACK
         }
         row()
-        label("Target:", "trnsprtConsole") { setFontScale(3f) }
+        label("Target:", "docTitle") { color = Color.BLACK }
         //Select party to perform the request.
         selectBox<String> {
             items = Array(gameState.parties.keys.toTypedArray())
@@ -78,11 +79,11 @@ class NewAgendaUI(gameState: GameState, override var actionCallback: (GameAction
         }.inCell.size(300f, 100f)
     }
     private val denouncePartyTable = scene2d.table {
-        label(ReadOnly.prop("denounceParty")) {
-            setFontScale(3f)
+        label(ReadOnly.prop("denounceParty"), "docTitle") {
+            color = Color.BLACK
         }
         row()
-        label("Target:", "trnsprtConsole") { setFontScale(3f) }
+        label("Target:", "docTitle") { color = Color.BLACK }
         //Select party to perform the request.
         selectBox<String> {
             items = Array(gameState.parties.keys.toTypedArray())
@@ -100,9 +101,9 @@ class NewAgendaUI(gameState: GameState, override var actionCallback: (GameAction
     }
 
     private val requestTable = scene2d.table {
-        label(ReadOnly.prop("request")) {
+        label(ReadOnly.prop("request"), "docTitle") {
             it.colspan(2)
-            setFontScale(3f)
+            color = Color.BLACK
         }
         row()
         add(PlaceSelectButton(skin, { this@NewAgendaUI.actionSelUI.changeTgtPlace(it) })).size(300f, 150f)
@@ -134,8 +135,8 @@ class NewAgendaUI(gameState: GameState, override var actionCallback: (GameAction
             row()
             button {
                 it.size(300f, 100f).fill()
-                label("Submit") {
-                    setFontScale(3f)
+                label("Submit", "docTitle") {
+                    color = Color.BLACK
                     setAlignment(Align.center)
 
                 }

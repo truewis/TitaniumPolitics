@@ -1,6 +1,7 @@
 package com.titaniumPolitics.game.ui
 
 
+import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.scenes.scene2d.InputEvent
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 
@@ -31,9 +32,9 @@ class EndSpeechUI(val gameState: GameState, override var actionCallback: (GameAc
                 row()
                 button {
                     it.fill()
-                    label("Submit") {
+                    label("Submit", "docTitle") {
                         setAlignment(Align.center)
-                        setFontScale(3f)
+                        color = Color.BLACK
                     }
                     addListener(object : ClickListener() {
                         override fun clicked(event: InputEvent?, x: Float, y: Float) {

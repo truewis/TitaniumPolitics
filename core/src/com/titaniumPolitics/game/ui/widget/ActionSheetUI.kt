@@ -20,6 +20,7 @@ open class ActionSheetUI(titleKey: String) : Table(Scene2DSkin.defaultSkin), KTa
     val titleLabel = scene2d.label(ReadOnly.prop(titleKey), "docTitle") {
         setFontScale(1f)
         setAlignment(Align.center)
+        color = Color.BLACK
     }
     val onClose = ArrayList<() -> Unit>()
     val content = Table()

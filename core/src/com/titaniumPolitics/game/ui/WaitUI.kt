@@ -1,6 +1,7 @@
 package com.titaniumPolitics.game.ui
 
 
+import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.scenes.scene2d.InputEvent
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 
@@ -40,11 +41,11 @@ class WaitUI(val gameState: GameState, override var actionCallback: (GameAction)
             table {
                 add(this@WaitUI.timeSelector).size(150f)
                 row()
-                button {
+                button ("document") {
                     it.fill()
-                    label("Submit") {
+                    label("Submit", "docTitle") {
                         setAlignment(Align.center)
-                        setFontScale(3f)
+                        color = Color.BLACK
                     }
                     addListener(object : ClickListener() {
                         override fun clicked(event: InputEvent?, x: Float, y: Float) {
@@ -115,9 +116,9 @@ class WaitUI(val gameState: GameState, override var actionCallback: (GameAction)
         }
         for (i in list) {
             with(timeSelector) {
-                button("check") {
-                    label(if (i < 60) "${i}m" else "${i / 60}h") {
-                        setFontScale(2f)
+                button("document") {
+                    label(if (i < 60) "${i}m" else "${i / 60}h", "docTitle") {
+                        color = Color.BLACK
                     }
                     it.fill()
                     it.size(100f)

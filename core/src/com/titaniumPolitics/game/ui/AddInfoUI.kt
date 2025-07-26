@@ -1,6 +1,7 @@
 package com.titaniumPolitics.game.ui
 
 
+import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.scenes.scene2d.InputEvent
 import com.badlogic.gdx.scenes.scene2d.ui.*
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
@@ -50,9 +51,9 @@ class AddInfoUI(val gameState: GameState, override var actionCallback: (GameActi
                 row()
                 button {
                     it.fill()
-                    label("Submit") {
+                    label("Submit", "docTitle") {
                         setAlignment(Align.center)
-                        setFontScale(3f)
+                        color = Color.BLACK
                     }
                     addListener(object : ClickListener() {
                         override fun clicked(event: InputEvent?, x: Float, y: Float) {
@@ -119,8 +120,8 @@ class AddInfoUI(val gameState: GameState, override var actionCallback: (GameActi
                             ) {
                                 this@AddInfoUI.targetTable.clear()
                                 this@AddInfoUI.targetTable.add(
-                                    scene2d.label(this@AddInfoUI.gameState.informations[key]!!.simpleDescription()) {
-                                        setFontScale(2f)
+                                    scene2d.label(this@AddInfoUI.gameState.informations[key]!!.simpleDescription(), "docTitle") {
+                                        color = Color.BLACK
                                         setAlignment(Align.center)
                                         wrap = true
                                     }).grow()
