@@ -183,7 +183,7 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable 
                             this@button.style = defaultSkin.get("document", Button.ButtonStyle::class.java)
                             this.setDrawable(defaultSkin, "SearchGrunge")
                             this@button.addListener(object : ChangeListener() {
-                                override fun changed(event: ChangeEvent, actor: Actor) {
+                                override fun changed(event: ChangeEvent, actor: Actor) {if(!this@button.isChecked) return
                                     this@AvailableActionsUI.options.isVisible =
                                         !this@AvailableActionsUI.options.isVisible
                                 }
@@ -203,7 +203,8 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable 
                             }
 
                             this@button.addListener(object : ChangeListener() {
-                                override fun changed(event: ChangeEvent, actor: Actor) {
+                                override fun changed(event: ChangeEvent, actor: Actor) {if(!this@button.isChecked) return
+                                    if(!this@button.isChecked) return
                                     if (this@AvailableActionsUI.gameState.player.currentMeeting != null) {
                                         GameEngine.acquireCallback(
                                             Wait(
@@ -232,7 +233,7 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable 
                             }
 
                             this@button.addListener(object : ChangeListener() {
-                                override fun changed(event: ChangeEvent, actor: Actor) {
+                                override fun changed(event: ChangeEvent, actor: Actor) {if(!this@button.isChecked) return
                                     val sound =
                                         Gdx.audio.newSound(Gdx.files.internal(ReadOnly.actionJson["Eat"]!!.jsonObject["sound"]!!.jsonPrimitive.content))
                                     sound.play()
@@ -255,7 +256,7 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable 
                             }
 
                             this@button.addListener(object : ChangeListener() {
-                                override fun changed(event: ChangeEvent, actor: Actor) {
+                                override fun changed(event: ChangeEvent, actor: Actor) {if(!this@button.isChecked) return
                                     val waitUI = WaitUI(this@AvailableActionsUI.gameState, GameEngine.acquireCallback)
                                     this@AvailableActionsUI.setActionSheet(waitUI)
                                     waitUI.refresh(WaitUIMode.SLEEP)
@@ -275,7 +276,7 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable 
                             }
 
                             this@button.addListener(object : ChangeListener() {
-                                override fun changed(event: ChangeEvent, actor: Actor) {
+                                override fun changed(event: ChangeEvent, actor: Actor) {if(!this@button.isChecked) return
                                     GameEngine.acquireCallback(action)
                                     ProgressBackgroundUI.instance.text = ReadOnly.prop("Repairing")
                                     ProgressBackgroundUI.instance.setVisibleWithFade(true)
@@ -286,7 +287,7 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable 
                         "UnofficialResourceTransfer" -> {
                             this.setDrawable(defaultSkin, "TilesGrunge")
                             this@button.addListener(object : ChangeListener() {
-                                override fun changed(event: ChangeEvent, actor: Actor) {
+                                override fun changed(event: ChangeEvent, actor: Actor) {if(!this@button.isChecked) return
                                     val resUI = ResourceTransferUI(this@AvailableActionsUI.gameState, GameEngine.acquireCallback)
                                     this@AvailableActionsUI.setActionSheet(resUI)
                                     resUI.refresh(
@@ -305,7 +306,7 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable 
                         "OfficialResourceTransfer" -> {
                             this.setDrawable(defaultSkin, "TilesGrunge")
                             this@button.addListener(object : ChangeListener() {
-                                override fun changed(event: ChangeEvent, actor: Actor) {
+                                override fun changed(event: ChangeEvent, actor: Actor) {if(!this@button.isChecked) return
                                     val resUI = ResourceTransferUI(this@AvailableActionsUI.gameState, GameEngine.acquireCallback)
                                     this@AvailableActionsUI.setActionSheet(resUI)
                                     resUI.refresh(
@@ -337,7 +338,7 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable 
                                     tooltip.displayInvalidReason(ReadOnly.prop("addInfo-noAgendas"))
                                 }
                             this@button.addListener(object : ChangeListener() {
-                                override fun changed(event: ChangeEvent, actor: Actor) {
+                                override fun changed(event: ChangeEvent, actor: Actor) {if(!this@button.isChecked) return
                                     val addInfoUI = AddInfoUI(this@AvailableActionsUI.gameState, GameEngine.acquireCallback)
                                     this@AvailableActionsUI.setActionSheet(addInfoUI)
                                     addInfoUI.refresh()
@@ -348,7 +349,7 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable 
                         "EndSpeech" -> {
                             this.setDrawable(defaultSkin, "TilesGrunge")
                             this@button.addListener(object : ChangeListener() {
-                                override fun changed(event: ChangeEvent, actor: Actor) {
+                                override fun changed(event: ChangeEvent, actor: Actor) {if(!this@button.isChecked) return
                                     val endSpeechUI = EndSpeechUI(this@AvailableActionsUI.gameState, GameEngine.acquireCallback)
                                     this@AvailableActionsUI.setActionSheet(endSpeechUI)
                                     endSpeechUI.refresh()
@@ -369,7 +370,7 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable 
                             }
 
                             this@button.addListener(object : ChangeListener() {
-                                override fun changed(event: ChangeEvent, actor: Actor) {
+                                override fun changed(event: ChangeEvent, actor: Actor) {if(!this@button.isChecked) return
                                     GameEngine.acquireCallback(action)
                                 }
                             })
@@ -389,7 +390,7 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable 
                             }
 
                             this@button.addListener(object : ChangeListener() {
-                                override fun changed(event: ChangeEvent, actor: Actor) {
+                                override fun changed(event: ChangeEvent, actor: Actor) {if(!this@button.isChecked) return
                                     GameEngine.acquireCallback(action)
                                 }
                             })
@@ -409,7 +410,7 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable 
                             }
 
                             this@button.addListener(object : ChangeListener() {
-                                override fun changed(event: ChangeEvent, actor: Actor) {
+                                override fun changed(event: ChangeEvent, actor: Actor) {if(!this@button.isChecked) return
                                     GameEngine.acquireCallback(action)
                                 }
                             })
@@ -427,7 +428,7 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable 
                             }
 
                             this@button.addListener(object : ChangeListener() {
-                                override fun changed(event: ChangeEvent, actor: Actor) {
+                                override fun changed(event: ChangeEvent, actor: Actor) {if(!this@button.isChecked) return
                                     GameEngine.acquireCallback(action)
                                 }
                             })
@@ -445,7 +446,7 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable 
                             }
 
                             this@button.addListener(object : ChangeListener() {
-                                override fun changed(event: ChangeEvent, actor: Actor) {
+                                override fun changed(event: ChangeEvent, actor: Actor) {if(!this@button.isChecked) return
                                     GameEngine.acquireCallback(action)
                                 }
                             })
@@ -459,7 +460,7 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable 
                                 tooltip.displayInvalidReason(ReadOnly.prop("prepareInfo-noKnownInfo"))
                             }
                             this@button.addListener(object : ChangeListener() {
-                                override fun changed(event: ChangeEvent, actor: Actor) {
+                                override fun changed(event: ChangeEvent, actor: Actor) {if(!this@button.isChecked) return
                                     InformationViewUI.instance.isVisible = true
                                     InformationViewUI.instance.refresh("tgtTime", InformationViewMode.SELECT) { keys ->
                                         GameEngine.acquireCallback(
@@ -480,7 +481,7 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable 
                         "JoinMeeting" -> {
                             this.setDrawable(defaultSkin, "ChatGrunge")
                             this@button.addListener(object : ChangeListener() {
-                                override fun changed(event: ChangeEvent, actor: Actor) {
+                                override fun changed(event: ChangeEvent, actor: Actor) {if(!this@button.isChecked) return
                                     GameEngine.acquireCallback(
                                         JoinMeeting(
                                             this@AvailableActionsUI.gameState.playerName,
@@ -498,7 +499,7 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable 
                         "StartMeeting" -> {
                             this.setDrawable(defaultSkin, "ChatGrunge")
                             this@button.addListener(object : ChangeListener() {
-                                override fun changed(event: ChangeEvent, actor: Actor) {
+                                override fun changed(event: ChangeEvent, actor: Actor) {if(!this@button.isChecked) return
                                     GameEngine.acquireCallback(
                                         StartMeeting(
                                             this@AvailableActionsUI.gameState.playerName,
@@ -518,7 +519,7 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable 
                         "NewAgenda" -> {
                             this.setDrawable(defaultSkin, "PlusGrunge")
                             this@button.addListener(object : ChangeListener() {
-                                override fun changed(event: ChangeEvent, actor: Actor) {
+                                override fun changed(event: ChangeEvent, actor: Actor) {if(!this@button.isChecked) return
                                     val newAgendaUI = NewAgendaUI(this@AvailableActionsUI.gameState, GameEngine.acquireCallback)
                                     this@AvailableActionsUI.setActionSheet(newAgendaUI)
                                     newAgendaUI.refresh(this@AvailableActionsUI.gameState)
@@ -538,7 +539,7 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable 
                             }
 
                             this@button.addListener(object : ChangeListener() {
-                                override fun changed(event: ChangeEvent, actor: Actor) {
+                                override fun changed(event: ChangeEvent, actor: Actor) {if(!this@button.isChecked) return
                                     GameEngine.acquireCallback(action)
                                 }
                             })
@@ -556,7 +557,7 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable 
                             }
 
                             this@button.addListener(object : ChangeListener() {
-                                override fun changed(event: ChangeEvent, actor: Actor) {
+                                override fun changed(event: ChangeEvent, actor: Actor) {if(!this@button.isChecked) return
                                     GameEngine.acquireCallback(action)
                                 }
                             })
