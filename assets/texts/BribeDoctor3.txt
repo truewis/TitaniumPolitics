@@ -5,7 +5,7 @@ DrPaik: But that will take weeks! I know the system too well. We need to fix thi
 Rui: That is the fastest I can do. I am sorry.
 DrPaik: But we might lose Sylvia if we don't fix this now!
 Rui: {SHAKE}Sir, are you fucking threatening me?{ENDSHAKE}
-DrPaik: I heard that in the lower deck construction yard there are a few tanks ready.
+DrPaik: I heard that somewhere at the outer barrier loading bay there are a few tanks ready.
 Rui: That information is confidential, whether it is true or not. And now you're suggesting stealing a division property. All of this is strictly illegal.
 DrPaik: The patients need your help desperately. I'll be waiting here.
 
