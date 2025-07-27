@@ -1,5 +1,6 @@
 package com.titaniumPolitics.game.ui
 
+import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane
 import com.badlogic.gdx.scenes.scene2d.ui.Table
@@ -8,6 +9,8 @@ import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.core.ReadOnly
 import com.titaniumPolitics.game.ui.widget.WindowUI
 import ktx.scene2d.Scene2DSkin
+import ktx.scene2d.label
+import ktx.scene2d.scene2d
 
 class CalendarUI(val gameState: GameState) : Table(Scene2DSkin.defaultSkin) {
     private val dataTable = Table(skin)
@@ -21,7 +24,6 @@ class CalendarUI(val gameState: GameState) : Table(Scene2DSkin.defaultSkin) {
         scrollPane.setScrollingDisabled(true, false) // 수직 스크롤만 허용
         add(dayTable).growX().padBottom(10f).row()
         add(scrollPane).grow()
-        debug()
 
         //Mark the calendar button When new meeting is scheduled within the next 5 days.
         //Also check AssistantUI for the button blinking condition.
@@ -30,8 +32,8 @@ class CalendarUI(val gameState: GameState) : Table(Scene2DSkin.defaultSkin) {
                 addEntry(
                     meeting.time,
                     ReadOnly.prop(meeting.type.toString()),
-                    meeting.place,
-                    "A new meeting has been scheduled at ${meeting.time}H in ${meeting.place}.",
+                    ReadOnly.prop(meeting.place),
+                    "A new meeting has been scheduled at ${ReadOnly.prop(meeting.place)}.",
                     gameState.scheduledMeetings.entries.find { it.value == meeting }?.key
                 )
         }
@@ -48,8 +50,8 @@ class CalendarUI(val gameState: GameState) : Table(Scene2DSkin.defaultSkin) {
         }
     }
 
-    fun addEntry(time: Int, title: String, place: String, description: String, associatedMeeting: String? = null) {
-        val entry = CalendarEntry(time, title, place, description, associatedMeeting)
+    fun addEntry(time: Int, title: String, place: String, docTitle: String, associatedMeeting: String? = null) {
+        val entry = CalendarEntry(time, title, place, docTitle, associatedMeeting)
         newEntries.add(entry)
     }
 
@@ -78,17 +80,17 @@ class CalendarUI(val gameState: GameState) : Table(Scene2DSkin.defaultSkin) {
 
 
         // 헤더: 시간/요일
-        dayTable.add(Label("H\\D", skin, "default").also {
-            it.setFontScale(6f)
+        dayTable.add(Label("H\\D", skin, "docTitle").also {
+            it.setFontScale(1f)
         }) // 왼쪽 상단 빈 칸
         for (i in 0 until DAYS) {
-            val style = if (i == 0) {
-                "console"
+
+            val dayLabel = Label("D${i + gameState.day}", skin, "docTitle")
+            if (i == 0) {
+                dayLabel.color == Color.GREEN
             } else {
-                "default"
+                //Change color here if needed
             }
-            val dayLabel = Label("D${i + gameState.day}", skin, style)
-            dayLabel.setFontScale(6f)
             dayLabel.setAlignment(Align.center)
             dayTable.add(dayLabel).center().padBottom(8f).width(350f)
         }
@@ -102,10 +104,10 @@ class CalendarUI(val gameState: GameState) : Table(Scene2DSkin.defaultSkin) {
         dataTable.row()
         for (hour in 0 until HOURS) {
             // 시간 라벨 (첫 번째 열)
-            val hourLabel = Label(String.format("%02dH", hour), skin)
-            hourLabel.setFontScale(4f)
+            val hourLabel = scene2d.label(String.format("%02d00", hour), "docTitle")
+            hourLabel.setFontScale(0.6f)
             if (hour == currentHour) {
-                hourLabel.setStyle(skin.get("console", Label.LabelStyle::class.java))
+                hourLabel.color = Color.GREEN
             }
             dataTable.add(hourLabel).right()
 
@@ -124,8 +126,8 @@ class CalendarUI(val gameState: GameState) : Table(Scene2DSkin.defaultSkin) {
                                 )
                             ).size(50f)
                         }
-                        val meetingLabel = Label("Meeting: ${entry.place}", skin)
-                        meetingLabel.setFontScale(2f)
+                        val meetingLabel = scene2d.label("Meeting: ${entry.place}", "description")
+                        meetingLabel.setFontScale(0.2f)
                         cellTable.add(meetingLabel).left()
                         cellTable.row()
                     }
@@ -148,7 +150,7 @@ class CalendarUI(val gameState: GameState) : Table(Scene2DSkin.defaultSkin) {
         val time: Int,
         val title: String,
         val place: String,
-        val description: String,
+        val docTitle: String,
         var associatedMeeting: String? = null,
         var associatedQuestName: String? = null,
         var hasAlerted: Boolean = false
