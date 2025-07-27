@@ -5,43 +5,68 @@ import com.titaniumPolitics.game.core.Information
 import com.titaniumPolitics.game.core.InformationType
 import ktx.scene2d.KTable
 import ktx.scene2d.image
+import ktx.scene2d.label
 import ktx.scene2d.stack
+import ktx.scene2d.table
 
-class InfoBubbleUI(val info: Information) : Table(), KTable {
-    init {
+class InfoBubbleUI(val info: Information) : Table(), KTable
+{
+    init
+    {
         with(info) {
             stack {
-                it.size(100f, 100f).fill()
-                image("BadgeRound") {
-
-                }
-                if (tgtCharacter != "") {
+                it.size(150f, HEIGHT).fill()
+                if (tgtCharacter != "")
+                {
                     //TODO: want to display the character's image here, but we don't have space for it.
 //                    image(tgtCharacter) {
 //                    }
                 }
-                when (type) {
-                    InformationType.ACTION -> {
-                        image("HelpGrunge") {
-                        }
-                    }
-
-                    InformationType.RESOURCES -> {
-                        image("HeartGrunge") {
-                        }
-                    }
-
-                    InformationType.CASUALTY -> {
-                        image("LightGrunge") {
+                table {
+                    when (type)
+                    {
+                        InformationType.ACTION ->
+                        {
+                            image("HelpGrunge") {
+                            }
+                            label("Action:$tgtCharacter", "description") {
+                                setFontScale(0.2f)
+                            }
                         }
 
-                    }
+                        InformationType.RESOURCES ->
+                        {
+                            image("LightGrunge") {
+                            }
+                            label("Resources:$tgtPlace", "description") {
+                                setFontScale(0.2f)
+                            }
+                        }
 
-                    else -> {
+                        InformationType.CASUALTY ->
+                        {
+                            image("HeartGrunge") {
+                            }
+                            label("Casualty:$tgtPlace", "description") {
+                                setFontScale(0.2f)
+                            }
 
+                        }
+
+                        else ->
+                        {
+                            label("${type.name}", "description") {
+                                setFontScale(0.2f)
+                            }
+                        }
                     }
                 }
             }
         }
+    }
+
+    companion object
+    {
+        const val HEIGHT = 50f
     }
 }
