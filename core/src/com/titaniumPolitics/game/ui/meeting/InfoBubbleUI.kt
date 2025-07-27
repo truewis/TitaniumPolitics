@@ -15,7 +15,7 @@ class InfoBubbleUI(val info: Information) : Table(), KTable
     {
         with(info) {
             stack {
-                it.size(150f, HEIGHT).fill()
+                it.size(WIDTH, HEIGHT).fill()
                 if (tgtCharacter != "")
                 {
                     //TODO: want to display the character's image here, but we don't have space for it.
@@ -67,6 +67,7 @@ class InfoBubbleUI(val info: Information) : Table(), KTable
 
     companion object
     {
+        const val WIDTH = 150f
         const val HEIGHT = 50f
     }
 }
