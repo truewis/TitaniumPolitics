@@ -13,9 +13,11 @@ import ktx.scene2d.Scene2DSkin.defaultSkin
 import ktx.scene2d.scene2d
 import ktx.scene2d.*
 
-class AlertPanelUI(var type: String, action: () -> Unit, val docList: Group, vararg params: String) : Table(), KTable {
+class AlertPanelUI(var type: String, action: () -> Unit, val docList: Group, vararg params: String) : Table(), KTable
+{
 
-    init {
+    init
+    {
         stack {
             it.size(500f, 75f)
             image("GradientBottom") {
@@ -25,7 +27,8 @@ class AlertPanelUI(var type: String, action: () -> Unit, val docList: Group, var
 
 
             table {
-                when (this@AlertPanelUI.type) {
+                when (this@AlertPanelUI.type)
+                {
                     "newInfo" -> image("icon_activity_66") {
                         it.size(36f).fill()
                     }
@@ -74,14 +77,17 @@ class AlertPanelUI(var type: String, action: () -> Unit, val docList: Group, var
                         it.size(36f).fill()
                     }
                 }
-                when (this@AlertPanelUI.type) {
+                when (this@AlertPanelUI.type)
+                {
                     "moved" ->
                         label(ReadOnly.prop(this@AlertPanelUI.type).format(params[0], params[1]), "description") {
                             it.growX()
-                            setFontScale(0.4f)
+                            setFontScale(0.2f)
                             wrap = true
-                            this@label.addListener(object : ClickListener() {
-                                override fun clicked(event: InputEvent?, x: Float, y: Float) {
+                            this@label.addListener(object : ClickListener()
+                            {
+                                override fun clicked(event: InputEvent?, x: Float, y: Float)
+                                {
                                     super.clicked(event, x, y)
                                     action()
                                 }
@@ -91,23 +97,28 @@ class AlertPanelUI(var type: String, action: () -> Unit, val docList: Group, var
                     "hunger", "thirst", "vital", "will" ->
                         label(ReadOnly.prop(this@AlertPanelUI.type), "description") {
                             it.growX()
-                            setFontScale(0.4f)
+                            setFontScale(0.3f)
                             color = Color.RED
-                            this@label.addListener(object : ClickListener() {
-                                override fun clicked(event: InputEvent?, x: Float, y: Float) {
+                            this@label.addListener(object : ClickListener()
+                            {
+                                override fun clicked(event: InputEvent?, x: Float, y: Float)
+                                {
                                     super.clicked(event, x, y)
                                     action()
                                 }
                             })
                         }
 
-                    "interrupted" -> {
+                    "interrupted" ->
+                    {
                         label(ReadOnly.prop(this@AlertPanelUI.type).format(params[0]), "description") {
                             it.growX()
-                            setFontScale(0.4f)
+                            setFontScale(0.2f)
                             wrap = true
-                            this@label.addListener(object : ClickListener() {
-                                override fun clicked(event: InputEvent?, x: Float, y: Float) {
+                            this@label.addListener(object : ClickListener()
+                            {
+                                override fun clicked(event: InputEvent?, x: Float, y: Float)
+                                {
                                     super.clicked(event, x, y)
                                     action()
                                 }
@@ -118,9 +129,11 @@ class AlertPanelUI(var type: String, action: () -> Unit, val docList: Group, var
                     else ->
                         label(ReadOnly.prop(this@AlertPanelUI.type).format(*params), "description") {
                             it.growX()
-                            setFontScale(0.4f)
-                            this@label.addListener(object : ClickListener() {
-                                override fun clicked(event: InputEvent?, x: Float, y: Float) {
+                            setFontScale(0.2f)
+                            this@label.addListener(object : ClickListener()
+                            {
+                                override fun clicked(event: InputEvent?, x: Float, y: Float)
+                                {
                                     super.clicked(event, x, y)
                                     action()
                                 }
@@ -132,8 +145,10 @@ class AlertPanelUI(var type: String, action: () -> Unit, val docList: Group, var
                     image("XGrunge") {
                         it.size(36f)
                     }
-                    this@button.addListener(object : ClickListener() {
-                        override fun clicked(event: InputEvent?, x: Float, y: Float) {
+                    this@button.addListener(object : ClickListener()
+                    {
+                        override fun clicked(event: InputEvent?, x: Float, y: Float)
+                        {
                             super.clicked(event, x, y)
                             this@AlertPanelUI.docList.removeActor(this@AlertPanelUI)
                             if (this@AlertPanelUI.docList.children.isEmpty)
