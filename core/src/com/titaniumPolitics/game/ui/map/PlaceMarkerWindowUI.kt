@@ -89,7 +89,9 @@ class PlaceMarkerWindowUI(var gameState: GameState, var owner: MapUI) : Table() 
 
     private val selectButton = scene2d.button {
         label("Select Place", "description") {
-            setFontScale(2f)
+            setFontScale(0.4f)
+            setAlignment(Align.center)
+            color = Color.WHITE
         }
 
         addListener(object : com.badlogic.gdx.scenes.scene2d.utils.ChangeListener() {

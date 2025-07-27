@@ -149,7 +149,8 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable
                     row()
                     add(this@AvailableActionsUI.options)
                     row()
-                    add(this@AvailableActionsUI.actionSheetContainer).size(900f, 800f).fill()
+                    add(this@AvailableActionsUI.actionSheetContainer).size(900f, 700f).fill()
+                    this@AvailableActionsUI.actionSheetContainer.top()
                 }
             }
         }

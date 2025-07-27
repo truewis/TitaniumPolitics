@@ -38,6 +38,7 @@ class ResourceTransferUI(gameState: GameState, override var actionCallback: (Gam
     val submitButton: Button = scene2d.button {
         isDisabled = true//Disabled until a place is selected.
         label("Transfer", "docTitle") {
+            setFontScale(0.5f)
             setAlignment(Align.center)
             color = Color.BLACK
         }
@@ -89,24 +90,26 @@ class ResourceTransferUI(gameState: GameState, override var actionCallback: (Gam
         val st = stack {
             it.grow()
             table {
-                this@ResourceTransferUI.modeLabel = label("Transaction", "docTitle") {  color = Color.BLACK }
+                this@ResourceTransferUI.modeLabel = label("Transaction", "docTitle") {setFontScale(0.5f);  color = Color.BLACK }
                 row()
-                label("Transfer resources to", "docTitle") { color = Color.BLACK }
+                label("Transfer resources to", "docTitle") { setFontScale(0.5f);color = Color.BLACK }
                 //Select place to transfer resources to.
                 this@ResourceTransferUI.placeButton = PlaceSelectButton(skin, {
                     this@ResourceTransferUI.toWhere = it
                     this@ResourceTransferUI.submitButton.isDisabled = false
                 })
-                add(this@ResourceTransferUI.placeButton).growX()
+                add(this@ResourceTransferUI.placeButton).size(400f, 75f)
 
                 row()
                 add(currentResourcePane)
                 add(targetResourcePane)
                 row()
-                add(this@ResourceTransferUI.submitButton).fill()//TODO: official transfer is only to my division
+                add(this@ResourceTransferUI.submitButton).size(400f, 75f).fill()//TODO: official transfer is only to my division
                 button {
                     it.fill()
+                    it.size(400f, 75f)
                     label("Cancel", "docTitle") {
+                        setFontScale(0.5f)
                         setAlignment(Align.center)
                         color = Color.BLACK
                     }
@@ -143,6 +146,7 @@ class ResourceTransferUI(gameState: GameState, override var actionCallback: (Gam
                     if (resourceAmount > .0) {
                         label("$resourceName: $resourceAmount", "docTitle") {
                             //TODO: Replace with icons
+                            setFontScale(0.5f)
                             setAlignment(Align.center)
                             addListener(object : ClickListener() {
                                 override fun clicked(
@@ -169,6 +173,7 @@ class ResourceTransferUI(gameState: GameState, override var actionCallback: (Gam
                     if (resourceAmount > .0) {
                         label("$resourceName: $resourceAmount", "docTitle") {
                             //TODO: Replace with icons
+                            setFontScale(0.5f)
                             setAlignment(Align.center)
                             addListener(object : ClickListener() {
                                 override fun clicked(

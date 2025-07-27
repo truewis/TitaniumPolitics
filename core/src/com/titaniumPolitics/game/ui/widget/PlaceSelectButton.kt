@@ -9,7 +9,7 @@ import ktx.scene2d.label
 import ktx.scene2d.scene2d
 
 class PlaceSelectButton(skin: Skin, callback: (String) -> Unit): Button(skin, "default"), KTable {
-    val placeLabel = label("Place:", "trnsprtConsole") { setFontScale(3f) }
+    val placeLabel = label("Place:", "docTitle") { setFontScale(0.5f) }
     init {
 
     addListener(object : ClickListener()
@@ -20,7 +20,7 @@ class PlaceSelectButton(skin: Skin, callback: (String) -> Unit): Button(skin, "d
             PlaceSelectionUI.instance.refresh()
             PlaceSelectionUI.instance.selectedPlaceCallback = {
                 PlaceSelectionUI.instance.isVisible = false
-                placeLabel.setText("Place: $it")
+                placeLabel.setText("$it")
                 callback(it)
             }
         }
