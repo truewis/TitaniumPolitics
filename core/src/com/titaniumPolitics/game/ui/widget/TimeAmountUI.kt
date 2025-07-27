@@ -28,6 +28,7 @@ class TimeAmountUI(amount: Int) : Table(Scene2DSkin.defaultSkin), KTable {
             label("1m", "description") {
                 it.fill()
                 setFontScale(0.4f)
+                color = Color.BLACK
             }
 
         } else if (ReadOnly.toMinutes(amount) in 60..60 * 24) {
@@ -35,11 +36,13 @@ class TimeAmountUI(amount: Int) : Table(Scene2DSkin.defaultSkin), KTable {
                 label("${ReadOnly.toHours(amount)}h ${ReadOnly.toMinutes(amount) % 60}m", "description") {
                     it.fill()
                     setFontScale(0.3f)
+                    color = Color.BLACK
                 }
             } else {
                 label("${ReadOnly.toHours(amount)}h", "description") {
                     it.fill()
                     setFontScale(0.4f)
+                    color = Color.BLACK
                 }
             }
         } else if (amount * ReadOnly.dt / 60 >= 60 * 24) {
@@ -47,17 +50,20 @@ class TimeAmountUI(amount: Int) : Table(Scene2DSkin.defaultSkin), KTable {
                 label("${ReadOnly.toDays(amount)}d ${ReadOnly.toHours(amount) % 24}h", "description") {
                     it.fill()
                     setFontScale(0.3f)
+                    color = Color.BLACK
                 }
             } else {
                 label("${ReadOnly.toDays(amount)}d", "description") {
                     it.fill()
                     setFontScale(0.4f)
+                    color = Color.BLACK
                 }
             }
         } else
             label("${ReadOnly.toMinutes(amount)}m", "description") {
                 it.fill()
                 setFontScale(0.4f)
+                color = Color.BLACK
             }
     }
 

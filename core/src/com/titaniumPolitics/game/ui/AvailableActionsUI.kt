@@ -238,8 +238,7 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable 
                                         Gdx.audio.newSound(Gdx.files.internal(ReadOnly.actionJson["Eat"]!!.jsonObject["sound"]!!.jsonPrimitive.content))
                                     sound.play()
                                     GameEngine.acquireCallback(action)
-                                    ProgressBackgroundUI.instance.text = ReadOnly.prop("Eating")
-                                    ProgressBackgroundUI.instance.setVisibleWithFade(true)
+                                    ProgressBackgroundUI.instance.setVisibleWithFade(true, "Eat")
                                 }
                             })
                         }
@@ -278,8 +277,7 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable 
                             this@button.addListener(object : ChangeListener() {
                                 override fun changed(event: ChangeEvent, actor: Actor) {if(!this@button.isChecked) return
                                     GameEngine.acquireCallback(action)
-                                    ProgressBackgroundUI.instance.text = ReadOnly.prop("Repairing")
-                                    ProgressBackgroundUI.instance.setVisibleWithFade(true)
+                                    ProgressBackgroundUI.instance.setVisibleWithFade(true, "Repair")
                                 }
                             })
                         }
@@ -294,8 +292,7 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable 
                                         "unofficial",
                                         {
                                             GameEngine.acquireCallback(it)
-                                            ProgressBackgroundUI.instance.text = ReadOnly.prop("Transferring")
-                                            ProgressBackgroundUI.instance.setVisibleWithFade(true)
+                                            ProgressBackgroundUI.instance.setVisibleWithFade(true, "UnofficialResourceTransfer")
                                         },
                                         this@AvailableActionsUI.gameState.player.place.resources.toHashMap()
                                     )
@@ -313,8 +310,7 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable 
                                         "official",
                                         {
                                             GameEngine.acquireCallback(it)
-                                            ProgressBackgroundUI.instance.text = ReadOnly.prop("Transferring")
-                                            ProgressBackgroundUI.instance.setVisibleWithFade(true)
+                                            ProgressBackgroundUI.instance.setVisibleWithFade(true, "OfficialResourceTransfer")
                                         },
                                         this@AvailableActionsUI.gameState.player.place.resources.toHashMap()
                                     )
@@ -374,8 +370,7 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable 
                                     GameEngine.acquireCallback(action)
                                 }
                             })
-                            ProgressBackgroundUI.instance.text = ReadOnly.prop("Investigating")
-                            ProgressBackgroundUI.instance.setVisibleWithFade(true)
+                            ProgressBackgroundUI.instance.setVisibleWithFade(true, "InvestigateAccidentScene")
                         }
 
                         "ClearAccidentScene" -> {
@@ -394,8 +389,7 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable 
                                     GameEngine.acquireCallback(action)
                                 }
                             })
-                            ProgressBackgroundUI.instance.text = ReadOnly.prop("Clearing")
-                            ProgressBackgroundUI.instance.setVisibleWithFade(true)
+                            ProgressBackgroundUI.instance.setVisibleWithFade(true, "ClearAccidentScene")
                         }
 
                         "Intercept" -> {
@@ -470,8 +464,7 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable 
                                             ).also {
                                                 it.newSetOfPrepInfoKeys = ArrayList(keys)
                                             })
-                                        ProgressBackgroundUI.instance.text = ReadOnly.prop("Preparing")
-                                        ProgressBackgroundUI.instance.setVisibleWithFade(true)
+                                        ProgressBackgroundUI.instance.setVisibleWithFade(true, "PrepareInfo")
                                     }
                                 }
                             })

@@ -63,9 +63,7 @@ class PlaceMarkerWindowUI(var gameState: GameState, var owner: MapUI) : Table() 
                     )
                     action.placeTo = this@PlaceMarkerWindowUI.placeDisplayed
                     action.injectParent(this@PlaceMarkerWindowUI.gameState)
-
-                    ProgressBackgroundUI.instance.text = ReadOnly.prop("Moving")
-                    ProgressBackgroundUI.instance.setVisibleWithFade(true)
+                    ProgressBackgroundUI.instance.setVisibleWithFade(true, "Move")
 
                     GameEngine.acquireCallback(action)
                 }
@@ -81,8 +79,7 @@ class PlaceMarkerWindowUI(var gameState: GameState, var owner: MapUI) : Table() 
                     action.placeTo = this@PlaceMarkerWindowUI.placeDisplayed
                     action.injectParent(this@PlaceMarkerWindowUI.gameState)
 
-                    ProgressBackgroundUI.instance.text = ReadOnly.prop("Moving")
-                    ProgressBackgroundUI.instance.setVisibleWithFade(true)
+                    ProgressBackgroundUI.instance.setVisibleWithFade(true, "Move")
 
                     GameEngine.acquireCallback(action)
                 }
@@ -190,12 +187,12 @@ class PlaceMarkerWindowUI(var gameState: GameState, var owner: MapUI) : Table() 
     fun spendTime(AcquireParams: GameEngine.Companion.AcquireParams) {
         if (interrupted) {
             GameEngine.acquireEvent -= this::spendTime
-            ProgressBackgroundUI.instance.setVisibleWithFade(false)
+            ProgressBackgroundUI.instance.setVisibleWithFade(false, "Move")
             return
         }
         if (gameState.player.place.name == tgtDestination) {
             GameEngine.acquireEvent -= this::spendTime
-            ProgressBackgroundUI.instance.setVisibleWithFade(false)
+            ProgressBackgroundUI.instance.setVisibleWithFade(false, "Move")
             return
         }
         val nextStop = gameState.player.place.shortestPathAndTimeTo(tgtDestination)?.first?.get(1)
@@ -203,7 +200,7 @@ class PlaceMarkerWindowUI(var gameState: GameState, var owner: MapUI) : Table() 
             AlertUI.instance.addAlert("interruptedMove-noPath", tgtDestination)
             interrupted = true
             GameEngine.acquireEvent -= this::spendTime
-            ProgressBackgroundUI.instance.setVisibleWithFade(false)
+            ProgressBackgroundUI.instance.setVisibleWithFade(false,"Move")
             return
         }
         GameEngine.acquireCallback(
@@ -214,8 +211,7 @@ class PlaceMarkerWindowUI(var gameState: GameState, var owner: MapUI) : Table() 
                 placeTo = nextStop
             }
         )
-        ProgressBackgroundUI.instance.text = ReadOnly.prop("Moving")
-        ProgressBackgroundUI.instance.setVisibleWithFade(true)
+        ProgressBackgroundUI.instance.setVisibleWithFade(true, "Move")
 
     }
 

@@ -36,8 +36,7 @@ class ExamineUI(var gameState: GameState) : Table(defaultSkin) {
                                 ).also { it.what = "HR" }
                             )
                             this@ExamineUI.isVisible = false
-                            ProgressBackgroundUI.instance.text = ReadOnly.prop("Investigating")
-                            ProgressBackgroundUI.instance.setVisibleWithFade(true)
+                            ProgressBackgroundUI.instance.setVisibleWithFade(true, "Examine")
                         }
                     }
                     )
@@ -61,8 +60,7 @@ class ExamineUI(var gameState: GameState) : Table(defaultSkin) {
                                     gameState.player.place.name
                                 ).also { it.what = "apparatus" }
                             )
-                            ProgressBackgroundUI.instance.text = ReadOnly.prop("Investigating")
-                            ProgressBackgroundUI.instance.setVisibleWithFade(true)
+                            ProgressBackgroundUI.instance.setVisibleWithFade(true, "Examine")
                             this@ExamineUI.isVisible = false
                         }
                     }
@@ -88,8 +86,7 @@ class ExamineUI(var gameState: GameState) : Table(defaultSkin) {
                                     gameState.player.place.name
                                 ).also { it.what = "resources" }
                             )
-                            ProgressBackgroundUI.instance.text = ReadOnly.prop("Investigating")
-                            ProgressBackgroundUI.instance.setVisibleWithFade(true)
+                            ProgressBackgroundUI.instance.setVisibleWithFade(true, "Examine")
                             this@ExamineUI.isVisible = false
                         }
                     }
