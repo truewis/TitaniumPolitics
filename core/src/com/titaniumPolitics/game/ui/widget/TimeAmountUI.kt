@@ -19,45 +19,45 @@ class TimeAmountUI(amount: Int) : Table(Scene2DSkin.defaultSkin), KTable {
             }
         }
         if (amount < 0) {
-            label("${ReadOnly.toMinutes(-amount)}m", "black") {
+            label("${ReadOnly.toMinutes(-amount)}m", "description") {
                 it.fill()
-                setFontScale(2f)
+                setFontScale(0.4f)
                 color = Color.RED
             }
         } else if (ReadOnly.toMinutes(amount) < 1) {
-            label("1m", "black") {
+            label("1m", "description") {
                 it.fill()
-                setFontScale(2f)
+                setFontScale(0.4f)
             }
 
         } else if (ReadOnly.toMinutes(amount) in 60..60 * 24) {
             if (ReadOnly.toMinutes(amount) % 60 != 0) {
-                label("${ReadOnly.toHours(amount)}h ${ReadOnly.toMinutes(amount) % 60}m", "black") {
+                label("${ReadOnly.toHours(amount)}h ${ReadOnly.toMinutes(amount) % 60}m", "description") {
                     it.fill()
-                    setFontScale(2f)
+                    setFontScale(0.3f)
                 }
             } else {
-                label("${ReadOnly.toHours(amount)}h", "black") {
+                label("${ReadOnly.toHours(amount)}h", "description") {
                     it.fill()
-                    setFontScale(2f)
+                    setFontScale(0.4f)
                 }
             }
         } else if (amount * ReadOnly.dt / 60 >= 60 * 24) {
             if (ReadOnly.toHours(amount) % 24 != 0) {
-                label("${ReadOnly.toDays(amount)}d ${ReadOnly.toHours(amount) % 24}h", "black") {
+                label("${ReadOnly.toDays(amount)}d ${ReadOnly.toHours(amount) % 24}h", "description") {
                     it.fill()
-                    setFontScale(2f)
+                    setFontScale(0.3f)
                 }
             } else {
-                label("${ReadOnly.toDays(amount)}d", "black") {
+                label("${ReadOnly.toDays(amount)}d", "description") {
                     it.fill()
-                    setFontScale(2f)
+                    setFontScale(0.4f)
                 }
             }
         } else
-            label("${ReadOnly.toMinutes(amount)}m", "black") {
+            label("${ReadOnly.toMinutes(amount)}m", "description") {
                 it.fill()
-                setFontScale(2f)
+                setFontScale(0.4f)
             }
     }
 
