@@ -119,7 +119,7 @@ class ExamineUI(var gameState: GameState) : Table(defaultSkin) {
     }
 
     override fun setVisible(visible: Boolean) {
-        CharacterPortraitsUI.instance.isVisible = !visible
+        //CharacterPortraitsUI.instance.isVisible = !visible //Not a good idea, during the meeting CharacterPortraitsUI should be invisible.
         super.setVisible(visible)
     }
 
