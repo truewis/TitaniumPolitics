@@ -30,6 +30,10 @@ class AssistantUI(gameState: GameState) : Table(defaultSkin) {
             yOffset = 0f,
             openAction = { mapUI.refresh() }
         )
+        // Close the map window when the move button is clicked
+        mapUI.currentPlaceMarkerWindow.onClose += {
+            mapButton.changeOpenState(false)
+        }
         addActor(mapButton)
         cabinetWindowUIs.add(mapButton)
         mapButton.setSize(buttonWidth, buttonHeight + 10f)
@@ -90,7 +94,6 @@ class AssistantUI(gameState: GameState) : Table(defaultSkin) {
             }
         }
     }
-
 
 
 }

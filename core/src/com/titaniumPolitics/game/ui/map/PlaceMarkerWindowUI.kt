@@ -14,7 +14,9 @@ import com.titaniumPolitics.game.core.gameActions.Move
 import com.titaniumPolitics.game.core.gameActions.Sleep
 import com.titaniumPolitics.game.core.gameActions.Wait
 import com.titaniumPolitics.game.ui.AlertUI
+import com.titaniumPolitics.game.ui.AssistantUI
 import com.titaniumPolitics.game.ui.FloatingWindowUI
+import com.titaniumPolitics.game.ui.InterfaceRoot
 import com.titaniumPolitics.game.ui.ProgressBackgroundUI
 import com.titaniumPolitics.game.ui.WaitUIMode
 import ktx.scene2d.button
@@ -30,6 +32,7 @@ class PlaceMarkerWindowUI(var gameState: GameState, var owner: MapUI) : Table() 
     var interrupted = false//Only used in move mode.
     var tgtDestination = ""//Only used in move mode.
     private val onRefresh = mutableListOf<() -> Unit>()
+    val onClose = mutableListOf<() -> Unit>()
     val content = Table()
     val titleLabel = scene2d.label("", "docTitle") {
         setFontScale(0.5f)
@@ -45,11 +48,12 @@ class PlaceMarkerWindowUI(var gameState: GameState, var owner: MapUI) : Table() 
 
     lateinit var moveLabel: Label
     private val moveButton = scene2d.button {
-        this@PlaceMarkerWindowUI.moveLabel = label("Move to Place: " + this@PlaceMarkerWindowUI.distance + "m", "description") {
-            setFontScale(0.4f)
-            setAlignment(Align.center)
-            color = Color.WHITE
-        }
+        this@PlaceMarkerWindowUI.moveLabel =
+            label("Move to Place: " + this@PlaceMarkerWindowUI.distance + "m", "description") {
+                setFontScale(0.4f)
+                setAlignment(Align.center)
+                color = Color.WHITE
+            }
 
         addListener(object : com.badlogic.gdx.scenes.scene2d.utils.ChangeListener() {
             override fun changed(event: ChangeEvent?, actor: Actor?) {
@@ -83,6 +87,8 @@ class PlaceMarkerWindowUI(var gameState: GameState, var owner: MapUI) : Table() 
 
                     GameEngine.acquireCallback(action)
                 }
+                //Close the window after the move action is initiated.
+                onClose.forEach { it() }
             }
         })
     }
@@ -202,7 +208,7 @@ class PlaceMarkerWindowUI(var gameState: GameState, var owner: MapUI) : Table() 
             AlertUI.instance.addAlert("interruptedMove-noPath", tgtDestination)
             interrupted = true
             GameEngine.acquireEvent -= this::spendTime
-            ProgressBackgroundUI.instance.setVisibleWithFade(false,"Move")
+            ProgressBackgroundUI.instance.setVisibleWithFade(false, "Move")
             return
         }
         GameEngine.acquireCallback(
