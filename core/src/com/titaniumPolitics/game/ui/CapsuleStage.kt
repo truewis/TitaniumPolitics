@@ -110,7 +110,7 @@ class CapsuleStage(val gameState: GameState) : Stage(FitViewport(1920F, 1080F)) 
         try {
             val sound =
                 Gdx.audio.newSound(Gdx.files.internal(ReadOnly.mapJson[if (name.contains("home")) "home" else name]!!.jsonObject["sound"]!!.jsonPrimitive.content))
-            sound.play()
+            sound.play()//TODO: use SoundEngine.
         } catch (e: Exception) {
             println("Background Sound Error: $e")
         }

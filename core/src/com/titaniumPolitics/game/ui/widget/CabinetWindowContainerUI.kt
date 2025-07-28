@@ -1,6 +1,7 @@
 package com.titaniumPolitics.game.ui.widget
 
 import com.badlogic.gdx.graphics.Color
+import com.badlogic.gdx.math.Interpolation
 import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.InputEvent
 import com.badlogic.gdx.scenes.scene2d.Touchable
@@ -12,6 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.badlogic.gdx.utils.Align
 import com.titaniumPolitics.game.ui.AssistantUI
 import com.titaniumPolitics.game.ui.CapsuleStage
+import com.titaniumPolitics.game.ui.SoundEngine
 import ktx.scene2d.KTable
 import ktx.scene2d.Scene2DSkin
 import ktx.scene2d.button
@@ -22,7 +24,13 @@ import ktx.scene2d.scene2d
 import ktx.scene2d.stack
 import ktx.scene2d.table
 
-open class CabinetWindowContainerUI(val title: String, val content: Actor, val xOffset: Float, val yOffset: Float, val openAction : () -> Unit = {}) :
+open class CabinetWindowContainerUI(
+    val title: String,
+    val content: Actor,
+    val xOffset: Float,
+    val yOffset: Float,
+    val openAction: () -> Unit = {}
+) :
     Table(Scene2DSkin.defaultSkin), KTable {
     val onClose = ArrayList<() -> Unit>()
     var isOpen = false
@@ -31,6 +39,7 @@ open class CabinetWindowContainerUI(val title: String, val content: Actor, val x
     val buttonWidth = 180f
     val buttonHeight = 540f
     val titleLabel: Label
+
     init {
         name = title
         stack {
@@ -111,7 +120,8 @@ open class CabinetWindowContainerUI(val title: String, val content: Actor, val x
                 Actions.moveTo(
                     stage.width, //When open, move to the right side of the screen. It should not depend on the parent actor's x offset.
                     y,
-                    0.5f
+                    0.8f,
+                    Interpolation.fade
                 )
             )
             otherCabinets.forEach {
@@ -119,16 +129,19 @@ open class CabinetWindowContainerUI(val title: String, val content: Actor, val x
                     Actions.moveTo(
                         -200f, //When closed, move to the left side of the screen to hide the handle. It should not depend on the parent actor's x offset.
                         it.y,
-                        0.5f
+                        0.8f,
+                        Interpolation.fade
                     )
                 )
             } // Close other cabinets
+            SoundEngine.playSound("metal-drawer-open.mp3")
         } else {
             addAction(
                 Actions.moveTo(
                     xOffset,
                     y,
-                    0.5f
+                    0.8f,
+                    Interpolation.fade
                 )
             )
             otherCabinets.forEach {
@@ -136,10 +149,13 @@ open class CabinetWindowContainerUI(val title: String, val content: Actor, val x
                     Actions.moveTo(
                         it.xOffset, //When closed, move to the left side of the screen to hide the handle. It should not depend on the parent actor's x offset.
                         it.y,
-                        0.5f
+                        0.8f,
+                        Interpolation.fade
                     )
                 )
+
             }
+            SoundEngine.playSound("metal-drawer-close.mp3")
         }
     }
 

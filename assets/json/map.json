@@ -1,7 +1,7 @@
 {
   "mainControlRoom": {
     "image": "data/mainControlRoom.png",
-    "sound": "data/mainControlRoom.mp3",
+    "sound": "data/sounds/mainControlRoom.mp3",
     "desc": "Fore frame of the hexagonal frame.",
     "ind": "capsuleMapIndForeFrame",
     "light": [
@@ -13,7 +13,7 @@
   },
   "home": {
     "image": "data/home.png",
-    "sound": "data/home.mp3",
+    "sound": "data/sounds/home.mp3",
     "ind": "capsuleMapIndStarboardAftPlane",
     "light": [
       0,
@@ -118,7 +118,7 @@
   },
   "outerBarrierWest": {
     "image": "data/conYard.png",
-    "sound": "data/conYard.mp3",
+    "sound": "data/sounds/conYard.mp3",
     "desc": "Center of the hexagonal frame.",
     "ind": "capsuleMapIndCenter",
     "light": [
@@ -130,7 +130,7 @@
   },
   "outerBarrierCenter": {
     "image": "data/conYard.png",
-    "sound": "data/conYard.mp3",
+    "sound": "data/sounds/conYard.mp3",
     "desc": "Center of the hexagonal frame.",
     "ind": "capsuleMapIndCenter",
     "light": [
@@ -142,7 +142,7 @@
   },
   "outerBarrierEast": {
     "image": "data/conYard.png",
-    "sound": "data/conYard.mp3",
+    "sound": "data/sounds/conYard.mp3",
     "desc": "Center of the hexagonal frame.",
     "ind": "capsuleMapIndCenter",
     "light": [
@@ -154,7 +154,7 @@
   },
   "constructionYardNorth": {
     "image": "data/conYard.png",
-    "sound": "data/conYard.mp3",
+    "sound": "data/sounds/conYard.mp3",
     "desc": "Center of the hexagonal frame.",
     "ind": "capsuleMapIndCenter",
     "light": [
@@ -166,7 +166,7 @@
   },
   "constructionYardSouth": {
     "image": "data/conYard.png",
-    "sound": "data/conYard.mp3",
+    "sound": "data/sounds/conYard.mp3",
     "desc": "Starboard-Aft frame of the hexagonal frame.",
     "ind": "capsuleMapIndStarboardAftFrame",
     "light": [
@@ -211,7 +211,7 @@
   },
   "recycleFacilityEast": {
     "image": "data/testimage.png",
-    "sound": "data/recycleFacility.mp3",
+    "sound": "data/sounds/recycleFacility.mp3",
     "desc": "Starboard-Fore arm of the station.",
     "ind": "capsuleMapIndStarboardForeArm",
     "light": [
@@ -223,7 +223,7 @@
   },
   "recycleFacilityWest": {
     "image": "data/testimage.png",
-    "sound": "data/recycleFacility.mp3",
+    "sound": "data/sounds/recycleFacility.mp3",
     "desc": "Starboard-Fore arm of the station.",
     "ind": "capsuleMapIndStarboardForeArm",
     "light": [
@@ -279,7 +279,7 @@
   },
   "miningSchool": {
     "image": "data/testimage.png",
-    "sound": "data/market.mp3",
+    "sound": "data/sounds/market.mp3",
     "desc": "Starboard-Fore arm of the station.",
     "ind": "capsuleMapIndStarboardForeArm",
     "light": [
@@ -291,7 +291,7 @@
   },
   "techSchool": {
     "image": "data/testimage.png",
-    "sound": "data/market.mp3",
+    "sound": "data/sounds/market.mp3",
     "desc": "Starboard-Fore arm of the station.",
     "ind": "capsuleMapIndStarboardForeArm",
     "light": [
@@ -336,7 +336,7 @@
   },
   "market": {
     "image": "data/market.jpeg",
-    "sound": "data/market.mp3",
+    "sound": "data/sounds/market.mp3",
     "desc": "Starboard-Fore arm of the station.",
     "ind": "capsuleMapIndStarboardForeArm",
     "light": [
@@ -348,7 +348,7 @@
   },
   "squareNorth": {
     "image": "data/squareNorth.jpeg",
-    "sound": "data/market.mp3",
+    "sound": "data/sounds/market.mp3",
     "desc": "Starboard-Fore arm of the station.",
     "ind": "capsuleMapIndStarboardForeArm",
     "light": [
@@ -360,7 +360,7 @@
   },
   "squareSouth": {
     "image": "data/squareSouth.jpeg",
-    "sound": "data/market.mp3",
+    "sound": "data/sounds/market.mp3",
     "desc": "Starboard-Fore arm of the station.",
     "ind": "capsuleMapIndStarboardForeArm",
     "light": [

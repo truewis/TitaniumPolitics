@@ -11,6 +11,7 @@ import ktx.scene2d.*
 class InterfaceRoot(val gameState: GameState) : Table(Scene2DSkin.defaultSkin), KTable {
     val stack: Stack
     val actions = AvailableActionsUI(this@InterfaceRoot.gameState)
+
     init {
         instance = this
         addActor(CharacterInteractionWindowUI(gameState = this@InterfaceRoot.gameState))
@@ -22,11 +23,19 @@ class InterfaceRoot(val gameState: GameState) : Table(Scene2DSkin.defaultSkin), 
 
             //We draw the following UIs above any other UIs.
             table {
+                add().fill()
+                add().grow()
+                val rightSeparator = table {
+                    it.fill()
+                    add(AlertUI(this@InterfaceRoot.gameState)).align(Align.topLeft).expandY().fill()
+                    row()
+                    add(CharStatusUI(this@InterfaceRoot.gameState)).align(Align.bottomRight).expandY()
+                }
+            }
+            table {
                 val leftSeparator = table {
                     it.fill()
                     add(QuestUI(this@InterfaceRoot.gameState)).align(Align.bottomLeft).expandY().fill()
-                    row()
-                    add(AlertUI(this@InterfaceRoot.gameState)).align(Align.bottomLeft).expandY().fill()
                     row()
                     add(AssistantUI(this@InterfaceRoot.gameState)).align(Align.bottomLeft)
                 }
@@ -35,10 +44,8 @@ class InterfaceRoot(val gameState: GameState) : Table(Scene2DSkin.defaultSkin), 
                     it.grow()
 
                 }
-                val rightSeparator = table {
-                    it.fill()
-                    add(CharStatusUI(this@InterfaceRoot.gameState)).align(Align.bottomRight).expandY()
-                }
+                add().fill()
+
             }
             add(ResourceInfoUI())
             add(HumanResourceInfoUI())
