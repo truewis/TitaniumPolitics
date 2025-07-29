@@ -6,21 +6,18 @@ import com.titaniumPolitics.game.core.GameEngine
 import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.core.ReadOnly
 import com.titaniumPolitics.game.core.gameActions.Examine
+import com.titaniumPolitics.game.ui.widget.ActionSheetUI
 import ktx.scene2d.*
 import ktx.scene2d.Scene2DSkin.defaultSkin
 
-class ExamineUI(var gameState: GameState) : Table(defaultSkin) {
-    var titleLabel: Label
+class ExamineUI(var gameState: GameState) : ActionSheetUI(ReadOnly.prop("examineUI")), KTable {
     private val docList = HorizontalGroup()
 
     init {
-        titleLabel = Label("Options", skin, "trnsprtConsole")
-        titleLabel.setFontScale(2f)
-        add(titleLabel).growX()
-        row()
         docList.grow()
         docList.addActor(scene2d.container {
             button("document") {
+                isDisabled = true // Disable this button, as it is not implemented yet.
                 image("UserGrunge") {
                     it.size(70f)
                     this@button.addListener(object : ClickListener() {
@@ -31,8 +28,8 @@ class ExamineUI(var gameState: GameState) : Table(defaultSkin) {
                         ) {
                             GameEngine.acquireCallback(
                                 Examine(
-                                    gameState.playerName,
-                                    gameState.player.place.name
+                                    this@ExamineUI.gameState.playerName,
+                                    this@ExamineUI.gameState.player.place.name
                                 ).also { it.what = "HR" }
                             )
                             this@ExamineUI.isVisible = false
@@ -56,8 +53,8 @@ class ExamineUI(var gameState: GameState) : Table(defaultSkin) {
                         ) {
                             GameEngine.acquireCallback(
                                 Examine(
-                                    gameState.playerName,
-                                    gameState.player.place.name
+                                    this@ExamineUI.gameState.playerName,
+                                    this@ExamineUI.gameState.player.place.name
                                 ).also { it.what = "apparatus" }
                             )
                             ProgressBackgroundUI.instance.setVisibleWithFade(true, "Examine")
@@ -82,8 +79,8 @@ class ExamineUI(var gameState: GameState) : Table(defaultSkin) {
                         ) {
                             GameEngine.acquireCallback(
                                 Examine(
-                                    gameState.playerName,
-                                    gameState.player.place.name
+                                    this@ExamineUI.gameState.playerName,
+                                    this@ExamineUI.gameState.player.place.name
                                 ).also { it.what = "resources" }
                             )
                             ProgressBackgroundUI.instance.setVisibleWithFade(true, "Examine")
@@ -96,26 +93,7 @@ class ExamineUI(var gameState: GameState) : Table(defaultSkin) {
             }
             size(100f, 100f)
         })
-        docList.addActor(scene2d.container {
-            button("document") {
-                image("X") {
-                    it.size(70f)
-                    this@button.addListener(object : ClickListener() {
-                        override fun clicked(
-                            event: com.badlogic.gdx.scenes.scene2d.InputEvent?,
-                            x: Float,
-                            y: Float
-                        ) {
-                            this@ExamineUI.isVisible = false
-                        }
-                    }
-                    )
-                }
-
-            }
-            size(100f, 100f)
-        })
-        add(docList).size(300f, 100f)
+        content.add(docList).size(300f, 100f)
     }
 
     override fun setVisible(visible: Boolean) {
