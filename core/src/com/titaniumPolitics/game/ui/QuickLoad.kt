@@ -1,0 +1,50 @@
+package com.titaniumPolitics.game.ui
+
+import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.scenes.scene2d.InputEvent
+import com.badlogic.gdx.scenes.scene2d.ui.Button
+import com.badlogic.gdx.scenes.scene2d.ui.Table
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
+import com.titaniumPolitics.game.EntryClass
+import com.titaniumPolitics.game.core.GameState
+import kotlinx.serialization.json.Json
+import ktx.scene2d.KTable
+import ktx.scene2d.Scene2DSkin.defaultSkin
+import ktx.scene2d.button
+import ktx.scene2d.label
+import ktx.scene2d.scene2d
+import ktx.scene2d.textField
+
+class QuickLoad() : Table(defaultSkin), KTable
+{
+    val path = textField { }
+
+    init
+    {
+        button {
+            label("Save", "docTitle")
+            addListener(object : ClickListener()
+            {
+                override fun clicked(event: InputEvent, x: Float, y: Float)
+                {
+                    super.clicked(event, x, y)
+                    val savedGamePath = this@QuickLoad.path.text
+                    println("Loading saved game from $savedGamePath...")
+                    val newGame = Json.decodeFromString(
+                        GameState.serializer(),
+                        Gdx.files.internal(savedGamePath).readString()
+                    ).also {
+                        it.injectDependency()
+                        println("Loading complete.")
+                        EntryClass.instance.stage = CapsuleStage(it)
+                        Gdx.input.inputProcessor = stage
+                    }
+                }
+            })
+        }
+        add(path)
+    }
+
+
+}

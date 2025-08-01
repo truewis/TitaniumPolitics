@@ -21,6 +21,7 @@ class SystemUI(val gameState: GameState) : WindowUI("SystemUITitle")
 {
     private val dataTable = scene2d.table {
         add(QuickSave(this@SystemUI.gameState))
+        add(QuickLoad())
     }
 
     init
