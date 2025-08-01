@@ -17,15 +17,14 @@ import kotlinx.serialization.json.jsonPrimitive
 import ktx.scene2d.*
 
 
-class SystemUI(val gameState: GameState) : WindowUI("SystemUITitle")
-{
+class SystemUI(val gameState: GameState) : WindowUI("SystemUITitle") {
     private val dataTable = scene2d.table {
         add(QuickSave(this@SystemUI.gameState))
+        row()
         add(QuickLoad())
     }
 
-    init
-    {
+    init {
         instance = this
         isVisible = false
         val informationPane = ScrollPane(dataTable)
@@ -35,8 +34,7 @@ class SystemUI(val gameState: GameState) : WindowUI("SystemUITitle")
 
     }
 
-    companion object
-    {
+    companion object {
         lateinit var instance: SystemUI
     }
 

@@ -23,7 +23,8 @@ import ktx.scene2d.Scene2DSkin.defaultSkin
 import ktx.scene2d.buttonGroup
 
 
-class NewAgendaUI(gameState: GameState, override var actionCallback: (GameAction) -> Unit) : ActionSheetUI("NewAgendaTitle"),
+class NewAgendaUI(gameState: GameState, override var actionCallback: (GameAction) -> Unit) :
+    ActionSheetUI("NewAgendaTitle"),
     ActionUI {
     private var subject = gameState.playerName
     val sbjObject = gameState.characters[subject]!!
@@ -113,12 +114,12 @@ class NewAgendaUI(gameState: GameState, override var actionCallback: (GameAction
 
         row()
         //Select Action
-        add(this@NewAgendaUI.actionSelUI).size(1700f, 600f)
+        add(this@NewAgendaUI.actionSelUI).size(1000f, 500f)
     }
     val st = scene2d.stack {
         table {
             this@NewAgendaUI.agendaSelectBox = buttonGroup(1, 1).also {
-                it.inCell.size(600f, 150f)
+                it.inCell.size(500f, 100f)
             }
 
             row()
@@ -368,7 +369,7 @@ class NewAgendaUI(gameState: GameState, override var actionCallback: (GameAction
                     }
                 }
             }
-            agendaSelectBox.add(t).size(150f).fill()
+            agendaSelectBox.add(t).size(100f).fill()
         }
     }
 
@@ -401,7 +402,6 @@ class NewAgendaUI(gameState: GameState, override var actionCallback: (GameAction
     override fun changeSubject(charName: String) {
         subject = charName
     }
-
 
 
 }

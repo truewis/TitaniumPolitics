@@ -16,18 +16,14 @@ import ktx.scene2d.label
 import ktx.scene2d.scene2d
 import ktx.scene2d.textField
 
-class QuickLoad() : Table(defaultSkin), KTable
-{
+class QuickLoad() : Table(defaultSkin), KTable {
     val path = textField { }
 
-    init
-    {
+    init {
         button {
-            label("Save", "docTitle")
-            addListener(object : ClickListener()
-            {
-                override fun clicked(event: InputEvent, x: Float, y: Float)
-                {
+            label("Load", "docTitle")
+            addListener(object : ClickListener() {
+                override fun clicked(event: InputEvent, x: Float, y: Float) {
                     super.clicked(event, x, y)
                     val savedGamePath = this@QuickLoad.path.text
                     println("Loading saved game from $savedGamePath...")
@@ -43,7 +39,7 @@ class QuickLoad() : Table(defaultSkin), KTable
                 }
             })
         }
-        add(path)
+        add(path).size(500f, 100f)
     }
 
 

@@ -10,24 +10,20 @@ import com.titaniumPolitics.game.ui.meeting.MeetingUI
 import com.titaniumPolitics.game.ui.widget.CharacterSelectUI
 import ktx.scene2d.*
 
-class InterfaceRoot(val gameState: GameState) : Table(Scene2DSkin.defaultSkin), KTable
-{
+class InterfaceRoot(val gameState: GameState) : Table(Scene2DSkin.defaultSkin), KTable {
     val stack: Stack
     val avAUI = AvailableActionsUI(this@InterfaceRoot.gameState)
     val charactersView = CharacterPortraitsUI(gameState)
     val meetingUI = MeetingUI(gameState)
 
-    init
-    {
+    init {
         instance = this
         gameState.updateUI += {
-            if (it.player.currentMeeting != null)
-            {
+            if (it.player.currentMeeting != null) {
                 meetingUI.isVisible = true
                 meetingUI.newMeeting(it.player.currentMeeting!!)
                 charactersView.isVisible = false
-            } else
-            {
+            } else {
                 meetingUI.isVisible = false
                 charactersView.isVisible = true
             }
@@ -87,11 +83,6 @@ class InterfaceRoot(val gameState: GameState) : Table(Scene2DSkin.defaultSkin), 
             add(PlaceSelectionUI(this@InterfaceRoot.gameState))
             add(CharacterSelectUI(this@InterfaceRoot.gameState))
 
-            container {
-                align(Align.topLeft)
-                addActor(QuickSave(this@InterfaceRoot.gameState))
-            }
-
             //We draw the following UIs above any other UIs.
             add(DialogueUI(this@InterfaceRoot.gameState))
 
@@ -102,8 +93,7 @@ class InterfaceRoot(val gameState: GameState) : Table(Scene2DSkin.defaultSkin), 
 
     }
 
-    companion object
-    {
+    companion object {
         //Singleton
         lateinit var instance: InterfaceRoot
     }

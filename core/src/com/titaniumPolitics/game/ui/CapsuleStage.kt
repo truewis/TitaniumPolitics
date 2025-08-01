@@ -16,10 +16,8 @@ import com.titaniumPolitics.game.core.ReadOnly
 import com.titaniumPolitics.game.ui.meeting.MeetingUI
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
-import sun.awt.ExtendedKeyCodes
 
-class CapsuleStage(val gameState: GameState) : Stage(FitViewport(1920F, 1080F))
-{
+class CapsuleStage(val gameState: GameState) : Stage(FitViewport(1920F, 1080F)) {
     var background = Image()
 
     //val inputEnabled = ArrayList<(Boolean)->Unit>() Unused
@@ -31,8 +29,7 @@ class CapsuleStage(val gameState: GameState) : Stage(FitViewport(1920F, 1080F))
     val onMouseDown = ArrayList<(Float, Float) -> Unit>()
     val onKeyDown = ArrayList<(Int) -> Unit>()
 
-    init
-    {
+    init {
         println("Initializing CapsuleStage...")
         instance = this
         val resolver = InternalFileHandleResolver()
@@ -77,8 +74,7 @@ class CapsuleStage(val gameState: GameState) : Stage(FitViewport(1920F, 1080F))
 
         var prevPlace = ""
         gameState.updateUI.add {
-            if (prevPlace != it.player.place.name)
-            {
+            if (prevPlace != it.player.place.name) {
                 prevPlace = it.player.place.name
                 roomChanged(it.player.place.name)
             }
@@ -88,18 +84,15 @@ class CapsuleStage(val gameState: GameState) : Stage(FitViewport(1920F, 1080F))
         println("CapsuleStage initialized successfully.")
     }
 
-    fun playMusic()
-    {
+    fun playMusic() {
         //val music = Gdx.audio.newMusic(Gdx.files.internal("data/Capsule_old_lighthouse_loop.mp3"))
         val music = Gdx.audio.newMusic(Gdx.files.internal("data/Capsule_old_lighthouse_loop.mp3"))
         music.isLooping = true
         music.play()
     }
 
-    fun roomChanged(name: String)
-    {
-        try
-        {
+    fun roomChanged(name: String) {
+        try {
 
             background.drawable = TextureRegionDrawable(
                 assetManager.get(
@@ -108,44 +101,37 @@ class CapsuleStage(val gameState: GameState) : Stage(FitViewport(1920F, 1080F))
                 )!!
             )
 
-        } catch (e: Exception)
-        {
+        } catch (e: Exception) {
             println("Background Image Error: $e")
         }
-        try
-        {
+        try {
             val sound =
                 Gdx.audio.newSound(Gdx.files.internal(ReadOnly.mapJson[if (name.contains("home")) "home" else name]!!.jsonObject["sound"]!!.jsonPrimitive.content))
             sound.play()//TODO: use SoundEngine.
-        } catch (e: Exception)
-        {
+        } catch (e: Exception) {
             println("Background Sound Error: $e")
         }
     }
 
 
-    override fun touchUp(screenX: Int, screenY: Int, pointer: Int, button: Int): Boolean
-    {
+    override fun touchUp(screenX: Int, screenY: Int, pointer: Int, button: Int): Boolean {
         onMouseClick.forEach { it(screenX.toFloat(), screenY.toFloat()) }
         return super.touchUp(screenX, screenY, pointer, button)
     }
 
-    override fun touchDown(screenX: Int, screenY: Int, pointer: Int, button: Int): Boolean
-    {
+    override fun touchDown(screenX: Int, screenY: Int, pointer: Int, button: Int): Boolean {
         onMouseDown.forEach { it(screenX.toFloat(), screenY.toFloat()) }
         return super.touchDown(screenX, screenY, pointer, button)
     }
 
-    override fun keyDown(keyCode: Int): Boolean
-    {
+    override fun keyDown(keyCode: Int): Boolean {
         onKeyDown.forEach { it(keyCode) }
         if (keyCode == Input.Keys.ESCAPE)
             SystemUI.instance.isVisible = !SystemUI.instance.isVisible
         return super.keyDown(keyCode)
     }
 
-    companion object
-    {
+    companion object {
         lateinit var instance: CapsuleStage
     }
 
