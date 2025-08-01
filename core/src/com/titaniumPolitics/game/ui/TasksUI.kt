@@ -1,27 +1,17 @@
 package com.titaniumPolitics.game.ui
 
-import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Color
-import com.badlogic.gdx.scenes.scene2d.InputEvent
 import com.badlogic.gdx.scenes.scene2d.actions.Actions
 import com.badlogic.gdx.scenes.scene2d.ui.*
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.badlogic.gdx.utils.Align
-import com.titaniumPolitics.game.core.EventSystem
-import com.titaniumPolitics.game.core.GameEngine
 import com.titaniumPolitics.game.core.GameState
-import com.titaniumPolitics.game.core.InformationType
-import com.titaniumPolitics.game.core.ReadOnly
-import com.titaniumPolitics.game.core.gameActions.Move
 import com.titaniumPolitics.game.ui.widget.TimeAmountUI
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.json.jsonObject
-import kotlinx.serialization.json.jsonPrimitive
 import ktx.scene2d.Scene2DSkin.defaultSkin
 import ktx.scene2d.scene2d
 import ktx.scene2d.*
 
-class QuestUI(var gameState: GameState) : Table(defaultSkin) {
+class TasksUI(var gameState: GameState) : Table(defaultSkin) {
     private val docList = VerticalGroup()
 
     init {
@@ -105,7 +95,7 @@ class QuestUI(var gameState: GameState) : Table(defaultSkin) {
 
 
     companion object {
-        lateinit var instance: QuestUI
+        lateinit var instance: TasksUI
     }
 
 

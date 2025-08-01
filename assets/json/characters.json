@@ -1,86 +1,112 @@
 {
   "charlie": {
     "name": "Charlie",
-    "image": "portraits/default.png"
+    "image": "portraits/default.png",
+    "headImage": "portraits/default.png"
   },
   "Astinomis": {
     "name": "Astinomis",
-    "image": "portraits/default.png"
+    "image": "portraits/default.png",
+    "headImage": "portraits/default.png"
   },
   "Alina": {
     "name": "Alina",
-    "image": "portraits/Alina.png"
+    "image": "portraits/Alina.png",
+    "headImage": "portraits/AlinaHead.png"
   },
   "mini": {
     "name": "Mini",
-    "image": "portraits/default.png"
+    "image": "portraits/default.png",
+    "headImage": "portraits/default.png"
   },
   "Eugene": {
     "name": "Eugene",
-    "image": "portraits/default.png"
+    "image": "portraits/default.png",
+    "headImage": "portraits/default.png"
+  },
+  "Rui": {
+    "name": "Rui",
+    "image": "portraits/Rui.png",
+    "headImage": "portraits/RuiHead.png"
   },
   "Hiroshi": {
     "name": "Hiroshi",
-    "image": "portraits/default.png"
+    "image": "portraits/default.png",
+    "headImage": "portraits/default.png"
   },
   "Indu": {
     "name": "Indu",
-    "image": "portraits/default.png"
+    "image": "portraits/default.png",
+    "headImage": "portraits/default.png"
   },
   "Evan": {
     "name": "Evan",
-    "image": "portraits/default.png"
+    "image": "portraits/default.png",
+    "headImage": "portraits/default.png"
   },
   "Krailin": {
     "name": "Krailin",
-    "image": "portraits/default.png"
+    "image": "portraits/default.png",
+    "headImage": "portraits/default.png"
   },
   "Vaeme": {
     "name": "Vaeme",
-    "image": "portraits/default.png"
+    "image": "portraits/default.png",
+    "headImage": "portraits/default.png"
   },
   "Mentor": {
     "name": "Mentor",
-    "image": "portraits/default.png"
+    "image": "portraits/default.png",
+    "headImage": "portraits/default.png"
   },
   "Salvor": {
     "name": "Salvor",
-    "image": "portraits/default.png"
+    "image": "portraits/Rui.png",
+    "headImage": "portraits/RuiHead.png"
   },
   "Metros": {
     "name": "Metros",
-    "image": "portraits/default.png"
+    "image": "portraits/default.png",
+    "headImage": "portraits/default.png"
   },
   "Dias": {
     "name": "Dias",
-    "image": "portraits/default.png"
+    "image": "portraits/default.png",
+    "headImage": "portraits/default.png"
   },
   "DrPaik": {
     "name": "Dr. Paik",
-    "image": "portraits/default.png"
+    "image": "portraits/default.png",
+    "headImage": "portraits/default.png"
   },
   "DrHess": {
     "name": "Dr. Hess",
-    "image": "portraits/default.png"
+    "image": "portraits/default.png",
+    "headImage": "portraits/default.png"
   },
   "Boulos": {
     "name": "Boulos",
-    "image": "portraits/default.png"
+    "image": "portraits/default.png",
+    "headImage": "portraits/default.png"
   },
   "Agros": {
     "name": "Agros",
-    "image": "portraits/default.png"
+    "image": "portraits/default.png",
+    "headImage": "portraits/default.png"
   },
   "Megaros": {
     "name": "Megaros",
-    "image": "portraits/default.png"
+    "image": "portraits/default.png",
+    "headImage": "portraits/default.png"
   },
   "ctrler": {
     "name": "The Controller",
-    "image": "portraits/ctrler.png"
+    "image": "portraits/ctrler.png",
+    "headImage": "portraits/ctrlerHead.png"
   },
   "observer": {
     "name": "The Observer",
-    "image": "portraits/observer.png"
+    "image": "portraits/observer.png",
+    "headImage": "portraits/observerHead.png"
   }
 }

@@ -23,8 +23,6 @@ class CapsuleStage(val gameState: GameState) : Stage(FitViewport(1920F, 1080F)) 
     val logBox = LogUI(gameState)
     var hud: InterfaceRoot
     val rootStack = Stack()
-    val charactersView = CharacterPortraitsUI(gameState)
-    val meetingUI = MeetingUI(gameState)
     val assetManager = AssetManager()
     val onMouseClick = ArrayList<(Float, Float) -> Unit>()
     val onMouseDown = ArrayList<(Float, Float) -> Unit>()
@@ -45,7 +43,14 @@ class CapsuleStage(val gameState: GameState) : Stage(FitViewport(1920F, 1080F)) 
         assetManager.load("document_small_contrast.png", Texture::class.java)
         assetManager.load("idcard_contrast.png", Texture::class.java)
         ReadOnly.charJson.forEach {
-            assetManager.load(it.value.jsonObject["image"]!!.jsonPrimitive.content, Texture::class.java)
+            assetManager.load(
+                it.value.jsonObject["image"]?.jsonPrimitive?.content ?: "portraits/${it.key}.png",
+                Texture::class.java
+            )
+            assetManager.load(
+                it.value.jsonObject["headImage"]?.jsonPrimitive?.content ?: "portraits/${it.key}Head.png",
+                Texture::class.java
+            )
         }
         ReadOnly.appJson.forEach {
             assetManager.load(it.value.jsonObject["image"]!!.jsonPrimitive.content, Texture::class.java)
@@ -55,8 +60,6 @@ class CapsuleStage(val gameState: GameState) : Stage(FitViewport(1920F, 1080F)) 
 
         rootStack.setFillParent(true)
         rootStack.add(background)
-        rootStack.add(charactersView)
-        rootStack.add(meetingUI)
         background.setFillParent(true)
 
         addActor(rootStack)
@@ -72,14 +75,6 @@ class CapsuleStage(val gameState: GameState) : Stage(FitViewport(1920F, 1080F)) 
             if (prevPlace != it.player.place.name) {
                 prevPlace = it.player.place.name
                 roomChanged(it.player.place.name)
-            }
-            if (it.player.currentMeeting != null) {
-                meetingUI.isVisible = true
-                meetingUI.newMeeting(it.player.currentMeeting!!)
-                charactersView.isVisible = false
-            } else {
-                meetingUI.isVisible = false
-                charactersView.isVisible = true
             }
         }
         println("Starting Audio...")

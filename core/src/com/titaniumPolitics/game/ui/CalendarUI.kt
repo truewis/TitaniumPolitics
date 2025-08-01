@@ -7,7 +7,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.utils.Align
 import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.core.ReadOnly
-import com.titaniumPolitics.game.ui.widget.WindowUI
 import ktx.scene2d.Scene2DSkin
 import ktx.scene2d.label
 import ktx.scene2d.scene2d
@@ -121,7 +120,7 @@ class CalendarUI(val gameState: GameState) : Table(Scene2DSkin.defaultSkin) {
                         //if there is a quest, add a quest label
                         if (entry.associatedQuestName != null) {
                             cellTable.add(
-                                QuestUI.QuestMarker(
+                                TasksUI.QuestMarker(
                                     gameState.eventSystem.quests.first { it.name == entry.associatedQuestName }
                                 )
                             ).size(50f)

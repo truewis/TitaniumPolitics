@@ -12,6 +12,7 @@ import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.core.Meeting
 import com.titaniumPolitics.game.ui.CapsuleStage
 import com.titaniumPolitics.game.ui.PortraitUI
+import com.titaniumPolitics.game.ui.widget.SimpleHeadPortraitUI
 import com.titaniumPolitics.game.ui.widget.SimplePortraitUI
 import ktx.scene2d.*
 import ktx.scene2d.Scene2DSkin.defaultSkin
@@ -19,13 +20,12 @@ import ktx.scene2d.Scene2DSkin.defaultSkin
 
 //This UI is used for both meetings and conferences
 class MeetingUI(var gameState: GameState) : Table(defaultSkin), KTable {
-    val portraits = arrayListOf<SimplePortraitUI>()
+    val portraits = arrayListOf<SimpleHeadPortraitUI>()
     val speakerPortrait = PortraitUI("", gameState, 1f)
     val deployedInfos = arrayListOf<InfoBubbleUI>()
     val currentAgendas = arrayListOf<AgendaBubbleUI>()
-    val currentAttention = Label("0", defaultSkin, "trnsprtConsole")
+    val currentAttention = Label("0", defaultSkin, "docTitle")
     val discussionTable: Stack
-    val attentionMeter: Image = image("BadgeRound")
     var previousMutualities = mutableMapOf<Pair<String, String>, Double>()
     val addAgendaButton = scene2d.button {
         stack {
@@ -36,8 +36,8 @@ class MeetingUI(var gameState: GameState) : Table(defaultSkin), KTable {
 
     init {
         instance = this
-        currentAttention.setColor(0f, 0f, 0f, 1f)
-        currentAttention.setFontScale(3f)
+        currentAttention.color = Color.RED
+        currentAttention.setFontScale(0.6f)
         currentAttention.setAlignment(Align.center, Align.center)
 
 
@@ -51,7 +51,7 @@ class MeetingUI(var gameState: GameState) : Table(defaultSkin), KTable {
             it.grow()
             add(this@MeetingUI.speakerPortrait)
             container(this@MeetingUI.currentAttention) {
-                pad(700f, 900f, 250f, 900f)
+                padTop(300f)
             }
         }
 
@@ -92,7 +92,6 @@ class MeetingUI(var gameState: GameState) : Table(defaultSkin), KTable {
         placeBubbles()
 
         currentAttention.setText(meeting.currentAttention.toString())
-        attentionMeter.color = Color(meeting.currentAttention.toFloat() / 100, 0f, 0f, 1f)
 
     }
 
@@ -159,7 +158,7 @@ class MeetingUI(var gameState: GameState) : Table(defaultSkin), KTable {
 
     private fun addCharacterPortrait(characterName: String) {
 
-        val portrait = SimplePortraitUI(characterName, 0.2f, true)//100f times 140f
+        val portrait = SimpleHeadPortraitUI(characterName, 0.2f, true)//100f times 140f
         portraits.add(portrait)
         addActor(portrait)
         portrait.layout()
@@ -203,7 +202,7 @@ class MeetingUI(var gameState: GameState) : Table(defaultSkin), KTable {
         val leftPortraits = portraits.take(leftSideCount)
         val rightPortraits = portraits.takeLast(rightSideCount)
 
-        fun distributeVertically(portraits: List<SimplePortraitUI>, x: Float) {
+        fun distributeVertically(portraits: List<SimpleHeadPortraitUI>, x: Float) {
             portraits.forEachIndexed { index, portrait ->
                 val y =
                     discussionTable.y + discussionTable.height / 2 + portraitUIHeight * (index + 0.5f - portraits.size / 2f)

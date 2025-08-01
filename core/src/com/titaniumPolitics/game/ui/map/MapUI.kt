@@ -5,8 +5,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.titaniumPolitics.game.core.GameState
-import com.titaniumPolitics.game.ui.QuestUI
-import com.titaniumPolitics.game.ui.widget.WindowUI
+import com.titaniumPolitics.game.ui.TasksUI
 import ktx.scene2d.*
 import ktx.scene2d.Scene2DSkin.defaultSkin
 
@@ -100,7 +99,7 @@ open class MapUI(val gameState: GameState) : Table(defaultSkin) {
         //Add quest markers.
         gameState.eventSystem.quests.forEach { quest ->
             if (quest.tgtPlace != null) {
-                QuestUI.QuestMarker(quest).also { marker ->
+                TasksUI.QuestMarker(quest).also { marker ->
                     setSize(50f, 50f)
                     dataTable.addActor(marker)
                     val coords = currentMarkers.first { it.place == quest.tgtPlace }
