@@ -2,24 +2,23 @@ package com.titaniumPolitics.game.ui
 
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.math.Vector2
+import com.badlogic.gdx.scenes.scene2d.Action
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable
 import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.core.InformationType
 import com.titaniumPolitics.game.core.ReadOnly
+import com.titaniumPolitics.game.core.gameActions.GameAction
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
 import ktx.scene2d.*
 import ktx.scene2d.Scene2DSkin.defaultSkin
 
-class PortraitUI(character: String, var gameState: GameState, scale: Float) : Table(defaultSkin), KTable
-{
+class PortraitUI(character: String, var gameState: GameState, scale: Float) : Table(defaultSkin), KTable {
     var displayTextBubble = true
     val portrait = scene2d.image("UserGrunge") {
-        addListener(object : com.badlogic.gdx.scenes.scene2d.utils.ClickListener()
-        {
-            override fun clicked(event: com.badlogic.gdx.scenes.scene2d.InputEvent?, x: Float, y: Float)
-            {
+        addListener(object : com.badlogic.gdx.scenes.scene2d.utils.ClickListener() {
+            override fun clicked(event: com.badlogic.gdx.scenes.scene2d.InputEvent?, x: Float, y: Float) {
                 //Open Character Marker UI
                 CharacterInteractionWindowUI.instance.isVisible = true
                 val coord = localToStageCoordinates(Vector2(x, y))
@@ -28,20 +27,17 @@ class PortraitUI(character: String, var gameState: GameState, scale: Float) : Ta
         })
     }
     var tgtCharacter = character
-        set(value)
-        {
+        set(value) {
             //TODO: Also check SimplePortraitUI for this.
             field = value
-            try
-            {
+            try {
                 portrait.drawable = TextureRegionDrawable(
                     CapsuleStage.instance.assetManager.get( //TODO: Temporary solution for portrait image loading. PortraitUI does not have a stage.
                         ReadOnly.charJson[tgtCharacter]!!.jsonObject["image"]!!.jsonPrimitive.content,
                         Texture::class.java
                     )!!
                 )
-            } catch (e: Exception)
-            {
+            } catch (e: Exception) {
                 println("Portrait Image Error: $value")
             }
         }
@@ -58,31 +54,30 @@ class PortraitUI(character: String, var gameState: GameState, scale: Float) : Ta
     val theEmoji = scene2d.image("HelpGrunge")
 
     val refresh = { state: GameState ->
-
-        //If there is an action that was taken by the character last turn, display a script on the portrait.
-        val actionInfo =
-            state.informations.values.firstOrNull { it.tgtCharacter == tgtCharacter && it.type == InformationType.ACTION && it.creationTime == state.time - 1 }
-        if (actionInfo != null && ReadOnly.script(actionInfo.action!!.javaClass.simpleName) != null && displayTextBubble)
-        {
-            bubble.isVisible = true
-            speech.setText(ReadOnly.script(actionInfo.action!!.javaClass.simpleName, actionInfo.action))
-        } else
-        {
-            bubble.isVisible = false
-        }
-
         //Display emoji based on event conditions.
-        if (state.eventSystem.displayEmoji(tgtCharacter))
-        {
+        if (state.eventSystem.displayEmoji(tgtCharacter)) {
             displayEmojiOnPortrait("HelpGrunge")
-        } else
-        {
+        } else {
             displayEmojiOnPortrait("")
         }
     }
 
-    init
-    {
+    fun displayAction(action: GameAction) {
+
+        if (displayTextBubble) {
+            bubble.isVisible = true
+            speech.setText(ReadOnly.script(action.javaClass.simpleName, action))
+        } else {
+            bubble.isVisible = false
+        }
+    }
+
+    fun clearAction() {
+        bubble.isVisible = false
+        speech.setText("")
+    }
+
+    init {
         bubble.isVisible = false
         //mMeter.isVisible = false
         theEmoji.isVisible = false
@@ -96,15 +91,13 @@ class PortraitUI(character: String, var gameState: GameState, scale: Float) : Ta
 
     }
 
-    override fun remove(): Boolean
-    {
+    override fun remove(): Boolean {
         gameState.updateUI -= refresh
         return super.remove()
     }
 
 
-    fun displayEmojiOnPortrait(emojiTexture: String)
-    {
+    fun displayEmojiOnPortrait(emojiTexture: String) {
         theEmoji.isVisible = emojiTexture != ""
         //theEmoji.setDrawable(defaultSkin, emojiTexture)
     }

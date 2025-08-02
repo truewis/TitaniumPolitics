@@ -26,7 +26,15 @@ class CharacterPortraitsUI(var gameState: GameState) : Table(defaultSkin) {
         GameEngine.onNonPlayerCharacterAction += { action ->
             if (isVisible && gameState.player.place.characters.contains(action.sbjCharacter)) {
                 //If the action is related to the current meeting, play the animation of mutuality arrows.
-                sleep(200)//TODO:
+                Gdx.app.postRunnable {
+                    portraits.forEach { portrait ->
+                        if (portrait.tgtCharacter == action.sbjCharacter) {
+                            portrait.displayAction(action)
+                        } else
+                            portrait.clearAction()
+                    }
+                    sleep(200)//TODO:
+                }
             }
         }
     }
