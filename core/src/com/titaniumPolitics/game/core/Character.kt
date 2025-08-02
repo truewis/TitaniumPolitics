@@ -8,12 +8,10 @@ import kotlinx.serialization.Transient
 import kotlin.math.max
 
 @Serializable
-class Character : GameStateElement()
-{
+class Character : GameStateElement() {
     var will: Double
         get() = parent.getMutuality(name)
-        set(value)
-        {
+        set(value) {
             parent.setMutuality(name, delta = value - will)
         }
     override val name: String
@@ -24,38 +22,34 @@ class Character : GameStateElement()
     var resources: Resources
         get() =
             parent.places["home_$name"]!!.resources
-        set(value)
-        {
+        set(value) {
             parent.places["home_$name"]!!.resources = value
         }
 
     var preparedInfoKeys =
         arrayListOf<String>()//Information that can be presented in meetings. Note that preparing the information prevents it from expiring.
+
+    var stats = hashMapOf<String, Int>() //Stats of the character. Used to calculate the effectiveness of actions.
+
     var health = .0
-        set(value)
-        {
+        set(value) {
             field = if (value < const("HealthMax")) value else const("HealthMax")//Max health is 100.
-            if (field < const("CriticalHealth") && (hunger > const("hungerThreshold") || thirst > const("thirstThreshold")))
-            {
+            if (field < const("CriticalHealth") && (hunger > const("hungerThreshold") || thirst > const("thirstThreshold"))) {
                 if (reliant > 1)
                     killReliant(max(reliant / 10, 1))
             }
         }
     var hunger = .0
-        set(value)
-        {
-            field = when
-            {
+        set(value) {
+            field = when {
                 value < .0 -> .0
                 value > const("HungerMax") -> const("HungerMax")
                 else -> value
             }//Max hunger is 100.
         }
     var thirst = .0
-        set(value)
-        {
-            field = when
-            {
+        set(value) {
+            field = when {
                 value < .0 -> .0
                 value > const("ThirstMax") -> const("ThirstMax")
                 else -> value
@@ -86,22 +80,19 @@ class Character : GameStateElement()
     val finishedRequests =
         HashSet<String>() //Requests that this character thinks are finished. The recipient of the request may not be aware of this yet.
 
-    fun hireCost(): Double
-    {
+    fun hireCost(): Double {
         return 10000.0 / parent.idlePop
     }
 
     //Item value is normalized to mutuality.
-    fun itemValue(resources: Resources): Double
-    {
+    fun itemValue(resources: Resources): Double {
         var sum = .0
         resources.forEach { (key, value) -> sum += itemValue(key) * value }
         return sum
 
     }
 
-    fun killReliant(num: Int)
-    {
+    fun killReliant(num: Int) {
         if (num == 0) return
         if (num >= reliant) throw Exception()
         reliant -= num
@@ -125,10 +116,8 @@ class Character : GameStateElement()
 
     //Item value is normalized to mutuality.
     //TODO: value may be affected by power dynamics.
-    fun itemValue(item: String): Double
-    {
-        val ret = when (item)
-        {
+    fun itemValue(item: String): Double {
+        val ret = when (item) {
             //Value of ration and water is based on the current need of the character.
             "ration" -> 5.0e-2 * (reliant) / (resources["ration"] + 1.0)
             "water" -> (reliant) / (resources["water"] + 1.0)
@@ -152,8 +141,7 @@ class Character : GameStateElement()
 
     }
 
-    fun actionValue(action: GameAction): Double
-    {
+    fun actionValue(action: GameAction): Double {
         //TODO: the value of the action should be calculated based on the expected outcome.
         //TODO: Action to remove rivals is more valuable.
         //TODO: Action to acquire resources is more valuable.
@@ -162,8 +150,7 @@ class Character : GameStateElement()
         if (action.javaClass.simpleName == "repair" && parent.parties[parent.places[action.tgtPlace]!!.responsibleDivision]?.members?.contains(
                 name
             ) == true
-        )
-        {
+        ) {
             val urgency =
                 100.0 - parent.places[action.tgtPlace]!!.apparatuses.sumOf { it.durability } / parent.places[action.tgtPlace]!!.apparatuses.size
             return urgency
@@ -174,12 +161,10 @@ class Character : GameStateElement()
 
     //The character's preference of this information spreading. -1 is hate, 0 is neutral, 1 is like.
     //TODO: preference depend on the trait of the character. When other characters use this function, the trait must be not reflected since they don't know the trait.
-    fun infoPreference(info: Information): Double
-    {
+    fun infoPreference(info: Information): Double {
         var ret = .0
         //Is the information about the character itself?
-        if (info.tgtCharacter == name)
-        {
+        if (info.tgtCharacter == name) {
             //The character don't like information about its wrongdoings.
             //Stole resource
             if (info.type == InformationType.ACTION && info.action!!.javaClass.simpleName == "UnofficialResourceTransfer")
@@ -199,23 +184,19 @@ class Character : GameStateElement()
 
             //Depends on their party
             parent.parties.filter { it.value.members.contains(name) }.forEach { party ->
-                when (party.key)
-                {
-                    "infrastructure" ->
-                    {
+                when (party.key) {
+                    "infrastructure" -> {
                         if (info.type == InformationType.ACTION && info.action!!.javaClass.simpleName == "Repair")
                             ret = 1e-1
                     }
                 }
             }
 
-        } else
-        {
+        } else {
             //Accidents are always interesting.
             if (info.type == InformationType.CASUALTY)
                 ret = 2e-1
-            else
-            {
+            else {
 
                 //Otherwise, if the information is about some other people, the character's preference depends on their relationship with the target.
                 //The target character's preference is reflected.
@@ -232,8 +213,7 @@ class Character : GameStateElement()
             //I don't like unresolved requests that are given to me.
             if (info.type == InformationType.ACTION && (info.action is NewAgenda) && (info.action as NewAgenda).agenda.type == AgendaType.REQUEST
                 && (info.action as NewAgenda).agenda.attachedRequest!!.issuedTo.contains(name) && !(info.action as NewAgenda).agenda.attachedRequest!!.completed
-            )
-            {
+            ) {
                 ret = -1e-1 * (1 - (info.action as NewAgenda).agenda.attachedRequest!!.issuedBy.sumOf {
                     parent.getMutuality(
                         name,
@@ -251,8 +231,7 @@ class Character : GameStateElement()
     }
 
     @Deprecated("This function has lost its purpose with the removal of trade.")
-    fun infoValue(info: Information): Double
-    {
+    fun infoValue(info: Information): Double {
         //Known information is less valuable.
         if (info.knownTo.contains(name))
             return 0.0

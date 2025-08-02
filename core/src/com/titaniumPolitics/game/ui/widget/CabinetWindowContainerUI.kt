@@ -59,11 +59,11 @@ open class CabinetWindowContainerUI(
             }
         ) {
             fill()
-            size(100f, 30f)
+            size(400f, 60f)
         }
         addActor(text)
         titleLabel = text.actor as Label
-        text.setPosition(160f, 140f)
+        text.setPosition(160f, 290f)
         text.isTransform = true // Enable transformations for the text actor
         text.rotateBy(90f)
         val UI = scene2d.stack {
@@ -100,6 +100,16 @@ open class CabinetWindowContainerUI(
                 //Open content UI
                 changeOpenState(true)
                 changeMarkedState(false)
+            }
+
+            override fun enter(event: InputEvent?, x: Float, y: Float, pointer: Int, fromActor: Actor?) {
+                this@CabinetWindowContainerUI.addAction(Actions.moveBy(10f, 0f, 0.2f))
+                super.enter(event, x, y, pointer, fromActor)
+            }
+
+            override fun exit(event: InputEvent?, x: Float, y: Float, pointer: Int, toActor: Actor?) {
+                this@CabinetWindowContainerUI.addAction(Actions.moveBy(-10f, 0f, 0.2f))
+                super.exit(event, x, y, pointer, toActor)
             }
         }
         )
@@ -140,8 +150,8 @@ open class CabinetWindowContainerUI(
                 Actions.moveTo(
                     xOffset,
                     y,
-                    0.8f,
-                    Interpolation.fade
+                    0.63f,
+                    Interpolation.pow2
                 )
             )
             otherCabinets.forEach {
@@ -149,8 +159,8 @@ open class CabinetWindowContainerUI(
                     Actions.moveTo(
                         it.xOffset, //When closed, move to the left side of the screen to hide the handle. It should not depend on the parent actor's x offset.
                         it.y,
-                        0.8f,
-                        Interpolation.fade
+                        0.63f,
+                        Interpolation.pow2
                     )
                 )
 

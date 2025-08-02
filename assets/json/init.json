@@ -16,19 +16,19 @@
     "Kae": {
       "type": "com.titaniumPolitics.game.core.NonPlayerAgent"
     },
-    "Kaea": {
+    "Peiyu": {
       "type": "com.titaniumPolitics.game.core.NonPlayerAgent"
     },
-    "Kaeb": {
+    "Kasem": {
       "type": "com.titaniumPolitics.game.core.NonPlayerAgent"
     },
-    "Kaec": {
+    "Bahriye": {
       "type": "com.titaniumPolitics.game.core.NonPlayerAgent"
     },
     "Alina": {
       "type": "com.titaniumPolitics.game.core.NonPlayerAgent"
     },
-    "mini": {
+    "Maisarah": {
       "type": "com.titaniumPolitics.game.core.NonPlayerAgent"
     },
     "Eugene": {
@@ -49,7 +49,7 @@
     "Vaeme": {
       "type": "com.titaniumPolitics.game.core.NonPlayerAgent"
     },
-    "Mentor": {
+    "Yuhoa": {
       "type": "com.titaniumPolitics.game.core.NonPlayerAgent"
     },
     "Salvor": {
@@ -58,7 +58,7 @@
     "Metros": {
       "type": "com.titaniumPolitics.game.core.NonPlayerAgent"
     },
-    "Dias": {
+    "Dion": {
       "type": "com.titaniumPolitics.game.core.NonPlayerAgent"
     },
     "DrPaik": {
@@ -93,6 +93,11 @@
         "old",
         "bargainer"
       ],
+      "stats": {
+        "logos": 10,
+        "ethos": 10,
+        "pathos": 10
+      },
       "health": 80,
       "livingBy": "constructionYardNorth"
     },
@@ -104,6 +109,11 @@
         "bargainer",
         "entertainer"
       ],
+      "stats": {
+        "logos": 10,
+        "ethos": 10,
+        "pathos": 10
+      },
       "health": 80,
       "reliant": 3,
       "livingBy": "mainControlRoom"
@@ -116,6 +126,11 @@
         "bargainer",
         "soldier"
       ],
+      "stats": {
+        "logos": 10,
+        "ethos": 10,
+        "pathos": 10
+      },
       "health": 80,
       "livingBy": "mainControlRoom"
     },
@@ -126,6 +141,11 @@
         "bargainer",
         "soldier"
       ],
+      "stats": {
+        "logos": 10,
+        "ethos": 10,
+        "pathos": 10
+      },
       "health": 80,
       "livingBy": "mainControlRoom"
     },
@@ -136,36 +156,56 @@
         "bargainer",
         "soldier"
       ],
+      "stats": {
+        "logos": 10,
+        "ethos": 10,
+        "pathos": 10
+      },
       "health": 80,
       "livingBy": "mainControlRoom"
     },
-    "Kaea": {
+    "Peiyu": {
       "trait": [
         "workaholic",
         "emotionless",
         "bargainer",
         "soldier"
       ],
+      "stats": {
+        "logos": 10,
+        "ethos": 10,
+        "pathos": 10
+      },
       "health": 80,
       "livingBy": "mainControlRoom"
     },
-    "Kaeb": {
+    "Kasem": {
       "trait": [
         "workaholic",
         "emotionless",
         "bargainer",
         "soldier"
       ],
+      "stats": {
+        "logos": 10,
+        "ethos": 10,
+        "pathos": 10
+      },
       "health": 80,
       "livingBy": "mainControlRoom"
     },
-    "Kaec": {
+    "Bahriye": {
       "trait": [
         "workaholic",
         "emotionless",
         "bargainer",
         "soldier"
       ],
+      "stats": {
+        "logos": 10,
+        "ethos": 10,
+        "pathos": 10
+      },
       "health": 80,
       "livingBy": "mainControlRoom"
     },
@@ -177,16 +217,26 @@
         "thief",
         "engineer"
       ],
+      "stats": {
+        "logos": 10,
+        "ethos": 10,
+        "pathos": 10
+      },
       "health": 80,
       "livingBy": "mainControlRoom"
     },
-    "mini": {
+    "Maisarah": {
       "trait": [
         "workaholic",
         "emotionless",
         "miningDivisionLeader",
         "thief"
       ],
+      "stats": {
+        "logos": 10,
+        "ethos": 10,
+        "pathos": 10
+      },
       "health": 80,
       "livingBy": "mainControlRoom"
     },
@@ -198,6 +248,11 @@
         "bargainer",
         "teacher"
       ],
+      "stats": {
+        "logos": 10,
+        "ethos": 10,
+        "pathos": 10
+      },
       "health": 80,
       "reliant": 3,
       "livingBy": "mainControlRoom"
@@ -210,6 +265,11 @@
         "thief",
         "organizer"
       ],
+      "stats": {
+        "logos": 10,
+        "ethos": 10,
+        "pathos": 10
+      },
       "health": 80,
       "livingBy": "mainControlRoom"
     },
@@ -220,6 +280,11 @@
         "thief",
         "organizer"
       ],
+      "stats": {
+        "logos": 10,
+        "ethos": 10,
+        "pathos": 10
+      },
       "health": 80,
       "reliant": 3,
       "livingBy": "mainControlRoom"
@@ -233,6 +298,11 @@
         "organizer"
       ],
       "reliant": 3,
+      "stats": {
+        "logos": 10,
+        "ethos": 10,
+        "pathos": 10
+      },
       "health": 80,
       "livingBy": "mainControlRoom"
     },
@@ -243,6 +313,11 @@
         "engineer",
         "bargainer"
       ],
+      "stats": {
+        "logos": 10,
+        "ethos": 10,
+        "pathos": 10
+      },
       "health": 80,
       "livingBy": "constructionYardNorth"
     },
@@ -252,6 +327,11 @@
         "emotionless",
         "engineer"
       ],
+      "stats": {
+        "logos": 10,
+        "ethos": 10,
+        "pathos": 10
+      },
       "health": 80,
       "livingBy": "constructionYardNorth"
     },
@@ -261,15 +341,25 @@
         "emotionless",
         "engineer"
       ],
+      "stats": {
+        "logos": 10,
+        "ethos": 10,
+        "pathos": 10
+      },
       "health": 80,
       "livingBy": "constructionYardNorth"
     },
-    "Mentor": {
+    "Yuhoa": {
       "trait": [
         "workaholic",
         "emotionless",
         "engineer"
       ],
+      "stats": {
+        "logos": 10,
+        "ethos": 10,
+        "pathos": 10
+      },
       "health": 80,
       "reliant": 2,
       "livingBy": "constructionYardNorth"
@@ -280,6 +370,11 @@
         "emotionless",
         "engineer"
       ],
+      "stats": {
+        "logos": 10,
+        "ethos": 10,
+        "pathos": 10
+      },
       "health": 80,
       "livingBy": "constructionYardNorth"
     },
@@ -288,14 +383,24 @@
         "workaholic",
         "emotionless"
       ],
+      "stats": {
+        "logos": 10,
+        "ethos": 10,
+        "pathos": 10
+      },
       "health": 80,
       "livingBy": "excavationShaftA"
     },
-    "Dias": {
+    "Dion": {
       "trait": [
         "workaholic",
         "emotionless"
       ],
+      "stats": {
+        "logos": 10,
+        "ethos": 10,
+        "pathos": 10
+      },
       "health": 80,
       "livingBy": "excavationShaftB"
     },
@@ -305,6 +410,11 @@
         "emotionless",
         "doctor"
       ],
+      "stats": {
+        "logos": 10,
+        "ethos": 10,
+        "pathos": 10
+      },
       "health": 80,
       "livingBy": "welfareStationWest"
     },
@@ -314,6 +424,11 @@
         "emotionless",
         "doctor"
       ],
+      "stats": {
+        "logos": 10,
+        "ethos": 10,
+        "pathos": 10
+      },
       "health": 80,
       "reliant": 3,
       "livingBy": "welfareStationEast"
@@ -324,6 +439,11 @@
         "emotionless",
         "organizer"
       ],
+      "stats": {
+        "logos": 10,
+        "ethos": 10,
+        "pathos": 10
+      },
       "health": 80,
       "livingBy": "market"
     },
@@ -333,6 +453,11 @@
         "emotionless",
         "organizer"
       ],
+      "stats": {
+        "logos": 10,
+        "ethos": 10,
+        "pathos": 10
+      },
       "health": 80,
       "livingBy": "market"
     },
@@ -340,6 +465,11 @@
       "trait": [
         "robot"
       ],
+      "stats": {
+        "logos": 10,
+        "ethos": 10,
+        "pathos": 10
+      },
       "health": 100,
       "livingBy": "mainControlRoom"
     },
@@ -347,6 +477,11 @@
       "trait": [
         "robot"
       ],
+      "stats": {
+        "logos": 10,
+        "ethos": 10,
+        "pathos": 10
+      },
       "health": 100,
       "livingBy": "observatory"
     }
@@ -582,7 +717,7 @@
       "characters": [
       ],
       "responsibleDivision": "mining",
-      "manager": "mini",
+      "manager": "Maisarah",
       "workHoursStart": 9,
       "workHoursEnd": 17
     },
@@ -718,7 +853,7 @@
       "characters": [
       ],
       "responsibleDivision": "mining",
-      "manager": "Dias",
+      "manager": "Dion",
       "workHoursStart": 9,
       "workHoursEnd": 17
     },
@@ -1217,7 +1352,7 @@
       "characters": [
       ],
       "responsibleDivision": "infrastructure",
-      "manager": "Mentor",
+      "manager": "Yuhoa",
       "workHoursStart": 0,
       "workHoursEnd": 24
     },
@@ -1735,7 +1870,7 @@
       "characters": [
       ],
       "responsibleDivision": "safety",
-      "manager": "Kaea",
+      "manager": "Peiyu",
       "workHoursStart": 0,
       "workHoursEnd": 24
     },
@@ -1782,7 +1917,7 @@
       "characters": [
       ],
       "responsibleDivision": "safety",
-      "manager": "Kaeb",
+      "manager": "Kasem",
       "workHoursStart": 0,
       "workHoursEnd": 24
     },
@@ -1829,7 +1964,7 @@
       "characters": [
       ],
       "responsibleDivision": "safety",
-      "manager": "Kaec",
+      "manager": "Bahriye",
       "workHoursStart": 0,
       "workHoursEnd": 24
     },
@@ -2109,7 +2244,7 @@
         "Charles",
         "Astinomis",
         "Alina",
-        "mini",
+        "Maisarah",
         "Eugene",
         "Hiroshi",
         "Evan"
@@ -2128,11 +2263,11 @@
     },
     "mining": {
       "type": "division",
-      "leader": "mini",
+      "leader": "Maisarah",
       "members": [
-        "mini",
+        "Maisarah",
         "Metros",
-        "Dias"
+        "Dion"
       ],
       "home": "excavationShaftA"
     },
@@ -2160,9 +2295,9 @@
         "Astinomis",
         "Muos",
         "Kae",
-        "Kaea",
-        "Kaeb",
-        "Kaec"
+        "Peiyu",
+        "Kasem",
+        "Bahriye"
       ],
       "home": "rescueStationNorth"
     },
@@ -2184,7 +2319,7 @@
         "Rui",
         "Krailin",
         "Vaeme",
-        "Mentor",
+        "Yuhoa",
         "Salvor"
       ],
       "home": "outerBarrierWest"

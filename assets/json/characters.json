@@ -1,5 +1,5 @@
 {
-  "charlie": {
+  "Charlie": {
     "name": "Charlie",
     "image": "portraits/default.png",
     "headImage": "portraits/default.png"
@@ -14,8 +14,8 @@
     "image": "portraits/Alina.png",
     "headImage": "portraits/AlinaHead.png"
   },
-  "mini": {
-    "name": "Mini",
+  "Maisarah": {
+    "name": "Maisarah",
     "image": "portraits/default.png",
     "headImage": "portraits/default.png"
   },
@@ -54,8 +54,8 @@
     "image": "portraits/default.png",
     "headImage": "portraits/default.png"
   },
-  "Mentor": {
-    "name": "Mentor",
+  "Yuhoa": {
+    "name": "Yuhoa",
     "image": "portraits/default.png",
     "headImage": "portraits/default.png"
   },
