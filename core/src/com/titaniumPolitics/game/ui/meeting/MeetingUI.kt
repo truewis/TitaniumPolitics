@@ -8,6 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.Stack
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.utils.Align
+import com.titaniumPolitics.game.core.GameEngine
 import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.core.Meeting
 import com.titaniumPolitics.game.ui.CapsuleStage
@@ -16,6 +17,7 @@ import com.titaniumPolitics.game.ui.widget.SimpleHeadPortraitUI
 import com.titaniumPolitics.game.ui.widget.SimplePortraitUI
 import ktx.scene2d.*
 import ktx.scene2d.Scene2DSkin.defaultSkin
+import java.lang.Thread.sleep
 
 
 //This UI is used for both meetings and conferences
@@ -45,6 +47,12 @@ class MeetingUI(var gameState: GameState) : Table(defaultSkin), KTable {
             if (it.player.currentMeeting != null) {
                 println("MeetingUI: Refreshing meeting ${it.player.currentMeeting!!}")
                 refresh(it.player.currentMeeting!!)
+            }
+        }
+        GameEngine.onNonPlayerCharacterAction += { action ->
+            if (isVisible && gameState.player.currentMeeting?.currentCharacters?.contains(action.sbjCharacter) ?: false) {
+                //If the action is related to the current meeting, play the animation of mutuality arrows.
+                sleep(200)//TODO:
             }
         }
         discussionTable = stack {

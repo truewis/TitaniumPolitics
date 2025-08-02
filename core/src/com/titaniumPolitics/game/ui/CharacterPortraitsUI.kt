@@ -6,27 +6,32 @@ import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.ui.Image
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable
+import com.titaniumPolitics.game.core.GameEngine
 import com.titaniumPolitics.game.core.GameState
 import ktx.scene2d.Scene2DSkin.defaultSkin
 import ktx.scene2d.image
 import ktx.scene2d.scene2d
+import java.lang.Thread.sleep
 
 //TODO: Make this scrollable to deal with many characters.
 //This UI is used to display the portraits of the characters in the current place.
-class CharacterPortraitsUI(var gameState: GameState) : Table(defaultSkin)
-{
+class CharacterPortraitsUI(var gameState: GameState) : Table(defaultSkin) {
     val portraits = arrayListOf<PortraitUI>()
 
-    init
-    {
+    init {
         instance = this
         gameState.updateUI.add {
             refresh(it.player.place.name)
         }
+        GameEngine.onNonPlayerCharacterAction += { action ->
+            if (isVisible && gameState.player.place.characters.contains(action.sbjCharacter)) {
+                //If the action is related to the current meeting, play the animation of mutuality arrows.
+                sleep(200)//TODO:
+            }
+        }
     }
 
-    fun refresh(place: String)
-    {
+    fun refresh(place: String) {
         portraits.forEach { it.remove() }
         portraits.clear()
         gameState.places[place]!!.characters.forEach {
@@ -38,8 +43,7 @@ class CharacterPortraitsUI(var gameState: GameState) : Table(defaultSkin)
         placeCharacterPortrait()
     }
 
-    private fun addCharacterPortrait(characterName: String)
-    {
+    private fun addCharacterPortrait(characterName: String) {
         val portrait = PortraitUI(characterName, gameState, 1f)
         portraits.add(portrait)
         addActor(portrait)
@@ -48,8 +52,7 @@ class CharacterPortraitsUI(var gameState: GameState) : Table(defaultSkin)
     }
 
     //Cf. the same function in MeetingUI
-    private fun placeCharacterPortrait()
-    {
+    private fun placeCharacterPortrait() {
         //Place portraits across the screen so they are not on top of each other.
         portraits.forEach {
             it.setPosition(
@@ -60,8 +63,7 @@ class CharacterPortraitsUI(var gameState: GameState) : Table(defaultSkin)
 
     }
 
-    companion object
-    {
+    companion object {
         lateinit var instance: CharacterPortraitsUI
     }
 }

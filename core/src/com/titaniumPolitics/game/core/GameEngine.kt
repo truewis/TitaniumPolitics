@@ -214,6 +214,9 @@ class GameEngine(val gameState: GameState) {
         action.execute()
         gameState.setMutuality(char.name, delta = action.deltaWill())
 
+        if (action.sbjCharacter != gameState.playerName)
+            onNonPlayerCharacterAction.forEach { it(action) }
+
     }
 
     private fun calculateMutuality() {
@@ -588,6 +591,8 @@ class GameEngine(val gameState: GameState) {
         var acquireCallback: (Any) -> Unit = {}
         var acquireEvent = arrayListOf<(AcquireParams) -> Unit>()
         val onAccident = ArrayList<(String, Int) -> Unit>()//Place and Casualty
+        val onNonPlayerCharacterAction =
+            ArrayList<(GameAction) -> Unit>()//Character and Action, used for UI animation between player turns.
 
         class AcquireParams(val type: String, val variables: HashMap<String, Any>)
 
