@@ -17,7 +17,7 @@ sealed class EventObject(var name: String, val oneTime: Boolean) {
     open fun injectParent(gameState: GameState) {
         parent = gameState
         if (this is IQuestEventObject) {
-            quest.parent = parent
+            quest.parent = gameState
             parent.eventSystem.updateQuest(quest)
         }
     }

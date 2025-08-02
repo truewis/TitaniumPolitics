@@ -195,7 +195,7 @@ class NewAgendaUI(gameState: GameState, override var actionCallback: (GameAction
             val t = scene2d.button("check") {
                 //TODO:Agenda Tooltip addListener(ActionTooltipUI(tobj))
                 container {
-                    it.size(150f)
+                    it.size(100f)
                     it.fill(0.66f, 0.66f)
                     it.align(Align.center)
                     image("Help") {

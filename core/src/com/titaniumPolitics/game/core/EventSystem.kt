@@ -12,7 +12,8 @@ class EventSystem : GameStateElement() {
         get() = "EventSystem" //There is only one EventSystem object in the game.
     private val dataBase = arrayListOf<EventObject>()
     private val tmpdataBase = arrayListOf<EventObject>()
-    val quests = hashSetOf<Quest>()
+    val quests =
+        arrayListOf<Quest>() //Do not use haseSet, it is not meant to be used with objects that can be modified.
 
     //Utility function called once when a new game starts.
     fun newGame() {
@@ -25,6 +26,9 @@ class EventSystem : GameStateElement() {
     }
 
     fun updateQuest(quest: Quest) {
+        if (quests.any { it.name == quest.name }) {
+            quests.removeIf { it.name == quest.name }
+        }
         quests.add(quest)
     }
 

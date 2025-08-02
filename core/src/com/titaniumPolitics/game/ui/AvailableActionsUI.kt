@@ -161,434 +161,461 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable 
             val t = scene2d.button("document") {
                 val tooltip = ActionTooltipUI(tobj)
                 addListener(tooltip)
-                image("Help") {
+                stack {
                     it.size(80f)
-                    color = Color.BLACK
+                    image("Help") {
+                        color = Color.BLACK
 
-                    when (tobj) {
+                        when (tobj) {
 
 
-                        "Examine" -> {
-                            this@button.style = defaultSkin.get("document", Button.ButtonStyle::class.java)
-                            this.setDrawable(defaultSkin, "SearchGrunge")
-                            this@button.addListener(object : ChangeListener() {
-                                override fun changed(event: ChangeEvent, actor: Actor) {
-                                    if (!this@button.isChecked) return
-                                    val examineUI =
-                                        ExamineUI(this@AvailableActionsUI.gameState)
-                                    this@AvailableActionsUI.setActionSheet(examineUI)
+                            "Examine" -> {
+                                this@button.style = defaultSkin.get("document", Button.ButtonStyle::class.java)
+                                this.setDrawable(defaultSkin, "SearchGrunge")
+                                this@button.addListener(object : ChangeListener() {
+                                    override fun changed(event: ChangeEvent, actor: Actor) {
+                                        if (!this@button.isChecked) return
+                                        val examineUI =
+                                            ExamineUI(this@AvailableActionsUI.gameState)
+                                        this@AvailableActionsUI.setActionSheet(examineUI)
+                                    }
                                 }
-                            }
-                            )
-                        }
-
-                        "Wait" -> {
-                            this.setDrawable(defaultSkin, "DotsGrunge")
-                            val action = Wait(
-                                this@AvailableActionsUI.gameState.playerName,
-                                this@AvailableActionsUI.gameState.player.place.name
-                            )
-                            action.injectParent(this@AvailableActionsUI.gameState); if (!action.isValid()) {
-                                this@button.isDisabled = true
-                                tooltip.displayInvalidReason(action.invalidReason)
+                                )
                             }
 
-                            this@button.addListener(object : ChangeListener() {
-                                override fun changed(event: ChangeEvent, actor: Actor) {
-                                    if (!this@button.isChecked) return
-                                    if (this@AvailableActionsUI.gameState.player.currentMeeting != null) {
-                                        GameEngine.acquireCallback(
-                                            Wait(
-                                                this@AvailableActionsUI.gameState.playerName,
-                                                this@AvailableActionsUI.gameState.player.place.name
+                            "Wait" -> {
+                                this.setDrawable(defaultSkin, "DotsGrunge")
+                                val action = Wait(
+                                    this@AvailableActionsUI.gameState.playerName,
+                                    this@AvailableActionsUI.gameState.player.place.name
+                                )
+                                action.injectParent(this@AvailableActionsUI.gameState); if (!action.isValid()) {
+                                    this@button.isDisabled = true
+                                    tooltip.displayInvalidReason(action.invalidReason)
+                                }
+
+                                this@button.addListener(object : ChangeListener() {
+                                    override fun changed(event: ChangeEvent, actor: Actor) {
+                                        if (!this@button.isChecked) return
+                                        if (this@AvailableActionsUI.gameState.player.currentMeeting != null) {
+                                            GameEngine.acquireCallback(
+                                                Wait(
+                                                    this@AvailableActionsUI.gameState.playerName,
+                                                    this@AvailableActionsUI.gameState.player.place.name
+                                                )
                                             )
-                                        )
-                                    } else {
+                                        } else {
+                                            val waitUI =
+                                                WaitUI(this@AvailableActionsUI.gameState, GameEngine.acquireCallback)
+                                            this@AvailableActionsUI.setActionSheet(waitUI)
+                                            waitUI.refresh(WaitUIMode.WAIT)
+                                        }
+                                    }
+                                })
+                            }
+
+                            "Eat" -> {
+                                this.setDrawable(defaultSkin, "AppleGrunge")
+                                val action = Eat(
+                                    this@AvailableActionsUI.gameState.playerName,
+                                    this@AvailableActionsUI.gameState.player.place.name
+                                )
+                                action.injectParent(this@AvailableActionsUI.gameState); if (!action.isValid()) {
+                                    this@button.isDisabled = true
+                                    tooltip.displayInvalidReason(action.invalidReason)
+                                }
+
+                                this@button.addListener(object : ChangeListener() {
+                                    override fun changed(event: ChangeEvent, actor: Actor) {
+                                        if (!this@button.isChecked) return
+                                        val sound =
+                                            Gdx.audio.newSound(Gdx.files.internal(ReadOnly.actionJson["Eat"]!!.jsonObject["sound"]!!.jsonPrimitive.content))
+                                        sound.play()
+                                        GameEngine.acquireCallback(action)
+                                        ProgressBackgroundUI.instance.setVisibleWithFade(true, "Eat")
+                                    }
+                                })
+                            }
+
+                            "Sleep" -> {
+                                this.setDrawable(defaultSkin, "icon_activity_117")
+                                val action = Sleep(
+                                    this@AvailableActionsUI.gameState.playerName,
+                                    this@AvailableActionsUI.gameState.player.place.name
+                                )
+                                action.injectParent(this@AvailableActionsUI.gameState); if (!action.isValid()) {
+                                    this@button.isDisabled = true
+                                    tooltip.displayInvalidReason(action.invalidReason)
+                                }
+
+                                this@button.addListener(object : ChangeListener() {
+                                    override fun changed(event: ChangeEvent, actor: Actor) {
+                                        if (!this@button.isChecked) return
                                         val waitUI =
                                             WaitUI(this@AvailableActionsUI.gameState, GameEngine.acquireCallback)
                                         this@AvailableActionsUI.setActionSheet(waitUI)
-                                        waitUI.refresh(WaitUIMode.WAIT)
+                                        waitUI.refresh(WaitUIMode.SLEEP)
                                     }
-                                }
-                            })
-                        }
-
-                        "Eat" -> {
-                            this.setDrawable(defaultSkin, "AppleGrunge")
-                            val action = Eat(
-                                this@AvailableActionsUI.gameState.playerName,
-                                this@AvailableActionsUI.gameState.player.place.name
-                            )
-                            action.injectParent(this@AvailableActionsUI.gameState); if (!action.isValid()) {
-                                this@button.isDisabled = true
-                                tooltip.displayInvalidReason(action.invalidReason)
+                                })
                             }
 
-                            this@button.addListener(object : ChangeListener() {
-                                override fun changed(event: ChangeEvent, actor: Actor) {
-                                    if (!this@button.isChecked) return
-                                    val sound =
-                                        Gdx.audio.newSound(Gdx.files.internal(ReadOnly.actionJson["Eat"]!!.jsonObject["sound"]!!.jsonPrimitive.content))
-                                    sound.play()
-                                    GameEngine.acquireCallback(action)
-                                    ProgressBackgroundUI.instance.setVisibleWithFade(true, "Eat")
-                                }
-                            })
-                        }
-
-                        "Sleep" -> {
-                            this.setDrawable(defaultSkin, "icon_activity_117")
-                            val action = Sleep(
-                                this@AvailableActionsUI.gameState.playerName,
-                                this@AvailableActionsUI.gameState.player.place.name
-                            )
-                            action.injectParent(this@AvailableActionsUI.gameState); if (!action.isValid()) {
-                                this@button.isDisabled = true
-                                tooltip.displayInvalidReason(action.invalidReason)
-                            }
-
-                            this@button.addListener(object : ChangeListener() {
-                                override fun changed(event: ChangeEvent, actor: Actor) {
-                                    if (!this@button.isChecked) return
-                                    val waitUI = WaitUI(this@AvailableActionsUI.gameState, GameEngine.acquireCallback)
-                                    this@AvailableActionsUI.setActionSheet(waitUI)
-                                    waitUI.refresh(WaitUIMode.SLEEP)
-                                }
-                            })
-                        }
-
-                        "Repair" -> {
-                            this.setDrawable(defaultSkin, "CogGrunge")
-                            val action = Repair(
-                                this@AvailableActionsUI.gameState.playerName,
-                                this@AvailableActionsUI.gameState.player.place.name
-                            )
-                            action.injectParent(this@AvailableActionsUI.gameState); if (!action.isValid()) {
-                                this@button.isDisabled = true
-                                tooltip.displayInvalidReason(action.invalidReason)
-                            }
-
-                            this@button.addListener(object : ChangeListener() {
-                                override fun changed(event: ChangeEvent, actor: Actor) {
-                                    if (!this@button.isChecked) return
-                                    GameEngine.acquireCallback(action)
-                                    ProgressBackgroundUI.instance.setVisibleWithFade(true, "Repair")
-                                }
-                            })
-                        }
-
-                        "UnofficialResourceTransfer" -> {
-                            this.setDrawable(defaultSkin, "TilesGrunge")
-                            this@button.addListener(object : ChangeListener() {
-                                override fun changed(event: ChangeEvent, actor: Actor) {
-                                    if (!this@button.isChecked) return
-                                    val resUI = ResourceTransferUI(
-                                        this@AvailableActionsUI.gameState,
-                                        GameEngine.acquireCallback
-                                    )
-                                    this@AvailableActionsUI.setActionSheet(resUI)
-                                    resUI.refresh(
-                                        "unofficial",
-                                        {
-                                            GameEngine.acquireCallback(it)
-                                            ProgressBackgroundUI.instance.setVisibleWithFade(
-                                                true,
-                                                "UnofficialResourceTransfer"
-                                            )
-                                        },
-                                        this@AvailableActionsUI.gameState.player.place.resources.toHashMap()
-                                    )
-                                }
-                            })
-                        }
-
-                        "OfficialResourceTransfer" -> {
-                            this.setDrawable(defaultSkin, "TilesGrunge")
-                            this@button.addListener(object : ChangeListener() {
-                                override fun changed(event: ChangeEvent, actor: Actor) {
-                                    if (!this@button.isChecked) return
-                                    val resUI = ResourceTransferUI(
-                                        this@AvailableActionsUI.gameState,
-                                        GameEngine.acquireCallback
-                                    )
-                                    this@AvailableActionsUI.setActionSheet(resUI)
-                                    resUI.refresh(
-                                        "official",
-                                        {
-                                            GameEngine.acquireCallback(it)
-                                            ProgressBackgroundUI.instance.setVisibleWithFade(
-                                                true,
-                                                "OfficialResourceTransfer"
-                                            )
-                                        },
-                                        this@AvailableActionsUI.gameState.player.place.resources.toHashMap()
-                                    )
-                                }
-                            })
-
-                        }
-
-
-                        "AddInfo" -> {
-                            this.setDrawable(defaultSkin, "TilesGrunge")
-                            if (this@AvailableActionsUI.gameState.player.preparedInfoKeys.isEmpty()) {
-                                this@button.isDisabled = true
-                                tooltip.displayInvalidReason(ReadOnly.prop("addInfo-noPreparedInfo"))
-                            } else
-                                if ((this@AvailableActionsUI.gameState.player.preparedInfoKeys - this@AvailableActionsUI.gameState.player.currentMeeting!!.agendas.flatMap { it.informationKeys }).isEmpty()) {
+                            "Repair" -> {
+                                this.setDrawable(defaultSkin, "CogGrunge")
+                                val action = Repair(
+                                    this@AvailableActionsUI.gameState.playerName,
+                                    this@AvailableActionsUI.gameState.player.place.name
+                                )
+                                action.injectParent(this@AvailableActionsUI.gameState); if (!action.isValid()) {
                                     this@button.isDisabled = true
-                                    tooltip.displayInvalidReason(ReadOnly.prop("addInfo-noAdditionalInfo"))
-                                } else if ((this@AvailableActionsUI.gameState.player.currentMeeting!!.agendas.isEmpty())) {
+                                    tooltip.displayInvalidReason(action.invalidReason)
+                                }
+
+                                this@button.addListener(object : ChangeListener() {
+                                    override fun changed(event: ChangeEvent, actor: Actor) {
+                                        if (!this@button.isChecked) return
+                                        GameEngine.acquireCallback(action)
+                                        ProgressBackgroundUI.instance.setVisibleWithFade(true, "Repair")
+                                    }
+                                })
+                            }
+
+                            "UnofficialResourceTransfer" -> {
+                                this.setDrawable(defaultSkin, "TilesGrunge")
+                                this@button.addListener(object : ChangeListener() {
+                                    override fun changed(event: ChangeEvent, actor: Actor) {
+                                        if (!this@button.isChecked) return
+                                        val resUI = ResourceTransferUI(
+                                            this@AvailableActionsUI.gameState,
+                                            GameEngine.acquireCallback
+                                        )
+                                        this@AvailableActionsUI.setActionSheet(resUI)
+                                        resUI.refresh(
+                                            "unofficial",
+                                            {
+                                                GameEngine.acquireCallback(it)
+                                                ProgressBackgroundUI.instance.setVisibleWithFade(
+                                                    true,
+                                                    "UnofficialResourceTransfer"
+                                                )
+                                            },
+                                            this@AvailableActionsUI.gameState.player.place.resources.toHashMap()
+                                        )
+                                    }
+                                })
+                            }
+
+                            "OfficialResourceTransfer" -> {
+                                this.setDrawable(defaultSkin, "TilesGrunge")
+                                this@button.addListener(object : ChangeListener() {
+                                    override fun changed(event: ChangeEvent, actor: Actor) {
+                                        if (!this@button.isChecked) return
+                                        val resUI = ResourceTransferUI(
+                                            this@AvailableActionsUI.gameState,
+                                            GameEngine.acquireCallback
+                                        )
+                                        this@AvailableActionsUI.setActionSheet(resUI)
+                                        resUI.refresh(
+                                            "official",
+                                            {
+                                                GameEngine.acquireCallback(it)
+                                                ProgressBackgroundUI.instance.setVisibleWithFade(
+                                                    true,
+                                                    "OfficialResourceTransfer"
+                                                )
+                                            },
+                                            this@AvailableActionsUI.gameState.player.place.resources.toHashMap()
+                                        )
+                                    }
+                                })
+
+                            }
+
+
+                            "AddInfo" -> {
+                                this.setDrawable(defaultSkin, "TilesGrunge")
+                                if (this@AvailableActionsUI.gameState.player.preparedInfoKeys.isEmpty()) {
                                     this@button.isDisabled = true
-                                    tooltip.displayInvalidReason(ReadOnly.prop("addInfo-noAgendas"))
-                                }
-                            this@button.addListener(object : ChangeListener() {
-                                override fun changed(event: ChangeEvent, actor: Actor) {
-                                    if (!this@button.isChecked) return
-                                    val addInfoUI =
-                                        AddInfoUI(this@AvailableActionsUI.gameState, GameEngine.acquireCallback)
-                                    this@AvailableActionsUI.setActionSheet(addInfoUI)
-                                    addInfoUI.refresh()
-                                }
-                            })
-                        }
-
-                        "EndSpeech" -> {
-                            this.setDrawable(defaultSkin, "TilesGrunge")
-                            this@button.addListener(object : ChangeListener() {
-                                override fun changed(event: ChangeEvent, actor: Actor) {
-                                    if (!this@button.isChecked) return
-                                    val endSpeechUI =
-                                        EndSpeechUI(this@AvailableActionsUI.gameState, GameEngine.acquireCallback)
-                                    this@AvailableActionsUI.setActionSheet(endSpeechUI)
-                                    endSpeechUI.refresh()
-                                }
-                            })
-                        }
-
-
-                        "InvestigateAccidentScene" -> {
-                            this.setDrawable(defaultSkin, "TilesGrunge")
-                            val action = InvestigateAccidentScene(
-                                this@AvailableActionsUI.gameState.playerName,
-                                this@AvailableActionsUI.gameState.player.place.name
-                            )
-                            action.injectParent(this@AvailableActionsUI.gameState); if (!action.isValid()) {
-                                this@button.isDisabled = true
-                                tooltip.displayInvalidReason(action.invalidReason)
+                                    tooltip.displayInvalidReason(ReadOnly.prop("addInfo-noPreparedInfo"))
+                                } else
+                                    if ((this@AvailableActionsUI.gameState.player.preparedInfoKeys - this@AvailableActionsUI.gameState.player.currentMeeting!!.agendas.flatMap { it.informationKeys }).isEmpty()) {
+                                        this@button.isDisabled = true
+                                        tooltip.displayInvalidReason(ReadOnly.prop("addInfo-noAdditionalInfo"))
+                                    } else if ((this@AvailableActionsUI.gameState.player.currentMeeting!!.agendas.isEmpty())) {
+                                        this@button.isDisabled = true
+                                        tooltip.displayInvalidReason(ReadOnly.prop("addInfo-noAgendas"))
+                                    }
+                                this@button.addListener(object : ChangeListener() {
+                                    override fun changed(event: ChangeEvent, actor: Actor) {
+                                        if (!this@button.isChecked) return
+                                        val addInfoUI =
+                                            AddInfoUI(this@AvailableActionsUI.gameState, GameEngine.acquireCallback)
+                                        this@AvailableActionsUI.setActionSheet(addInfoUI)
+                                        addInfoUI.refresh()
+                                    }
+                                })
                             }
 
-                            this@button.addListener(object : ChangeListener() {
-                                override fun changed(event: ChangeEvent, actor: Actor) {
-                                    if (!this@button.isChecked) return
-                                    GameEngine.acquireCallback(action)
-                                }
-                            })
-                            ProgressBackgroundUI.instance.setVisibleWithFade(true, "InvestigateAccidentScene")
-                        }
-
-                        "ClearAccidentScene" -> {
-                            this.setDrawable(defaultSkin, "TilesGrunge")
-                            val action = ClearAccidentScene(
-                                this@AvailableActionsUI.gameState.playerName,
-                                this@AvailableActionsUI.gameState.player.place.name
-                            )
-                            action.injectParent(this@AvailableActionsUI.gameState); if (!action.isValid()) {
-                                this@button.isDisabled = true
-                                tooltip.displayInvalidReason(action.invalidReason)
+                            "EndSpeech" -> {
+                                this.setDrawable(defaultSkin, "TilesGrunge")
+                                this@button.addListener(object : ChangeListener() {
+                                    override fun changed(event: ChangeEvent, actor: Actor) {
+                                        if (!this@button.isChecked) return
+                                        val endSpeechUI =
+                                            EndSpeechUI(this@AvailableActionsUI.gameState, GameEngine.acquireCallback)
+                                        this@AvailableActionsUI.setActionSheet(endSpeechUI)
+                                        endSpeechUI.refresh()
+                                    }
+                                })
                             }
 
-                            this@button.addListener(object : ChangeListener() {
-                                override fun changed(event: ChangeEvent, actor: Actor) {
-                                    if (!this@button.isChecked) return
-                                    GameEngine.acquireCallback(action)
-                                }
-                            })
-                            ProgressBackgroundUI.instance.setVisibleWithFade(true, "ClearAccidentScene")
-                        }
 
-                        "Intercept" -> {
-                            this.setDrawable(defaultSkin, "TilesGrunge")
-                            val action = Intercept(
-                                this@AvailableActionsUI.gameState.playerName,
-                                this@AvailableActionsUI.gameState.player.place.name
-                            )
-                            action.injectParent(this@AvailableActionsUI.gameState); if (!action.isValid()) {
-                                this@button.isDisabled = true
-                                tooltip.displayInvalidReason(action.invalidReason)
+                            "InvestigateAccidentScene" -> {
+                                this.setDrawable(defaultSkin, "TilesGrunge")
+                                val action = InvestigateAccidentScene(
+                                    this@AvailableActionsUI.gameState.playerName,
+                                    this@AvailableActionsUI.gameState.player.place.name
+                                )
+                                action.injectParent(this@AvailableActionsUI.gameState); if (!action.isValid()) {
+                                    this@button.isDisabled = true
+                                    tooltip.displayInvalidReason(action.invalidReason)
+                                }
+
+                                this@button.addListener(object : ChangeListener() {
+                                    override fun changed(event: ChangeEvent, actor: Actor) {
+                                        if (!this@button.isChecked) return
+                                        GameEngine.acquireCallback(action)
+                                    }
+                                })
+                                ProgressBackgroundUI.instance.setVisibleWithFade(true, "InvestigateAccidentScene")
                             }
 
-                            this@button.addListener(object : ChangeListener() {
-                                override fun changed(event: ChangeEvent, actor: Actor) {
-                                    if (!this@button.isChecked) return
-                                    GameEngine.acquireCallback(action)
+                            "ClearAccidentScene" -> {
+                                this.setDrawable(defaultSkin, "TilesGrunge")
+                                val action = ClearAccidentScene(
+                                    this@AvailableActionsUI.gameState.playerName,
+                                    this@AvailableActionsUI.gameState.player.place.name
+                                )
+                                action.injectParent(this@AvailableActionsUI.gameState); if (!action.isValid()) {
+                                    this@button.isDisabled = true
+                                    tooltip.displayInvalidReason(action.invalidReason)
                                 }
-                            })
-                        }
 
-                        "Resign" -> {
-                            this.setDrawable(defaultSkin, "TilesGrunge")
-                            val action = Resign(
-                                this@AvailableActionsUI.gameState.playerName,
-                                this@AvailableActionsUI.gameState.player.place.name
-                            )
-                            action.injectParent(this@AvailableActionsUI.gameState); if (!action.isValid()) {
-                                this@button.isDisabled = true
-                                tooltip.displayInvalidReason(action.invalidReason)
+                                this@button.addListener(object : ChangeListener() {
+                                    override fun changed(event: ChangeEvent, actor: Actor) {
+                                        if (!this@button.isChecked) return
+                                        GameEngine.acquireCallback(action)
+                                    }
+                                })
+                                ProgressBackgroundUI.instance.setVisibleWithFade(true, "ClearAccidentScene")
                             }
 
-                            this@button.addListener(object : ChangeListener() {
-                                override fun changed(event: ChangeEvent, actor: Actor) {
-                                    if (!this@button.isChecked) return
-                                    GameEngine.acquireCallback(action)
+                            "Intercept" -> {
+                                this.setDrawable(defaultSkin, "TilesGrunge")
+                                val action = Intercept(
+                                    this@AvailableActionsUI.gameState.playerName,
+                                    this@AvailableActionsUI.gameState.player.place.name
+                                )
+                                action.injectParent(this@AvailableActionsUI.gameState); if (!action.isValid()) {
+                                    this@button.isDisabled = true
+                                    tooltip.displayInvalidReason(action.invalidReason)
                                 }
-                            })
-                        }
 
-                        "Salary" -> {
-                            this.setDrawable(defaultSkin, "TilesGrunge")
-                            val action = Salary(
-                                this@AvailableActionsUI.gameState.playerName,
-                                this@AvailableActionsUI.gameState.player.place.name
-                            )
-                            action.injectParent(this@AvailableActionsUI.gameState); if (!action.isValid()) {
-                                this@button.isDisabled = true
-                                tooltip.displayInvalidReason(action.invalidReason)
+                                this@button.addListener(object : ChangeListener() {
+                                    override fun changed(event: ChangeEvent, actor: Actor) {
+                                        if (!this@button.isChecked) return
+                                        GameEngine.acquireCallback(action)
+                                    }
+                                })
                             }
 
-                            this@button.addListener(object : ChangeListener() {
-                                override fun changed(event: ChangeEvent, actor: Actor) {
-                                    if (!this@button.isChecked) return
-                                    GameEngine.acquireCallback(action)
+                            "Resign" -> {
+                                this.setDrawable(defaultSkin, "TilesGrunge")
+                                val action = Resign(
+                                    this@AvailableActionsUI.gameState.playerName,
+                                    this@AvailableActionsUI.gameState.player.place.name
+                                )
+                                action.injectParent(this@AvailableActionsUI.gameState); if (!action.isValid()) {
+                                    this@button.isDisabled = true
+                                    tooltip.displayInvalidReason(action.invalidReason)
                                 }
-                            })
-                        }
 
-                        "PrepareInfo" -> {
-                            this.setDrawable(defaultSkin, "TilesGrunge")
-                            if (this@AvailableActionsUI.gameState.informations.filter { it.value.knownTo.contains(this@AvailableActionsUI.gameState.playerName) }
-                                    .isEmpty()) {
-                                this@button.isDisabled = true
-                                tooltip.displayInvalidReason(ReadOnly.prop("prepareInfo-noKnownInfo"))
+                                this@button.addListener(object : ChangeListener() {
+                                    override fun changed(event: ChangeEvent, actor: Actor) {
+                                        if (!this@button.isChecked) return
+                                        GameEngine.acquireCallback(action)
+                                    }
+                                })
                             }
-                            this@button.addListener(object : ChangeListener() {
-                                override fun changed(event: ChangeEvent, actor: Actor) {
-                                    if (!this@button.isChecked) return
-                                    InformationViewUI.instance.isVisible = true
-                                    InformationViewUI.instance.refresh("tgtTime", InformationViewMode.SELECT) { keys ->
+
+                            "Salary" -> {
+                                this.setDrawable(defaultSkin, "TilesGrunge")
+                                val action = Salary(
+                                    this@AvailableActionsUI.gameState.playerName,
+                                    this@AvailableActionsUI.gameState.player.place.name
+                                )
+                                action.injectParent(this@AvailableActionsUI.gameState); if (!action.isValid()) {
+                                    this@button.isDisabled = true
+                                    tooltip.displayInvalidReason(action.invalidReason)
+                                }
+
+                                this@button.addListener(object : ChangeListener() {
+                                    override fun changed(event: ChangeEvent, actor: Actor) {
+                                        if (!this@button.isChecked) return
+                                        GameEngine.acquireCallback(action)
+                                    }
+                                })
+                            }
+
+                            "PrepareInfo" -> {
+                                this.setDrawable(defaultSkin, "TilesGrunge")
+                                if (this@AvailableActionsUI.gameState.informations.filter {
+                                        it.value.knownTo.contains(
+                                            this@AvailableActionsUI.gameState.playerName
+                                        )
+                                    }
+                                        .isEmpty()) {
+                                    this@button.isDisabled = true
+                                    tooltip.displayInvalidReason(ReadOnly.prop("prepareInfo-noKnownInfo"))
+                                }
+                                this@button.addListener(object : ChangeListener() {
+                                    override fun changed(event: ChangeEvent, actor: Actor) {
+                                        if (!this@button.isChecked) return
+                                        InformationViewUI.instance.isVisible = true
+                                        InformationViewUI.instance.refresh(
+                                            "tgtTime",
+                                            InformationViewMode.SELECT
+                                        ) { keys ->
+                                            GameEngine.acquireCallback(
+                                                PrepareInfo(
+                                                    this@AvailableActionsUI.gameState.playerName,
+                                                    this@AvailableActionsUI.gameState.player.place.name
+                                                ).also {
+                                                    it.newSetOfPrepInfoKeys = ArrayList(keys)
+                                                })
+                                            ProgressBackgroundUI.instance.setVisibleWithFade(true, "PrepareInfo")
+                                        }
+                                    }
+                                })
+                            }
+
+
+                            "JoinMeeting" -> {
+                                this.setDrawable(defaultSkin, "ChatGrunge")
+                                this@button.addListener(object : ChangeListener() {
+                                    override fun changed(event: ChangeEvent, actor: Actor) {
+                                        if (!this@button.isChecked) return
                                         GameEngine.acquireCallback(
-                                            PrepareInfo(
+                                            JoinMeeting(
                                                 this@AvailableActionsUI.gameState.playerName,
                                                 this@AvailableActionsUI.gameState.player.place.name
                                             ).also {
-                                                it.newSetOfPrepInfoKeys = ArrayList(keys)
-                                            })
-                                        ProgressBackgroundUI.instance.setVisibleWithFade(true, "PrepareInfo")
+                                                it.meetingName =
+                                                    this@AvailableActionsUI.gameState.ongoingMeetings.filter {
+                                                        it.value.scheduledCharacters.contains(this@AvailableActionsUI.gameState.playerName) && it.value.place == this@AvailableActionsUI.gameState.player.place.name
+                                                    }.keys.first()
+                                            }
+                                        )
                                     }
-                                }
-                            })
-                        }
-
-
-                        "JoinMeeting" -> {
-                            this.setDrawable(defaultSkin, "ChatGrunge")
-                            this@button.addListener(object : ChangeListener() {
-                                override fun changed(event: ChangeEvent, actor: Actor) {
-                                    if (!this@button.isChecked) return
-                                    GameEngine.acquireCallback(
-                                        JoinMeeting(
-                                            this@AvailableActionsUI.gameState.playerName,
-                                            this@AvailableActionsUI.gameState.player.place.name
-                                        ).also {
-                                            it.meetingName = this@AvailableActionsUI.gameState.ongoingMeetings.filter {
-                                                it.value.scheduledCharacters.contains(this@AvailableActionsUI.gameState.playerName) && it.value.place == this@AvailableActionsUI.gameState.player.place.name
-                                            }.keys.first()
-                                        }
-                                    )
-                                }
-                            })
-                        }
-
-                        "StartMeeting" -> {
-                            this.setDrawable(defaultSkin, "ChatGrunge")
-                            this@button.addListener(object : ChangeListener() {
-                                override fun changed(event: ChangeEvent, actor: Actor) {
-                                    if (!this@button.isChecked) return
-                                    GameEngine.acquireCallback(
-                                        StartMeeting(
-                                            this@AvailableActionsUI.gameState.playerName,
-                                            this@AvailableActionsUI.gameState.player.place.name
-                                        ).also {
-                                            it.meetingName =
-                                                this@AvailableActionsUI.gameState.scheduledMeetings.filter {
-                                                    it.value.scheduledCharacters.contains(this@AvailableActionsUI.gameState.playerName) && it.value.place == this@AvailableActionsUI.gameState.player.place.name
-                                                }.keys.first()
-                                        }
-                                    )
-                                }
-                            })
-                        }
-
-
-                        "NewAgenda" -> {
-                            this.setDrawable(defaultSkin, "PlusGrunge")
-                            this@button.addListener(object : ChangeListener() {
-                                override fun changed(event: ChangeEvent, actor: Actor) {
-                                    if (!this@button.isChecked) return
-                                    val newAgendaUI =
-                                        NewAgendaUI(this@AvailableActionsUI.gameState, GameEngine.acquireCallback)
-                                    this@AvailableActionsUI.setActionSheet(newAgendaUI)
-                                    newAgendaUI.refresh(this@AvailableActionsUI.gameState)
-                                    //TODO: Logger.warning("New Agenda Action should never be called from AcailableActionsUI, it is called from MeetingUI.")
-                                }
-                            })
-                        }
-
-                        "LeaveMeeting" -> {
-                            this.setDrawable(defaultSkin, "XGrunge")
-                            val action = LeaveMeeting(
-                                this@AvailableActionsUI.gameState.playerName,
-                                this@AvailableActionsUI.gameState.player.place.name
-                            )
-                            action.injectParent(this@AvailableActionsUI.gameState); if (!action.isValid()) {
-                                this@button.isDisabled = true
-                                tooltip.displayInvalidReason(action.invalidReason)
+                                })
                             }
 
-                            this@button.addListener(object : ChangeListener() {
-                                override fun changed(event: ChangeEvent, actor: Actor) {
-                                    if (!this@button.isChecked) return
-                                    GameEngine.acquireCallback(action)
-                                }
-                            })
-                        }
-
-                        "EndMeeting" -> {
-                            this.setDrawable(defaultSkin, "XGrunge")
-                            val action = EndMeeting(
-                                this@AvailableActionsUI.gameState.playerName,
-                                this@AvailableActionsUI.gameState.player.place.name
-                            )
-                            action.injectParent(this@AvailableActionsUI.gameState); if (!action.isValid()) {
-                                this@button.isDisabled = true
-                                tooltip.displayInvalidReason(action.invalidReason)
+                            "StartMeeting" -> {
+                                this.setDrawable(defaultSkin, "ChatGrunge")
+                                this@button.addListener(object : ChangeListener() {
+                                    override fun changed(event: ChangeEvent, actor: Actor) {
+                                        if (!this@button.isChecked) return
+                                        GameEngine.acquireCallback(
+                                            StartMeeting(
+                                                this@AvailableActionsUI.gameState.playerName,
+                                                this@AvailableActionsUI.gameState.player.place.name
+                                            ).also {
+                                                it.meetingName =
+                                                    this@AvailableActionsUI.gameState.scheduledMeetings.filter {
+                                                        it.value.scheduledCharacters.contains(this@AvailableActionsUI.gameState.playerName) && it.value.place == this@AvailableActionsUI.gameState.player.place.name
+                                                    }.keys.first()
+                                            }
+                                        )
+                                    }
+                                })
                             }
 
-                            this@button.addListener(object : ChangeListener() {
-                                override fun changed(event: ChangeEvent, actor: Actor) {
-                                    if (!this@button.isChecked) return
-                                    GameEngine.acquireCallback(action)
-                                }
-                            })
-                        }
-                        //TODO: also make changes to NewAgendaUI.kt, ActionSelectUI.kt
-                        else -> {
-                            this.setDrawable(defaultSkin, "Help")
 
+                            "NewAgenda" -> {
+                                this.setDrawable(defaultSkin, "PlusGrunge")
+                                this@button.addListener(object : ChangeListener() {
+                                    override fun changed(event: ChangeEvent, actor: Actor) {
+                                        if (!this@button.isChecked) return
+                                        val newAgendaUI =
+                                            NewAgendaUI(this@AvailableActionsUI.gameState, GameEngine.acquireCallback)
+                                        this@AvailableActionsUI.setActionSheet(newAgendaUI)
+                                        newAgendaUI.refresh(this@AvailableActionsUI.gameState)
+                                        //TODO: Logger.warning("New Agenda Action should never be called from AcailableActionsUI, it is called from MeetingUI.")
+                                    }
+                                })
+                            }
+
+                            "LeaveMeeting" -> {
+                                this.setDrawable(defaultSkin, "XGrunge")
+                                val action = LeaveMeeting(
+                                    this@AvailableActionsUI.gameState.playerName,
+                                    this@AvailableActionsUI.gameState.player.place.name
+                                )
+                                action.injectParent(this@AvailableActionsUI.gameState); if (!action.isValid()) {
+                                    this@button.isDisabled = true
+                                    tooltip.displayInvalidReason(action.invalidReason)
+                                }
+
+                                this@button.addListener(object : ChangeListener() {
+                                    override fun changed(event: ChangeEvent, actor: Actor) {
+                                        if (!this@button.isChecked) return
+                                        GameEngine.acquireCallback(action)
+                                    }
+                                })
+                            }
+
+                            "EndMeeting" -> {
+                                this.setDrawable(defaultSkin, "XGrunge")
+                                val action = EndMeeting(
+                                    this@AvailableActionsUI.gameState.playerName,
+                                    this@AvailableActionsUI.gameState.player.place.name
+                                )
+                                action.injectParent(this@AvailableActionsUI.gameState); if (!action.isValid()) {
+                                    this@button.isDisabled = true
+                                    tooltip.displayInvalidReason(action.invalidReason)
+                                }
+
+                                this@button.addListener(object : ChangeListener() {
+                                    override fun changed(event: ChangeEvent, actor: Actor) {
+                                        if (!this@button.isChecked) return
+                                        GameEngine.acquireCallback(action)
+                                    }
+                                })
+                            }
+                            //TODO: also make changes to NewAgendaUI.kt, ActionSelectUI.kt
+                            else -> {
+                                this.setDrawable(defaultSkin, "Help")
+
+                            }
+                        }
+
+                    }
+                    container {
+                        debug()
+                        align(Align.bottomLeft)
+                        size(30f)
+                        stack {
+                            image("white-pixel") {
+                                color = Color.BLACK
+                            }
+                            label("1", "docTitle") {
+                                setFontScale(0.4f)
+                                color = Color.WHITE
+                                setAlignment(Align.center)
+                            }
                         }
                     }
-
                 }
+
             }
             t.addListener(object : ChangeListener() {
                 override fun changed(event: ChangeEvent, actor: Actor) {

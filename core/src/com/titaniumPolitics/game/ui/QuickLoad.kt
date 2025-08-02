@@ -7,7 +7,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.titaniumPolitics.game.EntryClass
+import com.titaniumPolitics.game.core.GameEngine
 import com.titaniumPolitics.game.core.GameState
+import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.json.Json
 import ktx.scene2d.KTable
 import ktx.scene2d.Scene2DSkin.defaultSkin
@@ -15,6 +17,9 @@ import ktx.scene2d.button
 import ktx.scene2d.label
 import ktx.scene2d.scene2d
 import ktx.scene2d.textField
+import kotlin.concurrent.thread
+import kotlin.coroutines.resume
+import kotlin.coroutines.suspendCoroutine
 
 class QuickLoad() : Table(defaultSkin), KTable {
     val path = textField { }
@@ -26,6 +31,7 @@ class QuickLoad() : Table(defaultSkin), KTable {
                 override fun clicked(event: InputEvent, x: Float, y: Float) {
                     super.clicked(event, x, y)
                     val savedGamePath = this@QuickLoad.path.text
+                    //TODO: Check MainMenu for the same logic.
                     println("Loading saved game from $savedGamePath...")
                     val newGame = Json.decodeFromString(
                         GameState.serializer(),
@@ -34,12 +40,33 @@ class QuickLoad() : Table(defaultSkin), KTable {
                         it.injectDependency()
                         println("Loading complete.")
                         EntryClass.instance.stage = CapsuleStage(it)
-                        Gdx.input.inputProcessor = stage
+                        Gdx.input.inputProcessor = EntryClass.instance.stage
+                    }
+
+                    println("Starting game engine.")
+
+                    thread(start = true) {
+                        val engine = GameEngine(newGame)
+                        engine.onObserverCall += {
+                            runBlocking {
+                                suspendCoroutine { cont ->
+                                    Gdx.app.postRunnable {
+                                        val current =
+                                            newGame.updateUI.clone() as ArrayList<(GameState) -> Unit> //Clone the list to prevent concurrent modification, because updateUI can be modified by UI elements during the update.
+                                        current.forEach { it(newGame) }//Update UI
+                                        cont.resume(Unit)
+                                    }
+                                }
+                            }
+
+                        }
+                        engine.startGame()
                     }
                 }
             })
         }
         add(path).size(500f, 100f)
+        path.text = "saveBeforeMeeting.json" // Default path
     }
 
 

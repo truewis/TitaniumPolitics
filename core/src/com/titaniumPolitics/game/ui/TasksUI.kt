@@ -7,6 +7,7 @@ import com.badlogic.gdx.utils.Align
 import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.ui.widget.TimeAmountUI
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.Transient
 import ktx.scene2d.Scene2DSkin.defaultSkin
 import ktx.scene2d.scene2d
 import ktx.scene2d.*
@@ -110,6 +111,7 @@ data class Quest(
     val tgtMeeting: String? = null,
     val dueTime: Int? = null,
 ) {
+    @Transient
     lateinit var parent: GameState
     var isCompleted: Boolean = false
     val index: Int
