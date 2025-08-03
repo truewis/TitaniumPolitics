@@ -19,13 +19,11 @@ import ktx.scene2d.*
 
 
 class AddInfoUI(val gameState: GameState, override var actionCallback: (GameAction) -> Unit) :
-    ActionSheetUI("AddInfoTitle"), ActionUI {
+    ActionSheetUI("AddInfoTitle", gameState) {
     private val dataTable = Table()
     private var targetTable = Table()
     private var agendaTable = scene2d.buttonGroup(1, 1)
-
-    private var subject = gameState.playerName
-    private val sbjChar = gameState.characters[subject]!!
+    private val sbjChar get() = gameState.characters[subject]!!
     var infoKey = ""
     lateinit var agenda: MeetingAgenda
 
@@ -120,7 +118,10 @@ class AddInfoUI(val gameState: GameState, override var actionCallback: (GameActi
                             ) {
                                 this@AddInfoUI.targetTable.clear()
                                 this@AddInfoUI.targetTable.add(
-                                    scene2d.label(this@AddInfoUI.gameState.informations[key]!!.simpleDescription(), "docTitle") {
+                                    scene2d.label(
+                                        this@AddInfoUI.gameState.informations[key]!!.simpleDescription(),
+                                        "docTitle"
+                                    ) {
                                         color = Color.BLACK
                                         setAlignment(Align.center)
                                         wrap = true
@@ -132,11 +133,6 @@ class AddInfoUI(val gameState: GameState, override var actionCallback: (GameActi
             })
         }
     }
-
-    override fun changeSubject(charName: String) {
-        subject = charName
-    }
-
 
 
 }

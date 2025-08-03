@@ -14,7 +14,7 @@ import ktx.scene2d.image
 import ktx.scene2d.label
 
 class ActionSelectButton(callback: (GameAction) -> Unit) : Button(defaultSkin, "default"), KTable {
-    val actionIcon: Image = image("") {
+    val actionIcon: Image = image("Help") {
         it.size(100f)
     }
     val actionNameLabel: Label
@@ -22,7 +22,7 @@ class ActionSelectButton(callback: (GameAction) -> Unit) : Button(defaultSkin, "
 
     init {
         row()
-        actionNameLabel = label("", "docTitle") { setFontScale(3f) }
+        actionNameLabel = label("", "docTitle") { setFontScale(0.4f) }
         addListener(object : ClickListener() {
             override fun clicked(event: InputEvent?, x: Float, y: Float) {
                 ActionSelectUI.instance.isVisible = true
@@ -53,6 +53,6 @@ class ActionSelectButton(callback: (GameAction) -> Unit) : Button(defaultSkin, "
     }
 
     fun changeSubject(subject: String) {
-        ActionSelectUI.instance.changeSubject(subject)
+        ActionSelectUI.instance.subject = subject
     }
 }

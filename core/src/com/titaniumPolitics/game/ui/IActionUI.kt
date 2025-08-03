@@ -3,8 +3,8 @@ package com.titaniumPolitics.game.ui
 import com.titaniumPolitics.game.core.gameActions.GameAction
 
 
-interface ActionUI
-{
+interface IActionUI {
     var actionCallback: (GameAction) -> Unit
-    fun changeSubject(charName: String)
+    var subject: String
+    var tgtPlace: String
 }

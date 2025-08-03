@@ -16,9 +16,8 @@ import ktx.scene2d.*
 
 
 class EndSpeechUI(val gameState: GameState, override var actionCallback: (GameAction) -> Unit) :
-    ActionSheetUI("EndSpeechTitle"), ActionUI {
-    private var subject = gameState.playerName
-    private val sbjChar = gameState.characters[subject]!!
+    ActionSheetUI("EndSpeechTitle", gameState) {
+    private val sbjChar get() = gameState.characters[subject]!!
     private val charSelector = CharacterSelectButton(skin, { nextSpeaker = it })
     var nextSpeaker = ""
 
@@ -60,10 +59,6 @@ class EndSpeechUI(val gameState: GameState, override var actionCallback: (GameAc
         nextSpeaker = gameState.player.currentMeeting!!.currentCharacters.first { it != subject }
         charSelector.availableCharacters = gameState.player.currentMeeting!!.currentCharacters
         charSelector.setLabel(nextSpeaker)
-    }
-
-    override fun changeSubject(charName: String) {
-        subject = charName
     }
 
 

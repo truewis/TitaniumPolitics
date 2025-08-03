@@ -11,40 +11,35 @@ import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
 @Serializable
-class Examine(override val sbjCharacter: String, override val tgtPlace: String) : GameAction()
-{
+class Examine(override val sbjCharacter: String, override val tgtPlace: String) : GameAction() {
     var what = ""
-    override fun chooseParams()
-    {
+    override fun chooseParams() {
         what = GameEngine.acquire(arrayListOf("HR", "apparatus", "resources"))
     }
 
-    override fun execute()
-    {
-        when (what)
-        {
-            "HR" ->
-            {
-                //Acquire HR information is not planned.
+    override fun execute() {
+        when (what) {
+            "HR" -> {
+                //Acquire HR information
                 println("HR: ${parent.places[tgtPlace]!!.currentWorker}/${parent.places[tgtPlace]!!.plannedWorker}, ${parent.places[tgtPlace]!!.workHoursStart}-${parent.places[tgtPlace]!!.workHoursEnd}, ${parent.places[tgtPlace]!!.responsibleDivision}")
-                //This action has no effect on the game state.
-                //Open HR window Directly.
-                if (sbjCharacter == parent.playerName)
-                {
-                    runBlocking {
-                        suspendCoroutine { cont ->
-                            Gdx.app.postRunnable {
-                                HumanResourceInfoUI.instance.isVisible = true
-                                HumanResourceInfoUI.instance.refresh(parent.places[tgtPlace]!!, parent.time)
-                                cont.resume(Unit)
-                            }
-                        }
+
+                //Acquire apparatus information.
+                with(parent.places[tgtPlace]!!) {
+                    Information(
+                        author = sbjCharacter,
+                        creationTime = parent.time,
+                        type = InformationType.HUMAN_RESOURCES,
+                        tgtTime = parent.time,
+                        tgtPlace = tgtPlace,
+                        amount = currentWorker
+                    ).also {
+                        it.knownTo.add(sbjCharacter);parent.addInformation(it)
                     }
+
                 }
             }
 
-            "apparatus" ->
-            {
+            "apparatus" -> {
                 println("Apparatus: ${parent.places[tgtPlace]!!.apparatuses}")
 
                 //Acquire apparatus information.
@@ -64,10 +59,8 @@ class Examine(override val sbjCharacter: String, override val tgtPlace: String) 
                 }
             }
 
-            "resources" ->
-            {
-                if (tgtPlace.contains("home"))
-                {//Home is the exception; character's resources are shown instead.
+            "resources" -> {
+                if (tgtPlace.contains("home")) {//Home is the exception; character's resources are shown instead.
                     println("Resources: ${parent.characters[sbjCharacter]!!.resources}")
                     //Acquire resources information of this character.
                     parent.characters[sbjCharacter]!!.resources
@@ -82,8 +75,7 @@ class Examine(override val sbjCharacter: String, override val tgtPlace: String) 
                         it.knownTo.add(sbjCharacter);parent.addInformation(it)
                     }
 
-                } else
-                {
+                } else {
                     println("Resources: ${parent.places[tgtPlace]!!.resources}")
                     //Acquire resources information of this place.
                     Information(
@@ -105,13 +97,11 @@ class Examine(override val sbjCharacter: String, override val tgtPlace: String) 
         super.execute()
     }
 
-    override fun isValid(): Boolean
-    {
+    override fun isValid(): Boolean {
         return true
     }
 
-    override fun deltaWill(): Double
-    {
+    override fun deltaWill(): Double {
         var w = super.deltaWill()
         if (parent.characters[sbjCharacter]!!.trait.contains("investigator"))
             w += 10

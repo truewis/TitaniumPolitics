@@ -138,11 +138,15 @@ data class Information(//If there is no author, it is a rumor.
                 val apparatus = if (tgtApparatus.isNotEmpty()) tgtApparatus else "an apparatus"
                 "$apparatus durability is $amount at $tgtPlace"
             }
+
+            InformationType.HUMAN_RESOURCES -> {
+                "There are $amount current workers at $tgtPlace"
+            }
         }
     }
 }
 
 @Serializable
 enum class InformationType {
-    ACTION, RESOURCES, CASUALTY, LOST_RESOURCES, DAMAGED_APPARATUS, APPARATUS_DURABILITY
+    ACTION, RESOURCES, CASUALTY, LOST_RESOURCES, DAMAGED_APPARATUS, APPARATUS_DURABILITY, HUMAN_RESOURCES
 }

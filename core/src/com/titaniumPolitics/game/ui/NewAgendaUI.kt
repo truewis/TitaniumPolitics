@@ -23,10 +23,8 @@ import ktx.scene2d.buttonGroup
 
 
 class NewAgendaUI(gameState: GameState, override var actionCallback: (GameAction) -> Unit) :
-    ActionSheetUI("NewAgendaTitle"),
-    ActionUI {
-    private var subject = gameState.playerName
-    val sbjObject = gameState.characters[subject]!!
+    ActionSheetUI("NewAgendaTitle", gameState) {
+    val sbjChar = gameState.characters[subject]!!
 
     lateinit var agenda: MeetingAgenda
     private var availableAgendas = arrayOf<AgendaType>()
@@ -113,7 +111,18 @@ class NewAgendaUI(gameState: GameState, override var actionCallback: (GameAction
 
         row()
         //Select Action
-        add(this@NewAgendaUI.actionSelButton).size(1000f, 500f)
+        add(this@NewAgendaUI.actionSelButton).size(100f, 100f)
+        this@NewAgendaUI.actionSelButton.availableActions = setOf(
+            "Examine",
+            "UnofficialResourceTransfer",
+            "OfficialResourceTransfer",
+            "Repair",
+            "Salary",
+            "SetWorkers",
+            "SetWorkHours",
+            "InvestigateAccidentScene",
+            "ClearAccidentScene"
+        )
     }
     val st = scene2d.stack {
         table {
@@ -145,7 +154,7 @@ class NewAgendaUI(gameState: GameState, override var actionCallback: (GameAction
                         this@NewAgendaUI.actionCallback(
                             NewAgenda(
                                 this@NewAgendaUI.subject,
-                                this@NewAgendaUI.sbjObject.place.name
+                                this@NewAgendaUI.sbjChar.place.name
                             ).apply { agenda = this@NewAgendaUI.agenda })
                         this@NewAgendaUI.onClose.forEach { it() }
                     }
@@ -383,9 +392,9 @@ class NewAgendaUI(gameState: GameState, override var actionCallback: (GameAction
                 AgendaType.REQUEST,
                 AgendaType.APPOINT_MEETING
             )
-        if (this@NewAgendaUI.sbjObject.currentMeeting == null)
+        if (this@NewAgendaUI.sbjChar.currentMeeting == null)
             throw Exception("Player is not in a meeting.")
-        val mt = this@NewAgendaUI.sbjObject.currentMeeting!!
+        val mt = this@NewAgendaUI.sbjChar.currentMeeting!!
         if (mt.type == Meeting.MeetingType.DIVISION_LEADER_ELECTION)
             availableAgendas += AgendaType.NOMINATE
         if (mt.involvedParty == "cabinet" && !gameState.isBudgetProposed)
@@ -396,10 +405,6 @@ class NewAgendaUI(gameState: GameState, override var actionCallback: (GameAction
         if (mt.type == Meeting.MeetingType.DIVISION_DAILY_CONFERENCE && gameState.parties[mt.involvedParty]!!.leader == subject)
             availableAgendas += AgendaType.FIRE_MANAGER
         //TODO: Also update NewAgenda.kt
-    }
-
-    override fun changeSubject(charName: String) {
-        subject = charName
     }
 
 

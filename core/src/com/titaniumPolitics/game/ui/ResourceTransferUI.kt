@@ -21,11 +21,9 @@ import ktx.scene2d.*
 
 
 class ResourceTransferUI(gameState: GameState, override var actionCallback: (GameAction) -> Unit) :
-    ActionSheetUI("ResourceTransferTitle"), ActionUI {
+    ActionSheetUI("ResourceTransferTitle", gameState) {
     private val dataTable = Table()
     private val targetTable = Table()
-
-    private var subject = gameState.playerName
     private val sbjChar = gameState.characters[subject]!!
 
     //Determines if the transfer is official or not.
@@ -90,7 +88,8 @@ class ResourceTransferUI(gameState: GameState, override var actionCallback: (Gam
         val st = stack {
             it.grow()
             table {
-                this@ResourceTransferUI.modeLabel = label("Transaction", "docTitle") {setFontScale(0.5f);  color = Color.BLACK }
+                this@ResourceTransferUI.modeLabel =
+                    label("Transaction", "docTitle") { setFontScale(0.5f); color = Color.BLACK }
                 row()
                 label("Transfer resources to", "docTitle") { setFontScale(0.5f);color = Color.BLACK }
                 //Select place to transfer resources to.
@@ -104,7 +103,8 @@ class ResourceTransferUI(gameState: GameState, override var actionCallback: (Gam
                 add(currentResourcePane)
                 add(targetResourcePane)
                 row()
-                add(this@ResourceTransferUI.submitButton).size(400f, 75f).fill()//TODO: official transfer is only to my division
+                add(this@ResourceTransferUI.submitButton).size(400f, 75f)
+                    .fill()//TODO: official transfer is only to my division
                 button {
                     it.fill()
                     it.size(400f, 75f)
@@ -193,11 +193,5 @@ class ResourceTransferUI(gameState: GameState, override var actionCallback: (Gam
             })
         }
     }
-
-    override fun changeSubject(charName: String) {
-        subject = charName
-    }
-
-
 
 }

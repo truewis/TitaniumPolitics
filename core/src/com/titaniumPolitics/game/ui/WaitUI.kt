@@ -26,8 +26,7 @@ enum class WaitUIMode {
 }
 
 class WaitUI(val gameState: GameState, override var actionCallback: (GameAction) -> Unit = {}) :
-    ActionSheetUI("EndSpeechTitle"), ActionUI {
-    private var subject = gameState.playerName
+    ActionSheetUI("EndSpeechTitle", gameState) {
     private val sbjChar = gameState.characters[subject]!!
     var interrupted = false
     var mode = WaitUIMode.WAIT // Default mode is WAIT
@@ -153,11 +152,6 @@ class WaitUI(val gameState: GameState, override var actionCallback: (GameAction)
             println("WaitUI: Wait interrupted by ${info.author} at ${info.tgtPlace}")
         }
 
-    }
-
-
-    override fun changeSubject(charName: String) {
-        subject = charName
     }
 
     //Override this method instead of remove, remove is not called properly.
