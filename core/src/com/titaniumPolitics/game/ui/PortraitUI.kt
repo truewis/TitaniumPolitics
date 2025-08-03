@@ -3,13 +3,11 @@ package com.titaniumPolitics.game.ui
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.math.Vector2
-import com.badlogic.gdx.scenes.scene2d.Action
 import com.badlogic.gdx.scenes.scene2d.Group
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable
 import com.rafaskoberg.gdx.typinglabel.TypingLabel
 import com.titaniumPolitics.game.core.GameState
-import com.titaniumPolitics.game.core.InformationType
 import com.titaniumPolitics.game.core.ReadOnly
 import com.titaniumPolitics.game.core.gameActions.GameAction
 import kotlinx.serialization.json.jsonObject
@@ -61,6 +59,7 @@ class PortraitUI(character: String, var gameState: GameState, scale: Float) : Ta
     val theEmoji = scene2d.image("HelpGrunge")
 
     val refresh = { state: GameState ->
+        clearSpeech()
         //Display emoji based on event conditions.
         if (state.eventSystem.displayEmoji(tgtCharacter)) {
             displayEmojiOnPortrait("HelpGrunge")
@@ -69,7 +68,7 @@ class PortraitUI(character: String, var gameState: GameState, scale: Float) : Ta
         }
     }
 
-    fun displayAction(action: GameAction) {
+    fun displaySpeech(action: GameAction) {
 
         if (displayTextBubble) {
             bubble.isVisible = true
@@ -79,7 +78,7 @@ class PortraitUI(character: String, var gameState: GameState, scale: Float) : Ta
         }
     }
 
-    fun clearAction() {
+    fun clearSpeech() {
         bubble.isVisible = false
         speech.setText("")
     }

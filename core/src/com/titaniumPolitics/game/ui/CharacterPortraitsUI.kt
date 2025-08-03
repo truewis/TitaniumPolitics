@@ -1,17 +1,11 @@
 package com.titaniumPolitics.game.ui
 
 import com.badlogic.gdx.Gdx
-import com.badlogic.gdx.graphics.Texture
-import com.badlogic.gdx.scenes.scene2d.Actor
-import com.badlogic.gdx.scenes.scene2d.ui.Image
 import com.badlogic.gdx.scenes.scene2d.ui.Table
-import com.badlogic.gdx.scenes.scene2d.utils.Drawable
 import com.titaniumPolitics.game.core.GameEngine
 import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.core.gameActions.Wait
 import ktx.scene2d.Scene2DSkin.defaultSkin
-import ktx.scene2d.image
-import ktx.scene2d.scene2d
 import java.lang.Thread.sleep
 
 //TODO: Make this scrollable to deal with many characters.
@@ -24,7 +18,7 @@ class CharacterPortraitsUI(var gameState: GameState) : Table(defaultSkin) {
         gameState.updateUI.add {
             refresh(it.player.place.name)
         }
-        GameEngine.onNonPlayerCharacterAction += { action ->
+        GameEngine.onBeforeNonPlayerCharacterAction += { action ->
 
             //Do not play the animation if progress background is visible.
             if (isVisible && !ProgressBackgroundUI.instance.isVisible && portraits.map { it.tgtCharacter }.contains(
@@ -35,9 +29,8 @@ class CharacterPortraitsUI(var gameState: GameState) : Table(defaultSkin) {
                 Gdx.app.postRunnable {
                     portraits.forEach { portrait ->
                         if (portrait.tgtCharacter == action.sbjCharacter) {
-                            portrait.displayAction(action)
-                        } else
-                            portrait.clearAction()
+                            portrait.displaySpeech(action)
+                        }
                     }
                     println("CharacterPortraits: Non-player character action detected: ${action.sbjCharacter} performed ${action::class.simpleName}")
                     sleep(1000)//TODO:

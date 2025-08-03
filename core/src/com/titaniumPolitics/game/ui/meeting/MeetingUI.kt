@@ -4,7 +4,6 @@ import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.scenes.scene2d.actions.Actions
 import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction
-import com.badlogic.gdx.scenes.scene2d.ui.Image
 import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.Stack
 import com.badlogic.gdx.scenes.scene2d.ui.Table
@@ -16,7 +15,6 @@ import com.titaniumPolitics.game.core.gameActions.Wait
 import com.titaniumPolitics.game.ui.CapsuleStage
 import com.titaniumPolitics.game.ui.PortraitUI
 import com.titaniumPolitics.game.ui.widget.SimpleHeadPortraitUI
-import com.titaniumPolitics.game.ui.widget.SimplePortraitUI
 import ktx.scene2d.*
 import ktx.scene2d.Scene2DSkin.defaultSkin
 import java.lang.Thread.sleep
@@ -51,14 +49,12 @@ class MeetingUI(var gameState: GameState) : Table(defaultSkin), KTable {
                 refresh(it.player.currentMeeting!!)
             }
         }
-        GameEngine.onNonPlayerCharacterAction += { action ->
+        GameEngine.onBeforeNonPlayerCharacterAction += { action ->
             if (isVisible && gameState.player.currentMeeting?.currentCharacters?.contains(action.sbjCharacter) ?: false && action !is Wait) {
                 //If the action is related to the current meeting, play the animation of mutuality arrows.
                 Gdx.app.postRunnable {
                     if (speakerPortrait.tgtCharacter == action.sbjCharacter) {
-                        speakerPortrait.displayAction(action)
-                    } else {
-                        speakerPortrait.clearAction()
+                        speakerPortrait.displaySpeech(action)
                     }
 //                portraits.forEach { portrait ->
 //                    if (portrait.tgtCharacter == action.sbjCharacter) {
