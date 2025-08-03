@@ -162,7 +162,7 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable 
                 val tooltip = ActionTooltipUI(tobj)
                 addListener(tooltip)
                 stack {
-                    it.size(80f)
+                    it.size(100f)
                     image("Help") {
                         color = Color.BLACK
 
@@ -600,7 +600,6 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable 
 
                     }
                     container {
-                        debug()
                         align(Align.bottomLeft)
                         size(30f)
                         stack {
@@ -624,7 +623,7 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable 
                     }
                 }
             })
-            docList.add(t).size(150f).fill()
+            docList.add(t).size(100f).fill()
         }
         isVisible = !docList.children.isEmpty
 

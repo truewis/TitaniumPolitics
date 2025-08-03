@@ -31,7 +31,7 @@ class SimpleTextTooltipUI(text: String) : Tooltip<Table>(scene2d.table {
             setColor(0f, 0f, 0f, 1f)
         }
         table {
-            label(text) {
+            label(text, "description") {
                 it.size(350f, 200f)
                 setFontScale(2f)
                 setAlignment(Align.topLeft)
@@ -40,10 +40,8 @@ class SimpleTextTooltipUI(text: String) : Tooltip<Table>(scene2d.table {
         }
     }
 
-})
-{
-    init
-    {
+}) {
+    init {
         manager.initialTime = 0.5f
 
     }
