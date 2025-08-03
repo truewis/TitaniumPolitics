@@ -28,7 +28,7 @@ class PrepareInfoRoutine() : Routine() {
                 it.recommendKeys()
             }
         }
-        Logger.warning("$name: Cannot move to home_${name}. Terminating the prepareInfoRoutine......")
+        Logger.write("$name: Cannot move to home_${name}. Terminating the prepareInfoRoutine......")
         err = true
         return Wait(name, place)
     }

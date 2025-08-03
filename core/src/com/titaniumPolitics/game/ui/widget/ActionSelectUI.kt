@@ -1,6 +1,7 @@
 package com.titaniumPolitics.game.ui.widget
 
 import com.badlogic.gdx.scenes.scene2d.InputEvent
+import com.badlogic.gdx.scenes.scene2d.ui.Button
 import com.badlogic.gdx.scenes.scene2d.ui.Container
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane
 import com.badlogic.gdx.scenes.scene2d.ui.Table
@@ -23,7 +24,7 @@ import ktx.scene2d.scene2d
 
 //Select action for e.g. request in this dialogue.
 class ActionSelectUI(var gameState: GameState, override var actionCallback: (GameAction) -> Unit) :
-    Table(Scene2DSkin.defaultSkin),
+    WindowUI("CharacterSelectTitle"),
     KTable, ActionUI {
     private val docList = scene2d.buttonGroup(0, 1)
     private var subject = gameState.playerName
@@ -32,22 +33,9 @@ class ActionSelectUI(var gameState: GameState, override var actionCallback: (Gam
     private val sbjObject = gameState.characters[subject]!!
 
     private val actionDialogue = Container<Table>()
-    val options: ExamineUI
 
     init {
-
-
-        options = ExamineUI(this@ActionSelectUI.gameState)
-        add(options)
-        options.isVisible = false
-//        CapsuleStage.instance.onMouseDown.add { x, y ->
-//            //If x and y are not within the bounds of this UI, hide the option ui.
-//            val localpos = options.screenToLocalCoordinates(Vector2(x, y))
-//            if (options.hit(localpos.x, localpos.y, true) == null)
-//            {
-//                options.isVisible = false
-//            }
-//        }
+        instance = this
         row()
         val docScr = ScrollPane(docList)
         docList.align(Align.center)
@@ -98,17 +86,6 @@ class ActionSelectUI(var gameState: GameState, override var actionCallback: (Gam
 
                             "Examine" -> {
                                 this.setDrawable(Scene2DSkin.defaultSkin, "SearchGrunge")
-                                this@button.addListener(object : ClickListener() {
-                                    override fun clicked(
-                                        event: InputEvent?,
-                                        x: Float,
-                                        y: Float
-                                    ) {
-                                        this@ActionSelectUI.options.isVisible =
-                                            !this@ActionSelectUI.options.isVisible
-                                    }
-                                }
-                                )
                             }
 
                             "UnofficialResourceTransfer" -> {
@@ -200,6 +177,10 @@ class ActionSelectUI(var gameState: GameState, override var actionCallback: (Gam
 
     fun changeTgtPlace(placeName: String) {
         tgtPlace = placeName
+    }
+
+    companion object {
+        lateinit var instance: ActionSelectUI
     }
 
 

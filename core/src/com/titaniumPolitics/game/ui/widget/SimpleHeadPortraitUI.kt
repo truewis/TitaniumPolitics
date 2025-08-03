@@ -56,6 +56,6 @@ class SimpleHeadPortraitUI(character: String, scale: Float, interactable: Boolea
 
     init {
         tgtCharacter = character
-        add(portrait).size(500f * scale, 500f * scale)
+        add(portrait).grow()
     }
 }

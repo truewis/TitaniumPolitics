@@ -11,7 +11,6 @@ import com.titaniumPolitics.game.core.gameActions.EndSpeech
 import com.titaniumPolitics.game.core.gameActions.GameAction
 import com.titaniumPolitics.game.ui.widget.ActionSheetUI
 import com.titaniumPolitics.game.ui.widget.CharacterSelectButton
-import com.titaniumPolitics.game.ui.widget.WindowUI
 
 import ktx.scene2d.*
 
@@ -60,7 +59,7 @@ class EndSpeechUI(val gameState: GameState, override var actionCallback: (GameAc
     fun refresh() {
         nextSpeaker = gameState.player.currentMeeting!!.currentCharacters.first { it != subject }
         charSelector.availableCharacters = gameState.player.currentMeeting!!.currentCharacters
-        charSelector.setCharacter(nextSpeaker)
+        charSelector.setLabel(nextSpeaker)
     }
 
     override fun changeSubject(charName: String) {

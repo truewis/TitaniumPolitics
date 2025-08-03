@@ -4,7 +4,6 @@ import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.scenes.scene2d.actions.Actions
 import com.badlogic.gdx.scenes.scene2d.ui.*
 import com.badlogic.gdx.utils.Align
-import com.badlogic.gdx.utils.Logger
 import com.titaniumPolitics.game.core.GameEngine
 import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.core.ReadOnly
@@ -56,7 +55,8 @@ class ProgressBackgroundUI(var gameState: GameState, skin: Skin) : Table(skin), 
             isVisible = true
             addAction(Actions.fadeIn(0f))// No fade in, just show it immediately, but still need to change alpha to 1f here.
             status = actionName
-            val displayText = if(this@ProgressBackgroundUI.status !="")ReadOnly.prop(this@ProgressBackgroundUI.status+"_ProgressBackgroundUI") else "Loading"
+            val displayText =
+                if (this@ProgressBackgroundUI.status != "") ReadOnly.prop(this@ProgressBackgroundUI.status + "_ProgressBackgroundUI") else "Loading"
             with(progressLabel) {
                 clearActions()
                 addAction(
@@ -78,7 +78,7 @@ class ProgressBackgroundUI(var gameState: GameState, skin: Skin) : Table(skin), 
             }
         } else {
             if (status != actionName) {
-                com.titaniumPolitics.game.debugTools.Logger.warning(
+                com.titaniumPolitics.game.debugTools.Logger.write(
                     "Tried to hide ProgressBackgroundUI with action $actionName, but current status is $status"
                 )
                 return

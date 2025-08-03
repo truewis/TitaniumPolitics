@@ -5,10 +5,7 @@ import com.titaniumPolitics.game.core.ReadOnly.constInt
 import com.titaniumPolitics.game.core.ReadOnly.dt
 import com.titaniumPolitics.game.debugTools.Logger
 import kotlinx.serialization.Serializable
-import kotlin.div
 import kotlin.math.roundToInt
-import kotlin.text.get
-import kotlin.times
 
 /*
 *  This class represents a meeting in the game. It is used to represent meetings that are scheduled to happen in the future.
@@ -40,7 +37,7 @@ class Meeting(
                 val party = gameState.parties[involvedParty]!!
 
                 if (party.leader != "") {
-                    Logger.warning("The leader of the party $involvedParty exists as ${party.leader}, but the election is still happening.")
+                    Logger.write("The leader of the party $involvedParty exists as ${party.leader}, but the election is still happening.")
                     throw IllegalStateException("The leader of the party $involvedParty exists as ${party.leader}, but the election is still happening.")
                 }
                 voteResults = party.members
@@ -75,7 +72,7 @@ class Meeting(
         if (gameState.ongoingMeetings.containsValue(this)) {
             gameState.removeOngoingMeeting(gameState.ongoingMeetings.filter { it.value == this }.keys.first())
         } else {
-            Logger.warning("Meeting $this is not found in the ongoingMeetings.")
+            Logger.write("Meeting $this is not found in the ongoingMeetings.")
             throw IllegalStateException("Meeting $this is not found in the ongoingMeetings.")
         }
     }

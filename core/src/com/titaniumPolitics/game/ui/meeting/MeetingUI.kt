@@ -166,7 +166,8 @@ class MeetingUI(var gameState: GameState) : Table(defaultSkin), KTable {
 
     private fun addCharacterPortrait(characterName: String) {
 
-        val portrait = SimpleHeadPortraitUI(characterName, 0.2f, true)//100f times 140f
+        val portrait = SimpleHeadPortraitUI(characterName, 0.2f, true)
+        portrait.setSize(200f, 200f)
         portraits.add(portrait)
         addActor(portrait)
         portrait.layout()
@@ -198,8 +199,8 @@ class MeetingUI(var gameState: GameState) : Table(defaultSkin), KTable {
             .forEachIndexed { index, character ->
                 portraits[index].tgtCharacter = character
             }
-        val portraitUIWidth = 100f
-        val portraitUIHeight = 140f
+        val portraitUIWidth = 200f
+        val portraitUIHeight = 200f
         // Place portraits along the left and right walls of the discussion table.
         val leftX = discussionTable.x + portraitUIWidth * 3 // Adjust as needed to offset from the table
         val rightX = discussionTable.x + discussionTable.width - portraitUIWidth * 3

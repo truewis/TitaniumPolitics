@@ -128,7 +128,7 @@ class AnonAgent : Agent() {
         if (routines.isEmpty()) {
             whenIdle()
             if (routines.isEmpty()) {
-                Logger.warning("There is truly nothing to do for $name. This is likely a bug.")
+                Logger.write("There is truly nothing to do for $name. This is likely a bug.")
                 return Wait(name, place)
             }
         }

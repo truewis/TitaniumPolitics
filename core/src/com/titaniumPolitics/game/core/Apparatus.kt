@@ -23,18 +23,15 @@ import java.util.UUID
 *
 * */
 @Serializable
-class Apparatus
-{
+class Apparatus {
     var laborValuePerHour = 1.0
     var plannedWorker = 0
     var currentWorker = 0
     var name = ""
     var ID = UUID.randomUUID().toString() //Since many apparatus have same name, they need an identifier.
     var durability = 0.0
-        set(value)
-        {
-            field = when
-            {
+        set(value) {
+            field = when {
                 value > const("DurabilityMax") -> const("DurabilityMax")
                 value <= 0 -> 0.0//Damaged Apparatus Information is only stored in case of an accident.
                 else -> value
@@ -43,11 +40,9 @@ class Apparatus
     val isStorage
         get() = jsonData.jsonObject["variables"]?.jsonObject?.get("storageType") != null
     val storageType: Pair<String, Double>
-        get()
-        {
-            if (!isStorage)
-            {
-                Logger.warning("$name is not a storage apparatus.")
+        get() {
+            if (!isStorage) {
+                Logger.write("$name is not a storage apparatus.")
                 throw Exception("$name is not a storage apparatus.")
             }
             return jsonData.jsonObject["variables"]!!.jsonObject["storageType"]!!.jsonPrimitive.toString() to
@@ -58,8 +53,7 @@ class Apparatus
     private val baseDanger
         get() = jsonData.jsonObject["baseDanger"]!!.jsonPrimitive.double
     val requiredResourcePerRepair: ArrayList<Resources>
-        get()
-        {
+        get() {
             val res = arrayListOf<Resources>()
             jsonData.jsonObject["requiredResourcePerRepair"]!!.jsonArray.toList().forEach {
                 res.add(
@@ -106,8 +100,7 @@ class Apparatus
         get() = jsonData.jsonObject["idealWorker"]?.jsonPrimitive?.int ?: 0
 
     val currentProduction: Map<String, Double>
-        get()
-        {
+        get() {
             val result = idealProduction
             if (durability == .0) return result//No production if broken.
 
@@ -125,8 +118,7 @@ class Apparatus
             return result
         }
     val currentConsumption: Map<String, Double>
-        get()
-        {
+        get() {
             val result = idealConsumption
             if (durability == .0) return result//No production if broken.
 
@@ -147,8 +139,7 @@ class Apparatus
             return result
         }
     val currentAbsorption: Map<String, Double>
-        get()
-        {
+        get() {
             val result = idealAbsorption
             if (durability == .0) return result//No production if broken.
 
@@ -166,8 +157,7 @@ class Apparatus
             return result
         }
     val currentDistribution: Map<String, Double>
-        get()
-        {
+        get() {
             val result = idealDistribution
             if (durability == .0) return result//No production if broken.
 
@@ -189,8 +179,7 @@ class Apparatus
             return result
         }
     val currentHeatProduction: Double
-        get()
-        {
+        get() {
             var result = .0
             if (idealWorker == 0) return result//No production if no worker.
             if (durability == .0) return result//No production if broken.
@@ -206,10 +195,8 @@ class Apparatus
             return result
         }
     val currentDanger: Double
-        get()
-        {
-            return if (currentWorker == 0 || idealWorker == 0) 0.0 else if (durability == .0) 0.0 else
-            {
+        get() {
+            return if (currentWorker == 0 || idealWorker == 0) 0.0 else if (durability == .0) 0.0 else {
                 if (currentWorker <= idealWorker)
                     baseDanger * (2 - currentWorker / idealWorker) * 100 / durability / const("GlobalAccidentTau")
                 else
@@ -217,8 +204,7 @@ class Apparatus
             }
         }
     val currentGraveDanger: Double
-        get()
-        {
+        get() {
             return if (currentWorker == 0 || idealWorker == 0) 0.0
             else if (durability == .0) 0.0
             else if (currentWorker <= idealWorker * 4 / 5)
@@ -229,8 +215,7 @@ class Apparatus
                 0.0
         }
 
-    override fun toString(): String
-    {
+    override fun toString(): String {
         return "Apparatus(name='$name', durability=$durability, baseDanger=$baseDanger, idealProduction=$idealProduction, idealWorker=$idealWorker, currentWorker=$currentWorker, currentProduction=$currentProduction, currentDanger=$currentDanger, currentGraveDanger=$currentGraveDanger)"
     }
 

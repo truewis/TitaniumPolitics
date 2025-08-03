@@ -4,7 +4,6 @@ import com.badlogic.gdx.Gdx
 import com.titaniumPolitics.game.core.ReadOnly.const
 import com.titaniumPolitics.game.core.ReadOnly.dt
 import com.titaniumPolitics.game.core.gameActions.GameAction
-import com.titaniumPolitics.game.core.gameActions.Move
 import com.titaniumPolitics.game.core.gameActions.Wait
 import com.titaniumPolitics.game.debugTools.Logger
 import com.titaniumPolitics.game.ui.LogUI
@@ -13,7 +12,6 @@ import kotlinx.serialization.json.Json
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 import kotlin.math.log
-import kotlin.math.min
 import kotlin.random.Random
 import kotlin.system.exitProcess
 
@@ -157,13 +155,13 @@ class GameEngine(val gameState: GameState) {
                 ?: throw Exception("Non player character ${char.name} does not have a nonPlayerAgent.")
             action.injectParent(gameState)
             if (action.javaClass.simpleName !in actionList)
-                Logger.warning(
+                Logger.write(
                     "Non player character ${char.name} is performing ${action.javaClass.simpleName} at ${
                         char.place.name
                     }, time=${gameState.formatTime()}, which is not in the action list. This may be a bug."
                 )
             if (!action.isValid()) {
-                Logger.warning(
+                Logger.write(
                     "Non player character ${char.name} is performing ${action.javaClass.simpleName} at ${
                         char.place.name
                     }, time=${gameState.formatTime()}, which is not valid. This may be a bug."
@@ -172,7 +170,7 @@ class GameEngine(val gameState: GameState) {
                 throw Exception("Non player character ${char.name} is performing an invalid action.")
             }
             if (action.sbjCharacter != char.name) {
-                Logger.warning(
+                Logger.write(
                     "Non player character ${char.name} is performing ${action.javaClass.simpleName} at ${
                         char.place.name
                     }, time=${gameState.formatTime()}, which is not targeting itself. This may be a bug."
@@ -180,7 +178,7 @@ class GameEngine(val gameState: GameState) {
                 println(Json.encodeToString(GameAction.serializer(), action))
             }
             if (action.tgtPlace != char.place.name) {
-                Logger.warning(
+                Logger.write(
                     "Non player character ${char.name} is performing ${action.javaClass.simpleName} at ${
                         char.place.name
                     }, time=${gameState.formatTime()}, which is not targeting its own place. This may be a bug."
@@ -621,12 +619,12 @@ class GameEngine(val gameState: GameState) {
                     try {
                         wanted = x as T
                     } catch (e: Exception) {
-                        Logger.warning("Acquire failed: Wanted type: ${T::class}, Acquired type: ${x::class}")
+                        Logger.write("Acquire failed: Wanted type: ${T::class}, Acquired type: ${x::class}")
                         throw e
                     }
                     // Resume the coroutine to signal completion
                     acquireCallback = {
-                        Logger.warning("Acquire callback was called again with type: ${it::class}")
+                        Logger.write("Acquire callback was called again with type: ${it::class}")
                     }
                     //println("Acquire callback resumed.")
                     continuation.resume(Unit)
