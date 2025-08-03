@@ -135,6 +135,8 @@ class GameState {
 
     @Transient
     val onAddInfo: ArrayList<(Information) -> Unit> = arrayListOf()
+
+    //This function must be called after adding all knownTo characters, because it triggers the onAddInfo events.
     fun addInformation(
         info: Information
     ) {

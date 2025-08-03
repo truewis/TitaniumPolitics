@@ -3,6 +3,7 @@ package com.titaniumPolitics.game.ui
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.scenes.scene2d.Action
+import com.badlogic.gdx.scenes.scene2d.Group
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable
 import com.titaniumPolitics.game.core.GameState
@@ -91,9 +92,12 @@ class PortraitUI(character: String, var gameState: GameState, scale: Float) : Ta
 
     }
 
-    override fun remove(): Boolean {
-        gameState.updateUI -= refresh
-        return super.remove()
+    //Override this method instead of remove, remove is not called properly.
+    override fun setParent(parent: Group?) {
+        if (parent == null) {
+            gameState.updateUI -= refresh
+        }
+        super.setParent(parent)
     }
 
 

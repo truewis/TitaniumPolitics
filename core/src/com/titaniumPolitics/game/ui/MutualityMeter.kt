@@ -2,6 +2,7 @@ package com.titaniumPolitics.game.ui
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Color
+import com.badlogic.gdx.scenes.scene2d.Group
 import com.badlogic.gdx.scenes.scene2d.ui.Image
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.titaniumPolitics.game.core.GameState
@@ -12,8 +13,7 @@ import ktx.scene2d.*
 import ktx.scene2d.Scene2DSkin.defaultSkin
 import kotlin.random.Random
 
-class MutualityMeter(var gameState: GameState, var tgtCharacter: String, var who: String) : Table(defaultSkin), KTable
-{
+class MutualityMeter(var gameState: GameState, var tgtCharacter: String, var who: String) : Table(defaultSkin), KTable {
     val bar1 = MeterOvalUI()
     val bar2 = MeterOvalUI()
 
@@ -26,8 +26,7 @@ class MutualityMeter(var gameState: GameState, var tgtCharacter: String, var who
             )
         }
 
-    init
-    {
+    init {
         stack {
             it.grow()
 
@@ -52,45 +51,37 @@ class MutualityMeter(var gameState: GameState, var tgtCharacter: String, var who
         gameState.updateUI += refresh
         refresh(gameState)
         val tgtName = ReadOnly.charName(tgtCharacter)
-        var text = if (gameState.getMutuality(tgtCharacter, who) > 75)
-        {
+        var text = if (gameState.getMutuality(tgtCharacter, who) > 75) {
             "You think of $tgtName as trustworthy.\n"
-        } else if (gameState.getMutuality(tgtCharacter, who) > 50)
-        {
+        } else if (gameState.getMutuality(tgtCharacter, who) > 50) {
             "You think of $tgtName as reasonable.\n"
-        } else if (gameState.getMutuality(tgtCharacter, who) > 25)
-        {
+        } else if (gameState.getMutuality(tgtCharacter, who) > 25) {
             "You think of $tgtName as untrustworthy.\n"
-        } else
-        {
+        } else {
             "You hates $tgtName.\n"
         }
 
-        if (gameState.getMutuality(who, tgtCharacter) > 75)
-        {
+        if (gameState.getMutuality(who, tgtCharacter) > 75) {
             text += "They think of you as trustworthy."
-        } else if (gameState.getMutuality(who, tgtCharacter) > 50)
-        {
+        } else if (gameState.getMutuality(who, tgtCharacter) > 50) {
             text += "They think of you as reasonable."
-        } else if (gameState.getMutuality(who, tgtCharacter) > 25)
-        {
+        } else if (gameState.getMutuality(who, tgtCharacter) > 25) {
             text += "They think of you as untrustworthy."
-        } else
-        {
+        } else {
             text += "They hates you."
         }
         addListener(SimpleTextTooltipUI(text))
     }
 
-
-    override fun remove(): Boolean
-    {
-        gameState.updateUI -= refresh
-        return super.remove()
+    //Override this method instead of remove, remove is not called properly.
+    override fun setParent(parent: Group?) {
+        if (parent == null) {
+            gameState.updateUI -= refresh
+        }
+        super.setParent(parent)
     }
 
-    fun setValue(value1: Double, value2: Double)
-    {
+    fun setValue(value1: Double, value2: Double) {
         bar1.setValue(value1.toFloat())
         bar2.setValue(value2.toFloat())
     }

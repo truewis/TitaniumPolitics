@@ -2,6 +2,7 @@ package com.titaniumPolitics.game.ui
 
 
 import com.badlogic.gdx.graphics.Color
+import com.badlogic.gdx.scenes.scene2d.Group
 import com.badlogic.gdx.scenes.scene2d.InputEvent
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 
@@ -35,7 +36,6 @@ class WaitUI(val gameState: GameState, override var actionCallback: (GameAction)
     }
 
     init {
-        gameState.onAddInfo += this::waitInterruptCondition
         val st = stack {
             it.grow()
             table {
@@ -160,5 +160,12 @@ class WaitUI(val gameState: GameState, override var actionCallback: (GameAction)
         subject = charName
     }
 
+    //Override this method instead of remove, remove is not called properly.
+    override fun setParent(parent: Group?) {
+        if (parent == null) {
+            gameState.onAddInfo -= this::waitInterruptCondition
+        }
+        super.setParent(parent)
+    }
 
 }

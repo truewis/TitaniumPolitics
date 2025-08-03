@@ -24,7 +24,7 @@ class AlertUI(var gameState: GameState) : Table(defaultSkin) {
         docList.grow()
 
         add(docScr).grow()
-        gameState.onAddInfo += { it -> newInformation.add(it.name) }
+        gameState.onAddInfo += { it -> if (it.knownTo.contains(gameState.playerName)) newInformation.add(it.name) }
         gameState.updateUI += { _ -> displayAlerts(); }
         gameState.onPlayerAction += {
             //Remove all alerts.

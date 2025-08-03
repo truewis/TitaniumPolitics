@@ -195,8 +195,9 @@ class GameEngine(val gameState: GameState) {
                 char.name
             )
         }!!.name
-        //Unless the information is wait and move. I think wait and move info is useless. It adds a lot of overhead, and the info that a character saw someone can be obtained by talking to them instead.
-        if (action !is Wait && action !is Move) {
+        //Unless the information is wait. I think wait info is useless. It adds a lot of overhead, and the info that a character saw someone can be obtained by talking to them instead.
+        //Move info is used for moved alert currently.
+        if (action !is Wait) {
             //Add information to the character so that they can report back.
             Information(
                 char.name,

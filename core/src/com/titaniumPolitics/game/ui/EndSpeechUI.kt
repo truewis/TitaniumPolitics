@@ -24,7 +24,6 @@ class EndSpeechUI(val gameState: GameState, override var actionCallback: (GameAc
     var nextSpeaker = ""
 
     init {
-        isVisible = false
         val st = stack {
             it.grow()
             table {
@@ -67,7 +66,6 @@ class EndSpeechUI(val gameState: GameState, override var actionCallback: (GameAc
     override fun changeSubject(charName: String) {
         subject = charName
     }
-
 
 
 }
