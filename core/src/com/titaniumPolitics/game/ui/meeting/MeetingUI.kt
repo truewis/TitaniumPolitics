@@ -2,6 +2,7 @@ package com.titaniumPolitics.game.ui.meeting
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Color
+import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.actions.Actions
 import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction
 import com.badlogic.gdx.scenes.scene2d.ui.Label
@@ -80,12 +81,13 @@ class MeetingUI(var gameState: GameState) : Table(defaultSkin), KTable {
 
     //This function can be used for both meetings and conferences
     fun refresh(meeting: Meeting) {
+
+        //show mutuality arrows if there are any changes.
         val newMutualities = meeting.currentCharacters.flatMap { char1 ->
             meeting.currentCharacters.map { char2 ->
                 Pair(char1, char2) to gameState.getMutuality(char1, char2)
             }
         }.toMap().toMutableMap()
-        //show mutuality arrows if there are any changes.
         val mutualityChanges = newMutualities.filter { (pair, value) ->
             previousMutualities[pair]?.let { it != value } ?: false
         }.mapValues {
@@ -93,8 +95,11 @@ class MeetingUI(var gameState: GameState) : Table(defaultSkin), KTable {
         }
         if (mutualityChanges.isNotEmpty()) {
             showMutualityArrows(mutualityChanges)
-            previousMutualities = newMutualities
         }
+        previousMutualities = newMutualities
+
+
+
         placeCharacterPortrait()
         //Remove all bubbles before placing them again.
         removeBubbles()
@@ -117,14 +122,19 @@ class MeetingUI(var gameState: GameState) : Table(defaultSkin), KTable {
 
     val mutualityArrows = mutableListOf<MutualityArrowUI>()
 
+    fun findPortrait(characterName: String): Actor? {
+        return portraits.find { it.tgtCharacter == characterName }
+            ?: speakerPortrait.takeIf { it.tgtCharacter == characterName }
+    }
+
     fun showMutualityArrows(mutualityChanges: Map<Pair<String, String>, Double>) {
         // 기존 화살표 제거(화면에서만)
         mutualityArrows.forEach { it.remove() }
 
         // 새 화살표 생성 및 애니메이션
         mutualityChanges.forEach { (pair, delta) ->
-            val fromPortrait = portraits.find { it.tgtCharacter == pair.first } ?: return@forEach
-            val toPortrait = portraits.find { it.tgtCharacter == pair.second } ?: return@forEach
+            val fromPortrait = findPortrait(pair.first) ?: return@forEach
+            val toPortrait = findPortrait(pair.second) ?: return@forEach
             val arrow = MutualityArrowUI(fromPortrait, toPortrait, delta.toFloat(), skin)
             mutualityArrows.add(arrow)
             addActor(arrow)

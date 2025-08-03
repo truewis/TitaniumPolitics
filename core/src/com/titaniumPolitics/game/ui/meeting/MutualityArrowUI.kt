@@ -32,6 +32,8 @@ class MutualityArrowUI(
         width = sqrt((endX - startX) * (endX - startX) + (endY - startY) * (endY - startY))
         addAction(
             Actions.sequence(
+                Actions.delay(0.1f),
+                Actions.moveTo(startX, startY),
                 Actions.delay(1f),
                 Actions.run { isVisible = false }
             )
