@@ -52,7 +52,7 @@ class CharacterPortraitsUI(var gameState: GameState) : Table(defaultSkin) {
     }
 
     private fun addCharacterPortrait(characterName: String) {
-        val portrait = PortraitUI(characterName, gameState, 1f)
+        val portrait = PortraitUI(characterName, gameState, 1.5f)
         portraits.add(portrait)
         addActor(portrait)
 

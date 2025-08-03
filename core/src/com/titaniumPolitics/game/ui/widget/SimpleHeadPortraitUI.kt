@@ -44,13 +44,18 @@ class SimpleHeadPortraitUI(character: String, scale: Float, interactable: Boolea
             try {
                 portrait.drawable = TextureRegionDrawable(
                     CapsuleStage.instance.assetManager.get( //TODO: Temporary solution for portrait image loading. PortraitUI does not have a stage.
-                        "portraits/${field}Head.png",
+                        ReadOnly.charJson[tgtCharacter]!!.jsonObject["headImage"]!!.jsonPrimitive.content,
                         Texture::class.java
                     )!!
                 )
             } catch (e: Exception) {
-                println("Portrait Image Error: $value, ${e.message}")
-                portrait.drawable = skin.getDrawable("UserGrunge") // Fallback to default image
+                println("Portrait Image Error: $value")
+                portrait.drawable = TextureRegionDrawable(
+                    CapsuleStage.instance.assetManager.get( //TODO: Temporary solution for portrait image loading. PortraitUI does not have a stage.
+                        "portraits/default.png",
+                        Texture::class.java
+                    )!!
+                )
             }
         }
 

@@ -43,13 +43,19 @@ class SimplePortraitUI(character: String, scale: Float, interactable: Boolean) :
             field = value
             try {
                 portrait.drawable = TextureRegionDrawable(
-                    CapsuleStage.Companion.instance.assetManager.get( //TODO: Temporary solution for portrait image loading. PortraitUI does not have a stage.
-                        "portraits/$field.png",
+                    CapsuleStage.instance.assetManager.get( //TODO: Temporary solution for portrait image loading. PortraitUI does not have a stage.
+                        ReadOnly.charJson[tgtCharacter]!!.jsonObject["image"]!!.jsonPrimitive.content,
                         Texture::class.java
                     )!!
                 )
             } catch (e: Exception) {
                 println("Portrait Image Error: $value")
+                portrait.drawable = TextureRegionDrawable(
+                    CapsuleStage.instance.assetManager.get( //TODO: Temporary solution for portrait image loading. PortraitUI does not have a stage.
+                        "portraits/default.png",
+                        Texture::class.java
+                    )!!
+                )
             }
         }
 

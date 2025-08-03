@@ -40,6 +40,12 @@ class PortraitUI(character: String, var gameState: GameState, scale: Float) : Ta
                 )
             } catch (e: Exception) {
                 println("Portrait Image Error: $value")
+                portrait.drawable = TextureRegionDrawable(
+                    CapsuleStage.instance.assetManager.get(
+                        "portraits/default.png",
+                        Texture::class.java
+                    )!!
+                )
             }
         }
     val speech = TypingLabel("", defaultSkin, "description").apply {
@@ -84,6 +90,7 @@ class PortraitUI(character: String, var gameState: GameState, scale: Float) : Ta
     }
 
     init {
+        tgtCharacter = character
         bubble.isVisible = false
         //mMeter.isVisible = false
         theEmoji.isVisible = false
@@ -91,7 +98,7 @@ class PortraitUI(character: String, var gameState: GameState, scale: Float) : Ta
         row()
         add(theEmoji).growX().size(100f)
         row()
-        add(portrait).size(500f * scale, 700f * scale)
+        add(portrait).size(500f * scale, 700f * scale).fill()
         gameState.updateUI += refresh
         refresh(gameState)
 
