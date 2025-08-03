@@ -9,18 +9,18 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.titaniumPolitics.game.core.ReadOnly
 import com.titaniumPolitics.game.core.gameActions.GameAction
 import ktx.scene2d.KTable
+import ktx.scene2d.Scene2DSkin.defaultSkin
 import ktx.scene2d.image
 import ktx.scene2d.label
 
-class ActionSelectButton(skin: Skin, callback: (GameAction) -> Unit) : Button(skin, "default"), KTable {
-    val actionIcon: Image
+class ActionSelectButton(callback: (GameAction) -> Unit) : Button(defaultSkin, "default"), KTable {
+    val actionIcon: Image = image("") {
+        it.size(100f)
+    }
     val actionNameLabel: Label
     var availableActions: Set<String>? = null
 
     init {
-        actionIcon = image("") {
-            it.size(100f)
-        }
         row()
         actionNameLabel = label("", "docTitle") { setFontScale(3f) }
         addListener(object : ClickListener() {
@@ -31,6 +31,7 @@ class ActionSelectButton(skin: Skin, callback: (GameAction) -> Unit) : Button(sk
                 }
                 ActionSelectUI.instance.actionCallback = {
                     ActionSelectUI.instance.isVisible = false
+                    actionIcon.setDrawable(defaultSkin, it::class.simpleName)
                     setLabel(it)
                     callback(it)
                 }
@@ -41,5 +42,17 @@ class ActionSelectButton(skin: Skin, callback: (GameAction) -> Unit) : Button(sk
 
     fun setLabel(action: GameAction) {
         actionNameLabel.setText(ReadOnly.prop(action::class.simpleName!!))
+    }
+
+    fun refreshList(actions: List<String>) {
+        availableActions = actions.toSet()
+    }
+
+    fun changeTgtPlace(place: String) {
+        ActionSelectUI.instance.changeTgtPlace(place)
+    }
+
+    fun changeSubject(subject: String) {
+        ActionSelectUI.instance.changeSubject(subject)
     }
 }

@@ -7,6 +7,8 @@ import com.badlogic.gdx.utils.Align
 import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.ui.map.PlaceSelectionUI
 import com.titaniumPolitics.game.ui.meeting.MeetingUI
+import com.titaniumPolitics.game.ui.widget.ActionSelectButton
+import com.titaniumPolitics.game.ui.widget.ActionSelectUI
 import com.titaniumPolitics.game.ui.widget.CharacterSelectUI
 import ktx.scene2d.*
 
@@ -82,6 +84,7 @@ class InterfaceRoot(val gameState: GameState) : Table(Scene2DSkin.defaultSkin), 
             //We draw the following UIs above any other UIs, as they have to appear on top of everything else.
             add(PlaceSelectionUI(this@InterfaceRoot.gameState))
             add(CharacterSelectUI(this@InterfaceRoot.gameState))
+            add(ActionSelectUI(this@InterfaceRoot.gameState))
 
             //We draw the following UIs above any other UIs.
             add(DialogueUI(this@InterfaceRoot.gameState))

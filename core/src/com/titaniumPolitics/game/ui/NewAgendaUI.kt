@@ -12,11 +12,10 @@ import com.badlogic.gdx.utils.Array
 import com.badlogic.gdx.utils.Align
 import com.titaniumPolitics.game.core.*
 import com.titaniumPolitics.game.core.gameActions.*
-import com.titaniumPolitics.game.ui.widget.ActionSelectUI
+import com.titaniumPolitics.game.ui.widget.ActionSelectButton
 import com.titaniumPolitics.game.ui.widget.ActionSheetUI
 import com.titaniumPolitics.game.ui.widget.CharacterSelectButton
 import com.titaniumPolitics.game.ui.widget.PlaceSelectButton
-import com.titaniumPolitics.game.ui.widget.WindowUI
 
 import ktx.scene2d.*
 import ktx.scene2d.Scene2DSkin.defaultSkin
@@ -32,7 +31,7 @@ class NewAgendaUI(gameState: GameState, override var actionCallback: (GameAction
     lateinit var agenda: MeetingAgenda
     private var availableAgendas = arrayOf<AgendaType>()
     val agendaDetailStack: Stack
-    private val actionSelUI = ActionSelectUI(gameState, this::setRequestAction)
+    private val actionSelButton = ActionSelectButton(this::setRequestAction)
     fun setRequestAction(action: GameAction) {
         agenda.attachedRequest = Request(action, hashSetOf(action.sbjCharacter))
     }
@@ -107,14 +106,14 @@ class NewAgendaUI(gameState: GameState, override var actionCallback: (GameAction
             color = Color.BLACK
         }
         row()
-        add(PlaceSelectButton(skin, { this@NewAgendaUI.actionSelUI.changeTgtPlace(it) })).size(300f, 150f)
+        add(PlaceSelectButton(skin, { this@NewAgendaUI.actionSelButton.changeTgtPlace(it) })).size(300f, 150f)
         add(CharacterSelectButton(skin, { char ->
-            this@NewAgendaUI.actionSelUI.changeSubject(char)
+            this@NewAgendaUI.actionSelButton.changeSubject(char)
         })).size(150f, 150f)
 
         row()
         //Select Action
-        add(this@NewAgendaUI.actionSelUI).size(1000f, 500f)
+        add(this@NewAgendaUI.actionSelButton).size(1000f, 500f)
     }
     val st = scene2d.stack {
         table {
@@ -190,7 +189,7 @@ class NewAgendaUI(gameState: GameState, override var actionCallback: (GameAction
     fun refresh(gameState: GameState) {
         agendaSelectBox.clear()
         refreshAvailableAgendaList(gameState)
-        actionSelUI.refreshList(listOf("UnofficialResourceTransfer", "OfficialResourceTransfer"))
+        actionSelButton.refreshList(listOf("UnofficialResourceTransfer", "OfficialResourceTransfer"))
         availableAgendas.forEach { tobj ->
             val t = scene2d.button("check") {
                 //TODO:Agenda Tooltip addListener(ActionTooltipUI(tobj))

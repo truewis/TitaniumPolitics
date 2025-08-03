@@ -23,8 +23,8 @@ import ktx.scene2d.image
 import ktx.scene2d.scene2d
 
 //Select action for e.g. request in this dialogue.
-class ActionSelectUI(var gameState: GameState, override var actionCallback: (GameAction) -> Unit) :
-    WindowUI("CharacterSelectTitle"),
+class ActionSelectUI(var gameState: GameState, override var actionCallback: (GameAction) -> Unit = {}) :
+    WindowUI("ActionSelectTitle"),
     KTable, ActionUI {
     private val docList = scene2d.buttonGroup(0, 1)
     private var subject = gameState.playerName
@@ -36,14 +36,17 @@ class ActionSelectUI(var gameState: GameState, override var actionCallback: (Gam
 
     init {
         instance = this
-        row()
+        isVisible = false
+
         val docScr = ScrollPane(docList)
         docList.align(Align.center)
-
-        add(docScr).size(1200f, 150f).fill()
-        row()
-        add(actionDialogue).size(1200f, 800f).fill()
+        with(content) {
+            add(docScr).size(1200f, 150f).fill()
+            row()
+            add(actionDialogue).size(1200f, 800f).fill()
+        }
         refreshList(listOf("UnofficialResourceTransfer", "OfficialResourceTransfer"))
+
     }
 
     fun refreshList(actionUIList: List<String>) {
@@ -166,7 +169,6 @@ class ActionSelectUI(var gameState: GameState, override var actionCallback: (Gam
             }
             docList.add(t).size(150f).fill()
         }
-        isVisible = !docList.children.isEmpty
 
     }
 
