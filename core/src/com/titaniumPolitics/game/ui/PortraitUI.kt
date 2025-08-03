@@ -1,11 +1,13 @@
 package com.titaniumPolitics.game.ui
 
+import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.scenes.scene2d.Action
 import com.badlogic.gdx.scenes.scene2d.Group
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable
+import com.rafaskoberg.gdx.typinglabel.TypingLabel
 import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.core.InformationType
 import com.titaniumPolitics.game.core.ReadOnly
@@ -42,15 +44,19 @@ class PortraitUI(character: String, var gameState: GameState, scale: Float) : Ta
                 println("Portrait Image Error: $value")
             }
         }
-    val speech = scene2d.label("Hello", "console") {
-        setFontScale(3f)
+    val speech = TypingLabel("", defaultSkin, "description").apply {
+        setFontScale(0.5f)
+        color = Color.WHITE
         wrap = true
-        width = 400f
     }
     val bubble = scene2d.stack {
-        image("TooltipTitle") {
+        image("textbubble") {
+            setColor(0f, 0f, 0f, 0.7f) // Semi-transparent bubble
         }
-        add(this@PortraitUI.speech)
+        container(this@PortraitUI.speech) {
+            fill()
+            pad(30f)
+        }
     }
     val theEmoji = scene2d.image("HelpGrunge")
 
@@ -67,7 +73,7 @@ class PortraitUI(character: String, var gameState: GameState, scale: Float) : Ta
 
         if (displayTextBubble) {
             bubble.isVisible = true
-            speech.setText(ReadOnly.script(action.javaClass.simpleName, action))
+            speech.restart(ReadOnly.script(action.javaClass.simpleName, action))
         } else {
             bubble.isVisible = false
         }
@@ -82,7 +88,7 @@ class PortraitUI(character: String, var gameState: GameState, scale: Float) : Ta
         bubble.isVisible = false
         //mMeter.isVisible = false
         theEmoji.isVisible = false
-        add(bubble).growX()
+        add(bubble).size(600f, 200f).fill()
         row()
         add(theEmoji).growX().size(100f)
         row()

@@ -1,5 +1,6 @@
 package com.titaniumPolitics.game.ui.meeting
 
+import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.scenes.scene2d.actions.Actions
 import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction
@@ -11,6 +12,7 @@ import com.badlogic.gdx.utils.Align
 import com.titaniumPolitics.game.core.GameEngine
 import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.core.Meeting
+import com.titaniumPolitics.game.core.gameActions.Wait
 import com.titaniumPolitics.game.ui.CapsuleStage
 import com.titaniumPolitics.game.ui.PortraitUI
 import com.titaniumPolitics.game.ui.widget.SimpleHeadPortraitUI
@@ -50,9 +52,23 @@ class MeetingUI(var gameState: GameState) : Table(defaultSkin), KTable {
             }
         }
         GameEngine.onNonPlayerCharacterAction += { action ->
-            if (isVisible && gameState.player.currentMeeting?.currentCharacters?.contains(action.sbjCharacter) ?: false) {
+            if (isVisible && gameState.player.currentMeeting?.currentCharacters?.contains(action.sbjCharacter) ?: false && action !is Wait) {
                 //If the action is related to the current meeting, play the animation of mutuality arrows.
-                sleep(200)//TODO:
+                Gdx.app.postRunnable {
+                    if (speakerPortrait.tgtCharacter == action.sbjCharacter) {
+                        speakerPortrait.displayAction(action)
+                    } else {
+                        speakerPortrait.clearAction()
+                    }
+//                portraits.forEach { portrait ->
+//                    if (portrait.tgtCharacter == action.sbjCharacter) {
+//                        portrait.displayAction(action)
+//                    } else
+//                        portrait.clearAction()
+//                }
+                }
+                println("MeetingUI: Non-player character action detected: ${action.sbjCharacter} performed ${action::class.simpleName}")
+                sleep(1000)//TODO:
             }
         }
         discussionTable = stack {

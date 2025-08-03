@@ -201,6 +201,7 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable 
                 0.5f
             )
         )
+        this.actionSheetContainer.actor = null
     }
 
     companion object {

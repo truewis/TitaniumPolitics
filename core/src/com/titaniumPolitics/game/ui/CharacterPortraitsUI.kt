@@ -8,6 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable
 import com.titaniumPolitics.game.core.GameEngine
 import com.titaniumPolitics.game.core.GameState
+import com.titaniumPolitics.game.core.gameActions.Wait
 import ktx.scene2d.Scene2DSkin.defaultSkin
 import ktx.scene2d.image
 import ktx.scene2d.scene2d
@@ -26,9 +27,9 @@ class CharacterPortraitsUI(var gameState: GameState) : Table(defaultSkin) {
         GameEngine.onNonPlayerCharacterAction += { action ->
 
             //Do not play the animation if progress background is visible.
-            if (isVisible && !ProgressBackgroundUI.instance.isVisible && gameState.player.place.characters.contains(
+            if (isVisible && !ProgressBackgroundUI.instance.isVisible && portraits.map { it.tgtCharacter }.contains(
                     action.sbjCharacter
-                )
+                ) && action !is Wait
             ) {
                 //If the action is related to the current meeting, play the animation of mutuality arrows.
                 Gdx.app.postRunnable {
@@ -38,7 +39,8 @@ class CharacterPortraitsUI(var gameState: GameState) : Table(defaultSkin) {
                         } else
                             portrait.clearAction()
                     }
-                    sleep(200)//TODO:
+                    println("CharacterPortraits: Non-player character action detected: ${action.sbjCharacter} performed ${action::class.simpleName}")
+                    sleep(1000)//TODO:
                 }
             }
         }
