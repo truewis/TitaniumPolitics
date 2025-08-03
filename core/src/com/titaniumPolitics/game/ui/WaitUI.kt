@@ -41,7 +41,7 @@ class WaitUI(val gameState: GameState, override var actionCallback: (GameAction)
             table {
                 add(this@WaitUI.timeSelector).size(150f)
                 row()
-                button ("document") {
+                button("document") {
                     it.fill()
                     label("Submit", "docTitle") {
                         setAlignment(Align.center)
@@ -137,6 +137,12 @@ class WaitUI(val gameState: GameState, override var actionCallback: (GameAction)
     }
 
     private fun waitInterruptCondition(info: Information) {
+        if (interrupted)
+            return // If already interrupted, do not process further.
+        if (gameState.player.currentMeeting != null) {
+            // If the player is in a meeting, do not interrupt.
+            return
+        }
         //Interrupt if a character performs an action other than wait in this place.
         if (info.tgtPlace == gameState.player.place.name && info.tgtCharacter != gameState.playerName &&
             !(info.type == InformationType.ACTION && info.action is Wait) && info.knownTo.contains(gameState.playerName)

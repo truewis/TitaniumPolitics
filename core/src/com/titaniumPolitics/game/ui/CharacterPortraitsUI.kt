@@ -24,7 +24,12 @@ class CharacterPortraitsUI(var gameState: GameState) : Table(defaultSkin) {
             refresh(it.player.place.name)
         }
         GameEngine.onNonPlayerCharacterAction += { action ->
-            if (isVisible && gameState.player.place.characters.contains(action.sbjCharacter)) {
+
+            //Do not play the animation if progress background is visible.
+            if (isVisible && !ProgressBackgroundUI.instance.isVisible && gameState.player.place.characters.contains(
+                    action.sbjCharacter
+                )
+            ) {
                 //If the action is related to the current meeting, play the animation of mutuality arrows.
                 Gdx.app.postRunnable {
                     portraits.forEach { portrait ->

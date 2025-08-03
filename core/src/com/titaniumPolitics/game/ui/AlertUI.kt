@@ -28,9 +28,7 @@ class AlertUI(var gameState: GameState) : Table(defaultSkin) {
         gameState.updateUI += { _ -> displayAlerts(); }
         gameState.onPlayerAction += {
             //Remove all alerts.
-            docList.children.forEach {
-                it.remove()
-            }
+            docList.clear()
         }
     }
 

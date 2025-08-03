@@ -180,9 +180,12 @@ class PlaceMarkerWindowUI(var gameState: GameState, var owner: MapUI) : Table() 
     }
 
     private fun moveInterruptCondition(info: Information) {
-        //Interrupt if a character performs an action other than wait in this place.
-        if (info.tgtPlace == gameState.player.place.name && info.tgtCharacter != gameState.playerName &&
-            !(info.type == InformationType.ACTION && info.action is Wait) && info.knownTo.contains(gameState.playerName)
+        if (interrupted)
+            return // If already interrupted, do not process further.
+        if (false
+        //Do not interrupt moving
+//        if (info.tgtPlace == gameState.player.place.name && info.tgtCharacter != gameState.playerName &&
+//            !(info.type == InformationType.ACTION && info.action is Wait) && info.knownTo.contains(gameState.playerName)
         ) {
 
             AlertUI.instance.addAlert("interruptedMove", ReadOnly.prop(info.tgtCharacter))
