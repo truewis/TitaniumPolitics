@@ -6,11 +6,13 @@ import com.titaniumPolitics.game.core.GameEngine
 import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.core.ReadOnly
 import com.titaniumPolitics.game.core.gameActions.Examine
+import com.titaniumPolitics.game.core.gameActions.GameAction
 import com.titaniumPolitics.game.ui.widget.ActionSheetUI
 import ktx.scene2d.*
 import ktx.scene2d.Scene2DSkin.defaultSkin
 
-class ExamineUI(var gameState: GameState) : ActionSheetUI(ReadOnly.prop("examineUI"), gameState), KTable {
+class ExamineUI(var gameState: GameState, actionCallback: (GameAction) -> Unit) :
+    ActionSheetUI(ReadOnly.prop("examineUI"), gameState, actionCallback), KTable {
     private val docList = HorizontalGroup()
 
     init {

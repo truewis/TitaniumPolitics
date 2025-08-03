@@ -22,8 +22,8 @@ import ktx.scene2d.Scene2DSkin.defaultSkin
 import ktx.scene2d.buttonGroup
 
 
-class NewAgendaUI(gameState: GameState, override var actionCallback: (GameAction) -> Unit) :
-    ActionSheetUI("NewAgendaTitle", gameState) {
+class NewAgendaUI(gameState: GameState, actionCallback: (GameAction) -> Unit) :
+    ActionSheetUI("NewAgendaTitle", gameState, actionCallback) {
     val sbjChar = gameState.characters[subject]!!
 
     lateinit var agenda: MeetingAgenda

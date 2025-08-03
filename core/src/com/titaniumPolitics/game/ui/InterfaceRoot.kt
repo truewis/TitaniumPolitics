@@ -5,12 +5,17 @@ import com.badlogic.gdx.scenes.scene2d.ui.Stack
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.utils.Align
 import com.titaniumPolitics.game.core.GameState
+import com.titaniumPolitics.game.core.ReadOnly
+import com.titaniumPolitics.game.debugTools.Logger
 import com.titaniumPolitics.game.ui.map.PlaceSelectionUI
 import com.titaniumPolitics.game.ui.meeting.MeetingUI
 import com.titaniumPolitics.game.ui.widget.ActionSelectButton
 import com.titaniumPolitics.game.ui.widget.ActionSelectUI
 import com.titaniumPolitics.game.ui.widget.CharacterSelectUI
+import kotlinx.serialization.json.jsonObject
+import kotlinx.serialization.json.jsonPrimitive
 import ktx.scene2d.*
+import ktx.scene2d.Scene2DSkin.defaultSkin
 
 class InterfaceRoot(val gameState: GameState) : Table(Scene2DSkin.defaultSkin), KTable {
     val stack: Stack
@@ -82,7 +87,19 @@ class InterfaceRoot(val gameState: GameState) : Table(Scene2DSkin.defaultSkin), 
             add(ProgressBackgroundUI(this@InterfaceRoot.gameState, this@InterfaceRoot.skin))
 
 
-            add(ActionSelectUI(this@InterfaceRoot.gameState))
+            add(ActionSelectUI(this@InterfaceRoot.gameState, {
+                val actionName = it::class.simpleName
+                ActionSelectUI.instance.isVisible = false
+                ActionSelectUI.instance.buttonOwner?.apply {
+                    actionIcon.setDrawable(
+                        defaultSkin,
+                        ReadOnly.actionJson[actionName]?.jsonObject?.get("image")?.jsonPrimitive?.content ?: "Help"
+                    )
+                    setLabel(it)
+                    callback(it)
+                }
+                    ?: Logger.write("No button owner found for action: $actionName")
+            }))
             //ActionSelectUI may use PlaceSelection and CharacterSelectUI, so we add it before them.
             //We draw the following UIs above any other UIs, as they have to appear on top of everything else.
             add(PlaceSelectionUI(this@InterfaceRoot.gameState))

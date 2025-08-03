@@ -157,7 +157,17 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable 
             if (listOf("Move", "Talk").contains(tobj)) {
                 return@forEach
             }
-            val t = createActionButton(tobj, gameState, this::setActionSheet)
+            val t = createActionButton(tobj, gameState, this::setActionSheet, {
+                when (it::class.simpleName) {
+                    "UnofficialResourceTransfer", "OfficialResourceTransfer", "InvestigateAccidentScene", "ClearAccidentScene", "Eat", "Repair", "PrepareInfo" -> {
+                        ProgressBackgroundUI.instance.setVisibleWithFade(
+                            true,
+                            it::class.simpleName!!
+                        )
+                    }
+                }
+                GameEngine.acquireCallback(it)
+            })
             t.addListener(object : ChangeListener() {
                 override fun changed(event: ChangeEvent, actor: Actor) {
                     if (docList.buttonGroup.checked == null) {
@@ -208,7 +218,8 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable 
         fun createActionButton(
             actionName: String,
             gameState: GameState,
-            setActionSheet: (ActionSheetUI) -> Unit
+            setActionSheet: (ActionSheetUI) -> Unit,
+            actionCallback: (GameAction) -> Unit
         ): Button {
             return scene2d.button("document") {
                 val tooltip = ActionTooltipUI(actionName)
@@ -236,7 +247,7 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable 
                                     override fun changed(event: ChangeEvent, actor: Actor) {
                                         if (!this@button.isChecked) return
                                         val examineUI =
-                                            ExamineUI(gameState)
+                                            ExamineUI(gameState, actionCallback)
                                         setActionSheet(examineUI)
                                     }
                                 }
@@ -257,7 +268,7 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable 
                                     override fun changed(event: ChangeEvent, actor: Actor) {
                                         if (!this@button.isChecked) return
                                         if (gameState.player.currentMeeting != null) {
-                                            GameEngine.acquireCallback(
+                                            actionCallback(
                                                 Wait(
                                                     gameState.playerName,
                                                     gameState.player.place.name
@@ -265,7 +276,7 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable 
                                             )
                                         } else {
                                             val waitUI =
-                                                WaitUI(gameState, GameEngine.acquireCallback)
+                                                WaitUI(gameState, actionCallback)
                                             setActionSheet(waitUI)
                                             waitUI.refresh(WaitUIMode.WAIT)
                                         }
@@ -289,8 +300,7 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable 
                                         val sound =
                                             Gdx.audio.newSound(Gdx.files.internal(ReadOnly.actionJson["Eat"]!!.jsonObject["sound"]!!.jsonPrimitive.content))
                                         sound.play()
-                                        GameEngine.acquireCallback(action)
-                                        ProgressBackgroundUI.instance.setVisibleWithFade(true, "Eat")
+                                        actionCallback(action)
                                     }
                                 })
                             }
@@ -309,7 +319,7 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable 
                                     override fun changed(event: ChangeEvent, actor: Actor) {
                                         if (!this@button.isChecked) return
                                         val waitUI =
-                                            WaitUI(gameState, GameEngine.acquireCallback)
+                                            WaitUI(gameState, actionCallback)
                                         setActionSheet(waitUI)
                                         waitUI.refresh(WaitUIMode.SLEEP)
                                     }
@@ -329,8 +339,7 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable 
                                 this@button.addListener(object : ChangeListener() {
                                     override fun changed(event: ChangeEvent, actor: Actor) {
                                         if (!this@button.isChecked) return
-                                        GameEngine.acquireCallback(action)
-                                        ProgressBackgroundUI.instance.setVisibleWithFade(true, "Repair")
+                                        actionCallback(action)
                                     }
                                 })
                             }
@@ -341,19 +350,11 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable 
                                         if (!this@button.isChecked) return
                                         val resUI = ResourceTransferUI(
                                             gameState,
-                                            GameEngine.acquireCallback
+                                            actionCallback
                                         )
                                         setActionSheet(resUI)
                                         resUI.refresh(
-                                            "unofficial",
-                                            {
-                                                GameEngine.acquireCallback(it)
-                                                ProgressBackgroundUI.instance.setVisibleWithFade(
-                                                    true,
-                                                    "UnofficialResourceTransfer"
-                                                )
-                                            },
-                                            gameState.player.place.resources.toHashMap()
+                                            "unofficial"
                                         )
                                     }
                                 })
@@ -365,19 +366,11 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable 
                                         if (!this@button.isChecked) return
                                         val resUI = ResourceTransferUI(
                                             gameState,
-                                            GameEngine.acquireCallback
+                                            actionCallback
                                         )
                                         setActionSheet(resUI)
                                         resUI.refresh(
-                                            "official",
-                                            {
-                                                GameEngine.acquireCallback(it)
-                                                ProgressBackgroundUI.instance.setVisibleWithFade(
-                                                    true,
-                                                    "OfficialResourceTransfer"
-                                                )
-                                            },
-                                            gameState.player.place.resources.toHashMap()
+                                            "official"
                                         )
                                     }
                                 })
@@ -401,7 +394,7 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable 
                                     override fun changed(event: ChangeEvent, actor: Actor) {
                                         if (!this@button.isChecked) return
                                         val addInfoUI =
-                                            AddInfoUI(gameState, GameEngine.acquireCallback)
+                                            AddInfoUI(gameState, actionCallback)
                                         setActionSheet(addInfoUI)
                                         addInfoUI.refresh()
                                     }
@@ -413,7 +406,7 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable 
                                     override fun changed(event: ChangeEvent, actor: Actor) {
                                         if (!this@button.isChecked) return
                                         val endSpeechUI =
-                                            EndSpeechUI(gameState, GameEngine.acquireCallback)
+                                            EndSpeechUI(gameState, actionCallback)
                                         setActionSheet(endSpeechUI)
                                         endSpeechUI.refresh()
                                     }
@@ -434,10 +427,9 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable 
                                 this@button.addListener(object : ChangeListener() {
                                     override fun changed(event: ChangeEvent, actor: Actor) {
                                         if (!this@button.isChecked) return
-                                        GameEngine.acquireCallback(action)
+                                        actionCallback(action)
                                     }
                                 })
-                                ProgressBackgroundUI.instance.setVisibleWithFade(true, "InvestigateAccidentScene")
                             }
 
                             "ClearAccidentScene" -> {
@@ -453,10 +445,9 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable 
                                 this@button.addListener(object : ChangeListener() {
                                     override fun changed(event: ChangeEvent, actor: Actor) {
                                         if (!this@button.isChecked) return
-                                        GameEngine.acquireCallback(action)
+                                        actionCallback(action)
                                     }
                                 })
-                                ProgressBackgroundUI.instance.setVisibleWithFade(true, "ClearAccidentScene")
                             }
 
                             "Intercept" -> {
@@ -472,7 +463,7 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable 
                                 this@button.addListener(object : ChangeListener() {
                                     override fun changed(event: ChangeEvent, actor: Actor) {
                                         if (!this@button.isChecked) return
-                                        GameEngine.acquireCallback(action)
+                                        actionCallback(action)
                                     }
                                 })
                             }
@@ -490,7 +481,7 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable 
                                 this@button.addListener(object : ChangeListener() {
                                     override fun changed(event: ChangeEvent, actor: Actor) {
                                         if (!this@button.isChecked) return
-                                        GameEngine.acquireCallback(action)
+                                        actionCallback(action)
                                     }
                                 })
                             }
@@ -508,7 +499,7 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable 
                                 this@button.addListener(object : ChangeListener() {
                                     override fun changed(event: ChangeEvent, actor: Actor) {
                                         if (!this@button.isChecked) return
-                                        GameEngine.acquireCallback(action)
+                                        actionCallback(action)
                                     }
                                 })
                             }
@@ -531,14 +522,13 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable 
                                             "tgtTime",
                                             InformationViewMode.SELECT
                                         ) { keys ->
-                                            GameEngine.acquireCallback(
+                                            actionCallback(
                                                 PrepareInfo(
                                                     gameState.playerName,
                                                     gameState.player.place.name
                                                 ).also {
                                                     it.newSetOfPrepInfoKeys = ArrayList(keys)
                                                 })
-                                            ProgressBackgroundUI.instance.setVisibleWithFade(true, "PrepareInfo")
                                         }
                                     }
                                 })
@@ -549,7 +539,7 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable 
                                 this@button.addListener(object : ChangeListener() {
                                     override fun changed(event: ChangeEvent, actor: Actor) {
                                         if (!this@button.isChecked) return
-                                        GameEngine.acquireCallback(
+                                        actionCallback(
                                             JoinMeeting(
                                                 gameState.playerName,
                                                 gameState.player.place.name
@@ -568,7 +558,7 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable 
                                 this@button.addListener(object : ChangeListener() {
                                     override fun changed(event: ChangeEvent, actor: Actor) {
                                         if (!this@button.isChecked) return
-                                        GameEngine.acquireCallback(
+                                        actionCallback(
                                             StartMeeting(
                                                 gameState.playerName,
                                                 gameState.player.place.name
@@ -589,7 +579,7 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable 
                                     override fun changed(event: ChangeEvent, actor: Actor) {
                                         if (!this@button.isChecked) return
                                         val newAgendaUI =
-                                            NewAgendaUI(gameState, GameEngine.acquireCallback)
+                                            NewAgendaUI(gameState, actionCallback)
                                         setActionSheet(newAgendaUI)
                                         newAgendaUI.refresh(gameState)
                                         //TODO: Logger.warning("New Agenda Action should never be called from AcailableActionsUI, it is called from MeetingUI.")
@@ -610,7 +600,7 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable 
                                 this@button.addListener(object : ChangeListener() {
                                     override fun changed(event: ChangeEvent, actor: Actor) {
                                         if (!this@button.isChecked) return
-                                        GameEngine.acquireCallback(action)
+                                        actionCallback(action)
                                     }
                                 })
                             }
@@ -628,7 +618,7 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable 
                                 this@button.addListener(object : ChangeListener() {
                                     override fun changed(event: ChangeEvent, actor: Actor) {
                                         if (!this@button.isChecked) return
-                                        GameEngine.acquireCallback(action)
+                                        actionCallback(action)
                                     }
                                 })
                             }

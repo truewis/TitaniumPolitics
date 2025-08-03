@@ -18,8 +18,8 @@ import com.titaniumPolitics.game.ui.widget.WindowUI
 import ktx.scene2d.*
 
 
-class AddInfoUI(val gameState: GameState, override var actionCallback: (GameAction) -> Unit) :
-    ActionSheetUI("AddInfoTitle", gameState) {
+class AddInfoUI(val gameState: GameState, actionCallback: (GameAction) -> Unit) :
+    ActionSheetUI("AddInfoTitle", gameState, actionCallback) {
     private val dataTable = Table()
     private var targetTable = Table()
     private var agendaTable = scene2d.buttonGroup(1, 1)

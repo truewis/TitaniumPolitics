@@ -25,8 +25,8 @@ enum class WaitUIMode {
     WAIT, SLEEP
 }
 
-class WaitUI(val gameState: GameState, override var actionCallback: (GameAction) -> Unit = {}) :
-    ActionSheetUI("EndSpeechTitle", gameState) {
+class WaitUI(val gameState: GameState, actionCallback: (GameAction) -> Unit) :
+    ActionSheetUI("EndSpeechTitle", gameState, actionCallback) {
     private val sbjChar = gameState.characters[subject]!!
     var interrupted = false
     var mode = WaitUIMode.WAIT // Default mode is WAIT
@@ -69,7 +69,6 @@ class WaitUI(val gameState: GameState, override var actionCallback: (GameAction)
     }
 
     fun spendTime(AcquireParams: GameEngine.Companion.AcquireParams) {
-        this.actionCallback = GameEngine.acquireCallback
         if (interrupted) {
             GameEngine.acquireEvent -= this::spendTime
             ProgressBackgroundUI.instance.setVisibleWithFade(false, if (mode == WaitUIMode.WAIT) "Wait" else "Sleep")

@@ -20,10 +20,15 @@ import com.titaniumPolitics.game.ui.widget.WindowUI
 import ktx.scene2d.*
 
 
-class ResourceTransferUI(gameState: GameState, override var actionCallback: (GameAction) -> Unit) :
-    ActionSheetUI("ResourceTransferTitle", gameState) {
+class ResourceTransferUI(var gameState: GameState, actionCallback: (GameAction) -> Unit) :
+    ActionSheetUI("ResourceTransferTitle", gameState, actionCallback) {
     private val dataTable = Table()
     private val targetTable = Table()
+    override var tgtPlace: String = gameState.player.place.name
+        set(value) {
+            field = value
+            refresh(mode, gameState.places[value]!!.resources.toHashMap(), target)
+        }
     private val sbjChar = gameState.characters[subject]!!
 
     //Determines if the transfer is official or not.
@@ -129,11 +134,9 @@ class ResourceTransferUI(gameState: GameState, override var actionCallback: (Gam
 
     fun refresh(
         mode: String,
-        action: (GameAction) -> Unit,
-        current: HashMap<String, Double>,
+        current: HashMap<String, Double> = hashMapOf(),
         target: HashMap<String, Double> = hashMapOf(),
     ) {
-        this.actionCallback = action
         this.current = current
         this.target = target
         this.mode = mode
@@ -156,7 +159,7 @@ class ResourceTransferUI(gameState: GameState, override var actionCallback: (Gam
                                 ) {
                                     current[resourceName] = current[resourceName]!! - 1
                                     target[resourceName] = (target[resourceName] ?: .0) + 1
-                                    this@ResourceTransferUI.refresh(mode, action, current, target)
+                                    this@ResourceTransferUI.refresh(mode, current, target)
                                 }
                             })
                         }
@@ -183,7 +186,7 @@ class ResourceTransferUI(gameState: GameState, override var actionCallback: (Gam
                                 ) {
                                     target[resourceName] = target[resourceName]!! - 1
                                     current[resourceName] = (current[resourceName] ?: .0) + 1
-                                    this@ResourceTransferUI.refresh(mode, action, current, target)
+                                    this@ResourceTransferUI.refresh(mode, current, target)
                                 }
                             })
                         }

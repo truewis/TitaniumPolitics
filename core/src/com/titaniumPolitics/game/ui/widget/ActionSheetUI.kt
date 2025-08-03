@@ -16,7 +16,10 @@ import ktx.scene2d.table
 
 //Action descriptions displayed under AvailableActionsUI.
 //Always used with ActionUI interface.
-open class ActionSheetUI(titleKey: String, gameState: GameState) : Table(Scene2DSkin.defaultSkin), KTable, IActionUI {
+open class ActionSheetUI(
+    titleKey: String, gameState: GameState,
+    override val actionCallback: (GameAction) -> Unit
+) : Table(Scene2DSkin.defaultSkin), KTable, IActionUI {
     val titleLabel = scene2d.label(ReadOnly.prop(titleKey), "docTitle") {
         setFontScale(1f)
         setAlignment(Align.center)
@@ -24,7 +27,6 @@ open class ActionSheetUI(titleKey: String, gameState: GameState) : Table(Scene2D
     }
     val onClose = ArrayList<() -> Unit>()
     val content = Table()
-    override var actionCallback: (GameAction) -> Unit = {}
     override var subject = gameState.playerName
     override var tgtPlace = gameState.player.place.name
 

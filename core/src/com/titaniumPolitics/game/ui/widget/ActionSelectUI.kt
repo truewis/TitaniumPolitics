@@ -13,7 +13,7 @@ import ktx.scene2d.buttonGroup
 import ktx.scene2d.scene2d
 
 //Select action for e.g. request in this dialogue.
-class ActionSelectUI(var gameState: GameState, override var actionCallback: (GameAction) -> Unit = {}) :
+class ActionSelectUI(var gameState: GameState, override val actionCallback: (GameAction) -> Unit) :
     WindowUI("ActionSelectTitle"),
     KTable, IActionUI {
     private val docList = scene2d.buttonGroup(0, 1)
@@ -23,6 +23,7 @@ class ActionSelectUI(var gameState: GameState, override var actionCallback: (Gam
     private val sbjObject = gameState.characters[subject]!!
 
     private val actionDialogue = Container<Table>()
+    var buttonOwner: ActionSelectButton? = null
 
     init {
         instance = this
@@ -41,12 +42,11 @@ class ActionSelectUI(var gameState: GameState, override var actionCallback: (Gam
     fun refreshList(actionUIList: List<String>) {
         docList.clear()
         actionUIList.forEach { tobj ->
-            val t = AvailableActionsUI.createActionButton(tobj, gameState) {
+            val t = AvailableActionsUI.createActionButton(tobj, gameState, {
                 actionDialogue.actor = it
                 (it as IActionUI).subject = subject
                 (it as IActionUI).tgtPlace = tgtPlace
-                (it as IActionUI).actionCallback = actionCallback
-            }
+            }, actionCallback)
             docList.add(t).size(150f).fill()
         }
 

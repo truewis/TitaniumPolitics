@@ -13,7 +13,7 @@ import ktx.scene2d.Scene2DSkin.defaultSkin
 import ktx.scene2d.image
 import ktx.scene2d.label
 
-class ActionSelectButton(callback: (GameAction) -> Unit) : Button(defaultSkin, "default"), KTable {
+class ActionSelectButton(val callback: (GameAction) -> Unit) : Button(defaultSkin, "default"), KTable {
     val actionIcon: Image = image("Help") {
         it.size(100f)
     }
@@ -29,12 +29,7 @@ class ActionSelectButton(callback: (GameAction) -> Unit) : Button(defaultSkin, "
                 availableActions?.also {
                     ActionSelectUI.instance.refreshList(it.toList())
                 }
-                ActionSelectUI.instance.actionCallback = {
-                    ActionSelectUI.instance.isVisible = false
-                    actionIcon.setDrawable(defaultSkin, it::class.simpleName)
-                    setLabel(it)
-                    callback(it)
-                }
+                ActionSelectUI.instance.buttonOwner = this@ActionSelectButton
             }
         })
 

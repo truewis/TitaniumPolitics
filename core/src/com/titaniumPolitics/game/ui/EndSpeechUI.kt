@@ -15,8 +15,8 @@ import com.titaniumPolitics.game.ui.widget.CharacterSelectButton
 import ktx.scene2d.*
 
 
-class EndSpeechUI(val gameState: GameState, override var actionCallback: (GameAction) -> Unit) :
-    ActionSheetUI("EndSpeechTitle", gameState) {
+class EndSpeechUI(val gameState: GameState, actionCallback: (GameAction) -> Unit) :
+    ActionSheetUI("EndSpeechTitle", gameState, actionCallback) {
     private val sbjChar get() = gameState.characters[subject]!!
     private val charSelector = CharacterSelectButton(skin, { nextSpeaker = it })
     var nextSpeaker = ""

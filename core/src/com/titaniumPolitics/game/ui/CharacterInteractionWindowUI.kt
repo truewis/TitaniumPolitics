@@ -46,7 +46,6 @@ class CharacterInteractionWindowUI(var gameState: GameState) :
                 resUI.toWhere = "home_${this@CharacterInteractionWindowUI.characterDisplayed}"
                 resUI.refresh(
                     "private",
-                    GameEngine.acquireCallback,
                     this@CharacterInteractionWindowUI.gameState.player.resources.toHashMap()
                 )
                 InterfaceRoot.instance.avAUI.setActionSheet(resUI)
