@@ -103,7 +103,7 @@ class PlaceMarkerWindowUI(var gameState: GameState, var owner: MapUI) : Table() 
         addListener(object : com.badlogic.gdx.scenes.scene2d.utils.ChangeListener() {
             override fun changed(event: ChangeEvent?, actor: Actor?) {
                 //Select place.
-                PlaceSelectionUI.instance.selectedPlaceCallback(this@PlaceMarkerWindowUI.placeDisplayed)
+                (owner as PlaceSelectionUI).selectedPlaceCallback(this@PlaceMarkerWindowUI.placeDisplayed)
             }
         }
         )

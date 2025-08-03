@@ -81,10 +81,12 @@ class InterfaceRoot(val gameState: GameState) : Table(Scene2DSkin.defaultSkin), 
 
             add(ProgressBackgroundUI(this@InterfaceRoot.gameState, this@InterfaceRoot.skin))
 
+
+            add(ActionSelectUI(this@InterfaceRoot.gameState))
+            //ActionSelectUI may use PlaceSelection and CharacterSelectUI, so we add it before them.
             //We draw the following UIs above any other UIs, as they have to appear on top of everything else.
             add(PlaceSelectionUI(this@InterfaceRoot.gameState))
             add(CharacterSelectUI(this@InterfaceRoot.gameState))
-            add(ActionSelectUI(this@InterfaceRoot.gameState))
 
             //We draw the following UIs above any other UIs.
             add(DialogueUI(this@InterfaceRoot.gameState))
