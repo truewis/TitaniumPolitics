@@ -286,6 +286,14 @@ class GameState {
             ReadOnly.const("mutualityMin")
     }
 
+    fun setMutuality(a: Collection<String>, b: Collection<String> = a, delta: Double) {
+        a.forEach { a1 ->
+            b.forEach { b1 ->
+                setMutuality(a1, b1, delta)
+            }
+        }
+    }
+
     fun getPartyMutuality(a: String, b: String = a): Double {
         if (!parties.containsKey(a) || !parties.containsKey(b)) throw Exception("Getting party mutuality $a -> $b invalid.")
         var totalMutuality = 0.0

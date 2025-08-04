@@ -72,6 +72,31 @@ class Meeting(
             else -> {
             }
         }
+        //If there are any unsatisfied proof of work requests, affect the mutualities.
+        agendas.forEach {
+            if (it.type == AgendaType.PROOF_OF_WORK && it.attachedRequest != null && it.informationKeys.isEmpty()) {
+                //Mutuality decreases.
+                it.attachedRequest!!.issuedBy.forEach { issuedBy ->
+                    if (gameState.characters[issuedBy]!!.trait.contains("psychopath"))
+                        it.attachedRequest!!.issuedTo.forEach { issuedTo ->
+                            gameState.setMutuality(
+                                issuedBy,
+                                issuedTo,
+                                -const("RequestFinishDeltaMutuality") * 2
+                            )
+                        }
+                    else {
+                        it.attachedRequest!!.issuedTo.forEach { issuedTo ->
+                            gameState.setMutuality(
+                                issuedBy,
+                                issuedTo,
+                                -const("RequestFinishDeltaMutuality")
+                            )
+                        }
+                    }
+                }
+            }
+        }
         //Remove the meeting from the ongoingMeetings.
         if (gameState.ongoingMeetings.containsValue(this)) {
             gameState.removeOngoingMeeting(gameState.ongoingMeetings.filter { it.value == this }.keys.first())

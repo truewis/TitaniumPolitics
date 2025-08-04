@@ -57,7 +57,7 @@ class Request(
                             gState.setMutuality(
                                 issuedBy,
                                 issuedTo,
-                                ReadOnly.const("RequestFinishDeltaMutuality").toDouble() / 3
+                                ReadOnly.const("RequestFinishDeltaMutuality") / 3
                             )
                         }
                     else {
@@ -65,7 +65,7 @@ class Request(
                             gState.setMutuality(
                                 issuedBy,
                                 issuedTo,
-                                ReadOnly.const("RequestFinishDeltaMutuality").toDouble()
+                                ReadOnly.const("RequestFinishDeltaMutuality")
                             )
                         }
                     }
