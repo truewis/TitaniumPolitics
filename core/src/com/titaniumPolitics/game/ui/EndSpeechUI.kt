@@ -57,7 +57,8 @@ class EndSpeechUI(val gameState: GameState, actionCallback: (GameAction) -> Unit
 
     fun refresh() {
         nextSpeaker = gameState.player.currentMeeting!!.currentCharacters.first { it != subject }
-        charSelector.availableCharacters = gameState.player.currentMeeting!!.currentCharacters
+        charSelector.availableCharacters =
+            gameState.player.currentMeeting!!.currentCharacters.filter { it != subject }.toSet()
         charSelector.setLabel(nextSpeaker)
     }
 

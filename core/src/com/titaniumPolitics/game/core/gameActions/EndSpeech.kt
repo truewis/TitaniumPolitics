@@ -19,7 +19,7 @@ class EndSpeech(override val sbjCharacter: String, override val tgtPlace: String
 
     override fun isValid(): Boolean {
         val meeting = parent.characters[sbjCharacter]!!.currentMeeting!!
-        return meeting.currentSpeaker == sbjCharacter
+        return meeting.currentSpeaker == sbjCharacter && nextSpeaker != sbjCharacter
     }
 
     override fun deltaWill(): Double {
