@@ -1,0 +1,77 @@
+{
+  "ration": {
+    "baseEGP(g/g)": 1e-3,
+    "demandPopElasticity(g/day/person)": 1000,
+    "demandPriceElasticity": 0.2
+  },
+  "water": {
+    "baseEGP(g/g)": 1e-3,
+    "demandPopElasticity(g/day/person)": 1000,
+    "demandPriceElasticity": 0.2
+  },
+  "hydrogen": {
+    "baseEGP(g/g)": 1e-3,
+    "demandPopElasticity(g/day/person)": 1000,
+    "demandPriceElasticity": 1
+  },
+  "organics": {
+    "baseEGP(g/g)": 1e-3,
+    "demandPopElasticity(g/day/person)": 1000,
+    "demandPriceElasticity": 1
+  },
+  "lightMetal": {
+    "baseEGP(g/g)": 1e-3,
+    "demandPopElasticity(g/day/person)": 1000,
+    "demandPriceElasticity": 1
+  },
+  "heavyMetal": {
+    "baseEGP(g/g)": 1e-3,
+    "demandPopElasticity(g/day/person)": 1000,
+    "demandPriceElasticity": 1
+  },
+  "rareMetal": {
+    "baseEGP(g/g)": 1e-3,
+    "demandPopElasticity(g/day/person)": 1000,
+    "demandPriceElasticity": 1
+  },
+  "silicon": {
+    "baseEGP(g/g)": 1e-3,
+    "demandPopElasticity(g/day/person)": 1000,
+    "demandPriceElasticity": 1
+  },
+  "plastic": {
+    "baseEGP(g/g)": 1e-3,
+    "demandPopElasticity(g/day/person)": 1000,
+    "demandPriceElasticity": 1
+  },
+  "glass": {
+    "baseEGP(g/g)": 1e-3,
+    "demandPopElasticity(g/day/person)": 1000,
+    "demandPriceElasticity": 1
+  },
+  "ceramic": {
+    "baseEGP(g/g)": 1e-3,
+    "demandPopElasticity(g/day/person)": 1000,
+    "demandPriceElasticity": 1
+  },
+  "diamond": {
+    "baseEGP(g/g)": 1e-3,
+    "demandPopElasticity(g/day/person)": 1000,
+    "demandPriceElasticity": 1
+  },
+  "helium": {
+    "baseEGP(g/g)": 1e-3,
+    "demandPopElasticity(g/day/person)": 1000,
+    "demandPriceElasticity": 1
+  },
+  "glassClothes": {
+    "baseEGP(g/g)": 1e-3,
+    "demandPopElasticity(g/day/person)": 1000,
+    "demandPriceElasticity": 1
+  },
+  "cottonClothes": {
+    "baseEGP(g/g)": 1e-3,
+    "demandPopElasticity(g/day/person)": 1000,
+    "demandPriceElasticity": 1
+  }
+}
