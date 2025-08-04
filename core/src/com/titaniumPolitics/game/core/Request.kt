@@ -90,6 +90,10 @@ class Request(
             0.0
     }
 
+    fun difficulty(): Double {
+        return ReadOnly.const("RequestRejectAverageMutuality")//TODO: difficulty must change according to action.
+    }
+
     override fun toString(): String {
         return "Request(action=$action, issuedTo=$issuedTo, name='$name', executeTime=$executeTime, issuedBy=$issuedBy, completed=$completed)"
     }

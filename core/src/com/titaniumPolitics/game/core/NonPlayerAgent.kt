@@ -100,26 +100,28 @@ class NonPlayerAgent : Agent() {
         //If there is a command that is within the set time window, issued party is trusted enough, and seems to be executable at the exact place the character is in right now,(AvailableActions), start execution routine.
         //Note that the command may not be valid even if it in AvailableActions list. For example, if the character is already at the place, move command is not valid.
         //We should not enter executeCommand routine if it is already in the routine list.
-        if (routines.none { it is ExecuteCommandRoutine }) {
-            val request = parent.requests.values.firstOrNull {
-                GameEngine.availableActions(
-                    parent,
-                    it.action.tgtPlace,
-                    name
-                ).contains(it.action.javaClass.simpleName) && it.action.tgtPlace == place
-            }
-            if (request != null) {
-                routines.add(
-                    ExecuteCommandRoutine().apply {
+//        if (routines.none { it is ExecuteCommandRoutine }) {
+//            val request = parent.requests.values.firstOrNull {
+//                GameEngine.availableActions(
+//                    parent,
+//                    it.action.tgtPlace,
+//                    name
+//                ).contains(it.action.javaClass.simpleName) && it.action.tgtPlace == place
+//            }
+//            if (request != null) {
+//                routines.add(
+//                    ExecuteCommandRoutine().apply {
+//
+//                        priority = pri
+//                        variables["request"] = request.name
+//                        intVariables["routineStartTime"] = parent.time
+//                    }
+//                )//Add the routine with higher priority.
+//                return
+//            }
+//        }
 
-                        priority = pri
-                        variables["request"] = request.name
-                        intVariables["routineStartTime"] = parent.time
-                    }
-                )//Add the routine with higher priority.
-                return
-            }
-        }
+        //TODO: Remove this block. Only execute commands in WorkRoutine.
 
 
     }

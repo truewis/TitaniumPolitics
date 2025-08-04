@@ -7,6 +7,7 @@ import com.titaniumPolitics.game.core.ReadOnly
 import com.titaniumPolitics.game.core.gameActions.GameAction
 import com.titaniumPolitics.game.core.gameActions.PrepareInfo
 import com.titaniumPolitics.game.core.gameActions.Wait
+import com.titaniumPolitics.game.debugTools.Logger
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -111,7 +112,7 @@ class WorkRoutine() : Routine() {
                     name,
                     it
                 )
-            } / it.issuedBy.size > ReadOnly.const("RequestRejectAverageMutuality")) && GameEngine.availableActions(
+            } / it.issuedBy.size > it.difficulty()) && GameEngine.availableActions(
                 gState,
                 it.action.tgtPlace,
                 name
