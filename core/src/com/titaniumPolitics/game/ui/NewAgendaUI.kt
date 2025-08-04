@@ -55,7 +55,7 @@ class NewAgendaUI(val gameState: GameState, actionCallback: (GameAction) -> Unit
         add(CharacterSelectButton(skin, { char ->
             this@NewAgendaUI.agenda =
                 MeetingAgenda(AgendaType.PRAISE, this@NewAgendaUI.subject, hashMapOf("character" to char))
-        })).size(150f, 150f)
+        })).size(180f)
     }
     private val denounceTable = scene2d.table {
         label(ReadOnly.prop("denounce"), "docTitle") {
@@ -67,7 +67,7 @@ class NewAgendaUI(val gameState: GameState, actionCallback: (GameAction) -> Unit
         add(CharacterSelectButton(skin, { char ->
             this@NewAgendaUI.agenda =
                 MeetingAgenda(AgendaType.DENOUNCE, this@NewAgendaUI.subject, hashMapOf("character" to char))
-        })).size(150f, 150f)
+        })).size(180f)
     }
     private val praisePartyTable = scene2d.table {
         label(ReadOnly.prop("praiseParty"), "docTitle") {
@@ -115,13 +115,16 @@ class NewAgendaUI(val gameState: GameState, actionCallback: (GameAction) -> Unit
         }
         row()
         add(PlaceSelectButton(skin, { this@NewAgendaUI.actionSelButton.changeTgtPlace(it) })).size(300f, 150f)
-        add(CharacterSelectButton(skin, { char ->
+        val csButton = CharacterSelectButton(skin, { char ->
             this@NewAgendaUI.actionSelButton.changeSubject(char)
-        })).size(150f, 150f)
-
+        })
+        csButton.availableCharacters =
+            this@NewAgendaUI.sbjChar.currentMeeting!!.currentCharacters.filter { it != this@NewAgendaUI.subject }
+                .toSet()//TODO: this only works because we don't have to refresh the character list, because everything happens in the same turn.
+        add(csButton).size(180f)
         row()
         //Select Action
-        add(this@NewAgendaUI.actionSelButton).size(100f, 100f)
+        add(this@NewAgendaUI.actionSelButton).size(300f, 150f)
         this@NewAgendaUI.actionSelButton.availableActions = setOf(
             "Examine",
             "UnofficialResourceTransfer",
@@ -389,7 +392,7 @@ class NewAgendaUI(val gameState: GameState, actionCallback: (GameAction) -> Unit
                     }
                 }
             }
-            agendaSelectBox.add(t).size(100f).fill()
+            agendaSelectBox.add(t).size(150f).fill()
         }
     }
 

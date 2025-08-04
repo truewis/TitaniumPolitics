@@ -25,7 +25,7 @@ class EndSpeechUI(val gameState: GameState, actionCallback: (GameAction) -> Unit
         val st = stack {
             it.grow()
             table {
-                add(this@EndSpeechUI.charSelector).size(150f)
+                add(this@EndSpeechUI.charSelector).size(180f)
                 row()
                 button {
                     it.fill()
