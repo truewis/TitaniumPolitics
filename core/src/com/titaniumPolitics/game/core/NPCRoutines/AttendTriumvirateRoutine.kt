@@ -26,22 +26,7 @@ class AttendTriumvirateRoutine : Routine(), IMeetingRoutine {
             "AttendTriumvirateRoutine can only be used for triumvirateDailyConference when the character is a member of the party, but got $name as a member of ${party.name}"
         }
 
-        //If speaker, propose proof of work if nothing else is important.
-        //Proof of work should have corresponding request. If there is no request or no relevant information, do not propose proof of work.
-        //Some information are more relevant than others.
-        if (conf.agendas.any { it.type == AgendaType.PROOF_OF_WORK }) {
-
-            //If we haven't tried this branch in the current routine
-            if (intVariables["try_support_proofOfWork"] != 1) {
-                //If the agenda is already proposed, and we have a supporting information, support it.
-                intVariables["try_support_proofOfWork"] = 1
-                return (
-                        SupportAgendaRoutine().apply {
-                            intVariables["agendaIndex"] =
-                                conf.agendas.indexOfFirst { it.type == AgendaType.PROOF_OF_WORK }
-                        })//Add a routine, priority higher than work.
-            }
-        }
+        supportProofOfWork(conf, name)?.let { return it }
 
 
         return null
@@ -95,10 +80,7 @@ class AttendTriumvirateRoutine : Routine(), IMeetingRoutine {
 
 
             //2. request information about the commands issued today, by putting ProofOfWork agenda forward.
-            if (!conf.agendas.any { it.type == AgendaType.PROOF_OF_WORK })
-                return NewAgenda(name, place).also {
-                    it.agenda = MeetingAgenda(AgendaType.PROOF_OF_WORK, name)
-                }
+            proposeProofOfWork(conf, name, place)?.let { return it }
             //3. Praise or criticize the members, if there is any relevant information.
             //It should be noted that the content of the information is not checked here. Think about this later.
             party.members.forEach { member ->

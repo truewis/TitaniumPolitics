@@ -23,22 +23,7 @@ class AttendDivisionMeetingRoutine : Routine(), IMeetingRoutine {
             "AttendDivisionMeetingRoutine can only be used for divisionDailyConference when not the leader, but got $name as the leader of ${party.name}"
         }
 
-        //If speaker, propose proof of work if nothing else is important.
-        //Proof of work should have corresponding request. If there is no request or no relevant information, do not propose proof of work.
-        //Some information are more relevant than others.
-        if (conf.agendas.any { it.type == AgendaType.PROOF_OF_WORK }) {
-
-            //If we haven't tried this branch in the current routine
-            if (intVariables["try_support_proofOfWork"] != 1) {
-                //If the agenda is already proposed, and we have a supporting information, support it.
-                intVariables["try_support_proofOfWork"] = 1
-                return (
-                        SupportAgendaRoutine().apply {
-                            intVariables["agendaIndex"] =
-                                conf.agendas.indexOfFirst { it.type == AgendaType.PROOF_OF_WORK }
-                        })//Add a routine, priority higher than work.
-            }
-        }
+        supportProofOfWork(conf, name)?.let { return it }
 
 
         //Try supporting salary request.
@@ -109,13 +94,7 @@ class AttendDivisionMeetingRoutine : Routine(), IMeetingRoutine {
         } else {
             val party = gState.parties[conf.involvedParty]!!
 
-            //Proof of work should have corresponding request. If there is no request or no relevant information, do not propose proof of work.
-            //Some information are more relevant than others.
-            if (conf.agendas.none { it.type == AgendaType.PROOF_OF_WORK }) {
-                return NewAgenda(name, place).also {
-                    it.agenda = MeetingAgenda(AgendaType.PROOF_OF_WORK, name)
-                }
-            }
+            proposeProofOfWork(conf, name, place)?.let { return it }
 
             //If not division leader and salary is not paid, request salary.
             if (conf.currentSpeaker == name && !party.isSalaryPaid) {

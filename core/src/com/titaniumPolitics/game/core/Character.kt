@@ -76,8 +76,8 @@ class Character : GameStateElement() {
     var mercenaries = hashSetOf<String>()
 
     val history = arrayListOf<String>()
-    val finishedRequests =
-        HashSet<String>() //Requests that this character thinks are finished. The recipient of the request may not be aware of this yet.
+    val executedRequests =
+        HashSet<String>() //Requests that this character thinks are finished. The recipient of the request may not be aware of this yet. This is handled in Request.refresh().
 
     fun hireCost(): Double {
         return 10000.0 / parent.idlePop

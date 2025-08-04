@@ -31,7 +31,7 @@ class SupportAgendaRoutine() : Routine(), IMeetingRoutine {
                     //if there is any supporting information, add it.
                     character.preparedInfoKeys.filter { key ->
                         gState.informations[key]!!.type == InformationType.ACTION
-                                && character.finishedRequests.any {
+                                && character.executedRequests.any {
                             gState.requests[it]!!.action == gState.informations[key]!!.action &&
                                     gState.requests[it]!!.issuedBy.any {
                                         character.currentMeeting!!.currentCharacters.contains(

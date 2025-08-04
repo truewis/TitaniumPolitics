@@ -26,7 +26,7 @@ class AddInfo(override val sbjCharacter: String, override val tgtPlace: String) 
                 //if there is any supporting information, add it.
 
                 if (info.type == InformationType.ACTION
-                    && sbjCharObj.finishedRequests.any {
+                    && sbjCharObj.executedRequests.any {
                         parent.requests[it]!!.action == info.action &&
                                 parent.requests[it]!!.issuedBy.any {
                                     meeting.currentCharacters.contains(

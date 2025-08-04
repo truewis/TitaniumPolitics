@@ -8,7 +8,7 @@ import com.titaniumPolitics.game.core.gameActions.*
 import kotlinx.serialization.Serializable
 
 @Serializable
-class AttendCabinetMeetingRoutine : Routine(), IMeetingRoutine {
+class AttendPrivateMeetingRoutine : Routine(), IMeetingRoutine {
     init {
         priority = PRIORITY_MEETING
     }
@@ -17,15 +17,9 @@ class AttendCabinetMeetingRoutine : Routine(), IMeetingRoutine {
         val character = gState.characters[name]!!
         val conf =
             character.currentMeeting ?: return null
-        check(conf.type == Meeting.MeetingType.CABINET_DAILY_CONFERENCE) {
-            "AttendCabinetMeetingRoutine can only be used for cabinetDailyConference, but got ${conf.type}"
+        check(conf.type == Meeting.MeetingType.TALK) {
+            "AttendPrivateMeetingRoutine can only be used for talk, but got ${conf.type}"
         }
-
-        val party = gState.parties[conf.involvedParty]!!
-        check(party.leader != name) {
-            "AttendCabinetMeetingRoutine can only be used for cabinetDailyConference when not the leader, but got $name as the leader of ${party.name}"
-        }
-
         supportProofOfWork(conf, name)?.let { return it }
 
 
@@ -74,15 +68,7 @@ class AttendCabinetMeetingRoutine : Routine(), IMeetingRoutine {
                 return Wait(name, place)
             }
         } else {
-            gState.parties[conf.involvedParty]!!
-
-            //Proof of work should have corresponding request. If there is no request or no relevant information, do not propose proof of work.
-            //Some information are more relevant than others.
-            if (conf.agendas.none { it.type == AgendaType.PROOF_OF_WORK }) {
-                return NewAgenda(name, place).also {
-                    it.agenda = MeetingAgenda(AgendaType.PROOF_OF_WORK, name)
-                }
-            }
+            proposeProofOfWork(conf, name, place)?.let { return it }
 
             //If nothing else to talk about, end the speech. The next speaker is the character with the highest mutuality.
             return EndSpeech(name, place).also {

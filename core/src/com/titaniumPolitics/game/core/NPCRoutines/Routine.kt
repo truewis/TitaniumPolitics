@@ -1,8 +1,12 @@
 package com.titaniumPolitics.game.core.NPCRoutines
 
+import com.titaniumPolitics.game.core.AgendaType
 import com.titaniumPolitics.game.core.GameEngine
 import com.titaniumPolitics.game.core.GameState
+import com.titaniumPolitics.game.core.Meeting
+import com.titaniumPolitics.game.core.MeetingAgenda
 import com.titaniumPolitics.game.core.gameActions.GameAction
+import com.titaniumPolitics.game.core.gameActions.NewAgenda
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 import java.util.*
@@ -68,5 +72,50 @@ sealed class Routine() {
                 .newInstance(name, place) as GameAction).apply { injectParent(gState);chooseParams() }
 
         }.filter { it.isValid() }.maxBy { it.optimizeWill() }
+    }
+
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //Shared Functions
+
+    fun supportProofOfWork(conf: Meeting, name: String): Routine? {
+
+        //If speaker, try supporting proof of work if I am involved.
+        //Proof of work should have corresponding request. If there is no request or no relevant information, do not propose proof of work.
+        if (conf.agendas.any {
+                it.type == AgendaType.PROOF_OF_WORK && (it.attachedRequest == null /*If request is null, proof of work is about the general attire, so support it anyways.*/ || (name in it.attachedRequest!!.issuedBy && it.attachedRequest!!.issuedTo.intersect(
+                    conf.currentCharacters
+                ).isNotEmpty()))
+            }) {
+
+            //If we haven't tried this branch in the current routine
+            if (intVariables["try_support_proofOfWork"] != 1) {
+                //If the agenda is already proposed, and we have a supporting information, support it.
+                intVariables["try_support_proofOfWork"] = 1
+                return (
+                        SupportAgendaRoutine().apply {
+                            intVariables["agendaIndex"] =
+                                conf.agendas.indexOfFirst { it.type == AgendaType.PROOF_OF_WORK }
+                        })//Add a routine, priority higher than work.
+            }
+        }
+        return null
+    }
+
+    fun proposeProofOfWork(conf: Meeting, name: String, place: String): GameAction? {
+        //Proof of work should have corresponding request. If there is no request or no relevant information, do not propose proof of work.
+        //Some information are more relevant than others.
+        if (conf.agendas.none { it.type == AgendaType.PROOF_OF_WORK }) {
+            gState.requests.values.firstOrNull {
+                name in it.issuedBy && it.issuedTo.intersect(conf.currentCharacters)
+                    .isNotEmpty() && !it.completed
+            }?.let { req ->
+                return NewAgenda(name, place).also {
+                    it.agenda = MeetingAgenda(AgendaType.PROOF_OF_WORK, name, attachedRequest = req)
+                }
+            }
+
+        }
+        return null
     }
 }

@@ -39,18 +39,17 @@ class Request(
         //This function is called every turn.
         //Each time one of the issuedTo completes this request,
         //Add the key of this request to finishedRequests of the character.
-        gState.informations.filter { it.value.type == InformationType.ACTION && it.value.action == action && (issuedTo.isEmpty() || it.value.tgtCharacter in issuedTo) }
-            .forEach {
-                gState.characters[it.value.tgtCharacter]!!.finishedRequests.add(name)
-            }
-        val tgt = gState.informations.filter {
-            it.value.knownTo.containsAll(issuedBy) && it.value.type == InformationType.ACTION && it.value.action == action && (issuedTo.isEmpty() || issuedTo.contains(
-                it.value.tgtCharacter
-            ))
+        val executedRequests =
+            gState.informations.filter { it.value.type == InformationType.ACTION && it.value.action == action && (issuedTo.isEmpty() || it.value.tgtCharacter in issuedTo) }
+        executedRequests.forEach {
+            gState.characters[it.value.tgtCharacter]!!.executedRequests.add(name)
+        }
+        val executedAndFinishedRequests = executedRequests.filter {
+            it.value.knownTo.containsAll(issuedBy)
 
         }
         if ((executeTime in gState.time - 3..gState.time + 3 || executeTime == 0))
-            if (tgt.isNotEmpty()) {
+            if (executedAndFinishedRequests.isNotEmpty()) {
                 //Mutuality increases.
                 issuedBy.forEach { issuedBy ->
                     if (gState.characters[issuedBy]!!.trait.contains("psychopath"))
@@ -71,7 +70,7 @@ class Request(
                         }
                     }
                 }
-                tgt.forEach {
+                executedAndFinishedRequests.forEach {
                     gState.setMutuality(
                         it.value.tgtCharacter,
                         it.value.tgtCharacter,
