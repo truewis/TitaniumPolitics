@@ -152,12 +152,12 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable 
             gameState,
             gameState.player.place.name,
             gameState.playerName
-        ).forEach { tobj ->
+        ).forEachIndexed { index, tobj ->
             //We do not create buttons for these actions, as they are accessible through the main UI.
             if (listOf("Move", "Talk").contains(tobj)) {
-                return@forEach
+                return@forEachIndexed
             }
-            val t = createActionButton(tobj, gameState, this::setActionSheet, {
+            val t = createActionButton(index, tobj, gameState, this::setActionSheet, {
                 when (it::class.simpleName) {
                     "UnofficialResourceTransfer", "OfficialResourceTransfer", "InvestigateAccidentScene", "ClearAccidentScene", "Eat", "Repair", "PrepareInfo" -> {
                         ProgressBackgroundUI.instance.setVisibleWithFade(
@@ -217,6 +217,7 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable 
         }
 
         fun createActionButton(
+            index: Int,
             actionName: String,
             gameState: GameState,
             setActionSheet: (ActionSheetUI) -> Unit,
@@ -638,7 +639,7 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable 
                             image("white-pixel") {
                                 color = Color.BLACK
                             }
-                            label("1", "docTitle") {
+                            label(index.toString(), "docTitle") {
                                 setFontScale(0.4f)
                                 color = Color.WHITE
                                 setAlignment(Align.center)

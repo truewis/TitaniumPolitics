@@ -41,8 +41,8 @@ class ActionSelectUI(var gameState: GameState, override val actionCallback: (Gam
 
     fun refreshList(actionUIList: List<String>) {
         docList.clear()
-        actionUIList.forEach { tobj ->
-            val t = AvailableActionsUI.createActionButton(tobj, gameState, {
+        actionUIList.forEachIndexed { index, tobj ->
+            val t = AvailableActionsUI.createActionButton(index, tobj, gameState, {
                 actionDialogue.actor = it
                 (it as IActionUI).subject = subject
                 (it as IActionUI).tgtPlace = tgtPlace
