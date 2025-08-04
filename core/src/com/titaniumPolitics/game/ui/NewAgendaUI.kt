@@ -22,16 +22,26 @@ import ktx.scene2d.Scene2DSkin.defaultSkin
 import ktx.scene2d.buttonGroup
 
 
-class NewAgendaUI(gameState: GameState, actionCallback: (GameAction) -> Unit) :
+class NewAgendaUI(val gameState: GameState, actionCallback: (GameAction) -> Unit) :
     ActionSheetUI("NewAgendaTitle", gameState, actionCallback) {
     val sbjChar = gameState.characters[subject]!!
+    val submitButton: Button
+    var agenda: MeetingAgenda? = null
+        set(value) {
+            field = value
+            if (value != null)
+                submitButton.isDisabled =
+                    !NewAgenda(this.subject, this.tgtPlace).apply { agenda = value;injectParent(gameState) }.isValid()
+            else
+                submitButton.isDisabled = true
 
-    lateinit var agenda: MeetingAgenda
+
+        }
     private var availableAgendas = arrayOf<AgendaType>()
     val agendaDetailStack: Stack
     private val actionSelButton = ActionSelectButton(this::setRequestAction)
     fun setRequestAction(action: GameAction) {
-        agenda.attachedRequest = Request(action, hashSetOf(action.sbjCharacter))
+        agenda?.attachedRequest = Request(action, hashSetOf(action.sbjCharacter))
     }
 
     private lateinit var agendaSelectBox: Table
@@ -67,7 +77,7 @@ class NewAgendaUI(gameState: GameState, actionCallback: (GameAction) -> Unit) :
         label("Target:", "docTitle") { color = Color.BLACK }
         //Select party to perform the request.
         selectBox<String> {
-            items = Array(gameState.parties.keys.toTypedArray())
+            items = Array(this@NewAgendaUI.gameState.parties.keys.toTypedArray())
             addListener(object : ChangeListener() {
                 override fun changed(event: ChangeEvent?, actor: Actor?) {
                     this@NewAgendaUI.agenda =
@@ -84,7 +94,7 @@ class NewAgendaUI(gameState: GameState, actionCallback: (GameAction) -> Unit) :
         label("Target:", "docTitle") { color = Color.BLACK }
         //Select party to perform the request.
         selectBox<String> {
-            items = Array(gameState.parties.keys.toTypedArray())
+            items = Array(this@NewAgendaUI.gameState.parties.keys.toTypedArray())
             addListener(object : ChangeListener() {
                 override fun changed(event: ChangeEvent?, actor: Actor?) {
                     this@NewAgendaUI.agenda =
@@ -142,20 +152,21 @@ class NewAgendaUI(gameState: GameState, actionCallback: (GameAction) -> Unit) :
                 //TODO: also make changes to NewAgenda.kt.
             }
             row()
-            button {
+            this@NewAgendaUI.submitButton = button {
+                isDisabled = true
                 it.size(300f, 100f).fill()
                 label("Submit", "docTitle") {
                     color = Color.BLACK
                     setAlignment(Align.center)
 
                 }
-                addListener(object : ClickListener() {
-                    override fun clicked(event: InputEvent?, x: Float, y: Float) {
+                addListener(object : ChangeListener() {
+                    override fun changed(event: ChangeEvent?, actor: Actor?) {
                         this@NewAgendaUI.actionCallback(
                             NewAgenda(
                                 this@NewAgendaUI.subject,
-                                this@NewAgendaUI.sbjChar.place.name
-                            ).apply { agenda = this@NewAgendaUI.agenda })
+                                this@NewAgendaUI.tgtPlace
+                            ).apply { agenda = this@NewAgendaUI.agenda!! })
                         this@NewAgendaUI.onClose.forEach { it() }
                     }
                 })
@@ -192,6 +203,7 @@ class NewAgendaUI(gameState: GameState, actionCallback: (GameAction) -> Unit) :
         praisePartyTable.isVisible = false
         denouncePartyTable.isVisible = false
         requestTable.isVisible = false
+        agenda = null
     }
 
 
