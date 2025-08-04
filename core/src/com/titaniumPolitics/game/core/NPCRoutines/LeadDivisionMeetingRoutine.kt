@@ -181,25 +181,27 @@ class LeadDivisionMeetingRoutine : Routine(), IMeetingRoutine {
             if (productivity(name, minProdApp) < gState.laborValuePerHour) {
                 val reductionAmount = max(minProdApp.plannedWorker / 5, 1)
                 val wantPlace = gState.getApparatusPlace(minProdApp.ID)
-                //Fill in the agenda based on variables in the routine, resource and character.
-                val agenda = MeetingAgenda(AgendaType.REQUEST, name).apply {
-                    attachedRequest = Request(
-                        SetWorkers(
-                            wantPlace.manager,
-                            tgtPlace = wantPlace.name
+                if (wantPlace.manager != null) {
+                    //Fill in the agenda based on variables in the routine, resource and character.
+                    val agenda = MeetingAgenda(AgendaType.REQUEST, name).apply {
+                        attachedRequest = Request(
+                            SetWorkers(
+                                wantPlace.manager!!,
+                                tgtPlace = wantPlace.name
+                            ).apply {
+                                workers = minProdApp.plannedWorker - reductionAmount
+                                apparatusID = minProdApp.ID
+                            }//Created a command to transfer the resource.
+                            ,
+                            issuedTo = hashSetOf(wantPlace.manager!!)
                         ).apply {
-                            workers = minProdApp.plannedWorker - reductionAmount
-                            apparatusID = minProdApp.ID
-                        }//Created a command to transfer the resource.
-                        ,
-                        issuedTo = hashSetOf(wantPlace.manager)
-                    ).apply {
-                        executeTime = gState.time
-                        issuedBy = hashSetOf(name)
+                            executeTime = gState.time
+                            issuedBy = hashSetOf(name)
+                        }
                     }
-                }
-                return NewAgenda(name, place).also {
-                    it.agenda = agenda
+                    return NewAgenda(name, place).also {
+                        it.agenda = agenda
+                    }
                 }
 
             }
@@ -214,24 +216,26 @@ class LeadDivisionMeetingRoutine : Routine(), IMeetingRoutine {
                 val increaseAmount = max(maxProdApp.plannedWorker / 5, 1)
                 val wantPlace = gState.getApparatusPlace(maxProdApp.ID)
                 //Fill in the agenda based on variables in the routine, resource and character.
-                val agenda = MeetingAgenda(AgendaType.REQUEST, name).apply {
-                    attachedRequest = Request(
-                        SetWorkers(
-                            wantPlace.manager,
-                            tgtPlace = wantPlace.name
+                if (wantPlace.manager != null) {
+                    val agenda = MeetingAgenda(AgendaType.REQUEST, name).apply {
+                        attachedRequest = Request(
+                            SetWorkers(
+                                wantPlace.manager!!,
+                                tgtPlace = wantPlace.name
+                            ).apply {
+                                workers = maxProdApp.plannedWorker + increaseAmount
+                                apparatusID = maxProdApp.ID
+                            }//Created a command to transfer the resource.
+                            ,
+                            issuedTo = hashSetOf(wantPlace.manager!!)
                         ).apply {
-                            workers = maxProdApp.plannedWorker + increaseAmount
-                            apparatusID = maxProdApp.ID
-                        }//Created a command to transfer the resource.
-                        ,
-                        issuedTo = hashSetOf(wantPlace.manager)
-                    ).apply {
-                        executeTime = gState.time
-                        issuedBy = hashSetOf(name)
+                            executeTime = gState.time
+                            issuedBy = hashSetOf(name)
+                        }
                     }
-                }
-                return NewAgenda(name, place).also {
-                    it.agenda = agenda
+                    return NewAgenda(name, place).also {
+                        it.agenda = agenda
+                    }
                 }
 
             }

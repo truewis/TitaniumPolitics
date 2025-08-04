@@ -172,9 +172,14 @@ class PlaceMarkerWindowUI(var gameState: GameState, var owner: MapUI) : Table() 
             divisionLabel.setText(
                 "Managed by " + ReadOnly.prop(gState.places[this@PlaceMarkerWindowUI.placeDisplayed]!!.responsibleDivision)
             )
-            managerLabel.setText(
-                "Manager: " + ReadOnly.prop(gState.places[this@PlaceMarkerWindowUI.placeDisplayed]!!.manager)
-            )
+            gState.places[this@PlaceMarkerWindowUI.placeDisplayed]!!.manager?.let {
+                managerLabel.setText(
+                    "Manager: " + ReadOnly.prop(it)
+                )
+            }
+                ?: managerLabel.setText(
+                    "Manager: Not assigned"
+                )
         }
 
     }

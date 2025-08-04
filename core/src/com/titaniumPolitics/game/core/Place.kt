@@ -12,27 +12,24 @@ import kotlin.math.exp
 import kotlin.math.min
 
 @Serializable
-class Place : GameStateElement()
-{
+class Place : GameStateElement() {
     override val name: String
         get() = parent.places.filter { it.value == this }.keys.first()
     var resources = Resources()
 
     val connectedHomes: List<String>
-        get()
-        {
+        get() {
             if (name.contains("home"))
                 return listOf<String>()
             return connectedPlaces.filter { !it.contains("home") }
         }
     val whoseHome: String?
-        get()
-        {
+        get() {
             if (name.contains("home_"))
                 return name.substringAfter("home_")
             return null
         }
-    var manager = ""
+    var manager: String? = null
     var gasResources = Resources("oxygen" to 20000.0, "carbonDioxide" to 100.0)
     fun gasPressure(gasName: String): Double =
         gasResources[gasName] / ((ReadOnly.gasJson[gasName]!!.jsonObject["density"]!!.jsonPrimitive.float)) * (temperature / 273.15) / volume * 101325
@@ -47,8 +44,7 @@ class Place : GameStateElement()
     var coordinates = Coordinate3D(0, 0, 0)
     var temperature = 300.0 //Ambient temperature in Kelvin.
     var heatCapacity = 4.184e8//J/K
-    fun addHeat(energy: Double)
-    {
+    fun addHeat(energy: Double) {
         temperature += energy / heatCapacity
         if (temperature < 4) temperature = 4.0 //TODO:temporary solution. Lowest temperature ~ 4K.
     }
@@ -67,8 +63,7 @@ class Place : GameStateElement()
 
     val currentTotalPop: Int
         //This number must be conserved.
-        get()
-        {
+        get() {
             return characters.sumOf { if (it.contains("Anon")) parent.characters[it]!!.reliant else 1 }
 //            if (name.contains("home")) return 0 //Home populations are added to the places the home is in.
 //
@@ -85,8 +80,7 @@ class Place : GameStateElement()
             //return characters.filter { it } + currentWorker + idler +
         }
     val maxResources: Resources
-        get()
-        {
+        get() {
             val result = Resources()
             apparatuses.forEach {
                 if (it.durability > .0 && it.isStorage)
@@ -100,8 +94,7 @@ class Place : GameStateElement()
     val workHours: IntRange
         get() = workHoursStart..workHoursEnd
     var apparatuses = hashSetOf<Apparatus>()
-    fun getApparatus(ID: String): Apparatus
-    {
+    fun getApparatus(ID: String): Apparatus {
         return apparatuses.find { it.ID == ID }!!
     }
 
@@ -112,21 +105,18 @@ class Place : GameStateElement()
     var accidentInformationKeys =
         hashSetOf<String>()//Information about the last accident. Non empty only when isAccidentScene is true.
 
-    override fun injectParent(gameState: GameState)
-    {
+    override fun injectParent(gameState: GameState) {
         super.injectParent(gameState)
         apparatuses.forEach { it.plannedWorker = it.idealWorker }
     }
 
     //Check the gas pressure of the connected places and slowly equalize it. This function is called every time change.
-    fun diffuseGasAndTemp()
-    {
+    fun diffuseGasAndTemp() {
         connectedPlaces.forEach {
             val place = parent.places[it]!!
             //For each gas type, use the coordinates and the density in gasJson to distribute the gas according to the boltzmann distribution.
             gasResources.forEach { (key, _) ->
-                try
-                {
+                try {
                     val mass =
                         (ReadOnly.gasJson[key]!!.jsonObject["density"]!!.jsonPrimitive.float) * 0.0224f / ReadOnly.NA
 
@@ -145,8 +135,7 @@ class Place : GameStateElement()
                     gasResources[key] += flowAmount
 
                     place.gasResources[key] -= flowAmount
-                } catch (e: Exception)
-                {
+                } catch (e: Exception) {
                     throw Exception("$key, ${e}")
                 }
             }
@@ -166,10 +155,8 @@ class Place : GameStateElement()
     }
 
     //Workers are assigned to apparatuses. If there is not enough workers, some apparatuses are not worked.
-    fun distributeWorkers()
-    {
-        if (isAccidentScene)
-        {
+    fun distributeWorkers() {
+        if (isAccidentScene) {
             apparatuses.forEach { it.currentWorker = 0 }
             return
         } //If there is an accident, no one works until it is resolved.
@@ -185,8 +172,7 @@ class Place : GameStateElement()
             if (index == workableApparatus.size - 1)//If last apparatus in the place, we have to allocate the rest of the worker.
             {
                 apparatus.currentWorker = workForce - sum
-            } else
-            {
+            } else {
                 if (idealWorker != 0)
                     apparatus.currentWorker =
                         workForce * apparatus.idealWorker / idealWorker//Distribute workers according to ideal worker
@@ -195,8 +181,7 @@ class Place : GameStateElement()
         }
     }
 
-    fun workApparatusHourly()
-    {
+    fun workApparatusHourly() {
         val dth = 3600
         if (responsibleDivision == "") return //TODO: Is this true?
         if (isAccidentScene) return //If there is an accident, no one works until it is resolved.
@@ -205,8 +190,7 @@ class Place : GameStateElement()
             if (!apparatus.isStorage || apparatus.currentWorker >= apparatus.idealWorker)
                 apparatus.durability -= dth * const("DurabilityMax") / const("DurabilityTau")//Apparatuses are damaged over time. TODO: get rid of unexpected behaviors, if any
             //Check if it is workable------------------------------------------------------------------------------
-            if (apparatus.durability <= .0)
-            {
+            if (apparatus.durability <= .0) {
                 apparatus.durability = .0
                 println("${apparatus.name} in $name is broken and cannot function.")
                 return@app //Cannot work broken apparatus
@@ -243,30 +227,26 @@ class Place : GameStateElement()
             }
             addHeat(apparatus.currentHeatProduction * dth)
 
-            if (apparatus.currentGraveDanger * dth > GameEngine.random.nextDouble())
-            {
+            if (apparatus.currentGraveDanger * dth > GameEngine.random.nextDouble()) {
                 //Catastrophic accident occurred.
                 println("!Catastrophic accident occurred at: ${name}")
                 isAccidentScene = true
                 generateCatastrophicAccident()
 
-            } else if (apparatus.currentDanger * dth > GameEngine.random.nextDouble())
-            {
+            } else if (apparatus.currentDanger * dth > GameEngine.random.nextDouble()) {
                 //Accident occurred.
                 println("!Accident occurred at: ${name}")
                 isAccidentScene = true
                 generateAccident()
 
             }
-            if (apparatus.isStorage)
-            {
+            if (apparatus.isStorage) {
                 apparatus.durability += dth * const("DurabilityMax") / const("DurabilityTau")//Storages are repaired if they are worked.
             }
         }
 
         maxResources.forEach { //TODO: Note that if maxResources is undefined, the resource type is not checked. This prevents having to define storage for all sorts of resources.
-            if (it.value < resources[it.key])
-            {
+            if (it.value < resources[it.key]) {
                 //Overflow Accident occurred.
                 println("Overflow Accident of ${it.key} occurred at: ${name}")
                 isAccidentScene = true
@@ -275,8 +255,7 @@ class Place : GameStateElement()
         }
     }
 
-    fun resourceShortOfHourly(app: Apparatus): String?
-    {
+    fun resourceShortOfHourly(app: Apparatus): String? {
         val dth = 3600
         app.currentConsumption.forEach {
             if ((resources[it.key]) < it.value * dth)
@@ -290,8 +269,7 @@ class Place : GameStateElement()
 
     }
 
-    fun gasResourceShortOfHourly(app: Apparatus): String?
-    {
+    fun gasResourceShortOfHourly(app: Apparatus): String? {
         val dth = 3600
         app.currentAbsorption.forEach {
             if ((gasResources[it.key]) < it.value * dth)
@@ -301,8 +279,7 @@ class Place : GameStateElement()
 
     }
 
-    fun generateAccident()
-    {
+    fun generateAccident() {
         //Generate casualties.
         val workerToKill = workers.first()
         val death = min(currentWorker / 100 + 1, workerToKill.reliant) //TODO: what about injuries?
@@ -331,8 +308,7 @@ class Place : GameStateElement()
 
     }
 
-    fun generateOverflowAccident(resourceType: String)
-    {
+    fun generateOverflowAccident(resourceType: String) {
         //Generate casualties.
         val workerToKill = workers.first()
         val death = min(currentWorker / 100 + 1, workerToKill.reliant) //TODO: what about injuries?
@@ -358,8 +334,7 @@ class Place : GameStateElement()
 
     }
 
-    fun generateCatastrophicAccident()
-    {
+    fun generateCatastrophicAccident() {
         //Generate casualties.
         val workerToKill = workers.first()
         val death = min(currentWorker / 5 + 1, workerToKill.reliant) //TODO: what about injuries?
@@ -387,13 +362,11 @@ class Place : GameStateElement()
         //TODO: spread rumors. But think if it is a good game design.
     }
 
-    fun distanceTo(targetName: String): Int?
-    {
+    fun distanceTo(targetName: String): Int? {
         return if (connectedPlaces.contains(targetName)) 1 else null
     }
 
-    fun shortestPathAndTimeTo(targetName: String): Pair<List<String>, Int>?
-    {
+    fun shortestPathAndTimeTo(targetName: String): Pair<List<String>, Int>? {
         val distances = mutableMapOf<String, Int>().withDefault { Int.MAX_VALUE }
         val previous = mutableMapOf<String, String?>()
         val visited = mutableSetOf<String>()
@@ -404,8 +377,7 @@ class Place : GameStateElement()
         distances[this.name] = 0
         queue.add(this.name to 0)
 
-        while (queue.isNotEmpty())
-        {
+        while (queue.isNotEmpty()) {
             val (currentName, currentDistance) = queue.poll()
 
             if (currentName in visited) continue
@@ -415,15 +387,13 @@ class Place : GameStateElement()
 
             val currentPlace = parent.places[currentName] ?: continue
 
-            for (neighborName in currentPlace.connectedPlaces)
-            {
+            for (neighborName in currentPlace.connectedPlaces) {
                 if (neighborName in visited) continue
 
                 val weight = currentPlace.distanceTo(neighborName) ?: continue
                 val newDistance = currentDistance + weight
 
-                if (newDistance < distances.getValue(neighborName))
-                {
+                if (newDistance < distances.getValue(neighborName)) {
                     distances[neighborName] = newDistance
                     previous[neighborName] = currentName
                     queue.add(neighborName to newDistance)
@@ -436,8 +406,7 @@ class Place : GameStateElement()
 
         val path = mutableListOf<String>()
         var current: String? = targetName
-        while (current != null)
-        {
+        while (current != null) {
             path.add(0, current)
             current = previous[current]
         }
@@ -445,12 +414,10 @@ class Place : GameStateElement()
         return path to finalCost * ReadOnly.constInt("MoveDuration")
     }
 
-    companion object
-    {
+    companion object {
         val publicPlaces = setOf<String>("market", "squareNorth", "squareSouth")
 
-        fun whoseHome(place: String): String?
-        {
+        fun whoseHome(place: String): String? {
             if (place.contains("home_"))
                 return place.substringAfter("home_")
             return null
