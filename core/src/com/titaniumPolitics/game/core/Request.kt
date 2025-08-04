@@ -10,8 +10,7 @@ class Request(
     //IMPORTANT! tgtCharacter param of action is not used, as we want to support issuing requests to multiple characters.
     var action: GameAction,
     var issuedTo: HashSet<String>/*If unspecified, anyone can finish this request.*/
-)
-{
+) {
     var name = ""
         private set
     var executeTime = 0//The time the requester want the action to be executed. If 0, it can be executed anytime.
@@ -21,11 +20,9 @@ class Request(
     var completed = false
     var onComplete = arrayListOf<() -> Unit>()
 
-    fun generateName(): String
-    {
-        if (this.name != "")
-        {
-            //println("Warning: name of an information is already set but you are trying to generate a new one. $name");
+    fun generateName(): String {
+        if (this.name != "") {
+            //Logger.write("Warning: name of an information is already set but you are trying to generate a new one. $name", Logger.LogLevel.INFO);
             return this.name
 
         }
@@ -37,8 +34,7 @@ class Request(
         return name
     }
 
-    fun refresh(gState: GameState)
-    {
+    fun refresh(gState: GameState) {
         if (completed) return
         //This function is called every turn.
         //Each time one of the issuedTo completes this request,
@@ -54,8 +50,7 @@ class Request(
 
         }
         if ((executeTime in gState.time - 3..gState.time + 3 || executeTime == 0))
-            if (tgt.isNotEmpty())
-            {
+            if (tgt.isNotEmpty()) {
                 //Mutuality increases.
                 issuedBy.forEach { issuedBy ->
                     if (gState.characters[issuedBy]!!.trait.contains("psychopath"))
@@ -66,8 +61,7 @@ class Request(
                                 ReadOnly.const("RequestFinishDeltaMutuality").toDouble() / 3
                             )
                         }
-                    else
-                    {
+                    else {
                         issuedTo.forEach { issuedTo ->
                             gState.setMutuality(
                                 issuedBy,
@@ -90,16 +84,14 @@ class Request(
 
     }
 
-    fun deltaWill(tgtChar: String, gState: GameState): Double
-    {
+    fun deltaWill(tgtChar: String, gState: GameState): Double {
         return if ((executeTime in gState.time - 3..gState.time + 3 || executeTime == 0))
             issuedBy.sumOf { gState.getMutuality(tgtChar, it) * ReadOnly.const("RequestFinishDeltaWill") }
         else
             0.0
     }
 
-    override fun toString(): String
-    {
+    override fun toString(): String {
         return "Request(action=$action, issuedTo=$issuedTo, name='$name', executeTime=$executeTime, issuedBy=$issuedBy, completed=$completed)"
     }
 }

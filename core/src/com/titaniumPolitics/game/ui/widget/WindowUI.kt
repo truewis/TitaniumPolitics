@@ -6,14 +6,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.badlogic.gdx.utils.Align
 import com.titaniumPolitics.game.core.ReadOnly
-import ktx.scene2d.KTable
-import ktx.scene2d.Scene2DSkin
-import ktx.scene2d.button
-import ktx.scene2d.image
-import ktx.scene2d.label
-import ktx.scene2d.scene2d
-import ktx.scene2d.stack
-import ktx.scene2d.table
+import ktx.scene2d.*
 
 open class WindowUI(titleKey: String) : Table(Scene2DSkin.defaultSkin), KTable {
     val titleLabel = scene2d.label(ReadOnly.prop(titleKey), "docTitle") {

@@ -1,6 +1,5 @@
 package com.titaniumPolitics.game.ui
 
-import com.badlogic.gdx.scenes.scene2d.Touchable
 import com.badlogic.gdx.scenes.scene2d.ui.Stack
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.utils.Align
@@ -9,15 +8,17 @@ import com.titaniumPolitics.game.core.ReadOnly
 import com.titaniumPolitics.game.debugTools.Logger
 import com.titaniumPolitics.game.ui.map.PlaceSelectionUI
 import com.titaniumPolitics.game.ui.meeting.MeetingUI
-import com.titaniumPolitics.game.ui.widget.ActionSelectButton
 import com.titaniumPolitics.game.ui.widget.ActionSelectUI
 import com.titaniumPolitics.game.ui.widget.CharacterSelectUI
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
-import ktx.scene2d.*
+import ktx.scene2d.KTable
+import ktx.scene2d.Scene2DSkin
 import ktx.scene2d.Scene2DSkin.defaultSkin
+import ktx.scene2d.stack
+import ktx.scene2d.table
 
-class InterfaceRoot(val gameState: GameState) : Table(Scene2DSkin.defaultSkin), KTable {
+class InterfaceRoot(val gameState: GameState) : Table(defaultSkin), KTable {
     val stack: Stack
     val avAUI = AvailableActionsUI(this@InterfaceRoot.gameState)
     val charactersView = CharacterPortraitsUI(gameState)

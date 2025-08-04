@@ -1,18 +1,12 @@
 package com.titaniumPolitics.game.core
 
-import kotlinx.serialization.encodeToString
-import org.jetbrains.kotlinx.dataframe.api.add
 import java.io.BufferedWriter
 import java.io.File
-import java.lang.Double.parseDouble
-import java.lang.Float.parseFloat
 import java.nio.file.Files
 import java.nio.file.Paths
 
-class GameDataHandler(val directoryName: String)
-{
-    init
-    {
+class GameDataHandler(val directoryName: String) {
+    init {
         Files.createDirectories(Paths.get(directoryName))
     }
 
@@ -36,8 +30,7 @@ class GameDataHandler(val directoryName: String)
 
 
      */
-    fun initializeColumns()
-    {
+    fun initializeColumns() {
         resourceMap["temperature"] = GameDataFrame("$directoryName/temperature.csv")
         resourceMap["health"] = GameDataFrame("$directoryName/health.csv")
         resourceMap["currentWorkerPerPlace"] = GameDataFrame("$directoryName/currentWorkerPerPlace.csv")
@@ -48,14 +41,12 @@ class GameDataHandler(val directoryName: String)
 
     }
 
-    fun createIfNull(dfName: String)
-    {
+    fun createIfNull(dfName: String) {
         if (!resourceMap.contains(dfName))
             resourceMap[dfName] = GameDataFrame("$directoryName/$dfName.csv")
     }
 
-    fun writeEveryTurn(gState: GameState)
-    {
+    fun writeEveryTurn(gState: GameState) {
         resourceMap["temperature"]!![gState.time] = hashMapOf(*(gState.places.map { (pName, place) ->
             pName to place.temperature.toFloat()
         }.filter { !it.first.contains("Anon") }.toTypedArray()))
@@ -98,14 +89,12 @@ class GameDataHandler(val directoryName: String)
         }
     }
 
-    fun close()
-    {
+    fun close() {
         resourceMap.values.forEach { it.close() }
     }
 }
 
-data class GameDataFrame(var fName: String)
-{
+data class GameDataFrame(var fName: String) {
     private var file: File = File(fName)
     private var writer: BufferedWriter = file.bufferedWriter()
 
@@ -116,10 +105,8 @@ data class GameDataFrame(var fName: String)
 //        return data[time] ?: hashMapOf()
 //    }
 
-    operator fun set(time: Int = numRows, datum: HashMap<String, Float>)
-    {
-        if (!allKeys.containsAll(datum.keys))
-        {
+    operator fun set(time: Int = numRows, datum: HashMap<String, Float>) {
+        if (!allKeys.containsAll(datum.keys)) {
 
             writer.write("keys")
             allKeys.addAll(datum.keys - allKeys)
@@ -139,8 +126,7 @@ data class GameDataFrame(var fName: String)
 
     }
 
-    fun column(name: String): HashMap<Int, Float>
-    {
+    fun column(name: String): HashMap<Int, Float> {
         writer.close()
 
         val res = hashMapOf<Int, Float>()
@@ -150,8 +136,7 @@ data class GameDataFrame(var fName: String)
         var keyColumn = 0
 
         //Search for the key.
-        do
-        {
+        do {
             keyRow++
             if (keyRow == rows.size)
                 return res
@@ -160,8 +145,7 @@ data class GameDataFrame(var fName: String)
             if (keys[0] != "keys") continue
             keyColumn = keys.takeLast(keys.size - 1).indexOf(name) + 1//keyColumn remains 0 if the key is not found
         } while (keyColumn == 0)
-        for (i in keyRow..rows.size)
-        {
+        for (i in keyRow..rows.size) {
             var values = rows[i].split(',')
             if (values[0] == "keys") continue
             res[values[0].toInt()] = values[keyColumn].toFloat()
@@ -174,16 +158,14 @@ data class GameDataFrame(var fName: String)
         return res
     }
 
-    fun columnSum(): HashMap<Int, Float>
-    {
+    fun columnSum(): HashMap<Int, Float> {
         writer.close()
 
         val res = hashMapOf<Int, Float>()
         val s = file.readText()
         val rows = s.split('\n')
 
-        for (i in 1..rows.size)
-        {
+        for (i in 1..rows.size) {
             var values = rows[i].split(',')
             if (values[0] == "keys") continue
             res[values[0].toInt()] = values.takeLast(values.size - 1).sumOf { it.toDouble() }.toFloat()
@@ -196,8 +178,7 @@ data class GameDataFrame(var fName: String)
         return res
     }
 
-    fun close()
-    {
+    fun close() {
         writer.close()
     }
 

@@ -7,15 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.badlogic.gdx.utils.Align
 import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.core.ReadOnly
-import ktx.scene2d.KTable
-import ktx.scene2d.Scene2DSkin
-import ktx.scene2d.button
-import ktx.scene2d.buttonGroup
-import ktx.scene2d.container
-import ktx.scene2d.image
-import ktx.scene2d.label
-import ktx.scene2d.scene2d
-import ktx.scene2d.table
+import ktx.scene2d.*
 
 //This UI is used to select a character as a parameter for an action.
 //It displays all characters in a table format, with division tab button.

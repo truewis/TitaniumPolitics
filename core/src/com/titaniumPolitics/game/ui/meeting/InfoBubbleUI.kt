@@ -3,30 +3,21 @@ package com.titaniumPolitics.game.ui.meeting
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.titaniumPolitics.game.core.Information
 import com.titaniumPolitics.game.core.InformationType
-import ktx.scene2d.KTable
-import ktx.scene2d.image
-import ktx.scene2d.label
-import ktx.scene2d.stack
-import ktx.scene2d.table
+import ktx.scene2d.*
 
-class InfoBubbleUI(val info: Information) : Table(), KTable
-{
-    init
-    {
+class InfoBubbleUI(val info: Information) : Table(), KTable {
+    init {
         with(info) {
             stack {
                 it.size(WIDTH, HEIGHT).fill()
-                if (tgtCharacter != "")
-                {
+                if (tgtCharacter != "") {
                     //TODO: want to display the character's image here, but we don't have space for it.
 //                    image(tgtCharacter) {
 //                    }
                 }
                 table {
-                    when (type)
-                    {
-                        InformationType.ACTION ->
-                        {
+                    when (type) {
+                        InformationType.ACTION -> {
                             image("HelpGrunge") {
                             }
                             label("Action:$tgtCharacter", "description") {
@@ -34,8 +25,7 @@ class InfoBubbleUI(val info: Information) : Table(), KTable
                             }
                         }
 
-                        InformationType.RESOURCES ->
-                        {
+                        InformationType.RESOURCES -> {
                             image("LightGrunge") {
                             }
                             label("Resources:$tgtPlace", "description") {
@@ -43,8 +33,7 @@ class InfoBubbleUI(val info: Information) : Table(), KTable
                             }
                         }
 
-                        InformationType.CASUALTY ->
-                        {
+                        InformationType.CASUALTY -> {
                             image("HeartGrunge") {
                             }
                             label("Casualty:$tgtPlace", "description") {
@@ -53,8 +42,7 @@ class InfoBubbleUI(val info: Information) : Table(), KTable
 
                         }
 
-                        else ->
-                        {
+                        else -> {
                             label("${type.name}", "description") {
                                 setFontScale(0.2f)
                             }
@@ -65,8 +53,7 @@ class InfoBubbleUI(val info: Information) : Table(), KTable
         }
     }
 
-    companion object
-    {
+    companion object {
         const val WIDTH = 150f
         const val HEIGHT = 50f
     }

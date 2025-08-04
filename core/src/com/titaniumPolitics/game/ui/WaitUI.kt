@@ -5,20 +5,13 @@ import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.scenes.scene2d.Group
 import com.badlogic.gdx.scenes.scene2d.InputEvent
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
-
 import com.badlogic.gdx.utils.Align
-import com.titaniumPolitics.game.core.GameEngine
+import com.titaniumPolitics.game.core.*
 import com.titaniumPolitics.game.core.GameEngine.Companion.AcquireParams
-import com.titaniumPolitics.game.core.GameState
-import com.titaniumPolitics.game.core.Information
-import com.titaniumPolitics.game.core.InformationType
-import com.titaniumPolitics.game.core.ReadOnly
 import com.titaniumPolitics.game.core.gameActions.GameAction
 import com.titaniumPolitics.game.core.gameActions.Sleep
 import com.titaniumPolitics.game.core.gameActions.Wait
 import com.titaniumPolitics.game.ui.widget.ActionSheetUI
-import com.titaniumPolitics.game.ui.widget.WindowUI
-
 import ktx.scene2d.*
 
 enum class WaitUIMode {
@@ -148,7 +141,7 @@ class WaitUI(val gameState: GameState, actionCallback: (GameAction) -> Unit) :
 
             AlertUI.instance.addAlert("interrupted", ReadOnly.prop(info.tgtCharacter))
             interrupted = true
-            println("WaitUI: Wait interrupted by ${info.author} at ${info.tgtPlace}")
+            Logger.write("WaitUI: Wait interrupted by ${info.author} at ${info.tgtPlace}", Logger.LogLevel.INFO)
         }
 
     }

@@ -1,12 +1,10 @@
 package com.titaniumPolitics.game.ui.meeting
 
-import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.scenes.scene2d.Touchable
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.ui.Tooltip
 import com.badlogic.gdx.utils.Align
 import com.titaniumPolitics.game.core.MeetingAgenda
-import com.titaniumPolitics.game.core.ReadOnly
 import ktx.scene2d.*
 
 class AgendaTooltipUI(agenda: MeetingAgenda) : Tooltip<Table>(scene2d.table {
@@ -47,8 +45,7 @@ class AgendaTooltipUI(agenda: MeetingAgenda) : Tooltip<Table>(scene2d.table {
                 setAlignment(Align.topLeft)
                 wrap = true
             }
-            if (agenda.attachedRequest != null)
-            {
+            if (agenda.attachedRequest != null) {
                 row()
                 label(agenda.attachedRequest!!.toString()) {
                     it.size(350f, 150f)
@@ -62,10 +59,8 @@ class AgendaTooltipUI(agenda: MeetingAgenda) : Tooltip<Table>(scene2d.table {
         }
     }
 
-})
-{
-    init
-    {
+}) {
+    init {
         manager.initialTime = 0.5f
     }
 

@@ -7,12 +7,7 @@ import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.core.ReadOnly
 import com.titaniumPolitics.game.core.gameActions.GameAction
 import com.titaniumPolitics.game.ui.IActionUI
-import ktx.scene2d.KTable
-import ktx.scene2d.Scene2DSkin
-import ktx.scene2d.label
-import ktx.scene2d.scene2d
-import ktx.scene2d.stack
-import ktx.scene2d.table
+import ktx.scene2d.*
 
 //Action descriptions displayed under AvailableActionsUI.
 //Always used with ActionUI interface.

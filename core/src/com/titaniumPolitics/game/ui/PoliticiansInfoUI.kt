@@ -1,16 +1,13 @@
 package com.titaniumPolitics.game.ui
 
 
-import com.badlogic.gdx.scenes.scene2d.ui.*
-
+import com.badlogic.gdx.scenes.scene2d.ui.Label
+import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane
+import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.utils.Align
 import com.titaniumPolitics.game.core.Character
-
 import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.core.ReadOnly
-import com.titaniumPolitics.game.ui.widget.WindowUI
-import ktx.scene2d.Scene2DSkin
-
 import ktx.scene2d.Scene2DSkin.defaultSkin
 
 //Human Resource Management is currently done without information. The report is instant.

@@ -5,22 +5,11 @@ import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.utils.Align
-import com.titaniumPolitics.game.core.GameEngine
-import com.titaniumPolitics.game.core.GameState
-import com.titaniumPolitics.game.core.Information
-import com.titaniumPolitics.game.core.InformationType
-import com.titaniumPolitics.game.core.ReadOnly
+import com.titaniumPolitics.game.core.*
 import com.titaniumPolitics.game.core.gameActions.Move
-import com.titaniumPolitics.game.core.gameActions.Sleep
-import com.titaniumPolitics.game.core.gameActions.Wait
 import com.titaniumPolitics.game.ui.AlertUI
-import com.titaniumPolitics.game.ui.AssistantUI
-import com.titaniumPolitics.game.ui.FloatingWindowUI
-import com.titaniumPolitics.game.ui.InterfaceRoot
 import com.titaniumPolitics.game.ui.ProgressBackgroundUI
-import com.titaniumPolitics.game.ui.WaitUIMode
 import ktx.scene2d.button
-import ktx.scene2d.image
 import ktx.scene2d.label
 import ktx.scene2d.scene2d
 import ktx.scene2d.table
@@ -195,7 +184,7 @@ class PlaceMarkerWindowUI(var gameState: GameState, var owner: MapUI) : Table() 
 
             AlertUI.instance.addAlert("interruptedMove", ReadOnly.prop(info.tgtCharacter))
             interrupted = true
-            println("MoveUI: Move interrupted by ${info.author} at ${info.tgtPlace}")
+            Logger.write("MoveUI: Move interrupted by ${info.author} at ${info.tgtPlace}", Logger.LogLevel.INFO)
         }
 
     }

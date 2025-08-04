@@ -42,7 +42,7 @@ class ApparatusInfoUI : WindowUI("ApparatusInfoTitle") {
                         )!!
                     )
                 } catch (e: Exception) {
-                    println("Portrait Image Error: ${information.tgtApparatus}")
+                    Logger.write("Portrait Image Error: ${information.tgtApparatus}", Logger.LogLevel.INFO)
                 }
             }
             this.row()

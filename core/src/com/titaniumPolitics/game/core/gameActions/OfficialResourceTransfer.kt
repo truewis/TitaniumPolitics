@@ -4,18 +4,15 @@ import com.titaniumPolitics.game.core.Resources
 import kotlinx.serialization.Serializable
 
 @Serializable
-class OfficialResourceTransfer(override val sbjCharacter: String, override val tgtPlace: String) : GameAction()
-{
+class OfficialResourceTransfer(override val sbjCharacter: String, override val tgtPlace: String) : GameAction() {
     var toWhere = ""
     var resources = Resources()
 
-    override fun execute()
-    {
+    override fun execute() {
 
         if (
             resources.all { parent.places[tgtPlace]!!.resources[it.key] >= it.value }
-        )
-        {
+        ) {
             //Transfer resources.
             resources.forEach { (key, value) ->
                 parent.places[tgtPlace]!!.resources[key] -= value
@@ -23,13 +20,11 @@ class OfficialResourceTransfer(override val sbjCharacter: String, override val t
             }
 
 
-        } else
-        {
-            println("Not enough resources: $tgtPlace, $resources")
+        } else {
+            Logger.write("Not enough resources: $tgtPlace, $resources", Logger.LogLevel.INFO)
         }
         //The mutuality from the recipient party to my party increases. It depends on how the recipient party leader thinks of it.
-        if (parent.places[toWhere]!!.responsibleDivision != "")
-        {
+        if (parent.places[toWhere]!!.responsibleDivision != "") {
             val rparty = parent.places[toWhere]!!.responsibleDivision
             sbjCharObj.division?.also {
                 val partyLeader = parent.characters[parent.parties[rparty]!!.leader]
@@ -40,8 +35,7 @@ class OfficialResourceTransfer(override val sbjCharacter: String, override val t
 
     }
 
-    override fun isValid(): Boolean
-    {
+    override fun isValid(): Boolean {
         //Can't send to the same place
         if (toWhere == tgtPlace) return false
         return parent.places[tgtPlace]!!.responsibleDivision == sbjCharObj.division?.name && parent.places[tgtPlace]!!.resources.contains(

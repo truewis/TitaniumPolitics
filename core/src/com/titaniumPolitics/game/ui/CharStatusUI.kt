@@ -7,16 +7,10 @@ import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.core.ReadOnly
 import com.titaniumPolitics.game.ui.widget.HealthMeter
 import com.titaniumPolitics.game.ui.widget.SimpleHeadPortraitUI
-import com.titaniumPolitics.game.ui.widget.SimplePortraitUI
 import com.titaniumPolitics.game.ui.widget.WillMeter
-import ktx.scene2d.KTable
+import ktx.scene2d.*
 import ktx.scene2d.Scene2DSkin.defaultSkin
-import ktx.scene2d.container
-import ktx.scene2d.image
-import ktx.scene2d.label
-import ktx.scene2d.stack
-import ktx.scene2d.table
-import java.util.UUID
+import java.util.*
 
 //This class is a UI element that displays the player's portrait and their health and will meters.
 class CharStatusUI(gameState: GameState) : Table(defaultSkin), KTable {

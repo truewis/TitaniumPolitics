@@ -10,9 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.utils.ObjectMap
 import com.badlogic.gdx.utils.ScreenUtils
 import com.titaniumPolitics.game.ui.MainMenu
-import kotlinx.serialization.json.Json
 import ktx.scene2d.Scene2DSkin
-import kotlin.concurrent.thread
 
 class EntryClass : ApplicationAdapter() {
     lateinit var stage: Stage

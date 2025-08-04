@@ -24,12 +24,12 @@ class BudgetProposal(override val sbjCharacter: String, override val tgtPlace: S
     override fun execute() {
         //TODO: vote on the budget proposal
 
-        println("Budget proposal executed.")
+        Logger.write("Budget proposal executed.", Logger.LogLevel.INFO)
         parent.isBudgetProposed = true
         parent.budget = budget
         //Now, take the time of all characters present.
         parent.ongoingMeetings.filter { it.value.type == Meeting.MeetingType.BUDGET_PROPOSAL }.values.first().currentCharacters.forEach { parent.characters[it]!!.frozen++ }
-        println(budget)
+        Logger.write(budget, Logger.LogLevel.INFO)
     }
 
 }

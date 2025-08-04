@@ -6,8 +6,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.utils.Align
 import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.core.gameActions.GameAction
-import com.titaniumPolitics.game.ui.IActionUI
 import com.titaniumPolitics.game.ui.AvailableActionsUI
+import com.titaniumPolitics.game.ui.IActionUI
 import ktx.scene2d.KTable
 import ktx.scene2d.buttonGroup
 import ktx.scene2d.scene2d

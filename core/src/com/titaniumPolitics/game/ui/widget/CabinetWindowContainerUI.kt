@@ -14,15 +14,7 @@ import com.badlogic.gdx.utils.Align
 import com.titaniumPolitics.game.ui.AssistantUI
 import com.titaniumPolitics.game.ui.CapsuleStage
 import com.titaniumPolitics.game.ui.SoundEngine
-import ktx.scene2d.KTable
-import ktx.scene2d.Scene2DSkin
-import ktx.scene2d.button
-import ktx.scene2d.container
-import ktx.scene2d.image
-import ktx.scene2d.label
-import ktx.scene2d.scene2d
-import ktx.scene2d.stack
-import ktx.scene2d.table
+import ktx.scene2d.*
 
 open class CabinetWindowContainerUI(
     val title: String,
@@ -95,7 +87,7 @@ open class CabinetWindowContainerUI(
         UI.layout()
 
         text.addListener(object : ClickListener() {
-            override fun clicked(event: com.badlogic.gdx.scenes.scene2d.InputEvent?, x: Float, y: Float) {
+            override fun clicked(event: InputEvent?, x: Float, y: Float) {
 
                 //Open content UI
                 changeOpenState(true)

@@ -1,10 +1,8 @@
 package com.titaniumPolitics.game.core.gameActions
 
 @Deprecated("This class is deprecated. It could be implemented later.")
-class Chat(override val sbjCharacter: String, override val tgtPlace: String) : GameAction()
-{
-    override fun execute()
-    {
+class Chat(override val sbjCharacter: String, override val tgtPlace: String) : GameAction() {
+    override fun execute() {
         //TODO: acquire or give whole information to another character by chance.
         val who = parent.ongoingMeetings.filter { it.value.currentCharacters.contains(sbjCharacter) }
             .flatMap { it.value.currentCharacters }.filter { it != sbjCharacter }.toHashSet()
@@ -20,12 +18,11 @@ class Chat(override val sbjCharacter: String, override val tgtPlace: String) : G
             parent.setMutuality(it, sbjCharacter, 1.0 + count * factor)
         }
 
-        //if (tgtCharacter == who){ println("You chat with yourself.");return}
+        //if (tgtCharacter == who){ Logger.write("You chat with yourself.", Logger.LogLevel.INFO);return}
         parent.characters[sbjCharacter]!!.frozen++
     }
 
-    override fun isValid(): Boolean
-    {
+    override fun isValid(): Boolean {
         return parent.characters[sbjCharacter]!!.currentMeeting != null
     }
 

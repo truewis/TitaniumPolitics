@@ -3,9 +3,9 @@ package com.titaniumPolitics.game.ui
 
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.scenes.scene2d.InputEvent
-import com.badlogic.gdx.scenes.scene2d.ui.*
+import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane
+import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
-
 import com.badlogic.gdx.utils.Align
 import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.core.MeetingAgenda
@@ -13,8 +13,6 @@ import com.titaniumPolitics.game.core.gameActions.AddInfo
 import com.titaniumPolitics.game.core.gameActions.GameAction
 import com.titaniumPolitics.game.ui.meeting.AgendaBubbleUI
 import com.titaniumPolitics.game.ui.widget.ActionSheetUI
-import com.titaniumPolitics.game.ui.widget.WindowUI
-
 import ktx.scene2d.*
 
 

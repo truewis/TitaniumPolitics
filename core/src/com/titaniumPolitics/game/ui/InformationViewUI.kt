@@ -1,14 +1,18 @@
 package com.titaniumPolitics.game.ui
 
-import com.badlogic.gdx.scenes.scene2d.ui.*
+import com.badlogic.gdx.scenes.scene2d.ui.Label
+import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane
+import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.badlogic.gdx.utils.Align
 import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.core.Information
 import com.titaniumPolitics.game.core.InformationType
-import com.titaniumPolitics.game.ui.widget.WindowUI
-import ktx.scene2d.*
 import ktx.scene2d.Scene2DSkin.defaultSkin
+import ktx.scene2d.button
+import ktx.scene2d.checkBox
+import ktx.scene2d.label
+import ktx.scene2d.scene2d
 
 enum class InformationViewMode {
     SIMPLE, SELECT

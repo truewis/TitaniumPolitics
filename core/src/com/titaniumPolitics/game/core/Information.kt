@@ -92,7 +92,7 @@ data class Information(//If there is no author, it is a rumor.
 
     fun generateName(): String {
         if (this.name != "") {
-            //println("Warning: name of an information is already set but you are trying to generate a new one. $name");
+            //Logger.write("Warning: name of an information is already set but you are trying to generate a new one. $name", Logger.LogLevel.INFO);
             return this.name
 
         }

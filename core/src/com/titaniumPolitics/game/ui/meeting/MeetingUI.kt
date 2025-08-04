@@ -46,7 +46,7 @@ class MeetingUI(var gameState: GameState) : Table(defaultSkin), KTable {
 
         gameState.updateUI.add {
             if (it.player.currentMeeting != null) {
-                println("MeetingUI: Refreshing meeting ${it.player.currentMeeting!!}")
+                Logger.write("MeetingUI: Refreshing meeting ${it.player.currentMeeting!!}", Logger.LogLevel.INFO)
                 refresh(it.player.currentMeeting!!)
             }
         }
@@ -64,7 +64,10 @@ class MeetingUI(var gameState: GameState) : Table(defaultSkin), KTable {
 //                        portrait.clearAction()
 //                }
                 }
-                println("MeetingUI: Non-player character action detected: ${action.sbjCharacter} performed ${action::class.simpleName}")
+                Logger.write(
+                    "MeetingUI: Non-player character action detected: ${action.sbjCharacter} performed ${action::class.simpleName}",
+                    Logger.LogLevel.INFO
+                )
                 sleep(1000)//TODO:
             }
         }

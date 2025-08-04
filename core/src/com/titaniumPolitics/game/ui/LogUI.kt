@@ -11,16 +11,15 @@ import com.badlogic.gdx.scenes.scene2d.ui.Stack
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.badlogic.gdx.utils.Align
+import com.rafaskoberg.gdx.typinglabel.TypingAdapter
+import com.rafaskoberg.gdx.typinglabel.TypingLabel
 import com.titaniumPolitics.game.core.GameEngine
 import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.core.gameActions.GameAction
-import com.rafaskoberg.gdx.typinglabel.TypingAdapter
-import com.rafaskoberg.gdx.typinglabel.TypingLabel
 import ktx.scene2d.Scene2DSkin.defaultSkin
 import kotlin.concurrent.thread
 
-class LogUI(val gameState: GameState) : Table(defaultSkin)
-{
+class LogUI(val gameState: GameState) : Table(defaultSkin) {
     val stk = Stack()
 
     // Displays current log item.
@@ -47,20 +46,17 @@ class LogUI(val gameState: GameState) : Table(defaultSkin)
     var numberMode = false
     var numberModeCallback: (Int) -> Unit = {}
 
-    init
-    {
+    init {
         instance = this
         add(stk).grow()
         gameState.log.newItemAdded += { it, time, line ->
             Gdx.app.postRunnable {
-                if (!isPlaying)
-                {
+                if (!isPlaying) {
                     isPlaying = true
                     appendText(it)
                     currentLineNumber = line
                     //(stage as CapsuleStage).setInputEnable("log", false)
-                } else
-                {
+                } else {
                     logQueue.add(it)
                     logTimeQueue.add(time)
                     logLineNumberQueue.add(line)
@@ -78,19 +74,15 @@ class LogUI(val gameState: GameState) : Table(defaultSkin)
         oldTextDisplay.setFontScale(1f)
         currentTextDisplay.touchable = Touchable.disabled
         oldTextDisplay.touchable = Touchable.disabled
-        currentTextDisplay.typingListener = object : TypingAdapter()
-        {
+        currentTextDisplay.typingListener = object : TypingAdapter() {
             // Sense TypingLabel animation end and play next log in queue.
-            override fun end()
-            {
+            override fun end() {
                 super.end()
                 donePlayingLine.forEach { it(currentLineNumber) }
-                if (logQueue.isEmpty())
-                {
+                if (logQueue.isEmpty()) {
                     isPlaying = false
                     //(stage as CapsuleStage).setInputEnable("log", true)
-                } else
-                {
+                } else {
                     appendText(logQueue.removeFirst())
                     logTimeQueue.removeFirst()
                     currentLineNumber = logLineNumberQueue.removeFirst()
@@ -102,7 +94,8 @@ class LogUI(val gameState: GameState) : Table(defaultSkin)
         ctnuButton.setFontScale(2f)
         // Blinking ctnuButton
         ctnuButton.addAction(
-            Actions.forever(Actions.sequence(
+            Actions.forever(
+                Actions.sequence(
                 Actions.delay(0.5f),
                 AlphaAction().apply {
                     duration = 0.2f
@@ -115,10 +108,8 @@ class LogUI(val gameState: GameState) : Table(defaultSkin)
             )))
         addActor(ctnuButton)
         ctnuButton.isVisible = false
-        ctnuButton.addListener(object : ClickListener()
-        {
-            override fun clicked(event: InputEvent, x: Float, y: Float)
-            {
+        ctnuButton.addListener(object : ClickListener() {
+            override fun clicked(event: InputEvent, x: Float, y: Float) {
                 super.clicked(event, x, y)
                 ctnuCallback()
                 ctnuCallback = {}
@@ -126,15 +117,13 @@ class LogUI(val gameState: GameState) : Table(defaultSkin)
             }
         })
         GameEngine.acquireEvent += {
-            if (it.type == "Action")
-            {
+            if (it.type == "Action") {
                 isInputEnabled = true
             }
         }
         appendText("Welcome to Capsule Zero")
         GameEngine.acquireEvent += {//Print the action list. This is unnecessary if tall the action has the corresponding UI.
-            if (it.type == "Action")
-            {
+            if (it.type == "Action") {
                 appendText(
                     (it.variables["actionList"] as ArrayList<String>).toString().replace("[", "").replace("]", "")
                 )
@@ -144,13 +133,11 @@ class LogUI(val gameState: GameState) : Table(defaultSkin)
         }
     }
 
-    fun appendText(it: String)
-    {
+    fun appendText(it: String) {
         val oldText = oldTextDisplay.text.split('\n')
         var displayedOldText = ""
         oldText.forEachIndexed { i, x ->
-            if (i >= oldText.size - maxDisplayLine)
-            {
+            if (i >= oldText.size - maxDisplayLine) {
                 displayedOldText += "\n" + x
             }
         }
@@ -160,57 +147,43 @@ class LogUI(val gameState: GameState) : Table(defaultSkin)
         currentTextDisplay.restart(it)
     }
 
-    override fun act(delta: Float)
-    {
+    override fun act(delta: Float) {
         super.act(delta)
-        if (isInputEnabled)
-        {
+        if (isInputEnabled) {
             var choice = -1
-            if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_1))
-            {
+            if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_1)) {
                 choice = 0
             }
-            if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_2))
-            {
+            if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_2)) {
                 choice = 1
             }
-            if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_3))
-            {
+            if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_3)) {
                 choice = 2
             }
-            if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_4))
-            {
+            if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_4)) {
                 choice = 3
             }
-            if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_5))
-            {
+            if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_5)) {
                 choice = 4
             }
-            if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_6))
-            {
+            if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_6)) {
                 choice = 5
             }
-            if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_7))
-            {
+            if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_7)) {
                 choice = 6
             }
-            if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_8))
-            {
+            if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_8)) {
                 choice = 7
             }
-            if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_9))
-            {
+            if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_9)) {
                 choice = 8
             }
-            if (choice != -1)
-            {
+            if (choice != -1) {
                 if (numberMode) numberModeCallback(choice)
                 else
-                    when (playerActionList[choice])
-                    {
+                    when (playerActionList[choice]) {
 
-                        else ->
-                        {
+                        else -> {
                             val action =
                                 Class.forName("com.titaniumPolitics.game.core.gameActions." + playerActionList[choice])
                                     .getDeclaredConstructor(String::class.java, String::class.java).newInstance(
@@ -229,8 +202,7 @@ class LogUI(val gameState: GameState) : Table(defaultSkin)
         }
     }
 
-    companion object
-    {
+    companion object {
         lateinit var instance: LogUI
     }
 }

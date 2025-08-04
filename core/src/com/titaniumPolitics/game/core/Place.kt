@@ -3,11 +3,12 @@ package com.titaniumPolitics.game.core
 import com.titaniumPolitics.game.core.GameEngine.Companion.onAccident
 import com.titaniumPolitics.game.core.ReadOnly.const
 import com.titaniumPolitics.game.core.ReadOnly.dt
+import com.titaniumPolitics.game.debugTools.Logger
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.float
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
-import java.util.PriorityQueue
+import java.util.*
 import kotlin.math.exp
 import kotlin.math.min
 
@@ -192,7 +193,7 @@ class Place : GameStateElement() {
             //Check if it is workable------------------------------------------------------------------------------
             if (apparatus.durability <= .0) {
                 apparatus.durability = .0
-                println("${apparatus.name} in $name is broken and cannot function.")
+                Logger.write("${apparatus.name} in $name is broken and cannot function.", Logger.LogLevel.INFO)
                 return@app //Cannot work broken apparatus
             }
 
@@ -200,16 +201,22 @@ class Place : GameStateElement() {
             apparatus.currentProduction.forEach {
                 if (maxResources[it.key] != 0.0 && resources[it.key] + it.value > maxResources[it.key])//If maxResources is zero, there are no limit on how much resource you can store.
                 {
-                    println("${apparatus.name} in $name is cannot produce ${it.key} because it is full and cannot function.")
+                    Logger.write(
+                        "${apparatus.name} in $name is cannot produce ${it.key} because it is full and cannot function.",
+                        Logger.LogLevel.INFO
+                    )
                     return@app //If the resource is full, no one works.
                 }
             }
             resourceShortOfHourly(apparatus)?.also {
-                println("${apparatus.name} in $name is short of $it and cannot function.")
+                Logger.write("${apparatus.name} in $name is short of $it and cannot function.", Logger.LogLevel.INFO)
                 return@app //If there is not enough resources, no one works.
             }
             gasResourceShortOfHourly(apparatus)?.also {
-                println("${apparatus.name} in $name is short of $it gas and cannot function.")
+                Logger.write(
+                    "${apparatus.name} in $name is short of $it gas and cannot function.",
+                    Logger.LogLevel.INFO
+                )
                 return@app //If there is not enough resources, no one works.
             }
             //-----------------------------------------------------------------------------------------------------
@@ -229,13 +236,13 @@ class Place : GameStateElement() {
 
             if (apparatus.currentGraveDanger * dth > GameEngine.random.nextDouble()) {
                 //Catastrophic accident occurred.
-                println("!Catastrophic accident occurred at: ${name}")
+                Logger.write("!Catastrophic accident occurred at: ${name}", Logger.LogLevel.INFO)
                 isAccidentScene = true
                 generateCatastrophicAccident()
 
             } else if (apparatus.currentDanger * dth > GameEngine.random.nextDouble()) {
                 //Accident occurred.
-                println("!Accident occurred at: ${name}")
+                Logger.write("!Accident occurred at: ${name}", Logger.LogLevel.INFO)
                 isAccidentScene = true
                 generateAccident()
 
@@ -248,7 +255,7 @@ class Place : GameStateElement() {
         maxResources.forEach { //TODO: Note that if maxResources is undefined, the resource type is not checked. This prevents having to define storage for all sorts of resources.
             if (it.value < resources[it.key]) {
                 //Overflow Accident occurred.
-                println("Overflow Accident of ${it.key} occurred at: ${name}")
+                Logger.write("Overflow Accident of ${it.key} occurred at: ${name}", Logger.LogLevel.INFO)
                 isAccidentScene = true
                 generateOverflowAccident(it.key)
             }
@@ -410,7 +417,7 @@ class Place : GameStateElement() {
             path.add(0, current)
             current = previous[current]
         }
-        //println("The shortest path from $name to $targetName: $path")
+        //Logger.write("The shortest path from $name to $targetName: $path", Logger.LogLevel.INFO)
         return path to finalCost * ReadOnly.constInt("MoveDuration")
     }
 

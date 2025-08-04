@@ -1,15 +1,11 @@
 package com.titaniumPolitics.game.core.NPCRoutines
 
 import com.titaniumPolitics.game.core.AgendaType
-import com.titaniumPolitics.game.core.Apparatus
 import com.titaniumPolitics.game.core.Meeting
 import com.titaniumPolitics.game.core.MeetingAgenda
 import com.titaniumPolitics.game.core.ReadOnly
-import com.titaniumPolitics.game.core.Request
-import com.titaniumPolitics.game.core.Resources
 import com.titaniumPolitics.game.core.gameActions.*
 import kotlinx.serialization.Serializable
-import kotlin.math.max
 
 @Serializable
 class AttendCabinetMeetingRoutine : Routine(), IMeetingRoutine {

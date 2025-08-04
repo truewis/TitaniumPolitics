@@ -1,17 +1,14 @@
 package com.titaniumPolitics.game.ui
 
 import com.badlogic.gdx.scenes.scene2d.Actor
-import com.badlogic.gdx.scenes.scene2d.ui.*
+import com.badlogic.gdx.scenes.scene2d.ui.HorizontalGroup
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
-import com.titaniumPolitics.game.core.GameEngine
 import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.core.ReadOnly
 import com.titaniumPolitics.game.core.gameActions.Examine
 import com.titaniumPolitics.game.core.gameActions.GameAction
 import com.titaniumPolitics.game.ui.widget.ActionSheetUI
 import ktx.scene2d.*
-import ktx.scene2d.Scene2DSkin.defaultSkin
 
 class ExamineUI(var gameState: GameState, actionCallback: (GameAction) -> Unit) :
     ActionSheetUI(ReadOnly.prop("examineUI"), gameState, actionCallback), KTable {
@@ -86,11 +83,6 @@ class ExamineUI(var gameState: GameState, actionCallback: (GameAction) -> Unit) 
             size(100f, 100f)
         })
         content.add(docList).size(300f, 100f)
-    }
-
-    override fun setVisible(visible: Boolean) {
-        //CharacterPortraitsUI.instance.isVisible = !visible //Not a good idea, during the meeting CharacterPortraitsUI should be invisible.
-        super.setVisible(visible)
     }
 
 

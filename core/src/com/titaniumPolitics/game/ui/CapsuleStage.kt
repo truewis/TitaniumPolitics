@@ -13,7 +13,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable
 import com.badlogic.gdx.utils.viewport.FitViewport
 import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.core.ReadOnly
-import com.titaniumPolitics.game.ui.meeting.MeetingUI
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
 
@@ -30,7 +29,7 @@ class CapsuleStage(val gameState: GameState) : Stage(FitViewport(1920F, 1080F)) 
     val onKeyDown = ArrayList<(Int) -> Unit>()
 
     init {
-        println("Initializing CapsuleStage...")
+        Logger.write("Initializing CapsuleStage...", Logger.LogLevel.INFO)
         instance = this
         val resolver = InternalFileHandleResolver()
         assetManager.setLoader(
@@ -57,7 +56,7 @@ class CapsuleStage(val gameState: GameState) : Stage(FitViewport(1920F, 1080F)) 
         ReadOnly.appJson.forEach {
             assetManager.load(it.value.jsonObject["image"]!!.jsonPrimitive.content, Texture::class.java)
         }
-        println("Explicit asset imports successful.")
+        Logger.write("Explicit asset imports successful.", Logger.LogLevel.INFO)
         assetManager.finishLoading()
 
         rootStack.setFillParent(true)
@@ -79,9 +78,9 @@ class CapsuleStage(val gameState: GameState) : Stage(FitViewport(1920F, 1080F)) 
                 roomChanged(it.player.place.name)
             }
         }
-        println("Starting Audio...")
+        Logger.write("Starting Audio...", Logger.LogLevel.INFO)
         playMusic()
-        println("CapsuleStage initialized successfully.")
+        Logger.write("CapsuleStage initialized successfully.", Logger.LogLevel.INFO)
     }
 
     fun playMusic() {
@@ -102,14 +101,14 @@ class CapsuleStage(val gameState: GameState) : Stage(FitViewport(1920F, 1080F)) 
             )
 
         } catch (e: Exception) {
-            println("Background Image Error: $e")
+            Logger.write("Background Image Error: $e", Logger.LogLevel.INFO)
         }
         try {
             val sound =
                 Gdx.audio.newSound(Gdx.files.internal(ReadOnly.mapJson[if (name.contains("home")) "home" else name]!!.jsonObject["sound"]!!.jsonPrimitive.content))
             sound.play()//TODO: use SoundEngine.
         } catch (e: Exception) {
-            println("Background Sound Error: $e")
+            Logger.write("Background Sound Error: $e", Logger.LogLevel.INFO)
         }
     }
 

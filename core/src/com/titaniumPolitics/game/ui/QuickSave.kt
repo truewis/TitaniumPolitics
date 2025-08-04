@@ -2,26 +2,18 @@ package com.titaniumPolitics.game.ui
 
 import com.badlogic.gdx.scenes.scene2d.InputEvent
 import com.badlogic.gdx.scenes.scene2d.ui.Button
-import com.badlogic.gdx.scenes.scene2d.ui.Table
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.titaniumPolitics.game.core.GameState
 import ktx.scene2d.KTable
 import ktx.scene2d.Scene2DSkin.defaultSkin
-import ktx.scene2d.button
 import ktx.scene2d.label
-import ktx.scene2d.scene2d
 
-class QuickSave(gameState: GameState) : Button(defaultSkin), KTable
-{
+class QuickSave(gameState: GameState) : Button(defaultSkin), KTable {
 
-    init
-    {
+    init {
         label("Save", "docTitle")
-        addListener(object : ClickListener()
-        {
-            override fun clicked(event: InputEvent, x: Float, y: Float)
-            {
+        addListener(object : ClickListener() {
+            override fun clicked(event: InputEvent, x: Float, y: Float) {
                 super.clicked(event, x, y)
                 gameState.dump()
             }

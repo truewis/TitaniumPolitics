@@ -1,14 +1,10 @@
 package com.titaniumPolitics.game.ui
 
-import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.scenes.scene2d.Touchable
 import com.badlogic.gdx.scenes.scene2d.ui.Table
-import com.badlogic.gdx.scenes.scene2d.ui.TextTooltip
 import com.badlogic.gdx.scenes.scene2d.ui.Tooltip
 import com.badlogic.gdx.utils.Align
-import com.titaniumPolitics.game.core.ReadOnly
 import ktx.scene2d.*
-import ktx.scene2d.Scene2DSkin.defaultSkin
 
 class SimpleTextTooltipUI(text: String) : Tooltip<Table>(scene2d.table {
     addActor(scene2d.image("TooltipShadow10p") {

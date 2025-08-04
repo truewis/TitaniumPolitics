@@ -9,8 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable
 import com.badlogic.gdx.scenes.scene2d.utils.TiledDrawable
 
 
-class ScaledTiledDrawable : TiledDrawable
-{
+class ScaledTiledDrawable : TiledDrawable {
     private val scale = Vector2()
     private val transform = Affine2()
     private val matrix = Matrix4()
@@ -22,13 +21,11 @@ class ScaledTiledDrawable : TiledDrawable
 
     constructor(drawable: TextureRegionDrawable?) : super(drawable)
 
-    override fun getScale(): Float
-    {
+    override fun getScale(): Float {
         return scale.x
     }
 
-    override fun draw(batch: Batch, x: Float, y: Float, width: Float, height: Float)
-    {
+    override fun draw(batch: Batch, x: Float, y: Float, width: Float, height: Float) {
         oldMatrix.set(batch.transformMatrix)
         matrix.set(transform.setToTrnScl(x, y, scale.x, scale.y))
 

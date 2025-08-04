@@ -5,12 +5,9 @@ import com.titaniumPolitics.game.core.InformationType
 import com.titaniumPolitics.game.core.Meeting
 import com.titaniumPolitics.game.core.ReadOnly
 import com.titaniumPolitics.game.core.gameActions.GameAction
-import com.titaniumPolitics.game.core.gameActions.JoinMeeting
 import com.titaniumPolitics.game.core.gameActions.PrepareInfo
-import com.titaniumPolitics.game.core.gameActions.StartMeeting
 import com.titaniumPolitics.game.core.gameActions.Wait
 import kotlinx.serialization.Serializable
-import kotlin.text.set
 
 @Serializable
 class WorkRoutine() : Routine() {
@@ -192,7 +189,7 @@ class WorkRoutine() : Routine() {
                         }.random().name
                     }
                 } catch (e: NoSuchElementException) {
-                    println("Warning: No place to commute found for $name")
+                    Logger.write("Warning: No place to commute found for $name", Logger.LogLevel.INFO)
                 }
 
 

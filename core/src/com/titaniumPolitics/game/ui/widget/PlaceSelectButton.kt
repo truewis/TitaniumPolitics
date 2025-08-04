@@ -7,7 +7,6 @@ import com.titaniumPolitics.game.core.ReadOnly
 import com.titaniumPolitics.game.ui.map.PlaceSelectionUI
 import ktx.scene2d.KTable
 import ktx.scene2d.label
-import ktx.scene2d.scene2d
 
 class PlaceSelectButton(skin: Skin, callback: (String) -> Unit) : Button(skin, "default"), KTable {
     val placeLabel = label("Place:", "docTitle") { setFontScale(0.5f) }

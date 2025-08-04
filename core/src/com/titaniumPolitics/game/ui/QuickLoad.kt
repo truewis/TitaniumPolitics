@@ -2,9 +2,7 @@ package com.titaniumPolitics.game.ui
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.scenes.scene2d.InputEvent
-import com.badlogic.gdx.scenes.scene2d.ui.Button
 import com.badlogic.gdx.scenes.scene2d.ui.Table
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.titaniumPolitics.game.EntryClass
 import com.titaniumPolitics.game.core.GameEngine
@@ -15,7 +13,6 @@ import ktx.scene2d.KTable
 import ktx.scene2d.Scene2DSkin.defaultSkin
 import ktx.scene2d.button
 import ktx.scene2d.label
-import ktx.scene2d.scene2d
 import ktx.scene2d.textField
 import kotlin.concurrent.thread
 import kotlin.coroutines.resume
@@ -32,18 +29,18 @@ class QuickLoad() : Table(defaultSkin), KTable {
                     super.clicked(event, x, y)
                     val savedGamePath = this@QuickLoad.path.text
                     //TODO: Check MainMenu for the same logic.
-                    println("Loading saved game from $savedGamePath...")
+                    Logger.write("Loading saved game from $savedGamePath...", Logger.LogLevel.INFO)
                     val newGame = Json.decodeFromString(
                         GameState.serializer(),
                         Gdx.files.internal(savedGamePath).readString()
                     ).also {
                         it.injectDependency()
-                        println("Loading complete.")
+                        Logger.write("Loading complete.", Logger.LogLevel.INFO)
                         EntryClass.instance.stage = CapsuleStage(it)
                         Gdx.input.inputProcessor = EntryClass.instance.stage
                     }
 
-                    println("Starting game engine.")
+                    Logger.write("Starting game engine.", Logger.LogLevel.INFO)
 
                     thread(start = true) {
                         val engine = GameEngine(newGame)

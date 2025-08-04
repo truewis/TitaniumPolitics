@@ -14,7 +14,7 @@ class Talk(override val sbjCharacter: String, override val tgtPlace: String) : G
     override fun chooseParams() {
         who =
             GameEngine.acquire(tgtPlaceObj.characters.filter { it != sbjCharacter }.toList())
-        if (parent.characters[who]!!.frozen > 1) println("Warning: $who is already busy.")
+        if (parent.characters[who]!!.frozen > 1) Logger.write("Warning: $who is already busy.", Logger.LogLevel.INFO)
     }
 
     //Also refer to StartMeeting.execute()

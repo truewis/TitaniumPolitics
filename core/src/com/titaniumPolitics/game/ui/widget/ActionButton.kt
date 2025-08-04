@@ -5,7 +5,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.titaniumPolitics.game.core.GameEngine
 import com.titaniumPolitics.game.core.gameActions.GameAction
-import com.titaniumPolitics.game.core.gameActions.Salary
 import ktx.scene2d.KTable
 
 class ActionButton(skin: Skin, var action: GameAction) : Button(skin), KTable {

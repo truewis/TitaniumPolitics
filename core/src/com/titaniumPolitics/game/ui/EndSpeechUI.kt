@@ -4,15 +4,16 @@ package com.titaniumPolitics.game.ui
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.scenes.scene2d.InputEvent
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
-
 import com.badlogic.gdx.utils.Align
 import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.core.gameActions.EndSpeech
 import com.titaniumPolitics.game.core.gameActions.GameAction
 import com.titaniumPolitics.game.ui.widget.ActionSheetUI
 import com.titaniumPolitics.game.ui.widget.CharacterSelectButton
-
-import ktx.scene2d.*
+import ktx.scene2d.button
+import ktx.scene2d.label
+import ktx.scene2d.stack
+import ktx.scene2d.table
 
 
 class EndSpeechUI(val gameState: GameState, actionCallback: (GameAction) -> Unit) :

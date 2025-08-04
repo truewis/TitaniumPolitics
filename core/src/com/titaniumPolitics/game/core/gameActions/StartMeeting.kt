@@ -2,7 +2,6 @@ package com.titaniumPolitics.game.core.gameActions
 
 import com.titaniumPolitics.game.core.GameEngine
 import com.titaniumPolitics.game.core.Meeting
-import com.titaniumPolitics.game.core.ReadOnly
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -31,7 +30,7 @@ class StartMeeting(override val sbjCharacter: String, override val tgtPlace: Str
         requiredCharacters.forEach {
             parent.characters[it]!!.frozen = 1 //Force them to join the meeting.
             parent.ongoingMeetings[meetingName]!!.currentCharacters.add(it)
-            println("Interrupt: $it is forced to join the meeting.")
+            Logger.write("Interrupt: $it is forced to join the meeting.", Logger.LogLevel.INFO)
         }
         super.execute()
 

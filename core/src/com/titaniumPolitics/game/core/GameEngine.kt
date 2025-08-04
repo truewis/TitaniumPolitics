@@ -33,7 +33,7 @@ class GameEngine(val gameState: GameState) {
         //Start the game.
 
         onObserverCall.forEach { it(gameState) }
-        println("Game started. Time: ${gameState.time}. Starting main loop.")
+        Logger.write("Game started. Time: ${gameState.time}. Starting main loop.", Logger.LogLevel.INFO)
         //Main loop
 
 
@@ -96,7 +96,7 @@ class GameEngine(val gameState: GameState) {
     //This function is called at the end of each turn, after all the characters have performed their actions.
     fun progression() {
         gameState.time += 1
-        println("[${gameState.formatTime()}]")
+        Logger.write("[${gameState.formatTime(, Logger.LogLevel.INFO)}]")
         gameState.places.forEach {
             it.value.distributeWorkers()
         }
@@ -116,8 +116,8 @@ class GameEngine(val gameState: GameState) {
         }
 
 
-        //println("Time: ${gameState.time}")
-        //println("My approval:${gameState.characters[gameState.playerAgent]!!.approval}")
+        //Logger.write("Time: ${gameState.time}", Logger.LogLevel.INFO)
+        //Logger.write("My approval:${gameState.characters[gameState.playerAgent]!!.approval}", Logger.LogLevel.INFO)
         onObserverCall.forEach { it(gameState) }
 
     }
@@ -166,7 +166,7 @@ class GameEngine(val gameState: GameState) {
                         char.place.name
                     }, time=${gameState.formatTime()}, which is not valid. This may be a bug."
                 )
-                println(Json.encodeToString(GameAction.serializer(), action))
+                Logger.write(Json.encodeToString(GameAction.serializer(, Logger.LogLevel.INFO), action))
                 throw Exception("Non player character ${char.name} is performing an invalid action.")
             }
             if (action.sbjCharacter != char.name) {
@@ -175,7 +175,7 @@ class GameEngine(val gameState: GameState) {
                         char.place.name
                     }, time=${gameState.formatTime()}, which is not targeting itself. This may be a bug."
                 )
-                println(Json.encodeToString(GameAction.serializer(), action))
+                Logger.write(Json.encodeToString(GameAction.serializer(, Logger.LogLevel.INFO), action))
             }
             if (action.tgtPlace != char.place.name) {
                 Logger.write(
@@ -183,7 +183,7 @@ class GameEngine(val gameState: GameState) {
                         char.place.name
                     }, time=${gameState.formatTime()}, which is not targeting its own place. This may be a bug."
                 )
-                println(Json.encodeToString(GameAction.serializer(), action))
+                Logger.write(Json.encodeToString(GameAction.serializer(, Logger.LogLevel.INFO), action))
             }
 
         }
@@ -433,7 +433,7 @@ class GameEngine(val gameState: GameState) {
 
         gameState.places.forEach { (placeName, place) ->
             if (place.gasResources["oxygen"] < place.currentTotalPop * const("MarketOxygenConsumptionRate") * 86400)//TODO: Migrate to gas system.
-                println("Less than 24 hours of oxygen out in $placeName")
+                Logger.write("Less than 24 hours of oxygen out in $placeName", Logger.LogLevel.INFO)
             val consumptionOxygen = (place.currentTotalPop * const("MarketOxygenConsumptionRate") * dth)
             if (place.gasResources["oxygen"] > consumptionOxygen) {
                 place.gasResources["oxygen"] -= consumptionOxygen //0.5kg/day consumption.
@@ -448,7 +448,10 @@ class GameEngine(val gameState: GameState) {
                     place.currentTotalPop / 100 + 1//TODO: adjust deaths. Also, productivity starts to drop when oxygen is low. Use the gas system.
                 place.apply {
                     gameState.parties[responsibleDivision]!!.causeDeaths(death)
-                    println("Casualties: at most $death, due to suffocation at $placeName. Pop left: ${gameState.pop}")
+                    Logger.write(
+                        "Casualties: at most $death, due to suffocation at $placeName. Pop left: ${gameState.pop}",
+                        Logger.LogLevel.INFO
+                    )
                     createRumor(tgtState).apply {
                         type = InformationType.CASUALTY
                         tgtPlace = placeName
@@ -520,7 +523,7 @@ class GameEngine(val gameState: GameState) {
                 }
             }
             if (entry.value.alive && entry.value.health <= 0) {
-                println("${entry.key} died.")
+                Logger.write("${entry.key} died.", Logger.LogLevel.INFO)
                 gameState.places.values.find { it.characters.contains(entry.key) }!!.characters -= entry.key
                 entry.value.alive = false
             }
@@ -528,12 +531,12 @@ class GameEngine(val gameState: GameState) {
         val l = gameState.characters.filter { it.value.alive && !it.value.trait.contains("robot") }
         if (!l.contains(gameState.playerName)) {
 
-            println("You died. Game over.")
+            Logger.write("You died. Game over.", Logger.LogLevel.INFO)
             gameState.dump()
             exitProcess(0)
 
         } else if (l.size == 1) {
-            println("You are the last survivor.")
+            Logger.write("You are the last survivor.", Logger.LogLevel.INFO)
             gameState.dump()
             exitProcess(0)
         }
@@ -625,12 +628,12 @@ class GameEngine(val gameState: GameState) {
                     acquireCallback = {
                         Logger.write("Acquire callback was called again with type: ${it::class}")
                     }
-                    //println("Acquire callback resumed.")
+                    //Logger.write("Acquire callback resumed.", Logger.LogLevel.INFO)
                     continuation.resume(Unit)
                 }
-                //println("acquireCallback set.")
+                //Logger.write("acquireCallback set.", Logger.LogLevel.INFO)
                 Gdx.app.postRunnable {
-                    //println("Acquiring $dataType with params: $params")
+                    //Logger.write("Acquiring $dataType with params: $params", Logger.LogLevel.INFO)
                     (acquireEvent).toList().forEach {
                         it(
                             AcquireParams(
@@ -658,7 +661,7 @@ class GameEngine(val gameState: GameState) {
                     )
                 }.values.first()
                 if (character == gameState.playerName) {
-                    println("You are in a meeting.")
+                    Logger.write("You are in a meeting.", Logger.LogLevel.INFO)
                     println(
                         "Attendees: ${
                             conf.currentCharacters

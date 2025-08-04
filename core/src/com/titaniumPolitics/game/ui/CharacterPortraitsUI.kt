@@ -32,7 +32,10 @@ class CharacterPortraitsUI(var gameState: GameState) : Table(defaultSkin) {
                             portrait.displaySpeech(action)
                         }
                     }
-                    println("CharacterPortraits: Non-player character action detected: ${action.sbjCharacter} performed ${action::class.simpleName}")
+                    Logger.write(
+                        "CharacterPortraits: Non-player character action detected: ${action.sbjCharacter} performed ${action::class.simpleName}",
+                        Logger.LogLevel.INFO
+                    )
                     sleep(1000)//TODO:
                 }
             }

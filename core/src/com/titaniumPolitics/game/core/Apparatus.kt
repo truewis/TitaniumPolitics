@@ -5,13 +5,8 @@ import com.titaniumPolitics.game.debugTools.Logger
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.builtins.MapSerializer
 import kotlinx.serialization.builtins.serializer
-import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.double
-import kotlinx.serialization.json.int
-import kotlinx.serialization.json.jsonArray
-import kotlinx.serialization.json.jsonObject
-import kotlinx.serialization.json.jsonPrimitive
-import java.util.UUID
+import kotlinx.serialization.json.*
+import java.util.*
 
 /* Apparatus is a kind of building that can be used to produce and consume resources.
 * It can also be used to absorb resources from the environment.

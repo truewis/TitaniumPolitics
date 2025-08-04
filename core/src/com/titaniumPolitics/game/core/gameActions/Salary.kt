@@ -4,15 +4,12 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 //Salary is performed by the party leader. It decides the amount of resources to be paid to the party members.
-class Salary(override val sbjCharacter: String, override val tgtPlace: String) : GameAction()
-{
+class Salary(override val sbjCharacter: String, override val tgtPlace: String) : GameAction() {
     var resources = hashMapOf("ration" to 2, "water" to 2)
-    override fun chooseParams()
-    {
+    override fun chooseParams() {
     }
 
-    override fun execute()
-    {
+    override fun execute() {
         val who =
             (parent.ongoingMeetings.filter { it.value.currentCharacters.contains(sbjCharacter) }
                 .flatMap { it.value.currentCharacters }).toHashSet()
@@ -21,19 +18,18 @@ class Salary(override val sbjCharacter: String, override val tgtPlace: String) :
         val guildHall = party.home
 //        if (party.isDailySalaryPaid.keys.none { it == tgtCharacter })
 //        {
-//            println("Warning: $tgtCharacter is not eligible to be paid from ${party.name}.")
+//            Logger.write("Warning: $tgtCharacter is not eligible to be paid from ${party.name}.", Logger.LogLevel.INFO)
 //            return
 //        }
 //        if (party.isDailySalaryPaid[tgtCharacter] == true)
 //        {
-//            println("Warning: $tgtCharacter has already been paid from ${party.name} today.")
+//            Logger.write("Warning: $tgtCharacter has already been paid from ${party.name} today.", Logger.LogLevel.INFO)
 //            return
 //        }
         who.forEach { character ->
             if (
                 resources.all { (what, amount) -> parent.places[guildHall]!!.resources[what] >= amount }
-            )
-            {
+            ) {
                 resources.forEach { (what, amount) ->
                     parent.places[guildHall]!!.resources[what] =
                         parent.places[guildHall]!!.resources[what] - amount
@@ -41,17 +37,18 @@ class Salary(override val sbjCharacter: String, override val tgtPlace: String) :
                         parent.characters[character]!!.resources[what] + amount
                 }
                 //party.isDailySalaryPaid[tgtCharacter] = true
-                println("$character is paid $resources from $${party.name}.")
+                Logger.write("$character is paid $resources from $${party.name}.", Logger.LogLevel.INFO)
                 parent.characters[character]!!.frozen++
 
-            } else
-            {
-                println("Not enough resources to pay salary to $character: $tgtPlace, ${parent.places[tgtPlace]!!.resources}")
+            } else {
+                Logger.write(
+                    "Not enough resources to pay salary to $character: $tgtPlace, ${parent.places[tgtPlace]!!.resources}",
+                    Logger.LogLevel.INFO
+                )
                 //Party integrity decreases
                 parent.setPartyMutuality(party.name, party.name, -1.0)
                 //Opinion of the leader of the party decreases
-                if (party.leader != "")
-                {
+                if (party.leader != "") {
                     parent.setMutuality(character, party.leader, -1.0)
                 }
                 //TODO: are we sure that if the unpaid people are not in the meeting, there is no penalty to the party integrity?
@@ -63,8 +60,7 @@ class Salary(override val sbjCharacter: String, override val tgtPlace: String) :
 
     }
 
-    override fun isValid(): Boolean
-    {
+    override fun isValid(): Boolean {
         val who =
             (parent.ongoingMeetings.filter { it.value.currentCharacters.contains(sbjCharacter) }
                 .flatMap { it.value.currentCharacters }).toHashSet()
@@ -72,12 +68,12 @@ class Salary(override val sbjCharacter: String, override val tgtPlace: String) :
         val party = parent.parties.values.find { it.members.containsAll(who + sbjCharacter) }!!
 //        if (party.isDailySalaryPaid.keys.none { it == tgtCharacter })
 //        {
-//            //println("Warning: $tgtCharacter is not eligible to be paid from ${party.name}.")
+//            //Logger.write("Warning: $tgtCharacter is not eligible to be paid from ${party.name}.", Logger.LogLevel.INFO)
 //            return false
 //        }
 //        if (party.isDailySalaryPaid[tgtCharacter] == true)
 //        {
-//            //println("Warning: $tgtCharacter has already been paid from ${party.name} today.")
+//            //Logger.write("Warning: $tgtCharacter has already been paid from ${party.name} today.", Logger.LogLevel.INFO)
 //            return false
 //        }
         return !party.isSalaryPaid && who.isNotEmpty() && sbjCharacter == party.leader

@@ -11,8 +11,7 @@ import com.titaniumPolitics.game.core.TradeParams
 //The player character accepts the trade if the value of the offered item is higher than the value of the requested item.
 //The player cannot affect this decision.
 @Deprecated("This class is deprecated. Use request as meeting agenda instead.")
-class Trade(override val sbjCharacter: String, override val tgtPlace: String) : GameAction()
-{
+class Trade(override val sbjCharacter: String, override val tgtPlace: String) : GameAction() {
     var who = ""
     var item = hashMapOf<String, Int>()
     var item2 = hashMapOf<String, Int>()
@@ -21,14 +20,13 @@ class Trade(override val sbjCharacter: String, override val tgtPlace: String) : 
     var info: Information? = null
     var info2: Information? = null
     var onFinished: (Boolean) -> Unit = {} //This is called when the trade is accepted or rejected.
-    override fun chooseParams()
-    {
+    override fun chooseParams() {
         who =
             parent.ongoingMeetings.filter { it.value.currentCharacters.contains(sbjCharacter) }
                 .flatMap { it.value.currentCharacters }
                 .first { it != sbjCharacter }//Trade can happen only when there is exactly one other character in the meeting.
 
-//        println("What do you want to trade?")
+//        Logger.write("What do you want to trade?", Logger.LogLevel.INFO)
 //        val type = GameEngine.acquire(listOf("resource", "information", "action"))
 //        when (type){
 //            "resource"->{
@@ -37,11 +35,11 @@ class Trade(override val sbjCharacter: String, override val tgtPlace: String) : 
 //                amount = GameEngine.acquire(arrayListOf("1","2","3","4","5","6","7","8","9","10")).toInt()
 //            }
 //            "action"-> {
-//                //println("When do you want the action to be executed?") TODO: this is not implemented yet.
+//                //Logger.write("When do you want the action to be executed?", Logger.LogLevel.INFO) TODO: this is not implemented yet.
 //                //val meetingTime = tgtState.time+GameEngine.acquire(arrayListOf("3","6","9","12","18","21","24")).toInt()
-//                println("Where do you want the action to be executed?")
+//                Logger.write("Where do you want the action to be executed?", Logger.LogLevel.INFO)
 //                val where = GameEngine.acquire(tgtState.places.map { it.value.name })
-//                println("What action do you want to execute?")
+//                Logger.write("What action do you want to execute?", Logger.LogLevel.INFO)
 //                val name = GameEngine.acquire(GameEngine.availableActions(tgtState, where, who))
 //                action = Command(where, name, 0)
 //            }
@@ -49,7 +47,7 @@ class Trade(override val sbjCharacter: String, override val tgtPlace: String) : 
 //                info = tgtState.informations[GameEngine.acquire(tgtState.informations.filter { it.value.knownTo.contains(tgtCharacter) }.map { it.key })] //You can give information that opponent has no clue about.
 //            }
 //        }
-//        println("What do you want to trade it for?")
+//        Logger.write("What do you want to trade it for?", Logger.LogLevel.INFO)
 //        val type2 = GameEngine.acquire(listOf("resource", "information", "action"))
 //        when (type2){
 //            "resource"->{
@@ -59,11 +57,11 @@ class Trade(override val sbjCharacter: String, override val tgtPlace: String) : 
 //                amount2 = GameEngine.acquire(arrayListOf("1","2","3","4","5","6","7","8","9","10")).toInt()
 //            }
 //            "action"-> {
-//                //println("When do you want the action to be executed?") TODO: this is not implemented yet.
+//                //Logger.write("When do you want the action to be executed?", Logger.LogLevel.INFO) TODO: this is not implemented yet.
 //                //val meetingTime = tgtState.time+GameEngine.acquire(arrayListOf("3","6","9","12","18","21","24")).toInt()
-//                println("Where do you want the action to be executed?")
+//                Logger.write("Where do you want the action to be executed?", Logger.LogLevel.INFO)
 //                val where = GameEngine.acquire(tgtState.places.map { it.value.name })
-//                println("What action do you want to execute?")
+//                Logger.write("What action do you want to execute?", Logger.LogLevel.INFO)
 //                val name = GameEngine.acquire(GameEngine.availableActions(tgtState, where, who))
 //                action2 = Command(where, name, 0)
 //            }
@@ -91,8 +89,7 @@ class Trade(override val sbjCharacter: String, override val tgtPlace: String) : 
         //TODO: = tradeParams.action1?.let { Command(it, 0) }
     }
 
-    override fun execute()
-    {
+    override fun execute() {
         var success = false
         val value = item.keys.sumOf { parent.characters[who]!!.itemValue(it) * item[it]!! } + (action?.let {
             parent.characters[who]!!.actionValue(it.action)
@@ -114,13 +111,10 @@ class Trade(override val sbjCharacter: String, override val tgtPlace: String) : 
                 ?: .0) + (info2?.let { parent.characters[sbjCharacter]!!.infoValue(it) } ?: .0)
         success = true
 
-        if (success)
-        {
-            if (item.isNotEmpty())
-            {
-                if (item.any { (parent.characters[sbjCharacter]!!.resources[it.key] ?: .0) < item[it.key]!! })
-                {
-                    println("You don't have enough $item to trade.")
+        if (success) {
+            if (item.isNotEmpty()) {
+                if (item.any { (parent.characters[sbjCharacter]!!.resources[it.key] ?: .0) < item[it.key]!! }) {
+                    Logger.write("You don't have enough $item to trade.", Logger.LogLevel.INFO)
                     onFinished(false)
                     return
                 }
@@ -132,11 +126,9 @@ class Trade(override val sbjCharacter: String, override val tgtPlace: String) : 
                         ?: .0) + it.value
                 }
             }
-            if (item2.isNotEmpty())
-            {
-                if (item2.any { (parent.characters[who]!!.resources[it.key] ?: .0) < item2[it.key]!! })
-                {
-                    println("They don't have enough $item2 to trade.")
+            if (item2.isNotEmpty()) {
+                if (item2.any { (parent.characters[who]!!.resources[it.key] ?: .0) < item2[it.key]!! }) {
+                    Logger.write("They don't have enough $item2 to trade.", Logger.LogLevel.INFO)
                     onFinished(false)
                     return
                 }
@@ -156,11 +148,10 @@ class Trade(override val sbjCharacter: String, override val tgtPlace: String) : 
             parent.setMutuality(who, sbjCharacter, value + value2)
             parent.setMutuality(sbjCharacter, who, valuea + valuea2)
 
-            println("$who trades with $sbjCharacter.")
+            Logger.write("$who trades with $sbjCharacter.", Logger.LogLevel.INFO)
             onFinished(true)
-        } else
-        {
-            println("$who refuses to trade with $sbjCharacter.")
+        } else {
+            Logger.write("$who refuses to trade with $sbjCharacter.", Logger.LogLevel.INFO)
             onFinished(false)
             //TODO: this should come with consequences.
         }

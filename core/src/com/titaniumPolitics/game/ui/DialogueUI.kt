@@ -14,17 +14,16 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable
 import com.badlogic.gdx.utils.Align
-import com.titaniumPolitics.game.core.GameState
 import com.rafaskoberg.gdx.typinglabel.TypingAdapter
 import com.rafaskoberg.gdx.typinglabel.TypingLabel
 import com.titaniumPolitics.game.core.EventSystem
+import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.core.ReadOnly
 import com.titaniumPolitics.game.ui.widget.SimplePortraitUI
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
 import ktx.scene2d.*
 import ktx.scene2d.Scene2DSkin.defaultSkin
-import kotlin.collections.ArrayList
 
 class DialogueUI(val gameState: GameState) : Table(defaultSkin), KTable {
     var currentDialogue = ""
@@ -163,7 +162,7 @@ class DialogueUI(val gameState: GameState) : Table(defaultSkin), KTable {
 
     fun playLine(lineNumber: Int) {
         if (lineNumber > currentDialogueLength) {
-            println("Warning: Dialogue line number out of range in $currentDialogue.")
+            Logger.write("Warning: Dialogue line number out of range in $currentDialogue.", Logger.LogLevel.INFO)
             return
         }
         val line = Gdx.files.internal("texts/$currentDialogue.txt").readString().split("\n")[lineNumber]

@@ -4,8 +4,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 //SetWorkers is performed by the workplace manager. It sets the number of unnamed workers per apparatus.
-class SetWorkers(override val sbjCharacter: String, override val tgtPlace: String) : GameAction()
-{
+class SetWorkers(override val sbjCharacter: String, override val tgtPlace: String) : GameAction() {
     var workers = 0
     var apparatusID = ""
     val agent
@@ -17,12 +16,10 @@ class SetWorkers(override val sbjCharacter: String, override val tgtPlace: Strin
             )
         }
 
-    override fun chooseParams()
-    {
+    override fun chooseParams() {
     }
 
-    override fun execute()
-    {
+    override fun execute() {
         parent.getApparatus(apparatusID).plannedWorker = workers
         val current = agent.reliant
         agent.reliant = workers
@@ -30,8 +27,7 @@ class SetWorkers(override val sbjCharacter: String, override val tgtPlace: Strin
 
     }
 
-    override fun isValid(): Boolean
-    {
+    override fun isValid(): Boolean {
         if (parent.getApparatusPlace(apparatusID).name != tgtPlace) return false
         if (parent.idlePop < workers - agent.reliant) return false
 

@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.g2d.Batch
 import com.badlogic.gdx.graphics.g2d.BitmapFont
 import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.titaniumPolitics.game.ui.widget.WindowUI
-import space.earlygrey.shapedrawer.*
+import space.earlygrey.shapedrawer.ShapeDrawer
 import kotlin.math.abs
 
 

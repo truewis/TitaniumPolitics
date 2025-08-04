@@ -3,7 +3,6 @@ package com.titaniumPolitics.game.core.NPCRoutines
 import com.titaniumPolitics.game.core.Place
 import com.titaniumPolitics.game.core.ReadOnly.const
 import com.titaniumPolitics.game.core.gameActions.GameAction
-import com.titaniumPolitics.game.core.gameActions.Talk
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 

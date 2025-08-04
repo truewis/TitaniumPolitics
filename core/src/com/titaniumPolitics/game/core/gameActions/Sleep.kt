@@ -7,7 +7,7 @@ import kotlinx.serialization.Serializable
 class Sleep(override val sbjCharacter: String, override val tgtPlace: String) : GameAction() {
 
     override fun execute() {
-        println("$sbjCharacter slept.")
+        Logger.write("$sbjCharacter slept.", Logger.LogLevel.INFO)
         if (parent.characters[sbjCharacter]!!.trait.contains("old"))
             parent.characters[sbjCharacter]!!.health += 6
         else

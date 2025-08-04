@@ -4,11 +4,9 @@ import com.titaniumPolitics.game.core.InformationType
 import kotlinx.serialization.Serializable
 
 @Serializable
-class PrepareInfo(override val sbjCharacter: String, override val tgtPlace: String) : GameAction()
-{
+class PrepareInfo(override val sbjCharacter: String, override val tgtPlace: String) : GameAction() {
     var newSetOfPrepInfoKeys = arrayListOf<String>()
-    fun recommendKeys()
-    {
+    fun recommendKeys() {
         newSetOfPrepInfoKeys.clear()
         //If you have executed a command, you know the result. Add the result to the prepared information.
         parent.requests.values.filter { it.issuedBy.contains(sbjCharacter) }.forEach { command ->
@@ -26,8 +24,7 @@ class PrepareInfo(override val sbjCharacter: String, override val tgtPlace: Stri
             }
     }
 
-    override fun execute()
-    {
+    override fun execute() {
         sbjCharObj.preparedInfoKeys.forEach {
             parent.informations[it]!!.rememberedBy -= sbjCharacter
         }
@@ -43,8 +40,7 @@ class PrepareInfo(override val sbjCharacter: String, override val tgtPlace: Stri
         super.execute()
     }
 
-    override fun isValid(): Boolean
-    {
+    override fun isValid(): Boolean {
         return parent.informations.filter { it.value.knownTo.contains(sbjCharacter) }.keys.containsAll(
             newSetOfPrepInfoKeys
         )

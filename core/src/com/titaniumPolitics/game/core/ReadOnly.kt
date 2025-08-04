@@ -76,17 +76,27 @@ object ReadOnly {
 
         return if (obj != null)
             (props.getProperty(key)?.replacePlaceholders(obj))
-                ?: "Unknown".also { println("Warning: Could not find property $key") }
+                ?: "Unknown".also { Logger.write("Warning: Could not find property $key", Logger.LogLevel.INFO) }
         else
-            (props.getProperty(key)) ?: "Unknown".also { println("Warning: Could not find property $key") }
+            (props.getProperty(key)) ?: "Unknown".also {
+                Logger.write(
+                    "Warning: Could not find property $key",
+                    Logger.LogLevel.INFO
+                )
+            }
     }
 
     fun script(key: String, obj: Any? = null): String {
         return if (obj != null)
             (script.getProperty(key)?.replacePlaceholders(obj))
-                ?: "Unknown".also { println("Warning: Could not find property $key") }
+                ?: "Unknown".also { Logger.write("Warning: Could not find property $key", Logger.LogLevel.INFO) }
         else
-            (script.getProperty(key)) ?: "Unknown".also { println("Warning: Could not find property $key") }
+            (script.getProperty(key)) ?: "Unknown".also {
+                Logger.write(
+                    "Warning: Could not find property $key",
+                    Logger.LogLevel.INFO
+                )
+            }
 
     }
 

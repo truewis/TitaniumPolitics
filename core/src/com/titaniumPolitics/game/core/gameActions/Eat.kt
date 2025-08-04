@@ -3,36 +3,30 @@ package com.titaniumPolitics.game.core.gameActions
 import kotlinx.serialization.Serializable
 
 @Serializable
-class Eat(override val sbjCharacter: String, override val tgtPlace: String) : GameAction()
-{
+class Eat(override val sbjCharacter: String, override val tgtPlace: String) : GameAction() {
     val amount get() = sbjCharObj.reliant * 1.0
 
-    override fun execute()
-    {
+    override fun execute() {
 
         if (sbjCharObj.resources["ration"] > amount && sbjCharObj.resources["water"] > amount
-        )
-        {
+        ) {
             sbjCharObj.resources["ration"] -= amount
             sbjCharObj.resources["water"] -= amount
             sbjCharObj.hunger -= 50
             sbjCharObj.thirst -= 50
             tgtPlaceObj.gasResources["water"] += amount * 3.0//TODO: Calculate the amount of gas from Digestion
-            println("$sbjCharacter ate a ration and drank some water.")
-        } else
-        {
-            println("$sbjCharacter tried to eat, but there is nothing to eat.")
+            Logger.write("$sbjCharacter ate a ration and drank some water.", Logger.LogLevel.INFO)
+        } else {
+            Logger.write("$sbjCharacter tried to eat, but there is nothing to eat.", Logger.LogLevel.INFO)
         }
         super.execute()
     }
 
-    override fun isValid(): Boolean
-    {
+    override fun isValid(): Boolean {
         return tgtPlace.contains("home") && sbjCharObj.resources["ration"] > amount && sbjCharObj.resources["water"] > amount
     }
 
-    override fun deltaWill(): Double
-    {
+    override fun deltaWill(): Double {
         var w = super.deltaWill()
         w += 7
         if (sbjCharObj.hunger < 50)

@@ -3,16 +3,17 @@ package com.titaniumPolitics.game.ui
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.scenes.scene2d.InputEvent
-import com.badlogic.gdx.scenes.scene2d.ui.*
+import com.badlogic.gdx.scenes.scene2d.ui.Label
+import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane
+import com.badlogic.gdx.scenes.scene2d.ui.Table
+import com.badlogic.gdx.scenes.scene2d.ui.VerticalGroup
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
-import com.titaniumPolitics.game.core.GameEngine
 import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.core.gameActions.Trade
 import ktx.scene2d.*
 import ktx.scene2d.Scene2DSkin.defaultSkin
 
-class TradeUI(var gameState: GameState) : Table(defaultSkin)
-{
+class TradeUI(var gameState: GameState) : Table(defaultSkin) {
     var titleLabel: Label
     private val docList1 = VerticalGroup()
     private val docList2 = VerticalGroup()
@@ -21,8 +22,7 @@ class TradeUI(var gameState: GameState) : Table(defaultSkin)
     //val cancelButton = TextButton("취소", skin)
     var trade: Trade = Trade("", "")
 
-    init
-    {
+    init {
         instance = this
         titleLabel = Label("Trade", skin, "trnsprtConsole")
         titleLabel.setFontScale(2f)
@@ -55,8 +55,7 @@ class TradeUI(var gameState: GameState) : Table(defaultSkin)
 
     }
 
-    fun open()
-    {
+    fun open() {
 
         with(gameState) {
             val who =
@@ -87,8 +86,7 @@ class TradeUI(var gameState: GameState) : Table(defaultSkin)
         items2: HashMap<String, Double>,
         info1: HashSet<String>,
         info2: HashSet<String>
-    )
-    {
+    ) {
         docList1.clear()
         docList2.clear()
         items1.forEach { tobj ->
@@ -100,10 +98,8 @@ class TradeUI(var gameState: GameState) : Table(defaultSkin)
                     setFontScale(2f)
                 }
                 textField { text = "0" }.also { it2 ->
-                    it2.addListener(object : ClickListener()
-                    {
-                        override fun clicked(event: InputEvent?, x: Float, y: Float)
-                        {
+                    it2.addListener(object : ClickListener() {
+                        override fun clicked(event: InputEvent?, x: Float, y: Float) {
                             super.clicked(event, x, y)
                             trade.item[tobj.key] = it2.text.toInt()
                         }
@@ -144,10 +140,8 @@ class TradeUI(var gameState: GameState) : Table(defaultSkin)
                     setFontScale(2f)
                 }
                 textField { text = "0" }.also { it2 ->
-                    it2.addListener(object : ClickListener()
-                    {
-                        override fun clicked(event: InputEvent?, x: Float, y: Float)
-                        {
+                    it2.addListener(object : ClickListener() {
+                        override fun clicked(event: InputEvent?, x: Float, y: Float) {
                             super.clicked(event, x, y)
                             trade.item2[tobj.key] = it2.text.toInt()
                         }
@@ -185,8 +179,7 @@ class TradeUI(var gameState: GameState) : Table(defaultSkin)
 
     }
 
-    companion object
-    {
+    companion object {
         lateinit var instance: TradeUI
     }
 

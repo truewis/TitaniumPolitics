@@ -1,22 +1,18 @@
 package com.titaniumPolitics.game.ui.map
 
 import com.badlogic.gdx.Gdx
-import com.badlogic.gdx.scenes.scene2d.Group
 import com.badlogic.gdx.scenes.scene2d.ui.Image
 import com.titaniumPolitics.game.core.GameState
 import ktx.scene2d.Scene2DSkin.defaultSkin
 import kotlin.math.atan2
 import kotlin.math.sqrt
 
-class Connection(var gameState: GameState, val owner: MapUI, startPlace: String, endPlace: String) : Image()
-{
-    init
-    {
+class Connection(var gameState: GameState, val owner: MapUI, startPlace: String, endPlace: String) : Image() {
+    init {
         owner.dataTable.addActor(this)
         //Fetch default drawable from skin.
         drawable = defaultSkin.getDrawable("BlackPx")
-        try
-        {
+        try {
 
             val start: Pair<Float, Float> = owner.convertToScreenCoords(
                 gameState.places[startPlace]!!.coordinates.x.toFloat(),
@@ -39,8 +35,7 @@ class Connection(var gameState: GameState, val owner: MapUI, startPlace: String,
             rotation =
                 Math.toDegrees(atan2((end.second - start.second).toDouble(), (end.first - start.first).toDouble()))
                     .toFloat()
-        } catch (e: Exception)
-        {
+        } catch (e: Exception) {
             Gdx.app.log("Connection", "Error: $startPlace, $endPlace. $e")
         }
 

@@ -1,14 +1,11 @@
 package com.titaniumPolitics.game.ui.map
 
-import com.badlogic.gdx.graphics.Color
 import com.titaniumPolitics.game.core.GameState
 import ktx.scene2d.image
 import ktx.scene2d.scene2d
 
-class HomePlaceMarker(gameState: GameState, owner: MapUI, place: String) : PlaceMarker(gameState, owner, place)
-{
-    init
-    {
+class HomePlaceMarker(gameState: GameState, owner: MapUI, place: String) : PlaceMarker(gameState, owner, place) {
+    init {
         //Since place is set to home_characterName, we need to get the character's livingBy to get the actual place name.
         val place2 = gameState.characters[place.substring(5)]!!.livingBy
         val start: Pair<Float, Float> = owner.convertToScreenCoords(

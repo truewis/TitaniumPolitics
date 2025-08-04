@@ -1,18 +1,14 @@
 package com.titaniumPolitics.game.events
 
-import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.core.InformationType
 import com.titaniumPolitics.game.core.Resources
 import com.titaniumPolitics.game.core.gameActions.UnofficialResourceTransfer
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.Transient
 
 @Serializable
-class Event_BribeDoctor4(var searchFrom: Int) : EventObject("Talking with Dr Paik.", true)
-{
+class Event_BribeDoctor4(var searchFrom: Int) : EventObject("Talking with Dr Paik.", true) {
 
-    override fun exec(a: Int, b: Int)
-    {
+    override fun exec(a: Int, b: Int) {
         if (
             parent.informations.any { (_, info) ->
                 info.creationTime > searchFrom && info.type == InformationType.ACTION && (info.action is UnofficialResourceTransfer).also {
@@ -21,8 +17,7 @@ class Event_BribeDoctor4(var searchFrom: Int) : EventObject("Talking with Dr Pai
                     }
                 }
             }
-        )
-        {
+        ) {
             onPlayDialogue("BribeDoctor4")
             parent.eventSystem.add(Event_BribeDoctor5())
             deactivate()

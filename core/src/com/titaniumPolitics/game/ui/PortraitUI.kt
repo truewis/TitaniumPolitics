@@ -39,7 +39,7 @@ class PortraitUI(character: String, var gameState: GameState, scale: Float) : Ta
                     )!!
                 )
             } catch (e: Exception) {
-                println("Portrait Image Error: $value")
+                Logger.write("Portrait Image Error: $value", Logger.LogLevel.INFO)
                 portrait.drawable = TextureRegionDrawable(
                     CapsuleStage.instance.assetManager.get(
                         "portraits/default.png",

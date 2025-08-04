@@ -13,7 +13,10 @@ class EndSpeech(override val sbjCharacter: String, override val tgtPlace: String
         //The amount of attention gained can be modified here.
         meeting.currentAttention += 10
         meeting.currentSpeaker = nextSpeaker
-        println("$sbjCharacter ended their speech and nominated $nextSpeaker as the next speaker.")
+        Logger.write(
+            "$sbjCharacter ended their speech and nominated $nextSpeaker as the next speaker.",
+            Logger.LogLevel.INFO
+        )
         super.execute()
     }
 

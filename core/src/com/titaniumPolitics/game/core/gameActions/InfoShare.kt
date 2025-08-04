@@ -4,14 +4,12 @@ import com.titaniumPolitics.game.core.GameEngine
 import com.titaniumPolitics.game.core.Information
 
 @Deprecated("This class is deprecated. Info requests are done naturally through agendas.")
-class InfoShare(override val sbjCharacter: String, override val tgtPlace: String) : GameAction()
-{
+class InfoShare(override val sbjCharacter: String, override val tgtPlace: String) : GameAction() {
     var who = hashSetOf<String>()
     var what = ""
     var application = "" //praise, criticize, respond
     var responseTo: Information? = null //if application is respond
-    override fun chooseParams()
-    {
+    override fun chooseParams() {
         //TODO: ability to fabricate information
         what = GameEngine.acquire(parent.informations.filter { it.value.knownTo.contains(sbjCharacter) }.map { it.key })
 
@@ -19,18 +17,15 @@ class InfoShare(override val sbjCharacter: String, override val tgtPlace: String
         application = GameEngine.acquire(listOf("praise", "criticize", "respond", "report"))
     }
 
-    override fun execute()
-    {
+    override fun execute() {
         who =
             parent.characters[sbjCharacter]!!.currentMeeting!!.currentCharacters.toHashSet()
 
         val party = parent.parties.values.find { it.members.containsAll(who + sbjCharacter) }!!.name
         parent.informations[what]!!.knownTo += who
 
-        when (application)
-        {
-            "praise" ->
-            {
+        when (application) {
+            "praise" -> {
                 val factor = .1
 
                 //If party's average opinion of the character that is discussed is positive, then the party integrity increases. Otherwise, it decreases.
@@ -44,8 +39,7 @@ class InfoShare(override val sbjCharacter: String, override val tgtPlace: String
                 who.forEach { parent.setMutuality(it, parent.informations[what]!!.tgtCharacter, 2.0) }
             }
 
-            "criticize" ->
-            {
+            "criticize" -> {
                 val factor = -.2
                 //If party's average opinion of the character that is discussed is negative, then the party integrity increases. Otherwise, it decreases.
                 //It is easier to criticize someone than to praise someone to increase party integrity.
@@ -57,8 +51,7 @@ class InfoShare(override val sbjCharacter: String, override val tgtPlace: String
                 who.forEach { parent.setMutuality(it, parent.informations[what]!!.tgtCharacter, -5.0) }
             }
 
-            "respond" ->
-            {
+            "respond" -> {
                 //responseTo = tgtState.informations[what]
                 //TODO: response to a previous information given in the meeting, or a rumor
             }
@@ -68,8 +61,7 @@ class InfoShare(override val sbjCharacter: String, override val tgtPlace: String
         parent.characters[sbjCharacter]!!.frozen++
     }
 
-    override fun isValid(): Boolean
-    {
+    override fun isValid(): Boolean {
         return parent.characters[sbjCharacter]!!.currentMeeting != null
     }
 

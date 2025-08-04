@@ -4,7 +4,6 @@ import com.titaniumPolitics.game.core.ReadOnly.const
 import com.titaniumPolitics.game.core.gameActions.GameAction
 import com.titaniumPolitics.game.core.gameActions.NewAgenda
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.Transient
 import kotlin.math.max
 
 @Serializable

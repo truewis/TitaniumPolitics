@@ -5,7 +5,7 @@ import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.core.gameActions.GameAction
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
-import java.util.UUID
+import java.util.*
 
 //Trying implementing design pattern with function call stack is a bad idea because it is hard to debug.
 //Routine was designed to be independent of the gameState, but it is not the case anymore.

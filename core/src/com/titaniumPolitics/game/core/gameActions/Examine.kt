@@ -1,14 +1,9 @@
 package com.titaniumPolitics.game.core.gameActions
 
-import com.badlogic.gdx.Gdx
 import com.titaniumPolitics.game.core.GameEngine
 import com.titaniumPolitics.game.core.Information
 import com.titaniumPolitics.game.core.InformationType
-import com.titaniumPolitics.game.ui.HumanResourceInfoUI
-import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.Serializable
-import kotlin.coroutines.resume
-import kotlin.coroutines.suspendCoroutine
 
 @Serializable
 class Examine(override val sbjCharacter: String, override val tgtPlace: String) : GameAction() {
@@ -21,7 +16,10 @@ class Examine(override val sbjCharacter: String, override val tgtPlace: String) 
         when (what) {
             "HR" -> {
                 //Acquire HR information
-                println("HR: ${parent.places[tgtPlace]!!.currentWorker}/${parent.places[tgtPlace]!!.plannedWorker}, ${parent.places[tgtPlace]!!.workHoursStart}-${parent.places[tgtPlace]!!.workHoursEnd}, ${parent.places[tgtPlace]!!.responsibleDivision}")
+                Logger.write(
+                    "HR: ${parent.places[tgtPlace]!!.currentWorker}/${parent.places[tgtPlace]!!.plannedWorker}, ${parent.places[tgtPlace]!!.workHoursStart}-${parent.places[tgtPlace]!!.workHoursEnd}, ${parent.places[tgtPlace]!!.responsibleDivision}",
+                    Logger.LogLevel.INFO
+                )
 
                 //Acquire apparatus information.
                 with(parent.places[tgtPlace]!!) {
@@ -40,7 +38,7 @@ class Examine(override val sbjCharacter: String, override val tgtPlace: String) 
             }
 
             "apparatus" -> {
-                println("Apparatus: ${parent.places[tgtPlace]!!.apparatuses}")
+                Logger.write("Apparatus: ${parent.places[tgtPlace]!!.apparatuses}", Logger.LogLevel.INFO)
 
                 //Acquire apparatus information.
                 parent.places[tgtPlace]!!.apparatuses.forEach { entry ->
@@ -61,7 +59,7 @@ class Examine(override val sbjCharacter: String, override val tgtPlace: String) 
 
             "resources" -> {
                 if (tgtPlace.contains("home")) {//Home is the exception; character's resources are shown instead.
-                    println("Resources: ${parent.characters[sbjCharacter]!!.resources}")
+                    Logger.write("Resources: ${parent.characters[sbjCharacter]!!.resources}", Logger.LogLevel.INFO)
                     //Acquire resources information of this character.
                     parent.characters[sbjCharacter]!!.resources
                     Information(
@@ -76,7 +74,7 @@ class Examine(override val sbjCharacter: String, override val tgtPlace: String) 
                     }
 
                 } else {
-                    println("Resources: ${parent.places[tgtPlace]!!.resources}")
+                    Logger.write("Resources: ${parent.places[tgtPlace]!!.resources}", Logger.LogLevel.INFO)
                     //Acquire resources information of this place.
                     Information(
                         author = sbjCharacter,

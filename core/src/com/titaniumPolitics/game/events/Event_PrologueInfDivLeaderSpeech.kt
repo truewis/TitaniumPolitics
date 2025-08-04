@@ -1,10 +1,7 @@
 package com.titaniumPolitics.game.events
 
-import com.titaniumPolitics.game.core.GameState
-import com.titaniumPolitics.game.ui.DialogueUI
 import com.titaniumPolitics.game.ui.Quest
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.Transient
 
 @Serializable
 class Event_PrologueInfDivLeaderSpeech : EventObject("Introduction of Alina.", true), IQuestEventObject {

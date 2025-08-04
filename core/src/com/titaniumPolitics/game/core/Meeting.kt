@@ -49,7 +49,10 @@ class Meeting(
                         val score = party.members.sumOf {
                             gameState.getMutuality(it, candidate) * party.getMultiplier(it)
                         }
-                        println("The average support of $candidate is ${score / party.size}.")
+                        Logger.write(
+                            "The average support of $candidate is ${score / party.size}.",
+                            Logger.LogLevel.INFO
+                        )
                         score.roundToInt()
                     } as HashMap<String, Int>//TODO: This logic has to be more thorough. display the actual election process.
                 onVoteResults.forEach { it() }
@@ -57,7 +60,7 @@ class Meeting(
                 val leader = voteResults.maxByOrNull { it.value }?.key ?: ""
 
                 gameState.parties[involvedParty]!!.leader = leader
-                println("The leader of the party $involvedParty is elected as $leader.")
+                Logger.write("The leader of the party $involvedParty is elected as $leader.", Logger.LogLevel.INFO)
             }
 
             MeetingType.DIVISION_DAILY_CONFERENCE -> {
@@ -66,7 +69,8 @@ class Meeting(
                 }
             }
 
-            else -> {}
+            else -> {
+            }
         }
         //Remove the meeting from the ongoingMeetings.
         if (gameState.ongoingMeetings.containsValue(this)) {

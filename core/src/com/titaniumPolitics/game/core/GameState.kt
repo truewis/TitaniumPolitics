@@ -1,5 +1,6 @@
 package com.titaniumPolitics.game.core
 
+import com.titaniumPolitics.game.debugTools.Logger
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
@@ -181,7 +182,7 @@ class GameState {
     }
 
     fun initialize() {
-        println("Initializing game state...")
+        Logger.write("Initializing game state...", Logger.LogLevel.INFO)
         injectDependency()
         //Gain party anonymous member size from work place requirements.
         parties.forEach {
@@ -242,7 +243,7 @@ class GameState {
         }
         randomize()
         eventSystem.newGame()
-        println("Game state initialized successfully.")
+        Logger.write("Game state initialized successfully.", Logger.LogLevel.INFO)
     }
 
     fun randomize() {
@@ -347,7 +348,7 @@ class GameState {
         parties.forEach { it.value.injectParent(this) }
         nonPlayerAgents.forEach { it.value.injectParent(this) }
         eventSystem.injectParent(this)
-        println("GameState injected successfully.")
+        Logger.write("GameState injected successfully.", Logger.LogLevel.INFO)
     }
 
 
@@ -368,7 +369,7 @@ class GameState {
 
         val file = File(fileName)
         file.writeText(prettyJson.encodeToString(this))
-        println("Save File Dumped.")
+        Logger.write("Save File Dumped.", Logger.LogLevel.INFO)
     }
 
     private fun Date.toString(format: String, locale: Locale = Locale.getDefault()): String {

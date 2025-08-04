@@ -1,12 +1,7 @@
 package com.titaniumPolitics.game.core.gameActions
 
-import com.titaniumPolitics.game.core.AgendaType
-import com.titaniumPolitics.game.core.GameState
-import com.titaniumPolitics.game.core.Meeting
-import com.titaniumPolitics.game.core.MeetingAgenda
-import com.titaniumPolitics.game.core.ReadOnly
+import com.titaniumPolitics.game.core.*
 import kotlinx.serialization.Serializable
-import kotlin.collections.set
 import kotlin.math.max
 
 @Serializable

@@ -3,16 +3,14 @@ package com.titaniumPolitics.game.ui
 
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.scenes.scene2d.Touchable
-import com.badlogic.gdx.scenes.scene2d.ui.*
-
+import com.badlogic.gdx.scenes.scene2d.ui.Table
+import com.badlogic.gdx.scenes.scene2d.ui.Window
 import com.badlogic.gdx.utils.Align
-
 import ktx.scene2d.*
 import ktx.scene2d.Scene2DSkin.defaultSkin
 
 
-open class FloatingWindowUI : Window("", defaultSkin), KTable
-{
+open class FloatingWindowUI : Window("", defaultSkin), KTable {
     val content = Table()
     val shadow = scene2d.image("TooltipShadow10p") {
         it.width = 450f
@@ -27,18 +25,15 @@ open class FloatingWindowUI : Window("", defaultSkin), KTable
             setFontScale(2f)
         }
 
-        addListener(object : com.badlogic.gdx.scenes.scene2d.utils.ClickListener()
-        {
-            override fun clicked(event: com.badlogic.gdx.scenes.scene2d.InputEvent?, x: Float, y: Float)
-            {
+        addListener(object : com.badlogic.gdx.scenes.scene2d.utils.ClickListener() {
+            override fun clicked(event: com.badlogic.gdx.scenes.scene2d.InputEvent?, x: Float, y: Float) {
                 this@FloatingWindowUI.isVisible = false
 
             }
         })
     }
 
-    init
-    {
+    init {
         setSize(350f, 350f)
         addActor(shadow)
         titleLabel.apply {
@@ -70,8 +65,7 @@ open class FloatingWindowUI : Window("", defaultSkin), KTable
 
     }
 
-    override fun layout()
-    {
+    override fun layout() {
         super.layout()
         shadow.setSize(width + 100, height + 100)
     }

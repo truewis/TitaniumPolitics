@@ -4,18 +4,19 @@ import com.titaniumPolitics.game.core.GameEngine
 import com.titaniumPolitics.game.core.Request
 
 @Deprecated("This class is deprecated. Use meeting agendas to request actions instead.")
-class unofficialCommand(override val sbjCharacter: String, override val tgtPlace: String) : GameAction()
-{
+class unofficialCommand(override val sbjCharacter: String, override val tgtPlace: String) : GameAction() {
     var who = ""
     var request: Request? = null
-    override fun chooseParams()
-    {
+    override fun chooseParams() {
 
 
         val currentConf =
             parent.ongoingMeetings.filter { it.value.currentCharacters.contains(sbjCharacter) }.values.first()
         if (sbjCharacter != parent.parties[currentConf.involvedParty]!!.leader)
-            println("Warning: Only the leader of the party can issue commands. $sbjCharacter is not the leader of ${currentConf.involvedParty}")
+            Logger.write(
+                "Warning: Only the leader of the party can issue commands. $sbjCharacter is not the leader of ${currentConf.involvedParty}",
+                Logger.LogLevel.INFO
+            )
         who = GameEngine.acquire(currentConf.currentCharacters.toList())
         request = GameEngine.acquire<Request>(
             "Command",
@@ -23,8 +24,7 @@ class unofficialCommand(override val sbjCharacter: String, override val tgtPlace
         )
     }
 
-    override fun execute()
-    {
+    override fun execute() {
 
         parent.requests[request!!.name] = request!!
         parent.characters[sbjCharacter]!!.frozen++

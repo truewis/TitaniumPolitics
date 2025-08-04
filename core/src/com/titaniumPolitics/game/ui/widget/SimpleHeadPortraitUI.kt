@@ -49,7 +49,7 @@ class SimpleHeadPortraitUI(character: String, scale: Float, interactable: Boolea
                     )!!
                 )
             } catch (e: Exception) {
-                println("Portrait Image Error: $value")
+                Logger.write("Portrait Image Error: $value", Logger.LogLevel.INFO)
                 portrait.drawable = TextureRegionDrawable(
                     CapsuleStage.instance.assetManager.get( //TODO: Temporary solution for portrait image loading. PortraitUI does not have a stage.
                         "portraits/default.png",

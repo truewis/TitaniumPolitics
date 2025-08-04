@@ -1,19 +1,13 @@
 package com.titaniumPolitics.game.events
 
-import com.titaniumPolitics.game.core.GameState
-import com.titaniumPolitics.game.ui.DialogueUI
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.Transient
 
 @Serializable
-class Event_BoyFindingMom2 : EventObject("A boy with a box.", true)
-{
+class Event_BoyFindingMom2 : EventObject("A boy with a box.", true) {
 
-    override fun exec(a: Int, b: Int)
-    {
+    override fun exec(a: Int, b: Int) {
         if (parent.player.currentMeeting != null && parent.player.currentMeeting!!.currentCharacters.contains("Mom")
-        )
-        {
+        ) {
             onPlayDialogue("FindMom2")
             parent.eventSystem.add(Event_BoyFindingMom3())
             deactivate()

@@ -25,7 +25,7 @@ open class MapUI(val gameState: GameState) : Table(defaultSkin) {
 
 
     init {
-        println(this::class.java.simpleName + " initialized.")
+        Logger.write(this::class.java.simpleName + " initialized.", Logger.LogLevel.INFO)
         scrollPane = ScrollPane(dataTable)
         scrollPane.setScrollingDisabled(false, false)
         add(scrollPane).grow()

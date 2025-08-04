@@ -15,7 +15,6 @@ data class MeetingAgenda(
 )
 
 @Serializable
-enum class AgendaType
-{
+enum class AgendaType {
     PROOF_OF_WORK, NOMINATE, REQUEST, PRAISE, DENOUNCE, PRAISE_PARTY, DENOUNCE_PARTY, BUDGET_PROPOSAL, BUDGET_RESOLUTION, APPOINT_MEETING, FIRE_MANAGER
 }

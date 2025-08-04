@@ -12,7 +12,7 @@ class ExecuteCommandRoutine() : Routine() {
     var timeout = ReadOnly.const("ExecuteCommandRoutineInvalidActionTimeout")
 
     override fun newRoutineCondition(name: String, place: String, routines: List<Routine>): Routine? {
-        println("$name is executing the command ${executableRequest}.")
+        Logger.write("$name is executing the command ${executableRequest}.", Logger.LogLevel.INFO)
 
         if (place != executableRequest.action.tgtPlace) {
             if (routines.none { it is MoveRoutine })
@@ -27,7 +27,10 @@ class ExecuteCommandRoutine() : Routine() {
         if (place == executableRequest.action.tgtPlace) {
             executableRequest.action.injectParent(gState)
             if (executableRequest.action.isValid()) {
-                println("$name: The request ${executableRequest.action} is valid. Executing...")
+                Logger.write(
+                    "$name: The request ${executableRequest.action} is valid. Executing...",
+                    Logger.LogLevel.INFO
+                )
                 executeDone = true
                 return executableRequest.action
             } else {
@@ -42,7 +45,10 @@ class ExecuteCommandRoutine() : Routine() {
             }
         }
 
-        println("$name: Cannot move to ${executableRequest.action.tgtPlace} to execute the request ${executableRequest.action}. Terminating the routine......")
+        Logger.write(
+            "$name: Cannot move to ${executableRequest.action.tgtPlace} to execute the request ${executableRequest.action}. Terminating the routine......",
+            Logger.LogLevel.INFO
+        )
         err = true
         return Wait(name, place)
     }

@@ -26,7 +26,10 @@ class MoveRoutine() : Routine() {
                     nextStop = it.first[1]
                 } == null) {
 
-                println("There is no path from $place to ${variables["movePlace"]}! Terminating moveRoutine...")
+                Logger.write(
+                    "There is no path from $place to ${variables["movePlace"]}! Terminating moveRoutine...",
+                    Logger.LogLevel.INFO
+                )
                 executeDone = false
                 return true
 

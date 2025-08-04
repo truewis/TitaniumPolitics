@@ -7,8 +7,7 @@ import com.titaniumPolitics.game.core.ReadOnly
 import kotlinx.serialization.Serializable
 
 @Serializable
-class AddInfo(override val sbjCharacter: String, override val tgtPlace: String) : GameAction()
-{
+class AddInfo(override val sbjCharacter: String, override val tgtPlace: String) : GameAction() {
     lateinit var infoKey: String
     var agendaIndex = 0
     val agenda
@@ -20,13 +19,10 @@ class AddInfo(override val sbjCharacter: String, override val tgtPlace: String) 
 
 
     //Unit: Mutuality
-    fun effectivity(): Double
-    {
+    fun effectivity(): Double {
         val newsPeople = meeting.currentCharacters.intersect(info.knownTo)
-        when (agenda.type)
-        {
-            AgendaType.PROOF_OF_WORK ->
-            {
+        when (agenda.type) {
+            AgendaType.PROOF_OF_WORK -> {
                 //if there is any supporting information, add it.
 
                 if (info.type == InformationType.ACTION
@@ -51,26 +47,22 @@ class AddInfo(override val sbjCharacter: String, override val tgtPlace: String) 
 
             }
 
-            AgendaType.NOMINATE, AgendaType.PRAISE ->
-            {
+            AgendaType.NOMINATE, AgendaType.PRAISE -> {
                 return parent.characters[agenda.subjectParams["character"]]!!.infoPreference(info)
             }
 
             AgendaType.REQUEST -> return meeting.currentCharacters.sumOf { parent.characters[it]!!.actionValue(agenda.attachedRequest!!.action) } / meeting.currentCharacters.size
-            AgendaType.DENOUNCE ->
-            {
+            AgendaType.DENOUNCE -> {
                 return -parent.characters[agenda.subjectParams["character"]]!!.infoPreference(info)
             }
 
-            AgendaType.PRAISE_PARTY ->
-            {
+            AgendaType.PRAISE_PARTY -> {
                 val pt = parent.parties[agenda.subjectParams["party"]]!!
                 return pt.members.sumOf { parent.characters[it]!!.infoPreference(info) } / pt.members.size
 
             }
 
-            AgendaType.DENOUNCE_PARTY ->
-            {
+            AgendaType.DENOUNCE_PARTY -> {
                 val pt = parent.parties[agenda.subjectParams["party"]]!!
                 return pt.members.sumOf { -parent.characters[it]!!.infoPreference(info) } / pt.members.size
             }
@@ -78,14 +70,16 @@ class AddInfo(override val sbjCharacter: String, override val tgtPlace: String) 
             AgendaType.BUDGET_PROPOSAL -> TODO()
             AgendaType.BUDGET_RESOLUTION -> TODO()
             AgendaType.APPOINT_MEETING -> return 0.0
-            AgendaType.FIRE_MANAGER -> return -parent.characters[agenda.subjectParams["character"]]!!.infoPreference(info)
+            AgendaType.FIRE_MANAGER -> return -parent.characters[agenda.subjectParams["character"]]!!.infoPreference(
+                info
+            )
+
             else -> return 0.0
         }
         return 0.0
     }
 
-    override fun execute()
-    {
+    override fun execute() {
 
         agenda.informationKeys.add(infoKey)
 
@@ -106,8 +100,7 @@ class AddInfo(override val sbjCharacter: String, override val tgtPlace: String) 
         super.execute()
     }
 
-    override fun isValid(): Boolean
-    {
+    override fun isValid(): Boolean {
         if (meeting.agendas.size <= agendaIndex)
             return false
         //If the information is already presented in the meeting, it cannot be presented again.

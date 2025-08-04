@@ -5,8 +5,7 @@ import com.titaniumPolitics.game.core.gameActions.Wait
 import kotlinx.serialization.Serializable
 
 @Serializable
-sealed class Agent : GameStateElement()
-{
+sealed class Agent : GameStateElement() {
     override val name: String
         get() = parent.nonPlayerAgents.filter { it.value == this }.keys.first()
     val character: Character
@@ -14,8 +13,7 @@ sealed class Agent : GameStateElement()
     val place
         get() = parent.places.values.find { it.characters.contains(name) }!!.name
 
-    open fun chooseAction(): GameAction
-    {
+    open fun chooseAction(): GameAction {
         return Wait(character.name, place)
     }
 }

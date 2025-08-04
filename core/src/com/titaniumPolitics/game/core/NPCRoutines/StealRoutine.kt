@@ -42,7 +42,7 @@ class StealRoutine() : Routine() {
                 )
             )
             toWhere = "home_$name"
-            println("$name is stealing $resources from ${resplace.name}!")
+            Logger.write("$name is stealing $resources from ${resplace.name}!", Logger.LogLevel.INFO)
         }
 
     }
