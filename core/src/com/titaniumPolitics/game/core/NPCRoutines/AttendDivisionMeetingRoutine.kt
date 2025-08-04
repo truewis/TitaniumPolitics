@@ -48,7 +48,7 @@ class AttendDivisionMeetingRoutine : Routine(), IMeetingRoutine {
         }
 
 
-        //If not division leader and salary is not paid, request salary.
+        //Try supporting salary request.
         if (conf.currentSpeaker == name && !party.isSalaryPaid) {
             //Check if there is already a salary request.
             if (conf.agendas.none { it.type == AgendaType.REQUEST && it.attachedRequest!!.action is Salary }) {
@@ -128,24 +128,27 @@ class AttendDivisionMeetingRoutine : Routine(), IMeetingRoutine {
             if (conf.currentSpeaker == name && !party.isSalaryPaid) {
                 //Check if there is already a salary request.
                 if (conf.agendas.none { it.type == AgendaType.REQUEST && it.attachedRequest?.action is Salary }) {
-                    //Fill in the agenda based on variables in the routine, resource and character.
-                    val agenda = MeetingAgenda(AgendaType.REQUEST, name).apply {
-                        attachedRequest = Request(
-                            Salary(
-                                party.leader,
-                                tgtPlace = party.home
+                    //Check if the division leader is present in the meeting.
+                    if (party.leader in conf.currentCharacters) {
+                        //Fill in the agenda based on variables in the routine, resource and character.
+                        val agenda = MeetingAgenda(AgendaType.REQUEST, name).apply {
+                            attachedRequest = Request(
+                                Salary(
+                                    party.leader,
+                                    tgtPlace = party.home
+                                ).apply {
+                                    //TODO: adjust the salary, it.resources.
+                                }//Created a command to transfer the resource.
+                                ,
+                                issuedTo = hashSetOf(party.leader)
                             ).apply {
-                                //TODO: adjust the salary, it.resources.
-                            }//Created a command to transfer the resource.
-                            ,
-                            issuedTo = hashSetOf(party.leader)
-                        ).apply {
-                            executeTime = gState.time
-                            issuedBy = hashSetOf(name)
+                                executeTime = gState.time
+                                issuedBy = hashSetOf(name)
+                            }
                         }
-                    }
-                    return NewAgenda(name, place).also {
-                        it.agenda = agenda
+                        return NewAgenda(name, place).also {
+                            it.agenda = agenda
+                        }
                     }
                 }
             }
