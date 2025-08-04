@@ -16,7 +16,7 @@ class GameEngineTest {
     fun runFor2Days() {
 
         gdh.initializeColumns()
-        Logger.write("Working Directory = " + System.getProperty("user.dir", Logger.LogLevel.INFO))
+        Logger.write("Working Directory = " + System.getProperty("user.dir"), Logger.LogLevel.INFO)
         gState = Json.Default.decodeFromString(
             GameState.serializer(), File("../assets/json/init.json").readText()
         ).also {
@@ -70,19 +70,26 @@ class GameEngineTest {
             missedMeetings.add(it.key)
             Logger.write("////////////////////////////////////////////////", Logger.LogLevel.INFO)
             Logger.write("!Missed meeting:${it.key} at ${it.value.place}.", Logger.LogLevel.INFO)
-            Logger.write("Scheduled: ${GameState.formatTime(it.value.time, Logger.LogLevel.INFO)}")
+            Logger.write("Scheduled: ${GameState.formatTime(it.value.time)}", Logger.LogLevel.INFO)
             Logger.write("What people are doing:", Logger.LogLevel.INFO)
             it.value.scheduledCharacters.forEach { ch ->
-                Logger.write("\t$ch:${characters[ch]!!.place.name}, doing ${characters[ch]!!.history.last(, Logger.LogLevel.INFO)}")
+                Logger.write(
+                    "\t$ch:${characters[ch]!!.place.name}, doing ${characters[ch]!!.history.last()}",
+                    Logger.LogLevel.INFO
+                )
                 if (nonPlayerAgents[ch] is NonPlayerAgent) {
-                    Logger.write("\t\tunder ${(nonPlayerAgents[ch] as NonPlayerAgent, Logger.LogLevel.INFO).routines[0]::class.java.simpleName}")
+                    Logger.write(
+                        "\t\tunder ${(nonPlayerAgents[ch] as NonPlayerAgent).routines[0]::class.java.simpleName}",
+                        Logger.LogLevel.INFO
+                    )
                     Logger.write(
                         "\t\troutine started: ${
                             GameState.formatTime(
-                                (nonPlayerAgents[ch] as NonPlayerAgent,
-                                Logger.LogLevel.INFO
-                            ).routines[0].intVariables["routineStartTime"] ?: 0)
-                        }"
+                                (nonPlayerAgents[ch] as NonPlayerAgent
+                                        ).routines[0].intVariables["routineStartTime"] ?: 0
+                            )
+                        }",
+                        Logger.LogLevel.INFO
                     )
                 }
             }

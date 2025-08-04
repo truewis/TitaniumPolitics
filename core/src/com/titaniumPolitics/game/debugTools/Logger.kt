@@ -7,9 +7,9 @@ class Logger {
     companion object {
         lateinit var gState: GameState
         fun write(txt: String, level: LogLevel = LogLevel.WARNING) {
-            write("[${gState.formatTime(, LogLevel.INFO)}]$level: $txt")
+            println("[${gState.formatTime()}]$level: $txt")
             if (level == LogLevel.ERROR || level == LogLevel.WARNING)
-                write("GameState Dumped: ${gState.dump(, LogLevel.INFO)}")
+                println("GameState Dumped: ${gState.dump()}")
 
         }
     }

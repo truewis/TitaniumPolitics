@@ -96,7 +96,6 @@ class GameEngine(val gameState: GameState) {
     //This function is called at the end of each turn, after all the characters have performed their actions.
     fun progression() {
         gameState.time += 1
-        Logger.write("[${gameState.formatTime(, Logger.LogLevel.INFO)}]")
         gameState.places.forEach {
             it.value.distributeWorkers()
         }
@@ -166,7 +165,7 @@ class GameEngine(val gameState: GameState) {
                         char.place.name
                     }, time=${gameState.formatTime()}, which is not valid. This may be a bug."
                 )
-                Logger.write(Json.encodeToString(GameAction.serializer(, Logger.LogLevel.INFO), action))
+                Logger.write(Json.encodeToString(GameAction.serializer(), action), Logger.LogLevel.INFO)
                 throw Exception("Non player character ${char.name} is performing an invalid action.")
             }
             if (action.sbjCharacter != char.name) {
@@ -175,7 +174,7 @@ class GameEngine(val gameState: GameState) {
                         char.place.name
                     }, time=${gameState.formatTime()}, which is not targeting itself. This may be a bug."
                 )
-                Logger.write(Json.encodeToString(GameAction.serializer(, Logger.LogLevel.INFO), action))
+                Logger.write(Json.encodeToString(GameAction.serializer(), action), Logger.LogLevel.INFO)
             }
             if (action.tgtPlace != char.place.name) {
                 Logger.write(
@@ -183,7 +182,7 @@ class GameEngine(val gameState: GameState) {
                         char.place.name
                     }, time=${gameState.formatTime()}, which is not targeting its own place. This may be a bug."
                 )
-                Logger.write(Json.encodeToString(GameAction.serializer(, Logger.LogLevel.INFO), action))
+                Logger.write(Json.encodeToString(GameAction.serializer(), action), Logger.LogLevel.INFO)
             }
 
         }
