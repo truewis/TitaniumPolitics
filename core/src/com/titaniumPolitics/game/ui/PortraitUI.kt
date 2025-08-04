@@ -7,9 +7,12 @@ import com.badlogic.gdx.scenes.scene2d.Group
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable
 import com.rafaskoberg.gdx.typinglabel.TypingLabel
+import com.titaniumPolitics.game.core.AgendaType
 import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.core.ReadOnly
 import com.titaniumPolitics.game.core.gameActions.GameAction
+import com.titaniumPolitics.game.core.gameActions.NewAgenda
+import com.titaniumPolitics.game.debugTools.Logger
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
 import ktx.scene2d.*
@@ -78,7 +81,44 @@ class PortraitUI(character: String, var gameState: GameState, scale: Float) : Ta
 
         if (displayTextBubble) {
             bubble.isVisible = true
-            speech.restart(ReadOnly.script(action.javaClass.simpleName, action))
+            var text = ""
+            if (action is NewAgenda) {
+                when (action.agenda.type) {
+                    AgendaType.PROOF_OF_WORK -> text = ReadOnly.script("NewAgenda-ProofOfWork")
+                    AgendaType.NOMINATE -> text =
+                        ReadOnly.script("NewAgenda-Nominate").format(action.agenda.subjectParams["character"])
+
+                    AgendaType.REQUEST -> text = ReadOnly.script("NewAgenda-Request").format(
+                        ReadOnly.prop(
+                            action.agenda.attachedRequest!!
+                                .action::class.simpleName!!
+                        ), action.agenda.attachedRequest!!.issuedTo.first()
+                    )
+
+                    AgendaType.PRAISE -> text =
+                        ReadOnly.script("NewAgenda-Praise").format(action.agenda.subjectParams["character"])
+
+                    AgendaType.DENOUNCE -> text =
+                        ReadOnly.script("NewAgenda-Denounce").format(action.agenda.subjectParams["character"])
+
+                    AgendaType.PRAISE_PARTY -> text =
+                        ReadOnly.script("NewAgenda-PraiseParty").format(action.agenda.subjectParams["party"])
+
+                    AgendaType.DENOUNCE_PARTY -> text =
+                        ReadOnly.script("NewAgenda-DenounceParty").format(action.agenda.subjectParams["party"])
+
+                    AgendaType.BUDGET_PROPOSAL -> ReadOnly.script("NewAgenda-BudgetProposal")
+                    AgendaType.BUDGET_RESOLUTION -> ReadOnly.script("NewAgenda-BudgetResolution")
+                    AgendaType.APPOINT_MEETING -> text =
+                        ReadOnly.script("NewAgenda-AppointMeeting")
+
+                    AgendaType.FIRE_MANAGER -> text =
+                        ReadOnly.script("NewAgenda-FireManager").format(action.agenda.subjectParams["character"])
+                }
+            } else {
+                text = ReadOnly.script(action.javaClass.simpleName, action)
+            }
+            speech.restart(text)
         } else {
             bubble.isVisible = false
         }

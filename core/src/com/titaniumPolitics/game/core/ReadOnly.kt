@@ -1,6 +1,7 @@
 package com.titaniumPolitics.game.core
 
 import com.badlogic.gdx.Gdx
+import com.titaniumPolitics.game.debugTools.Logger
 import kotlinx.serialization.json.*
 import java.io.File
 import java.io.FileInputStream
