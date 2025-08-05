@@ -1,4 +1,9 @@
 {
+  "phosphorite": {
+    "baseEGP(g/g)": 1,
+    "demandPopElasticity(g/day/person)": 1,
+    "demandPriceElasticity": 0.2
+  },
   "ration": {
     "baseEGP(g/g)": 1e-3,
     "demandPopElasticity(g/day/person)": 1000,
@@ -11,67 +16,67 @@
   },
   "hydrogen": {
     "baseEGP(g/g)": 1e-3,
-    "demandPopElasticity(g/day/person)": 1000,
+    "demandPopElasticity(g/day/person)": 0,
     "demandPriceElasticity": 1
   },
   "organics": {
     "baseEGP(g/g)": 1e-3,
-    "demandPopElasticity(g/day/person)": 1000,
+    "demandPopElasticity(g/day/person)": 0,
     "demandPriceElasticity": 1
   },
   "lightMetal": {
-    "baseEGP(g/g)": 1e-3,
-    "demandPopElasticity(g/day/person)": 1000,
+    "baseEGP(g/g)": 2e-4,
+    "demandPopElasticity(g/day/person)": 0,
     "demandPriceElasticity": 1
   },
   "heavyMetal": {
-    "baseEGP(g/g)": 1e-3,
-    "demandPopElasticity(g/day/person)": 1000,
+    "baseEGP(g/g)": 1e-4,
+    "demandPopElasticity(g/day/person)": 0,
     "demandPriceElasticity": 1
   },
   "rareMetal": {
-    "baseEGP(g/g)": 1e-3,
-    "demandPopElasticity(g/day/person)": 1000,
-    "demandPriceElasticity": 1
+    "baseEGP(g/g)": 1e-1,
+    "demandPopElasticity(g/day/person)": 0,
+    "demandPriceElasticity": 2
   },
   "silicon": {
-    "baseEGP(g/g)": 1e-3,
-    "demandPopElasticity(g/day/person)": 1000,
+    "baseEGP(g/g)": 5e-2,
+    "demandPopElasticity(g/day/person)": 0,
     "demandPriceElasticity": 1
   },
   "plastic": {
     "baseEGP(g/g)": 1e-3,
-    "demandPopElasticity(g/day/person)": 1000,
-    "demandPriceElasticity": 1
+    "demandPopElasticity(g/day/person)": 0,
+    "demandPriceElasticity": 2
   },
   "glass": {
     "baseEGP(g/g)": 1e-3,
-    "demandPopElasticity(g/day/person)": 1000,
+    "demandPopElasticity(g/day/person)": 0,
     "demandPriceElasticity": 1
   },
   "ceramic": {
-    "baseEGP(g/g)": 1e-3,
-    "demandPopElasticity(g/day/person)": 1000,
+    "baseEGP(g/g)": 2e-3,
+    "demandPopElasticity(g/day/person)": 0,
     "demandPriceElasticity": 1
   },
   "diamond": {
-    "baseEGP(g/g)": 1e-3,
-    "demandPopElasticity(g/day/person)": 1000,
-    "demandPriceElasticity": 1
+    "baseEGP(g/g)": 1e-1,
+    "demandPopElasticity(g/day/person)": 0,
+    "demandPriceElasticity": 2
   },
   "helium": {
-    "baseEGP(g/g)": 1e-3,
-    "demandPopElasticity(g/day/person)": 1000,
+    "baseEGP(g/g)": 1e-1,
+    "demandPopElasticity(g/day/person)": 0,
     "demandPriceElasticity": 1
   },
   "glassClothes": {
     "baseEGP(g/g)": 1e-3,
-    "demandPopElasticity(g/day/person)": 1000,
-    "demandPriceElasticity": 1
+    "demandPopElasticity(g/day/person)": 10,
+    "demandPriceElasticity": 0.5
   },
   "cottonClothes": {
-    "baseEGP(g/g)": 1e-3,
-    "demandPopElasticity(g/day/person)": 1000,
-    "demandPriceElasticity": 1
+    "baseEGP(g/g)": 1e-2,
+    "demandPopElasticity(g/day/person)": 1,
+    "demandPriceElasticity": 2
   }
 }
