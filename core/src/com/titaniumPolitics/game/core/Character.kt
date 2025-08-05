@@ -1,8 +1,13 @@
 package com.titaniumPolitics.game.core
 
 import com.titaniumPolitics.game.core.ReadOnly.const
+import com.titaniumPolitics.game.core.gameActions.ClearAccidentScene
 import com.titaniumPolitics.game.core.gameActions.GameAction
+import com.titaniumPolitics.game.core.gameActions.InvestigateAccidentScene
 import com.titaniumPolitics.game.core.gameActions.NewAgenda
+import com.titaniumPolitics.game.core.gameActions.OfficialResourceTransfer
+import com.titaniumPolitics.game.core.gameActions.Repair
+import com.titaniumPolitics.game.core.gameActions.UnofficialResourceTransfer
 import kotlinx.serialization.Serializable
 import kotlin.math.max
 
@@ -146,20 +151,64 @@ class Character : GameStateElement() {
 
     fun actionValue(action: GameAction): Double {
         //TODO: the value of the action should be calculated based on the expected outcome.
-        //TODO: Action to remove rivals is more valuable.
-        //TODO: Action to acquire resources is more valuable.
 
-        //Action to repair the character's apparatus is more valuable.
-        if (action.javaClass.simpleName == "repair" && parent.parties[parent.places[action.tgtPlace]!!.responsibleDivision]?.members?.contains(
-                name
-            ) == true
-        ) {
-            val urgency =
-                100.0 - parent.places[action.tgtPlace]!!.apparatuses.sumOf { it.durability } / parent.places[action.tgtPlace]!!.apparatuses.size
-            return urgency
+        when (action) {
+            is UnofficialResourceTransfer -> {
+                //Action value of unofficial resource transfer from me is equal to the value of the resources transferred.
+                if (action.sbjCharacter == name && action.fromHome)
+                    return -itemValue(action.resources)
+                if (action.toWhere == "home_$name")
+                    return itemValue(action.resources)
+            }
+
+            is OfficialResourceTransfer -> {
+                //Action value of official resource transfer depends on the division integrity.
+                //for not, set it to 0.
+                return .0
+            }
+
+            is Repair -> {
+                //Fixing the apparatus where I am the manager is more valuable.
+                //This scales with division integrity.
+                val party = parent.parties.filter { name in it.value.members }.keys.firstOrNull() ?: return 0.0
+                val factor = if (place.manager == name) 2.0 else 1.0
+                val urgency =
+                    1.0 - parent.places[action.tgtPlace]!!.apparatuses.sumOf { it.durability } / parent.places[action.tgtPlace]!!.apparatuses.size / 100.0
+                if (parent.places[action.tgtPlace]!!.responsibleDivision == party) {
+                    return urgency * parent.getPartyMutuality(party) * factor
+                }
+                //Otherwise, the action value is 0.
+                return 0.0
+            }
+
+            is ClearAccidentScene -> {
+                //Clearing the accident scene is more valuable if I am the manager of the place.
+                if (parent.places[action.tgtPlace]!!.responsibleDivision == division?.name) {
+                    val factor = if (place.manager == name) 2.0 else 1.0
+                    return factor * parent.getPartyMutuality(division!!.name)
+                }
+                return 0.0
+            }
+
+            is InvestigateAccidentScene -> {
+                //I hate someone investigating the accident scene where I am the manager.
+                if (parent.places[action.tgtPlace]!!.responsibleDivision == division?.name) {
+                    if (place.manager == name && action.sbjCharacter != name) {
+                        return (const("mutualityMax") - parent.getPartyMutuality(division!!.name)) * 0.5
+                    }
+                }
+                return 0.0
+            }
+
+            else -> {
+
+            }
         }
 
-        return 1.0
+
+        //TODO: Action to remove rivals is more valuable.
+
+        return .0
     }
 
     //The character's preference of this information spreading. -1 is hate, 0 is neutral, 1 is like.
