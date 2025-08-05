@@ -16,7 +16,6 @@ import kotlin.math.min
 class Place : GameStateElement() {
     override val name: String
         get() = parent.places.filter { it.value == this }.keys.first()
-    var resources = Resources()
 
     val connectedHomes: List<String>
         get() {
@@ -31,6 +30,23 @@ class Place : GameStateElement() {
             return null
         }
     var manager: String? = null
+
+
+    var resources = Resources()
+    val maxResources: Resources
+        get() {
+            val result = Resources()
+            apparatuses.forEach {
+                if (it.durability > .0 && it.isStorage)
+                    result[it.storageType.first] += it.storageType.second
+            }
+            return result
+        }
+
+    val marketSupplyEstimateWeekly = Resources()
+    val marketSupplyEstimateHours =
+        168 // For the marketSupplyEstimate, we have to average the distribution over this many hours, and convert it to a weekly basis
+    val marketSupplyEstimateR = 1 - 1.0 / marketSupplyEstimateHours
     var gasResources = Resources("oxygen" to 20000.0, "carbonDioxide" to 100.0)
     fun gasPressure(gasName: String): Double =
         gasResources[gasName] / ((ReadOnly.gasJson[gasName]!!.jsonObject["density"]!!.jsonPrimitive.float)) * (temperature / 273.15) / volume * 101325
@@ -79,15 +95,6 @@ class Place : GameStateElement() {
 
 
             //return characters.filter { it } + currentWorker + idler +
-        }
-    val maxResources: Resources
-        get() {
-            val result = Resources()
-            apparatuses.forEach {
-                if (it.durability > .0 && it.isStorage)
-                    result[it.storageType.first] += it.storageType.second
-            }
-            return result
         }
 
     var workHoursStart = 0
@@ -228,7 +235,10 @@ class Place : GameStateElement() {
             }
             apparatus.currentDistribution.forEach {
                 workers.first().resources[it.key] += it.value * dth
+                marketSupplyEstimateWeekly[it.key] += it.value * dth //Market supply estimate is updated.
+
             }
+            marketSupplyEstimateWeekly *= marketSupplyEstimateR
             apparatus.currentAbsorption.forEach {
                 gasResources[it.key] -= it.value * dth
             }

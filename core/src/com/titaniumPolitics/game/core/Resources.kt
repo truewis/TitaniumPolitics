@@ -59,6 +59,12 @@ class Resources() {
         return result
     }
 
+    operator fun timesAssign(r: Double) {
+        _resources.forEach { (key, value) ->
+            this[key] = value * r
+        }
+    }
+
     operator fun minus(r1: Resources): Resources {
         if (!contains(r1)) throw Exception("OHH!")
         val result = Resources()

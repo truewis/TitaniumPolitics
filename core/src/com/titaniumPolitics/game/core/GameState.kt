@@ -1,6 +1,5 @@
 package com.titaniumPolitics.game.core
 
-import com.titaniumPolitics.game.debugTools.Logger
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
@@ -405,9 +404,22 @@ class GameState {
 
     //Market price per Kg, units of mutuality
     fun getMarketPrice(item: String): Double {
+
+        val totalMarketSupplyEstimateWeekly = places.values.sumOf { it.marketSupplyEstimateWeekly[item] }
+
+        val totalMarketBaseDemandEstimateWeekly =
+            pop / 1000.0 * (ReadOnly.resJson[item]?.jsonObject?.get("demandPopElasticity(g/day/person)")?.jsonPrimitive?.double
+                ?: .0) //This is base demand before elasticity is applied.
+
+        val elasticityModifier =
+            1 + (totalMarketBaseDemandEstimateWeekly / totalMarketSupplyEstimateWeekly - 1) / (ReadOnly.resJson[item]?.jsonObject?.get(
+                "demandPriceElasticity"
+            )?.jsonPrimitive?.double
+                ?: 1.0)
+
         return (ReadOnly.resJson[item]?.jsonObject?.get("baseEGP(g/g)")?.jsonPrimitive?.double
             ?: .0) * 1000 /* Convert to Kg */ *
-                (ReadOnly.const("mutualityMax") * 1e-3 /*1000 egP = 100 mutuality*/)
+                (ReadOnly.const("mutualityMax") * 1e-3 /*1000 egP = 100 mutuality*/) * elasticityModifier
     }
 
     companion object {
