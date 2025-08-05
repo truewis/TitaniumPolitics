@@ -6,6 +6,9 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.double
+import kotlinx.serialization.json.jsonObject
+import kotlinx.serialization.json.jsonPrimitive
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
@@ -397,6 +400,14 @@ class GameState {
 
     fun formatClock(): String {
         return formatClock(time)
+    }
+
+
+    //Market price per Kg, units of mutuality
+    fun getMarketPrice(item: String): Double {
+        return (ReadOnly.resJson[item]?.jsonObject?.get("baseEGP(g/g)")?.jsonPrimitive?.double
+            ?: .0) * 1000 /* Convert to Kg */ *
+                (ReadOnly.const("mutualityMax") * 1e-3 /*1000 egP = 100 mutuality*/)
     }
 
     companion object {

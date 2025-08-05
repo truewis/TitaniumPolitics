@@ -123,33 +123,21 @@ class Character : GameStateElement() {
     }
 
     fun itemValueModifier(item: String): Double {
+        when (item) {
+            "ration" -> return max(
+                (reliant) / (resources["ration"] + 1.0),
+                1.0
+            )//1 kg of ration is enough for 1 people for a day.
+            "water" -> max((reliant) / (resources["water"] + 1.0), 1.0)//1 kg of water is enough for 1 people for a day.
+        }
         return 1.0 //TODO: Implement item value modifier based on the character's trait.
     }
 
     //Item value is normalized to mutuality.
     //TODO: value may be affected by power dynamics.
     fun itemValue(item: String): Double {
-        val ret = when (item) {
-            //Value of ration and water is based on the current need of the character.
-            "ration" -> 5.0e-2 * (reliant) / (resources["ration"] + 1.0)
-            "water" -> (reliant) / (resources["water"] + 1.0)
-            "hydrogen" -> 1.0e-2
-            "organics" -> 5.0e-2
-            "lightMetal" -> 1.0e-2
-            "heavyMetal" -> 1.0e-2
-            "rareMetal" -> 5.0e-2
-            "silicon" -> 1.0e-2
-            "plastic" -> 10.0e-2
-            "glass" -> 1.0e-2
-            "ceramic" -> 1.0e-2
-            "diamond" -> 3.0e-2
-            "helium" -> 1.0e-2
-            "glassClothes" -> 1.0e-2
-            "cottonClothes" -> 10.0e-2
-
-            else -> 0.0
-        }
-        return ret * const("mutualityMax")
+        val ret = parent.getMarketPrice(item)
+        return ret * itemValueModifier(item) * const("mutualityMax")
 
     }
 

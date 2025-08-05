@@ -36,6 +36,10 @@ object ReadOnly {
         Gdx.files?.internal("json/apparatus.json")?.readString() ?: File("../assets/json/apparatus.json").readText()
     ).jsonObject
 
+    val resJson = Json.parseToJsonElement(
+        Gdx.files?.internal("json/resources.json")?.readString() ?: File("../assets/json/resources.json").readText()
+    ).jsonObject
+
     val props = javaClass.classLoader.getResourceAsStream("texts/ui.properties")?.use {
         Properties().apply { load(it) }
     } ?: Properties().apply { load(FileInputStream(File("../assets/texts/ui.properties"))) }
