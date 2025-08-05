@@ -9,6 +9,7 @@ import com.titaniumPolitics.game.core.Request
 import com.titaniumPolitics.game.core.Resources
 import com.titaniumPolitics.game.core.gameActions.GameAction
 import com.titaniumPolitics.game.core.gameActions.NewAgenda
+import com.titaniumPolitics.game.core.gameActions.Repair
 import com.titaniumPolitics.game.core.gameActions.UnofficialResourceTransfer
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
@@ -135,56 +136,102 @@ sealed class Routine() {
 
         //Compute the total item value of each of the issuers.
         val issuers = requests.flatMap { it!!.issuedBy }.distinct()
-        val issuersValues =
-            requests.flatMap { it!!.issuedBy }
+        val issuersItemValues =
+            issuers
                 .map { n1 -> Pair(n1, char.itemValue(gState.characters[n1]!!.resources)) }
 
-        //Find the issuer with the highest item value.
-        val bestIssuer = issuersValues.maxByOrNull { it.second }?.first ?: return null
+        val issuersActionValues =
+            issuers
+                .map { n1 -> Pair(n1, askForValuableAction(n1, name)?.let { char.actionValue(it) } ?: .0) }
 
-        //If the best issuer's item value is higher than the total value of the requests, propose a new agenda to match the requests.
-        if (issuersValues.maxOf { it.second } > totalValue) {
 
-            //Pick resources from the best issuer until the total value of the requests is met.
-            val resourcesToTransfer = gState.characters[bestIssuer]!!.resources
-                .keys.filter { char.itemValue(it) > 0 }
+        val maxItemValue = issuersItemValues.maxOfOrNull { it.second } ?: 0.0
+        val maxActionValue = issuersActionValues.maxOfOrNull { it.second } ?: 0.0
 
-            // Sort the resource keys by my relative demand.
-            val sortedResources = resourcesToTransfer.sortedByDescending { char.itemValueModifier(it) }
+        //If the maximum value is 0, then there is no matching request.
+        if (maxItemValue <= 0 && maxActionValue <= 0) return null
 
-            // Pick resources until the total value of the requests is met.
-            val resourcesToTransferMap = hashMapOf<String, Double>()
-            var remainingValue = totalValue
-            for (resource in sortedResources) {
-                if (remainingValue <= 0) break
-                val amount = min(
-                    gState.characters[bestIssuer]!!.resources[resource],
-                    remainingValue
-                )
-                if (amount > 0) {
-                    resourcesToTransferMap[resource] = amount
-                    remainingValue -= amount * char.itemValueModifier(resource)
+        if (maxItemValue > maxActionValue) {
+
+            //Find the issuer with the highest item value.
+            val bestIssuer = issuersItemValues.maxByOrNull { it.second }?.first ?: return null
+
+            //If the best issuer's item value is higher than the total value of the requests, propose a new agenda to match the requests.
+            if (issuersItemValues.maxOf { it.second } > totalValue) {
+
+                //Pick resources from the best issuer until the total value of the requests is met.
+                val resourcesToTransfer = gState.characters[bestIssuer]!!.resources
+                    .keys.filter { char.itemValue(it) > 0 }
+
+                // Sort the resource keys by my relative demand.
+                val sortedResources = resourcesToTransfer.sortedByDescending { char.itemValueModifier(it) }
+
+                // Pick resources until the total value of the requests is met.
+                val resourcesToTransferMap = hashMapOf<String, Double>()
+                var remainingValue = totalValue
+                for (resource in sortedResources) {
+                    if (remainingValue <= 0) break
+                    val amount = min(
+                        gState.characters[bestIssuer]!!.resources[resource],
+                        remainingValue
+                    )
+                    if (amount > 0) {
+                        resourcesToTransferMap[resource] = amount
+                        remainingValue -= amount * char.itemValueModifier(resource)
+                    }
+                }
+
+
+                return NewAgenda(name, place).also {
+                    it.agenda = MeetingAgenda(
+                        AgendaType.REQUEST,
+                        author = name,
+                        attachedRequest = Request(
+                            action = UnofficialResourceTransfer(bestIssuer, "home_$bestIssuer").apply {
+                                fromHome = true
+                                toWhere = "home_$name"
+                                resources = Resources(resourcesToTransferMap)
+                            },
+                            issuedTo = hashSetOf(bestIssuer)
+                        )
+                    )
                 }
             }
+        } else {
+            //If the maximum action value is higher than the total value of the requests, propose a new agenda to match the requests.
+            val bestActionIssuer = issuersActionValues.maxByOrNull { it.second }?.first ?: return null
+            val action = askForValuableAction(bestActionIssuer, name) ?: return null
 
-
-            return NewAgenda(name, place).also {
-                it.agenda = MeetingAgenda(
-                    AgendaType.REQUEST,
-                    author = name,
-                    subjectParams = hashMapOf("character" to bestIssuer),
-                    attachedRequest = Request(
-                        action = UnofficialResourceTransfer(bestIssuer, "home_$bestIssuer").apply {
-                            fromHome = true
-                            toWhere = "home_$name"
-                            resources = Resources(resourcesToTransferMap)
-                        },
-                        issuedTo = issuers.toHashSet()
+            if (gState.characters[bestActionIssuer]!!.actionValue(action) >= totalValue) {
+                return NewAgenda(name, place).also {
+                    it.agenda = MeetingAgenda(
+                        AgendaType.REQUEST,
+                        author = name,
+                        attachedRequest = Request(
+                            action = action,
+                            issuedTo = hashSetOf(bestActionIssuer)
+                        )
                     )
-                )
+                }
             }
         }
 
+        return null
+    }
+
+    fun askForValuableAction(who: String, name: String): GameAction? {
+        val tgtChar = gState.characters[who] ?: return null
+        if ("engineer" in tgtChar.trait) {
+            //If the place I am managing has a broken apparatus, request repair.
+            gState.places.values.filter { it.manager == name }.forEach { placeObj ->
+                if (placeObj.apparatuses.any { it.durability < 50f })
+                    return Repair(who, placeObj.name).apply {
+                        injectParent(gState)
+                    }
+            }
+
+
+        }
         return null
     }
 }
