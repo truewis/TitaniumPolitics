@@ -4,6 +4,7 @@ import com.titaniumPolitics.game.core.AgendaType
 import com.titaniumPolitics.game.core.Meeting
 import com.titaniumPolitics.game.core.MeetingAgenda
 import com.titaniumPolitics.game.core.ReadOnly
+import com.titaniumPolitics.game.core.Request
 import com.titaniumPolitics.game.core.gameActions.*
 import kotlinx.serialization.Serializable
 
@@ -69,6 +70,13 @@ class AttendPrivateMeetingRoutine : Routine(), IMeetingRoutine {
             }
         } else {
             proposeProofOfWork(conf, name, place)?.let { return it }
+
+            //If there is a new request issued to me, and there is no matching request from me, try to match it.
+            val reqAgendas = conf.agendas.filter { it.type == AgendaType.REQUEST }
+            if (reqAgendas.any { name in it.attachedRequest!!.issuedTo } && reqAgendas.none { name in it.attachedRequest!!.issuedBy }) {
+                matchRequests(conf, name, place)?.let { return it }
+            }
+
 
             //If nothing else to talk about, end the speech. The next speaker is the character with the highest mutuality.
             return EndSpeech(name, place).also {

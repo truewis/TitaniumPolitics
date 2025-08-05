@@ -113,6 +113,10 @@ class Character : GameStateElement() {
 
     }
 
+    fun itemValueModifier(item: String): Double {
+        return 1.0 //TODO: Implement item value modifier based on the character's trait.
+    }
+
     //Item value is normalized to mutuality.
     //TODO: value may be affected by power dynamics.
     fun itemValue(item: String): Double {

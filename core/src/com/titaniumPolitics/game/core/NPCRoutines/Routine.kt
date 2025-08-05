@@ -5,11 +5,15 @@ import com.titaniumPolitics.game.core.GameEngine
 import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.core.Meeting
 import com.titaniumPolitics.game.core.MeetingAgenda
+import com.titaniumPolitics.game.core.Request
+import com.titaniumPolitics.game.core.Resources
 import com.titaniumPolitics.game.core.gameActions.GameAction
 import com.titaniumPolitics.game.core.gameActions.NewAgenda
+import com.titaniumPolitics.game.core.gameActions.UnofficialResourceTransfer
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 import java.util.*
+import kotlin.math.min
 
 //Trying implementing design pattern with function call stack is a bad idea because it is hard to debug.
 //Routine was designed to be independent of the gameState, but it is not the case anymore.
@@ -108,7 +112,7 @@ sealed class Routine() {
         if (conf.agendas.none { it.type == AgendaType.PROOF_OF_WORK }) {
             gState.requests.values.firstOrNull {
                 name in it.issuedBy && it.issuedTo.intersect(conf.currentCharacters)
-                    .isNotEmpty() && !it.completed
+                    .isNotEmpty() && !it.completed && conf.agendas.none { agenda -> agenda.type == AgendaType.REQUEST && agenda.attachedRequest == it } /*Do not demand the request submitted in this meeting to be proved right away.*/
             }?.let { req ->
                 return NewAgenda(name, place).also {
                     it.agenda = MeetingAgenda(AgendaType.PROOF_OF_WORK, name, attachedRequest = req)
@@ -116,6 +120,71 @@ sealed class Routine() {
             }
 
         }
+        return null
+    }
+
+    fun matchRequests(conf: Meeting, name: String, place: String): GameAction? {
+        //Find all requests in this meeting that is issued to me.
+        val requests = conf.agendas.filter { it.type == AgendaType.REQUEST }.map { it.attachedRequest }
+            .filter { it != null && name in it.issuedTo }
+        val char = gState.characters[name]!!
+        if (requests.isEmpty()) return null
+
+        //Compute the aggregate value of the requests.
+        val totalValue = requests.sumOf { char.actionValue(it!!.action) }
+
+        //Compute the total item value of each of the issuers.
+        val issuers = requests.flatMap { it!!.issuedBy }.distinct()
+        val issuersValues =
+            requests.flatMap { it!!.issuedBy }
+                .map { n1 -> Pair(n1, char.itemValue(gState.characters[n1]!!.resources)) }
+
+        //Find the issuer with the highest item value.
+        val bestIssuer = issuersValues.maxByOrNull { it.second }?.first ?: return null
+
+        //If the best issuer's item value is higher than the total value of the requests, propose a new agenda to match the requests.
+        if (issuersValues.maxOf { it.second } > totalValue) {
+
+            //Pick resources from the best issuer until the total value of the requests is met.
+            val resourcesToTransfer = gState.characters[bestIssuer]!!.resources
+                .keys.filter { char.itemValue(it) > 0 }
+
+            // Sort the resource keys by my relative demand.
+            val sortedResources = resourcesToTransfer.sortedByDescending { char.itemValueModifier(it) }
+
+            // Pick resources until the total value of the requests is met.
+            val resourcesToTransferMap = hashMapOf<String, Double>()
+            var remainingValue = totalValue
+            for (resource in sortedResources) {
+                if (remainingValue <= 0) break
+                val amount = min(
+                    gState.characters[bestIssuer]!!.resources[resource],
+                    remainingValue
+                )
+                if (amount > 0) {
+                    resourcesToTransferMap[resource] = amount
+                    remainingValue -= amount * char.itemValueModifier(resource)
+                }
+            }
+
+
+            return NewAgenda(name, place).also {
+                it.agenda = MeetingAgenda(
+                    AgendaType.REQUEST,
+                    author = name,
+                    subjectParams = hashMapOf("character" to bestIssuer),
+                    attachedRequest = Request(
+                        action = UnofficialResourceTransfer(bestIssuer, "home_$bestIssuer").apply {
+                            fromHome = true
+                            toWhere = "home_$name"
+                            resources = Resources(resourcesToTransferMap)
+                        },
+                        issuedTo = issuers.toHashSet()
+                    )
+                )
+            }
+        }
+
         return null
     }
 }
