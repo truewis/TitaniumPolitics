@@ -37,7 +37,7 @@ class Character : GameStateElement() {
     var preparedInfoKeys =
         arrayListOf<String>()//Information that can be presented in meetings. Note that preparing the information prevents it from expiring.
 
-    var stats = hashMapOf<String, Int>() //Stats of the character. Used to calculate the effectiveness of actions.
+    var stats = Stat() //Stats of the character. Used to calculate the effectiveness of actions.
 
     var health = .0
         set(value) {
@@ -190,6 +190,44 @@ class Character : GameStateElement() {
                     }
                 }
                 return 0.0
+            }
+
+            is NewAgenda -> {
+                when (action.agenda.type) {
+                    AgendaType.PROOF_OF_WORK -> return 0.0 //TODO()
+                    AgendaType.NOMINATE -> {
+                        //If it is someone else nominating me, like. If it is nominating someone else, dislike. Neutral if it is not my division.
+                        if (action.agenda.subjectParams["character"] == name)
+                            return 20.0
+                        else if (action.agenda.subjectParams["party"] == division?.name)
+                            return -10.0
+                        return 0.0
+
+                    }
+
+                    AgendaType.REQUEST -> return 0.0 // Prevent nested request!
+                    AgendaType.PRAISE -> {
+                        //Based on the party's friendliness.
+                    }// TODO()
+                    AgendaType.DENOUNCE -> {
+                        //Based on the party's friendliness.
+                    }// TODO()
+                    AgendaType.PRAISE_PARTY -> {
+                        //Based on the party's friendliness.
+                    }// TODO()
+                    AgendaType.DENOUNCE_PARTY -> {
+                        //Based on the party's friendliness.
+                    }// TODO()
+                    AgendaType.BUDGET_PROPOSAL -> return 0.0 // TODO()
+                    AgendaType.BUDGET_RESOLUTION -> return 0.0 // TODO()
+                    AgendaType.APPOINT_MEETING -> return 0.0// TODO()
+                    AgendaType.FIRE_MANAGER -> {
+                        //If firing me, heavy dislike.
+                        if (action.agenda.subjectParams["character"] == name)
+                            return -30.0
+                        //Otherwise, if firing my friend, dislike.
+                    }
+                }
             }
 
             else -> {
