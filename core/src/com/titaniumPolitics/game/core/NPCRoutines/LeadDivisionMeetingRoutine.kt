@@ -157,7 +157,7 @@ class LeadDivisionMeetingRoutine : Routine(), IMeetingRoutine {
             if (productivity(name, minProdApp) < gState.laborValuePerHour) {
                 val reductionAmount = max(minProdApp.plannedWorker / 5, 1)
                 val wantPlace = gState.getApparatusPlace(minProdApp.ID)
-                if (wantPlace.manager != null) {
+                if (wantPlace.manager != null && wantPlace.manager!! in charObj.currentMeeting!!.currentCharacters) {
                     //Fill in the agenda based on variables in the routine, resource and character.
                     val agenda = MeetingAgenda(AgendaType.REQUEST, name).apply {
                         attachedRequest = Request(
@@ -192,7 +192,7 @@ class LeadDivisionMeetingRoutine : Routine(), IMeetingRoutine {
                 val increaseAmount = max(maxProdApp.plannedWorker / 5, 1)
                 val wantPlace = gState.getApparatusPlace(maxProdApp.ID)
                 //Fill in the agenda based on variables in the routine, resource and character.
-                if (wantPlace.manager != null) {
+                if (wantPlace.manager != null && wantPlace.manager!! in charObj.currentMeeting!!.currentCharacters) {
                     val agenda = MeetingAgenda(AgendaType.REQUEST, name).apply {
                         attachedRequest = Request(
                             SetWorkers(
