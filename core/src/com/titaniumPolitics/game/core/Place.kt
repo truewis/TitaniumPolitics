@@ -274,13 +274,9 @@ class Place : GameStateElement() {
 
     fun resourceShortOfHourly(app: Apparatus): String? {
         val dth = 3600
-        app.currentConsumption.forEach {
+        (app.currentConsumption + app.currentDistribution).forEach {
             if ((resources[it.key]) < it.value * dth)
                 return it.key //If the resource is less than an hour worth of consumption, return the resource name.
-        }
-        app.currentAbsorption.forEach {
-            if ((gasResources[it.key]) < it.value * dth)
-                return it.key //If the resource is less than a unit time worth of consumption, return the resource name.
         }
         return null
 

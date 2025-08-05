@@ -128,9 +128,7 @@ class Apparatus {
 
                 }
             }
-            //Distribute wages
-            result["ration"] =
-                (result["ration"] ?: .0) + currentWorker * laborValuePerHour * const("WorkerWaterConsumptionRate")
+            //Don't Distribute wages here.
             return result
         }
     val currentAbsorption: Map<String, Double>
