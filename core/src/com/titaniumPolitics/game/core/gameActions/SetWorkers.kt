@@ -37,4 +37,8 @@ class SetWorkers(override val sbjCharacter: String, override val tgtPlace: Strin
         return parent.getApparatusPlace(apparatusID).manager == sbjCharacter
     }
 
+    override fun deltaWill(): Double {
+        return super.deltaWill() * sbjCharObj.stats.pScale
+    }
+
 }

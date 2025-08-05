@@ -42,7 +42,11 @@ class Talk(override val sbjCharacter: String, override val tgtPlace: String) : G
             super.execute()
         }
         //The person's mutuality toward the subject character decreases.
-        parent.setMutuality(who, sbjCharacter, -ReadOnly.const("talkMutualityDecrease"))
+        parent.setMutuality(
+            who,
+            sbjCharacter,
+            -ReadOnly.const("talkMutualityDecrease") * parent.characters[who]!!.stats.pScale
+        )
     }
 
     override fun isValid(): Boolean {

@@ -63,18 +63,30 @@ class NewAgenda(override val sbjCharacter: String, override val tgtPlace: String
     override fun deltaWill(): Double {
         val mt = parent.characters[sbjCharacter]!!.currentMeeting!!
         when (agenda.type) {
-            AgendaType.PRAISE -> return parent.getMutuality(sbjCharacter, agenda.subjectParams["character"]!!) * 0.1
-            AgendaType.DENOUNCE -> return parent.getMutuality(sbjCharacter, agenda.subjectParams["character"]!!) * -0.1
-            AgendaType.NOMINATE -> return parent.getMutuality(sbjCharacter, agenda.subjectParams["character"]!!) * 0.5
-            AgendaType.PRAISE_PARTY -> return parent.getPartyMutuality(
-                mt.involvedParty,
-                agenda.subjectParams["party"]!!
-            ) * 0.1
+            AgendaType.PRAISE -> return parent.getMutNorm(
+                sbjCharacter,
+                agenda.subjectParams["character"]!!
+            ) * 5.0 * sbjCharObj.stats.eScale
 
-            AgendaType.DENOUNCE_PARTY -> return parent.getPartyMutuality(
+            AgendaType.DENOUNCE -> return parent.getMutNorm(
+                sbjCharacter,
+                agenda.subjectParams["character"]!!
+            ) * -7.0 * sbjCharObj.stats.pScale
+
+            AgendaType.NOMINATE -> return parent.getMutNorm(
+                sbjCharacter,
+                agenda.subjectParams["character"]!!
+            ) * 20.0 * sbjCharObj.stats.pScale
+
+            AgendaType.PRAISE_PARTY -> return parent.getPartyMutNorm(
                 mt.involvedParty,
                 agenda.subjectParams["party"]!!
-            ) * -0.1
+            ) * 3.0 * sbjCharObj.stats.eScale
+
+            AgendaType.DENOUNCE_PARTY -> return parent.getPartyMutNorm(
+                mt.involvedParty,
+                agenda.subjectParams["party"]!!
+            ) * -5.0 * sbjCharObj.stats.pScale
 
             else -> return .0
         }
@@ -104,11 +116,11 @@ class NewAgenda(override val sbjCharacter: String, override val tgtPlace: String
                 }
 
                 AgendaType.PRAISE -> {
-                    parent.setMutuality(agenda.subjectParams["character"]!!, sbjCharacter, 3.0 * effectivity)
+                    parent.setMutuality(agenda.subjectParams["character"]!!, sbjCharacter, 5.0 * effectivity)
                 }
 
                 AgendaType.DENOUNCE -> {
-                    parent.setMutuality(agenda.subjectParams["character"]!!, sbjCharacter, -10.0 * effectivity)
+                    parent.setMutuality(agenda.subjectParams["character"]!!, sbjCharacter, -7.0 * effectivity)
                 }
 
                 AgendaType.PRAISE_PARTY -> {
@@ -119,14 +131,14 @@ class NewAgenda(override val sbjCharacter: String, override val tgtPlace: String
                     parent.setPartyMutuality(
                         meeting.involvedParty,
                         agenda.subjectParams["party"]!!,
-                        -10.0 * effectivity
+                        -5.0 * effectivity
                     )
                     //Increase party integrity
                     parent.setPartyMutuality(meeting.involvedParty, meeting.involvedParty, 5.0 * effectivity)
                 }
 
                 AgendaType.NOMINATE -> {
-                    parent.setMutuality(agenda.subjectParams["character"]!!, sbjCharacter, 10.0 * effectivity)
+                    parent.setMutuality(agenda.subjectParams["character"]!!, sbjCharacter, 20.0 * effectivity)
                 }
                 //request is not executed until the end of the meeting. Check Meeting.kt
                 else -> {

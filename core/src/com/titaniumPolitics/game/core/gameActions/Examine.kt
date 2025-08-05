@@ -104,7 +104,7 @@ class Examine(override val sbjCharacter: String, override val tgtPlace: String) 
         var w = super.deltaWill()
         if (parent.characters[sbjCharacter]!!.trait.contains("investigator"))
             w += 10
-        return w
+        return w * sbjCharObj.stats.lScale
     }
 
 }

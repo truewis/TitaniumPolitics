@@ -27,7 +27,7 @@ class EndSpeech(override val sbjCharacter: String, override val tgtPlace: String
     }
 
     override fun deltaWill(): Double {
-        return parent.getMutuality(sbjCharacter, nextSpeaker) * 0.1
+        return parent.getMutuality(sbjCharacter, nextSpeaker) * 0.1 * sbjCharObj.stats.pScale
     }
 
 

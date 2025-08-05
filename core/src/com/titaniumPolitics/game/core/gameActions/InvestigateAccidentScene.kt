@@ -20,4 +20,8 @@ class InvestigateAccidentScene(override val sbjCharacter: String, override val t
         )
     }
 
+    override fun deltaWill(): Double {
+        return super.deltaWill() * sbjCharObj.stats.lScale
+    }
+
 }

@@ -137,7 +137,7 @@ class Character : GameStateElement() {
     //TODO: value may be affected by power dynamics.
     fun itemValue(item: String): Double {
         val ret = parent.getMarketPrice(item)
-        return ret * itemValueModifier(item) * const("mutualityMax")
+        return ret * itemValueModifier(item)
 
     }
 
@@ -207,16 +207,28 @@ class Character : GameStateElement() {
 
                     AgendaType.REQUEST -> return 0.0 // Prevent nested request!
                     AgendaType.PRAISE -> {
-                        //Based on the party's friendliness.
-                    }// TODO()
+                        //Based on the mutuality.
+                        return parent.getMutNorm(name, action.agenda.subjectParams["character"]!!) * 5.0
+                    }
+
                     AgendaType.DENOUNCE -> {
-                        //Based on the party's friendliness.
-                    }// TODO()
+                        //Based on the mutuality.
+                        return parent.getMutNorm(name, action.agenda.subjectParams["character"]!!) * -7.0
+                    }
+
                     AgendaType.PRAISE_PARTY -> {
-                        //Based on the party's friendliness.
+                        //Based on the party's mutuality.
+                        return parent.getMutNorm(
+                            name, parent.parties[action.agenda.subjectParams["party"]!!
+                            ]!!.leader
+                        ) * 3.0
                     }// TODO()
                     AgendaType.DENOUNCE_PARTY -> {
                         //Based on the party's friendliness.
+                        return parent.getMutNorm(
+                            name, parent.parties[action.agenda.subjectParams["party"]!!
+                            ]!!.leader
+                        ) * -5.0
                     }// TODO()
                     AgendaType.BUDGET_PROPOSAL -> return 0.0 // TODO()
                     AgendaType.BUDGET_RESOLUTION -> return 0.0 // TODO()
@@ -226,6 +238,7 @@ class Character : GameStateElement() {
                         if (action.agenda.subjectParams["character"] == name)
                             return -30.0
                         //Otherwise, if firing my friend, dislike.
+                        else return parent.getMutNorm(name, action.agenda.subjectParams["character"]!!) * -20.0
                     }
                 }
             }
@@ -250,7 +263,7 @@ class Character : GameStateElement() {
             //The character don't like information about its wrongdoings.
             //Stole resource
             if (info.type == InformationType.ACTION && info.action is UnofficialResourceTransfer && !(info.action as UnofficialResourceTransfer).fromHome /*If not from any homes, it is probably stolen. We don't care about the destination.*/)
-                ret = -1e-1
+                ret = -1e-1 * stats.pScale
             //Stayed in home during work hours?
             //Did their job well
             if (info.type == InformationType.ACTION && info.action is NewAgenda)
@@ -284,19 +297,15 @@ class Character : GameStateElement() {
         } else {
             //Accidents are always interesting.
             if (info.type == InformationType.CASUALTY)
-                ret = 2e-1
+                ret = 2e-1 * stats.lScale
             else {
 
                 //Otherwise, if the information is about some other people, the character's preference depends on their relationship with the target.
                 //The target character's preference is reflected.
-                if (parent.getMutuality(
-                        name,
-                        info.tgtCharacter
-                    ) > (const("mutualityMin") + const("mutualityMax")) / 2
-                )
-                    ret = parent.characters[info.tgtCharacter]!!.infoPreference(info) / const("mutualityMax")
-                else
-                    ret = -parent.characters[info.tgtCharacter]!!.infoPreference(info) / const("mutualityMax")
+                ret = parent.characters[info.tgtCharacter]!!.infoPreference(info) * parent.getMutNorm(
+                    name,
+                    info.tgtCharacter
+                ) * stats.eScale
             }
 
             //I don't like unresolved requests that are given to me.
@@ -304,11 +313,11 @@ class Character : GameStateElement() {
                 && (info.action as NewAgenda).agenda.attachedRequest!!.issuedTo.contains(name) && !(info.action as NewAgenda).agenda.attachedRequest!!.completed
             ) {
                 ret = -1e-1 * (1 - (info.action as NewAgenda).agenda.attachedRequest!!.issuedBy.sumOf {
-                    parent.getMutuality(
+                    parent.getMutNorm(
                         name,
                         it
                     )
-                } / (info.action as NewAgenda).agenda.attachedRequest!!.issuedBy.size / const("mutualityMax"))
+                } / (info.action as NewAgenda).agenda.attachedRequest!!.issuedBy.size) * stats.pScale
                 //If I hate the issuers, I hate this information even more. If I like the issuers, I don't hate this information as much.
             }
 

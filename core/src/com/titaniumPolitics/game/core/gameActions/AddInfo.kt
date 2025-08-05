@@ -34,7 +34,7 @@ class AddInfo(override val sbjCharacter: String, override val tgtPlace: String) 
                                     )
                                 }
                     }
-                ) return 5.0
+                ) return 5.0 * sbjCharObj.stats.lScale
 
 
                 //If there are any interesting (to this character) news about the division, share it.
@@ -43,28 +43,28 @@ class AddInfo(override val sbjCharacter: String, override val tgtPlace: String) 
                         "lengthOfDay"
                     ) + ReadOnly.constInt("lengthOfDay") - 1)
                 )
-                    return newsPeople.sumOf { parent.characters[it]!!.infoPreference(info) } / newsPeople.size//Share the most interesting news.
+                    return newsPeople.sumOf { parent.characters[it]!!.infoPreference(info) } / newsPeople.size * sbjCharObj.stats.eScale//Share the most interesting news.
 
             }
 
             AgendaType.NOMINATE, AgendaType.PRAISE -> {
-                return parent.characters[agenda.subjectParams["character"]]!!.infoPreference(info)
+                return parent.characters[agenda.subjectParams["character"]]!!.infoPreference(info) * sbjCharObj.stats.eScale
             }
 
-            AgendaType.REQUEST -> return meeting.currentCharacters.sumOf { parent.characters[it]!!.actionValue(agenda.attachedRequest!!.action) } / meeting.currentCharacters.size
+            AgendaType.REQUEST -> return meeting.currentCharacters.sumOf { parent.characters[it]!!.actionValue(agenda.attachedRequest!!.action) } / meeting.currentCharacters.size * sbjCharObj.stats.lScale
             AgendaType.DENOUNCE -> {
-                return -parent.characters[agenda.subjectParams["character"]]!!.infoPreference(info)
+                return -parent.characters[agenda.subjectParams["character"]]!!.infoPreference(info) * sbjCharObj.stats.pScale
             }
 
             AgendaType.PRAISE_PARTY -> {
                 val pt = parent.parties[agenda.subjectParams["party"]]!!
-                return pt.members.sumOf { parent.characters[it]!!.infoPreference(info) } / pt.members.size
+                return pt.members.sumOf { parent.characters[it]!!.infoPreference(info) } / pt.members.size * sbjCharObj.stats.eScale
 
             }
 
             AgendaType.DENOUNCE_PARTY -> {
                 val pt = parent.parties[agenda.subjectParams["party"]]!!
-                return pt.members.sumOf { -parent.characters[it]!!.infoPreference(info) } / pt.members.size
+                return pt.members.sumOf { -parent.characters[it]!!.infoPreference(info) } / pt.members.size * sbjCharObj.stats.pScale
             }
 
             AgendaType.BUDGET_PROPOSAL -> TODO()
@@ -72,7 +72,7 @@ class AddInfo(override val sbjCharacter: String, override val tgtPlace: String) 
             AgendaType.APPOINT_MEETING -> return 0.0
             AgendaType.FIRE_MANAGER -> return -parent.characters[agenda.subjectParams["character"]]!!.infoPreference(
                 info
-            )
+            ) * sbjCharObj.stats.pScale
 
             else -> return 0.0
         }

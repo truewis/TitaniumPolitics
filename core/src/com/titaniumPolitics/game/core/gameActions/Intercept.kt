@@ -26,8 +26,11 @@ class Intercept(override val sbjCharacter: String, override val tgtPlace: String
 
     override fun deltaWill(): Double {
         val meeting = parent.characters[sbjCharacter]!!.currentMeeting!!
-        val factor = if (parent.characters[sbjCharacter]!!.trait.contains("provoker")) -0.05 else -0.1
-        return super.deltaWill() + parent.getMutuality(sbjCharacter, meeting.currentSpeaker) * factor
+        val factor = if (parent.characters[sbjCharacter]!!.trait.contains("provoker")) -15 else -10
+        return super.deltaWill() + parent.getMutNorm(
+            sbjCharacter,
+            meeting.currentSpeaker
+        ) * factor * sbjCharObj.stats.pScale
     }
 
 

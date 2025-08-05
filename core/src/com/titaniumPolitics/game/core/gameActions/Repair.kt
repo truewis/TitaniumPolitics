@@ -50,4 +50,8 @@ class Repair(override val sbjCharacter: String, override val tgtPlace: String) :
         return parent.places[tgtPlace]!!.apparatuses.isNotEmpty() && parent.characters[sbjCharacter]!!.trait.contains("technician")
     }
 
+    override fun deltaWill(): Double {
+        return super.deltaWill() * sbjCharObj.stats.lScale
+    }
+
 }

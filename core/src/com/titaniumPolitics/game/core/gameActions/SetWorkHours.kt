@@ -29,4 +29,8 @@ class SetWorkHours(override val sbjCharacter: String, override val tgtPlace: Str
         return tgtPlaceObj.manager == sbjCharacter
     }
 
+    override fun deltaWill(): Double {
+        return super.deltaWill() * sbjCharObj.stats.pScale
+    }
+
 }

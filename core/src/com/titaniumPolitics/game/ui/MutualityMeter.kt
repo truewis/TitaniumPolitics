@@ -16,8 +16,8 @@ class MutualityMeter(var gameState: GameState, var tgtCharacter: String, var who
     val refresh =
         { state: GameState ->
             setValue(
-                state.getMutuality(tgtCharacter, who) / 100f,
-                state.getMutuality(who, tgtCharacter) / 100f
+                (state.getMutNorm(tgtCharacter, who) + 1) / 2,
+                (state.getMutNorm(who, tgtCharacter) + 1) / 2
             )
         }
 
@@ -46,21 +46,21 @@ class MutualityMeter(var gameState: GameState, var tgtCharacter: String, var who
         gameState.updateUI += refresh
         refresh(gameState)
         val tgtName = ReadOnly.charName(tgtCharacter)
-        var text = if (gameState.getMutuality(tgtCharacter, who) > 75) {
+        var text = if (gameState.getMutNorm(tgtCharacter, who) > 0.5) {
             "You think of $tgtName as trustworthy.\n"
-        } else if (gameState.getMutuality(tgtCharacter, who) > 50) {
+        } else if (gameState.getMutNorm(tgtCharacter, who) > 0) {
             "You think of $tgtName as reasonable.\n"
-        } else if (gameState.getMutuality(tgtCharacter, who) > 25) {
+        } else if (gameState.getMutNorm(tgtCharacter, who) > -0.5) {
             "You think of $tgtName as untrustworthy.\n"
         } else {
             "You hates $tgtName.\n"
         }
 
-        if (gameState.getMutuality(who, tgtCharacter) > 75) {
+        if (gameState.getMutNorm(who, tgtCharacter) > 0.5) {
             text += "They think of you as trustworthy."
-        } else if (gameState.getMutuality(who, tgtCharacter) > 50) {
+        } else if (gameState.getMutNorm(who, tgtCharacter) > 0) {
             text += "They think of you as reasonable."
-        } else if (gameState.getMutuality(who, tgtCharacter) > 25) {
+        } else if (gameState.getMutNorm(who, tgtCharacter) > -0.5) {
             text += "They think of you as untrustworthy."
         } else {
             text += "They hates you."
