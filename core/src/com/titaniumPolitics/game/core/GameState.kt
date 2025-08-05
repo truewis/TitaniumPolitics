@@ -277,6 +277,14 @@ class GameState {
         return _mutuality[a]!![b]!!
     }
 
+    //Return value [-1, 1].
+    fun getMutNorm(a: String, b: String = a) = normMut(getMutuality(a, b))
+
+    private fun normMut(mutuality: Double) =
+        (2 * mutuality - (ReadOnly.const("mutualityMax") + ReadOnly.const("mutualityMin"))) / (ReadOnly.const("mutualityMax") - ReadOnly.const(
+            "mutualityMin"
+        ))
+
     fun setMutuality(a: String, b: String = a, delta: Double) {
         if (!characters.containsKey(a) || !characters.containsKey(b)) throw Exception("Setting mutuality $a -> $b invalid.")
         if (!_mutuality.containsKey(a))
@@ -295,6 +303,9 @@ class GameState {
             }
         }
     }
+
+    //Return value [-1, 1].
+    fun getPartyMutNorm(a: String, b: String = a) = normMut(getPartyMutuality(a, b))
 
     fun getPartyMutuality(a: String, b: String = a): Double {
         if (!parties.containsKey(a) || !parties.containsKey(b)) throw Exception("Getting party mutuality $a -> $b invalid.")
