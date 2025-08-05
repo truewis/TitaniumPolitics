@@ -5,6 +5,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.titaniumPolitics.game.core.GameState
+import com.titaniumPolitics.game.debugTools.Logger
 import com.titaniumPolitics.game.ui.TasksUI
 import ktx.scene2d.*
 import ktx.scene2d.Scene2DSkin.defaultSkin

@@ -9,6 +9,7 @@ import com.badlogic.gdx.utils.Align
 
 import com.titaniumPolitics.game.core.Information
 import com.titaniumPolitics.game.core.ReadOnly
+import com.titaniumPolitics.game.debugTools.Logger
 import com.titaniumPolitics.game.ui.widget.WindowUI
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive

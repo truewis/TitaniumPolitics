@@ -1,6 +1,7 @@
 package com.titaniumPolitics.game.core.gameActions
 
 import com.titaniumPolitics.game.core.GameEngine
+import com.titaniumPolitics.game.debugTools.Logger
 
 @Deprecated("Use infoShare instead")
 class praise(override val sbjCharacter: String, override val tgtPlace: String) : GameAction() {

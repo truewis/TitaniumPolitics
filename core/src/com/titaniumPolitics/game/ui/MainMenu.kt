@@ -19,6 +19,7 @@ import com.titaniumPolitics.game.EntryClass
 import com.titaniumPolitics.game.core.GameEngine
 import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.core.ReadOnly
+import com.titaniumPolitics.game.debugTools.Logger
 import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.jsonObject
@@ -54,7 +55,6 @@ class MainMenu(val entry: EntryClass) : Stage(FitViewport(1920F, 1080F)) {
         setAlignment(Align.bottomRight, Align.bottomRight)
         addListener(object : ClickListener() {
             override fun clicked(event: com.badlogic.gdx.scenes.scene2d.InputEvent?, x: Float, y: Float) {
-                Logger.write("Start button clicked.", Logger.LogLevel.INFO)
                 startGame()
             }
         })
@@ -74,7 +74,7 @@ class MainMenu(val entry: EntryClass) : Stage(FitViewport(1920F, 1080F)) {
             assetManager.load("data/dev/capsuleDevBox.png", Texture::class.java)
 
         }
-        Logger.write("Explicit asset imports successful.", Logger.LogLevel.INFO)
+        println("Explicit asset imports successful.")
         assetManager.finishLoading()
 
         rootStack.setFillParent(true)
@@ -120,12 +120,12 @@ class MainMenu(val entry: EntryClass) : Stage(FitViewport(1920F, 1080F)) {
         var newGame: GameState
         startbutton.setText("Loading...")
         if (savedGamePath == null) {
-            Logger.write("Loading init.json...", Logger.LogLevel.INFO)
+            println("Loading init.json...")
             newGame = Json.decodeFromString(
                 GameState.serializer(),
                 Gdx.files.internal("json/init.json").readString()
             ).also {
-                Logger.write("Loading complete.", Logger.LogLevel.INFO)
+                println("Loading complete.")
                 it.initialize()
                 entry.stage = CapsuleStage(it)
                 Gdx.input.inputProcessor = entry.stage
@@ -133,18 +133,18 @@ class MainMenu(val entry: EntryClass) : Stage(FitViewport(1920F, 1080F)) {
             newGame.onStart.forEach { it() }
         } else {
             //TODO: Check QuickLoad for the same logic.
-            Logger.write("Loading saved game from $savedGamePath...", Logger.LogLevel.INFO)
+            println("Loading saved game from $savedGamePath...")
             newGame = Json.decodeFromString(
                 GameState.serializer(),
                 Gdx.files.internal(savedGamePath).readString()
             ).also {
                 it.injectDependency()
-                Logger.write("Loading complete.", Logger.LogLevel.INFO)
+                println("Loading complete.")
                 entry.stage = CapsuleStage(it)
                 Gdx.input.inputProcessor = entry.stage
             }
         }
-        Logger.write("Starting game engine.", Logger.LogLevel.INFO)
+        println("Starting game engine.")
 
         thread(start = true) {
             val engine = GameEngine(newGame)

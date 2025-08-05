@@ -4,6 +4,7 @@ import com.titaniumPolitics.game.core.GameEngine
 import com.titaniumPolitics.game.core.Information
 import com.titaniumPolitics.game.core.Request
 import com.titaniumPolitics.game.core.TradeParams
+import com.titaniumPolitics.game.debugTools.Logger
 
 
 //Important: there is no trade anymore, just requests.

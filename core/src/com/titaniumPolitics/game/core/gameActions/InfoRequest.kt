@@ -1,6 +1,7 @@
 package com.titaniumPolitics.game.core.gameActions
 
 import com.titaniumPolitics.game.core.GameEngine
+import com.titaniumPolitics.game.debugTools.Logger
 
 //TODO: party integrity affects the chances. Party integrity is affected.
 @Deprecated("This class is deprecated. Info requests are done naturally through agendas.")

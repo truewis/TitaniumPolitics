@@ -182,7 +182,7 @@ class GameState {
     }
 
     fun initialize() {
-        Logger.write("Initializing game state...", Logger.LogLevel.INFO)
+        println("Initializing game state...")
         injectDependency()
         //Gain party anonymous member size from work place requirements.
         parties.forEach {
@@ -243,7 +243,7 @@ class GameState {
         }
         randomize()
         eventSystem.newGame()
-        Logger.write("Game state initialized successfully.", Logger.LogLevel.INFO)
+        println("Game state initialized successfully.")
     }
 
     fun randomize() {
@@ -356,7 +356,7 @@ class GameState {
         parties.forEach { it.value.injectParent(this) }
         nonPlayerAgents.forEach { it.value.injectParent(this) }
         eventSystem.injectParent(this)
-        Logger.write("GameState injected successfully.", Logger.LogLevel.INFO)
+        println("GameState injected successfully.")
     }
 
 
@@ -377,7 +377,7 @@ class GameState {
 
         val file = File(fileName)
         file.writeText(prettyJson.encodeToString(this))
-        Logger.write("Save File Dumped.", Logger.LogLevel.INFO)
+        println("Save File Dumped.")
     }
 
     private fun Date.toString(format: String, locale: Locale = Locale.getDefault()): String {

@@ -1,6 +1,7 @@
 package com.titaniumPolitics.game.core.gameActions
 
 import com.titaniumPolitics.game.core.Meeting
+import com.titaniumPolitics.game.debugTools.Logger
 
 @Deprecated("This class is deprecated. BudgetProposal is a separate agenda item.")
 class BudgetProposal(override val sbjCharacter: String, override val tgtPlace: String) : GameAction() {
@@ -29,7 +30,7 @@ class BudgetProposal(override val sbjCharacter: String, override val tgtPlace: S
         parent.budget = budget
         //Now, take the time of all characters present.
         parent.ongoingMeetings.filter { it.value.type == Meeting.MeetingType.BUDGET_PROPOSAL }.values.first().currentCharacters.forEach { parent.characters[it]!!.frozen++ }
-        Logger.write(budget, Logger.LogLevel.INFO)
+        Logger.write(budget.toString(), Logger.LogLevel.INFO)
     }
 
 }
