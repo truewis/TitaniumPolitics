@@ -1,9 +1,13 @@
 package com.titaniumPolitics.game.core
 
 import com.titaniumPolitics.game.core.ReadOnly.const
+import com.titaniumPolitics.game.core.gameActions.AddInfo
+import com.titaniumPolitics.game.core.gameActions.Arrest
+import com.titaniumPolitics.game.core.gameActions.BlockAccess
 import com.titaniumPolitics.game.core.gameActions.ClearAccidentScene
 import com.titaniumPolitics.game.core.gameActions.GameAction
 import com.titaniumPolitics.game.core.gameActions.InvestigateAccidentScene
+import com.titaniumPolitics.game.core.gameActions.Move
 import com.titaniumPolitics.game.core.gameActions.NewAgenda
 import com.titaniumPolitics.game.core.gameActions.OfficialResourceTransfer
 import com.titaniumPolitics.game.core.gameActions.Repair
@@ -219,26 +223,33 @@ class Character : GameStateElement() {
         if (info.tgtCharacter == name) {
             //The character don't like information about its wrongdoings.
             //Stole resource
-            if (info.type == InformationType.ACTION && info.action!!.javaClass.simpleName == "UnofficialResourceTransfer")
+            if (info.type == InformationType.ACTION && info.action is UnofficialResourceTransfer && !(info.action as UnofficialResourceTransfer).fromHome /*If not from any homes, it is probably stolen. We don't care about the destination.*/)
                 ret = -1e-1
-            //Stayed in home during work hours
+            //Stayed in home during work hours?
             //Did their job well
-            if (info.type == InformationType.ACTION && info.action!!.javaClass.simpleName == "NewAgenda")
+            if (info.type == InformationType.ACTION && info.action is NewAgenda)
                 ret = 5e-2
-            if (info.type == InformationType.ACTION && info.action!!.javaClass.simpleName == "AddInfo")
+            if (info.type == InformationType.ACTION && info.action is AddInfo)
                 ret = 5e-2
-            if (info.type == InformationType.ACTION && info.action!!.javaClass.simpleName == "OfficialResourceTransfer")
+            if (info.type == InformationType.ACTION && info.action is OfficialResourceTransfer)
                 ret = 5e-2
-            if (info.type == InformationType.ACTION && info.action!!.javaClass.simpleName == "InvestigateAccidentScene")
+            if (info.type == InformationType.ACTION && info.action is InvestigateAccidentScene)
                 ret = 1e-1
-            if (info.type == InformationType.ACTION && info.action!!.javaClass.simpleName == "ClearAccidentScene")
+            if (info.type == InformationType.ACTION && info.action is ClearAccidentScene)
                 ret = 1e-1
 
             //Depends on their party
             parent.parties.filter { it.value.members.contains(name) }.forEach { party ->
                 when (party.key) {
                     "infrastructure" -> {
-                        if (info.type == InformationType.ACTION && info.action!!.javaClass.simpleName == "Repair")
+                        if (info.type == InformationType.ACTION && info.action is Repair)
+                            ret = 1e-1
+                    }
+
+                    "safety" -> {
+                        if (info.type == InformationType.ACTION && info.action is BlockAccess)
+                            ret = 1e-1
+                        if (info.type == InformationType.ACTION && info.action is Arrest)
                             ret = 1e-1
                     }
                 }
