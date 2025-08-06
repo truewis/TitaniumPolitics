@@ -190,8 +190,37 @@ class GameState {
     fun initialize() {
         println("Initializing game state...")
         injectDependency()
+
+
+        //Create workplace party for each workplace.
+        places.forEach { place ->
+            parties["workplace_${place.key}"] = Party().apply {
+                injectParent(this@GameState)
+                leader = place.value.manager
+                leader?.let { members.add(it) }
+                type = "workplace"
+                home = place.key
+            }
+
+        }
+
+        //Generate lower level managers for each workplace.
+        parties.filter { it.value.type == "workplace" }.forEach { party ->
+            listOf("administrator", "overseer", "logistician").forEach {
+                characters[party.key + it] = Character().apply {
+                    this.injectParent(this@GameState)
+                    this.livingBy = Place.publicPlaces.random()
+
+                    this.health = 100.0
+                }
+                nonPlayerAgents[party.key + it] = NonPlayerAgent()
+            }
+
+        }
+
         //Gain party anonymous member size from work place requirements.
         parties.forEach {
+            if (it.value.type != "division") return@forEach //
             val party = it.value
             it.value.places.sumOf { it.apparatuses.sumOf { it.idealWorker } }
 
@@ -248,17 +277,6 @@ class GameState {
                 Resources("ration" to 100.0 * char.value.reliant, "water" to 100.0 * char.value.reliant)
         }
 
-        //Create workplace party for each workplace.
-        places.forEach { place ->
-            parties["workplace_${place.key}"] = Party().apply {
-                injectParent(this@GameState)
-                leader = place.value.manager
-                leader?.let { members.add(it) }
-                type = "workplace"
-                home = place.key
-            }
-
-        }
         randomize()
         eventSystem.newGame()
         println("Game state initialized successfully.")
