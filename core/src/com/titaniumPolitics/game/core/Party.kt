@@ -6,9 +6,9 @@ import kotlinx.serialization.Serializable
 class Party : GameStateElement() {
     override val name: String
         get() = parent.parties.filter { it.value == this }.keys.first()
-    var leader = ""
-    var type = ""
-    var home = "" //The place where the party is based.
+    var leader: String? = null
+    var type: String? = null
+    var home: String? = null //The place where the party is based.
     var members = hashSetOf<String>()
     var isSalaryPaid = false //This variable is reset every quarter.
     val numAnonymousMembers: Int

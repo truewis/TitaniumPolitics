@@ -4,6 +4,8 @@ import com.titaniumPolitics.game.core.AgendaType
 import com.titaniumPolitics.game.core.Meeting
 import com.titaniumPolitics.game.core.MeetingAgenda
 import com.titaniumPolitics.game.core.ReadOnly
+import com.titaniumPolitics.game.core.Request
+import com.titaniumPolitics.game.core.Resources
 import com.titaniumPolitics.game.core.gameActions.*
 import kotlinx.serialization.Serializable
 
@@ -61,18 +63,7 @@ class AttendCabinetMeetingRoutine : Routine(), IMeetingRoutine {
         }
         //If not speaker, wait if the mutuality to the speaker is high. Otherwise, if possible, interrupt the speaker.
         if (conf.currentSpeaker != name) {
-            if (gState.getMutuality(
-                    name,
-                    conf.currentSpeaker
-                ) > ReadOnly.const("SpeakerInterceptMutualityThreshold")
-            )
-                return Wait(name, place)
-            else {
-                val action = Intercept(name, place).also { it.injectParent(gState) }
-                if (action.isValid())
-                    return action
-                return Wait(name, place)
-            }
+            return interceptCondition(conf, name, place)
         } else {
             gState.parties[conf.involvedParty]!!
 
@@ -81,6 +72,59 @@ class AttendCabinetMeetingRoutine : Routine(), IMeetingRoutine {
             if (conf.agendas.none { it.type == AgendaType.PROOF_OF_WORK }) {
                 return NewAgenda(name, place).also {
                     it.agenda = MeetingAgenda(AgendaType.PROOF_OF_WORK, name)
+                }
+            }
+
+            //If there is a place in my division with a resource that is short of, and if there is other division with the resource, request the resource from that division.
+            gState.places.values.forEach { place1 -> //TODO: right now, supply resource to any place regardless of the division. In the future, agents will not supply resources to hostile divisions.
+                place1.apparatuses.forEach { apparatus ->
+                    val res = place1.resourceShortOfHourly(apparatus) //Type of resource that is short of.
+                    if (res != null)
+                    //if there is a place within my division with the resource, skip.
+                    {
+                        val resplace =
+                            gState.places.values.filter {
+                                it.responsibleDivision != null && name in gState.parties[it.responsibleDivision]!!.members && it.shortestPathAndTimeTo(
+                                    place1.name
+                                ) != null //Check connectivity so that the resource can be delivered.
+                            }
+                                .filter { it.resources[res] > apparatus.currentConsumption[res]!! * place1.workHoursLength * 3 } //Check if the place has enough resource to supply for 3 work days.
+                        if (resplace.isEmpty()) //Only if there is no place in my division with the resource, request the resource from other divisions.
+                        {
+                            val findResourceOutsideDivision =
+                                gState.places.values.filter {
+                                    it.responsibleDivision != null && gState.parties[it.responsibleDivision]!!.leader in conf.currentCharacters && it.shortestPathAndTimeTo(
+                                        place1.name
+                                    ) != null //Check connectivity so that the resource can be delivered.
+                                }
+                                    .filter { it.resources[res] > apparatus.currentConsumption[res]!! * place1.workHoursLength * 3 } //Check if the place has enough resource to supply for 3 work days.
+                            //Check if there is already a request for the resource.
+                            if (findResourceOutsideDivision.isEmpty()) return@forEach //If there is no place with the resource, skip.
+                            val tgtPlace = findResourceOutsideDivision.first()
+                            val tgtParty = gState.parties[tgtPlace.responsibleDivision]!!
+                            tgtParty.leader?.let { leader ->
+                                if (conf.agendas.none { it.type == AgendaType.REQUEST && it.author == name && it.attachedRequest?.action is OfficialResourceTransfer }) {
+                                    //Fill in the agenda based on variables in the routine, resource and character.
+                                    val agenda = MeetingAgenda(AgendaType.REQUEST, name).apply {
+                                        attachedRequest = Request(
+                                            OfficialResourceTransfer(
+                                                leader, tgtPlace.name
+                                            ).apply {
+                                                resources =
+                                                    Resources(res to apparatus.currentConsumption[res]!! * place1.workHoursLength * 3)
+                                                toWhere = place1.name
+                                            },
+                                            issuedTo = hashSetOf(leader),
+                                            issuedBy = hashSetOf(name)
+                                        ) //Created a command to transfer the resource.
+                                    }
+                                    return NewAgenda(name, place).also { it.agenda = agenda }
+                                }
+                            }
+
+                        }
+
+                    }
                 }
             }
 

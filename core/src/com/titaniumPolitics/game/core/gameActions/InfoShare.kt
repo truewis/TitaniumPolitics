@@ -32,11 +32,11 @@ class InfoShare(override val sbjCharacter: String, override val tgtPlace: String
                 parent.setPartyMutuality(
                     party,
                     party,
-                    (parent.parties[party]!!.individualMutuality(parent.informations[what]!!.tgtCharacter) - 50) * factor
+                    (parent.parties[party]!!.individualMutuality(parent.informations[what]!!.tgtCharacter!!) - 50) * factor
                 )
 
                 //Every attendant's individual mutuality to the character that is discussed increases.
-                who.forEach { parent.setMutuality(it, parent.informations[what]!!.tgtCharacter, 2.0) }
+                who.forEach { parent.setMutuality(it, parent.informations[what]!!.tgtCharacter!!, 2.0) }
             }
 
             "criticize" -> {
@@ -46,9 +46,9 @@ class InfoShare(override val sbjCharacter: String, override val tgtPlace: String
                 parent.setPartyMutuality(
                     party,
                     party,
-                    (parent.parties[party]!!.individualMutuality(parent.informations[what]!!.tgtCharacter) - 50) * factor
+                    (parent.parties[party]!!.individualMutuality(parent.informations[what]!!.tgtCharacter!!) - 50) * factor
                 )
-                who.forEach { parent.setMutuality(it, parent.informations[what]!!.tgtCharacter, -5.0) }
+                who.forEach { parent.setMutuality(it, parent.informations[what]!!.tgtCharacter!!, -5.0) }
             }
 
             "respond" -> {

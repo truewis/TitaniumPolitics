@@ -78,7 +78,11 @@ class Place : GameStateElement() {
     var volume = 1000f //Volume in m^3.
     val currentWorker: Int get() = apparatuses.sumOf { it.currentWorker }
     val workForce: Int
-        get() = characters.filter { it.contains("Anon") && it.contains(responsibleDivision) }
+        get() = characters.filter {
+            it.contains("Anon") && it.contains(
+                responsibleDivision ?: "this string returns false!"
+            )
+        }
             .sumOf { parent.characters[it]!!.reliant }
     val workers
         get() = parent.characters.values.filter {
@@ -106,6 +110,7 @@ class Place : GameStateElement() {
             //return characters.filter { it } + currentWorker + idler +
         }
 
+    val workHoursLength get() = workHoursEnd - workHoursStart
     var workHoursStart = 0
     var workHoursEnd = 0
     val workHours: IntRange
@@ -116,7 +121,7 @@ class Place : GameStateElement() {
     }
 
     var characters = hashSetOf<String>()
-    var responsibleDivision = "" //Determines which party is responsible for the place.
+    var responsibleDivision: String? = null //Determines which party is responsible for the place.
     var isAccidentScene =
         false //If true, the place is closed and no one can enter. Can be cleared by clearAccidentScene.
     var accidentInformationKeys =
@@ -200,7 +205,7 @@ class Place : GameStateElement() {
 
     fun workApparatusHourly() {
         val dth = 3600
-        if (responsibleDivision == "") return //TODO: Is this true?
+        if (responsibleDivision == null) return //TODO: Is this true?
         if (isAccidentScene) return //If there is an accident, no one works until it is resolved.
         apparatuses.forEach app@{ apparatus ->
             //Consume durability, no matter it is currently being worked or not. For storages, keep the durability if they are fully staffed.
@@ -312,7 +317,7 @@ class Place : GameStateElement() {
             maxResources
             app.durability -= 30
             Information(
-                author = "",
+                author = null,
                 creationTime = parent.time,
                 type = InformationType.DAMAGED_APPARATUS,
                 tgtPlace = name,
@@ -340,7 +345,7 @@ class Place : GameStateElement() {
         val loss = resources[resourceType] / 2
         resources[resourceType] -= loss
         Information(
-            author = "",
+            author = null,
             creationTime = parent.time,
             type = InformationType.LOST_RESOURCES,
             tgtPlace = name,
@@ -367,7 +372,7 @@ class Place : GameStateElement() {
             maxResources
             app.durability -= 75
             Information(
-                author = "",
+                author = null,
                 creationTime = parent.time,
                 type = InformationType.DAMAGED_APPARATUS,
                 tgtPlace = name,

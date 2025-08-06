@@ -1635,7 +1635,7 @@
         "_resources": {
           "oxygen": 100,
           "water": 1500,
-          "ration": 500
+          "ration": 5000
         }
       },
       "connectedPlaces": [

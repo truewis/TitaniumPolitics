@@ -10,7 +10,7 @@ class BudgetProposal(override val sbjCharacter: String, override val tgtPlace: S
     override fun chooseParams() {
         //TODO: set up the budget proposal
         parent.places.forEach {
-            if (it.key == "home" || it.value.responsibleDivision == "") return@forEach else budget[it.value.responsibleDivision] =
+            if (it.key == "home" || it.value.responsibleDivision == null) return@forEach else budget[it.value.responsibleDivision!!] =
                 (budget[it.value.responsibleDivision]
                     ?: .0) + it.value.plannedWorker * (it.value.workHoursEnd - it.value.workHoursStart) * 15.0
         }

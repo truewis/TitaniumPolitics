@@ -24,18 +24,7 @@ class TalkRoutine : Routine(), IMeetingRoutine {
             }
         //If not speaker, wait if the mutuality to the speaker is high. Otherwise, if possible, interrupt the speaker.
         if (conf.currentSpeaker != name) {
-            if (gState.getMutuality(
-                    name,
-                    conf.currentSpeaker
-                ) > ReadOnly.const("SpeakerInterceptMutualityThreshold")
-            )
-                return Wait(name, place)
-            else {
-                val action = Intercept(name, place).also { it.injectParent(gState) }
-                if (action.isValid())
-                    return action
-                return Wait(name, place)
-            }
+            return interceptCondition(conf, name, place)
         } else {
             //If it is my turn to speak
             //Check if I had an intention

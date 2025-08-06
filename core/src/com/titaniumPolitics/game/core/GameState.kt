@@ -1,5 +1,6 @@
 package com.titaniumPolitics.game.core
 
+import com.badlogic.gdx.math.MathUtils.clamp
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
@@ -230,7 +231,7 @@ class GameState {
             //Create home for each character.
             places["home_" + char.key] = Place().apply {
                 this.injectParent(this@GameState)
-                responsibleDivision = ""
+                responsibleDivision = null //Homes are not responsible for any division.
                 //Connect the new home to the place specified in the character.
                 val liveBy = this@GameState.characters[char.key]!!.livingBy
                 connectedPlaces.add(liveBy)
@@ -281,7 +282,7 @@ class GameState {
     }
 
     //Return value [-1, 1].
-    fun getMutNorm(a: String, b: String = a) = normMut(getMutuality(a, b))
+    fun getMutNorm(a: String?, b: String? = a) = if (a == null || b == null) .0 else normMut(getMutuality(a, b))
 
     private fun normMut(mutuality: Double) =
         (2 * mutuality - (ReadOnly.const("mutualityMax") + ReadOnly.const("mutualityMin"))) / (ReadOnly.const("mutualityMax") - ReadOnly.const(
@@ -289,6 +290,7 @@ class GameState {
         ))
 
     fun setMutuality(a: String, b: String = a, delta: Double) {
+        if (!delta.isFinite()) throw Exception("Setting mutuality $a -> $b with delta $delta is not finite.")
         if (!characters.containsKey(a) || !characters.containsKey(b)) throw Exception("Setting mutuality $a -> $b invalid.")
         if (!_mutuality.containsKey(a))
             _mutuality[a] = hashMapOf()
@@ -308,7 +310,8 @@ class GameState {
     }
 
     //Return value [-1, 1].
-    fun getPartyMutNorm(a: String, b: String = a) = normMut(getPartyMutuality(a, b))
+    fun getPartyMutNorm(a: String?, b: String? = a) =
+        if (a == null || b == null) .0 else normMut(getPartyMutuality(a, b))
 
     fun getPartyMutuality(a: String, b: String = a): Double {
         if (!parties.containsKey(a) || !parties.containsKey(b)) throw Exception("Getting party mutuality $a -> $b invalid.")
@@ -341,12 +344,7 @@ class GameState {
         val membersB = parties[b]?.members ?: emptyList()
         for (memberA in membersA) {
             for (memberB in membersB) {
-                try {
-                    setMutuality(memberA, memberB, delta)
-                } catch (e: Exception) {
-                    // Handle cases where mutuality cannot be set, e.g., one of the members does not exist.
-                    throw Exception("Setting party mutuality $memberA -> $memberB invalid.")
-                }
+                setMutuality(memberA, memberB, delta)
             }
         }
     }
@@ -425,11 +423,16 @@ class GameState {
             pop / 1000.0 * (ReadOnly.resJson[item]?.jsonObject?.get("demandPopElasticity(g/day/person)")?.jsonPrimitive?.double
                 ?: .0) //This is base demand before elasticity is applied.
 
-        val elasticityModifier =
+        var elasticityModifier = clamp(
             1 + (totalMarketBaseDemandEstimateWeekly / totalMarketSupplyEstimateWeekly - 1) / (ReadOnly.resJson[item]?.jsonObject?.get(
                 "demandPriceElasticity"
             )?.jsonPrimitive?.double
-                ?: 1.0)
+                ?: 1.0), 0.3, 3.0
+        )//Clamp the elasticity modifier to prevent extreme values and infinite values.
+
+        if (elasticityModifier.isNaN())
+            elasticityModifier = 3.0 // If elasticityModifier is NaN, set it to 3.0 to avoid issues.
+
 
         return (ReadOnly.resJson[item]?.jsonObject?.get("baseEGP(g/g)")?.jsonPrimitive?.double
             ?: .0) * 1000 /* Convert to Kg */ *

@@ -59,18 +59,7 @@ class LeadDivisionMeetingRoutine : Routine(), IMeetingRoutine {
         val party = gState.parties[conf.involvedParty]!!
         //If not speaker, wait if the mutuality to the speaker is high. Otherwise, if possible, interrupt the speaker.
         if (conf.currentSpeaker != name) {
-            if (gState.getMutuality(
-                    name,
-                    conf.currentSpeaker
-                ) > ReadOnly.const("SpeakerInterceptMutualityThreshold")
-            )
-                return Wait(name, place)
-            else {
-                val action = Intercept(name, place).also { it.injectParent(gState) }
-                if (action.isValid())
-                    return action
-                return Wait(name, place)
-            }
+            return interceptCondition(conf, name, place)
         } else //If it is my turn to speak
         {
             //1. Pay the salary if not paid yet.
@@ -114,9 +103,9 @@ class LeadDivisionMeetingRoutine : Routine(), IMeetingRoutine {
 
             //5. Criticize the common enemies of the division. It is determined by the party with the low mutuality with the division.
             val enemyParty = gState.parties.values.filter { it.name != conf.involvedParty }
-                .minBy { gState.getPartyMutuality(it.name, conf.involvedParty) }.name
+                .minBy { gState.getPartyMutuality(it.name, conf.involvedParty!!) }.name
             if (gState.getPartyMutuality(
-                    conf.involvedParty,
+                    conf.involvedParty!!,
                     enemyParty
                 ) < ReadOnly.const("EnemyPartyMutualityThreshold")
             )
@@ -130,7 +119,7 @@ class LeadDivisionMeetingRoutine : Routine(), IMeetingRoutine {
 
             //7. Gossip
             TalkRoutine.gossip(gState, name, place)?.also { return it }
-            
+
             //8. End meeting if attention is low.
             endMeetingIfLowAttention(conf, name, place)?.let { return it }
 //If nothing else to talk about, end the speech. The next speaker is the character with the highest mutuality.
@@ -172,12 +161,11 @@ class LeadDivisionMeetingRoutine : Routine(), IMeetingRoutine {
                             ).apply {
                                 workers = minProdApp.plannedWorker - reductionAmount
                                 apparatusID = minProdApp.ID
-                            }//Created a command to transfer the resource.
-                            ,
-                            issuedTo = hashSetOf(wantPlace.manager!!)
+                            },
+                            issuedTo = hashSetOf(wantPlace.manager!!),
+                            issuedBy = hashSetOf(name)
                         ).apply {
                             executeTime = gState.time
-                            issuedBy = hashSetOf(name)
                         }
                     }
                     return NewAgenda(name, place).also {
@@ -206,12 +194,12 @@ class LeadDivisionMeetingRoutine : Routine(), IMeetingRoutine {
                             ).apply {
                                 workers = maxProdApp.plannedWorker + increaseAmount
                                 apparatusID = maxProdApp.ID
-                            }//Created a command to transfer the resource.
-                            ,
-                            issuedTo = hashSetOf(wantPlace.manager!!)
+                            },
+                            issuedTo = hashSetOf(wantPlace.manager!!),
+                            issuedBy = hashSetOf(name)
                         ).apply {
                             executeTime = gState.time
-                            issuedBy = hashSetOf(name)
+
                         }
                     }
                     return NewAgenda(name, place).also {

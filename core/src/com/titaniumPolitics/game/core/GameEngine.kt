@@ -251,15 +251,15 @@ class GameEngine(val gameState: GameState) {
             //bad news affect the approval. casualty, stolen resource, TODO: low water ration oxygen, high wealth, crimes
             gameState.informations.filter { it.value.type == InformationType.CASUALTY }.forEach {
                 var factor = 1.0
-                if (it.value.author == "") factor *= 2.0//rumors affect the approval negatively.
+                if (it.value.author == null) factor *= 2.0//rumors affect the approval negatively.
                 if (it.value.auxParty == party.key) factor *= 2.0//If the casualty is in our party, approval of the responsible party drops even more.
                 //If casualty is not localized, does not affect mutualities.
-                if (it.value.tgtPlace == "everywhere" || gameState.places[it.value.tgtPlace]!!.responsibleDivision == "") {
+                if (it.value.tgtPlace == "everywhere" || gameState.places[it.value.tgtPlace]!!.responsibleDivision == null) {
                     //Do nothing
                 } else
                     gameState.setPartyMutuality(
                         party.key,
-                        gameState.places[it.value.tgtPlace]!!.responsibleDivision,
+                        gameState.places[it.value.tgtPlace]!!.responsibleDivision!!,
                         -it.value.amount * gameState.publicity(
                             it.key,
                             party.key
@@ -271,18 +271,21 @@ class GameEngine(val gameState: GameState) {
             gameState.informations.filter { it.value.type == InformationType.ACTION && it.value.action!!.javaClass.simpleName == "unofficialResourceTransfer" }
                 .forEach {
                     var factor = 1
-                    if (it.value.author == "") factor = 2//rumors affect the approval negatively.
+                    if (it.value.author == null) factor = 2//rumors affect the approval negatively.
 
                     //party loses mutuality toward the responsible party. TODO: consider affecting the individual mutuality toward the perpetrator.
                     //TODO: item value must be put into consideration
-                    gameState.setPartyMutuality(
-                        party.key, gameState.places[it.value.tgtPlace]!!.responsibleDivision, -log(
-                            it.value.amount.toDouble() + 1, 2.0
-                        ) * gameState.publicity(
-                            it.key,
-                            party.key
-                        ) / party.value.size * factor * dt / const("MutualityFromInfoTau") * ReadOnly.mutualityScale
-                    )
+                    gameState.places[it.value.tgtPlace]!!.responsibleDivision?.run {
+
+                        gameState.setPartyMutuality(
+                            party.key, this, -log(
+                                it.value.amount.toDouble() + 1, 2.0
+                            ) * gameState.publicity(
+                                it.key,
+                                party.key
+                            ) / party.value.size * factor * dt / const("MutualityFromInfoTau") * ReadOnly.mutualityScale
+                        )
+                    }
                 }
             //The fact that resource is low itself does not affect the mutuality.--------------------------------------------------------------------
             //TODO: Why?
@@ -346,11 +349,11 @@ class GameEngine(val gameState: GameState) {
     fun scheduleDailyConferences() {
         //Each division has a conference every day. The conference is attended by the head of the division and the members of the division.
         gameState.parties.values.filter { it.type == "division" }.forEach { party ->
-            if (party.leader != "") {
+            if (party.leader != null) {
                 val conference = Meeting(
                     gameState.time + 9 * 3600 / dt /*9 in the morning*/,
                     Meeting.MeetingType.DIVISION_DAILY_CONFERENCE,
-                    place = party.home,
+                    place = party.home!!,
                     scheduledCharacters = party.realMembers //Without anonymous members
                 ).also { it.involvedParty = party.name }
 
@@ -360,7 +363,7 @@ class GameEngine(val gameState: GameState) {
                 val conference = Meeting(
                     gameState.time + 9 * 3600 / dt /*9 in the morning*/,
                     Meeting.MeetingType.DIVISION_LEADER_ELECTION,
-                    place = party.home,
+                    place = party.home!!,
                     scheduledCharacters = (setOf("ctrler") + party.realMembers).toHashSet() //Without anonymous members
                 ).also { it.involvedParty = party.name }
                 gameState.addScheduledMeeting(conference)
@@ -372,7 +375,7 @@ class GameEngine(val gameState: GameState) {
         val conference = Meeting(
             gameState.time + 12 * 3600 / dt /*12 in the afternoon*/,
             Meeting.MeetingType.CABINET_DAILY_CONFERENCE,
-            place = gameState.parties["cabinet"]!!.home,
+            place = gameState.parties["cabinet"]!!.home!!,
             scheduledCharacters = gameState.parties["cabinet"]!!.members
         ).also { it.involvedParty = "cabinet" }
 
@@ -382,7 +385,7 @@ class GameEngine(val gameState: GameState) {
         val conference2 = Meeting(
             gameState.time + 15 * 3600 / dt /*3 in the afternoon*/,
             Meeting.MeetingType.TRIUMVIRATE_DAILY_CONFERENCE,
-            place = gameState.parties["triumvirate"]!!.home,
+            place = gameState.parties["triumvirate"]!!.home!!,
             scheduledCharacters = gameState.parties["triumvirate"]!!.members
         ).also { it.involvedParty = "triumvirate" }
 
@@ -442,7 +445,7 @@ class GameEngine(val gameState: GameState) {
                     "oxygen"
                 ) > const("CriticalCarbonDioxideRatio")
             ) {
-                if (place.responsibleDivision == "") return//TODO: currently oxygen deaths don't happen in places without responsibleParty.
+                if (place.responsibleDivision == null) return//TODO: currently oxygen deaths don't happen in places without responsibleParty.
                 val death =
                     place.currentTotalPop / 100 + 1//TODO: adjust deaths. Also, productivity starts to drop when oxygen is low. Use the gas system.
                 place.apply {
@@ -477,7 +480,7 @@ class GameEngine(val gameState: GameState) {
     }
 
     fun createRumor(tgtState: GameState) = Information(
-        author = "",
+        author = null,
         creationTime = tgtState.time
     ).also { /*spread rumor*/
         tgtState.addInformation(it) //cpy.publicity = 5
@@ -702,7 +705,7 @@ class GameEngine(val gameState: GameState) {
             if (placeObj.characters.count() > 1)
                 actions.add("Talk")
             if (placeObj.isAccidentScene) {
-                if (placeObj.responsibleDivision != "" && gameState.parties[placeObj.responsibleDivision]!!.members.contains(
+                if (placeObj.responsibleDivision != null && gameState.parties[placeObj.responsibleDivision]!!.members.contains(
                         character
                     )
                 )//Only the responsible party members can clear the accident scene.
@@ -726,7 +729,7 @@ class GameEngine(val gameState: GameState) {
             if (place == "mainControlRoom" || place == "market" || place == "squareNorth" || place == "squareSouth") {
                 //actions.add("InfoAnnounce") Only the leader of the internal division can announce.
             }
-            if (placeObj.responsibleDivision != "" && gameState.parties[placeObj.responsibleDivision]!!.members.contains(
+            if (placeObj.responsibleDivision != null && gameState.parties[placeObj.responsibleDivision]!!.members.contains(
                     character
                 )
             ) {

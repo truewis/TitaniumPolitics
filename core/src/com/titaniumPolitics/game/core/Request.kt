@@ -9,12 +9,13 @@ class Request(
     //This is the action to be executed.
     //IMPORTANT! tgtCharacter param of action is not used, as we want to support issuing requests to multiple characters.
     var action: GameAction,
-    var issuedTo: HashSet<String>/*If unspecified, anyone can finish this request.*/
+    var issuedTo: HashSet<String>,/*If unspecified, anyone can finish this request.*/
+    var issuedBy: HashSet<String> = hashSetOf() //If unspecified, it is a system request.
 ) {
     var name = ""
         private set
     var executeTime = 0//The time the requester want the action to be executed. If 0, it can be executed anytime.
-    var issuedBy: HashSet<String> = hashSetOf() //If unspecified, it is a system request.
+
 
     @Transient
     var completed = false
@@ -72,9 +73,8 @@ class Request(
                 }
                 executedAndFinishedRequests.forEach {
                     gState.setMutuality(
-                        it.value.tgtCharacter,
-                        it.value.tgtCharacter,
-                        deltaWill(it.value.tgtCharacter, gState)
+                        it.value.tgtCharacter!!,
+                        delta = deltaWill(it.value.tgtCharacter!!, gState)
                     )
                 }
                 onComplete.forEach { it() }

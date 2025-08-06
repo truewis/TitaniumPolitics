@@ -10,9 +10,11 @@ import com.titaniumPolitics.game.core.Request
 import com.titaniumPolitics.game.core.Resources
 import com.titaniumPolitics.game.core.gameActions.EndMeeting
 import com.titaniumPolitics.game.core.gameActions.GameAction
+import com.titaniumPolitics.game.core.gameActions.Intercept
 import com.titaniumPolitics.game.core.gameActions.NewAgenda
 import com.titaniumPolitics.game.core.gameActions.Repair
 import com.titaniumPolitics.game.core.gameActions.UnofficialResourceTransfer
+import com.titaniumPolitics.game.core.gameActions.Wait
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 import java.util.*
@@ -194,7 +196,8 @@ sealed class Routine() {
                                 toWhere = "home_$name"
                                 resources = Resources(resourcesToTransferMap)
                             },
-                            issuedTo = hashSetOf(bestIssuer)
+                            issuedTo = hashSetOf(bestIssuer),
+                            issuedBy = hashSetOf(name)
                         )
                     )
                 }
@@ -211,7 +214,8 @@ sealed class Routine() {
                         author = name,
                         attachedRequest = Request(
                             action = action,
-                            issuedTo = hashSetOf(bestActionIssuer)
+                            issuedTo = hashSetOf(bestActionIssuer),
+                            issuedBy = hashSetOf(name)
                         )
                     )
                 }
@@ -235,6 +239,25 @@ sealed class Routine() {
 
         }
         return null
+    }
+
+    fun interceptCondition(
+        conf: Meeting,
+        name: String,
+        place: String
+    ): GameAction {
+        if (gState.getMutuality(
+                name,
+                conf.currentSpeaker!!
+            ) > ReadOnly.const("SpeakerInterceptMutualityThreshold")
+        )
+            return Wait(name, place)
+        else {
+            val action = Intercept(name, place).also { it.injectParent(gState) }
+            if (action.isValid())
+                return action
+            return Wait(name, place)
+        }
     }
 
     fun endMeetingIfLowAttention(

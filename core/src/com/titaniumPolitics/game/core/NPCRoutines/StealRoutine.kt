@@ -13,7 +13,7 @@ import kotlin.math.min
 class StealRoutine() : Routine() {
     fun findResource(name: String): Place? {
         return gState.places.values.filter {
-            it.responsibleDivision != "" && gState.parties[it.responsibleDivision]!!.members.contains(
+            it.responsibleDivision != null && gState.parties[it.responsibleDivision]!!.members.contains(
                 name
             )
         }.maxByOrNull { it.resources[variables["stealResource"]!!] }

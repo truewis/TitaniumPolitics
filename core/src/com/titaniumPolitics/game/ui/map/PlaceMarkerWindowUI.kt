@@ -159,12 +159,17 @@ class PlaceMarkerWindowUI(var gameState: GameState, var owner: MapUI) : Table() 
         this@PlaceMarkerWindowUI.onRefresh += {
             //Update the resource information label with the most recent information about the place.
             val gState = this@PlaceMarkerWindowUI.gameState
-            divisionLabel.setText(
-                "Managed by " + ReadOnly.prop(gState.places[this@PlaceMarkerWindowUI.placeDisplayed]!!.responsibleDivision)
+            gState.places[this@PlaceMarkerWindowUI.placeDisplayed]!!.responsibleDivision?.run {
+
+                divisionLabel.setText(
+                    "Managed by " + ReadOnly.prop(this)
+                )
+            } ?: divisionLabel.setText(
+                "Managed by: Not assigned"
             )
-            gState.places[this@PlaceMarkerWindowUI.placeDisplayed]!!.manager?.let {
+            gState.places[this@PlaceMarkerWindowUI.placeDisplayed]!!.manager?.run {
                 managerLabel.setText(
-                    "Manager: " + ReadOnly.prop(it)
+                    "Manager: " + ReadOnly.prop(this)
                 )
             }
                 ?: managerLabel.setText(
@@ -183,7 +188,7 @@ class PlaceMarkerWindowUI(var gameState: GameState, var owner: MapUI) : Table() 
 //            !(info.type == InformationType.ACTION && info.action is Wait) && info.knownTo.contains(gameState.playerName)
         ) {
 
-            AlertUI.instance.addAlert("interruptedMove", ReadOnly.prop(info.tgtCharacter))
+            AlertUI.instance.addAlert("interruptedMove", ReadOnly.prop(info.tgtCharacter ?: "Someone"))
             interrupted = true
             Logger.write("MoveUI: Move interrupted by ${info.author} at ${info.tgtPlace}", Logger.LogLevel.INFO)
         }

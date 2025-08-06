@@ -13,14 +13,14 @@ class BuyRoutine() : Routine() {
         //Select a character to trade with, based on the information known to the character.
 
         val info = gState.informations.values.filter {
-            it.type == InformationType.RESOURCES && it.tgtCharacter != "" && it.tgtCharacter != name && it.resources.containsKey(
+            it.type == InformationType.RESOURCES && it.tgtCharacter != null && it.tgtCharacter != name && it.resources.containsKey(
                 variables["wantedResource"]!!
             ) && it.resources[variables["wantedResource"]!!] > 10 && it.knownTo.contains(
                 name
             )
         }
         tradeCharacter = if (info.isNotEmpty()) {//If this character knows a character with the resource
-            info.random().tgtCharacter
+            info.random().tgtCharacter!!
         } else
             gState.characters.keys.filter { it != name }.random()
 

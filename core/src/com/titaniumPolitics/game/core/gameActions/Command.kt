@@ -21,7 +21,7 @@ class Command(override val sbjCharacter: String, override val tgtPlace: String) 
         who = GameEngine.acquire(currentConf.currentCharacters.toList())
         request = GameEngine.acquire<Request>(
             "Command",
-            hashMapOf("issuedBy" to sbjCharacter, "issuedTo" to who, "party" to currentConf.involvedParty)
+            hashMapOf("issuedBy" to sbjCharacter, "issuedTo" to who, "party" to currentConf.involvedParty!!)
         )
     }
 

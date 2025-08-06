@@ -12,17 +12,17 @@ import kotlin.math.min
 * */
 @Serializable
 data class Information(//If there is no author, it is a rumor.
-    var author: String = "",
+    var author: String? = null,
     var creationTime: Int = 0,
     var type: InformationType = InformationType.ACTION,
     var tgtTime: Int = 0,
     var tgtPlace: String = "",
-    var tgtApparatus: String = "",
-    var tgtCharacter: String = "",
+    var tgtApparatus: String? = null,
+    var tgtCharacter: String? = null,
     var amount: Int = 0,
     var action: GameAction? = null,
-    var tgtParty: String = "",
-    var auxParty: String = "",
+    var tgtParty: String? = null,
+    var auxParty: String? = null,
     var resources: Resources = Resources()
 ) {
     //Do not copy the name. It is unique.
@@ -59,7 +59,7 @@ data class Information(//If there is no author, it is a rumor.
 
     //TODO: NPCs should do this instead.
     fun compatibility(other: Information): Double {//Two information with low compatibility fight each other.
-        if (tgtCharacter == other.tgtCharacter && tgtCharacter != "") {//alibi
+        if (tgtCharacter == other.tgtCharacter && tgtCharacter != null) {//alibi
             if (tgtTime - other.tgtTime !in -6..6)//If time does not overlap
                 return .0
             if (tgtPlace == other.tgtPlace && action == other.action) {//If exactly the same
@@ -107,35 +107,35 @@ data class Information(//If there is no author, it is a rumor.
     fun simpleDescription(): String {
         return when (type) {
             InformationType.ACTION -> {
-                val actor = if (author.isNotEmpty()) author else "Someone"
+                val actor = author ?: "Someone"
                 val actionStr = action!!::class.simpleName
-                val target = if (tgtCharacter.isNotEmpty()) "to $tgtCharacter" else ""
+                val target = tgtCharacter?.let { "to $it" } ?: ""
                 val place = if (tgtPlace.isNotEmpty()) "at $tgtPlace" else ""
                 "$actor performed $actionStr $target $place"
             }
 
             InformationType.RESOURCES -> {
-                val who = if (tgtCharacter.isNotEmpty()) tgtCharacter else "Someone"
+                val who = tgtCharacter ?: "Someone"
                 "$who has $amount resources at $tgtPlace"
             }
 
             InformationType.CASUALTY -> {
-                val who = if (tgtCharacter.isNotEmpty()) tgtCharacter else "Someone"
+                val who = tgtCharacter ?: "Someone"
                 "$who suffered $amount casualties at $tgtPlace"
             }
 
             InformationType.LOST_RESOURCES -> {
-                val who = if (tgtCharacter.isNotEmpty()) tgtCharacter else "Someone"
+                val who = tgtCharacter ?: "Someone"
                 "$who lost $amount resources at $tgtPlace"
             }
 
             InformationType.DAMAGED_APPARATUS -> {
-                val apparatus = if (tgtApparatus.isNotEmpty()) tgtApparatus else "an apparatus"
+                val apparatus = tgtApparatus ?: "an apparatus"
                 "$apparatus was damaged at $tgtPlace"
             }
 
             InformationType.APPARATUS_DURABILITY -> {
-                val apparatus = if (tgtApparatus.isNotEmpty()) tgtApparatus else "an apparatus"
+                val apparatus = tgtApparatus ?: "an apparatus"
                 "$apparatus durability is $amount at $tgtPlace"
             }
 

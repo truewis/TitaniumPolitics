@@ -6,8 +6,8 @@ import kotlinx.serialization.Serializable
 class Resources() {
     private val _resources = hashMapOf<String, Double>()
 
-    constructor(hashMap: HashMap<String, Double>) : this() {
-        hashMap.forEach {
+    constructor(map: Map<String, Double>) : this() {
+        map.forEach {
             _resources[it.key] = it.value
         }
     }

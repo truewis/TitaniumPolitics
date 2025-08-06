@@ -25,11 +25,10 @@ class OfficialResourceTransfer(override val sbjCharacter: String, override val t
             Logger.write("Not enough resources: $tgtPlace, $resources", Logger.LogLevel.INFO)
         }
         //The mutuality from the recipient party to my party increases. It depends on how the recipient party leader thinks of it.
-        if (parent.places[toWhere]!!.responsibleDivision != "") {
-            val rparty = parent.places[toWhere]!!.responsibleDivision
+        parent.places[toWhere]!!.responsibleDivision?.run {
             sbjCharObj.division?.also {
-                val partyLeader = parent.characters[parent.parties[rparty]!!.leader]
-                parent.setPartyMutuality(rparty, it.name, (partyLeader?.itemValue(resources) ?: .0))
+                val partyLeader = parent.characters[parent.parties[this]!!.leader]
+                parent.setPartyMutuality(this, it.name, (partyLeader?.itemValue(resources) ?: .0))
             }
         }
         super.execute()

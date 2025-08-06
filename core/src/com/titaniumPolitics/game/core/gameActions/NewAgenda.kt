@@ -130,17 +130,25 @@ class NewAgenda(override val sbjCharacter: String, override val tgtPlace: String
                 }
 
                 AgendaType.PRAISE_PARTY -> {
-                    parent.setPartyMutuality(meeting.involvedParty, agenda.subjectParams["party"]!!, 3.0 * effectivity)
+                    meeting.involvedParty?.run {
+                        parent.setPartyMutuality(
+                            this,
+                            agenda.subjectParams["party"]!!,
+                            3.0 * effectivity
+                        )
+                    }
                 }
 
                 AgendaType.DENOUNCE_PARTY -> {
-                    parent.setPartyMutuality(
-                        meeting.involvedParty,
-                        agenda.subjectParams["party"]!!,
-                        -5.0 * effectivity
-                    )
+                    meeting.involvedParty?.run {
+                        parent.setPartyMutuality(
+                            this,
+                            agenda.subjectParams["party"]!!,
+                            -5.0 * effectivity
+                        )
+                    }
                     //Increase party integrity
-                    parent.setPartyMutuality(meeting.involvedParty, meeting.involvedParty, 5.0 * effectivity)
+                    meeting.involvedParty?.run { parent.setPartyMutuality(this, this, 3.0 * effectivity) }
                 }
 
                 AgendaType.NOMINATE -> {

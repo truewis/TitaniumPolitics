@@ -140,7 +140,7 @@ class WaitUI(val gameState: GameState, actionCallback: (GameAction) -> Unit) :
             !(info.type == InformationType.ACTION && info.action is Wait) && info.knownTo.contains(gameState.playerName)
         ) {
 
-            AlertUI.instance.addAlert("interrupted", ReadOnly.prop(info.tgtCharacter))
+            AlertUI.instance.addAlert("interrupted", ReadOnly.prop(info.tgtCharacter ?: "Someone"))
             interrupted = true
             Logger.write("WaitUI: Wait interrupted by ${info.author} at ${info.tgtPlace}", Logger.LogLevel.INFO)
         }

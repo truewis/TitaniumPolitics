@@ -21,8 +21,8 @@ class Meeting(
     var place: String,
     var currentCharacters: HashSet<String> = hashSetOf()
 ) {
-    var involvedParty: String = ""
-    var currentSpeaker = ""
+    var involvedParty: String? = null
+    var currentSpeaker: String? = null
     var currentAttention = 0
         set(value) {
             field = when {

@@ -219,7 +219,7 @@ class MeetingUI(var gameState: GameState) : Table(defaultSkin), KTable {
             missingCharacters.forEach { addCharacterPortrait(it) }
         }
         //Assign the speaker portrait to the current speaker.
-        speakerPortrait.tgtCharacter = currentMeeting.currentSpeaker
+        speakerPortrait.tgtCharacter = currentMeeting.currentSpeaker!!
         //Assign the rest of the characters to each portrait.
         currentMeeting.currentCharacters.filter { it != currentMeeting.currentSpeaker }
             .forEachIndexed { index, character ->

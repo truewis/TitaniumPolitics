@@ -109,7 +109,7 @@ class Character : GameStateElement() {
         thirst = 0.0
         resources["corpse"] += num * 1.0
         Information(
-            author = "",
+            author = null,
             creationTime = parent.time,
             type = InformationType.CASUALTY,
             tgtPlace = place.name,
@@ -302,10 +302,13 @@ class Character : GameStateElement() {
 
                 //Otherwise, if the information is about some other people, the character's preference depends on their relationship with the target.
                 //The target character's preference is reflected.
-                ret = parent.characters[info.tgtCharacter]!!.infoPreference(info) * parent.getMutNorm(
-                    name,
-                    info.tgtCharacter
-                ) * stats.eScale
+                info.tgtCharacter?.run {
+                    ret = parent.characters[this]!!.infoPreference(info) * parent.getMutNorm(
+                        name,
+                        this
+                    ) * stats.eScale
+                }
+
             }
 
             //I don't like unresolved requests that are given to me.

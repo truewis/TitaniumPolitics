@@ -79,18 +79,7 @@ class AttendDivisionMeetingRoutine : Routine(), IMeetingRoutine {
         }
         //If not speaker, wait if the mutuality to the speaker is high. Otherwise, if possible, interrupt the speaker.
         if (conf.currentSpeaker != name) {
-            if (gState.getMutuality(
-                    name,
-                    conf.currentSpeaker
-                ) > ReadOnly.const("SpeakerInterceptMutualityThreshold")
-            )
-                return Wait(name, place)
-            else {
-                val action = Intercept(name, place).also { it.injectParent(gState) }
-                if (action.isValid())
-                    return action
-                return Wait(name, place)
-            }
+            return interceptCondition(conf, name, place)
         } else {
             val party = gState.parties[conf.involvedParty]!!
 
@@ -106,16 +95,16 @@ class AttendDivisionMeetingRoutine : Routine(), IMeetingRoutine {
                         val agenda = MeetingAgenda(AgendaType.REQUEST, name).apply {
                             attachedRequest = Request(
                                 Salary(
-                                    party.leader,
-                                    tgtPlace = party.home
+                                    party.leader!!,
+                                    tgtPlace = party.home!!
                                 ).apply {
                                     //TODO: adjust the salary, it.resources.
                                 }//Created a command to transfer the resource.
                                 ,
-                                issuedTo = hashSetOf(party.leader)
+                                issuedTo = hashSetOf(party.leader!!), issuedBy = hashSetOf(name)
                             ).apply {
                                 executeTime = gState.time
-                                issuedBy = hashSetOf(name)
+
                             }
                         }
                         return NewAgenda(name, place).also {

@@ -49,8 +49,8 @@ class Salary(override val sbjCharacter: String, override val tgtPlace: String) :
                 //Party integrity decreases
                 parent.setPartyMutuality(party.name, party.name, -1.0)
                 //Opinion of the leader of the party decreases
-                if (party.leader != "") {
-                    parent.setMutuality(character, party.leader, -1.0)
+                if (party.leader != null) {
+                    parent.setMutuality(character, party.leader!!, -1.0)
                 }
                 //TODO: are we sure that if the unpaid people are not in the meeting, there is no penalty to the party integrity?
 //

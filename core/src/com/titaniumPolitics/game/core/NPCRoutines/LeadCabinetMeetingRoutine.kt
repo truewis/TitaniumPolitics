@@ -61,18 +61,7 @@ class LeadCabinetMeetingRoutine : Routine(), IMeetingRoutine {
         val party = gState.parties[conf.involvedParty]!!
         //If not speaker, wait if the mutuality to the speaker is high. Otherwise, if possible, interrupt the speaker.
         if (conf.currentSpeaker != name) {
-            if (gState.getMutuality(
-                    name,
-                    conf.currentSpeaker
-                ) > ReadOnly.const("SpeakerInterceptMutualityThreshold")
-            )
-                return Wait(name, place)
-            else {
-                val action = Intercept(name, place).also { it.injectParent(gState) }
-                if (action.isValid())
-                    return action
-                return Wait(name, place)
-            }
+            return interceptCondition(conf, name, place)
         } else //If it is my turn to speak
         {
             //1. No salary in cabinet meeting, so no need to support salary agenda.
@@ -115,9 +104,9 @@ class LeadCabinetMeetingRoutine : Routine(), IMeetingRoutine {
 
             //5. Criticize the common enemies of the division. It is determined by the party with the low mutuality with the division.
             val enemyParty = gState.parties.values.filter { it.name != conf.involvedParty }
-                .minBy { gState.getPartyMutuality(it.name, conf.involvedParty) }.name
+                .minBy { gState.getPartyMutuality(it.name, conf.involvedParty!!) }.name
             if (gState.getPartyMutuality(
-                    conf.involvedParty,
+                    conf.involvedParty!!,
                     enemyParty
                 ) < ReadOnly.const("EnemyPartyMutualityThreshold")
             )

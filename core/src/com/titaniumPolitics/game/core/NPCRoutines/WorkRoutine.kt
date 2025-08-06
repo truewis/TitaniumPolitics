@@ -29,7 +29,7 @@ class WorkRoutine() : Routine() {
 
         //1. If an accident happened in the place of my control, investigate and clear it.
         gState.places.values.firstOrNull {
-            it.responsibleDivision != "" && gState.parties[it.responsibleDivision]!!.members.contains(
+            it.responsibleDivision != null && gState.parties[it.responsibleDivision]!!.members.contains(
                 name
             ) && it.isAccidentScene
         }?.also { place ->
@@ -132,7 +132,7 @@ class WorkRoutine() : Routine() {
                 {
                     val resplace =
                         gState.places.values.filter {
-                            it.responsibleDivision != "" && gState.parties[it.responsibleDivision]!!.members.contains(
+                            it.responsibleDivision != null && gState.parties[it.responsibleDivision]!!.members.contains(
                                 name
                             ) && it.shortestPathAndTimeTo(place) != null
                         }
