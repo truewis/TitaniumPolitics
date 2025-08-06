@@ -128,7 +128,8 @@ class Apparatus {
 
                 }
             }
-            //Don't Distribute wages here.
+            result["ration"] =
+                (result["ration"] ?: .0) + wages
             return result
         }
     val currentAbsorption: Map<String, Double>
@@ -149,6 +150,7 @@ class Apparatus {
             }
             return result
         }
+    val wages get() = currentWorker * laborValuePerHour * const("WorkerWaterConsumptionRate")
     val currentDistribution: Map<String, Double>
         get() {
             val result = idealDistribution
@@ -167,7 +169,7 @@ class Apparatus {
 
                 //Distribute wages
                 result["ration"] =
-                    (result["ration"] ?: .0) + currentWorker * laborValuePerHour * const("WorkerWaterConsumptionRate")
+                    (result["ration"] ?: .0) + wages
             }
             return result
         }

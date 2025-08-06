@@ -49,10 +49,19 @@ class Place : GameStateElement() {
     val marketSupplyEstimateR = 1 - 1.0 / marketSupplyEstimateHours
     var gasResources = Resources("oxygen" to 20000.0, "carbonDioxide" to 100.0)
     fun gasPressure(gasName: String): Double =
-        gasResources[gasName] / ((ReadOnly.gasJson[gasName]!!.jsonObject["density"]!!.jsonPrimitive.float)) * (temperature / 273.15) / volume * 101325
+        try {
+            gasResources[gasName] / ((ReadOnly.gasJson[gasName]!!.jsonObject["density"]!!.jsonPrimitive.float)) * (temperature / 273.15) / volume * 101325
+        } catch (e: Exception) {
+            throw Exception("Gas $gasName density not found in gasJson.")
+        }
 
     fun pressureToMass(gasName: String, pressure: Double): Double =
-        pressure * ((ReadOnly.gasJson[gasName]!!.jsonObject["density"]!!.jsonPrimitive.float)) / (temperature / 273.15) * volume / 101325
+        try {
+            pressure * ((ReadOnly.gasJson[gasName]!!.jsonObject["density"]!!.jsonPrimitive.float)) / (temperature / 273.15) * volume / 101325
+        } catch (e: Exception) {
+            throw Exception("Gas $gasName density not found in gasJson.")
+        }
+
 
     var connectedPlaces = arrayListOf<String>()
     val plannedWorker: Int

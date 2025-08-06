@@ -1186,7 +1186,8 @@
         "_resources": {
           "lightMetal": 50,
           "component": 100,
-          "water": 0
+          "water": 100,
+          "ration": 100
         }
       },
       "connectedPlaces": [
@@ -1241,7 +1242,8 @@
         "_resources": {
           "lightMetal": 50,
           "component": 100,
-          "water": 0
+          "water": 100,
+          "ration": 100
         }
       },
       "connectedPlaces": [
@@ -1424,7 +1426,8 @@
         "_resources": {
           "water": 300000,
           "lightMetal": 50,
-          "component": 100
+          "component": 100,
+          "ration": 100
         }
       },
       "connectedPlaces": [
@@ -1482,7 +1485,8 @@
         "_resources": {
           "lightMetal": 50,
           "component": 100,
-          "water": 15000
+          "water": 15000,
+          "ration": 100
         }
       },
       "connectedPlaces": [
