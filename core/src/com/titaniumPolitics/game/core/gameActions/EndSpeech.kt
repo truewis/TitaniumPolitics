@@ -12,7 +12,7 @@ class EndSpeech(override val sbjCharacter: String, override val tgtPlace: String
         val meeting = parent.characters[sbjCharacter]!!.currentMeeting!!
 
         //The amount of attention gained can be modified here.
-        meeting.currentAttention += 10
+        meeting.currentAttention -= 40
         meeting.currentSpeaker = nextSpeaker
         Logger.write(
             "$sbjCharacter ended their speech and nominated $nextSpeaker as the next speaker.",

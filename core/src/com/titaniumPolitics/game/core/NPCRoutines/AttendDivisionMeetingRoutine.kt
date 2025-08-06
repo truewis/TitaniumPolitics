@@ -141,11 +141,10 @@ class AttendDivisionMeetingRoutine : Routine(), IMeetingRoutine {
 
     //TODO: Also check AttendMeetingRoutine for the same function.
     override fun endCondition(name: String, place: String): Boolean {
-        gState.characters[name]!!
         //If the conference is over, leave the routine. But the condition is not checked here, because the routine is not ended until the action is executed.
         //See NonPlayerAgent.selectRoutine()
         //If two hours has passed since the meeting started, leave the meeting. TODO: what if the meeting has started late?
         //TODO: stay in the meeting until I have something else to do, or the work hours are over.
-        return routineStartTime + 7200 / ReadOnly.dt <= gState.time || gState.characters[name]!!.currentMeeting?.let { it.type != Meeting.MeetingType.DIVISION_DAILY_CONFERENCE } ?: false /*Sometimes characters are transferred between different meetings without their turn. In that case, the previous meeting routine is killed here.*/
+        return meetingRoutineEndCondition(name, Meeting.MeetingType.DIVISION_DAILY_CONFERENCE)
     }
 }

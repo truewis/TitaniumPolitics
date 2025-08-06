@@ -5,8 +5,10 @@ import com.titaniumPolitics.game.core.GameEngine
 import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.core.Meeting
 import com.titaniumPolitics.game.core.MeetingAgenda
+import com.titaniumPolitics.game.core.ReadOnly
 import com.titaniumPolitics.game.core.Request
 import com.titaniumPolitics.game.core.Resources
+import com.titaniumPolitics.game.core.gameActions.EndMeeting
 import com.titaniumPolitics.game.core.gameActions.GameAction
 import com.titaniumPolitics.game.core.gameActions.NewAgenda
 import com.titaniumPolitics.game.core.gameActions.Repair
@@ -233,5 +235,26 @@ sealed class Routine() {
 
         }
         return null
+    }
+
+    fun endMeetingIfLowAttention(
+        conf: Meeting,
+        name: String,
+        place: String
+    ): GameAction? {
+        //If the attention of the meeting is low, end the meeting.
+        if (conf.currentCharacters.count() > 1 && conf.currentAttention < 20) {
+            return EndMeeting(name, place)
+        }
+        return null
+    }
+
+    fun meetingRoutineEndCondition(name: String, type: Meeting.MeetingType): Boolean {
+        return routineStartTime + 7200 / ReadOnly.dt <= gState.time || gState.characters[name]!!.currentMeeting?.let { it.type != type } ?: false
+        /*Sometimes characters are transferred between different meetings without their turn. In that case, the previous meeting routine is killed here.*/
+    }
+
+    override fun toString(): String {
+        return "Routine(ID='$ID', priority=$priority, subroutines=$subroutines, routineStartTime=$routineStartTime, variables=$variables, intVariables=$intVariables, doubleVariables=$doubleVariables, executeDone=$executeDone)"
     }
 }

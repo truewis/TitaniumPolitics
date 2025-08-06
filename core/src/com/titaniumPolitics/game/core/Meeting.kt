@@ -24,6 +24,12 @@ class Meeting(
     var involvedParty: String = ""
     var currentSpeaker = ""
     var currentAttention = 0
+        set(value) {
+            field = when {
+                value < 0 -> 0
+                else -> value
+            }
+        }
     var agendas = arrayListOf<MeetingAgenda>()
     var voteResults = hashMapOf<String, Int>()
     var onVoteResults = ArrayList<() -> Unit>()

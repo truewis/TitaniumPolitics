@@ -131,7 +131,19 @@ class NonPlayerAgent : Agent() {
         routines.sortByDescending { it.priority }
 
         var routineSettled = false
+        var loopCounter = 0
+        var maxLoopCounter = 20
         while (!routineSettled) {
+            loopCounter++
+            if (loopCounter == maxLoopCounter) {
+                Logger.write(
+                    "//////////////////////Routine loop counter exceeded for $name. Collecting Trace.//////////////////////",
+                    Logger.LogLevel.INFO
+                )
+            }
+            if (loopCounter > maxLoopCounter + 5) {
+                throw RuntimeException("Routine loop counter exceeded for $name.")
+            }
             routineSettled = true
             routines.forEach {
                 it.injectParent(parent)
@@ -144,6 +156,8 @@ class NonPlayerAgent : Agent() {
             }
             routines.removeAll(removeList)
             routines.forEach { routine -> routine.subroutines.removeIf { s -> routines.none { it.ID == s } } } //Remove the subroutines that were removed.
+            if (loopCounter > maxLoopCounter)
+                Logger.write("Routines $removeList is being removed.", Logger.LogLevel.INFO)
             removeList.clear()
             routines.forEach {
                 it.newRoutineCondition(name, place, routines)?.let { v ->
@@ -152,6 +166,8 @@ class NonPlayerAgent : Agent() {
                         v.priority = it.priority + 10 //Set the priority to be higher than the current routine.
                     it.subroutines += v.ID
                     addList += v
+                    if (loopCounter > maxLoopCounter)
+                        Logger.write("Adding new routine $v from $it", Logger.LogLevel.INFO)
                     routineSettled = false
                 }
             }

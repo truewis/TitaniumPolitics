@@ -130,7 +130,9 @@ class LeadDivisionMeetingRoutine : Routine(), IMeetingRoutine {
 
             //7. Gossip
             TalkRoutine.gossip(gState, name, place)?.also { return it }
-
+            
+            //8. End meeting if attention is low.
+            endMeetingIfLowAttention(conf, name, place)?.let { return it }
 //If nothing else to talk about, end the speech. The next speaker is the character with the highest mutuality.
             return EndSpeech(name, place).also {
                 it.nextSpeaker = conf.currentCharacters.minus(name)
@@ -226,6 +228,6 @@ class LeadDivisionMeetingRoutine : Routine(), IMeetingRoutine {
         //See NonPlayerAgent.selectRoutine()
         //If two hours has passed since the meeting started, leave the meeting. TODO: what if the meeting has started late?
         //TODO: stay in the meeting until I have something else to do, or the work hours are over.
-        return routineStartTime + 7200 / ReadOnly.dt <= gState.time || gState.characters[name]!!.currentMeeting?.let { it.type != Meeting.MeetingType.DIVISION_DAILY_CONFERENCE } ?: false /*Sometimes characters are transferred between different meetings without their turn. In that case, the previous meeting routine is killed here.*/
+        return meetingRoutineEndCondition(name, Meeting.MeetingType.DIVISION_DAILY_CONFERENCE)
     }
 }
