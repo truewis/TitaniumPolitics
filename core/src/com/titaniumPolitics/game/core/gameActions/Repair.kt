@@ -21,16 +21,6 @@ class Repair(override val sbjCharacter: String, override val tgtPlace: String) :
 
     }
 
-    fun checkRepairLevel(app: Apparatus): Pair<Int, Double> {
-        return if (app.durability > 70) {//TODO: set resource cost.
-            Pair(0, 100.0)
-        } else if (app.durability <= 70 && app.durability > 30) {
-            Pair(1, 70.0)
-        } else {
-            Pair(2, 30.0)
-        }
-    }
-
     override fun isValid(): Boolean {
         val app = parent.places[tgtPlace]!!.getApparatus(apparatusID)
         return parent.characters[sbjCharacter]!!.trait.contains("engineer")
@@ -42,6 +32,18 @@ class Repair(override val sbjCharacter: String, override val tgtPlace: String) :
 
     override fun deltaWill(): Double {
         return super.deltaWill() * sbjCharObj.stats.lScale
+    }
+
+    companion object {
+        fun checkRepairLevel(app: Apparatus): Pair<Int, Double> {
+            return if (app.durability > 70) {//TODO: set resource cost.
+                Pair(0, 100.0)
+            } else if (app.durability <= 70 && app.durability > 30) {
+                Pair(1, 70.0)
+            } else {
+                Pair(2, 30.0)
+            }
+        }
     }
 
 }
