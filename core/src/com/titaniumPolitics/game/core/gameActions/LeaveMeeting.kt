@@ -1,5 +1,6 @@
 package com.titaniumPolitics.game.core.gameActions
 
+import com.titaniumPolitics.game.core.Meeting
 import com.titaniumPolitics.game.debugTools.Logger
 import kotlinx.serialization.Serializable
 
@@ -29,7 +30,11 @@ class LeaveMeeting(override val sbjCharacter: String, override val tgtPlace: Str
 
     override fun isValid(): Boolean {
         //TODO: Should not be able to leave meeting freely if there is a voting at the end.
-        return parent.characters[sbjCharacter]!!.currentMeeting != null
+        val meeting = parent.characters[sbjCharacter]!!.currentMeeting
+        return meeting != null && reason(
+            meeting.type != Meeting.MeetingType.DIVISION_LEADER_ELECTION,
+            "leaveMeeting-election"
+        )
     }
 
 }

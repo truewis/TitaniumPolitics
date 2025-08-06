@@ -1,5 +1,6 @@
 package com.titaniumPolitics.game.core.gameActions
 
+import com.titaniumPolitics.game.core.Apparatus
 import com.titaniumPolitics.game.debugTools.Logger
 import kotlinx.serialization.Serializable
 
@@ -11,43 +12,32 @@ class Repair(override val sbjCharacter: String, override val tgtPlace: String) :
 
 
         parent.places[tgtPlace]!!.getApparatus(apparatusID).also {
-
-            if (it.durability > 70) {//TODO: set resource cost.
-                if (tgtPlaceObj.resources.contains(it.requiredResourcePerRepair[0])) {
-                    tgtPlaceObj.resources -= it.requiredResourcePerRepair[0]
-                    it.durability = 100.0
-                } else
-                    Logger.write(
-                        "$sbjCharacter tried to repair $it, but don't have the proper resource.",
-                        Logger.LogLevel.INFO
-                    )
-            } else if (it.durability <= 70 && it.durability > 30) {
-                if (tgtPlaceObj.resources.contains(it.requiredResourcePerRepair[1])) {
-                    tgtPlaceObj.resources -= it.requiredResourcePerRepair[1]
-                    it.durability = 70.0
-                } else
-                    Logger.write(
-                        "$sbjCharacter tried to repair $it, but don't have the proper resource.",
-                        Logger.LogLevel.INFO
-                    )
-            } else if (it.durability <= 30) {
-                if (tgtPlaceObj.resources.contains(it.requiredResourcePerRepair[2])) {
-                    tgtPlaceObj.resources -= it.requiredResourcePerRepair[2]
-                    it.durability = 30.0
-                } else
-                    Logger.write(
-                        "$sbjCharacter tried to repair $it, but don't have the proper resource.",
-                        Logger.LogLevel.INFO
-                    )
-            }
+            val level = checkRepairLevel(it)
+            tgtPlaceObj.resources -= it.requiredResourcePerRepair[level.first]
+            it.durability = level.second
 
         }
         super.execute()
 
     }
 
+    fun checkRepairLevel(app: Apparatus): Pair<Int, Double> {
+        return if (app.durability > 70) {//TODO: set resource cost.
+            Pair(0, 100.0)
+        } else if (app.durability <= 70 && app.durability > 30) {
+            Pair(1, 70.0)
+        } else {
+            Pair(2, 30.0)
+        }
+    }
+
     override fun isValid(): Boolean {
-        return parent.places[tgtPlace]!!.apparatuses.isNotEmpty() && parent.characters[sbjCharacter]!!.trait.contains("technician")
+        val app = parent.places[tgtPlace]!!.getApparatus(apparatusID)
+        return parent.characters[sbjCharacter]!!.trait.contains("engineer")
+                && reason(
+            tgtPlaceObj.resources.contains(app.requiredResourcePerRepair[checkRepairLevel(app).first]),
+            "repair-resources"
+        )
     }
 
     override fun deltaWill(): Double {

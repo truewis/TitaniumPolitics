@@ -22,7 +22,7 @@ class EndMeeting(override val sbjCharacter: String, override val tgtPlace: Strin
         return meeting != null &&
                 meeting!!.currentCharacters.contains(sbjCharacter) &&
                 meeting!!.currentSpeaker == sbjCharacter &&
-                meeting!!.type != Meeting.MeetingType.DIVISION_LEADER_ELECTION
+                reason(meeting!!.type != Meeting.MeetingType.DIVISION_LEADER_ELECTION, "endMeeting-election")
     }
 
 }

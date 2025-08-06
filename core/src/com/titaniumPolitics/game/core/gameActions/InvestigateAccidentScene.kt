@@ -15,8 +15,10 @@ class InvestigateAccidentScene(override val sbjCharacter: String, override val t
     }
 
     override fun isValid(): Boolean {
-        return parent.places[tgtPlace]!!.isAccidentScene && parent.parties[parent.places[tgtPlace]!!.responsibleDivision]!!.members.contains(
-            sbjCharacter
+        return parent.places[tgtPlace]!!.isAccidentScene && reason(
+            parent.parties[parent.places[tgtPlace]!!.responsibleDivision]!!.members.contains(
+                sbjCharacter
+            ), "investigateAccidentScene-division"
         )
     }
 

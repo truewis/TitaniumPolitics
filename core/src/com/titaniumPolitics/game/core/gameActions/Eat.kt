@@ -24,7 +24,10 @@ class Eat(override val sbjCharacter: String, override val tgtPlace: String) : Ga
     }
 
     override fun isValid(): Boolean {
-        return tgtPlace.contains("home") && sbjCharObj.resources["ration"] > amount && sbjCharObj.resources["water"] > amount
+        return tgtPlace.contains("home") && reason(
+            sbjCharObj.resources["ration"] > amount && sbjCharObj.resources["water"] > amount,
+            "eat-resources"
+        )
     }
 
     override fun deltaWill(): Double {
