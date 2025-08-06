@@ -487,7 +487,7 @@ class GameEngine(val gameState: GameState) {
 
     //TODO: Check for win/lose/interrupt conditions
     fun conditionCheck() {
-        gameState.characters.forEach { entry ->
+        gameState.aliveCharacters.forEach { entry ->
             //If air is not breathable, take damage.
             if (entry.value.place.gasPressure("oxygen") < const("CriticalOxygenPressure") || entry.value.place.gasPressure(
                     "carbonDioxide"
@@ -527,7 +527,7 @@ class GameEngine(val gameState: GameState) {
                 entry.value.alive = false
             }
         }
-        val l = gameState.characters.filter { it.value.alive && !it.value.trait.contains("robot") }
+        val l = gameState.aliveCharacters.filter { !it.value.trait.contains("robot") }
         if (!l.contains(gameState.playerName)) {
 
             Logger.write("You died. Game over.", Logger.LogLevel.INFO)

@@ -16,13 +16,13 @@ class GameEngineTest {
     fun runFor2Days() {
 
         gdh.initializeColumns()
-        Logger.write("Working Directory = " + System.getProperty("user.dir"), Logger.LogLevel.INFO)
+        println("Working Directory = " + System.getProperty("user.dir"))
         gState = Json.Default.decodeFromString(
             GameState.serializer(), File("../assets/json/init.json").readText()
         ).also {
             //To run tests, control the player character with an agent.
             it.nonPlayerAgents[it.playerName] = NonPlayerAgent()
-            Logger.write("Loading complete.", Logger.LogLevel.INFO)
+            println("Loading complete.")
             it.initialize()
         }
         gState.onStart.forEach { it() }
@@ -109,7 +109,7 @@ class GameEngineTest {
             }
 
         if (time % 60 == 0) {
-            val suffocating = characters.filter { entry ->
+            val suffocating = aliveCharacters.filter { entry ->
                 entry.value.place.gasPressure("oxygen") < const("CriticalOxygenPressure") || entry.value.place.gasPressure(
                     "carbonDioxide"
                 ) / entry.value.place.gasPressure(
@@ -120,7 +120,7 @@ class GameEngineTest {
                 Logger.write("!${suffocating} is suffocating", Logger.LogLevel.INFO)
 
             }
-            val hot = characters.filter { entry ->
+            val hot = aliveCharacters.filter { entry ->
                 entry.value.place.temperature - 300 /*[K]*/ !in -const("TemperatureDifferenceTolerance")..const("TemperatureDifferenceTolerance")
             }.keys
 

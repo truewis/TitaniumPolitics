@@ -177,7 +177,7 @@ class NonPlayerAgent : Agent() {
 
     //Recursively stop the routine and all its subroutines.
     fun endRoutine(routine: Routine) {
-        routine.subroutines.forEach { id -> endRoutine(routines.first { it.ID == id }) }
+        routine.subroutines.forEach { id -> routines.firstOrNull { it.ID == id }?.let { endRoutine(it) } }
         removeList += (routine)
     }
 

@@ -19,6 +19,14 @@ class JoinMeeting(override val sbjCharacter: String, override val tgtPlace: Stri
     }
 
     override fun isValid(): Boolean {
+        if (sbjCharObj.currentMeeting != null) {
+            Logger.write(
+                "Cannot join a meeting $meetingName while already in one: ${sbjCharObj.currentMeeting}",
+                Logger.LogLevel.ERROR
+            )
+            return false
+        }
+
         return parent.ongoingMeetings.any {
             it.value.scheduledCharacters.contains(sbjCharacter) && !it.value.currentCharacters.contains(
                 sbjCharacter

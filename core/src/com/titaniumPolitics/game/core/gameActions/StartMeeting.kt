@@ -28,6 +28,7 @@ class StartMeeting(override val sbjCharacter: String, override val tgtPlace: Str
         meeting.currentSpeaker = sbjCharacter
         meeting.currentAttention = 100
         val requiredCharacters = meeting.scheduledCharacters.intersect(tgtPlaceObj.characters)
+            .filter { s -> parent.characters[s]!!.currentMeeting == null /*Forcing characters out of meetings causes bunch of problems, such as missing speaker. Don't do this.*/ }
         requiredCharacters.forEach {
             parent.characters[it]!!.frozen = 1 //Force them to join the meeting.
             parent.ongoingMeetings[meetingName]!!.currentCharacters.add(it)
@@ -38,6 +39,14 @@ class StartMeeting(override val sbjCharacter: String, override val tgtPlace: Str
     }
 
     override fun isValid(): Boolean {
+        if (sbjCharObj.currentMeeting != null) {
+            Logger.write(
+                "Cannot start a meeting $meetingName while already in one: ${sbjCharObj.currentMeeting}",
+                Logger.LogLevel.ERROR
+            )
+            return false
+        }
+
         val targetMeeting =
             parent.scheduledMeetings.filter {
                 it.value.isValidTimeToStart(parent.time)
@@ -46,7 +55,8 @@ class StartMeeting(override val sbjCharacter: String, override val tgtPlace: Str
                 .filter { !parent.ongoingMeetings.containsKey(it.key) }
                 .filter { it.value.scheduledCharacters.contains(sbjCharacter) }.keys.firstOrNull()
         return targetMeeting != null &&
-                parent.scheduledMeetings[targetMeeting]!!.scheduledCharacters.intersect(parent.places[tgtPlace]!!.characters).size >= 2 &&
+                //Check if there are enough characters scheduled to attend the meeting.
+                parent.scheduledMeetings[targetMeeting]!!.scheduledCharacters.intersect(parent.places[tgtPlace]!!.characters.filter { s -> parent.characters[s]!!.currentMeeting == null }).size >= 2 &&
                 (parent.scheduledMeetings[targetMeeting]!!.type != Meeting.MeetingType.DIVISION_LEADER_ELECTION || //Beware that division leader elections can only be started by the controller.
                         sbjCharacter == "ctrler")
 

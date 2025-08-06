@@ -79,6 +79,9 @@ class GameState {
     var _alertLevel = 0
     var places = hashMapOf<String, Place>()
     var characters = hashMapOf<String, Character>()
+
+    val aliveCharacters get() = characters.filter { it.value.alive }
+
     var nonPlayerAgents = hashMapOf<String, Agent>()
     var playerName = ""
 

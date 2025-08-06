@@ -16,7 +16,7 @@ class LeadDivisionMeetingRoutine : Routine(), IMeetingRoutine {
         val conf =
             character.currentMeeting ?: return null
         check(conf.type == Meeting.MeetingType.DIVISION_DAILY_CONFERENCE) {
-            "LeadDivisionMeetingRoutine can only be used in divisionDailyConference , but got ${conf.type}"
+            "LeadDivisionMeetingRoutine can only be used in divisionDailyConference, but got ${conf.type}."
         }
         val party = gState.parties[conf.involvedParty]!!
         check(party.leader == name) {
