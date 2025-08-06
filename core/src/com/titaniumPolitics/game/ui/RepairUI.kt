@@ -22,6 +22,7 @@ import com.titaniumPolitics.game.ui.widget.ActionSelectButton
 import com.titaniumPolitics.game.ui.widget.ActionSheetUI
 import com.titaniumPolitics.game.ui.widget.CharacterSelectButton
 import com.titaniumPolitics.game.ui.widget.PlaceSelectButton
+import com.titaniumPolitics.game.ui.widget.ResourceDisplayUI
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
 import ktx.scene2d.*
@@ -57,17 +58,15 @@ class RepairUI(val gameState: GameState, actionCallback: (GameAction) -> Unit) :
         }
 
         row()
-        val requiredRes = label("Required:", "docTitle") {
-            setAlignment(Align.center)
-            setFontScale(0.5f)
-        } //TODO: Replace with resource widget
+        val requiredRes = ResourceDisplayUI()
 
         this@RepairUI.onUpdateSelectedApp += {
             name.setText(it.name)
             dur.setText(it.durability.toString())
-            requiredRes.setText(
-                it.requiredResourcePerRepair[Repair.checkRepairLevel(it).first].toString()
-            )
+            requiredRes.current = (
+                    it.requiredResourcePerRepair[Repair.checkRepairLevel(it).first]
+                    )
+            requiredRes.refresh()
 
         }
     }

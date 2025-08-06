@@ -17,13 +17,14 @@ import com.titaniumPolitics.game.core.gameActions.OfficialResourceTransfer
 import com.titaniumPolitics.game.core.gameActions.UnofficialResourceTransfer
 import com.titaniumPolitics.game.ui.widget.ActionSheetUI
 import com.titaniumPolitics.game.ui.widget.PlaceSelectButton
+import com.titaniumPolitics.game.ui.widget.ResourceDisplayUI
 import ktx.scene2d.*
 
 
 class ResourceTransferUI(var gameState: GameState, actionCallback: (GameAction) -> Unit) :
     ActionSheetUI("ResourceTransferTitle", gameState, actionCallback) {
-    private val dataTable = Table()
-    private val targetTable = Table()
+    private val dataTable = ResourceDisplayUI()
+    private val targetTable = ResourceDisplayUI()
     override var tgtPlace: String = gameState.player.place.name
         set(value) {
             field = value
@@ -85,11 +86,6 @@ class ResourceTransferUI(var gameState: GameState, actionCallback: (GameAction) 
     }
 
     init {
-        val currentResourcePane = ScrollPane(dataTable)
-        currentResourcePane.setScrollingDisabled(false, false)
-
-        val targetResourcePane = ScrollPane(targetTable)
-        targetResourcePane.setScrollingDisabled(false, false)
         val st = stack {
             it.grow()
             table {
@@ -105,8 +101,8 @@ class ResourceTransferUI(var gameState: GameState, actionCallback: (GameAction) 
                 add(this@ResourceTransferUI.placeButton).size(400f, 75f)
 
                 row()
-                add(currentResourcePane)
-                add(targetResourcePane)
+                add(this@ResourceTransferUI.dataTable)
+                add(this@ResourceTransferUI.targetTable)
                 row()
                 add(this@ResourceTransferUI.submitButton).size(400f, 75f)
                     .fill()//TODO: official transfer is only to my division
@@ -142,59 +138,24 @@ class ResourceTransferUI(var gameState: GameState, actionCallback: (GameAction) 
         this.mode = mode
         this.modeLabel.setText("Transaction: $mode")
         placeButton.isVisible = mode != "private"
-        dataTable.clear()
-        dataTable.apply {
-            add(table {
-                current.forEach { (resourceName, resourceAmount) ->
-                    if (resourceAmount > .0) {
-                        label("$resourceName: $resourceAmount", "docTitle") {
-                            //TODO: Replace with icons
-                            setFontScale(0.5f)
-                            setAlignment(Align.center)
-                            addListener(object : ClickListener() {
-                                override fun clicked(
-                                    event: com.badlogic.gdx.scenes.scene2d.InputEvent?,
-                                    x: Float,
-                                    y: Float
-                                ) {
-                                    current[resourceName] = current[resourceName]!! - 1
-                                    target[resourceName] = (target[resourceName] ?: .0) + 1
-                                    this@ResourceTransferUI.refresh(mode, current, target)
-                                }
-                            })
-                        }
-                        row()
-                    }
-                }
-            })
+        dataTable.current = Resources(current)
+        dataTable.callback = { resourceName, amount ->
+            current[resourceName] = current[resourceName]!! - 1
+            target[resourceName] = (target[resourceName] ?: .0) + 1
+            this@ResourceTransferUI.refresh(mode, current, target)
+        }
+        dataTable.refresh()
+
+        targetTable.current = Resources(current)
+        targetTable.callback = { resourceName, amount ->
+            target[resourceName] = target[resourceName]!! - 1
+            current[resourceName] = (current[resourceName] ?: .0) + 1
+            this@ResourceTransferUI.refresh(mode, current, target)
         }
 
-        targetTable.clear()
-        targetTable.apply {
-            add(table {
-                target.forEach { (resourceName, resourceAmount) ->
-                    if (resourceAmount > .0) {
-                        label("$resourceName: $resourceAmount", "docTitle") {
-                            //TODO: Replace with icons
-                            setFontScale(0.5f)
-                            setAlignment(Align.center)
-                            addListener(object : ClickListener() {
-                                override fun clicked(
-                                    event: com.badlogic.gdx.scenes.scene2d.InputEvent?,
-                                    x: Float,
-                                    y: Float
-                                ) {
-                                    target[resourceName] = target[resourceName]!! - 1
-                                    current[resourceName] = (current[resourceName] ?: .0) + 1
-                                    this@ResourceTransferUI.refresh(mode, current, target)
-                                }
-                            })
-                        }
-                        row()
-                    }
-                }
-            })
-        }
+        targetTable.refresh()
+
+
     }
 
 }
