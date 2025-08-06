@@ -347,7 +347,7 @@ class GameEngine(val gameState: GameState) {
     }
 
     fun scheduleDailyConferences() {
-        //Each division has a conference every day. The conference is attended by the head of the division and the members of the division.
+        //Each division has a conference every day. The conference is attended by the head of the division and the directors of the division.
         gameState.parties.values.filter { it.type == "division" }.forEach { party ->
             if (party.leader != null) {
                 val conference = Meeting(
@@ -366,6 +366,19 @@ class GameEngine(val gameState: GameState) {
                     place = party.home!!,
                     scheduledCharacters = (setOf("ctrler") + party.realMembers).toHashSet() //Without anonymous members
                 ).also { it.involvedParty = party.name }
+                gameState.addScheduledMeeting(conference)
+            }
+        }
+        //Each division has a conference every day. The conference is attended by the director of the workplace.
+        gameState.parties.values.filter { it.type == "workplace" }.forEach { party ->
+            if (party.leader != null) {
+                val conference = Meeting(
+                    gameState.time + 12 * 3600 / dt /*12 in the afternoon*/,
+                    Meeting.MeetingType.DIVISION_DAILY_CONFERENCE,
+                    place = party.home!!,
+                    scheduledCharacters = party.realMembers //Without anonymous members
+                ).also { it.involvedParty = party.name }
+
                 gameState.addScheduledMeeting(conference)
             }
         }

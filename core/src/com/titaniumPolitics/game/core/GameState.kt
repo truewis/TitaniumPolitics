@@ -247,6 +247,18 @@ class GameState {
             char.value.resources =
                 Resources("ration" to 100.0 * char.value.reliant, "water" to 100.0 * char.value.reliant)
         }
+
+        //Create workplace party for each workplace.
+        places.forEach { place ->
+            parties["workplace_${place.key}"] = Party().apply {
+                injectParent(this@GameState)
+                leader = place.value.manager
+                leader?.let { members.add(it) }
+                type = "workplace"
+                home = place.key
+            }
+
+        }
         randomize()
         eventSystem.newGame()
         println("Game state initialized successfully.")
