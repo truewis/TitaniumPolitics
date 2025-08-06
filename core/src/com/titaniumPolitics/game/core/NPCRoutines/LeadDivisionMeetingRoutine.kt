@@ -16,11 +16,11 @@ class LeadDivisionMeetingRoutine : Routine(), IMeetingRoutine {
         val conf =
             character.currentMeeting ?: return null
         check(conf.type == Meeting.MeetingType.DIVISION_DAILY_CONFERENCE) {
-            "LeadDivisionMeetingRoutine can only be used in divisionDailyConference, but got ${conf.type}."
+            "For $name, LeadDivisionMeetingRoutine can only be used in divisionDailyConference, but got ${conf.type}."
         }
         val party = gState.parties[conf.involvedParty]!!
         check(party.leader == name) {
-            "LeadDivisionMeetingRoutine can only be used by the division leader, but got $name"
+            "For $name, LeadDivisionMeetingRoutine can only be used by the division leader, but got $name"
         }
 
         //DO not support proof of work, as we are the leader.
@@ -157,7 +157,10 @@ class LeadDivisionMeetingRoutine : Routine(), IMeetingRoutine {
             if (productivity(name, minProdApp) < gState.laborValuePerHour) {
                 val reductionAmount = max(minProdApp.plannedWorker / 5, 1)
                 val wantPlace = gState.getApparatusPlace(minProdApp.ID)
-                if (wantPlace.manager != null && wantPlace.manager!! in charObj.currentMeeting!!.currentCharacters) {
+                if (wantPlace.manager?.let {
+                        it in charObj.currentMeeting!!.currentCharacters && it != name
+                    }
+                        ?: false) {
                     //Fill in the agenda based on variables in the routine, resource and character.
                     val agenda = MeetingAgenda(AgendaType.REQUEST, name).apply {
                         attachedRequest = Request(
@@ -219,11 +222,10 @@ class LeadDivisionMeetingRoutine : Routine(), IMeetingRoutine {
     }
 
     override fun endCondition(name: String, place: String): Boolean {
-        gState.characters[name]!!
         //If the conference is over, leave the routine. But the condition is not checked here, because the routine is not ended until the action is executed.
         //See NonPlayerAgent.selectRoutine()
         //If two hours has passed since the meeting started, leave the meeting. TODO: what if the meeting has started late?
         //TODO: stay in the meeting until I have something else to do, or the work hours are over.
-        return routineStartTime + 7200 / ReadOnly.dt <= gState.time
+        return routineStartTime + 7200 / ReadOnly.dt <= gState.time || gState.characters[name]!!.currentMeeting?.let { it.type != Meeting.MeetingType.DIVISION_DAILY_CONFERENCE } ?: false /*Sometimes characters are transferred between different meetings without their turn. In that case, the previous meeting routine is killed here.*/
     }
 }

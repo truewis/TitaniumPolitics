@@ -18,11 +18,11 @@ class LeadCabinetMeetingRoutine : Routine(), IMeetingRoutine {
         val conf =
             character.currentMeeting ?: return null
         check(conf.type == Meeting.MeetingType.CABINET_DAILY_CONFERENCE) {
-            "LeadCabinetMeetingRoutine can only be used in cabinetDailyConference, but got ${conf.type}"
+            "For $name, LeadCabinetMeetingRoutine can only be used in cabinetDailyConference, but got ${conf.type}"
         }
         val party = gState.parties[conf.involvedParty]!!
         check(party.leader == name) {
-            "LeadCabinetMeetingRoutine can only be used for cabinetDailyConference when the leader, but got $name as the leader of ${party.name}"
+            "For $name, LeadCabinetMeetingRoutine can only be used for cabinetDailyConference when the leader, but got $name as the leader of ${party.name}"
         }
 
         //Do not support proof of work, as we are the leader.
@@ -148,6 +148,6 @@ class LeadCabinetMeetingRoutine : Routine(), IMeetingRoutine {
         //See NonPlayerAgent.selectRoutine()
         //If two hours has passed since the meeting started, leave the meeting. TODO: what if the meeting has started late?
         //TODO: stay in the meeting until I have something else to do, or the work hours are over.
-        return routineStartTime + 7200 / ReadOnly.dt <= gState.time
+        return routineStartTime + 7200 / ReadOnly.dt <= gState.time || gState.characters[name]!!.currentMeeting?.let { it.type != Meeting.MeetingType.CABINET_DAILY_CONFERENCE } ?: false /*Sometimes characters are transferred between different meetings without their turn. In that case, the previous meeting routine is killed here.*/
     }
 }
