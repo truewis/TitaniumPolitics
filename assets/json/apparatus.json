@@ -224,7 +224,7 @@
     "image": "defaultApparatus.png",
     "durabilityTau": 8.64e8,
     "baseDanger": 6e-4,
-    "idealWorker": 50,
+    "idealWorker": 0,
     "idealProduction": {
       "energy": 2e8
     },
