@@ -1,5 +1,5 @@
 {
-  "phosphorite": {
+  "phosphorus": {
     "baseEGP(g/g)": 1,
     "demandPopElasticity(g/day/person)": 1,
     "demandPriceElasticity": 0.2
