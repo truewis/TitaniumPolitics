@@ -4,6 +4,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.ui.HorizontalGroup
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener
 import com.titaniumPolitics.game.core.GameState
+import com.titaniumPolitics.game.core.InformationType
 import com.titaniumPolitics.game.core.ReadOnly
 import com.titaniumPolitics.game.core.gameActions.Examine
 import com.titaniumPolitics.game.core.gameActions.GameAction
@@ -26,8 +27,9 @@ class ExamineUI(var gameState: GameState, actionCallback: (GameAction) -> Unit) 
                             actionCallback(
                                 Examine(
                                     this@ExamineUI.gameState.playerName,
-                                    this@ExamineUI.gameState.player.place.name
-                                ).also { it.what = "HR" }
+                                    this@ExamineUI.gameState.player.place.name,
+                                    InformationType.HUMAN_RESOURCES
+                                )
                             )
                             ProgressBackgroundUI.instance.setVisibleWithFade(true, "Examine")
                             this@ExamineUI.onClose.forEach { it() }
@@ -47,8 +49,9 @@ class ExamineUI(var gameState: GameState, actionCallback: (GameAction) -> Unit) 
                             actionCallback(
                                 Examine(
                                     this@ExamineUI.gameState.playerName,
-                                    this@ExamineUI.gameState.player.place.name
-                                ).also { it.what = "apparatus" }
+                                    this@ExamineUI.gameState.player.place.name,
+                                    InformationType.APPARATUS_DURABILITY
+                                )
                             )
                             ProgressBackgroundUI.instance.setVisibleWithFade(true, "Examine")
                             this@ExamineUI.onClose.forEach { it() }
@@ -69,8 +72,9 @@ class ExamineUI(var gameState: GameState, actionCallback: (GameAction) -> Unit) 
                             actionCallback(
                                 Examine(
                                     this@ExamineUI.gameState.playerName,
-                                    this@ExamineUI.gameState.player.place.name
-                                ).also { it.what = "resources" }
+                                    this@ExamineUI.gameState.player.place.name,
+                                    InformationType.RESOURCES
+                                )
                             )
                             ProgressBackgroundUI.instance.setVisibleWithFade(true, "Examine")
                             this@ExamineUI.onClose.forEach { it() }

@@ -213,7 +213,9 @@ class GameState {
 
                     this.health = 100.0
                 }
-                nonPlayerAgents[party.key + it] = NonPlayerAgent()
+                nonPlayerAgents[party.key + it] = NonPlayerAgent().also {
+                    it.injectParent(this)
+                }
             }
 
         }
