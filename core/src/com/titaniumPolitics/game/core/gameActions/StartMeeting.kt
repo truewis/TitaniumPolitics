@@ -32,7 +32,10 @@ class StartMeeting(override val sbjCharacter: String, override val tgtPlace: Str
         requiredCharacters.forEach {
             parent.characters[it]!!.frozen = 1 //Force them to join the meeting.
             parent.ongoingMeetings[meetingName]!!.currentCharacters.add(it)
-            Logger.write("Interrupt: $it is forced to join the meeting.", Logger.LogLevel.INFO)
+            Logger.write(
+                "Interrupt: $it is forced to join by $sbjCharacter starting the meeting.",
+                Logger.LogLevel.INFO
+            )
         }
         super.execute()
 

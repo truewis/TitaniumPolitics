@@ -7,6 +7,7 @@ class Logger {
     companion object {
         lateinit var gState: GameState
         fun write(txt: String, level: LogLevel = LogLevel.WARNING) {
+            if (level == LogLevel.ACTION_VERBOSE) return
             println("[${gState.formatTime()}]$level: $txt")
             if (level == LogLevel.ERROR || level == LogLevel.WARNING)
                 println("GameState Dumped: ${gState.dump()}")
@@ -15,6 +16,6 @@ class Logger {
     }
 
     enum class LogLevel {
-        INFO, WARNING, ERROR
+        INFO, WARNING, ERROR, ACTION_VERBOSE
     }
 }

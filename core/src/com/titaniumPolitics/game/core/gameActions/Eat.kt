@@ -9,17 +9,12 @@ class Eat(override val sbjCharacter: String, override val tgtPlace: String) : Ga
 
     override fun execute() {
 
-        if (sbjCharObj.resources["ration"] > amount && sbjCharObj.resources["water"] > amount
-        ) {
-            sbjCharObj.resources["ration"] -= amount
-            sbjCharObj.resources["water"] -= amount
-            sbjCharObj.hunger -= 50
-            sbjCharObj.thirst -= 50
-            tgtPlaceObj.gasResources["water"] += amount * 3.0//TODO: Calculate the amount of gas from Digestion
-            Logger.write("$sbjCharacter ate a ration and drank some water.", Logger.LogLevel.INFO)
-        } else {
-            Logger.write("$sbjCharacter tried to eat, but there is nothing to eat.", Logger.LogLevel.INFO)
-        }
+        sbjCharObj.resources["ration"] -= amount
+        sbjCharObj.resources["water"] -= amount
+        sbjCharObj.hunger -= 50
+        sbjCharObj.thirst -= 50
+        tgtPlaceObj.gasResources["water"] += amount * 3.0//TODO: Calculate the amount of gas from Digestion
+        Logger.write("$sbjCharacter ate a ration and drank some water.", Logger.LogLevel.ACTION_VERBOSE)
         super.execute()
     }
 

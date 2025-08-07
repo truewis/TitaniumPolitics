@@ -267,30 +267,19 @@ sealed class Routine() {
         place: String
     ): GameAction? {
         //If the attention of the meeting is low, end the meeting.
-        if (conf.currentCharacters.count() > 1 && conf.currentAttention < 20) {
+        if (conf.currentCharacters.count() > 1 && conf.currentAttention < 10) {
             return EndMeeting(name, place)
         }
         return null
     }
 
     fun meetingRoutineEndCondition(name: String, type: Meeting.MeetingType): Boolean {
-        return routineStartTime + 7200 / ReadOnly.dt <= gState.time || gState.characters[name]!!.currentMeeting?.let { it.type != type } ?: false
+        return routineStartTime + 7200 / ReadOnly.dt <= gState.time || gState.characters[name]!!.currentMeeting?.let { it.type != type } ?: false || (gState.characters[name]!!.currentMeeting?.currentAttention
+            ?: 100) < 10
         /*Sometimes characters are transferred between different meetings without their turn. In that case, the previous meeting routine is killed here.*/
     }
 
-    fun leaveMeetingAttentionCondition(
-        conf: Meeting,
-        name: String,
-        place: String
-    ): GameAction? {
-        //If the attention of the meeting is low, leave the meeting.
-        if (conf.currentCharacters.count() > 1 && conf.currentAttention < 10) {
-            return LeaveMeeting(name, place)
-        }
-        return null
-    }
-
     override fun toString(): String {
-        return "Routine(ID='$ID', priority=$priority, subroutines=$subroutines, routineStartTime=$routineStartTime, variables=$variables, intVariables=$intVariables, doubleVariables=$doubleVariables, executeDone=$executeDone)"
+        return "${this::class.simpleName}(ID='$ID', priority=$priority, subroutines=$subroutines, routineStartTime=$routineStartTime, variables=$variables, intVariables=$intVariables, doubleVariables=$doubleVariables, executeDone=$executeDone)"
     }
 }

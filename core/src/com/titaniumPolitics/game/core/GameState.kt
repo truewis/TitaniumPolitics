@@ -114,6 +114,12 @@ class GameState {
         _scheduledMeetings.remove(key)
     }
 
+    fun meetingName(mt: Meeting): String {
+        return ongoingMeetings.filter { it.value == mt }.keys.firstOrNull()
+            ?: scheduledMeetings.filter { it.value == mt }.keys.firstOrNull()
+            ?: throw Exception("Meeting $mt not found in ongoing or scheduled meetings.")
+    }
+
     private var _ongoingMeetings = hashMapOf<String, Meeting>()
     val ongoingMeetings: Map<String, Meeting> = Collections.unmodifiableMap(_ongoingMeetings)
 
@@ -207,17 +213,17 @@ class GameState {
         //Generate lower level managers for each workplace.
         parties.filter { it.value.type == "workplace" }.forEach { party ->
             listOf("administrator", "overseer", "logistician").forEach {
-                characters[party.key + it] = Character().apply {
+                characters[it + "_" + party.key] = Character().apply {
                     this.injectParent(this@GameState)
                     this.livingBy = Place.publicPlaces.random()
 
                     this.health = 100.0
                 }
-                nonPlayerAgents[party.key + it] = NonPlayerAgent().also {
+                nonPlayerAgents[it + "_" + party.key] = NonPlayerAgent().also {
                     it.injectParent(this)
                 }
                 places[party.value.home]?.responsibleDivision?.let { div ->
-                    parties[div]!!.members += it //Add the lower level manager to the division party. These people have two parties at least.
+                    parties[div]!!.members += it + "_" + party.key//Add the lower level manager to the division party. These people have two parties at least.
                 }
             }
 
@@ -375,7 +381,7 @@ class GameState {
                     )
                 } catch (e: Exception) {
                     // Handle cases where mutuality cannot be retrieved, e.g., one of the members does not exist.
-                    throw Exception("Getting party mutuality $memberA -> $memberB invalid.")
+                    throw Exception("Getting mutuality $memberA -> $memberB invalid.")
                 }
             }
         }

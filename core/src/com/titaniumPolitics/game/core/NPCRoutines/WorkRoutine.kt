@@ -12,6 +12,8 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 class WorkRoutine() : Routine() {
+    val meetingsAttended = arrayListOf<String>()
+
     init {
         priority = PRIORITY_WORK
     }
@@ -22,8 +24,10 @@ class WorkRoutine() : Routine() {
         if (routines.any { it is IMeetingRoutine })//I am already in a meeting, do not start a new routine.
             return null
 
-        //I am forced into a meeting. Pick a meeting routine.
+        //I am forced into a meeting. Pick a meeting routine. Do not attend the meeting if it is already attended.
         if (character.currentMeeting != null) {
+            if (gState.meetingName(character.currentMeeting!!) in meetingsAttended)
+                return null//LeaveMeeting must be issued by NonPlayerAgent.
             return pickMeetingRoutine(name, character.currentMeeting!!)
         }
 
@@ -45,7 +49,8 @@ class WorkRoutine() : Routine() {
         val missingMeeting = gState.ongoingMeetings.values
             .firstOrNull { it.scheduledCharacters.contains(name) && !it.currentCharacters.contains(name) }
 
-        if (missingMeeting != null) {
+        //Do not attend the meeting if it is already attended.
+        if (missingMeeting != null && gState.meetingName(missingMeeting) !in meetingsAttended) {
             // Move to the meeting if not already there
             if (place != missingMeeting.place) {
                 if (routines.none { it is MoveRoutine }) {
@@ -200,6 +205,7 @@ class WorkRoutine() : Routine() {
 
     //TODO: move name to class parameter
     private fun pickMeetingRoutine(name: String, conf: Meeting): Routine {
+        meetingsAttended += gState.meetingName(conf)
         when (conf.type) {
             Meeting.MeetingType.DIVISION_DAILY_CONFERENCE -> {
                 if (name != gState.parties[conf.involvedParty]!!.leader) {
