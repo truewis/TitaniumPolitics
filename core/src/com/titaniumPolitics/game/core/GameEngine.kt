@@ -354,7 +354,7 @@ class GameEngine(val gameState: GameState) {
                     gameState.time + 9 * 3600 / dt /*9 in the morning*/,
                     Meeting.MeetingType.DIVISION_DAILY_CONFERENCE,
                     place = party.home!!,
-                    scheduledCharacters = party.realMembers //Without anonymous members
+                    scheduledCharacters = party.directorMembers //Without low level members
                 ).also { it.involvedParty = party.name }
 
                 gameState.addScheduledMeeting(conference)
@@ -364,7 +364,7 @@ class GameEngine(val gameState: GameState) {
                     gameState.time + 9 * 3600 / dt /*9 in the morning*/,
                     Meeting.MeetingType.DIVISION_LEADER_ELECTION,
                     place = party.home!!,
-                    scheduledCharacters = (setOf("ctrler") + party.realMembers).toHashSet() //Without anonymous members
+                    scheduledCharacters = (setOf("ctrler") + party.directorMembers).toHashSet() //Without low level members
                 ).also { it.involvedParty = party.name }
                 gameState.addScheduledMeeting(conference)
             }

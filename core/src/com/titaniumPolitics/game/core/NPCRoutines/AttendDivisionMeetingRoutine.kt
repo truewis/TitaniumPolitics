@@ -79,6 +79,9 @@ class AttendDivisionMeetingRoutine : Routine(), IMeetingRoutine {
         }
         //If not speaker, wait if the mutuality to the speaker is high. Otherwise, if possible, interrupt the speaker.
         if (conf.currentSpeaker != name) {
+            //If the meeting is boring, leave the meeting.
+            leaveMeetingAttentionCondition(conf, name, place)?.let { return it }
+            //If the meeting is not boring, but the mutuality to the speaker is low, intercept the speaker.
             return interceptCondition(conf, name, place)
         } else {
             val party = gState.parties[conf.involvedParty]!!
@@ -117,7 +120,8 @@ class AttendDivisionMeetingRoutine : Routine(), IMeetingRoutine {
             //If nothing else to talk about, end the speech. The next speaker is the character with the highest mutuality.
             return EndSpeech(name, place).also {
                 it.nextSpeaker = conf.currentCharacters.minus(name)
-                    .maxByOrNull { gState.getMutuality(name, it) }!!
+                    .maxByOrNull { gState.getMutuality(name, it) }
+                    ?: throw IllegalStateException("No next speaker found in the meeting $conf at for character $name")
             }
         }
 

@@ -191,7 +191,6 @@ class GameState {
         println("Initializing game state...")
         injectDependency()
 
-
         //Create workplace party for each workplace.
         places.forEach { place ->
             parties["workplace_${place.key}"] = Party().apply {
@@ -203,6 +202,7 @@ class GameState {
             }
 
         }
+
 
         //Generate lower level managers for each workplace.
         parties.filter { it.value.type == "workplace" }.forEach { party ->
@@ -216,11 +216,24 @@ class GameState {
                 nonPlayerAgents[party.key + it] = NonPlayerAgent().also {
                     it.injectParent(this)
                 }
+                places[party.value.home]?.responsibleDivision?.let { div ->
+                    parties[div]!!.members += it //Add the lower level manager to the division party. These people have two parties at least.
+                }
+            }
+
+
+        }
+        places.forEach { place ->
+            parties["workplace_${place.key}"]?.apply {
+                members.addAll(characters.keys.filter { it.contains("workplace_${place.key}") }
+                    .toHashSet() //Add all characters that are lower level managers of this workplace.
+                )
             }
 
         }
 
-        //Gain party anonymous member size from work place requirements.
+
+        //Gain division anonymous member size from work place requirements.
         parties.forEach {
             if (it.value.type != "division") return@forEach //
             val party = it.value

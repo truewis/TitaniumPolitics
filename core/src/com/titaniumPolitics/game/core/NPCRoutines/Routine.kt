@@ -11,6 +11,7 @@ import com.titaniumPolitics.game.core.Resources
 import com.titaniumPolitics.game.core.gameActions.EndMeeting
 import com.titaniumPolitics.game.core.gameActions.GameAction
 import com.titaniumPolitics.game.core.gameActions.Intercept
+import com.titaniumPolitics.game.core.gameActions.LeaveMeeting
 import com.titaniumPolitics.game.core.gameActions.NewAgenda
 import com.titaniumPolitics.game.core.gameActions.Repair
 import com.titaniumPolitics.game.core.gameActions.UnofficialResourceTransfer
@@ -275,6 +276,18 @@ sealed class Routine() {
     fun meetingRoutineEndCondition(name: String, type: Meeting.MeetingType): Boolean {
         return routineStartTime + 7200 / ReadOnly.dt <= gState.time || gState.characters[name]!!.currentMeeting?.let { it.type != type } ?: false
         /*Sometimes characters are transferred between different meetings without their turn. In that case, the previous meeting routine is killed here.*/
+    }
+
+    fun leaveMeetingAttentionCondition(
+        conf: Meeting,
+        name: String,
+        place: String
+    ): GameAction? {
+        //If the attention of the meeting is low, leave the meeting.
+        if (conf.currentCharacters.count() > 1 && conf.currentAttention < 10) {
+            return LeaveMeeting(name, place)
+        }
+        return null
     }
 
     override fun toString(): String {

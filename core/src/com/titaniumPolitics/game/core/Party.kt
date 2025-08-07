@@ -15,6 +15,9 @@ class Party : GameStateElement() {
         get() = members.filter { it.contains("Anon") }.sumOf { parent.characters[it]!!.reliant }
     val realMembers: HashSet<String>
         get() = members.filter { !it.contains("Anon") }.toHashSet()
+    val directorMembers: HashSet<String>
+        get() = members.filter { char -> parent.places.any { it.value.manager == char } }
+            .toHashSet() //Directors are the ones who can make decisions in the party.
     val size: Int
         get() = members.sumOf { getMultiplier(it) }
 
