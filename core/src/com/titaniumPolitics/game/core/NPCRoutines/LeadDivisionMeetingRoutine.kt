@@ -63,8 +63,9 @@ class LeadDivisionMeetingRoutine : Routine(), IMeetingRoutine {
         } else //If it is my turn to speak
         {
             //1. Pay the salary if not paid yet.
-            if (!party.isSalaryPaid) {
-                return Salary(name, place)
+            Salary(name, place).also {
+                it.injectParent(gState)
+                if (it.isValid()) return it
             }
             //2. request information about the commands issued today, by putting ProofOfWork agenda forward.
             proposeProofOfWork(conf, name, place)?.let { return it }

@@ -1,12 +1,22 @@
 package com.titaniumPolitics.game.core.gameActions
 
+import com.titaniumPolitics.game.core.Meeting
+import com.titaniumPolitics.game.core.ReadOnly
 import com.titaniumPolitics.game.debugTools.Logger
 import kotlinx.serialization.Serializable
+import kotlin.collections.get
 
 @Serializable
 //Salary is performed by the party leader. It decides the amount of resources to be paid to the party members.
 class Salary(override val sbjCharacter: String, override val tgtPlace: String) : GameAction() {
-    var resources = hashMapOf("ration" to 2, "water" to 2)
+    val resources
+        get() = when (parent.parties[sbjCharObj.currentMeeting!!.involvedParty!!]!!.type) {
+            "cabinet" -> hashMapOf("ration" to 50.0, "water" to 50.0, "phosphorite" to 0.1)
+            "division" -> hashMapOf("ration" to 30.0, "water" to 30.0, "phosphorite" to 0.03)
+            "workplace" -> hashMapOf("ration" to 15.0, "water" to 15.0, "phosphorite" to 0.01)
+            else -> throw IllegalArgumentException("Salary can only be performed in cabinet or division daily conferences.")
+        }
+
     override fun chooseParams() {
     }
 
@@ -17,45 +27,21 @@ class Salary(override val sbjCharacter: String, override val tgtPlace: String) :
 
         val party = parent.parties.values.find { it.members.containsAll(who + sbjCharacter) }!!
         val guildHall = party.home
-//        if (party.isDailySalaryPaid.keys.none { it == tgtCharacter })
-//        {
-//            Logger.write("Warning: $tgtCharacter is not eligible to be paid from ${party.name}.", Logger.LogLevel.INFO)
-//            return
-//        }
-//        if (party.isDailySalaryPaid[tgtCharacter] == true)
-//        {
-//            Logger.write("Warning: $tgtCharacter has already been paid from ${party.name} today.", Logger.LogLevel.INFO)
-//            return
-//        }
-        who.forEach { character ->
-            if (
-                resources.all { (what, amount) -> parent.places[guildHall]!!.resources[what] >= amount }
-            ) {
-                resources.forEach { (what, amount) ->
-                    parent.places[guildHall]!!.resources[what] =
-                        parent.places[guildHall]!!.resources[what] - amount
-                    parent.characters[character]!!.resources[what] =
-                        parent.characters[character]!!.resources[what] + amount
-                }
-                //party.isDailySalaryPaid[tgtCharacter] = true
-                Logger.write("$character is paid $resources from $${party.name}.", Logger.LogLevel.INFO)
-                parent.characters[character]!!.frozen++
 
-            } else {
-                Logger.write(
-                    "Not enough resources to pay salary to $character: $tgtPlace, ${parent.places[tgtPlace]!!.resources}",
-                    Logger.LogLevel.INFO
-                )
-                //Party integrity decreases
-                parent.setPartyMutuality(party.name, party.name, -1.0)
-                //Opinion of the leader of the party decreases
-                if (party.leader != null) {
-                    parent.setMutuality(character, party.leader!!, -1.0)
-                }
-                //TODO: are we sure that if the unpaid people are not in the meeting, there is no penalty to the party integrity?
-//
+        who.forEach { character ->
+            resources.forEach { (what, amount) ->
+                parent.places[guildHall]!!.resources[what] =
+                    parent.places[guildHall]!!.resources[what] - amount
+                parent.characters[character]!!.resources[what] =
+                    parent.characters[character]!!.resources[what] + amount
             }
+            //Opinion of the leader of the party increases.
+
+            parent.setMutuality(character, party.leader!!, ReadOnly.const("salaryMutualityIncrease"))
         }
+        //Party integrity decreases
+        parent.setPartyMutuality(party.name, delta = ReadOnly.const("salaryMutualityIncrease"))
+
         party.isSalaryPaid =
             true//Even if some members are not paid, the salary is considered paid, and cannot be paid again this quarter.
 
@@ -63,21 +49,13 @@ class Salary(override val sbjCharacter: String, override val tgtPlace: String) :
 
     override fun isValid(): Boolean {
         val who =
-            (parent.ongoingMeetings.filter { it.value.currentCharacters.contains(sbjCharacter) }
-                .flatMap { it.value.currentCharacters }).toHashSet()
+            sbjCharObj.currentMeeting!!.currentCharacters
 
-        val party = parent.parties.values.find { it.members.containsAll(who + sbjCharacter) }!!
-//        if (party.isDailySalaryPaid.keys.none { it == tgtCharacter })
-//        {
-//            //Logger.write("Warning: $tgtCharacter is not eligible to be paid from ${party.name}.", Logger.LogLevel.INFO)
-//            return false
-//        }
-//        if (party.isDailySalaryPaid[tgtCharacter] == true)
-//        {
-//            //Logger.write("Warning: $tgtCharacter has already been paid from ${party.name} today.", Logger.LogLevel.INFO)
-//            return false
-//        }
-        return !party.isSalaryPaid && who.isNotEmpty() && sbjCharacter == party.leader
+        val party = parent.parties.values.find { it.name == sbjCharObj.currentMeeting!!.involvedParty }!!
+        return !party.isSalaryPaid && who.isNotEmpty() && sbjCharacter == party.leader && reason(
+            resources.all { (what, amount) -> parent.places[party.home]!!.resources[what] >= amount },
+            "salary-resources"
+        )
     }
 
 }

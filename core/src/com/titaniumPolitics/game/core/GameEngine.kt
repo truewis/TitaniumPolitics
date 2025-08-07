@@ -560,7 +560,7 @@ class GameEngine(val gameState: GameState) {
             gameState.isBudgetProposed = false
             gameState.isBudgetResolved = false
             //Since the party is division, it pays out the salary of the members.
-            gameState.parties.values.filter { it.type == "division" }.forEach { party ->
+            gameState.parties.values.filter { it.type in listOf("division", "cabinet", "workplace") }.forEach { party ->
                 party.isSalaryPaid = false
             }
         }
