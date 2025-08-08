@@ -21,6 +21,7 @@ class HireRoutine() : Routine() {
     }
 
     override fun execute(name: String, place: String): GameAction {
+        executeDone = true
         //If in market, hire a character based on role variable.
         if (variables["role"]!!.contains("director")) {
             val placeForDirector = variables["role"]!!.split('_')[1]
@@ -46,6 +47,6 @@ class HireRoutine() : Routine() {
     }
 
     override fun endCondition(name: String, place: String): Boolean {
-        return true
+        return executeDone //In case the role is filled already, wait one turn, then end the routine.
     }
 }
