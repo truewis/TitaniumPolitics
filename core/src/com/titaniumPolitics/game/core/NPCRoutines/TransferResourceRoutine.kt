@@ -22,14 +22,15 @@ class TransferResourceRoutine() : Routine() {
 
     override fun execute(name: String, place: String): GameAction {
         executeDone = true
-        if (place == source)
+        if (place == source)//TODO: do not transfer if the amount of resource is not enough for the destination place. Either here or in workRoutine.
             OfficialResourceTransfer(name, place).also {
+                it.injectParent(gState)
                 it.resources = Resources(res to gState.places[place]!!.resources[res] / 2)
                 it.toWhere = dest
-                return it
+                if (it.isValid())
+                    return it
             }
-        else
-            return Wait(name, place)
+        return Wait(name, place)
     }
 
     override fun endCondition(name: String, place: String): Boolean {

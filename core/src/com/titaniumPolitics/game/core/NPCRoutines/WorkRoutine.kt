@@ -12,7 +12,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 class WorkRoutine() : Routine() {
-    val meetingsAttended = arrayListOf<String>()
+    val meetingsAttended = hashSetOf<String>()
 
     init {
         priority = PRIORITY_WORK

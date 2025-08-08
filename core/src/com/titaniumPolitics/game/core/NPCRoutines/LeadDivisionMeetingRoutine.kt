@@ -132,17 +132,22 @@ class LeadDivisionMeetingRoutine : Routine(), IMeetingRoutine {
                     }
                 }
             //6. If the world is short of resources and we have an apparatus producing that, increase the production. //TODO: this decision must depend on a personal parameter
-            adjustResourceProd(name, place)?.also { return it }
+            if (conf.involvedParty!!.contains("workplace"))
+                adjustResourceProd(name, place)?.also { return it }
+            //Adjust resource production request is only issued in workplace meetings.
+            //In director meetings, the resource production request is not issued, as the director does not manage resources.s
 
             //7. Gossip
             TalkRoutine.gossip(gState, name, place)?.also { return it }
 
             //8. End meeting if attention is low.
             endMeetingIfLowAttention(conf, name, place)?.let { return it }
-//If nothing else to talk about, end the speech. The next speaker is the character with the highest mutuality.
+            //If nothing else to talk about, end the speech. The next speaker is the character with the highest mutuality.
+            val nextSpeaker = conf.currentCharacters.minus(name)
+                .maxByOrNull { gState.getMutuality(name, it) }
+                ?: return EndMeeting(name, place)
             return EndSpeech(name, place).also {
-                it.nextSpeaker = conf.currentCharacters.minus(name)
-                    .maxByOrNull { gState.getMutuality(name, it) }!!
+                it.nextSpeaker = nextSpeaker
             }
         }
 
@@ -165,7 +170,7 @@ class LeadDivisionMeetingRoutine : Routine(), IMeetingRoutine {
             if (productivity(name, minProdApp) < gState.laborValuePerHour) {
                 val reductionAmount = max(minProdApp.plannedWorker / 5, 1)
                 val wantPlace = gState.getApparatusPlace(minProdApp.ID)
-                if (wantPlace.manager?.let {
+                if (wantPlace.workplaceParty?.overseer?.let {
                         it in charObj.currentMeeting!!.currentCharacters && it != name
                     }
                         ?: false) {
@@ -173,13 +178,13 @@ class LeadDivisionMeetingRoutine : Routine(), IMeetingRoutine {
                     val agenda = MeetingAgenda(AgendaType.REQUEST, name).apply {
                         attachedRequest = Request(
                             SetWorkers(
-                                wantPlace.manager!!,
+                                wantPlace.workplaceParty!!.overseer!!,
                                 tgtPlace = wantPlace.name
                             ).apply {
                                 workers = minProdApp.plannedWorker - reductionAmount
                                 apparatusID = minProdApp.ID
                             },
-                            issuedTo = hashSetOf(wantPlace.manager!!),
+                            issuedTo = hashSetOf(wantPlace.workplaceParty!!.overseer!!),
                             issuedBy = hashSetOf(name)
                         ).apply {
                             executeTime = gState.time
@@ -202,17 +207,17 @@ class LeadDivisionMeetingRoutine : Routine(), IMeetingRoutine {
                 val increaseAmount = max(maxProdApp.plannedWorker / 5, 1)
                 val wantPlace = gState.getApparatusPlace(maxProdApp.ID)
                 //Fill in the agenda based on variables in the routine, resource and character.
-                if (wantPlace.manager != null && wantPlace.manager!! in charObj.currentMeeting!!.currentCharacters) {
+                if (wantPlace.workplaceParty?.overseer != null && wantPlace.workplaceParty?.overseer in charObj.currentMeeting!!.currentCharacters) {
                     val agenda = MeetingAgenda(AgendaType.REQUEST, name).apply {
                         attachedRequest = Request(
                             SetWorkers(
-                                wantPlace.manager!!,
+                                wantPlace.workplaceParty!!.overseer!!,
                                 tgtPlace = wantPlace.name
                             ).apply {
                                 workers = maxProdApp.plannedWorker + increaseAmount
                                 apparatusID = maxProdApp.ID
                             },
-                            issuedTo = hashSetOf(wantPlace.manager!!),
+                            issuedTo = hashSetOf(wantPlace.workplaceParty!!.overseer!!),
                             issuedBy = hashSetOf(name)
                         ).apply {
                             executeTime = gState.time

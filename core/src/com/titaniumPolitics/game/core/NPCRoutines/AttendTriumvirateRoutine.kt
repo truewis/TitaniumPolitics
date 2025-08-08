@@ -120,11 +120,12 @@ class AttendTriumvirateRoutine : Routine(), IMeetingRoutine {
 
             //7. Gossip
             TalkRoutine.gossip(gState, name, place)?.also { return it }
-
-//If nothing else to talk about, end the speech. The next speaker is the character with the highest mutuality.
+            //If nothing else to talk about, end the speech. The next speaker is the character with the highest mutuality.
+            val nextSpeaker = conf.currentCharacters.minus(name)
+                .maxByOrNull { gState.getMutuality(name, it) }
+                ?: return EndMeeting(name, place)
             return EndSpeech(name, place).also {
-                it.nextSpeaker = conf.currentCharacters.minus(name)
-                    .maxByOrNull { gState.getMutuality(name, it) }!!
+                it.nextSpeaker = nextSpeaker
             }
         }
 

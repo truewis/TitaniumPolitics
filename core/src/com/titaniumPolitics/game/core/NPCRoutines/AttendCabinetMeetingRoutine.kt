@@ -129,14 +129,13 @@ class AttendCabinetMeetingRoutine : Routine(), IMeetingRoutine {
             }
 
             //If nothing else to talk about, end the speech. The next speaker is the character with the highest mutuality.
+            val nextSpeaker = conf.currentCharacters.minus(name)
+                .maxByOrNull { gState.getMutuality(name, it) }
+                ?: return EndMeeting(name, place)
             return EndSpeech(name, place).also {
-                it.nextSpeaker = conf.currentCharacters.minus(name)
-                    .maxByOrNull { gState.getMutuality(name, it) }!!
+                it.nextSpeaker = nextSpeaker
             }
         }
-
-        //If everything else, wait.
-        return Wait(name, place)
         //TODO: do something in the meeting. Leave the meeting if nothing to do.
 
 

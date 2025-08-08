@@ -116,10 +116,11 @@ class AttendDivisionMeetingRoutine : Routine(), IMeetingRoutine {
             }
 
             //If nothing else to talk about, end the speech. The next speaker is the character with the highest mutuality.
+            val nextSpeaker = conf.currentCharacters.minus(name)
+                .maxByOrNull { gState.getMutuality(name, it) }
+                ?: return EndMeeting(name, place)
             return EndSpeech(name, place).also {
-                it.nextSpeaker = conf.currentCharacters.minus(name)
-                    .maxByOrNull { gState.getMutuality(name, it) }
-                    ?: throw IllegalStateException("No next speaker found in the meeting $conf at for character $name")
+                it.nextSpeaker = nextSpeaker
             }
         }
 
