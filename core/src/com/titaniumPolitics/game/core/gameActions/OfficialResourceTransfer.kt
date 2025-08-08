@@ -36,6 +36,11 @@ class OfficialResourceTransfer(override val sbjCharacter: String, override val t
     }
 
     override fun isValid(): Boolean {
+        if (!reason(
+                sbjCharacter == tgtPlaceObj.workplaceParty?.treasurer,
+                "officialResourceTransfer-notTreasurer"
+            )
+        ) return false
         //Can't send to the same place
         if (toWhere == tgtPlace) return false
         return parent.places[tgtPlace]!!.responsibleDivision == sbjCharObj.division?.name && parent.places[tgtPlace]!!.resources.contains(

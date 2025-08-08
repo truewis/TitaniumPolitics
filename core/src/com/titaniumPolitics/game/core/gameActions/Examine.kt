@@ -121,6 +121,18 @@ class Examine(override val sbjCharacter: String, override val tgtPlace: String, 
                 )
             ) return false
 
+            InformationType.HUMAN_RESOURCES -> if (!reason(
+                    sbjCharacter == tgtPlaceObj.workplaceParty?.overseer,
+                    "examine-HR-notOverseer"
+                )
+            ) return false
+
+            InformationType.RESOURCES -> if (!reason(
+                    sbjCharacter == tgtPlaceObj.workplaceParty?.treasurer,
+                    "examine-resources-notTreasurer"
+                )
+            ) return false
+
             else -> {}
         }
         return true

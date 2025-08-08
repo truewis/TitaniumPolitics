@@ -213,17 +213,31 @@ class GameState {
         //Generate lower level managers for each workplace.
         parties.filter { it.value.type == "workplace" }.forEach { party ->
             listOf("administrator", "overseer", "logistician").forEach {
-                characters[it + "_" + party.key] = Character().apply {
+                val name = "${it}_${party.key}"
+                characters[name] = Character().apply {
                     this.injectParent(this@GameState)
                     this.livingBy = Place.publicPlaces.random()
 
                     this.health = 100.0
                 }
-                nonPlayerAgents[it + "_" + party.key] = NonPlayerAgent().also {
+                nonPlayerAgents[name] = NonPlayerAgent().also {
                     it.injectParent(this)
                 }
                 places[party.value.home]?.responsibleDivision?.let { div ->
-                    parties[div]!!.members += it + "_" + party.key//Add the lower level manager to the division party. These people have two parties at least.
+                    parties[div]!!.members += name//Add the lower level manager to the division party. These people have two parties at least.
+                }
+                when (it) {
+                    "administrator" -> {
+                        party.value.administrator = name
+                    }
+
+                    "overseer" -> {
+                        party.value.overseer = name
+                    }
+
+                    "logistician" -> {
+                        party.value.treasurer = name
+                    }
                 }
             }
 
@@ -269,7 +283,6 @@ class GameState {
                     it.injectParent(this@GameState)
                     it.workPlace = place.name
                 }
-                //TODO: Give traits to the anonymous characters.
                 party.members.add(name)
 
             }
@@ -312,14 +325,8 @@ class GameState {
                 }
             }
         }
-        val randomTraits = listOf("gourmand", "old", "young", "psychopath", "charismatic", "shy")
-        // Assign random traits to characters
-        characters.forEach { (_, character) ->
-            if (Math.random() < 0.2) // 20% chance to get a random trait
-            {
-                val trait = randomTraits.random()
-                character.trait.add(trait)
-            }
+        characters.forEach {
+            it.value.randomizeTraitAndStats()
         }
     }
 

@@ -28,6 +28,7 @@ class SetWorkers(override val sbjCharacter: String, override val tgtPlace: Strin
     }
 
     override fun isValid(): Boolean {
+        if (!reason(sbjCharacter == tgtPlaceObj.workplaceParty?.overseer, "setWorkers-notOverseer")) return false
         if (parent.getApparatusPlace(apparatusID).name != tgtPlace) return false
         if (parent.idlePop < workers - agent.reliant) return false
 

@@ -7,6 +7,9 @@ class Party : GameStateElement() {
     override val name: String
         get() = parent.parties.filter { it.value == this }.keys.first()
     var leader: String? = null
+    var administrator: String? = null //The person who manages the party.
+    var treasurer: String? = null //The person who manages the party's finances.
+    var overseer: String? = null //The person who oversees worker's activities.
     var type: String? = null
     var home: String? = null //The place where the party is based.
     var members = hashSetOf<String>()
@@ -53,6 +56,17 @@ class Party : GameStateElement() {
         }
         parent.popChanged.forEach { it() }
 
+    }
+
+    fun vacancyRole(): String? {
+        return when {
+            leader == null -> "leader"
+            type == "division" && parent.places.values.any { it.responsibleDivision == name && it.manager == null } -> "director_" + parent.places.values.first { it.responsibleDivision == name && it.manager == null }.name//Director role is not filled.
+            administrator == null || administrator == leader -> "administrator"
+            treasurer == null || treasurer == leader -> "treasurer"
+            overseer == null || overseer == leader -> "overseer"
+            else -> null
+        }
     }
 
     //Used in mutuality calculation. Is 1 for characters.

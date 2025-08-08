@@ -100,6 +100,29 @@ class Character : GameStateElement() {
 
     }
 
+    fun randomizeTraitAndStats() {
+        //Randomly assign a trait to the character.
+        val traits = listOf(
+            "gourmand",
+            "old",
+            "young",
+            "psychopath",
+            "charismatic",
+            "shy",
+            "introvert",
+            "extrovert",
+            "lazy",
+            "hardworking"
+        )
+        trait.add(traits.random())
+        //Randomly assign stats to the character.
+        stats = Stat(
+            logos = (0..20).random(),
+            ethos = (0..20).random(),
+            pathos = (0..20).random(),
+        )
+    }
+
     fun killReliant(num: Int) {
         if (num == 0) return
         if (num >= reliant) throw Exception()

@@ -21,6 +21,7 @@ class SetWorkHours(override val sbjCharacter: String, override val tgtPlace: Str
     }
 
     override fun isValid(): Boolean {
+        if (!reason(sbjCharacter == tgtPlaceObj.workplaceParty?.overseer, "setWorkHours-notOverseer")) return false
         val who =
             (parent.ongoingMeetings.filter { it.value.currentCharacters.contains(sbjCharacter) }
                 .flatMap { it.value.currentCharacters }).toHashSet()

@@ -175,6 +175,19 @@ class WorkRoutine() : Routine() {
             }
         }
 
+        //8. Hire a new employee if there is a vacancy in the party.
+        gState.parties.values.filter { party ->
+            party.leader == name
+        }.forEach { party ->
+            party.vacancyRole()?.let {
+                if (routines.none { it is HireRoutine }) {
+                    return HireRoutine().apply {
+                        variables["party"] = party.name; variables["role"] = it
+                    }
+                }
+            }
+        }
+
 
         //8. If there is nothing above to do, move to a place that is the home of one of the parties of the character.
         //If already at home, wait.

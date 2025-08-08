@@ -122,6 +122,8 @@ class Place : GameStateElement() {
 
     var characters = hashSetOf<String>()
     var responsibleDivision: String? = null //Determines which party is responsible for the place.
+    val workplaceParty: Party?
+        get() = parent.parties["workplace_$name"]
     var isAccidentScene =
         false //If true, the place is closed and no one can enter. Can be cleared by clearAccidentScene.
     var accidentInformationKeys =
