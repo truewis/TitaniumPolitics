@@ -20,63 +20,7 @@ class AddInfo(override val sbjCharacter: String, override val tgtPlace: String) 
 
     //Unit: Mutuality
     fun effectivity(): Double {
-        val newsPeople = meeting.currentCharacters.intersect(info.knownTo)
-        when (agenda.type) {
-            AgendaType.PROOF_OF_WORK -> {
-                //if there is any supporting information, add it.
-
-                if (info.type == InformationType.ACTION
-                    && sbjCharObj.executedRequests.any {
-                        parent.requests[it]!!.action == info.action &&
-                                parent.requests[it]!!.issuedBy.any {
-                                    meeting.currentCharacters.contains(
-                                        it
-                                    )
-                                }
-                    }
-                ) return 5.0 * sbjCharObj.stats.lScale
-
-
-                //If there are any interesting (to this character) news about the division, share it.
-
-                if (info.tgtTime in parent.day * ReadOnly.constInt("lengthOfDay")..(parent.day * ReadOnly.constInt(
-                        "lengthOfDay"
-                    ) + ReadOnly.constInt("lengthOfDay") - 1)
-                )
-                    return newsPeople.sumOf { parent.characters[it]!!.infoPreference(info) } / newsPeople.size * sbjCharObj.stats.eScale//Share the most interesting news.
-
-            }
-
-            AgendaType.NOMINATE, AgendaType.PRAISE -> {
-                return parent.characters[agenda.subjectParams["character"]]!!.infoPreference(info) * sbjCharObj.stats.eScale
-            }
-
-            AgendaType.REQUEST -> return meeting.currentCharacters.sumOf { parent.characters[it]!!.actionValue(agenda.attachedRequest!!.action) } / meeting.currentCharacters.size * sbjCharObj.stats.lScale
-            AgendaType.DENOUNCE -> {
-                return -parent.characters[agenda.subjectParams["character"]]!!.infoPreference(info) * sbjCharObj.stats.pScale
-            }
-
-            AgendaType.PRAISE_PARTY -> {
-                val pt = parent.parties[agenda.subjectParams["party"]]!!
-                return pt.members.sumOf { parent.characters[it]!!.infoPreference(info) } / pt.members.size * sbjCharObj.stats.eScale
-
-            }
-
-            AgendaType.DENOUNCE_PARTY -> {
-                val pt = parent.parties[agenda.subjectParams["party"]]!!
-                return pt.members.sumOf { -parent.characters[it]!!.infoPreference(info) } / pt.members.size * sbjCharObj.stats.pScale
-            }
-
-            AgendaType.BUDGET_PROPOSAL -> TODO()
-            AgendaType.BUDGET_RESOLUTION -> TODO()
-            AgendaType.APPOINT_MEETING -> return 0.0
-            AgendaType.FIRE_MANAGER -> return -parent.characters[agenda.subjectParams["character"]]!!.infoPreference(
-                info
-            ) * sbjCharObj.stats.pScale
-
-            else -> return 0.0
-        }
-        return 0.0
+        return agenda.effectivity(parent, meeting, info, sbjCharObj)
     }
 
     override fun execute() {
@@ -101,11 +45,17 @@ class AddInfo(override val sbjCharacter: String, override val tgtPlace: String) 
     }
 
     override fun isValid(): Boolean {
+        //Array index out of bounds check.
         if (meeting.agendas.size <= agendaIndex)
             return false
         //If the information is already presented in the meeting, it cannot be presented again.
         if (meeting.agendas.any { it.informationKeys.contains(infoKey) })
             return false
+        if (!reason(
+                effectivity() > 0,
+                "Information is not effective enough to be presented for this agenda."
+            )
+        ) return false
         return true //We are assuming that the information is always valid. Whether the information is effective or not is a different matter.
     }
 

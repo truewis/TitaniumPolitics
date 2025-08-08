@@ -99,6 +99,22 @@ class LeadDivisionMeetingRoutine : Routine(), IMeetingRoutine {
                     }
                 }//TODO: there must be a cooldown, stored in party class.
             }
+            //3. If sufficiently discontent with a current meeting attendant, and have an information to fire him, fire the person.
+            conf.currentCharacters.forEach { char ->
+                if (char != name && gState.getMutNorm(name, char) < -0.5) {
+                    val agenda = MeetingAgenda(AgendaType.FIRE_MANAGER, name).also {
+                        it.subjectParams["character"] = char
+                    }
+                    if (character.preparedInfoKeys.any {
+                            agenda.effectivity(gState, conf, gState.informations[it]!!, character) > 0
+                        }) {
+                        return NewAgenda(name, place).also {
+                            it.agenda = agenda
+                        }
+                    }
+                }
+            }
+
             //4. If it is not covered above, if the division is short of resources, share the information about the resource shortage.
             //However, right now, the resource information is available to everyone immediately, no need to share.
 

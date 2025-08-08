@@ -57,8 +57,9 @@ class NewAgenda(override val sbjCharacter: String, override val tgtPlace: String
             //"salary" -> return mt.involvedParty != "" && mt.type == "divisionDailyConference" && !parent.parties[mt.involvedParty]!!.isSalaryPaid
             AgendaType.APPOINT_MEETING -> return true
 
-            AgendaType.FIRE_MANAGER -> return mt.type == Meeting.MeetingType.DIVISION_DAILY_CONFERENCE && parent.parties[mt.involvedParty]!!.leader == sbjCharacter && agenda.subjectParams["character"] != null
-            //TODO: impeach, fire
+            AgendaType.FIRE_MANAGER -> return mt.type == Meeting.MeetingType.DIVISION_DAILY_CONFERENCE && parent.parties[mt.involvedParty]!!.leader == sbjCharacter &&
+                    agenda.subjectParams["character"] in mt.currentCharacters
+            //TODO: impeach, fire division leader, etc. This is done by the cabinet meeting.
             //TODO: Also update NewAgendaUI.kt
 
 
@@ -154,6 +155,11 @@ class NewAgenda(override val sbjCharacter: String, override val tgtPlace: String
                 AgendaType.NOMINATE -> {
                     parent.setMutuality(agenda.subjectParams["character"]!!, sbjCharacter, 20.0 * effectivity)
                 }
+
+                AgendaType.FIRE_MANAGER -> {
+                    parent.setMutuality(agenda.subjectParams["character"]!!, sbjCharacter, -20.0 * effectivity)
+                }
+
                 //request is not executed until the end of the meeting. Check Meeting.kt
                 else -> {
                 }

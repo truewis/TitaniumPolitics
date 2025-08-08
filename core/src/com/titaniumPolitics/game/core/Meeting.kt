@@ -70,9 +70,31 @@ class Meeting(
             }
 
             MeetingType.DIVISION_DAILY_CONFERENCE -> {
-                if (agendas.any { it.type == AgendaType.FIRE_MANAGER }) {
-                    //TODO:
-                }
+                agendas.filter { it.type == AgendaType.FIRE_MANAGER && it.informationKeys.isNotEmpty() }
+                    .forEach { agenda ->
+                        val manager = agenda.subjectParams["character"] as String
+
+                        //If the manager is a Director of a place, fire them.
+                        gameState.places.filter { it.value.manager == manager }.forEach { place ->
+                            Logger.write(
+                                "The manager $manager of the place ${place.value.name} is fired.",
+                                Logger.LogLevel.INFO
+                            )
+                            place.value.manager = null //Remove the manager from the place.
+                        }
+                        //Fire manager from the workplace party.
+                        gameState.parties.filter { (key, value) -> value.type == "workplace" && manager in value.members }
+                            .forEach { (key, value) ->
+                                Logger.write(
+                                    "The manager $manager of the workplace party ${value.name} is fired.",
+                                    Logger.LogLevel.INFO
+                                )
+                                value.members.remove(manager)
+                                if (value.leader == manager)
+                                    value.leader = null //If the manager was the leader, set the leader to null.
+                            }
+
+                    }
             }
 
             else -> {

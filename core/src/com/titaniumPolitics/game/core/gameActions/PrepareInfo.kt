@@ -22,6 +22,23 @@ class PrepareInfo(override val sbjCharacter: String, override val tgtPlace: Stri
             .forEach {
                 newSetOfPrepInfoKeys.add(it.key)
             }
+
+        //If you hate someone in your party, prepare information about them which they hate.
+        parent.parties.filter { (key, value) -> sbjCharacter in value.members }.forEach {
+            val party = it.value
+            party.members.filter { it != sbjCharacter && parent.getMutNorm(sbjCharacter, it) < -0.5 }
+                .forEach { hatedChar ->
+                    val hatedCharObj = parent.characters[hatedChar]!!
+                    parent.informations.filter {
+                        it.value.knownTo.contains(sbjCharacter) && hatedCharObj.infoPreference(
+                            it.value
+                        ) < 0
+                    }
+                        .forEach {
+                            newSetOfPrepInfoKeys.add(it.key)
+                        }
+                }
+        }
     }
 
     override fun execute() {

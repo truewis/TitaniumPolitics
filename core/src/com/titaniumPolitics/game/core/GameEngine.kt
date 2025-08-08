@@ -538,9 +538,7 @@ class GameEngine(val gameState: GameState) {
                 }
             }
             if (entry.value.alive && entry.value.health <= 0) {
-                Logger.write("${entry.key} died.", Logger.LogLevel.INFO)
-                gameState.places.values.find { it.characters.contains(entry.key) }!!.characters -= entry.key
-                entry.value.alive = false
+                killCharacter(entry)
             }
         }
         val l = gameState.aliveCharacters.filter { !it.value.trait.contains("robot") }
@@ -601,6 +599,18 @@ class GameEngine(val gameState: GameState) {
 //            }
         }
 
+    }
+
+    private fun killCharacter(entry: Map.Entry<String, Character>) {
+        Logger.write("${entry.key} died.", Logger.LogLevel.INFO)
+        gameState.places.values.find { it.characters.contains(entry.key) }!!.characters -= entry.key
+        gameState.parties.values.forEach {
+            it.members -= entry.key
+            if (it.leader == entry.key) {
+                it.leader == null
+            }
+        } //Remove from all parties.
+        entry.value.alive = false
     }
 
     companion object {
