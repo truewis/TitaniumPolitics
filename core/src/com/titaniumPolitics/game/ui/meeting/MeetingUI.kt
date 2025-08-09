@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.actions.Actions
 import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction
+import com.badlogic.gdx.scenes.scene2d.ui.Container
 import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.Stack
 import com.badlogic.gdx.scenes.scene2d.ui.Table
@@ -30,6 +31,7 @@ class MeetingUI(var gameState: GameState) : Table(defaultSkin), KTable {
     val currentAgendas = arrayListOf<AgendaBubbleUI>()
     val currentAttention = Label("0", defaultSkin, "docTitle")
     val discussionTable: Stack
+    val electionUIContainer = Container<ElectionUI>()
     var previousMutualities = mutableMapOf<Pair<String, String>, Double>()
     val addAgendaButton = scene2d.button {
         stack {
@@ -74,6 +76,7 @@ class MeetingUI(var gameState: GameState) : Table(defaultSkin), KTable {
         }
         discussionTable = stack {
             it.grow()
+            add(this@MeetingUI.electionUIContainer)
             add(this@MeetingUI.speakerPortrait)
             container(this@MeetingUI.currentAttention) {
                 padTop(300f)
@@ -85,6 +88,19 @@ class MeetingUI(var gameState: GameState) : Table(defaultSkin), KTable {
 
     //This function can be used for both meetings and conferences
     fun refresh(meeting: Meeting) {
+
+        //If the meeting is a division leader election, set the election UI after the candidates are set.
+        if (meeting.type == Meeting.MeetingType.DIVISION_LEADER_ELECTION)
+            meeting.onCandidatesSet += {
+                electionUIContainer.setActor(
+                    ElectionUI(
+                        gameState,
+                        gameState.parties[meeting.involvedParty]!!,
+                        it
+                    )
+                )
+            }
+
 
         //show mutuality arrows if there are any changes.
         val newMutualities = meeting.currentCharacters.flatMap { char1 ->

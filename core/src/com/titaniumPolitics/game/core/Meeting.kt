@@ -32,6 +32,7 @@ class Meeting(
         }
     var agendas = arrayListOf<MeetingAgenda>()
     var voteResults = hashMapOf<String, Int>()
+    var onCandidatesSet = ArrayList<(Set<String>) -> Unit>() //Called when the candidates for the election are set.
     var onVoteResults = ArrayList<() -> Unit>()
 
     fun endMeeting(gameState: GameState) {
@@ -46,21 +47,12 @@ class Meeting(
                     Logger.write("The leader of the party $involvedParty exists as ${party.leader}, but the election is still happening.")
                     throw IllegalStateException("The leader of the party $involvedParty exists as ${party.leader}, but the election is still happening.")
                 }
-                voteResults = party.members
-                    .filter { char ->
-                        agendas.any {
-                            it.type == AgendaType.NOMINATE && it.subjectParams["character"] == char
-                        }
-                    }.associateWith { candidate ->
-                        val score = party.members.sumOf {
-                            gameState.getMutuality(it, candidate) * party.getMultiplier(it)
-                        }
-                        Logger.write(
-                            "The average support of $candidate is ${score / party.size}.",
-                            Logger.LogLevel.INFO
-                        )
-                        score.roundToInt()
-                    } as HashMap<String, Int>//TODO: This logic has to be more thorough. display the actual election process.
+                val candidates = party.members.filter { char ->
+                    agendas.any {
+                        it.type == AgendaType.NOMINATE && it.subjectParams["character"] == char
+                    }
+                }
+                voteResults = party.getVotes(candidates.toSet())
                 onVoteResults.forEach { it() }
 
                 val leader = voteResults.maxByOrNull { it.value }?.key ?: ""
