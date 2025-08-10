@@ -219,7 +219,10 @@ class Place : GameStateElement() {
             //Check if it is workable------------------------------------------------------------------------------
             if (apparatus.durability <= .0) {
                 apparatus.durability = .0
-                Logger.write("${apparatus.name} in $name is broken and cannot function.", Logger.LogLevel.INFO)
+                Logger.write(
+                    "${apparatus.name} in $name is broken and cannot function.",
+                    Logger.LogLevel.APPARATUS_VERBOSE
+                )
                 return@app //Cannot work broken apparatus
             }
 
@@ -229,19 +232,22 @@ class Place : GameStateElement() {
                 {
                     Logger.write(
                         "${apparatus.name} in $name is cannot produce ${it.key} because it is full and cannot function.",
-                        Logger.LogLevel.INFO
+                        Logger.LogLevel.APPARATUS_VERBOSE
                     )
                     return@app //If the resource is full, no one works.
                 }
             }
             resourceShortOfHourly(apparatus)?.also {
-                Logger.write("${apparatus.name} in $name is short of $it and cannot function.", Logger.LogLevel.INFO)
+                Logger.write(
+                    "${apparatus.name} in $name is short of $it and cannot function.",
+                    Logger.LogLevel.APPARATUS_VERBOSE
+                )
                 return@app //If there is not enough resources, no one works.
             }
             gasResourceShortOfHourly(apparatus)?.also {
                 Logger.write(
                     "${apparatus.name} in $name is short of $it gas and cannot function.",
-                    Logger.LogLevel.INFO
+                    Logger.LogLevel.APPARATUS_VERBOSE
                 )
                 return@app //If there is not enough resources, no one works.
             }

@@ -5,7 +5,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 class Eat(override val sbjCharacter: String, override val tgtPlace: String) : GameAction() {
-    val amount get() = sbjCharObj.reliant * 1.0
+    val amount get() = sbjCharObj.reliant * 1.0 //In kilograms, 1.0 kg per reliant.
 
     override fun execute() {
 
@@ -13,7 +13,8 @@ class Eat(override val sbjCharacter: String, override val tgtPlace: String) : Ga
         sbjCharObj.resources["water"] -= amount
         sbjCharObj.hunger -= 50
         sbjCharObj.thirst -= 50
-        tgtPlaceObj.gasResources["water"] += amount * 3.0//TODO: Calculate the amount of gas from Digestion
+        tgtPlaceObj.gasResources["water"] += 1.68 * amount //All hydrogen in the ration plus the liquid water consumed is counted. Look at apparatus json at farmArray.
+        tgtPlaceObj.gasResources["carbonDioxide"] += amount * 1.16
         Logger.write("$sbjCharacter ate a ration and drank some water.", Logger.LogLevel.ACTION_VERBOSE)
         super.execute()
     }

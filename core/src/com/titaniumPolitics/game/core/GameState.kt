@@ -307,6 +307,7 @@ class GameState {
                 val liveBy = this@GameState.characters[char.key]!!.livingBy
                 connectedPlaces.add(liveBy)
                 coordinates = this@GameState.places[liveBy]!!.coordinates
+                volume = 100.0f //Set a default volume for the home.
             }
             places[this@GameState.characters[char.key]!!.livingBy]!!.connectedPlaces.add("home_" + char.key)
             if (places.none { it.value.characters.contains(char.key) })
@@ -316,7 +317,7 @@ class GameState {
             setMutuality(char.key, char.key, 50.0)
 
             char.value.resources =
-                Resources("ration" to 100.0 * char.value.reliant, "water" to 100.0 * char.value.reliant)
+                Resources("ration" to 10.0 * char.value.reliant, "water" to 10.0 * char.value.reliant)
         }
 
         randomize()
