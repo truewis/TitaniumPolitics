@@ -13,7 +13,7 @@ class ExecuteCommandRoutine() : Routine() {
     var timeout = ReadOnly.const("ExecuteCommandRoutineInvalidActionTimeout")
 
     override fun newRoutineCondition(name: String, place: String, subroutines: List<Routine>): Routine? {
-        Logger.write("$name is executing the command ${executableRequest}.", Logger.LogLevel.INFO)
+        //Logger.write("$name is executing the command ${executableRequest}.", Logger.LogLevel.INFO)
 
         if (place != executableRequest.action.tgtPlace) {
             if (subroutines.none { it is MoveRoutine })
