@@ -22,44 +22,28 @@ class AttackAgendaRoutine() : Routine(), IMeetingRoutine {
             return Wait(name, place)
         } else //If it is my turn to speak
         {
-            when (variables["agenda"]) {
-
-                "proofOfWork" -> {
-                    //if there is any attacking information, add it.
-                }
-
-                "nomination", "praise" -> {
-                    //if there is any attacking information, add it.
-                    character.preparedInfoKeys.filter { key ->
-                        gState.informations[key]!!.tgtCharacter == conf.agendas[intVariables["agendaIndex"]!!].subjectParams["character"]
-                                && gState.characters[gState.informations[key]!!.tgtCharacter]!!.infoPreference(
-                            gState.informations[key]!!
-                        ) < 0
-                    }.forEach { key ->
-                        val action = AddInfo(name, place).also {
-                            it.infoKey = key
-                            it.agendaIndex = intVariables["agendaIndex"]!!
-                        }
-                        if (action.isValid())//In particular, if this information is not already presented in the meeting.
-                            return action
-                    }
-                }
-
-                "denounce" -> {
-                    //if there is any attacking information, add it.
-                    character.preparedInfoKeys.filter { key ->
-                        gState.informations[key]!!.tgtCharacter == conf.agendas[intVariables["agendaIndex"]!!].subjectParams["character"]
-                                && gState.characters[gState.informations[key]!!.tgtCharacter]!!.infoPreference(
-                            gState.informations[key]!!
-                        ) > 0
-                    }.forEach { key ->
-                        val action = AddInfo(name, place).also {
-                            it.infoKey = key
-                            it.agendaIndex = intVariables["agendaIndex"]!!
-                        }
-                        if (action.isValid())//In particular, if this information is not already presented in the meeting.
-                            return action
-                    }
+            //Check if I have any information to support the agenda.
+            val attackingInfo = character.preparedInfoKeys.filter {
+                conf.agendas[intVariables["agendaIndex"]!!].effectivity(
+                    gState,
+                    conf,
+                    gState.informations[it]!!,
+                    character
+                ) < 0.0
+            }.minByOrNull {
+                conf.agendas[intVariables["agendaIndex"]!!].effectivity(
+                    gState,
+                    conf,
+                    gState.informations[it]!!,
+                    character
+                )
+            }
+            if (attackingInfo != null) {
+                //If I have supporting information, add it to the agenda.
+                return AddInfo(name, place).also {
+                    it.injectParent(gState)
+                    it.infoKey = attackingInfo
+                    it.agendaIndex = intVariables["agendaIndex"]!!
                 }
             }
             //If there is no supporting information, end speech.
