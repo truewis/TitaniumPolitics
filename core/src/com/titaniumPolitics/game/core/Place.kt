@@ -2,7 +2,8 @@ package com.titaniumPolitics.game.core
 
 import com.titaniumPolitics.game.core.GameEngine.Companion.onAccident
 import com.titaniumPolitics.game.core.ReadOnly.const
-import com.titaniumPolitics.game.core.ReadOnly.dt
+import com.titaniumPolitics.game.core.ReadOnly.DT
+import com.titaniumPolitics.game.core.ReadOnly.S_PER_HR
 import com.titaniumPolitics.game.debugTools.Logger
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.float
@@ -121,6 +122,8 @@ class Place : GameStateElement() {
     }
 
     var characters = hashSetOf<String>()
+    val realCharacters
+        get() = characters.filter { !it.contains("Anon") }.toHashSet() //Characters that are not anonymous.
     var responsibleDivision: String? = null //Determines which party is responsible for the place.
     val workplaceParty: Party?
         get() = parent.parties["workplace_$name"]
@@ -153,7 +156,7 @@ class Place : GameStateElement() {
 
                     val flowAmount = pressureToMass(
                         key,
-                        (equilabriumPressure - gasPressure(key)) * dt / const("GasDiffusionTau")
+                        (equilabriumPressure - gasPressure(key)) * DT / const("GasDiffusionTau")
                     )
 
                     gasResources[key] += flowAmount
@@ -167,7 +170,7 @@ class Place : GameStateElement() {
                 (temperature * heatCapacity + place.temperature * place.heatCapacity) / (heatCapacity + place.heatCapacity)
 
             val flowAmount =
-                (equilabriumTemp - temperature) * (heatCapacity + place.heatCapacity) * dt / const("TemperatureDiffusionTau")
+                (equilabriumTemp - temperature) * (heatCapacity + place.heatCapacity) * DT / const("TemperatureDiffusionTau")
 
 
             temperature += flowAmount / heatCapacity
@@ -206,13 +209,12 @@ class Place : GameStateElement() {
     }
 
     fun workApparatusHourly() {
-        val dth = 3600
         if (responsibleDivision == null) return //TODO: Is this true?
         if (isAccidentScene) return //If there is an accident, no one works until it is resolved.
         apparatuses.forEach app@{ apparatus ->
             //Consume durability, no matter it is currently being worked or not. For storages, keep the durability if they are fully staffed.
             if (!apparatus.isStorage || apparatus.currentWorker >= apparatus.idealWorker)
-                apparatus.durability -= dth * const("DurabilityMax") / const("DurabilityTau")//Apparatuses are damaged over time. TODO: get rid of unexpected behaviors, if any
+                apparatus.durability -= S_PER_HR * const("DurabilityMax") / const("DurabilityTau")//Apparatuses are damaged over time. TODO: get rid of unexpected behaviors, if any
             //Check if it is workable------------------------------------------------------------------------------
             if (apparatus.durability <= .0) {
                 apparatus.durability = .0
@@ -244,29 +246,29 @@ class Place : GameStateElement() {
             }
             //-----------------------------------------------------------------------------------------------------
             apparatus.currentProduction.forEach {
-                resources[it.key] += it.value * dth
+                resources[it.key] += it.value * S_PER_HR
             }
             apparatus.currentConsumption.forEach {
-                resources[it.key] = (resources[it.key]) - it.value * dth
+                resources[it.key] = (resources[it.key]) - it.value * S_PER_HR
             }
             apparatus.currentDistribution.forEach {
-                workers.first().resources[it.key] += it.value * dth
-                marketSupplyEstimateWeekly[it.key] += it.value * dth //Market supply estimate is updated.
+                workers.first().resources[it.key] += it.value * S_PER_HR
+                marketSupplyEstimateWeekly[it.key] += it.value * S_PER_HR //Market supply estimate is updated.
 
             }
             marketSupplyEstimateWeekly *= marketSupplyEstimateR
             apparatus.currentAbsorption.forEach {
-                gasResources[it.key] -= it.value * dth
+                gasResources[it.key] -= it.value * S_PER_HR
             }
-            addHeat(apparatus.currentHeatProduction * dth)
+            addHeat(apparatus.currentHeatProduction * S_PER_HR)
 
-            if (apparatus.currentGraveDanger * dth > GameEngine.random.nextDouble()) {
+            if (apparatus.currentGraveDanger * S_PER_HR > GameEngine.random.nextDouble()) {
                 //Catastrophic accident occurred.
                 Logger.write("!Catastrophic accident occurred at: ${name}", Logger.LogLevel.INFO)
                 isAccidentScene = true
                 generateCatastrophicAccident()
 
-            } else if (apparatus.currentDanger * dth > GameEngine.random.nextDouble()) {
+            } else if (apparatus.currentDanger * S_PER_HR > GameEngine.random.nextDouble()) {
                 //Accident occurred.
                 Logger.write("!Accident occurred at: ${name}", Logger.LogLevel.INFO)
                 isAccidentScene = true
@@ -274,7 +276,7 @@ class Place : GameStateElement() {
 
             }
             if (apparatus.isStorage) {
-                apparatus.durability += dth * const("DurabilityMax") / const("DurabilityTau")//Storages are repaired if they are worked.
+                apparatus.durability += S_PER_HR * const("DurabilityMax") / const("DurabilityTau")//Storages are repaired if they are worked.
             }
         }
 
@@ -289,9 +291,8 @@ class Place : GameStateElement() {
     }
 
     fun resourceShortOfHourly(app: Apparatus): String? {
-        val dth = 3600
         (app.currentConsumption + app.currentDistribution).forEach {
-            if ((resources[it.key]) < it.value * dth)
+            if ((resources[it.key]) < it.value * S_PER_HR)
                 return it.key //If the resource is less than an hour worth of consumption, return the resource name.
         }
         return null
@@ -299,9 +300,8 @@ class Place : GameStateElement() {
     }
 
     fun gasResourceShortOfHourly(app: Apparatus): String? {
-        val dth = 3600
         app.currentAbsorption.forEach {
-            if ((gasResources[it.key]) < it.value * dth)
+            if ((gasResources[it.key]) < it.value * S_PER_HR)
                 return it.key //If the resource is less than a unit time worth of consumption, return the resource name.
         }
         return null

@@ -5,13 +5,14 @@ import com.titaniumPolitics.game.core.GameEngine
 import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.core.Meeting
 import com.titaniumPolitics.game.core.MeetingAgenda
+import com.titaniumPolitics.game.core.Place
 import com.titaniumPolitics.game.core.ReadOnly
+import com.titaniumPolitics.game.core.ReadOnly.DTH
 import com.titaniumPolitics.game.core.Request
 import com.titaniumPolitics.game.core.Resources
 import com.titaniumPolitics.game.core.gameActions.EndMeeting
 import com.titaniumPolitics.game.core.gameActions.GameAction
 import com.titaniumPolitics.game.core.gameActions.Intercept
-import com.titaniumPolitics.game.core.gameActions.LeaveMeeting
 import com.titaniumPolitics.game.core.gameActions.NewAgenda
 import com.titaniumPolitics.game.core.gameActions.Repair
 import com.titaniumPolitics.game.core.gameActions.UnofficialResourceTransfer
@@ -274,12 +275,22 @@ sealed class Routine() {
     }
 
     fun meetingRoutineEndCondition(name: String, type: Meeting.MeetingType): Boolean {
-        return routineStartTime + 7200 / ReadOnly.dt <= gState.time || gState.characters[name]!!.currentMeeting?.let { it.type != type } ?: false || (gState.characters[name]!!.currentMeeting?.currentAttention
+        return routineStartTime + 7200 / ReadOnly.DT <= gState.time || gState.characters[name]!!.currentMeeting?.let { it.type != type } ?: false || (gState.characters[name]!!.currentMeeting?.currentAttention
             ?: 100) < 10
         /*Sometimes characters are transferred between different meetings without their turn. In that case, the previous meeting routine is killed here.*/
     }
 
     override fun toString(): String {
         return "${this::class.simpleName}(ID='$ID', priority=$priority, subroutines=$subroutines, routineStartTime=$routineStartTime, variables=$variables, intVariables=$intVariables, doubleVariables=$doubleVariables, executeDone=$executeDone)"
+    }
+
+    companion object {
+        fun isWorkHourWithETA(gState: GameState, place: String, workplace: String, padding: Int = 0): Boolean {
+            //Consider the estimated time to workplace, if the character is not at home.
+            val eta = gState.places[place]!!.shortestPathAndTimeTo(workplace)?.second ?: 0
+            val extendedWorkHours =
+                (gState.places[workplace]!!.workHours.first / DTH).toInt() - eta - padding..(gState.places[workplace]!!.workHours.last / DTH).toInt() + eta + padding
+            return (gState.timeInDay in extendedWorkHours)
+        }
     }
 }

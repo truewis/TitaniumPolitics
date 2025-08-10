@@ -1,6 +1,7 @@
 package com.titaniumPolitics.game.core.NPCRoutines
 
 import com.titaniumPolitics.game.core.ReadOnly
+import com.titaniumPolitics.game.core.ReadOnly.DTH
 import com.titaniumPolitics.game.core.gameActions.GameAction
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
@@ -25,11 +26,18 @@ class RestRoutine() : Routine() {
     }
 
     override fun endCondition(name: String, place: String): Boolean {
+        // Wake up based on eta to workplace and workplace work hours.
         if (gState.characters[name]!!.health < ReadOnly.const("CriticalHealth")) return false
         if (variables["workPlace"] == null)
             return (gState.hour in 8..18)
-        else
-            return (gState.hour in gState.places[variables["workPlace"]!!]!!.workHours)
+        else {
+            return isWorkHourWithETA(
+                gState,
+                place,
+                variables["workPlace"]!!,
+                (1 / DTH).toInt()
+            )//Allow waking up 1 hour before commuting to work.
+        }
     }
 
     @Transient

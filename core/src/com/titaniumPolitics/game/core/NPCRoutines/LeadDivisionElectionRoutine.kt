@@ -54,6 +54,10 @@ class LeadDivisionElectionRoutine : Routine(), IMeetingRoutine {
             return interceptCondition(conf, name, place)
         } else //If it is my turn to speak
         {
+            //If I am the controller, finish nomination if there are three candidates or more.
+            if (name == "ctrler" && conf.agendas.count { it.type == AgendaType.NOMINATE } >= 3) {
+                return FinishNomination(name, place)
+            }
             val nominee = gState.characters.keys.filter { it != name && party.members.contains(it) }
                 .maxByOrNull { gState.getMutuality(name, it) }!!
             //Nominate the person with the highest mutuality, if not nominated yet.

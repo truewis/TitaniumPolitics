@@ -82,7 +82,7 @@ class AssistantUI(gameState: GameState) : Table(defaultSkin) {
         //Also check CalendarUI
         gameState.onAddScheduledMeeting += { meeting ->
             Gdx.app.postRunnable {
-                if (meeting.time - gameState.day * 86400 / ReadOnly.dt <= 5 * 86400 / ReadOnly.dt && meeting.scheduledCharacters.contains(
+                if (meeting.time - gameState.day * 86400 / ReadOnly.DT <= 5 * 86400 / ReadOnly.DT && meeting.scheduledCharacters.contains(
                         gameState.playerName
                     )
                 ) {//5 days from today's start

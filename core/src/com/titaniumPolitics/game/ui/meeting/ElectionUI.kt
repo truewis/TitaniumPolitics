@@ -11,7 +11,7 @@ import ktx.scene2d.*
 class ElectionUI(val gameState: GameState, val party: Party, val candidates: Set<String>) : Table(), KTable {
     val characterBases = candidates.map { CharacterBase(it) }
     val characterBubbles =
-        candidates.map { CharBubble(it, party, characterBases.first { base -> base.name == it }) }
+        candidates.map { CharBubble(it, party, characterBases.first { base -> base.charName == it }) }
 
     init {
         //Do not use scrollPane, we don't want to hide candidates.
@@ -32,7 +32,7 @@ class ElectionUI(val gameState: GameState, val party: Party, val candidates: Set
     fun refresh() {
         characterBubbles.forEach { bubble ->
             val support = party.getVotes(candidates)
-            bubble.refresh((support[bubble.name]!! * 1.0 / party.totalVotes))
+            bubble.refresh((support[bubble.charName]!! * 1.0 / party.totalVotes))
         }
 
     }
@@ -44,8 +44,8 @@ class ElectionUI(val gameState: GameState, val party: Party, val candidates: Set
 
 
     //This bubble is floating above the character base, showing the current support of the character.
-    class CharBubble(val name: String, val party: Party, val base: CharacterBase) : Table(), KTable {
-        val nameLabel = scene2d.label(ReadOnly.prop(name), "docTitle") {
+    class CharBubble(val charName: String, val party: Party, val base: CharacterBase) : Table(), KTable {
+        val nameLabel = scene2d.label(ReadOnly.prop(charName), "docTitle") {
             setFontScale(0.7f)
         }
         val supportLabel: Label = scene2d.label("", "docTitle") {
@@ -76,7 +76,7 @@ class ElectionUI(val gameState: GameState, val party: Party, val candidates: Set
         }
     }
 
-    class CharacterBase(val name: String) : Table(), KTable {
+    class CharacterBase(val charName: String) : Table(), KTable {
         init {
         }
     }

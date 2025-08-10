@@ -56,6 +56,7 @@ class WorkRoutine() : Routine() {
                 if (routines.none { it is MoveRoutine }) {
                     return MoveRoutine().apply {
                         variables["movePlace"] = missingMeeting.place
+                        priority = PRIORITY_MEETING//Higher priority
                     }
                 }
             } else {
@@ -66,14 +67,16 @@ class WorkRoutine() : Routine() {
 
         //3. If a conference is scheduled
         gState.scheduledMeetings.values.firstOrNull {
+            if (!it.scheduledCharacters.contains(name)) return@firstOrNull false //If I am not scheduled to attend this meeting, skip it.
             val eta = gState.places[it.place]!!.shortestPathAndTimeTo(place)?.second ?: return@firstOrNull false
-            return@firstOrNull it.scheduledCharacters.contains(name) && it.isValidTimeToStart(gState.time + eta)
+            return@firstOrNull it.isValidTimeToStart(gState.time + eta)
         }?.also { conf ->
             //----------------------------------------------------------------------------------Move to the Meeting
             if (place != conf.place) {
                 if (routines.none { it is MoveRoutine })
                     return MoveRoutine().apply {
                         variables["movePlace"] = conf.place
+                        priority = PRIORITY_MEETING//Higher priority
                     }
             } else {
                 return pickMeetingRoutine(name, conf)
@@ -82,7 +85,7 @@ class WorkRoutine() : Routine() {
 
         //4. Corruption for power: If the character is the leader of a party, and a party member is short of resources, steal resources from workplace to party member's home
         //Only attempted once a day or once a work, whichever is shorter.
-        if (gState.time - (intVariables["corruptionTimer"] ?: 0) > ReadOnly.constInt("CorruptionTau") / ReadOnly.dt)
+        if (gState.time - (intVariables["corruptionTimer"] ?: 0) > ReadOnly.constInt("CorruptionTau") / ReadOnly.DT)
             if (gState.parties.values.any { it.leader == name }) {
                 val party = gState.parties.values.find { it.leader == name }!!
                 val rationThreshold =
@@ -271,7 +274,8 @@ class WorkRoutine() : Routine() {
 
     override fun endCondition(name: String, place: String): Boolean {
         //If work hours are over, rest. Also, if the character is too hungry, thirsty, or sick, rest. (Which is checked earlier.)
-        return (gState.hour !in 8..18)
+        return !isWorkHourWithETA(gState, place, variables["workplace"]!!, (1 / ReadOnly.DTH).toInt())
+                || gState.characters[name]!!.health <= ReadOnly.const("CriticalHealth")
     }
 
     @Transient

@@ -39,11 +39,12 @@ class DowntimeRoutine() : Routine() {
     override fun endCondition(name: String, place: String): Boolean {
         //Pay attention to the condition checking order.
         //return false must be checked first, otherwise the routine will be created again.
+        return true
         if (gState.getMutuality(name) < const("DowntimeWill")) return false
         if (variables["workPlace"] == null)
             return (gState.hour in 8..18)
         else
-            return (gState.hour in gState.places[variables["workPlace"]!!]!!.workHours)
+            return isWorkHourWithETA(gState, place, variables["workPlace"]!!)
     }
 
     @Transient

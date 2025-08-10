@@ -45,7 +45,7 @@ class TimeAmountUI(amount: Int) : Table(Scene2DSkin.defaultSkin), KTable {
                     color = Color.BLACK
                 }
             }
-        } else if (amount * ReadOnly.dt / 60 >= 60 * 24) {
+        } else if (amount * ReadOnly.DT / 60 >= 60 * 24) {
             if (ReadOnly.toHours(amount) % 24 != 0) {
                 label("${ReadOnly.toDays(amount)}D${ReadOnly.toHours(amount) % 24}H", "docTitle") {
                     it.fill()

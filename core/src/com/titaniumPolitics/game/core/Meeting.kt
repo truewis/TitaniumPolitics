@@ -2,10 +2,9 @@ package com.titaniumPolitics.game.core
 
 import com.titaniumPolitics.game.core.ReadOnly.const
 import com.titaniumPolitics.game.core.ReadOnly.constInt
-import com.titaniumPolitics.game.core.ReadOnly.dt
+import com.titaniumPolitics.game.core.ReadOnly.DT
 import com.titaniumPolitics.game.debugTools.Logger
 import kotlinx.serialization.Serializable
-import kotlin.math.roundToInt
 
 /*
 *  This class represents a meeting in the game. It is used to represent meetings that are scheduled to happen in the future.
@@ -34,6 +33,15 @@ class Meeting(
     var voteResults = hashMapOf<String, Int>()
     var onCandidatesSet = ArrayList<(Set<String>) -> Unit>() //Called when the candidates for the election are set.
     var onVoteResults = ArrayList<() -> Unit>()
+
+    fun finishNomination() {
+        //This is called when the nomination is finished.
+        //It will call the onCandidatesSet callbacks with the candidates.
+        val candidates = agendas.filter { it.type == AgendaType.NOMINATE }
+            .map { it.subjectParams["character"]!! }
+            .toSet()
+        onCandidatesSet.forEach { it(candidates) }
+    }
 
     fun endMeeting(gameState: GameState) {
         //If this is an election, elect the leader from the mutuality matrix.
@@ -134,12 +142,12 @@ class Meeting(
         if (type == MeetingType.TALK) {
             //Chill meeting
             currentCharacters.forEach {
-                gameState.setMutuality(it, delta = dt / const("ChillMeetingWillTau") * const("mutualityMax"))
+                gameState.setMutuality(it, delta = DT / const("ChillMeetingWillTau") * const("mutualityMax"))
             }
         } else {
             //Work meeting
             currentCharacters.forEach {
-                gameState.setMutuality(it, delta = dt / const("WorkMeetingWillTau") * const("mutualityMax"))
+                gameState.setMutuality(it, delta = DT / const("WorkMeetingWillTau") * const("mutualityMax"))
             }
         }
         agendas.forEach { agenda ->

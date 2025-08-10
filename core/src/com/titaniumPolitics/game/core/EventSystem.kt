@@ -17,7 +17,7 @@ class EventSystem : GameStateElement() {
 
     //Utility function called once when a new game starts.
     fun newGame() {
-        add(Event_PrologueInfDivLeaderSpeech())
+        add(Event_PrologueAlinaSpeech())
         add(Event_BribeDoctor1())
         add(Event_BoyFindingMom())
         //dataBase.add(Event_ObserverIntro())

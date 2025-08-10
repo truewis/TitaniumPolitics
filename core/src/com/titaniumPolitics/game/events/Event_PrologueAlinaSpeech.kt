@@ -4,7 +4,7 @@ import com.titaniumPolitics.game.ui.Quest
 import kotlinx.serialization.Serializable
 
 @Serializable
-class Event_PrologueInfDivLeaderSpeech : EventObject("Introduction of Alina.", true), IQuestEventObject {
+class Event_PrologueAlinaSpeech : EventObject("Introduction of Alina.", true), IQuestEventObject {
 
     override val quest = Quest(
         "Alina's speech",
@@ -14,9 +14,10 @@ class Event_PrologueInfDivLeaderSpeech : EventObject("Introduction of Alina.", t
     )
 
     override fun exec(a: Int, b: Int) {
-        if (parent.player.currentMeeting != null && parent.parties["infrastructure"]!!.leader == "Alina" && parent.player.currentMeeting!!.currentCharacters.containsAll(
-                listOf("Alina", "Krailin")
+        if (parent.parties["infrastructure"]!!.leader == "Alina" && parent.player.currentMeeting?.currentCharacters?.containsAll(
+                listOf("Alina", "Krailin", "Rui")
             )
+            ?: false
         ) {
             onPlayDialogue("PrologueInfDivLeaderSpeech")
             parent.eventSystem.add(Event_AlinaResign())

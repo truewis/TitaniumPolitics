@@ -39,7 +39,7 @@ class CalendarUI(val gameState: GameState) : Table(Scene2DSkin.defaultSkin) {
 
         gameState.timeChanged += { _, time ->
             // Check if there is an entry within the next hour
-            entries.firstOrNull { it.time - time in 0..3600 / ReadOnly.dt && !it.hasAlerted }?.let {
+            entries.firstOrNull { it.time - time in 0..3600 / ReadOnly.DT && !it.hasAlerted }?.let {
                 it.hasAlerted = true // Mark as alerted
                 AlertUI.instance.addAlert("alarm") {
                     isVisible = true

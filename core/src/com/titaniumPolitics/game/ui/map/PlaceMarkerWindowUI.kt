@@ -17,7 +17,7 @@ import ktx.scene2d.table
 
 class PlaceMarkerWindowUI(var gameState: GameState, var owner: MapUI) : Table() {
     var placeDisplayed = ""
-    val distance get() = (gameState.player.place.shortestPathAndTimeTo(placeDisplayed)?.second ?: 0) * ReadOnly.dt / 60
+    val distance get() = (gameState.player.place.shortestPathAndTimeTo(placeDisplayed)?.second ?: 0) * ReadOnly.DT / 60
     var mode = ""
     var interrupted = false//Only used in move mode.
     var tgtDestination = ""//Only used in move mode.

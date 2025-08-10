@@ -1,5 +1,6 @@
 package com.titaniumPolitics.game.core.gameActions
 
+import com.badlogic.gdx.math.MathUtils.clamp
 import com.titaniumPolitics.game.core.Resources
 import com.titaniumPolitics.game.debugTools.Logger
 import kotlinx.serialization.Serializable
@@ -28,7 +29,7 @@ class OfficialResourceTransfer(override val sbjCharacter: String, override val t
         parent.places[toWhere]!!.responsibleDivision?.run {
             sbjCharObj.division?.also {
                 val partyLeader = parent.characters[parent.parties[this]!!.leader]
-                parent.setPartyMutuality(this, it.name, (partyLeader?.itemValue(resources) ?: .0))
+                parent.setPartyMutuality(this, it.name, clamp((partyLeader?.itemValue(resources) ?: .0), 0.0, 10.0))
             }
         }
         super.execute()

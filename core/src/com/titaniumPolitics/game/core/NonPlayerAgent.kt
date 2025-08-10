@@ -1,6 +1,7 @@
 package com.titaniumPolitics.game.core
 
 import com.titaniumPolitics.game.core.NPCRoutines.*
+import com.titaniumPolitics.game.core.ReadOnly.DTH
 import com.titaniumPolitics.game.core.gameActions.GameAction
 import com.titaniumPolitics.game.core.gameActions.LeaveMeeting
 import com.titaniumPolitics.game.core.gameActions.Wait
@@ -80,6 +81,9 @@ class NonPlayerAgent : Agent() {
                 routines.add(RestRoutine().apply {
 
                     priority = pri
+                    variables["workplace"] = parent.places.filter {
+                        name in (it.value.workplaceParty?.members ?: return@filter false)
+                    }.keys.first()
                     intVariables["routineStartTime"] = parent.time
                 })//Add a routine, priority higher than work.
                 return
@@ -213,16 +217,26 @@ class NonPlayerAgent : Agent() {
 
     private fun whenIdle() {
         //When work hours, work
-        if (parent.hour in 8..18) {
-            routines.add(WorkRoutine().also {
-                it.intVariables["routineStartTime"] = parent.time
-            })
-            return
-        } else
-        //When not work hours, rest
+        parent.getWorkplace(name)?.let { wkplace ->
+            if (Routine.isWorkHourWithETA(parent, place, wkplace.name, (1 / DTH).toInt())) {
+                routines.add(WorkRoutine().also {
+                    it.variables["workplace"] = wkplace.name
+                    it.intVariables["routineStartTime"] = parent.time
+                })
+                return
+            } else
+            //When not work hours, rest
+                routines.add(RestRoutine().also {
+                    it.variables["workplace"] = wkplace.name
+                    it.intVariables["routineStartTime"] = parent.time
+                })
+        }
+            ?:
+            //When no workplace, rest
             routines.add(RestRoutine().also {
                 it.intVariables["routineStartTime"] = parent.time
             })
+
     }
 
     @Deprecated("This function is not used anymore because we don't have trade action anymore.")

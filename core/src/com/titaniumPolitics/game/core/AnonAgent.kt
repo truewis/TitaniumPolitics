@@ -1,6 +1,7 @@
 package com.titaniumPolitics.game.core
 
 import com.titaniumPolitics.game.core.NPCRoutines.*
+import com.titaniumPolitics.game.core.ReadOnly.DTH
 import com.titaniumPolitics.game.core.gameActions.GameAction
 import com.titaniumPolitics.game.core.gameActions.LeaveMeeting
 import com.titaniumPolitics.game.core.gameActions.Wait
@@ -165,7 +166,7 @@ class AnonAgent : Agent() {
 
     private fun whenIdle() {
         //When work hours, work
-        if (parent.hour in parent.places[workPlace]!!.workHoursStart..parent.places[workPlace]!!.workHoursEnd) {
+        if (Routine.isWorkHourWithETA(parent, place, workPlace, (1 / DTH).toInt())) {
             routines.add(WorkAnonRoutine().also {
                 it.variables["workPlace"] = workPlace
             })

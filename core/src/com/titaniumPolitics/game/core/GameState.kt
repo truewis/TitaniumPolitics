@@ -12,6 +12,7 @@ import kotlinx.serialization.json.jsonPrimitive
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.math.absoluteValue
 
 @Serializable
 class GameState {
@@ -40,6 +41,8 @@ class GameState {
                 )
             } //Clone the list to prevent concurrent modification.
         }
+    val timeInDay
+        get() = _time % ReadOnly.constInt("lengthOfDay") //Time in the current day.
     val hour: Int
         get() = ReadOnly.toHours(_time)
     val day: Int
@@ -191,6 +194,11 @@ class GameState {
             it.injectParent(this@GameState)
             it.workPlace = Place.publicPlaces.random()
         }
+    }
+
+    fun getWorkplace(character: String): Place? {
+        //Returns the workplace of the character, if it exists.
+        return places.values.find { character in (it.workplaceParty?.members ?: return@find false) }
     }
 
     fun initialize() {
@@ -348,6 +356,7 @@ class GameState {
         ))
 
     fun setMutuality(a: String, b: String = a, delta: Double) {
+        if (delta.absoluteValue > 50f) throw Exception("Setting mutuality $a -> $b with delta $delta is too high. Use smaller values.")
         if (!delta.isFinite()) throw Exception("Setting mutuality $a -> $b with delta $delta is not finite.")
         if (!characters.containsKey(a) || !characters.containsKey(b)) throw Exception("Setting mutuality $a -> $b invalid.")
         if (!_mutuality.containsKey(a))
@@ -402,6 +411,7 @@ class GameState {
         val membersB = parties[b]?.members ?: emptyList()
         for (memberA in membersA) {
             for (memberB in membersB) {
+                if (memberA == memberB) continue //Skip self-mutuality.
                 setMutuality(memberA, memberB, delta)
             }
         }
