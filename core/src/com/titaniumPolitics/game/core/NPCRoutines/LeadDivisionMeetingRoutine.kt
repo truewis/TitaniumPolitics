@@ -11,7 +11,7 @@ class LeadDivisionMeetingRoutine : Routine(), IMeetingRoutine {
         priority = PRIORITY_MEETING
     }
 
-    override fun newRoutineCondition(name: String, place: String, routines: List<Routine>): Routine? {
+    override fun newRoutineCondition(name: String, place: String, subroutines: List<Routine>): Routine? {
         val character = gState.characters[name]!!
         val conf =
             character.currentMeeting ?: return null

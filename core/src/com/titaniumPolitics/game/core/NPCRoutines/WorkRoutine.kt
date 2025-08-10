@@ -18,10 +18,10 @@ class WorkRoutine() : Routine() {
         priority = PRIORITY_WORK
     }
 
-    override fun newRoutineCondition(name: String, place: String, routines: List<Routine>): Routine? {
+    override fun newRoutineCondition(name: String, place: String, subroutines: List<Routine>): Routine? {
         val character = gState.characters[name]!!
 
-        if (routines.any { it is IMeetingRoutine })//I am already in a meeting, do not start a new routine.
+        if (subroutines.any { it is IMeetingRoutine })//I am already in a meeting, do not start a new routine.
             return null
 
         //I am forced into a meeting. Pick a meeting routine. Do not attend the meeting if it is already attended.
@@ -37,7 +37,7 @@ class WorkRoutine() : Routine() {
                 name
             ) && it.isAccidentScene
         }?.also { place ->
-            if (routines.none { it is InvestigateAndClearAccidentRoutine && it.variables["place"] == place.name }) {
+            if (subroutines.none { it is InvestigateAndClearAccidentRoutine && it.variables["place"] == place.name }) {
                 //If there is no routine to investigate and clear the accident in this place, create a new one.
                 return InvestigateAndClearAccidentRoutine().apply {
                     variables["place"] = place.name
@@ -53,7 +53,7 @@ class WorkRoutine() : Routine() {
         if (missingMeeting != null && gState.meetingName(missingMeeting) !in meetingsAttended) {
             // Move to the meeting if not already there
             if (place != missingMeeting.place) {
-                if (routines.none { it is MoveRoutine }) {
+                if (subroutines.none { it is MoveRoutine }) {
                     return MoveRoutine().apply {
                         variables["movePlace"] = missingMeeting.place
                         priority = PRIORITY_MEETING//Higher priority
@@ -73,7 +73,7 @@ class WorkRoutine() : Routine() {
         }?.also { conf ->
             //----------------------------------------------------------------------------------Move to the Meeting
             if (place != conf.place) {
-                if (routines.none { it is MoveRoutine })
+                if (subroutines.none { it is MoveRoutine })
                     return MoveRoutine().apply {
                         variables["movePlace"] = conf.place
                         priority = PRIORITY_MEETING//Higher priority
@@ -94,7 +94,7 @@ class WorkRoutine() : Routine() {
                 val member = party.members.find {
                     gState.characters[it]!!.resources["ration"] <= rationThreshold * (gState.characters[it]!!.reliant) || gState.characters[it]!!.resources["water"] <= waterThreshold * (gState.characters[it]!!.reliant)
                 }
-                if (member != null && routines.none { it is StealRoutine }) {
+                if (member != null && subroutines.none { it is StealRoutine }) {
                     //The resource to steal is what the member is short of, either ration or water.
                     val wantedResource =
                         if (character.resources["ration"] <= rationThreshold * (character.reliant)
@@ -127,7 +127,7 @@ class WorkRoutine() : Routine() {
             )
                 .contains(it.action.javaClass.simpleName) //Here, we can move to other places to execute the command, so we do not check if the place is here.
         }?.also { request ->
-            if (routines.none({ it is ExecuteCommandRoutine && it.variables["request"] == request.name }))
+            if (subroutines.none({ it is ExecuteCommandRoutine && it.variables["request"] == request.name }))
                 return ExecuteCommandRoutine().also { it.variables["request"] = request.name }
         }
 
@@ -147,7 +147,7 @@ class WorkRoutine() : Routine() {
                             .maxByOrNull { it.resources[res] }
                     if (resplace != null && place1.name != resplace.name)
                     //start new routine if there is a place with all the conditions met.
-                        if (resplace.resources[res] > 0 && routines.none { it is TransferResourceRoutine }) {
+                        if (resplace.resources[res] > 0 && subroutines.none { it is TransferResourceRoutine }) {
                             return TransferResourceRoutine().also {
                                 it.res = res; it.source = resplace.name; it.dest = place1.name
                             }
@@ -169,7 +169,7 @@ class WorkRoutine() : Routine() {
             if (gState.informations.none { (_, information) ->
                     information.author == character.name && information.type == InformationType.ACTION && information.action is PrepareInfo
                             && gState.time - information.creationTime > ReadOnly.constInt("lengthOfDay") * 2
-                } && routines.none { it is PrepareInfoRoutine }) {
+                } && subroutines.none { it is PrepareInfoRoutine }) {
                 //If we haven't tried this branch in the current routine
                 if (intVariables["try_prepare_info"] != 1) {
                     intVariables["try_prepare_info"] = 1
@@ -183,7 +183,7 @@ class WorkRoutine() : Routine() {
             party.leader == name
         }.forEach { party ->
             party.vacancyRole()?.let {
-                if (routines.none { it is HireRoutine }) {
+                if (subroutines.none { it is HireRoutine }) {
                     return HireRoutine().apply {
                         variables["party"] = party.name; variables["role"] = it
                     }
@@ -191,31 +191,31 @@ class WorkRoutine() : Routine() {
             }
         }
 
-
-        //8. If there is nothing above to do, move to a place that is the home of one of the parties of the character.
-        //If already at home, wait.
-        if (gState.parties.values.any { party -> party.home == place && party.members.contains(name) }) {
-        } else
-        //Move to a place that is the home of one of the parties of the character.
-        {
-            if (routines.none { it is MoveRoutine })
-                try {
-                    return MoveRoutine().apply {
-                        gState = this@WorkRoutine.gState
-                        variables["movePlace"] = gState.places.values.filter { place ->
-                            gState.parties.values.any { party ->
-                                party.home == place.name && party.members.contains(
-                                    name
-                                )
-                            }
-                        }.random().name
-                    }
-                } catch (e: NoSuchElementException) {
-                    Logger.write("Warning: No place to commute found for $name", Logger.LogLevel.INFO)
-                }
-
-
-        }
+//
+//        //8. If there is nothing above to do, move to a place that is the home of one of the parties of the character.
+//        //If already at home, wait.
+//        if (gState.parties.values.any { party -> party.home == place && party.members.contains(name) }) {
+//        } else
+//        //Move to a place that is the home of one of the parties of the character.
+//        {
+//            if (subroutines.none { it is MoveRoutine })
+//                try {
+//                    return MoveRoutine().apply {
+//                        gState = this@WorkRoutine.gState
+//                        variables["movePlace"] = gState.places.values.filter { place ->
+//                            gState.parties.values.any { party ->
+//                                party.home == place.name && party.members.contains(
+//                                    name
+//                                )
+//                            }
+//                        }.random().name
+//                    }
+//                } catch (e: NoSuchElementException) {
+//                    Logger.write("Warning: No place to commute found for $name", Logger.LogLevel.INFO)
+//                }
+//
+//
+//        }
         return null
     }
 

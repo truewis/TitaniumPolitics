@@ -6,7 +6,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 class FindCharacterRoutine() : Routine() {
     var time = 0
-    override fun newRoutineCondition(name: String, place: String, routines: List<Routine>): Routine? {
+    override fun newRoutineCondition(name: String, place: String, subroutines: List<Routine>): Routine? {
         //Stop if spent too much time
         if (time != 0) {
             if (gState.time - time > 10) {
@@ -21,7 +21,7 @@ class FindCharacterRoutine() : Routine() {
             return null
         }
 
-        if (routines.none { it is MoveRoutine })
+        if (subroutines.none { it is MoveRoutine })
             return MoveRoutine().also {
                 it.variables["movePlace"] =
                     gState.places.values.find { it.characters.contains(variables["character"]) }!!.name

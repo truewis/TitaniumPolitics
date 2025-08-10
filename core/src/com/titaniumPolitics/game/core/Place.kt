@@ -15,8 +15,9 @@ import kotlin.math.min
 
 @Serializable
 class Place : GameStateElement() {
+    private var _name: String? = null
     override val name: String
-        get() = parent.places.filter { it.value == this }.keys.first()
+        get() = _name ?: parent.places.filter { it.value == this }.keys.first().also { _name = it }
 
     val connectedHomes: List<String>
         get() {

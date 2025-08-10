@@ -19,11 +19,11 @@ class StealRoutine() : Routine() {
         }.maxByOrNull { it.resources[variables["stealResource"]!!] }
     }
 
-    override fun newRoutineCondition(name: String, place: String, routines: List<Routine>): Routine? {
+    override fun newRoutineCondition(name: String, place: String, subroutines: List<Routine>): Routine? {
 
         val resplace = findResource(name)?.name ?: return null
         if (place != resplace) {
-            if (routines.none { it is MoveRoutine })
+            if (subroutines.none { it is MoveRoutine })
                 return MoveRoutine().apply {
                     variables["movePlace"] = resplace
                 }//Add a move routine with higher priority.

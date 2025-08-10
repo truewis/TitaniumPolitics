@@ -8,7 +8,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 class MoveRoutine() : Routine() {
     var nextStop = ""
-    override fun newRoutineCondition(name: String, place: String, routines: List<Routine>): Routine? {
+    override fun newRoutineCondition(name: String, place: String, subroutines: List<Routine>): Routine? {
         return null
     }
 

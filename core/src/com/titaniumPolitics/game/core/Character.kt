@@ -22,8 +22,9 @@ class Character : GameStateElement() {
         set(value) {
             parent.setMutuality(name, delta = value - will)
         }
+    private var _name: String? = null
     override val name: String
-        get() = parent.characters.filter { it.value == this }.keys.first()
+        get() = _name ?: parent.characters.filter { it.value == this }.keys.first().also { _name = it }
     var alive = true
     var trait = hashSetOf<String>()
 

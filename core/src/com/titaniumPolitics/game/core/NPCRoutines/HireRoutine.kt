@@ -8,10 +8,10 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 class HireRoutine() : Routine() {
-    override fun newRoutineCondition(name: String, place: String, routines: List<Routine>): Routine? {
+    override fun newRoutineCondition(name: String, place: String, subroutines: List<Routine>): Routine? {
         //If not in market, move to market.
         if (place != "market") {
-            if (routines.none { it is MoveRoutine }) {
+            if (subroutines.none { it is MoveRoutine }) {
                 return MoveRoutine().apply {
                     variables["movePlace"] = "market"
                 } //Add a move routine with higher priority.

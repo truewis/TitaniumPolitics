@@ -11,10 +11,10 @@ class TransferResourceRoutine() : Routine() {
     var res = ""
     var source = ""
     var dest = ""
-    override fun newRoutineCondition(name: String, place: String, routines: List<Routine>): Routine? {
+    override fun newRoutineCondition(name: String, place: String, subroutines: List<Routine>): Routine? {
 
         if (place != source) {
-            if (routines.none { it is MoveRoutine })
+            if (subroutines.none { it is MoveRoutine })
                 return MoveRoutine().apply { variables["movePlace"] = source }
         }
         return null

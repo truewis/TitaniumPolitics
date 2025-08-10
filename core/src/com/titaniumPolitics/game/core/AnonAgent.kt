@@ -114,14 +114,15 @@ class AnonAgent : Agent() {
             routines.forEach { routine -> routine.subroutines.removeAll(removeList.map { it.ID }) } //Remove the subroutines that were removed.
             removeList.clear()
             routines.forEach {
-                it.newRoutineCondition(name, place, routines)?.let { v ->
-                    v.routineStartTime = parent.time
-                    if (v.priority == 0)//Initial priority
-                        v.priority = it.priority + 10 //Set the priority to be higher than the current routine.
-                    it.subroutines += v.ID
-                    addList += v
-                    routineSettled = false
-                }
+                it.newRoutineCondition(name, place, it.subroutines.map { routines.first { rt -> rt.ID == it } })
+                    ?.let { v ->
+                        v.routineStartTime = parent.time
+                        if (v.priority == 0)//Initial priority
+                            v.priority = it.priority + 10 //Set the priority to be higher than the current routine.
+                        it.subroutines += v.ID
+                        addList += v
+                        routineSettled = false
+                    }
             }
             routines += addList
             addList.clear()

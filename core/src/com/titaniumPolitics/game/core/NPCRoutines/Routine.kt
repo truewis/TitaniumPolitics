@@ -5,7 +5,6 @@ import com.titaniumPolitics.game.core.GameEngine
 import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.core.Meeting
 import com.titaniumPolitics.game.core.MeetingAgenda
-import com.titaniumPolitics.game.core.Place
 import com.titaniumPolitics.game.core.ReadOnly
 import com.titaniumPolitics.game.core.ReadOnly.DTH
 import com.titaniumPolitics.game.core.Request
@@ -46,7 +45,7 @@ sealed class Routine() {
         this.gState = gState
     }
 
-    abstract fun newRoutineCondition(name: String, place: String, routines: List<Routine>): Routine?
+    abstract fun newRoutineCondition(name: String, place: String, subroutines: List<Routine>): Routine?
     abstract fun execute(name: String, place: String): GameAction
     abstract fun endCondition(name: String, place: String): Boolean
 

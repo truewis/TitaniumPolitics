@@ -12,11 +12,11 @@ class DowntimeRoutine() : Routine() {
         priority = PRIORITY_REST
     }
 
-    override fun newRoutineCondition(name: String, place: String, routines: List<Routine>): Routine? {
+    override fun newRoutineCondition(name: String, place: String, subroutines: List<Routine>): Routine? {
         val char = gState.characters[name]!!
         if (char.trait.contains("extrovert")) {
             if (place !in Place.publicPlaces)
-                if (routines.none { it is MoveRoutine })
+                if (subroutines.none { it is MoveRoutine })
                     return MoveRoutine().apply {
                         variables["movePlace"] = Place.publicPlaces.random()
                     }//Add a move routine with higher priority.
@@ -25,7 +25,7 @@ class DowntimeRoutine() : Routine() {
 
         //Otherwise, go home
         if (place != "home_$name")
-            if (routines.none { it is MoveRoutine })
+            if (subroutines.none { it is MoveRoutine })
                 return MoveRoutine().apply {
                     variables["movePlace"] = "home_$name"
                 }//Add a move routine with higher priority.

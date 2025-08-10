@@ -8,9 +8,9 @@ import kotlinx.serialization.Serializable
 @Serializable
 class InvestigateAndClearAccidentRoutine() : Routine() {
     var investigated = false
-    override fun newRoutineCondition(name: String, place: String, routines: List<Routine>): Routine? {
+    override fun newRoutineCondition(name: String, place: String, subroutines: List<Routine>): Routine? {
         if (place != variables["place"]!!) {
-            if (routines.none { it is MoveRoutine })
+            if (subroutines.none { it is MoveRoutine })
                 return MoveRoutine().also {
                     it.variables["movePlace"] = variables["place"]!!
                 }

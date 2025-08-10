@@ -12,11 +12,11 @@ class ExecuteCommandRoutine() : Routine() {
     val executableRequest get() = gState.requests[variables["request"]!!]!!
     var timeout = ReadOnly.const("ExecuteCommandRoutineInvalidActionTimeout")
 
-    override fun newRoutineCondition(name: String, place: String, routines: List<Routine>): Routine? {
+    override fun newRoutineCondition(name: String, place: String, subroutines: List<Routine>): Routine? {
         Logger.write("$name is executing the command ${executableRequest}.", Logger.LogLevel.INFO)
 
         if (place != executableRequest.action.tgtPlace) {
-            if (routines.none { it is MoveRoutine })
+            if (subroutines.none { it is MoveRoutine })
                 return MoveRoutine().apply {
                     variables["movePlace"] = executableRequest.action.tgtPlace
                 }//Add a move routine with higher priority.

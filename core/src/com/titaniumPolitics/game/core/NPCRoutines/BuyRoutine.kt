@@ -8,7 +8,7 @@ import kotlinx.serialization.Serializable
 class BuyRoutine() : Routine() {
     var err = false
     lateinit var tradeCharacter: String
-    override fun newRoutineCondition(name: String, place: String, routines: List<Routine>): Routine? {
+    override fun newRoutineCondition(name: String, place: String, subroutines: List<Routine>): Routine? {
         //Try to trade for resources
         //Select a character to trade with, based on the information known to the character.
 
@@ -27,7 +27,7 @@ class BuyRoutine() : Routine() {
         //FindCharacter
         // if the character is not in the same place.
         if (place != gState.places.values.find { it.characters.contains(tradeCharacter) }!!.name) {
-            if (routines.none { it is FindCharacterRoutine })
+            if (subroutines.none { it is FindCharacterRoutine })
                 return FindCharacterRoutine().apply {
                     variables["character"] = tradeCharacter
                 }
@@ -41,7 +41,7 @@ class BuyRoutine() : Routine() {
                         )
                     )
                 }) {
-                if (routines.none { it is TalkRoutine })
+                if (subroutines.none { it is TalkRoutine })
                     return TalkRoutine().apply {
                         intention = "requestResource"
                         variables["requestResourceType"] = variables["wantedResource"]!!

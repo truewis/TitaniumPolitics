@@ -8,7 +8,7 @@ import kotlinx.serialization.Serializable
 class TalkRoutine : Routine(), IMeetingRoutine {
     var toWho = "" //The character to whom I want to talk
     var intention = "" //The intention of the character. It can be "requestResource" or "" (no particular intention).
-    override fun newRoutineCondition(name: String, place: String, routines: List<Routine>): Routine? {
+    override fun newRoutineCondition(name: String, place: String, subroutines: List<Routine>): Routine? {
         val character = gState.characters[name]!!
         val conf =
             character.currentMeeting ?: return null
