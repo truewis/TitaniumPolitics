@@ -49,7 +49,7 @@ class Place : GameStateElement() {
     val marketSupplyEstimateHours =
         168 // For the marketSupplyEstimate, we have to average the distribution over this many hours, and convert it to a weekly basis
     val marketSupplyEstimateR = 1 - 1.0 / marketSupplyEstimateHours
-    var gasResources = Resources("oxygen" to 20000.0, "carbonDioxide" to 100.0)
+    var gasResources = Resources("oxygen" to 3000.0, "carbonDioxide" to 15.0, "nitrogen" to 9000.0)
     fun gasPressure(gasName: String): Double =
         try {
             gasResources[gasName] / ((ReadOnly.gasJson[gasName]!!.jsonObject["density"]!!.jsonPrimitive.float)) * (temperature / 273.15) / volume * 101325
@@ -77,7 +77,7 @@ class Place : GameStateElement() {
         if (temperature < 4) temperature = 4.0 //TODO:temporary solution. Lowest temperature ~ 4K.
     }
 
-    var volume = 1000f //Volume in m^3.
+    var volume = 1e4f //Volume in m^3.
     val currentWorker: Int get() = apparatuses.sumOf { it.currentWorker }
     val workForce: Int
         get() = characters.filter {

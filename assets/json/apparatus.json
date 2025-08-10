@@ -48,7 +48,7 @@
     "idealWorker": 10,
     "variables": {
       "storageType": "energy",
-      "storageAmount": 1.0e11
+      "storageAmount": 2.0e11
     }
   },
   "waterStorage": {
@@ -447,12 +447,18 @@
     "baseDanger": 4e-4,
     "idealWorker": 100,
     "idealProduction": {
-      "ration": 0.06
+      "ration": 6e-2
+    },
+    "idealAbsorption": {
+      "carbonDioxide": 2.2e-2,
+      "oxygen": -3.8e-2
     },
     "idealConsumption": {
-      "energy": 1e7
+      "energy": 1e7,
+      "phosphorus": 1e-5,
+      "ammonia": 5e-5
     },
-    "idealHeatProduction": 5e6,
+    "idealHeatProduction": 8e6,
     "requiredResourcePerRepair": [
       {
         "_resources": {
@@ -506,18 +512,18 @@
     "baseDanger": 8e-4,
     "idealWorker": 5,
     "idealAbsorption": {
-      "oxygen": -0.8
+      "oxygen": -8e-5
     },
     "idealDistribution": {
     },
     "idealConsumption": {
-      "water": 0.9,
-      "energy": 1.91e7
+      "water": 9e-5,
+      "energy": 1.91e3
     },
     "idealProduction": {
-      "hydrogen": 0.1
+      "hydrogen": 1e-5
     },
-    "idealHeatProduction": 5e6,
+    "idealHeatProduction": 5e2,
     "requiredResourcePerRepair": [
       {
         "_resources": {
@@ -545,15 +551,15 @@
     "baseDanger": 8e-4,
     "idealWorker": 5,
     "idealAbsorption": {
-      "oxygen": -0.2
+      "oxygen": -2e-5
     },
     "idealDistribution": {
     },
     "idealConsumption": {
-      "oxygen": 0.2,
-      "energy": 1.91e5
+      "oxygen": 2e-5,
+      "energy": 1.91e1
     },
-    "idealHeatProduction": 5e4,
+    "idealHeatProduction": 5e0,
     "requiredResourcePerRepair": [
       {
         "_resources": {
@@ -580,12 +586,18 @@
     "durabilityTau": 8.64e5,
     "baseDanger": 6e-4,
     "idealWorker": 5,
+    "idealAbsorption": {
+      "nitrogen": -2.6e-4,
+      "carbonDioxide": -6.78e-3,
+      "water": -8.55e-3,
+      "oxygen": 5.65e-3
+    },
     "idealConsumption": {
-      "energy": 2e8,
-      "corpse": 1
+      "energy": 2e3,
+      "corpse": 1e-4
     },
     "idealProduction": {
-      "phosphorus": 0.5
+      "phosphorus": 6e-5
     },
     "idealHeatProduction": 2e8,
     "requiredResourcePerRepair": [
@@ -612,17 +624,14 @@
     "image": "defaultApparatus.png",
     "durabilityTau": 8.64e6,
     "baseDanger": 6e-4,
-    "idealWorker": 5,
-    "idealConsumption": {
-      "energy": 2.26e7
-    },
+    "idealWorker": 0,
     "idealAbsorption": {
-      "water": 1
+      "water": 5e-3
     },
     "idealProduction": {
-      "water": 1
+      "water": 5e-3
     },
-    "idealHeatProduction": 2.26e7,
+    "idealHeatProduction": 1.13e5,
     "requiredResourcePerRepair": [
       {
         "_resources": {
@@ -647,7 +656,7 @@
     "image": "defaultApparatus.png",
     "durabilityTau": 8.64e6,
     "baseDanger": 6e-4,
-    "idealWorker": 5,
+    "idealWorker": 0,
     "idealAbsorption": {
       "carbonDioxide": 1,
       "oxygen": -0.7
@@ -662,6 +671,42 @@
       "organics": 0.38
     },
     "idealHeatProduction": 1e7,
+    "requiredResourcePerRepair": [
+      {
+        "_resources": {
+          "plumbing": 10
+        }
+      },
+      {
+        "_resources": {
+          "plumbing": 10,
+          "electronics": 5.0
+        }
+      },
+      {
+        "_resources": {
+          "plumbing": 20,
+          "electronics": 10.0
+        }
+      }
+    ]
+  },
+  "ammoniaProduction": {
+    "image": "defaultApparatus.png",
+    "durabilityTau": 8.64e6,
+    "baseDanger": 6e-4,
+    "idealWorker": 0,
+    "idealAbsorption": {
+      "nitrogen": 1.3e-4
+    },
+    "idealConsumption": {
+      "hydrogen": 2.8e-5,
+      "energy": 4.28e2
+    },
+    "idealProduction": {
+      "ammonia": 1.58e-4
+    },
+    "idealHeatProduction": 0,
     "requiredResourcePerRepair": [
       {
         "_resources": {
@@ -759,7 +804,7 @@
     "image": "defaultApparatus.png",
     "durabilityTau": 8.64e6,
     "baseDanger": 6e-4,
-    "idealWorker": 100,
+    "idealWorker": 0,
     "currentWorker": 0,
     "idealConsumption": {
       "energy": 1e7

@@ -97,7 +97,7 @@ class Apparatus {
     val currentProduction: Map<String, Double>
         get() {
             val result = idealProduction
-            if (durability == .0) return result//No production if broken.
+            if (durability == .0) return emptyMap()//No production if broken.
 
             if (idealWorker != 0)//Modify results based on the number of current worker.
             {
@@ -115,7 +115,7 @@ class Apparatus {
     val currentConsumption: Map<String, Double>
         get() {
             val result = idealConsumption
-            if (durability == .0) return result//No production if broken.
+            if (durability == .0) return emptyMap()//No production if broken.
 
             if (idealWorker != 0)//Modify results based on the number of current worker.
             {
@@ -135,7 +135,7 @@ class Apparatus {
     val currentAbsorption: Map<String, Double>
         get() {
             val result = idealAbsorption
-            if (durability == .0) return result//No production if broken.
+            if (durability == .0) return emptyMap()//No production if broken.
 
             if (idealWorker != 0)//Modify results based on the number of current worker.
             {
@@ -154,7 +154,7 @@ class Apparatus {
     val currentDistribution: Map<String, Double>
         get() {
             val result = idealDistribution
-            if (durability == .0) return result//No production if broken.
+            if (durability == .0) return emptyMap()//No production if broken.
 
             if (idealWorker != 0)//Modify results based on the number of current worker.
             {

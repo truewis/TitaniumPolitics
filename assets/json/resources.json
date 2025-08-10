@@ -19,6 +19,11 @@
     "demandPopElasticity(g/day/person)": 0,
     "demandPriceElasticity": 1
   },
+  "ammonia": {
+    "baseEGP(g/g)": 1e-3,
+    "demandPopElasticity(g/day/person)": 0,
+    "demandPriceElasticity": 1
+  },
   "organics": {
     "baseEGP(g/g)": 1e-3,
     "demandPopElasticity(g/day/person)": 0,

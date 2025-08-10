@@ -18,7 +18,7 @@
   "StealAmountMultiplier": 15,
   "WorkerWaterConsumptionRate": 1e-4,
   "MarketWaterConsumptionRate": 1e-4,
-  "MarketOxygenConsumptionRate": 2.48e-7,
+  "MarketOxygenConsumptionRate": 9.7e-6,
   "MarketRationConsumptionRate": 1e-5,
   "hungerThreshold": 90,
   "thirstThreshold": 70,

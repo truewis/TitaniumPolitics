@@ -421,13 +421,15 @@ class GameEngine(val gameState: GameState) {
         //Some resources are scheduled to be distributed to other places. Other resources are distributed manually.
         //Distribute energy. Each energy storage value slowly moves to the average of all energy storage values.
         val energyDistributionTau = 10000 //[s]
+        val energyPlaces =
+            gameState.places.values.filter { place -> place.apparatuses.any { it.name == "energyStorage" } }
         val energyStorage =
-            gameState.places.values.filter { place -> place.apparatuses.any { it.name == "energyStorage" } }.sumOf {
+            energyPlaces.sumOf {
                 it.resources["energy"]
             }
         val energyStorageCount =
             gameState.places.values.sumOf { place -> place.apparatuses.filter { it.name == "energyStorage" }.size }
-        gameState.places.values.filter { place -> place.apparatuses.any { it.name == "energyStorage" } }
+        energyPlaces
             .forEach { place ->
                 place.resources["energy"] = (place.resources["energy"]
                         ) + (energyStorage / energyStorageCount * place.apparatuses.filter { it.name == "energyStorage" }.size - (place.resources["energy"]
@@ -455,8 +457,8 @@ class GameEngine(val gameState: GameState) {
                 Logger.write("Less than 24 hours of oxygen out in $placeName", Logger.LogLevel.INFO)
             val consumptionOxygen = (place.currentTotalPop * const("MarketOxygenConsumptionRate") * S_PER_HR)
             if (place.gasResources["oxygen"] > consumptionOxygen) {
-                place.gasResources["oxygen"] -= consumptionOxygen //0.5kg/day consumption.
-                place.gasResources["carbonDioxide"] += consumptionOxygen * 96 / 64 //Oxygen is converted to carbonDioxide.
+                place.gasResources["oxygen"] -= consumptionOxygen
+                place.gasResources["carbonDioxide"] += consumptionOxygen * 44 / 32 //Oxygen is converted to carbonDioxide.
             }
             if (place.gasPressure("oxygen") < const("CriticalOxygenPressure") || place.gasPressure("carbonDioxide") / place.gasPressure(
                     "oxygen"

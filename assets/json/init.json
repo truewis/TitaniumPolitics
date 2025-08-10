@@ -1201,6 +1201,14 @@
           "durability": 95
         },
         {
+          "name": "ammoniaProduction",
+          "durability": 95
+        },
+        {
+          "name": "ammoniaProduction",
+          "durability": 95
+        },
+        {
           "name": "rationStorage",
           "durability": 95
         },
@@ -1210,6 +1218,78 @@
         },
         {
           "name": "waterStorage",
+          "durability": 95
+        },
+        {
+          "name": "waterRecycle",
+          "durability": 95
+        },
+        {
+          "name": "waterRecycle",
+          "durability": 95
+        },
+        {
+          "name": "waterRecycle",
+          "durability": 95
+        },
+        {
+          "name": "waterRecycle",
+          "durability": 95
+        },
+        {
+          "name": "waterRecycle",
+          "durability": 95
+        },
+        {
+          "name": "waterRecycle",
+          "durability": 95
+        },
+        {
+          "name": "waterRecycle",
+          "durability": 95
+        },
+        {
+          "name": "waterRecycle",
+          "durability": 95
+        },
+        {
+          "name": "waterRecycle",
+          "durability": 95
+        },
+        {
+          "name": "waterRecycle",
+          "durability": 95
+        },
+        {
+          "name": "waterRecycle",
+          "durability": 95
+        },
+        {
+          "name": "waterRecycle",
+          "durability": 95
+        },
+        {
+          "name": "waterRecycle",
+          "durability": 95
+        },
+        {
+          "name": "waterRecycle",
+          "durability": 95
+        },
+        {
+          "name": "waterRecycle",
+          "durability": 95
+        },
+        {
+          "name": "waterRecycle",
+          "durability": 95
+        },
+        {
+          "name": "waterRecycle",
+          "durability": 95
+        },
+        {
+          "name": "waterRecycle",
           "durability": 95
         },
         {
@@ -1276,7 +1356,7 @@
           "durability": 95
         },
         {
-          "name": "corpseRecycle",
+          "name": "waterRecycle",
           "durability": 95
         },
         {
@@ -1284,7 +1364,31 @@
           "durability": 95
         },
         {
-          "name": "co2Recycle",
+          "name": "waterRecycle",
+          "durability": 95
+        },
+        {
+          "name": "waterRecycle",
+          "durability": 95
+        },
+        {
+          "name": "waterRecycle",
+          "durability": 95
+        },
+        {
+          "name": "waterRecycle",
+          "durability": 95
+        },
+        {
+          "name": "waterRecycle",
+          "durability": 95
+        },
+        {
+          "name": "waterRecycle",
+          "durability": 95
+        },
+        {
+          "name": "waterRecycle",
           "durability": 95
         },
         {
@@ -1635,13 +1739,31 @@
         "_resources": {
           "oxygen": 100,
           "water": 1500,
-          "ration": 5000
+          "ration": 1000,
+          "ammonia": 20,
+          "phosphorus": 5
         }
       },
       "connectedPlaces": [
         "reservoirEast"
       ],
       "apparatuses": [
+        {
+          "name": "farmArray",
+          "durability": 95
+        },
+        {
+          "name": "farmArray",
+          "durability": 95
+        },
+        {
+          "name": "farmArray",
+          "durability": 95
+        },
+        {
+          "name": "farmArray",
+          "durability": 95
+        },
         {
           "name": "farmArray",
           "durability": 95
@@ -1660,6 +1782,22 @@
         },
         {
           "name": "rationStorage",
+          "durability": 95
+        },
+        {
+          "name": "energyStorage",
+          "durability": 95
+        },
+        {
+          "name": "energyStorage",
+          "durability": 95
+        },
+        {
+          "name": "energyStorage",
+          "durability": 95
+        },
+        {
+          "name": "energyStorage",
           "durability": 95
         },
         {
@@ -2172,7 +2310,8 @@
           "lightMetal": 100,
           "component": 200,
           "water": 15000,
-          "oxygen": 10000
+          "oxygen": 10000,
+          "energy": 1e12
         }
       },
       "connectedPlaces": [
@@ -2205,6 +2344,22 @@
         },
         {
           "name": "componentStorage",
+          "durability": 95
+        },
+        {
+          "name": "energyStorage",
+          "durability": 95
+        },
+        {
+          "name": "energyStorage",
+          "durability": 95
+        },
+        {
+          "name": "energyStorage",
+          "durability": 95
+        },
+        {
+          "name": "energyStorage",
           "durability": 95
         },
         {
