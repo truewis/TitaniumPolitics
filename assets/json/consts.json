@@ -1,6 +1,6 @@
 {
   "lengthOfDay": 1440,
-  "InfoLifetime": 300000,
+  "InfoLifetime": 80000,
   "startTime": 180,
   "HungerMax": 100,
   "ThirstMax": 100,

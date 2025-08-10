@@ -68,6 +68,9 @@ object ReadOnly {
 
     //A timestep in hours.
     val DTH = (24 / const("lengthOfDay"))
+
+    val IDTH = (const("lengthOfDay") / 24.0).toInt() //Integer timestep in hours.
+
     const val S_PER_HR = 3600 //How many seconds in an hour.
     fun toMinutes(time: Int): Int =
         (time % constInt("lengthOfDay") / (const("lengthOfDay") / 1440.0)).toInt()

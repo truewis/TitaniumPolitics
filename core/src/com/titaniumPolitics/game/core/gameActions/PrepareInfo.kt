@@ -12,9 +12,7 @@ class PrepareInfo(override val sbjCharacter: String, override val tgtPlace: Stri
         parent.requests.values.filter { it.issuedBy.contains(sbjCharacter) }.forEach { command ->
             //If you have the corresponding action information.
             parent.informations.filter { it.value.knownTo.contains(sbjCharacter) && it.value.type == InformationType.ACTION && it.value.action!!.javaClass.simpleName == command.action.javaClass.simpleName }
-                .forEach {
-                    newSetOfPrepInfoKeys.add(it.key)
-                }
+            //Order them in time and add the most recent five ones to the prepared information.
         }
 
         //If you have seen wrongdoings, you know the result. Add the result to the prepared information.

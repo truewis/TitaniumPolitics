@@ -3,6 +3,8 @@ package com.titaniumPolitics.game.core
 import com.badlogic.gdx.Gdx
 import com.titaniumPolitics.game.core.ReadOnly.const
 import com.titaniumPolitics.game.core.ReadOnly.DT
+import com.titaniumPolitics.game.core.ReadOnly.DTH
+import com.titaniumPolitics.game.core.ReadOnly.IDTH
 import com.titaniumPolitics.game.core.ReadOnly.S_PER_HR
 import com.titaniumPolitics.game.core.gameActions.GameAction
 import com.titaniumPolitics.game.core.gameActions.Wait
@@ -242,7 +244,7 @@ class GameEngine(val gameState: GameState) {
     private fun ageInformationHourly() {
         val removed = arrayListOf<String>()
         gameState.informations.forEach {
-            it.value.life -= DT
+            it.value.life -= 3600 //1 hour
             if (it.value.life <= 0 && it.value.rememberedBy.isEmpty())
                 removed.add(it.key)
         }
