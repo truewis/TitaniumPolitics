@@ -308,7 +308,12 @@ class GameState {
                 val liveBy = this@GameState.characters[char.key]!!.livingBy
                 connectedPlaces.add(liveBy)
                 coordinates = this@GameState.places[liveBy]!!.coordinates
-                volume = 100.0f //Set a default volume for the home.
+                volume = 100.0f * (char.value.reliant + 1) //Set a default volume for the home.
+                gasResources = Resources(
+                    "oxygen" to 300.0,
+                    "carbonDioxide" to 1.5,
+                    "nitrogen" to 900.0
+                ) * (char.value.reliant + 1.0)
             }
             places[this@GameState.characters[char.key]!!.livingBy]!!.connectedPlaces.add("home_" + char.key)
             if (places.none { it.value.characters.contains(char.key) })

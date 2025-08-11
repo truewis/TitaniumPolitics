@@ -13,9 +13,8 @@ import kotlin.math.min
 class StealRoutine() : Routine() {
     fun findResource(name: String): Place? {
         return gState.places.values.filter {
-            it.responsibleDivision != null && gState.parties[it.responsibleDivision]!!.members.contains(
-                name
-            )
+            it.workplaceParty?.treasurer == null ||
+                    it.workplaceParty?.treasurer == name //If the character is the treasurer of the party, they can steal from any place.
         }.maxByOrNull { it.resources[variables["stealResource"]!!] }
     }
 
