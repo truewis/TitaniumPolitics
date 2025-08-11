@@ -291,6 +291,7 @@ class GameState {
                     it.injectParent(this@GameState)
                     it.workPlace = place.name
                 }
+                place.workplaceParty?.members?.add(name)
                 party.members.add(name)
 
             }
@@ -408,7 +409,7 @@ class GameState {
 
     fun setPartyMutuality(a: String, b: String = a, delta: Double) {
         if (!parties.containsKey(a) || !parties.containsKey(b)) throw Exception("Setting party mutuality $a -> $b invalid.")
-        val membersA = parties[a]?.members ?: emptyList()
+        val membersA = (parties[a]?.members ?: emptyList()) - (parties[a]?.directorMembers ?: emptyList())
         val membersB = parties[b]?.members ?: emptyList()
         for (memberA in membersA) {
             for (memberB in membersB) {

@@ -14,6 +14,7 @@ import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.json.Json
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
+import kotlin.math.abs
 import kotlin.math.log
 import kotlin.random.Random
 import kotlin.system.exitProcess
@@ -269,7 +270,7 @@ class GameEngine(val gameState: GameState) {
                         -it.value.amount * gameState.publicity(
                             it.key,
                             party.key
-                        ) / party.value.size * factor * DT / const("MutualityFromInfoTau") * ReadOnly.mutualityScale
+                        ) / party.value.size * factor * S_PER_HR / const("MutualityFromInfoTau") * ReadOnly.mutualityScale
                     )
                 //if our party is responsible, integrity drops.
 
@@ -289,7 +290,7 @@ class GameEngine(val gameState: GameState) {
                             ) * gameState.publicity(
                                 it.key,
                                 party.key
-                            ) / party.value.size * factor * DT / const("MutualityFromInfoTau") * ReadOnly.mutualityScale
+                            ) / party.value.size * factor * S_PER_HR / const("MutualityFromInfoTau") * ReadOnly.mutualityScale
                         )
                     }
                 }
@@ -539,7 +540,7 @@ class GameEngine(val gameState: GameState) {
                     if (entry.value.place.responsibleDivision == it.name && it.leader != entry.key)
                         gameState.setPartyMutuality(
                             it.name,
-                            delta = -DT / const("TemperatureIntegrityDamageTau") * const("mutualityMax")
+                            delta = -DT / const("TemperatureIntegrityDamageTau") * const("mutualityMax") * abs(entry.value.place.temperature / 300 /*[K]*/ - 1)
                         )
                 }
             }

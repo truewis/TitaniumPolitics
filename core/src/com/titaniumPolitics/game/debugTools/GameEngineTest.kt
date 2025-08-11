@@ -47,9 +47,6 @@ class GameEngineTest {
         //Main loop
         while (gameState.ongoingMeetings.none { it.value.type == Meeting.MeetingType.DIVISION_LEADER_ELECTION }) {
             gameLoop()
-            gameState.characters.forEach {
-                gameState.setMutuality(it.key, delta = 50.0)//For debugging purposes, increase will for all characters.
-            }
             gameState.debug()
             if (gameState.time % 60 == 0)
                 gdh.writeEveryTurn(gState)
