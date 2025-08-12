@@ -6,11 +6,21 @@ import kotlinx.serialization.json.Json
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Test
 import java.io.File
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Date
+import java.util.Locale
 
 class GameEngineTest {
     lateinit var gState: GameState
+    val directory = "data" + Calendar.getInstance().time.toString("YYYYMMdd_HHmmss")
     val gdh =
-        GameDataHandler("data${System.currentTimeMillis()}")
+        GameDataHandler(directory)
+
+    private fun Date.toString(format: String, locale: Locale = Locale.getDefault()): String {
+        val formatter = SimpleDateFormat(format, locale)
+        return formatter.format(this)
+    }
 
     @Test
     fun runFor2Days() {
@@ -21,10 +31,13 @@ class GameEngineTest {
             GameState.serializer(), File("../assets/json/init.json").readText()
         ).also {
             //To run tests, control the player character with an agent.
+            it.workingDirectory = directory
             it.nonPlayerAgents[it.playerName] = NonPlayerAgent()
             println("Loading complete.")
             it.initialize()
         }
+        val fNameInit = "$directory/dataInit.json"
+        gState.dump(fNameInit)
         gState.onStart.forEach { it() }
         val engine = GameEngine(gState)
         engine.runUntil(2)
@@ -62,12 +75,14 @@ class GameEngineTest {
             gameState.debug()
             if (gameState.time % 60 == 0)
                 gdh.writeEveryTurn(gState)
+            if (gameState.time % 1440 == 0)
+                gState.dump(directory + "/data" + gState.time + ".json")
         }
     }
 
     @AfterEach
     fun after() {
-        gState.dump()
+        gState.dump(directory + "/data" + gState.time + ".json")
         gdh.close()
     }
 

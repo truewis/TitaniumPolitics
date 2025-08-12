@@ -26,6 +26,10 @@ import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
 import ktx.scene2d.label
 import ktx.scene2d.scene2d
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Date
+import java.util.Locale
 import kotlin.concurrent.thread
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
@@ -126,6 +130,8 @@ class MainMenu(val entry: EntryClass) : Stage(FitViewport(1920F, 1080F)) {
                 Gdx.files.internal("json/init.json").readString()
             ).also {
                 println("Loading complete.")
+                it.workingDirectory =
+                    "data" + Calendar.getInstance().time.toString("YYYYMMdd_HHmmss")//DO not put this statement when loading existing game or in initialize(); it will mess up with GameEngineTest.
                 it.initialize()
                 entry.stage = CapsuleStage(it)
                 Gdx.input.inputProcessor = entry.stage
@@ -163,6 +169,11 @@ class MainMenu(val entry: EntryClass) : Stage(FitViewport(1920F, 1080F)) {
             }
             engine.startGame()
         }
+    }
+
+    private fun Date.toString(format: String, locale: Locale = Locale.getDefault()): String {
+        val formatter = SimpleDateFormat(format, locale)
+        return formatter.format(this)
     }
 
 

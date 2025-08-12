@@ -16,6 +16,7 @@ import kotlin.math.absoluteValue
 
 @Serializable
 class GameState {
+    var workingDirectory = ""
     private var _time = 0
     private var _idlePop = 0
 
@@ -450,7 +451,10 @@ class GameState {
 
 
     fun dump(): String {
-        val fName = "save${Calendar.getInstance().time.toString("YYYYMMdd_HHmmss")}_${System.currentTimeMillis()}.json"
+        val fName =
+            if (workingDirectory != "") (workingDirectory + "/save${time}_${System.currentTimeMillis()}.json") else "save${
+                Calendar.getInstance().time.toString("YYYYMMdd_HHmmss")
+            }_${time}_${System.currentTimeMillis()}.json"
         dump(fName)
         return fName
     }

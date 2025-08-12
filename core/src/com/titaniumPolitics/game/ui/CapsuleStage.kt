@@ -31,6 +31,7 @@ class CapsuleStage(val gameState: GameState) : Stage(FitViewport(1920F, 1080F)) 
 
     init {
         Logger.gState = gameState
+        Logger.init()
         Logger.write("Initializing CapsuleStage...", Logger.LogLevel.INFO)
         instance = this
         val resolver = InternalFileHandleResolver()

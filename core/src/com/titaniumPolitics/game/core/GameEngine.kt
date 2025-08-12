@@ -31,6 +31,7 @@ class GameEngine(val gameState: GameState) {
 
     init {
         Logger.gState = gameState
+        Logger.init()
     }
 
     fun startGame() {
