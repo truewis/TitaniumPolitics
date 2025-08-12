@@ -1201,14 +1201,6 @@
           "durability": 95
         },
         {
-          "name": "ammoniaProduction",
-          "durability": 95
-        },
-        {
-          "name": "ammoniaProduction",
-          "durability": 95
-        },
-        {
           "name": "rationStorage",
           "durability": 95
         },
@@ -1439,6 +1431,10 @@
           "durability": 95
         },
         {
+          "name": "ammoniaProduction",
+          "durability": 95
+        },
+        {
           "name": "electrolysisArray",
           "durability": 95
         },
@@ -1494,6 +1490,10 @@
         },
         {
           "name": "waterStorage",
+          "durability": 95
+        },
+        {
+          "name": "ammoniaProduction",
           "durability": 95
         },
         {
