@@ -17,6 +17,11 @@ import kotlin.math.max
 
 @Serializable
 class Character : GameStateElement() {
+    @Serializable
+    enum class Type {
+        DIRECTOR, EMPLOYEE, ANON
+    }
+
     var will: Double
         get() = parent.getMutuality(name)
         set(value) {
@@ -27,6 +32,7 @@ class Character : GameStateElement() {
         get() = _name ?: parent.characters.filter { it.value == this }.keys.first().also { _name = it }
     var alive = true
     var trait = hashSetOf<String>()
+    var type = Type.DIRECTOR
 
     var resources: Resources
         get() =

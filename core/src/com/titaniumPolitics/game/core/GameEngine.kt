@@ -497,12 +497,12 @@ class GameEngine(val gameState: GameState) {
         //Total redistribution of resources among anonymous people every hour.
         val marketResources = Resources()
         var anonPeople = 0
-        gameState.characters.filter { it.key.contains("Anon") }.forEach {
+        gameState.characters.filter { it.value.type == Character.Type.ANON }.forEach {
             marketResources += it.value.resources
             anonPeople += it.value.reliant
         }
 
-        gameState.characters.filter { it.key.contains("Anon") }
+        gameState.characters.filter { it.value.type == Character.Type.ANON }
             .forEach { it.value.resources = marketResources * (it.value.reliant * 1.0 / anonPeople) }
 
     }

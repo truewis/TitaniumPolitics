@@ -17,12 +17,12 @@ class Party : GameStateElement() {
     var members = hashSetOf<String>()
     var isSalaryPaid = false //This variable is reset every quarter.
     val anonMembers: HashSet<String>
-        get() = members.filter { it.contains("Anon") }
+        get() = members.filter { parent.characters[it]!!.type == Character.Type.ANON }
             .toHashSet() //Anonymous members are those who are not registered in the party.
     val numAnonMembers: Int
-        get() = members.filter { it.contains("Anon") }.sumOf { parent.characters[it]!!.reliant }
+        get() = anonMembers.sumOf { parent.characters[it]!!.reliant }
     val realMembers: HashSet<String>
-        get() = members.filter { !it.contains("Anon") }.toHashSet()
+        get() = (members - anonMembers).toHashSet()
     val directorMembers: HashSet<String>
         get() = members.filter { char -> parent.places.any { it.value.manager == char } }
             .toHashSet() //Directors are the ones who can make decisions in the party.

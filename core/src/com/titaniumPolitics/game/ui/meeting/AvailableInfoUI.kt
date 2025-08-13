@@ -5,7 +5,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.core.Meeting
-import com.titaniumPolitics.game.ui.CharacterPortraitsUI
+import com.titaniumPolitics.game.ui.CharactersInPlaceUI
 import com.titaniumPolitics.game.ui.InfoCardUI
 import ktx.scene2d.Scene2DSkin.defaultSkin
 
@@ -24,7 +24,7 @@ class AvailableInfoUI(var gameState: GameState) : Table(defaultSkin) {
     }
 
     override fun setVisible(visible: Boolean) {
-        CharacterPortraitsUI.instance.isVisible = !visible
+        CharactersInPlaceUI.instance.isVisible = !visible
         super.setVisible(visible)
     }
 

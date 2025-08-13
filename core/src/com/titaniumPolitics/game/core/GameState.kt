@@ -48,7 +48,7 @@ class GameState {
     val pop: Int
         get() = places.values.sumOf { it.currentTotalPop }
     val totalAnonPop: Int
-        get() = characters.values.filter { it.name.contains("Anon") }.sumOf { it.reliant }
+        get() = characters.values.filter { it.type == Character.Type.ANON }.sumOf { it.reliant }
     private var _idlePop = 0
 
     var idlePop: Int
@@ -172,7 +172,6 @@ class GameState {
     }
 
     var eventSystem = EventSystem()
-    val realCharList get() = characters.keys.filter { !it.contains("Anon") && characters[it]!!.alive }
     val existingResourceList get() = places.values.map { it.resources.keys }.flatten().toHashSet()
     val existingGasList get() = places.values.map { it.gasResources.keys }.flatten().toHashSet()
     fun getApparatus(apparatusID: String): Apparatus {
@@ -188,10 +187,11 @@ class GameState {
         val name = "Anon-idle"
         characters[name] =
             Character().apply {
-                this.injectParent(this@GameState)
-                this.livingBy = Place.publicPlaces.random()
-                this.health = 100.0
-                this.reliant = idlePop
+                injectParent(this@GameState)
+                type = Character.Type.ANON
+                livingBy = Place.publicPlaces.random()
+                health = 100.0
+                reliant = idlePop
             }
         nonPlayerAgents[name] = AnonAgent().also {
             it.injectParent(this@GameState)
@@ -230,6 +230,7 @@ class GameState {
                 val name = "${it}_${party.key}"
                 characters[name] = Character().apply {
                     this.injectParent(this@GameState)
+                    type = Character.Type.EMPLOYEE
                     this.livingBy = Place.publicPlaces.random()
 
                     this.health = 100.0
@@ -282,6 +283,7 @@ class GameState {
                     Character().apply {
                         //They live by one of their work places.
                         this.injectParent(this@GameState)
+                        type = Character.Type.ANON
                         try {
 
                             this.livingBy = places.filter { it.value.responsibleDivision == party.name }.keys.random()

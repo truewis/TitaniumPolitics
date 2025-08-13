@@ -8,13 +8,10 @@ class SetWorkers(override val sbjCharacter: String, override val tgtPlace: Strin
     var workers = 0
     var apparatusID = ""
     val agent
-        get() = parent.characters.values.first {
-            it.name.contains("Anon") && it.name.contains(
-                parent.getApparatusPlace(
-                    apparatusID
-                ).name
-            )
-        }
+        get() = parent.getApparatusPlace(
+            apparatusID
+        ).workers!!.first()
+
 
     override fun chooseParams() {
     }

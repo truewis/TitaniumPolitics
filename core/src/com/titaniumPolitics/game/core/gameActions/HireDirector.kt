@@ -1,11 +1,12 @@
 package com.titaniumPolitics.game.core.gameActions
 
+import com.titaniumPolitics.game.core.Character
 import com.titaniumPolitics.game.debugTools.Logger
 import kotlinx.serialization.Serializable
 
 @Serializable
 class HireDirector(override val sbjCharacter: String, override val tgtPlace: String) : GameAction() {
-    val div get() = parent.parties.filter { (key, value) -> value.leader == sbjCharacter && value.type == "division" }.values.first()
+    val div get() = parent.parties.filter { (_, value) -> value.leader == sbjCharacter && value.type == "division" }.values.first()
     var employee: String? = null
     var workplace = ""
 
@@ -45,7 +46,7 @@ class HireDirector(override val sbjCharacter: String, override val tgtPlace: Str
     fun availableEmployees(): List<String> {
         return tgtPlaceObj.characters.filter {
             //Cannot be anonymous.
-            if (it.contains("Anon")) {
+            if (parent.characters[it]!!.type == Character.Type.ANON) {
                 return@filter false
             }
             //Employee cannot be in triumvirate, be a division leader or the director.
@@ -56,7 +57,7 @@ class HireDirector(override val sbjCharacter: String, override val tgtPlace: Str
             }
 
             //The employee must be a member of the party if they are in lower management.
-            if (parent.places.any { (key, value) ->
+            if (parent.places.any { (_, value) ->
                     value.workplaceParty?.members?.contains(employee) == true
                 }) {
                 if (employee !in div.members) {

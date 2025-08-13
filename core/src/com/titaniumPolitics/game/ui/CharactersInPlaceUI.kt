@@ -2,6 +2,7 @@ package com.titaniumPolitics.game.ui
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.scenes.scene2d.ui.Table
+import com.titaniumPolitics.game.core.Character
 import com.titaniumPolitics.game.core.GameEngine
 import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.core.gameActions.Wait
@@ -11,7 +12,7 @@ import java.lang.Thread.sleep
 
 //TODO: Make this scrollable to deal with many characters.
 //This UI is used to display the portraits of the characters in the current place.
-class CharacterPortraitsUI(var gameState: GameState) : Table(defaultSkin) {
+class CharactersInPlaceUI(var gameState: GameState) : Table(defaultSkin) {
     val portraits = arrayListOf<PortraitUI>()
 
     init {
@@ -49,7 +50,7 @@ class CharacterPortraitsUI(var gameState: GameState) : Table(defaultSkin) {
         gameState.places[place]!!.characters.forEach {
 
             //Player cannot see themselves.
-            if (it != gameState.playerName && !it.contains("Anon"))
+            if (it != gameState.playerName && gameState.characters[it]!!.type == Character.Type.DIRECTOR)
                 addCharacterPortrait(it)
         }
         placeCharacterPortrait()
@@ -76,6 +77,6 @@ class CharacterPortraitsUI(var gameState: GameState) : Table(defaultSkin) {
     }
 
     companion object {
-        lateinit var instance: CharacterPortraitsUI
+        lateinit var instance: CharactersInPlaceUI
     }
 }

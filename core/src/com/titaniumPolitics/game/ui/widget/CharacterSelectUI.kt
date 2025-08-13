@@ -5,6 +5,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.badlogic.gdx.utils.Align
+import com.titaniumPolitics.game.core.Character
 import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.core.ReadOnly
 import ktx.scene2d.*
@@ -98,7 +99,7 @@ class CharacterSelectUI(val gameState: GameState) : WindowUI("CharacterSelectTit
 
     fun refresh(
         division: String = "",
-        characters: Set<String> = gameState.characters.filter { it.value.alive && !it.key.contains("Anon") }.keys
+        characters: Set<String> = gameState.characters.filter { it.value.alive && it.value.type != Character.Type.ANON }.keys
     )//This function refreshes the character selection UI based on the selected division. If no division is selected, it shows all characters.
     {
         divisionSelectionBox.isVisible =
