@@ -36,12 +36,20 @@ class RepairUI(val gameState: GameState, actionCallback: (GameAction) -> Unit) :
     val submitButton: Button
     val agendaDetailStack: Stack
     val onUpdateSelectedApp = arrayListOf<(Apparatus) -> Unit>()
+    val tooltip = ActionTooltipUI("Repair")
     var selectedApp: Apparatus? = null
         set(value) {
             if (value == null) throw Exception("")
             field = value
             onUpdateSelectedApp.forEach { it(value) }
-            action = Repair(sbjChar.name, sbjChar.place.name).apply { apparatusID = value.ID }
+            action = Repair(sbjChar.name, sbjChar.place.name).apply {
+                injectParent(gameState)
+                apparatusID = value.ID
+            }
+            if (!action.isValid()) {
+                submitButton.isDisabled = true
+                tooltip.displayInvalidReason(this@RepairUI.action.invalidReason)
+            }
         }
     lateinit var action: Repair
 
@@ -59,6 +67,7 @@ class RepairUI(val gameState: GameState, actionCallback: (GameAction) -> Unit) :
 
         row()
         val requiredRes = ResourceDisplayUI()
+        add(requiredRes)
 
         this@RepairUI.onUpdateSelectedApp += {
             name.setText(it.name)
@@ -73,7 +82,7 @@ class RepairUI(val gameState: GameState, actionCallback: (GameAction) -> Unit) :
     val st = scene2d.stack {
         table {
             scrollPane {
-                it.size(1600f, 400f)
+                it.size(1000f, 400f)
                 setScrollingDisabled(false, true)
                 this@RepairUI.agendaSelectBox =
 
@@ -89,12 +98,7 @@ class RepairUI(val gameState: GameState, actionCallback: (GameAction) -> Unit) :
             }
             row()
             this@RepairUI.submitButton = button {
-                val tooltip = ActionTooltipUI("Repair")
-                addListener(tooltip)
-                if (!this@RepairUI.action.isValid()) {
-                    this@button.isDisabled = true
-                    tooltip.displayInvalidReason(this@RepairUI.action.invalidReason)
-                }
+                addListener(this@RepairUI.tooltip)
                 it.size(300f, 100f).fill()
                 label("Submit", "docTitle") {
                     color = Color.BLACK

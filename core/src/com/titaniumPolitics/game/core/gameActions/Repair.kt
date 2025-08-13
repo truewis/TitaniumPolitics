@@ -36,7 +36,7 @@ class Repair(override val sbjCharacter: String, override val tgtPlace: String) :
 
     companion object {
         fun checkRepairLevel(app: Apparatus): Pair<Int, Double> {
-            return if (app.durability > 70) {//TODO: set resource cost.
+            return if (app.durability > 70) {
                 Pair(0, 100.0)
             } else if (app.durability <= 70 && app.durability > 30) {
                 Pair(1, 70.0)
