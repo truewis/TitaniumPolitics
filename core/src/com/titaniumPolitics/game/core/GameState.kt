@@ -358,7 +358,7 @@ class GameState {
         return _mutuality[indexA][indexB]
     }
 
-    //Return value [-1, 1].
+    /**Return value [-1, 1].*/
     fun getMutNorm(a: String?, b: String? = a) = if (a == null || b == null) .0 else normMut(getMutuality(a, b))
 
     private fun normMut(mutuality: Double) =
@@ -387,7 +387,7 @@ class GameState {
         }
     }
 
-    //Return value [-1, 1].
+    /**Return value [-1, 1].*/
     fun getPartyMutNorm(a: String?, b: String? = a) =
         if (a == null || b == null) .0 else normMut(getPartyMutuality(a, b))
 
@@ -416,14 +416,19 @@ class GameState {
         return if (count > 0) totalMutuality / count else 0.0
     }
 
-    fun setPartyMutuality(a: String, b: String = a, delta: Double) {
+
+    /**
+    Sets mutuality for all members of the party a to all members of the party b.
+    This is weighted by the size of the party a, so that larger parties have less influence on individual mutualities.
+     */
+    fun setPartyMutuality(a: String, b: String = a, weightedDelta: Double) {
         if (!parties.containsKey(a) || !parties.containsKey(b)) throw Exception("Setting party mutuality $a -> $b invalid.")
         val membersA = (parties[a]?.members ?: emptyList()) - (parties[a]?.directorMembers ?: emptyList())
         val membersB = parties[b]?.members ?: emptyList()
         for (memberA in membersA) {
             for (memberB in membersB) {
                 if (memberA == memberB) continue //Skip self-mutuality.
-                setMutuality(memberA, memberB, delta)
+                setMutuality(memberA, memberB, weightedDelta / parties[a]!!.size)
             }
         }
     }
@@ -496,7 +501,7 @@ class GameState {
     }
 
 
-    //Market price per Kg, units of mutuality
+    /**Market price per Kg, units of mutuality*/
     fun getMarketPrice(item: String): Double {
 
         val totalMarketSupplyEstimateWeekly = places.values.sumOf { it.marketSupplyEstimateWeekly[item] }

@@ -3,8 +3,6 @@ package com.titaniumPolitics.game.core
 import com.badlogic.gdx.Gdx
 import com.titaniumPolitics.game.core.ReadOnly.const
 import com.titaniumPolitics.game.core.ReadOnly.DT
-import com.titaniumPolitics.game.core.ReadOnly.DTH
-import com.titaniumPolitics.game.core.ReadOnly.IDTH
 import com.titaniumPolitics.game.core.ReadOnly.S_PER_HR
 import com.titaniumPolitics.game.core.gameActions.GameAction
 import com.titaniumPolitics.game.core.gameActions.Wait
@@ -512,40 +510,52 @@ class GameEngine(val gameState: GameState) {
     //TODO: Check for win/lose/interrupt conditions
     fun conditionCheck() {
         gameState.aliveCharacters.forEach { entry ->
+            val char = entry.value
             //If air is not breathable, take damage.
-            if (entry.value.place.gasPressure("oxygen") < const("CriticalOxygenPressure") || entry.value.place.gasPressure(
+            if (char.place.gasPressure("oxygen") < const("CriticalOxygenPressure") || char.place.gasPressure(
                     "carbonDioxide"
-                ) / entry.value.place.gasPressure(
+                ) / char.place.gasPressure(
                     "oxygen"
                 ) > const("CriticalCarbonDioxideRatio")
             ) {
-                entry.value.health -= DT / const("SuffocationTau") * const("HealthMax")
+                char.health -= DT / const("SuffocationTau") * const("HealthMax")
                 //If in a workplace, party integrity decreases, if I am not the leader
-                entry.value.division?.also {
-                    if (entry.value.place.responsibleDivision == it.name && it.leader != entry.key)
+                char.division?.also {
+                    if (char.place.responsibleDivision == it.name && it.leader != entry.key)
                         gameState.setPartyMutuality(
                             it.name,
-                            delta = -DT / const("SuffocationTau") * const("mutualityMax")
+                            weightedDelta = -DT / const("SuffocationTau") * const("mutualityMax")
                         )
                 }
 
             }
             //If temperature is extreme, take damage.
-            if (entry.value.place.temperature - 300 /*[K]*/ !in -const("TemperatureDifferenceTolerance")..const("TemperatureDifferenceTolerance")
+            if (char.place.temperature - 300 /*[K]*/ !in -const("TemperatureDifferenceTolerance")..const("TemperatureDifferenceTolerance")
             ) {
-//                entry.value.health -= dt / const("TemperatureDamageTau") * abs(entry.value.place.temperature / 300 /*[K]*/ - 1) * const(
+//                char.health -= dt / const("TemperatureDamageTau") * abs(char.place.temperature / 300 /*[K]*/ - 1) * const(
 //                    "HealthMax"
 //                )//TODO: balance this
-                //If in a workplace, party integrity decreases, if I am not the leader
-                entry.value.division?.also {
-                    if (entry.value.place.responsibleDivision == it.name && it.leader != entry.key)
-                        gameState.setPartyMutuality(
-                            it.name,
-                            delta = -DT / const("TemperatureIntegrityDamageTau") * const("mutualityMax") * abs(entry.value.place.temperature / 300 /*[K]*/ - 1)
-                        )
+                //If in a workplace, opinion of the leader decreases.
+                char.place.workplaceParty?.let {
+                    if (char.name in it.members) {
+                        it.leader?.let { wkLeader ->
+                            gameState.setMutuality(
+                                char.name, wkLeader,
+                                delta = -DT / const("TemperatureIntegrityDamageTau") * const("mutualityMax") * abs(char.place.temperature / 300 /*[K]*/ - 1)
+                            )
+                        }
+                        //If the character is in a division, the opinion of the division leader also decreases.
+                        char.division?.leader?.let { divisionLeader ->
+                            gameState.setMutuality(
+                                char.name, divisionLeader,
+                                delta = -DT / const("TemperatureIntegrityDamageTau") * const("mutualityMax") * abs(char.place.temperature / 300 /*[K]*/ - 1)
+                            )
+                        }
+
+                    }
                 }
             }
-            if (entry.value.alive && entry.value.health <= 0) {
+            if (char.alive && char.health <= 0) {
                 killCharacter(entry)
             }
         }

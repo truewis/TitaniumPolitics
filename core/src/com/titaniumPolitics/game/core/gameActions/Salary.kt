@@ -1,8 +1,6 @@
 package com.titaniumPolitics.game.core.gameActions
 
-import com.titaniumPolitics.game.core.Meeting
 import com.titaniumPolitics.game.core.ReadOnly
-import com.titaniumPolitics.game.debugTools.Logger
 import kotlinx.serialization.Serializable
 import kotlin.collections.get
 
@@ -40,7 +38,7 @@ class Salary(override val sbjCharacter: String, override val tgtPlace: String) :
             parent.setMutuality(character, party.leader!!, ReadOnly.const("salaryMutualityIncrease"))
         }
         //Party integrity decreases
-        parent.setPartyMutuality(party.name, delta = ReadOnly.const("salaryMutualityIncrease"))
+        parent.setPartyMutuality(party.name, weightedDelta = ReadOnly.const("salaryMutualityIncrease"))
 
         party.isSalaryPaid =
             true//Even if some members are not paid, the salary is considered paid, and cannot be paid again this quarter.
