@@ -308,8 +308,8 @@ class MeetingUI(var gameState: GameState) : Table(defaultSkin), KTable {
                 if (index == 0 || index == 2) agendaUI.x + agendaUI.width + 20f else agendaUI.x - infoSpacingX - 20f
             var infoStartY = agendaUI.y + agendaUI.height / 2 + agendaUI.agenda.informationKeys.size * infoSpacingY / 2
 
-            agendaUI.agenda.informationKeys.forEachIndexed { i, key ->
-                val info = deployedInfos.find { it.info.name == key } ?: return@forEachIndexed
+            agendaUI.agenda.informationKeys.forEachIndexed information@{ i, key ->
+                val info = deployedInfos.find { it.info.name == key } ?: return@information
                 info.setPosition(
                     infoStartX,
                     infoStartY - i * infoSpacingY
