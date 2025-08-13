@@ -12,6 +12,7 @@
   "TemperatureDamageTau": 3600,
   "TemperatureIntegrityDamageTau": 360000,
   "WorkingHumanHeatProduction": 300,
+  "IdleHumanHeatProduction": 100,
   "DurabilityMax": 100,
   "DurabilityTau": 800000,
   "CorruptionTau": 864000,

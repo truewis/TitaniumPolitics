@@ -6,7 +6,9 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.builtins.MapSerializer
 import kotlinx.serialization.builtins.serializer
 import kotlinx.serialization.json.*
+import java.lang.Math.pow
 import java.util.*
+import kotlin.math.pow
 
 /* Apparatus is a kind of building that can be used to produce and consume resources.
 * It can also be used to absorb resources from the environment.
@@ -32,6 +34,12 @@ class Apparatus {
                 else -> value
             }
         }
+
+    /**
+     * Temperature of this apparatus. Updated every hour to be equal to the temperature of the place.
+     * */
+    var temperature = 300.0
+
     val isStorage
         get() = jsonData.jsonObject["variables"]?.jsonObject?.get("storageType") != null
     val storageType: Pair<String, Double>
@@ -47,6 +55,18 @@ class Apparatus {
         get() = ReadOnly.appJson[name] ?: throw Exception("$name not found in apparatus file.")
     private val baseDanger
         get() = jsonData.jsonObject["baseDanger"]!!.jsonPrimitive.double
+
+    /**
+     * Efficiency is multiplied by (T/300)^tempCoef.
+     */
+    private val tempCoef
+        get() = jsonData.jsonObject["tempCoef"]?.jsonPrimitive?.double ?: .0
+
+    val netEfficiency
+        get() = (temperature / 300).pow(tempCoef) *
+                (if (durability <= 0) 0 else 1) *
+                (if (idealWorker == 0) 1 else if (currentWorker <= idealWorker) currentWorker / idealWorker else 1 + (currentWorker - idealWorker) / idealWorker / 2)//Labor efficiency drops to 50% if overcrowded.
+
     val requiredResourcePerRepair: ArrayList<Resources>
         get() {
             val res = arrayListOf<Resources>()
@@ -61,134 +81,58 @@ class Apparatus {
 
             return res
         }
-    private val idealAbsorption: HashMap<String, Double>
-        get() = HashMap(
-            Json.decodeFromString(
-                MapSerializer<String, Double>(String.serializer(), Double.serializer()),
-                (jsonData.jsonObject["idealAbsorption"]?.toString() ?: "{}")
+    private val idealAbsorption: Resources
+        get() = Resources(
+            HashMap(
+                Json.decodeFromString(
+                    MapSerializer<String, Double>(String.serializer(), Double.serializer()),
+                    (jsonData.jsonObject["idealAbsorption"]?.toString() ?: "{}")
+                )
             )
         )
-    private val idealProduction: HashMap<String, Double>
-        get() = HashMap(
-            Json.decodeFromString(
-                MapSerializer<String, Double>(String.serializer(), Double.serializer()),
-                (jsonData.jsonObject["idealProduction"]?.toString() ?: "{}")
+    private val idealProduction: Resources
+        get() = Resources(
+            HashMap(
+                Json.decodeFromString(
+                    MapSerializer<String, Double>(String.serializer(), Double.serializer()),
+                    (jsonData.jsonObject["idealProduction"]?.toString() ?: "{}")
+                )
             )
         )
-    private val idealConsumption: HashMap<String, Double>
-        get() = HashMap(
-            Json.decodeFromString(
-                MapSerializer<String, Double>(String.serializer(), Double.serializer()),
-                (jsonData.jsonObject["idealConsumption"]?.toString() ?: "{}")
+    private val idealConsumption: Resources
+        get() = Resources(
+            HashMap(
+                Json.decodeFromString(
+                    MapSerializer<String, Double>(String.serializer(), Double.serializer()),
+                    (jsonData.jsonObject["idealConsumption"]?.toString() ?: "{}")
+                )
             )
         )
-    private val idealDistribution: HashMap<String, Double>
-        get() = HashMap(
-            Json.decodeFromString(
-                MapSerializer<String, Double>(String.serializer(), Double.serializer()),
-                (jsonData.jsonObject["idealDistribution"]?.toString() ?: "{}")
+    private val idealDistribution: Resources
+        get() = Resources(
+            HashMap(
+                Json.decodeFromString(
+                    MapSerializer<String, Double>(String.serializer(), Double.serializer()),
+                    (jsonData.jsonObject["idealDistribution"]?.toString() ?: "{}")
+                )
             )
         ) //Converts resources into market resources.
     private val idealHeatProduction
         get() = jsonData.jsonObject["idealHeatProduction"]?.jsonPrimitive?.double ?: .0
     val idealWorker
         get() = jsonData.jsonObject["idealWorker"]?.jsonPrimitive?.int ?: 0
-
-    val currentProduction: Map<String, Double>
-        get() {
-            val result = idealProduction
-            if (durability == .0) return emptyMap()//No production if broken.
-
-            if (idealWorker != 0)//Modify results based on the number of current worker.
-            {
-                idealProduction.forEach {
-                    if (currentWorker <= idealWorker)
-                        result[it.key] = it.value * currentWorker / idealWorker
-                    else
-                        result[it.key] =
-                            it.value + it.value * (currentWorker - idealWorker) / idealWorker / 2 //Labor efficiency drops to 50% if overcrowded.
-
-                }
-            }
-            return result
-        }
-    val currentConsumption: Map<String, Double>
-        get() {
-            val result = idealConsumption
-            if (durability == .0) return emptyMap()//No production if broken.
-
-            if (idealWorker != 0)//Modify results based on the number of current worker.
-            {
-                idealConsumption.forEach {
-                    if (currentWorker <= idealWorker)
-                        result[it.key] = it.value * currentWorker / idealWorker
-                    else
-                        result[it.key] =
-                            it.value + it.value * (currentWorker - idealWorker) / idealWorker / 2 //Labor efficiency drops to 50% if overcrowded.
-
-                }
-            }
-            result["ration"] =
-                (result["ration"] ?: .0) + wages
-            return result
-        }
-    val currentAbsorption: Map<String, Double>
-        get() {
-            val result = idealAbsorption
-            if (durability == .0) return emptyMap()//No production if broken.
-
-            if (idealWorker != 0)//Modify results based on the number of current worker.
-            {
-                idealAbsorption.forEach {
-                    if (currentWorker <= idealWorker)
-                        result[it.key] = it.value * currentWorker / idealWorker
-                    else
-                        result[it.key] =
-                            it.value + it.value * (currentWorker - idealWorker) / idealWorker / 2 //Labor efficiency drops to 50% if overcrowded.
-
-                }
-            }
-            return result
-        }
     val wages get() = currentWorker * laborValuePerHour * const("WorkerWaterConsumptionRate")
-    val currentDistribution: Map<String, Double>
-        get() {
-            val result = idealDistribution
-            if (durability == .0) return emptyMap()//No production if broken.
 
-            if (idealWorker != 0)//Modify results based on the number of current worker.
-            {
-                idealDistribution.forEach {
-                    if (currentWorker <= idealWorker)
-                        result[it.key] = it.value * currentWorker / idealWorker
-                    else
-                        result[it.key] =
-                            it.value + it.value * (currentWorker - idealWorker) / idealWorker / 2 //Labor efficiency drops to 50% if overcrowded.
-
-                }
-
-                //Distribute wages
-                result["ration"] =
-                    (result["ration"] ?: .0) + wages
-            }
-            return result
-        }
+    val currentProduction: Resources
+        get() = idealProduction * netEfficiency
+    val currentConsumption: Resources
+        get() = idealConsumption * netEfficiency + Resources("ration" to wages)
+    val currentAbsorption: Resources
+        get() = idealAbsorption * netEfficiency
+    val currentDistribution: Resources
+        get() = idealDistribution * netEfficiency + Resources("ration" to wages)
     val currentHeatProduction: Double
-        get() {
-            var result = .0
-            if (idealWorker == 0) return result//No production if no worker.
-            if (durability == .0) return result//No production if broken.
-            if (currentWorker <= idealWorker)
-                result = idealHeatProduction * currentWorker / idealWorker
-            else
-                result =
-                    idealHeatProduction + idealHeatProduction * (currentWorker - idealWorker) / idealWorker / 2 //Labor efficiency drops to 50% if overcrowded.
-
-            //Each worker adds a bit of heat as they work.
-            result += currentWorker * const("WorkingHumanHeatProduction")
-
-            return result
-        }
+        get() = idealHeatProduction * netEfficiency + currentWorker * const("WorkingHumanHeatProduction")
     val currentDanger: Double
         get() {
             return if (currentWorker == 0 || idealWorker == 0) 0.0 else if (durability == .0) 0.0 else {

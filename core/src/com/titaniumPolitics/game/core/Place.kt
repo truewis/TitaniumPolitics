@@ -213,6 +213,8 @@ class Place : GameStateElement() {
         if (responsibleDivision == null) return //TODO: Is this true?
         if (isAccidentScene) return //If there is an accident, no one works until it is resolved.
         apparatuses.forEach app@{ apparatus ->
+            apparatus.temperature = this.temperature
+
             //Consume durability, no matter it is currently being worked or not. For storages, keep the durability if they are fully staffed.
             if (!apparatus.isStorage || apparatus.currentWorker >= apparatus.idealWorker)
                 apparatus.durability -= S_PER_HR * const("DurabilityMax") / const("DurabilityTau")//Apparatuses are damaged over time. TODO: get rid of unexpected behaviors, if any
@@ -281,9 +283,6 @@ class Place : GameStateElement() {
                 isAccidentScene = true
                 generateAccident()
 
-            }
-            if (apparatus.isStorage) {
-                apparatus.durability += S_PER_HR * const("DurabilityMax") / const("DurabilityTau")//Storages are repaired if they are worked.
             }
         }
 

@@ -225,6 +225,7 @@
     "durabilityTau": 8.64e8,
     "baseDanger": 6e-4,
     "idealWorker": 0,
+    "tempCoef": -1.0,
     "idealProduction": {
       "energy": 2e8
     },
@@ -550,6 +551,7 @@
     "durabilityTau": 8.64e7,
     "baseDanger": 8e-4,
     "idealWorker": 5,
+    "tempCoef": 1,
     "idealAbsorption": {
       "oxygen": -2e-5
     },
@@ -625,6 +627,7 @@
     "durabilityTau": 8.64e6,
     "baseDanger": 6e-4,
     "idealWorker": 0,
+    "tempCoef": -1,
     "idealAbsorption": {
       "water": 5e-3
     },
@@ -806,6 +809,7 @@
     "baseDanger": 6e-4,
     "idealWorker": 0,
     "currentWorker": 0,
+    "tempCoef": 1,
     "idealConsumption": {
       "energy": 1e7
     },

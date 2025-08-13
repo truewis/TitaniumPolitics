@@ -192,7 +192,7 @@ class GameState {
                 this.livingBy = Place.publicPlaces.random()
                 this.health = 100.0
                 this.reliant = idlePop
-            } //TODO: anonymous characters get resource from market.
+            }
         nonPlayerAgents[name] = AnonAgent().also {
             it.injectParent(this@GameState)
             it.workPlace = Place.publicPlaces.random()
@@ -204,6 +204,9 @@ class GameState {
         return places.values.find { character in (it.workplaceParty?.members ?: return@find false) }
     }
 
+    /**
+     * This function is only called once when new game starts. Not called when loading existing games.
+     * */
     fun initialize() {
         println("Initializing game state...")
         injectDependency()
@@ -348,6 +351,13 @@ class GameState {
         }
         characters.forEach {
             it.value.randomizeTraitAndStats()
+        }
+
+        //Randomize durabilities.
+        places.forEach {
+            it.value.apparatuses.forEach {
+                it.durability = (Math.random() * 50 + 50)
+            }
         }
     }
 
