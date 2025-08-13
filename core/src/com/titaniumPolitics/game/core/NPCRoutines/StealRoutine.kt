@@ -12,7 +12,7 @@ import kotlin.math.min
 @Serializable
 class StealRoutine() : Routine() {
     fun findResource(name: String): Place? {
-        return gState.places.values.filter {
+        return gState.publicPlaces.values.filter {
             it.workplaceParty?.treasurer == null ||
                     it.workplaceParty?.treasurer == name //If the character is the treasurer of the party, they can steal from any place.
         }.maxByOrNull { it.resources[variables["stealResource"]!!] }

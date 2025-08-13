@@ -18,18 +18,6 @@ import kotlin.math.absoluteValue
 class GameState {
     var workingDirectory = ""
     private var _time = 0
-    private var _idlePop = 0
-
-    var idlePop: Int
-        get() = _idlePop
-        set(value) {
-            _idlePop = value
-            characters["Anon-idle"]!!.reliant = value
-        }
-    val laborValuePerHour
-        get() =
-            ReadOnly.const("mutualityMax") * 1e-2 * (pop - idlePop) / pop//TODO: must scale with cost of living
-
     var time: Int
         get() = _time
         set(value) {
@@ -61,6 +49,17 @@ class GameState {
         get() = places.values.sumOf { it.currentTotalPop }
     val totalAnonPop: Int
         get() = characters.values.filter { it.name.contains("Anon") }.sumOf { it.reliant }
+    private var _idlePop = 0
+
+    var idlePop: Int
+        get() = _idlePop
+        set(value) {
+            _idlePop = value
+            characters["Anon-idle"]!!.reliant = value
+        }
+    val laborValuePerHour
+        get() =
+            ReadOnly.const("mutualityMax") * 1e-2 * (pop - idlePop) / pop//TODO: must scale with cost of living
     val pickRandomParty: Party
         get() {
             //random party picker
@@ -83,7 +82,10 @@ class GameState {
     val onStart = arrayListOf<() -> Unit>()
     var _alertLevel = 0
     var places = hashMapOf<String, Place>()
+    val publicPlaces get() = places.filter { it.value.whoseHome == null }
     var characters = hashMapOf<String, Character>()
+    private var characterIndexCache =
+        hashMapOf<String, Int>() //Cache for character indices to speed up mutuality calculations.
 
     val aliveCharacters get() = characters.filter { it.value.alive }
 
@@ -96,7 +98,7 @@ class GameState {
     var requests = hashMapOf<String, Request>()
 
     @Serializable
-    private var _mutuality = hashMapOf<String, HashMap<String, Double>>()
+    private var _mutuality = Array(1) { DoubleArray(1) }
 
     private var _scheduledMeetings = hashMapOf<String, Meeting>()
     val scheduledMeetings: Map<String, Meeting> = Collections.unmodifiableMap(_scheduledMeetings)
@@ -320,11 +322,14 @@ class GameState {
             if (places.none { it.value.characters.contains(char.key) })
                 places["home_" + char.key]!!.characters.add(char.key)
 
-            //Set Will to 50 for all characters.
-            setMutuality(char.key, char.key, 50.0)
-
             char.value.resources =
                 Resources("ration" to 10.0 * char.value.reliant, "water" to 10.0 * char.value.reliant)
+        }
+
+        //After all characters are created, create mutuality matrix.
+        _mutuality = Array(characters.size) { DoubleArray(characters.size) { ReadOnly.const("mutualityDefault") } }
+        characters.keys.forEachIndexed { index, name ->
+            characterIndexCache[name] = index //Cache the index of the character for faster access.
         }
 
         randomize()
@@ -348,11 +353,9 @@ class GameState {
 
     fun getMutuality(a: String, b: String = a): Double {
         if (!characters.containsKey(a) || !characters.containsKey(b)) throw Exception("Getting mutuality $a -> $b invalid.")
-        if (!_mutuality.containsKey(a))
-            _mutuality[a] = hashMapOf()
-        if (!_mutuality[a]!!.containsKey(b))
-            _mutuality[a]!![b] = ReadOnly.const("mutualityDefault")
-        return _mutuality[a]!![b]!!
+        val indexA = characterIndexCache[a]!!
+        val indexB = characterIndexCache[b]!!
+        return _mutuality[indexA][indexB]
     }
 
     //Return value [-1, 1].
@@ -367,12 +370,12 @@ class GameState {
         if (delta.absoluteValue > 50f) throw Exception("Setting mutuality $a -> $b with delta $delta is too high. Use smaller values.")
         if (!delta.isFinite()) throw Exception("Setting mutuality $a -> $b with delta $delta is not finite.")
         if (!characters.containsKey(a) || !characters.containsKey(b)) throw Exception("Setting mutuality $a -> $b invalid.")
-        if (!_mutuality.containsKey(a))
-            _mutuality[a] = hashMapOf()
-        _mutuality[a]!![b] = getMutuality(a, b) + delta
-        if (getMutuality(a, b) > ReadOnly.const("mutualityMax")) _mutuality[a]!![b] =
+        val indexA = characterIndexCache[a]!!
+        val indexB = characterIndexCache[b]!!
+        _mutuality[indexA][indexB] = getMutuality(a, b) + delta
+        if (getMutuality(a, b) > ReadOnly.const("mutualityMax")) _mutuality[indexA][indexB] =
             ReadOnly.const("mutualityMax")
-        if (getMutuality(a, b) < ReadOnly.const("mutualityMin")) _mutuality[a]!![b] =
+        if (getMutuality(a, b) < ReadOnly.const("mutualityMin")) _mutuality[indexA][indexB] =
             ReadOnly.const("mutualityMin")
     }
 
