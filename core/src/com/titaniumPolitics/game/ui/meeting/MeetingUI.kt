@@ -26,7 +26,7 @@ import java.lang.Thread.sleep
 //This UI is used for both meetings and conferences
 class MeetingUI(var gameState: GameState) : Table(defaultSkin), KTable {
     val portraits = arrayListOf<SimpleHeadPortraitUI>()
-    val speakerPortrait = PortraitUI("", gameState, 1f)
+    val speakerPortrait = PortraitUI("", gameState)
     val deployedInfos = arrayListOf<InfoBubbleUI>()
     val currentAgendas = arrayListOf<AgendaBubbleUI>()
     val currentAttention = Label("0", defaultSkin, "docTitle")
@@ -77,7 +77,9 @@ class MeetingUI(var gameState: GameState) : Table(defaultSkin), KTable {
         discussionTable = stack {
             it.grow()
             add(this@MeetingUI.electionUIContainer)
-            add(this@MeetingUI.speakerPortrait)
+            container(this@MeetingUI.speakerPortrait) {
+                size(450f, 600f)
+            }
             container(this@MeetingUI.currentAttention) {
                 padTop(300f)
             }

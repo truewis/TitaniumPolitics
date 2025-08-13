@@ -56,7 +56,7 @@ class CharacterPortraitsUI(var gameState: GameState) : Table(defaultSkin) {
     }
 
     private fun addCharacterPortrait(characterName: String) {
-        val portrait = PortraitUI(characterName, gameState, 1.5f)
+        val portrait = PortraitUI(characterName, gameState)
         portraits.add(portrait)
         addActor(portrait)
 
@@ -69,7 +69,7 @@ class CharacterPortraitsUI(var gameState: GameState) : Table(defaultSkin) {
         portraits.forEach {
             it.setPosition(
                 (portraits.indexOf(it) + 0.5f) * CapsuleStage.instance.width / portraits.size + it.width / 2,
-                300f
+                500f
             )
         }
 
