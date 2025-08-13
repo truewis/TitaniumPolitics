@@ -17,6 +17,7 @@ class Logger {
         }
 
         fun init() {
+            File(gState.workingDirectory).mkdirs()
             writer = File(gState.workingDirectory + "/log.txt").bufferedWriter()
             writer1 = File(gState.workingDirectory + "/actions.txt").bufferedWriter()
             writer2 = File(gState.workingDirectory + "/apparatus.txt").bufferedWriter()

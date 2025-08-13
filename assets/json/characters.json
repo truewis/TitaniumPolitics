@@ -46,8 +46,8 @@
   },
   "Krailin": {
     "name": "Krailin",
-    "image": "portraits/default.png",
-    "headImage": "portraits/defaultHead.png"
+    "image": "portraits/Krailin.png",
+    "headImage": "portraits/KrailinHead.png"
   },
   "Vaeme": {
     "name": "Vaeme",
