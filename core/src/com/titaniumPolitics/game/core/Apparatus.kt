@@ -1,5 +1,6 @@
 package com.titaniumPolitics.game.core
 
+import com.titaniumPolitics.game.core.ReadOnly.S_PER_HR
 import com.titaniumPolitics.game.core.ReadOnly.const
 import com.titaniumPolitics.game.debugTools.Logger
 import kotlinx.serialization.Serializable
@@ -8,6 +9,7 @@ import kotlinx.serialization.builtins.serializer
 import kotlinx.serialization.json.*
 import java.lang.Math.pow
 import java.util.*
+import kotlin.math.exp
 import kotlin.math.pow
 
 /* Apparatus is a kind of building that can be used to produce and consume resources.
@@ -62,8 +64,24 @@ class Apparatus {
     private val tempCoef
         get() = jsonData.jsonObject["tempCoef"]?.jsonPrimitive?.double ?: .0
 
+    /**
+     * When T>Tmax, Efficiency is multiplied by exp[(1-T/Tmax)*10].  Damaged is scaled by 1+(T/Tmax). Danger is scaled by 1+(T/Tmax).
+     */
+    private val maxTemp
+        get() = jsonData.jsonObject["maxTemp"]?.jsonPrimitive?.double ?: Double.POSITIVE_INFINITY
+
+    /**
+     * When T<Tmin, Efficiency is multiplied by exp[(1-Tmin/T)*10].  Damaged is scaled by 1+(Tmin/T). Danger is scaled by 1+(Tmin/T).
+     */
+    private val minTemp
+        get() = jsonData.jsonObject["minTemp"]?.jsonPrimitive?.double ?: 4.0
+
+    private val damageTempScale
+        get() = if (temperature > maxTemp) 1 + temperature / maxTemp else if (temperature < minTemp) 1 + minTemp / temperature else 1.0
+
     val netEfficiency
         get() = (temperature / 300).pow(tempCoef) *
+                (if (temperature > maxTemp) exp((1 - temperature / maxTemp) * 10) else if (temperature < minTemp) exp((1 - minTemp / temperature) * 10) else 1.0) *
                 (if (durability <= 0) 0 else 1) *
                 (if (idealWorker == 0) 1 else if (currentWorker <= idealWorker) currentWorker / idealWorker else 1 + (currentWorker - idealWorker) / idealWorker / 2)//Labor efficiency drops to 50% if overcrowded.
 
@@ -137,9 +155,9 @@ class Apparatus {
         get() {
             return if (currentWorker == 0 || idealWorker == 0) 0.0 else if (durability == .0) 0.0 else {
                 if (currentWorker <= idealWorker)
-                    baseDanger * (2 - currentWorker / idealWorker) * 100 / durability / const("GlobalAccidentTau")
+                    baseDanger * (2 - currentWorker / idealWorker) * 100 / durability / const("GlobalAccidentTau") * damageTempScale
                 else
-                    baseDanger * (2 * currentWorker / idealWorker - 1) * 100 / durability / const("GlobalAccidentTau")//Danger increases when overcrewed or undercrewed.
+                    baseDanger * (2 * currentWorker / idealWorker - 1) * 100 / durability / const("GlobalAccidentTau") * damageTempScale//Danger increases when overcrewed or undercrewed.
             }
         }
     val currentGraveDanger: Double
@@ -147,12 +165,30 @@ class Apparatus {
             return if (currentWorker == 0 || idealWorker == 0) 0.0
             else if (durability == .0) 0.0
             else if (currentWorker <= idealWorker * 4 / 5)
-                baseDanger * (0.2 - currentWorker / 4 / idealWorker) * 100 / durability / const("GlobalAccidentTau")
+                baseDanger * (0.2 - currentWorker / 4 / idealWorker) * 100 / durability / const("GlobalAccidentTau") * damageTempScale
             else if (currentWorker >= idealWorker * 6 / 5)
-                baseDanger * (2 * currentWorker / 3 / idealWorker - 0.8) * 100 / durability / const("GlobalAccidentTau") //Nonzero only when very overcrewed or undercrewed.
+                baseDanger * (2 * currentWorker / 3 / idealWorker - 0.8) * 100 / durability / const("GlobalAccidentTau") * damageTempScale //Nonzero only when very overcrewed or undercrewed.
             else
                 0.0
         }
+
+    /**
+     * Current time constant of durability decrease.
+     * */
+    val currentDurabilityTau
+        get() =
+            (jsonData.jsonObject["durabilityTau"]?.jsonPrimitive?.double ?: const("DurabilityTau")) / damageTempScale
+
+    fun depreciateHourly() {
+        //Consume durability, no matter it is currently being worked or not. For storages, keep the durability if they are fully staffed.
+        if (!isStorage || currentWorker >= idealWorker)
+            durability -= S_PER_HR / currentDurabilityTau
+        if (temperature > maxTemp)
+            Logger.write("$name is overheated: $temperature K > $maxTemp K", Logger.LogLevel.APPARATUS_VERBOSE)
+        if (temperature < minTemp)
+            Logger.write("$name is freezing: $temperature K < $minTemp K", Logger.LogLevel.APPARATUS_VERBOSE)
+
+    }
 
     override fun toString(): String {
         return "Apparatus(name='$name', durability=$durability, baseDanger=$baseDanger, idealProduction=$idealProduction, idealWorker=$idealWorker, currentWorker=$currentWorker, currentProduction=$currentProduction, currentDanger=$currentDanger, currentGraveDanger=$currentGraveDanger)"
