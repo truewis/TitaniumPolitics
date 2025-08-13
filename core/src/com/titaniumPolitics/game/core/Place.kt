@@ -34,10 +34,10 @@ class Place : GameStateElement() {
     var manager: String? = null
 
 
-    var resources = Resources()
+    var resources = Resources(positive = true)
     val maxResources: Resources
         get() {
-            val result = Resources()
+            val result = Resources(positive = true)
             apparatuses.forEach {
                 if (it.durability > .0 && it.isStorage)
                     result[it.storageType.first] += it.storageType.second
@@ -45,7 +45,7 @@ class Place : GameStateElement() {
             return result
         }
 
-    val marketSupplyEstimateWeekly = Resources()
+    val marketSupplyEstimateWeekly = Resources(positive = true)
     val marketSupplyEstimateHours =
         168 // For the marketSupplyEstimate, we have to average the distribution over this many hours, and convert it to a weekly basis
     val marketSupplyEstimateR = 1 - 1.0 / marketSupplyEstimateHours
@@ -229,6 +229,7 @@ class Place : GameStateElement() {
             }
 
 
+            var err = false
             apparatus.currentProduction.forEach {
                 if (maxResources[it.key] != 0.0 && resources[it.key] + it.value > maxResources[it.key])//If maxResources is zero, there are no limit on how much resource you can store.
                 {
@@ -236,9 +237,10 @@ class Place : GameStateElement() {
                         "${apparatus.name} in $name is cannot produce ${it.key} because it is full and cannot function.",
                         Logger.LogLevel.APPARATUS_VERBOSE
                     )
-                    return@app //If the resource is full, no one works.
+                    err = true //If the resource is full, no one works.
                 }
             }
+            if (err) return@app
             resourceShortOfHourly(apparatus)?.also {
                 Logger.write(
                     "${apparatus.name} in $name is short of $it and cannot function.",
@@ -297,20 +299,22 @@ class Place : GameStateElement() {
     }
 
     fun resourceShortOfHourly(app: Apparatus): String? {
+        var ret: String? = null
         (app.currentConsumption + app.currentDistribution).forEach {
             if ((resources[it.key]) < it.value * S_PER_HR)
-                return it.key //If the resource is less than an hour worth of consumption, return the resource name.
+                ret = it.key //If the resource is less than an hour worth of consumption, return the resource name.
         }
-        return null
+        return ret
 
     }
 
     fun gasResourceShortOfHourly(app: Apparatus): String? {
+        var ret: String? = null
         app.currentAbsorption.forEach {
             if ((gasResources[it.key]) < it.value * S_PER_HR)
-                return it.key //If the resource is less than a unit time worth of consumption, return the resource name.
+                ret = it.key //If the resource is less than a unit time worth of consumption, return the resource name.
         }
-        return null
+        return ret
 
     }
 

@@ -156,7 +156,7 @@ class LeadDivisionMeetingRoutine : Routine(), IMeetingRoutine {
     }
 
     fun productivity(toWhom: String, apparatus: Apparatus): Double {
-        return apparatus.currentProduction.entries.sumOf { (key, value) -> gState.characters[toWhom]!!.itemValue(key) * value } / apparatus.currentWorker
+        return gState.characters[toWhom]!!.itemValue(apparatus.currentProduction) / apparatus.currentWorker
     }
 
     fun adjustResourceProd(name: String, place: String): GameAction? {

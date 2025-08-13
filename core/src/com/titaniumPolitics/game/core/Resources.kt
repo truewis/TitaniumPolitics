@@ -3,7 +3,7 @@ package com.titaniumPolitics.game.core
 import kotlinx.serialization.Serializable
 
 @Serializable
-class Resources() {
+class Resources(var positive: Boolean = false) {
     private val _resources = hashMapOf<String, Double>()
 
     constructor(map: Map<String, Double>) : this() {
@@ -23,7 +23,7 @@ class Resources() {
     }
 
     operator fun set(key: String, value: Double): Double? {
-        return if (this[key] + value >= 0) {
+        return if (this[key] + value >= 0 || !positive) {
             _resources.put(key, value)
         } else {
             throw Exception("Resource value must be nonNegative: $key, $value")
