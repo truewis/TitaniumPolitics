@@ -132,7 +132,7 @@ class WorkRoutine() : Routine() {
         }
 
         //6. Supply resource
-        gState.places.values.forEach { place1 -> //TODO: right now, supply resource to any place regardless of the division. In the future, agents will not supply resources to hostile divisions.
+        gState.places.values.forEach { place1 ->
             place1.apparatuses.forEach { apparatus ->
                 val res = place1.resourceShortOfHourly(apparatus) //Type of resource that is short of.
                 if (res != null)
@@ -242,7 +242,6 @@ class WorkRoutine() : Routine() {
             Meeting.MeetingType.TALK -> {
                 return TalkRoutine()
             }
-            //TODO: implement intentions
 
             Meeting.MeetingType.CABINET_DAILY_CONFERENCE -> {
                 if (name != gState.parties["cabinet"]!!.leader) {
@@ -264,11 +263,7 @@ class WorkRoutine() : Routine() {
 
     override fun execute(name: String, place: String): GameAction {
 
-        //TODO: If there is no subroutine to do, move to a place that is the home of one of the parties of the character.
-        //If already at home, wait.
-        if (gState.parties.values.any { party -> party.home == place && party.members.contains(name) }) {
-            return Wait(name, place)
-        }
+        //Wait until there is some routine available above.
         return Wait(name, place) //If no subroutine is found, wait at the current place.
     }
 

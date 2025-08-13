@@ -94,7 +94,7 @@ class Party : GameStateElement() {
     fun getVotes(candidates: Set<String>): HashMap<String, Int> {
         val voteResults = candidates.associateWith { candidate ->
             0
-        } as HashMap<String, Int>//TODO: This logic has to be more thorough. display the actual election process.
+        } as HashMap<String, Int>
         members.forEach { mem ->
             val bestCandidate = candidates.maxBy { parent.getMutuality(mem, it) }
             voteResults[bestCandidate] = (voteResults[bestCandidate] ?: 0) + getMultiplier(mem)

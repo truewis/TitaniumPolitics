@@ -84,7 +84,7 @@ class GameDataHandler(val directoryName: String) {
         gState.existingGasList.forEach {
             createIfNull("${it}GasPressure")
             resourceMap["${it}GasPressure"]!![gState.time] = hashMapOf(*(gState.places.map { (pName, place) ->
-                pName to place.gasPressure(it).toFloat()//TODO: store pressure instead?
+                pName to place.gasPressure(it).toFloat()
             }.filter { !it.first.contains("Anon") }.toTypedArray()))
         }
     }

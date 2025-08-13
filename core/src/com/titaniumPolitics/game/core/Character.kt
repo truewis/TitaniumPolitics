@@ -246,14 +246,16 @@ class Character : GameStateElement() {
                             name, parent.parties[action.agenda.subjectParams["party"]!!
                             ]!!.leader
                         ) * 3.0
-                    }// TODO()
+                    }
+
                     AgendaType.DENOUNCE_PARTY -> {
                         //Based on the party's friendliness.
                         return parent.getMutNorm(
                             name, parent.parties[action.agenda.subjectParams["party"]!!
                             ]!!.leader
                         ) * -5.0
-                    }// TODO()
+                    }
+
                     AgendaType.BUDGET_PROPOSAL -> return 0.0 // TODO()
                     AgendaType.BUDGET_RESOLUTION -> return 0.0 // TODO()
                     AgendaType.APPOINT_MEETING -> return 0.0// TODO()

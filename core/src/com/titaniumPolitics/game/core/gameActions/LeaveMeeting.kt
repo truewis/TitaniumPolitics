@@ -29,7 +29,6 @@ class LeaveMeeting(override val sbjCharacter: String, override val tgtPlace: Str
     }
 
     override fun isValid(): Boolean {
-        //TODO: Should not be able to leave meeting freely if there is a voting at the end.
         val meeting = parent.characters[sbjCharacter]!!.currentMeeting
         return meeting != null && reason(
             meeting.type != Meeting.MeetingType.DIVISION_LEADER_ELECTION,

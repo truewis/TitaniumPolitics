@@ -64,7 +64,6 @@ sealed class GameAction() {
                 sbjCharObj.frozen += 3 * ReadOnly.constInt(this::class.simpleName!! + "Duration")
             else if (this is Sleep || this is Move)
                 sbjCharObj.frozen += 2 * ReadOnly.constInt(this::class.simpleName!! + "Duration")
-            //TODO: Reduce health every turn?
         } else if (parent.getMutuality(sbjCharacter) < ReadOnly.const("DowntimeWill")) {
             sbjCharObj.frozen += 3 * ReadOnly.constInt(this::class.simpleName!! + "Duration") / 2
 
