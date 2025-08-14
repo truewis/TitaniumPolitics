@@ -13,7 +13,6 @@ import com.titaniumPolitics.game.ui.widget.CharacterSelectUI
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
 import ktx.scene2d.KTable
-import ktx.scene2d.Scene2DSkin
 import ktx.scene2d.Scene2DSkin.defaultSkin
 import ktx.scene2d.stack
 import ktx.scene2d.table
@@ -21,7 +20,7 @@ import ktx.scene2d.table
 class InterfaceRoot(val gameState: GameState) : Table(defaultSkin), KTable {
     val stack: Stack
     val avAUI = AvailableActionsUI(this@InterfaceRoot.gameState)
-    val charactersView = CharacterPortraitsUI(gameState)
+    val charactersView = CharactersInPlaceUI(gameState)
     val meetingUI = MeetingUI(gameState)
 
     init {

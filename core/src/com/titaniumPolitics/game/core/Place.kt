@@ -34,10 +34,10 @@ class Place : GameStateElement() {
     var manager: String? = null
 
 
-    var resources = Resources()
+    var resources = Resources(positive = true)
     val maxResources: Resources
         get() {
-            val result = Resources()
+            val result = Resources(positive = true)
             apparatuses.forEach {
                 if (it.durability > .0 && it.isStorage)
                     result[it.storageType.first] += it.storageType.second
@@ -45,7 +45,7 @@ class Place : GameStateElement() {
             return result
         }
 
-    val marketSupplyEstimateWeekly = Resources()
+    val marketSupplyEstimateWeekly = Resources(positive = true)
     val marketSupplyEstimateHours =
         168 // For the marketSupplyEstimate, we have to average the distribution over this many hours, and convert it to a weekly basis
     val marketSupplyEstimateR = 1 - 1.0 / marketSupplyEstimateHours
@@ -79,24 +79,19 @@ class Place : GameStateElement() {
 
     var volume = 1e4f //Volume in m^3.
     val currentWorker: Int get() = apparatuses.sumOf { it.currentWorker }
-    val workForce: Int
+    val currentAvailableLabor: Int
         get() = characters.filter {
-            it.contains("Anon") && it.contains(
-                responsibleDivision ?: "this string returns false!"
-            )
+            parent.characters[it]!!.type == Character.Type.ANON && it in workplaceParty!!.members
         }
             .sumOf { parent.characters[it]!!.reliant }
     val workers
-        get() = parent.characters.values.filter {
-            it.name.contains("Anon") && it.name.contains(
-                name
-            )
-        }
+        get() = workplaceParty?.members?.filter { parent.characters[it]!!.type == Character.Type.ANON }
+            ?.map { parent.characters[it]!! }
 
     val currentTotalPop: Int
         //This number must be conserved.
         get() {
-            return characters.sumOf { if (it.contains("Anon")) parent.characters[it]!!.reliant else 1 }
+            return characters.sumOf { if (parent.characters[it]!!.type == Character.Type.ANON) parent.characters[it]!!.reliant else 1 }
 //            if (name.contains("home")) return 0 //Home populations are added to the places the home is in.
 //
 //            if (name == "squareSouth") return parent.idlePop + currentWorker//All idle people gather at the square.
@@ -124,7 +119,8 @@ class Place : GameStateElement() {
 
     var characters = hashSetOf<String>()
     val realCharacters
-        get() = characters.filter { !it.contains("Anon") }.toHashSet() //Characters that are not anonymous.
+        get() = characters.filter { parent.characters[it]!!.type != Character.Type.ANON }
+            .toHashSet() //Characters that are not anonymous.
     var responsibleDivision: String? = null //Determines which party is responsible for the place.
     val workplaceParty: Party?
         get() = parent.parties["workplace_$name"]
@@ -199,11 +195,11 @@ class Place : GameStateElement() {
         workableApparatus.forEachIndexed lambda@{ index, apparatus ->
             if (index == workableApparatus.size - 1)//If last apparatus in the place, we have to allocate the rest of the worker.
             {
-                apparatus.currentWorker = workForce - sum
+                apparatus.currentWorker = currentAvailableLabor - sum
             } else {
                 if (idealWorker != 0)
                     apparatus.currentWorker =
-                        workForce * apparatus.idealWorker / idealWorker//Distribute workers according to ideal worker
+                        currentAvailableLabor * apparatus.idealWorker / idealWorker//Distribute workers according to ideal worker
                 sum += apparatus.currentWorker
             }
         }
@@ -213,9 +209,8 @@ class Place : GameStateElement() {
         if (responsibleDivision == null) return //TODO: Is this true?
         if (isAccidentScene) return //If there is an accident, no one works until it is resolved.
         apparatuses.forEach app@{ apparatus ->
-            //Consume durability, no matter it is currently being worked or not. For storages, keep the durability if they are fully staffed.
-            if (!apparatus.isStorage || apparatus.currentWorker >= apparatus.idealWorker)
-                apparatus.durability -= S_PER_HR * const("DurabilityMax") / const("DurabilityTau")//Apparatuses are damaged over time. TODO: get rid of unexpected behaviors, if any
+            apparatus.temperature = this.temperature
+            apparatus.depreciateHourly()
             //Check if it is workable------------------------------------------------------------------------------
             if (apparatus.durability <= .0) {
                 apparatus.durability = .0
@@ -227,6 +222,7 @@ class Place : GameStateElement() {
             }
 
 
+            var err = false
             apparatus.currentProduction.forEach {
                 if (maxResources[it.key] != 0.0 && resources[it.key] + it.value > maxResources[it.key])//If maxResources is zero, there are no limit on how much resource you can store.
                 {
@@ -234,9 +230,10 @@ class Place : GameStateElement() {
                         "${apparatus.name} in $name is cannot produce ${it.key} because it is full and cannot function.",
                         Logger.LogLevel.APPARATUS_VERBOSE
                     )
-                    return@app //If the resource is full, no one works.
+                    err = true //If the resource is full, no one works.
                 }
             }
+            if (err) return@app
             resourceShortOfHourly(apparatus)?.also {
                 Logger.write(
                     "${apparatus.name} in $name is short of $it and cannot function.",
@@ -259,7 +256,7 @@ class Place : GameStateElement() {
                 resources[it.key] = (resources[it.key]) - it.value * S_PER_HR
             }
             apparatus.currentDistribution.forEach {
-                workers.first().resources[it.key] += it.value * S_PER_HR
+                workers!!.first().resources[it.key] += it.value * S_PER_HR
                 marketSupplyEstimateWeekly[it.key] += it.value * S_PER_HR //Market supply estimate is updated.
 
             }
@@ -282,9 +279,6 @@ class Place : GameStateElement() {
                 generateAccident()
 
             }
-            if (apparatus.isStorage) {
-                apparatus.durability += S_PER_HR * const("DurabilityMax") / const("DurabilityTau")//Storages are repaired if they are worked.
-            }
         }
 
         maxResources.forEach { //TODO: Note that if maxResources is undefined, the resource type is not checked. This prevents having to define storage for all sorts of resources.
@@ -298,104 +292,112 @@ class Place : GameStateElement() {
     }
 
     fun resourceShortOfHourly(app: Apparatus): String? {
+        var ret: String? = null
         (app.currentConsumption + app.currentDistribution).forEach {
             if ((resources[it.key]) < it.value * S_PER_HR)
-                return it.key //If the resource is less than an hour worth of consumption, return the resource name.
+                ret = it.key //If the resource is less than an hour worth of consumption, return the resource name.
         }
-        return null
+        return ret
 
     }
 
     fun gasResourceShortOfHourly(app: Apparatus): String? {
+        var ret: String? = null
         app.currentAbsorption.forEach {
             if ((gasResources[it.key]) < it.value * S_PER_HR)
-                return it.key //If the resource is less than a unit time worth of consumption, return the resource name.
+                ret = it.key //If the resource is less than a unit time worth of consumption, return the resource name.
         }
-        return null
+        return ret
 
     }
 
     fun generateAccident() {
         //Generate casualties.
-        val workerToKill = workers.first()
-        val death = min(currentWorker / 100 + 1, workerToKill.reliant) //TODO: what about injuries?
-        workerToKill.killReliant(death)
+        workers?.firstOrNull()?.let { workerToKill ->
 
-        //Generate apparatus damage.
-        apparatuses.forEach { app ->
-            maxResources
-            app.durability -= 30
-            Information(
-                author = null,
-                creationTime = parent.time,
-                type = InformationType.DAMAGED_APPARATUS,
-                tgtPlace = name,
-                amount = 30,
-                tgtApparatus = app.name
-            )/*store info*/.also {
-                parent.addInformation(it)
-                //Add all people in the place to the known list.
-                it.knownTo.addAll(characters)
-                accidentInformationKeys += it.name
-            }
-            onAccident.forEach { it(name, death) }
-        }//TODO: spread rumors. But think if it is a good game design.
+            val death = min(currentWorker / 100 + 1, workerToKill.reliant) //TODO: what about injuries?
+            workerToKill.killReliant(death)
+
+            //Generate apparatus damage.
+            apparatuses.forEach { app ->
+                maxResources
+                app.durability -= 30
+                Information(
+                    author = null,
+                    creationTime = parent.time,
+                    type = InformationType.DAMAGED_APPARATUS,
+                    tgtPlace = name,
+                    amount = 30,
+                    tgtApparatus = app.name
+                )/*store info*/.also {
+                    parent.addInformation(it)
+                    //Add all people in the place to the known list.
+                    it.knownTo.addAll(characters)
+                    accidentInformationKeys += it.name
+                }
+                onAccident.forEach { it(name, death) }
+            }//TODO: spread rumors. But think if it is a good game design.
+        }
 
 
     }
 
     fun generateOverflowAccident(resourceType: String) {
         //Generate casualties.
-        val workerToKill = workers.first()
-        val death = min(currentWorker / 100 + 1, workerToKill.reliant) //TODO: what about injuries?
-        workerToKill.killReliant(death)
 
-        //Generate resource loss.
-        val loss = resources[resourceType] / 2
-        resources[resourceType] -= loss
-        Information(
-            author = null,
-            creationTime = parent.time,
-            type = InformationType.LOST_RESOURCES,
-            tgtPlace = name,
-            resources = Resources(resourceType to loss)
-        )/*store info*/.also {
-            parent.addInformation(it)
-            //Add all people in the place to the known list.
-            it.knownTo.addAll(characters)
-            accidentInformationKeys += it.name
-        }
+        workers?.firstOrNull()?.let { workerToKill ->
 
-        //Do not Generate apparatus damage.
+            val death = min(currentWorker / 100 + 1, workerToKill.reliant) //TODO: what about injuries?
+            workerToKill.killReliant(death)
 
-    }
-
-    fun generateCatastrophicAccident() {
-        //Generate casualties.
-        val workerToKill = workers.first()
-        val death = min(currentWorker / 5 + 1, workerToKill.reliant) //TODO: what about injuries?
-        workerToKill.killReliant(death)
-
-        //Generate apparatus damage.
-        apparatuses.forEach { app ->
-            maxResources
-            app.durability -= 75
+            //Generate resource loss.
+            val loss = resources[resourceType] / 2
+            resources[resourceType] -= loss
             Information(
                 author = null,
                 creationTime = parent.time,
-                type = InformationType.DAMAGED_APPARATUS,
+                type = InformationType.LOST_RESOURCES,
                 tgtPlace = name,
-                amount = 75,
-                tgtApparatus = app.name
+                resources = Resources(resourceType to loss)
             )/*store info*/.also {
                 parent.addInformation(it)
                 //Add all people in the place to the known list.
                 it.knownTo.addAll(characters)
                 accidentInformationKeys += it.name
             }
+
+            //Do not Generate apparatus damage.
         }
-        onAccident.forEach { it(name, death) }
-        //TODO: spread rumors. But think if it is a good game design.
+    }
+
+    fun generateCatastrophicAccident() {
+        //Generate casualties.
+        workers?.firstOrNull()?.let { workerToKill ->
+
+            val death = min(currentWorker / 5 + 1, workerToKill.reliant) //TODO: what about injuries?
+            workerToKill.killReliant(death)
+
+            //Generate apparatus damage.
+            apparatuses.forEach { app ->
+                maxResources
+                app.durability -= 75
+                Information(
+                    author = null,
+                    creationTime = parent.time,
+                    type = InformationType.DAMAGED_APPARATUS,
+                    tgtPlace = name,
+                    amount = 75,
+                    tgtApparatus = app.name
+                )/*store info*/.also {
+                    parent.addInformation(it)
+                    //Add all people in the place to the known list.
+                    it.knownTo.addAll(characters)
+                    accidentInformationKeys += it.name
+                }
+            }
+            onAccident.forEach { it(name, death) }
+            //TODO: spread rumors. But think if it is a good game design.
+        }
     }
 
     fun distanceTo(targetName: String): Int? {

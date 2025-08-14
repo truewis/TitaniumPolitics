@@ -26,6 +26,8 @@
     "image": "defaultApparatus.png",
     "durabilityTau": 8.64e7,
     "baseDanger": 2.0E-4,
+    "maxTemp": 400,
+    "minTemp": 200,
     "requiredResourcePerRepair": [
       {
         "_resources": {
@@ -55,6 +57,8 @@
     "image": "defaultApparatus.png",
     "durabilityTau": 8.64e7,
     "baseDanger": 3.0E-4,
+    "maxTemp": 373,
+    "minTemp": 273,
     "requiredResourcePerRepair": [
       {
         "_resources": {
@@ -113,6 +117,8 @@
     "image": "defaultApparatus.png",
     "durabilityTau": 8.64e6,
     "baseDanger": 3.0E-4,
+    "maxTemp": 340,
+    "minTemp": 70,
     "requiredResourcePerRepair": [
       {
         "_resources": {
@@ -143,6 +149,7 @@
     "image": "defaultApparatus.png",
     "durabilityTau": 8.64e8,
     "baseDanger": 1.0E-4,
+    "maxTemp": 373,
     "requiredResourcePerRepair": [
       {
         "_resources": {
@@ -170,6 +177,7 @@
     "image": "defaultApparatus.png",
     "durabilityTau": 8.64e7,
     "baseDanger": 1.0E-4,
+    "maxTemp": 800,
     "requiredResourcePerRepair": [
       {
         "_resources": {
@@ -197,6 +205,7 @@
     "image": "defaultApparatus.png",
     "durabilityTau": 8.64e7,
     "baseDanger": 1.0E-4,
+    "maxTemp": 800,
     "requiredResourcePerRepair": [
       {
         "_resources": {
@@ -225,6 +234,7 @@
     "durabilityTau": 8.64e8,
     "baseDanger": 6e-4,
     "idealWorker": 0,
+    "tempCoef": -1.0,
     "idealProduction": {
       "energy": 2e8
     },
@@ -252,6 +262,8 @@
     "durabilityTau": 8.64e7,
     "baseDanger": 6e-4,
     "idealWorker": 5,
+    "maxTemp": 400,
+    "minTemp": 200,
     "idealProduction": {
       "component": 0.01
     },
@@ -285,6 +297,8 @@
     "durabilityTau": 8.64e7,
     "baseDanger": 6e-4,
     "idealWorker": 5,
+    "maxTemp": 330,
+    "minTemp": 260,
     "idealProduction": {
       "electronics": 0.01
     },
@@ -319,6 +333,8 @@
     "durabilityTau": 8.64e7,
     "baseDanger": 6e-4,
     "idealWorker": 5,
+    "maxTemp": 400,
+    "minTemp": 200,
     "idealProduction": {
       "plumbing": 0.01
     },
@@ -353,6 +369,7 @@
     "durabilityTau": 8.64e6,
     "baseDanger": 10e-4,
     "idealWorker": 500,
+    "minTemp": 200,
     "idealProduction": {
       "structure": 0.1
     },
@@ -446,6 +463,8 @@
     "durabilityTau": 8.64e6,
     "baseDanger": 4e-4,
     "idealWorker": 100,
+    "maxTemp": 320,
+    "minTemp": 280,
     "idealProduction": {
       "ration": 6e-2
     },
@@ -511,6 +530,8 @@
     "durabilityTau": 8.64e6,
     "baseDanger": 8e-4,
     "idealWorker": 5,
+    "maxTemp": 373,
+    "minTemp": 273,
     "idealAbsorption": {
       "oxygen": -8e-5
     },
@@ -550,6 +571,9 @@
     "durabilityTau": 8.64e7,
     "baseDanger": 8e-4,
     "idealWorker": 5,
+    "tempCoef": 1,
+    "maxTemp": 340,
+    "minTemp": 70,
     "idealAbsorption": {
       "oxygen": -2e-5
     },
@@ -625,6 +649,9 @@
     "durabilityTau": 8.64e6,
     "baseDanger": 6e-4,
     "idealWorker": 0,
+    "tempCoef": -1,
+    "maxTemp": 373,
+    "minTemp": 273,
     "idealAbsorption": {
       "water": 5e-3
     },
@@ -657,6 +684,8 @@
     "durabilityTau": 8.64e6,
     "baseDanger": 6e-4,
     "idealWorker": 0,
+    "maxTemp": 400,
+    "minTemp": 200,
     "idealAbsorption": {
       "carbonDioxide": 1,
       "oxygen": -0.7
@@ -696,6 +725,8 @@
     "durabilityTau": 8.64e6,
     "baseDanger": 6e-4,
     "idealWorker": 0,
+    "maxTemp": 400,
+    "minTemp": 200,
     "idealAbsorption": {
       "nitrogen": 1.3e-4
     },
@@ -806,6 +837,7 @@
     "baseDanger": 6e-4,
     "idealWorker": 0,
     "currentWorker": 0,
+    "tempCoef": 1,
     "idealConsumption": {
       "energy": 1e7
     },
@@ -966,6 +998,8 @@
     "durabilityTau": 8.64e7,
     "baseDanger": 2e-4,
     "idealWorker": 32,
+    "maxTemp": 400,
+    "minTemp": 200,
     "idealConsumption": {
       "energy": 1e4
     },

@@ -449,10 +449,17 @@ class GameEngine(val gameState: GameState) {
 
     fun checkMarketResourcesHourly(tgtState: GameState) {
         gameState.places.forEach { place ->
-            place.value.gasResources.forEach { place.value.gasResources[it.key] = it.value * 0.999 }
-        } //1/1000 of the floating resources is lost
+
+        }
+
+
 
         gameState.places.forEach { (placeName, place) ->
+            place.gasResources.forEach {
+                place.gasResources[it.key] = it.value * 0.999
+            }//1/1000 of the floating resources is lost
+            place.addHeat(place.currentTotalPop * const("IdleHumanHeatProduction") * S_PER_HR) //Humans generate heat
+
             if (place.gasResources["oxygen"] < place.currentTotalPop * const("MarketOxygenConsumptionRate") * 86400)//TODO: Migrate to gas system.
                 Logger.write("Less than 24 hours of oxygen out in $placeName", Logger.LogLevel.INFO)
             val consumptionOxygen = (place.currentTotalPop * const("MarketOxygenConsumptionRate") * S_PER_HR)
@@ -488,12 +495,12 @@ class GameEngine(val gameState: GameState) {
         //Total redistribution of resources among anonymous people every hour.
         val marketResources = Resources()
         var anonPeople = 0
-        gameState.characters.filter { it.key.contains("Anon") }.forEach {
+        gameState.characters.filter { it.value.type == Character.Type.ANON }.forEach {
             marketResources += it.value.resources
             anonPeople += it.value.reliant
         }
 
-        gameState.characters.filter { it.key.contains("Anon") }
+        gameState.characters.filter { it.value.type == Character.Type.ANON }
             .forEach { it.value.resources = marketResources * (it.value.reliant * 1.0 / anonPeople) }
 
     }

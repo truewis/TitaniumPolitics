@@ -1,5 +1,6 @@
 package com.titaniumPolitics.game.ui
 
+import com.titaniumPolitics.game.core.Character
 import com.titaniumPolitics.game.core.GameEngine
 import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.core.ReadOnly
@@ -89,7 +90,7 @@ class CharacterInteractionWindowUI(var gameState: GameState) :
             val YOFFSET = 0
             setPosition(x + XOFFSET, y + YOFFSET)
             isVisible = true
-            if (!charName.contains("Anon"))
+            if (gameState.characters[charName]!!.type != Character.Type.ANON)
                 this.titleLabel.setText(ReadOnly.prop(charName))
             else
                 this.titleLabel.setText("Survivor")
