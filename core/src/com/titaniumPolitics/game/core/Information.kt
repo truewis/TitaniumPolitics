@@ -145,6 +145,16 @@ data class Information(//If there is no author, it is a rumor.
             }
         }
     }
+
+    companion object {
+        fun createRumor(tgtState: GameState) = Information(
+            author = null,
+            creationTime = tgtState.time
+        ).also { /*spread rumor*/
+            tgtState.addInformation(it) //cpy.publicity = 5
+            it.knownTo += tgtState.pickRandomCharacter.name
+        }
+    }
 }
 
 @Serializable

@@ -337,93 +337,95 @@ class Place : GameStateElement() {
 
     }
 
-    fun generateAccident() {
-        //Generate casualties.
-        workers?.firstOrNull()?.let { workerToKill ->
-
-            val death = min(currentWorker / 100 + 1, workerToKill.reliant) //TODO: what about injuries?
-            workerToKill.killReliant(death)
-
-            //Generate apparatus damage.
-            apparatuses.forEach { app ->
-                maxResources
-                app.durability -= 30
-                Information(
-                    author = null,
-                    creationTime = parent.time,
-                    type = InformationType.DAMAGED_APPARATUS,
-                    tgtPlace = name,
-                    amount = 30,
-                    tgtApparatus = app.name
-                )/*store info*/.also {
-                    parent.addInformation(it)
-                    //Add all people in the place to the known list.
-                    it.knownTo.addAll(characters)
-                    accidentInformationKeys += it.name
-                }
-                onAccident.forEach { it(name, death) }
-            }//TODO: spread rumors. But think if it is a good game design.
+    fun killWorkersInPlace(death: Int) {
+        //Kill workers in the place.
+        var sum = death
+        workers?.forEach { worker ->
+            if (sum <= 0) return@forEach
+            val killed = min(sum, worker.reliant)
+            worker.killReliant(killed)
+            sum -= killed
         }
-
-
+        if (sum > 0) {
+            Logger.write("Warning: $sum workers were not killed in $name", Logger.LogLevel.WARNING)
+        }
     }
 
-    fun generateOverflowAccident(resourceType: String) {
+    fun generateAccident() {
         //Generate casualties.
+        val death = currentWorker / 100 + 1 //At least one worker dies.
+        killWorkersInPlace(death)
 
-        workers?.firstOrNull()?.let { workerToKill ->
-
-            val death = min(currentWorker / 100 + 1, workerToKill.reliant) //TODO: what about injuries?
-            workerToKill.killReliant(death)
-
-            //Generate resource loss.
-            val loss = resources[resourceType] / 2
-            resources[resourceType] -= loss
+        //Generate apparatus damage.
+        apparatuses.forEach { app ->
+            maxResources
+            app.durability -= 30
             Information(
                 author = null,
                 creationTime = parent.time,
-                type = InformationType.LOST_RESOURCES,
+                type = InformationType.DAMAGED_APPARATUS,
                 tgtPlace = name,
-                resources = Resources(resourceType to loss)
+                amount = 30,
+                tgtApparatus = app.name
             )/*store info*/.also {
                 parent.addInformation(it)
                 //Add all people in the place to the known list.
                 it.knownTo.addAll(characters)
                 accidentInformationKeys += it.name
             }
-
-            //Do not Generate apparatus damage.
         }
+        onAccident.forEach { it(name, death) }
+
+
+    }
+
+    fun generateOverflowAccident(resourceType: String) {
+        //Generate casualties.
+        val death = currentWorker / 100 + 1 //At least one worker dies.
+        killWorkersInPlace(death)
+        //Generate resource loss.
+        val loss = resources[resourceType] / 2
+        resources[resourceType] -= loss
+        Information(
+            author = null,
+            creationTime = parent.time,
+            type = InformationType.LOST_RESOURCES,
+            tgtPlace = name,
+            resources = Resources(resourceType to loss)
+        )/*store info*/.also {
+            parent.addInformation(it)
+            //Add all people in the place to the known list.
+            it.knownTo.addAll(characters)
+            accidentInformationKeys += it.name
+        }
+        onAccident.forEach { it(name, death) }
+        //Do not Generate apparatus damage.
     }
 
     fun generateCatastrophicAccident() {
         //Generate casualties.
-        workers?.firstOrNull()?.let { workerToKill ->
-
-            val death = min(currentWorker / 5 + 1, workerToKill.reliant) //TODO: what about injuries?
-            workerToKill.killReliant(death)
-
-            //Generate apparatus damage.
-            apparatuses.forEach { app ->
-                maxResources
-                app.durability -= 75
-                Information(
-                    author = null,
-                    creationTime = parent.time,
-                    type = InformationType.DAMAGED_APPARATUS,
-                    tgtPlace = name,
-                    amount = 75,
-                    tgtApparatus = app.name
-                )/*store info*/.also {
-                    parent.addInformation(it)
-                    //Add all people in the place to the known list.
-                    it.knownTo.addAll(characters)
-                    accidentInformationKeys += it.name
-                }
+        val death = currentWorker / 5 + 1 //At least one worker dies.
+        killWorkersInPlace(death)
+        //Generate apparatus damage.
+        apparatuses.forEach { app ->
+            maxResources
+            app.durability -= 75
+            Information(
+                author = null,
+                creationTime = parent.time,
+                type = InformationType.DAMAGED_APPARATUS,
+                tgtPlace = name,
+                amount = 75,
+                tgtApparatus = app.name
+            )/*store info*/.also {
+                parent.addInformation(it)
+                //Add all people in the place to the known list.
+                it.knownTo.addAll(characters)
+                accidentInformationKeys += it.name
             }
-            onAccident.forEach { it(name, death) }
-            //TODO: spread rumors. But think if it is a good game design.
         }
+        onAccident.forEach { it(name, death) }
+
     }
 
     fun distanceTo(targetName: String): Int? {

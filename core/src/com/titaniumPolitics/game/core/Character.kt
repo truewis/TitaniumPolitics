@@ -11,6 +11,7 @@ import com.titaniumPolitics.game.core.gameActions.NewAgenda
 import com.titaniumPolitics.game.core.gameActions.OfficialResourceTransfer
 import com.titaniumPolitics.game.core.gameActions.Repair
 import com.titaniumPolitics.game.core.gameActions.UnofficialResourceTransfer
+import com.titaniumPolitics.game.debugTools.Logger
 import kotlinx.serialization.Serializable
 import kotlin.math.max
 
@@ -138,15 +139,16 @@ class Character : GameStateElement() {
         hunger = 0.0//This character ate the reliant.
         thirst = 0.0
         resources["corpse"] += num * 100.0 //1 corpse is 100 kg.
-        Information(
-            author = null,
-            creationTime = parent.time,
-            type = InformationType.CASUALTY,
-            tgtPlace = place.name,
-            auxParty = place.responsibleDivision,
+        Logger.write(
+            "Killed $num reliant of $name at ${place.name}. Now has ${reliant} reliant.",
+            Logger.LogLevel.INFO
+        )
+        Information.createRumor(parent).apply {
+            type = InformationType.CASUALTY
+            tgtPlace = place.name
+            auxParty = place.responsibleDivision
             amount = num
-        ).also {
-            parent.addInformation(it) //cpy.publicity = 5
+        }.also {
             it.knownTo += name
         }
 
