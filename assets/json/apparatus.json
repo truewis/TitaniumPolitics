@@ -300,11 +300,11 @@
     "maxTemp": 330,
     "minTemp": 260,
     "idealProduction": {
-      "electronics": 0.01
+      "electronics": 1e-4
     },
     "idealConsumption": {
       "rareMetal": 1e-6,
-      "lightMetal": 0.01,
+      "lightMetal": 1e-4,
       "energy": 1e5
     },
     "idealHeatProduction": 1e5,
@@ -617,13 +617,13 @@
       "oxygen": 5.65e-3
     },
     "idealConsumption": {
-      "energy": 2e3,
+      "energy": 2e4,
       "corpse": 1e-4
     },
     "idealProduction": {
       "phosphorus": 6e-5
     },
-    "idealHeatProduction": 2e8,
+    "idealHeatProduction": 2e4,
     "requiredResourcePerRepair": [
       {
         "_resources": {
@@ -687,19 +687,19 @@
     "maxTemp": 400,
     "minTemp": 200,
     "idealAbsorption": {
-      "carbonDioxide": 1,
-      "oxygen": -0.7
+      "carbonDioxide": 1e-3,
+      "oxygen": -7e-4
     },
     "idealConsumption": {
-      "energy": 2e7,
-      "hydrogen": 0.08
+      "energy": 2e4,
+      "hydrogen": 8e-5
     },
     "idealDistribution": {
     },
     "idealProduction": {
-      "organics": 0.38
+      "organics": 3.8e-4
     },
-    "idealHeatProduction": 1e7,
+    "idealHeatProduction": 1e4,
     "requiredResourcePerRepair": [
       {
         "_resources": {
