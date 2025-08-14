@@ -1,6 +1,7 @@
 package com.titaniumPolitics.game.core
 
 import com.badlogic.gdx.Gdx
+import com.titaniumPolitics.game.core.Character.Type
 import com.titaniumPolitics.game.core.ReadOnly.const
 import com.titaniumPolitics.game.core.ReadOnly.DT
 import com.titaniumPolitics.game.core.ReadOnly.S_PER_HR
@@ -14,6 +15,7 @@ import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 import kotlin.math.abs
 import kotlin.math.log
+import kotlin.math.max
 import kotlin.random.Random
 import kotlin.system.exitProcess
 
@@ -562,8 +564,24 @@ class GameEngine(val gameState: GameState) {
                     }
                 }
             }
-            if (char.alive && char.health <= 0) {
-                killCharacter(entry)
+            with(char) {
+                if (health < const("CriticalHealth")) {
+                    if (type == Type.ANON) {
+                        if (reliant > 1) {
+                            killReliant(
+                                max(
+                                    reliant / 10/*Arbitrary number*/,
+                                    1
+                                )
+                            )//If the character is an anon, they will decrease in size if their health is below critical.
+                        }
+                    } else
+                        if ((hunger > const("hungerThreshold") || thirst > const("thirstThreshold")) && reliant > 1)
+                            killReliant(max(reliant / 10, 1))
+                }
+                if (char.alive && char.health <= 0) {
+                    killCharacter(entry)
+                }
             }
         }
         val l = gameState.aliveCharacters.filter { !it.value.trait.contains("robot") }

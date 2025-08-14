@@ -45,9 +45,17 @@ class Place : GameStateElement() {
             return result
         }
 
+    /**
+     * Market supply estimate is a weekly estimate of how much resources are produced in the place.
+     */
     val marketSupplyEstimateWeekly = Resources(positive = true)
+
+    /**
+     * This is a constant that determines how much the market supply estimate is reduced every hour to form a time-averaged supply estimate.
+     * It is used to smooth out the market supply estimate over time.
+     * */
     val marketSupplyEstimateHours =
-        168 // For the marketSupplyEstimate, we have to average the distribution over this many hours, and convert it to a weekly basis
+        168
     val marketSupplyEstimateR = 1 - 1.0 / marketSupplyEstimateHours
     var gasResources = Resources("oxygen" to 3000.0, "carbonDioxide" to 15.0, "nitrogen" to 9000.0)
     fun gasPressure(gasName: String): Double =
@@ -70,14 +78,27 @@ class Place : GameStateElement() {
         get() =
             apparatuses.sumOf { it.plannedWorker }
     var coordinates = Coordinate3D(0, 0, 0)
-    var temperature = 300.0 //Ambient temperature in Kelvin.
-    var heatCapacity = 4.184e8//J/K
+
+    /**
+     * Ambient temperature of the place in Kelvin.
+     */
+    var temperature = 300.0
+
+    /**
+     * Heat capacity of the place in J/K.
+     * This is a constant that determines how much heat is needed to change the temperature of the place by 1 K.
+     */
+    var heatCapacity = 4.184e8
     fun addHeat(energy: Double) {
         temperature += energy / heatCapacity
         if (temperature < 4) temperature = 4.0 //TODO:temporary solution. Lowest temperature ~ 4K.
     }
 
-    var volume = 1e4f //Volume in m^3.
+    /**
+     * Volume of the place in m^3.
+     * This is a constant that determines how much gas can be stored in the place at a given pressure.
+     */
+    var volume = 1e4f
     val currentWorker: Int get() = apparatuses.sumOf { it.currentWorker }
     val currentAvailableLabor: Int
         get() = characters.filter {
@@ -91,7 +112,7 @@ class Place : GameStateElement() {
     val currentTotalPop: Int
         //This number must be conserved.
         get() {
-            return characters.sumOf { if (parent.characters[it]!!.type == Character.Type.ANON) parent.characters[it]!!.reliant else 1 }
+            return characters.sumOf { if (it.contains("Anon")) parent.characters[it]!!.reliant else 1 }
 //            if (name.contains("home")) return 0 //Home populations are added to the places the home is in.
 //
 //            if (name == "squareSouth") return parent.idlePop + currentWorker//All idle people gather at the square.
@@ -119,8 +140,7 @@ class Place : GameStateElement() {
 
     var characters = hashSetOf<String>()
     val realCharacters
-        get() = characters.filter { parent.characters[it]!!.type != Character.Type.ANON }
-            .toHashSet() //Characters that are not anonymous.
+        get() = characters.filter { !it.contains("Anon") }.toHashSet() //Characters that are not anonymous.
     var responsibleDivision: String? = null //Determines which party is responsible for the place.
     val workplaceParty: Party?
         get() = parent.parties["workplace_$name"]
@@ -134,7 +154,7 @@ class Place : GameStateElement() {
         apparatuses.forEach { it.plannedWorker = it.idealWorker }
     }
 
-    //Check the gas pressure of the connected places and slowly equalize it. This function is called every time change.
+    /**Check the gas pressure of the connected places and slowly equalize it. This function is called every time step.*/
     fun diffuseGasAndTemp() {
         connectedPlaces.forEach {
             val place = parent.places[it]!!
@@ -209,8 +229,9 @@ class Place : GameStateElement() {
         if (responsibleDivision == null) return //TODO: Is this true?
         if (isAccidentScene) return //If there is an accident, no one works until it is resolved.
         apparatuses.forEach app@{ apparatus ->
-            apparatus.temperature = this.temperature
-            apparatus.depreciateHourly()
+            //Consume durability, no matter it is currently being worked or not. For storages, keep the durability if they are fully staffed.
+            if (!apparatus.isStorage || apparatus.currentWorker >= apparatus.idealWorker)
+                apparatus.durability -= S_PER_HR * const("DurabilityMax") / const("DurabilityTau")//Apparatuses are damaged over time. TODO: get rid of unexpected behaviors, if any
             //Check if it is workable------------------------------------------------------------------------------
             if (apparatus.durability <= .0) {
                 apparatus.durability = .0
@@ -233,7 +254,9 @@ class Place : GameStateElement() {
                     err = true //If the resource is full, no one works.
                 }
             }
-            if (err) return@app
+            if (err) {
+                return@app //If there is an error, no one works.
+            }
             resourceShortOfHourly(apparatus)?.also {
                 Logger.write(
                     "${apparatus.name} in $name is short of $it and cannot function.",
@@ -278,6 +301,9 @@ class Place : GameStateElement() {
                 isAccidentScene = true
                 generateAccident()
 
+            }
+            if (apparatus.isStorage) {
+                apparatus.durability += S_PER_HR * const("DurabilityMax") / const("DurabilityTau")//Storages are repaired if they are worked.
             }
         }
 

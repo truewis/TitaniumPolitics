@@ -272,7 +272,6 @@ class GameState {
         parties.forEach {
             if (it.value.type != "division") return@forEach //
             val party = it.value
-            it.value.places.sumOf { it.apparatuses.sumOf { it.idealWorker } }
 
             //Create anonymous characters if the party is big enough.
             //TODO: maybe assign more then one anon agent per place.
@@ -316,12 +315,12 @@ class GameState {
                 val liveBy = this@GameState.characters[char.key]!!.livingBy
                 connectedPlaces.add(liveBy)
                 coordinates = this@GameState.places[liveBy]!!.coordinates
-                volume = 100.0f * (char.value.reliant + 1) //Set a default volume for the home.
+                volume = 100.0f * (char.value.reliant) //Set a default volume for the home.
                 gasResources = Resources(
                     "oxygen" to 300.0,
                     "carbonDioxide" to 1.5,
                     "nitrogen" to 900.0
-                ) * (char.value.reliant + 1.0)
+                ) * (char.value.reliant).toDouble()
             }
             places[this@GameState.characters[char.key]!!.livingBy]!!.connectedPlaces.add("home_" + char.key)
             if (places.none { it.value.characters.contains(char.key) })
