@@ -80,6 +80,7 @@ class InterfaceRoot(val gameState: GameState) : Table(defaultSkin), KTable {
             add(ResourceInfoUI())
             add(HumanResourceInfoUI())
             add(ApparatusInfoUI())
+            add(CharacterInfoUI())
 
             //TODO: Place UI here
 

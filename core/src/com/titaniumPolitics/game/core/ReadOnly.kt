@@ -52,6 +52,10 @@ object ReadOnly {
         Properties().apply { load(it) }
     } ?: Properties().apply { load(FileInputStream(File("../assets/texts/place.properties"))) }
 
+    val charProps = javaClass.classLoader.getResourceAsStream("texts/character.properties")?.use {
+        Properties().apply { load(it) }
+    } ?: Properties().apply { load(FileInputStream(File("../assets/texts/character.properties"))) }
+
     val script = javaClass.classLoader.getResourceAsStream("texts/DefaultCharacter.properties")?.use {
         Properties().apply { load(it) }
     } ?: Properties().apply { load(FileInputStream(File("../assets/texts/DefaultCharacter.properties"))) }
@@ -127,6 +131,20 @@ object ReadOnly {
                 ?: "Unknown".also { Logger.write("Warning: Could not find property $key", Logger.LogLevel.INFO) }
         else
             (placeProps.getProperty(key)) ?: "Unknown".also {
+                Logger.write(
+                    "Warning: Could not find property $key",
+                    Logger.LogLevel.INFO
+                )
+            }
+    }
+
+    fun charProp(key: String, obj: Any? = null): String {
+
+        return if (obj != null)
+            (charProps.getProperty(key)?.replacePlaceholders(obj))
+                ?: "Unknown".also { Logger.write("Warning: Could not find property $key", Logger.LogLevel.INFO) }
+        else
+            (charProps.getProperty(key)) ?: "Unknown".also {
                 Logger.write(
                     "Warning: Could not find property $key",
                     Logger.LogLevel.INFO
