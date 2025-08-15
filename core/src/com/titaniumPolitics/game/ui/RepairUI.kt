@@ -60,6 +60,11 @@ class RepairUI(val gameState: GameState, actionCallback: (GameAction) -> Unit) :
             setFontScale(0.5f)
         }
         row()
+        val desc = label("Apparatus Description:", "docTitle") {
+            setAlignment(Align.center)
+            setFontScale(0.3f)
+        }
+        row()
         val dur = label("Durability:", "docTitle") {
             setAlignment(Align.center)
             setFontScale(0.5f)
@@ -71,6 +76,7 @@ class RepairUI(val gameState: GameState, actionCallback: (GameAction) -> Unit) :
 
         this@RepairUI.onUpdateSelectedApp += {
             name.setText(it.name)
+            desc.setText(ReadOnly.appProp(it.name))
             dur.setText(it.durability.toString())
             requiredRes.current = (
                     it.requiredResourcePerRepair[Repair.checkRepairLevel(it).first]

@@ -614,7 +614,7 @@ class GameEngine(val gameState: GameState) {
                 Logger.LogLevel.ERROR
             )
         Logger.write("${char.name} died.", Logger.LogLevel.INFO)
-        char.place.resources["corpse"] += 100 * char.reliant //Add corpses to the place.
+        char.place.resources.plusAssign(Resources("corpse" to 100.0 * char.reliant)) //Add corpses to the place.
         char.place.characters -= char.name //Remove from the place.
         gameState.parties.values.forEach {
             it.members -= char.name
