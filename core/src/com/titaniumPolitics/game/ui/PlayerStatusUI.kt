@@ -42,7 +42,7 @@ class PlayerStatusUI(gameState: GameState) : Table(defaultSkin), KTable {
                     row()
                     table {
                         it.size(100f, 200f).top().padRight(5f).padTop(10f)
-                        add(SimpleHeadPortraitUI(gameState.player.name, 0.2f, false)).fill().top().size(100f).expandY()
+                        add(SimpleHeadPortraitUI(gameState.player.name, false)).fill().top().size(100f).expandY()
                         row()
                         label("Verified", "docTitle") {
                             it.center()

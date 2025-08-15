@@ -141,7 +141,7 @@ class PortraitUI(character: String, var gameState: GameState) : Table(defaultSki
             add(this@PortraitUI.theEmoji)
         }
         row()
-        add(portrait).size(750f, 1000f).fill()
+        add(portrait).size(500f, 1000f).fill()
         debug()
         gameState.updateUI += refresh
         refresh(gameState)

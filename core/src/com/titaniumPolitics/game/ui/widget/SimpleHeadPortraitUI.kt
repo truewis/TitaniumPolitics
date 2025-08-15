@@ -17,7 +17,7 @@ import ktx.scene2d.Scene2DSkin
 import ktx.scene2d.image
 import ktx.scene2d.scene2d
 
-class SimpleHeadPortraitUI(character: String, scale: Float, interactable: Boolean) : Table(Scene2DSkin.defaultSkin),
+class SimpleHeadPortraitUI(character: String, interactable: Boolean) : Table(Scene2DSkin.defaultSkin),
     KTable {
     init {
         background = skin.getDrawable("simpleBorder")

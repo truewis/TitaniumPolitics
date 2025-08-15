@@ -123,14 +123,7 @@ class CharacterSelectUI(val gameState: GameState) : WindowUI("CharacterSelectTit
                     it.fillX()
                     it.height(150f)
                     it.width(150f)
-                    image("icon_app_1") {//portrait
-                        it.fill()
-                    }
-                    row()
-                    label(ReadOnly.prop(character), "trnsprtConsole") {
-                        setFontScale(2f)
-                        setAlignment(Align.center, Align.center)
-                    }
+                    add(SimpleHeadPortraitUI(character, interactable = false))
                     addListener(object : ClickListener() {
                         override fun clicked(event: InputEvent?, x: Float, y: Float) {
                             this@CharacterSelectUI.selectedCharacterCallback(character)
