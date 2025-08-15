@@ -34,8 +34,36 @@ class CharacterInfoUI : WindowUI("CharacterInfoTitle") {
     fun refresh(character: Character) {
         dataTable.clear()
         dataTable.apply {
+            table {
+                it.fill()
+                label(ReadOnly.charProp(character.name), "description") {
+                    setAlignment(Align.center)
+                    setFontScale(0.5f)
+                }
+                row()
+                label(ReadOnly.charProp(character.name + "-desc"), "description") {
+                    setAlignment(Align.center)
+                    setFontScale(0.3f)
+                }
+                row()
+                label("Stats: ${character.stats}", "description") {
+                    setAlignment(Align.center)
+                    setFontScale(0.5f)
+                }
+                row()
+                add(
+                    MutualityMeter(
+                        character.parent,
+                        tgtCharacter = character.name,
+                        who = character.parent.playerName
+                    ).also {
+                        it.remove() //Do not refresh the meter, since this window is not persistent.
+                    })
+
+            }
+
             image("CogGrunge") {
-                it.size(200f, 200f)
+                it.size(500f, 1000f)
                 try {
                     drawable = TextureRegionDrawable(
                         CapsuleStage.instance.assetManager.get( //TODO: Temporary solution for portrait image loading. PortraitUI does not have a stage.
@@ -47,33 +75,6 @@ class CharacterInfoUI : WindowUI("CharacterInfoTitle") {
                     Logger.write("Portrait Image Error: ${character.name}", Logger.LogLevel.INFO)
                 }
             }
-            row()
-
-
-            label(ReadOnly.charProp(character.name), "description") {
-                setAlignment(Align.center)
-                setFontScale(0.5f)
-            }
-            row()
-            label(ReadOnly.charProp(character.name + "-desc"), "description") {
-                setAlignment(Align.center)
-                setFontScale(0.3f)
-            }
-            row()
-            label("Stats: ${character.stats}", "description") {
-                setAlignment(Align.center)
-                setFontScale(0.5f)
-            }
-            row()
-            add(
-                MutualityMeter(
-                    character.parent,
-                    tgtCharacter = character.name,
-                    who = character.parent.playerName
-                ).also {
-                    it.remove() //Do not refresh the meter, since this window is not persistent.
-                })
-
         }
 
     }
