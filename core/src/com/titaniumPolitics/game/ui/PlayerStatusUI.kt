@@ -3,6 +3,7 @@ package com.titaniumPolitics.game.ui
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.scenes.scene2d.ui.Table
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.core.ReadOnly
 import com.titaniumPolitics.game.ui.widget.HealthMeter
@@ -13,7 +14,7 @@ import ktx.scene2d.Scene2DSkin.defaultSkin
 import java.util.*
 
 //This class is a UI element that displays the player's portrait and their health and will meters.
-class CharStatusUI(gameState: GameState) : Table(defaultSkin), KTable {
+class PlayerStatusUI(gameState: GameState) : Table(defaultSkin), KTable {
 
     init {
         stack {
@@ -35,7 +36,7 @@ class CharStatusUI(gameState: GameState) : Table(defaultSkin), KTable {
                         it.left()
                         it.padLeft(10f)
                         setFontScale(0.15f)
-                        color = this@CharStatusUI.skin.getColor("BackgroundGray")
+                        color = this@PlayerStatusUI.skin.getColor("BackgroundGray")
                         setAlignment(com.badlogic.gdx.utils.Align.center)
                     }
                     row()
@@ -47,14 +48,14 @@ class CharStatusUI(gameState: GameState) : Table(defaultSkin), KTable {
                             it.center()
                             //it.padLeft(2f)
                             setFontScale(0.2f)
-                            color = this@CharStatusUI.skin.getColor("BackgroundGray")
+                            color = this@PlayerStatusUI.skin.getColor("BackgroundGray")
                         }
                         row()
                         label("18627101", "docTitle") {
                             it.center()
                             //it.padLeft(2f)
                             setFontScale(0.3f)
-                            color = this@CharStatusUI.skin.getColor("BackgroundGray")
+                            color = this@PlayerStatusUI.skin.getColor("BackgroundGray")
                         }
 
                     }
@@ -72,7 +73,7 @@ class CharStatusUI(gameState: GameState) : Table(defaultSkin), KTable {
                             it.left()
                             //it.padLeft(2f)
                             setFontScale(0.25f)
-                            color = this@CharStatusUI.skin.getColor("BackgroundGray")
+                            color = this@PlayerStatusUI.skin.getColor("BackgroundGray")
                             setAlignment(com.badlogic.gdx.utils.Align.center)
                         }
                         row()
@@ -80,7 +81,7 @@ class CharStatusUI(gameState: GameState) : Table(defaultSkin), KTable {
                             it.left()
                             //it.padLeft(2f)
                             setFontScale(0.20f)
-                            color = this@CharStatusUI.skin.getColor("BackgroundGray")
+                            color = this@PlayerStatusUI.skin.getColor("BackgroundGray")
                             setAlignment(com.badlogic.gdx.utils.Align.center)
                         }
                         row()
@@ -92,6 +93,21 @@ class CharStatusUI(gameState: GameState) : Table(defaultSkin), KTable {
                     }
                 }
             }
+
+            addListener(
+                object : ClickListener() {
+                    override fun clicked(
+                        event: com.badlogic.gdx.scenes.scene2d.InputEvent?,
+                        x: Float,
+                        y: Float
+                    ) {
+                        if (event?.button == 0) { // Left click
+                            CharacterInfoUI.instance.refresh(gameState.player)
+                            CharacterInfoUI.instance.isVisible = true
+                        }
+                    }
+                }
+            )
 
         }
     }

@@ -29,7 +29,7 @@ class SimpleTextTooltipUI(text: String) : Tooltip<Table>(scene2d.table {
         table {
             label(text, "description") {
                 it.size(350f, 200f)
-                setFontScale(2f)
+                setFontScale(0.5f)
                 setAlignment(Align.topLeft)
                 wrap = true
             }

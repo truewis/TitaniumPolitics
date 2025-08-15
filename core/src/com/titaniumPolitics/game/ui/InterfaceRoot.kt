@@ -49,7 +49,7 @@ class InterfaceRoot(val gameState: GameState) : Table(defaultSkin), KTable {
                     it.fill()
                     add(AlertUI(this@InterfaceRoot.gameState)).align(Align.topLeft).expandY().fill()
                     row()
-                    add(CharStatusUI(this@InterfaceRoot.gameState)).align(Align.bottomRight).expandY()
+                    add(PlayerStatusUI(this@InterfaceRoot.gameState)).align(Align.bottomRight).expandY()
                 }
             }
             table {
