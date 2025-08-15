@@ -32,9 +32,24 @@ class DialogueUI(val gameState: GameState) : Table(defaultSkin), KTable {
     var currentLineNumber = 0
 
     // Displays current dialogue line.
-    val currentTextDisplay = TypingLabel("", skin, "consoleWhite")
+    val currentTextDisplay = TypingLabel("", skin, "description").apply {
+        setFontScale(0.5f)
+        touchable = Touchable.disabled
+        wrap = true
+        typingListener = object : TypingAdapter() {
+            // Sense TypingLabel animation end and play next log in queue.
+            override fun end() {
+                super.end()
 
-    val speakerNameDisplay = Label("", skin, "consoleWhite")
+            }
+        }
+    }
+
+    val speakerNameDisplay = Label("", skin, "description").apply {
+        setFontScale(0.7f)
+        touchable = Touchable.disabled
+        setAlignment(Align.bottomLeft)
+    }
     val ctnuButton = Label(">>>", skin, "consoleWhite")
     val donePlayingLine = ArrayList<(Int) -> Unit>()
     val background = Image(defaultSkin, "BackgroundNoiseHD")
@@ -75,19 +90,6 @@ class DialogueUI(val gameState: GameState) : Table(defaultSkin), KTable {
                 }
             }
         }
-        speakerNameDisplay.setAlignment(Align.bottomLeft)
-        currentTextDisplay.setFontScale(3f)
-        speakerNameDisplay.setFontScale(4f)
-        currentTextDisplay.touchable = Touchable.disabled
-        speakerNameDisplay.touchable = Touchable.disabled
-        currentTextDisplay.typingListener = object : TypingAdapter() {
-            // Sense TypingLabel animation end and play next log in queue.
-            override fun end() {
-                super.end()
-
-            }
-        }
-        currentTextDisplay.wrap = true
         ctnuButton.setPosition(1800f, 0f)
         ctnuButton.setFontScale(2f)
         // Blinking ctnuButton
@@ -135,9 +137,28 @@ class DialogueUI(val gameState: GameState) : Table(defaultSkin), KTable {
         super.setVisible(visible)
     }
 
+    private var dialogueLines: List<String> = emptyList()
+    private val activePortraits = mutableMapOf<String, SimplePortraitUI>()
+
     fun nextLine() {
-        if (currentLineNumber < currentDialogueLength - 1) {
+        if (currentLineNumber < dialogueLines.lastIndex) {
             currentLineNumber++
+            val line = dialogueLines[currentLineNumber]
+
+            // Handle special commands before playing dialogue line
+            if (line.startsWith("ENTER ")) {
+                val name = line.removePrefix("ENTER ").trim()
+                addPortrait(name)
+                nextLine() // Skip to next real dialogue or command
+                return
+            }
+            if (line.startsWith("EXIT ")) {
+                val name = line.removePrefix("EXIT ").trim()
+                removePortrait(name)
+                nextLine()
+                return
+            }
+
             playLine(currentLineNumber)
         } else {
             ctnuCallback()
@@ -148,35 +169,110 @@ class DialogueUI(val gameState: GameState) : Table(defaultSkin), KTable {
 
     fun playDialogue(dialogueKey: String) {
         isVisible = true
+
         val placeName = gameState.player.place.name
+        val imageKey = if (placeName.contains("home")) "home" else placeName
+        val imagePath = ReadOnly.mapJson[imageKey]!!
+            .jsonObject["image"]!!
+            .jsonPrimitive.content
+
         background.drawable = TextureRegionDrawable(
-            (stage as CapsuleStage).assetManager.get(
-                ReadOnly.mapJson[if (placeName.contains("home")) "home" else placeName]!!.jsonObject["image"]!!.jsonPrimitive.content,
-                Texture::class.java
-            )!!
+            (stage as CapsuleStage).assetManager.get(imagePath, Texture::class.java)
         )
+
         currentDialogue = dialogueKey
-        currentDialogueLength = Gdx.files.internal("texts/$currentDialogue.txt").readString().split("\n").size
-        currentLineNumber = 0
-        playLine(currentLineNumber)
+        dialogueLines = Gdx.files.internal("texts/$currentDialogue.txt")
+            .readString()
+            .split("\n")
+            .filter { it.isNotBlank() }
+
+        currentDialogueLength = dialogueLines.size
+        currentLineNumber = -1 // So first call to nextLine() gets line 0
+        activePortraits.clear()
+        portraitsTable.clear()
+
+        nextLine()
     }
 
     fun playLine(lineNumber: Int) {
-        if (lineNumber > currentDialogueLength) {
-            Logger.write("Warning: Dialogue line number out of range in $currentDialogue.", Logger.LogLevel.INFO)
+        if (lineNumber !in dialogueLines.indices) {
+            Logger.write(
+                "Warning: Dialogue line number $lineNumber out of range in '$currentDialogue'.",
+                Logger.LogLevel.INFO
+            )
             return
         }
-        val line = Gdx.files.internal("texts/$currentDialogue.txt").readString().split("\n")[lineNumber]
-        val lineSpeaker = line.split(": ")[0]
-        val lineText =
-            line.split(": ")[1]
-        speakerNameDisplay.setText(ReadOnly.prop(lineSpeaker))
-        currentTextDisplay.restart(lineText)
-        portraitsTable.clear()
-        var prefwidth = 0f
-        portraitsTable.add(
-            SimplePortraitUI(lineSpeaker, 1f, false)
-        ).expand().align(Align.bottom).prefHeight(800f).prefWidth(prefwidth)
+
+        val line = dialogueLines[lineNumber]
+        val parts = line.split(": ", limit = 2)
+        if (parts.size < 2) {
+            Logger.write(
+                "Warning: Malformed dialogue line in '$currentDialogue' at index $lineNumber: '$line'",
+                Logger.LogLevel.INFO
+            )
+            return
+        }
+        val prefix = parts[0].split(", ", limit = 2)
+
+        val emotion = if (prefix.size < 2) {
+            "idle"
+        } else prefix[1]
+        val speaker = prefix[0]
+        val text = parts[1]
+
+        speakerNameDisplay.setText(ReadOnly.prop(speaker))
+        currentTextDisplay.restart(text)
+
+        // Bring the current speaker to the foreground
+        bringPortraitToFront(speaker, emotion)
+    }
+
+    /** Adds a portrait to the scene */
+    private fun addPortrait(name: String) {
+        if (activePortraits.containsKey(name)) return
+        val portrait = SimplePortraitUI(name, 1f, false).apply {
+            color.a = 0f // Start transparent, fade in
+            addAction(Actions.fadeIn(0.3f))
+        }
+        activePortraits[name] = portrait
+        portraitsTable.addActor(portrait)
+    }
+
+    /** Removes a portrait from the scene */
+    private fun removePortrait(name: String) {
+        activePortraits[name]?.let { portrait ->
+            portrait.addAction(
+                Actions.sequence(
+                    Actions.fadeOut(0.3f),
+                    Actions.removeActor()
+                )
+            )
+            activePortraits.remove(name)
+        }
+    }
+
+    /** Moves the given portrait to the foreground and pushes others back */
+    private fun bringPortraitToFront(speaker: String, emotion: String) {
+        activePortraits.forEach { (name, portrait) ->
+            if (name == speaker) {
+                // Move to center & brighten alpha
+                portrait.addAction(
+                    Actions.parallel(
+                        Actions.moveTo(portraitsTable.width / 2f - portrait.width / 2f, portrait.y, 0.4f),
+                        Actions.fadeIn(0.4f)
+                    )
+                )
+                portrait.setEmotion(emotion)
+            } else {
+                // Move away & dim alpha
+                portrait.addAction(
+                    Actions.parallel(
+                        Actions.moveBy(-50f, 0f, 0.4f), // Example: slide back
+                        Actions.alpha(0.5f, 0.4f)
+                    )
+                )
+            }
+        }
     }
 
 
