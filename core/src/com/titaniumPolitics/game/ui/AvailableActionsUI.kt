@@ -13,6 +13,7 @@ import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.core.ReadOnly
 import com.titaniumPolitics.game.core.gameActions.*
 import com.titaniumPolitics.game.ui.widget.ActionSheetUI
+import com.titaniumPolitics.game.ui.widget.ActionTooltipUI
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
 import ktx.scene2d.*
@@ -350,7 +351,8 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable 
                                         )
                                         setActionSheet(resUI)
                                         resUI.refresh(
-                                            "unofficial"
+                                            "unofficial",
+                                            gameState.player.place.resources.toHashMap()
                                         )
                                     }
                                 })
@@ -366,7 +368,8 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable 
                                         )
                                         setActionSheet(resUI)
                                         resUI.refresh(
-                                            "official"
+                                            "official",
+                                            gameState.player.place.resources.toHashMap()
                                         )
                                     }
                                 })

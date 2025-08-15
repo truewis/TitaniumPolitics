@@ -146,7 +146,7 @@ class ResourceTransferUI(var gameState: GameState, actionCallback: (GameAction) 
         }
         dataTable.refresh()
 
-        targetTable.current = Resources(current)
+        targetTable.current = Resources(target)
         targetTable.callback = { resourceName, amount ->
             target[resourceName] = target[resourceName]!! - 1
             current[resourceName] = (current[resourceName] ?: .0) + 1

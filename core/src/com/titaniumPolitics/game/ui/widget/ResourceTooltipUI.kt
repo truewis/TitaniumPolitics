@@ -1,4 +1,4 @@
-package com.titaniumPolitics.game.ui
+package com.titaniumPolitics.game.ui.widget
 
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.scenes.scene2d.Touchable
@@ -7,10 +7,13 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.ui.Tooltip
 import com.badlogic.gdx.utils.Align
 import com.titaniumPolitics.game.core.ReadOnly
-import com.titaniumPolitics.game.ui.widget.TimeAmountUI
-import ktx.scene2d.*
+import ktx.scene2d.image
+import ktx.scene2d.label
+import ktx.scene2d.scene2d
+import ktx.scene2d.stack
+import ktx.scene2d.table
 
-class ActionTooltipUI(actionName: String) : Tooltip<Table>(scene2d.table {
+class ResourceTooltipUI(itemName: String) : Tooltip<Table>(scene2d.table {
     addActor(scene2d.image("TooltipShadow10p") {
         it.width = 450f
         it.height = 450f
@@ -35,40 +38,38 @@ class ActionTooltipUI(actionName: String) : Tooltip<Table>(scene2d.table {
                 it.size(350f, 50f)
                 image("TooltipTitle")
                 table {
-                    label(ReadOnly.prop(actionName), "description") {
+                    label(ReadOnly.itemProp(itemName), "description") {
                         it.growX()
                         setFontScale(0.4f)
                         color = Color.BLACK
                     }
-                    add(TimeAmountUI(ReadOnly.constInt(actionName + "Duration"))).fill()
+                    // Uncomment to display duration of the resource
+                    //add(TimeAmountUI(ReadOnly.constInt(itemName + "Duration"))).fill()
                 }
             }
             row()
-            label(ReadOnly.prop("$actionName-description"), "description") {
+            label(ReadOnly.itemProp("$itemName-desc"), "description") {
                 it.size(350f, 200f)
                 setFontScale(0.25f)
                 setAlignment(Align.topLeft)
                 wrap = true
             }
-            row()
-            label("", "description") {
-                it.size(350f, 100f)
-                name = "reasonText"
-                setFontScale(0.25f)
-                color = Color.RED
-                setAlignment(Align.topLeft)
-                wrap = true
-            }
+            //Uncomment to display invalid reason text
+//            row()
+//            label("", "description") {
+//                it.size(350f, 100f)
+//                name = "reasonText"
+//                setFontScale(0.25f)
+//                color = Color.RED
+//                setAlignment(Align.topLeft)
+//                wrap = true
+//            }
         }
     }
 
 }) {
     init {
         manager.initialTime = 0.5f
-    }
-
-    fun displayInvalidReason(reason: String) {
-        container.findActor<Label>("reasonText").setText(reason)
     }
 
 }
