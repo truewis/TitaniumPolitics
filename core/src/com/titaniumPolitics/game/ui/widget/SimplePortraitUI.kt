@@ -20,7 +20,14 @@ import ktx.scene2d.scene2d
 class SimplePortraitUI(character: String, scale: Float, interactable: Boolean) : Table(Scene2DSkin.defaultSkin),
     KTable {
     fun setEmotion(emotion: String) {
-        TODO("")
+        when (emotion) {
+            "idle" -> {}
+            "smile" -> {}
+            "confused" -> {}
+            "anxious" -> {}
+            "angry" -> {}
+            "fury" -> {}
+        }
     }
 
     init {

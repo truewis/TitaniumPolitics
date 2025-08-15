@@ -158,6 +158,12 @@ class DialogueUI(val gameState: GameState) : Table(defaultSkin), KTable {
                 nextLine()
                 return
             }
+            if (line.startsWith("BELL")) {
+                TODO()
+            }
+            if (line.startsWith("SLAM")) {
+                TODO()
+            }
 
             playLine(currentLineNumber)
         } else {
@@ -220,7 +226,10 @@ class DialogueUI(val gameState: GameState) : Table(defaultSkin), KTable {
         val speaker = prefix[0]
         val text = parts[1]
 
-        speakerNameDisplay.setText(ReadOnly.prop(speaker))
+        if (speaker == "Narrator")
+            speakerNameDisplay.setText("")
+        else
+            speakerNameDisplay.setText(ReadOnly.prop(speaker))
         currentTextDisplay.restart(text)
 
         // Bring the current speaker to the foreground
