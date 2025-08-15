@@ -688,8 +688,8 @@ class GameEngine(val gameState: GameState) {
         }
 
         //When someone else requests an action, request class will check isValid function of the action, not this function.
-        fun availableActions(gameState: GameState, place: String, character: String): ArrayList<String> {
-            val actions = arrayListOf<String>()
+        fun availableActions(gameState: GameState, place: String, character: String): HashSet<String> {
+            val actions = hashSetOf<String>()
             val placeObj = gameState.places[place]!!
             if (gameState.ongoingMeetings.any { it.value.currentCharacters.contains(character) }) {
                 val conf = gameState.ongoingMeetings.filter {
