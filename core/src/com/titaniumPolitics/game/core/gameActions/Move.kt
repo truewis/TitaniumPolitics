@@ -1,11 +1,13 @@
 package com.titaniumPolitics.game.core.gameActions
 
 import com.titaniumPolitics.game.core.GameEngine
+import com.titaniumPolitics.game.core.ReadOnly
 import kotlinx.serialization.Serializable
 
 @Serializable
 class Move(override val sbjCharacter: String, override val tgtPlace: String) : GameAction() {
     var placeTo = ""
+    val distance get() = tgtPlaceObj.distanceTo(placeTo)
     override fun chooseParams() {
         GameEngine.acquire(tgtPlaceObj.connectedPlaces + "cancel")
     }
@@ -19,7 +21,7 @@ class Move(override val sbjCharacter: String, override val tgtPlace: String) : G
 
         tgtPlaceObj.characters.remove(sbjCharacter)
         parent.places[placeTo]!!.characters.add(sbjCharacter)
-        super.execute()
+        sbjCharObj.frozen += ReadOnly.constInt(this::class.simpleName!! + "Duration") * distance!!
     }
 
 }

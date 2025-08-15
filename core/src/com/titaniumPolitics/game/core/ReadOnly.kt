@@ -79,13 +79,20 @@ object ReadOnly {
         return prop(charId)
     }
 
-    //A timestep in seconds.
+    /**A timestep in seconds.
+     *
+     */
     val DT = (86400 / const("lengthOfDay")).toInt()
 
-    //A timestep in hours.
+    /**A timestep in hours.
+     *
+     */
     val DTH = (24 / const("lengthOfDay"))
 
-    val IDTH = (const("lengthOfDay") / 24.0).toInt() //Integer timestep in hours.
+    /**An hour in timestep units.
+     *
+     */
+    val IDTH = (const("lengthOfDay") / 24.0).toInt()
 
     const val S_PER_HR = 3600 //How many seconds in an hour.
     fun toMinutes(time: Int): Int =

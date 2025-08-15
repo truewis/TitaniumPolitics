@@ -159,7 +159,7 @@ class GameEngineTest {
                 ) > const("CriticalCarbonDioxideRatio")
             }.keys
             if (!suffocating.isEmpty()) {
-                Logger.write("!${suffocating} is suffocating", Logger.LogLevel.INFO)
+                Logger.write("!suffocating!:${suffocating}", Logger.LogLevel.CONDITION_VERBOSE)
 
             }
             val hot = aliveCharacters.filter { entry ->
@@ -170,7 +170,16 @@ class GameEngineTest {
             if (!hot.isEmpty()
             ) {
 //
-                Logger.write("!${hot} is under extreme temperature!", Logger.LogLevel.INFO)
+                Logger.write("!under extreme temperature!:${hot}", Logger.LogLevel.CONDITION_VERBOSE)
+            }
+
+            val places = suffocating.map { gState.characters[it]!!.place.name }.toSet() +
+                    hot.map { gState.characters[it]!!.place.name }.toSet()
+            if (places.isNotEmpty()) {
+                Logger.write(
+                    "Characters in places with extreme conditions: ${places.joinToString(", ")}",
+                    Logger.LogLevel.CONDITION_VERBOSE
+                )
             }
 
         }

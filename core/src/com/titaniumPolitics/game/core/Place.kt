@@ -3,6 +3,7 @@ package com.titaniumPolitics.game.core
 import com.titaniumPolitics.game.core.GameEngine.Companion.onAccident
 import com.titaniumPolitics.game.core.ReadOnly.const
 import com.titaniumPolitics.game.core.ReadOnly.DT
+import com.titaniumPolitics.game.core.ReadOnly.DTH
 import com.titaniumPolitics.game.core.ReadOnly.S_PER_HR
 import com.titaniumPolitics.game.debugTools.Logger
 import kotlinx.serialization.Serializable
@@ -57,7 +58,9 @@ class Place : GameStateElement() {
     val marketSupplyEstimateHours =
         168
     val marketSupplyEstimateR = 1 - 1.0 / marketSupplyEstimateHours
-    var gasResources = Resources("oxygen" to 3000.0, "carbonDioxide" to 15.0, "nitrogen" to 9000.0)
+    var gasResources =
+        Resources("oxygen" to 3000.0, "carbonDioxide" to 15.0, "nitrogen" to 9000.0).apply { positive = true }
+
     fun gasPressure(gasName: String): Double =
         try {
             gasResources[gasName] / ((ReadOnly.gasJson[gasName]!!.jsonObject["density"]!!.jsonPrimitive.float)) * (temperature / 273.15) / volume * 101325
@@ -88,7 +91,7 @@ class Place : GameStateElement() {
      * Heat capacity of the place in J/K.
      * This is a constant that determines how much heat is needed to change the temperature of the place by 1 K.
      */
-    var heatCapacity = 4.184e8
+    var heatCapacity = 4.184e9
     fun addHeat(energy: Double) {
         temperature += energy / heatCapacity
         if (temperature < 4) temperature = 4.0 //TODO:temporary solution. Lowest temperature ~ 4K.
@@ -160,28 +163,24 @@ class Place : GameStateElement() {
             val place = parent.places[it]!!
             //For each gas type, use the coordinates and the density in gasJson to distribute the gas according to the boltzmann distribution.
             gasResources.forEach { (key, _) ->
-                try {
-                    val mass =
-                        (ReadOnly.gasJson[key]!!.jsonObject["density"]!!.jsonPrimitive.float) * 0.0224f / ReadOnly.NA
+                val mass =
+                    (ReadOnly.gasJson[key]!!.jsonObject["density"]!!.jsonPrimitive.float) * 0.0224f / ReadOnly.NA
 
-                    val potentialDiff = coordinates.z - place.coordinates.z
-                    val ratio = exp(
-                        -(ReadOnly.GA * mass * potentialDiff) / (ReadOnly.KB * temperature) //[J] = [kg*m^2/s^2]
-                    ) //Boltzmann distribution. TODO: reflect the volume of the place.
-                    val equilabriumPressure =
-                        (gasPressure(key) * volume + place.gasPressure(key) * place.volume) / (volume + ratio * place.volume)
+                val potentialDiff = coordinates.z - place.coordinates.z
+                val ratio = exp(
+                    -(ReadOnly.GA * mass * potentialDiff) / (ReadOnly.KB * temperature) //[J] = [kg*m^2/s^2]
+                ) //Boltzmann distribution. TODO: reflect the volume of the place.
+                val equilabriumPressure =
+                    (gasPressure(key) * volume + place.gasPressure(key) * place.volume) / (volume + ratio * place.volume)
 
-                    val flowAmount = pressureToMass(
-                        key,
-                        (equilabriumPressure - gasPressure(key)) * DT / const("GasDiffusionTau")
-                    )
+                val flowAmount = pressureToMass(
+                    key,
+                    (equilabriumPressure - gasPressure(key)) * DT / const("GasDiffusionTau")
+                )
 
-                    gasResources[key] += flowAmount
+                gasResources[key] += flowAmount
 
-                    place.gasResources[key] -= flowAmount
-                } catch (e: Exception) {
-                    throw Exception("$key, ${e}")
-                }
+                place.gasResources[key] -= flowAmount
             }
             val equilabriumTemp =
                 (temperature * heatCapacity + place.temperature * place.heatCapacity) / (heatCapacity + place.heatCapacity)
@@ -190,9 +189,8 @@ class Place : GameStateElement() {
                 (equilabriumTemp - temperature) * (heatCapacity + place.heatCapacity) * DT / const("TemperatureDiffusionTau")
 
 
-            temperature += flowAmount / heatCapacity
-
-            place.temperature -= flowAmount / place.heatCapacity
+            addHeat(flowAmount)
+            place.addHeat(-flowAmount)
         }
 
 
@@ -229,6 +227,8 @@ class Place : GameStateElement() {
         if (responsibleDivision == null) return //TODO: Is this true?
         if (isAccidentScene) return //If there is an accident, no one works until it is resolved.
         apparatuses.forEach app@{ apparatus ->
+            apparatus.temperature = temperature //Update the temperature of the apparatus to the ambient temperature.
+
             //Consume durability, no matter it is currently being worked or not. For storages, keep the durability if they are fully staffed.
             if (!apparatus.isStorage || apparatus.currentWorker >= apparatus.idealWorker)
                 apparatus.durability -= S_PER_HR * const("DurabilityMax") / const("DurabilityTau")//Apparatuses are damaged over time. TODO: get rid of unexpected behaviors, if any
@@ -429,7 +429,7 @@ class Place : GameStateElement() {
     }
 
     fun distanceTo(targetName: String): Int? {
-        return if (connectedPlaces.contains(targetName)) 1 else null
+        return if (connectedPlaces.contains(targetName)) (parent.places[targetName]!!.coordinates - coordinates).amplitude.toInt() + 1 else null
     }
 
     fun shortestPathAndTimeTo(targetName: String): Pair<List<String>, Int>? {

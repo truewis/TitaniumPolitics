@@ -81,7 +81,7 @@ class Apparatus {
 
     val netEfficiency
         get() = (temperature / 300).pow(tempCoef) *
-                (if (temperature > maxTemp) exp((1 - temperature / maxTemp) * 10) else if (temperature < minTemp) exp((1 - minTemp / temperature) * 10) else 1.0) *
+                (if (temperature > maxTemp) exp((1 - temperature / maxTemp) * 30) else if (temperature < minTemp) exp((1 - minTemp / temperature) * 30) else 1.0) *
                 (if (durability <= 0) 0 else 1) *
                 (if (idealWorker == 0) 1 else if (currentWorker <= idealWorker) currentWorker / idealWorker else 1 + (currentWorker - idealWorker) / idealWorker / 2)//Labor efficiency drops to 50% if overcrowded.
 

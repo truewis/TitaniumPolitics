@@ -838,10 +838,11 @@
     "idealWorker": 0,
     "currentWorker": 0,
     "tempCoef": 1,
+    "minTemp": 280,
     "idealConsumption": {
-      "energy": 1e7
+      "energy": 8e6
     },
-    "idealHeatProduction": -8e7,
+    "idealHeatProduction": -3e7,
     "requiredResourcePerRepair": [
       {
         "_resources": {

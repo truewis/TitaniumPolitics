@@ -315,7 +315,8 @@ class GameState {
                 val liveBy = this@GameState.characters[char.key]!!.livingBy
                 connectedPlaces.add(liveBy)
                 coordinates = this@GameState.places[liveBy]!!.coordinates
-                volume = 100.0f * (char.value.reliant) //Set a default volume for the home.
+                volume =
+                    100.0f * (char.value.reliant + 1) //Set a default volume for the home. There are virtual anon agents with 0 reliant, so we add 1 to avoid division by zero.
                 gasResources = Resources(
                     "oxygen" to 300.0,
                     "carbonDioxide" to 1.5,
