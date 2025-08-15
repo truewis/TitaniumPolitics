@@ -20,6 +20,7 @@ import com.titaniumPolitics.game.core.gameActions.Repair
 import com.titaniumPolitics.game.debugTools.Logger
 import com.titaniumPolitics.game.ui.widget.ActionSelectButton
 import com.titaniumPolitics.game.ui.widget.ActionSheetUI
+import com.titaniumPolitics.game.ui.widget.ActionTooltipUI
 import com.titaniumPolitics.game.ui.widget.CharacterSelectButton
 import com.titaniumPolitics.game.ui.widget.PlaceSelectButton
 import com.titaniumPolitics.game.ui.widget.ResourceDisplayUI
@@ -60,6 +61,11 @@ class RepairUI(val gameState: GameState, actionCallback: (GameAction) -> Unit) :
             setFontScale(0.5f)
         }
         row()
+        val desc = label("Apparatus Description:", "docTitle") {
+            setAlignment(Align.center)
+            setFontScale(0.3f)
+        }
+        row()
         val dur = label("Durability:", "docTitle") {
             setAlignment(Align.center)
             setFontScale(0.5f)
@@ -71,6 +77,7 @@ class RepairUI(val gameState: GameState, actionCallback: (GameAction) -> Unit) :
 
         this@RepairUI.onUpdateSelectedApp += {
             name.setText(it.name)
+            desc.setText(ReadOnly.appProp(it.name))
             dur.setText(it.durability.toString())
             requiredRes.current = (
                     it.requiredResourcePerRepair[Repair.checkRepairLevel(it).first]

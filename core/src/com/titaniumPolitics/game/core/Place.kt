@@ -3,6 +3,7 @@ package com.titaniumPolitics.game.core
 import com.titaniumPolitics.game.core.GameEngine.Companion.onAccident
 import com.titaniumPolitics.game.core.ReadOnly.const
 import com.titaniumPolitics.game.core.ReadOnly.DT
+import com.titaniumPolitics.game.core.ReadOnly.DTH
 import com.titaniumPolitics.game.core.ReadOnly.S_PER_HR
 import com.titaniumPolitics.game.debugTools.Logger
 import kotlinx.serialization.Serializable
@@ -45,11 +46,21 @@ class Place : GameStateElement() {
             return result
         }
 
+    /**
+     * Market supply estimate is a weekly estimate of how much resources are produced in the place.
+     */
     val marketSupplyEstimateWeekly = Resources(positive = true)
+
+    /**
+     * This is a constant that determines how much the market supply estimate is reduced every hour to form a time-averaged supply estimate.
+     * It is used to smooth out the market supply estimate over time.
+     * */
     val marketSupplyEstimateHours =
-        168 // For the marketSupplyEstimate, we have to average the distribution over this many hours, and convert it to a weekly basis
+        168
     val marketSupplyEstimateR = 1 - 1.0 / marketSupplyEstimateHours
-    var gasResources = Resources("oxygen" to 3000.0, "carbonDioxide" to 15.0, "nitrogen" to 9000.0)
+    var gasResources =
+        Resources("oxygen" to 3000.0, "carbonDioxide" to 15.0, "nitrogen" to 9000.0).apply { positive = true }
+
     fun gasPressure(gasName: String): Double =
         try {
             gasResources[gasName] / ((ReadOnly.gasJson[gasName]!!.jsonObject["density"]!!.jsonPrimitive.float)) * (temperature / 273.15) / volume * 101325
@@ -70,14 +81,27 @@ class Place : GameStateElement() {
         get() =
             apparatuses.sumOf { it.plannedWorker }
     var coordinates = Coordinate3D(0, 0, 0)
-    var temperature = 300.0 //Ambient temperature in Kelvin.
-    var heatCapacity = 4.184e8//J/K
+
+    /**
+     * Ambient temperature of the place in Kelvin.
+     */
+    var temperature = 300.0
+
+    /**
+     * Heat capacity of the place in J/K.
+     * This is a constant that determines how much heat is needed to change the temperature of the place by 1 K.
+     */
+    var heatCapacity = 4.184e9
     fun addHeat(energy: Double) {
         temperature += energy / heatCapacity
         if (temperature < 4) temperature = 4.0 //TODO:temporary solution. Lowest temperature ~ 4K.
     }
 
-    var volume = 1e4f //Volume in m^3.
+    /**
+     * Volume of the place in m^3.
+     * This is a constant that determines how much gas can be stored in the place at a given pressure.
+     */
+    var volume = 1e4f
     val currentWorker: Int get() = apparatuses.sumOf { it.currentWorker }
     val currentAvailableLabor: Int
         get() = characters.filter {
@@ -91,7 +115,7 @@ class Place : GameStateElement() {
     val currentTotalPop: Int
         //This number must be conserved.
         get() {
-            return characters.sumOf { if (parent.characters[it]!!.type == Character.Type.ANON) parent.characters[it]!!.reliant else 1 }
+            return characters.sumOf { if (it.contains("Anon")) parent.characters[it]!!.reliant else 1 }
 //            if (name.contains("home")) return 0 //Home populations are added to the places the home is in.
 //
 //            if (name == "squareSouth") return parent.idlePop + currentWorker//All idle people gather at the square.
@@ -119,8 +143,7 @@ class Place : GameStateElement() {
 
     var characters = hashSetOf<String>()
     val realCharacters
-        get() = characters.filter { parent.characters[it]!!.type != Character.Type.ANON }
-            .toHashSet() //Characters that are not anonymous.
+        get() = characters.filter { !it.contains("Anon") }.toHashSet() //Characters that are not anonymous.
     var responsibleDivision: String? = null //Determines which party is responsible for the place.
     val workplaceParty: Party?
         get() = parent.parties["workplace_$name"]
@@ -134,34 +157,30 @@ class Place : GameStateElement() {
         apparatuses.forEach { it.plannedWorker = it.idealWorker }
     }
 
-    //Check the gas pressure of the connected places and slowly equalize it. This function is called every time change.
+    /**Check the gas pressure of the connected places and slowly equalize it. This function is called every time step.*/
     fun diffuseGasAndTemp() {
         connectedPlaces.forEach {
             val place = parent.places[it]!!
             //For each gas type, use the coordinates and the density in gasJson to distribute the gas according to the boltzmann distribution.
             gasResources.forEach { (key, _) ->
-                try {
-                    val mass =
-                        (ReadOnly.gasJson[key]!!.jsonObject["density"]!!.jsonPrimitive.float) * 0.0224f / ReadOnly.NA
+                val mass =
+                    (ReadOnly.gasJson[key]!!.jsonObject["density"]!!.jsonPrimitive.float) * 0.0224f / ReadOnly.NA
 
-                    val potentialDiff = coordinates.z - place.coordinates.z
-                    val ratio = exp(
-                        -(ReadOnly.GA * mass * potentialDiff) / (ReadOnly.KB * temperature) //[J] = [kg*m^2/s^2]
-                    ) //Boltzmann distribution. TODO: reflect the volume of the place.
-                    val equilabriumPressure =
-                        (gasPressure(key) * volume + place.gasPressure(key) * place.volume) / (volume + ratio * place.volume)
+                val potentialDiff = coordinates.z - place.coordinates.z
+                val ratio = exp(
+                    -(ReadOnly.GA * mass * potentialDiff) / (ReadOnly.KB * temperature) //[J] = [kg*m^2/s^2]
+                ) //Boltzmann distribution. TODO: reflect the volume of the place.
+                val equilabriumPressure =
+                    (gasPressure(key) * volume + place.gasPressure(key) * place.volume) / (volume + ratio * place.volume)
 
-                    val flowAmount = pressureToMass(
-                        key,
-                        (equilabriumPressure - gasPressure(key)) * DT / const("GasDiffusionTau")
-                    )
+                val flowAmount = pressureToMass(
+                    key,
+                    (equilabriumPressure - gasPressure(key)) * DT / const("GasDiffusionTau")
+                )
 
-                    gasResources[key] += flowAmount
+                gasResources[key] += flowAmount
 
-                    place.gasResources[key] -= flowAmount
-                } catch (e: Exception) {
-                    throw Exception("$key, ${e}")
-                }
+                place.gasResources[key] -= flowAmount
             }
             val equilabriumTemp =
                 (temperature * heatCapacity + place.temperature * place.heatCapacity) / (heatCapacity + place.heatCapacity)
@@ -170,9 +189,8 @@ class Place : GameStateElement() {
                 (equilabriumTemp - temperature) * (heatCapacity + place.heatCapacity) * DT / const("TemperatureDiffusionTau")
 
 
-            temperature += flowAmount / heatCapacity
-
-            place.temperature -= flowAmount / place.heatCapacity
+            addHeat(flowAmount)
+            place.addHeat(-flowAmount)
         }
 
 
@@ -209,8 +227,11 @@ class Place : GameStateElement() {
         if (responsibleDivision == null) return //TODO: Is this true?
         if (isAccidentScene) return //If there is an accident, no one works until it is resolved.
         apparatuses.forEach app@{ apparatus ->
-            apparatus.temperature = this.temperature
-            apparatus.depreciateHourly()
+            apparatus.temperature = temperature //Update the temperature of the apparatus to the ambient temperature.
+
+            //Consume durability, no matter it is currently being worked or not. For storages, keep the durability if they are fully staffed.
+            if (!apparatus.isStorage || apparatus.currentWorker >= apparatus.idealWorker)
+                apparatus.durability -= S_PER_HR * const("DurabilityMax") / const("DurabilityTau")//Apparatuses are damaged over time. TODO: get rid of unexpected behaviors, if any
             //Check if it is workable------------------------------------------------------------------------------
             if (apparatus.durability <= .0) {
                 apparatus.durability = .0
@@ -233,7 +254,9 @@ class Place : GameStateElement() {
                     err = true //If the resource is full, no one works.
                 }
             }
-            if (err) return@app
+            if (err) {
+                return@app //If there is an error, no one works.
+            }
             resourceShortOfHourly(apparatus)?.also {
                 Logger.write(
                     "${apparatus.name} in $name is short of $it and cannot function.",
@@ -279,6 +302,9 @@ class Place : GameStateElement() {
                 generateAccident()
 
             }
+            if (apparatus.isStorage) {
+                apparatus.durability += S_PER_HR * const("DurabilityMax") / const("DurabilityTau")//Storages are repaired if they are worked.
+            }
         }
 
         maxResources.forEach { //TODO: Note that if maxResources is undefined, the resource type is not checked. This prevents having to define storage for all sorts of resources.
@@ -311,97 +337,99 @@ class Place : GameStateElement() {
 
     }
 
-    fun generateAccident() {
-        //Generate casualties.
-        workers?.firstOrNull()?.let { workerToKill ->
-
-            val death = min(currentWorker / 100 + 1, workerToKill.reliant) //TODO: what about injuries?
-            workerToKill.killReliant(death)
-
-            //Generate apparatus damage.
-            apparatuses.forEach { app ->
-                maxResources
-                app.durability -= 30
-                Information(
-                    author = null,
-                    creationTime = parent.time,
-                    type = InformationType.DAMAGED_APPARATUS,
-                    tgtPlace = name,
-                    amount = 30,
-                    tgtApparatus = app.name
-                )/*store info*/.also {
-                    parent.addInformation(it)
-                    //Add all people in the place to the known list.
-                    it.knownTo.addAll(characters)
-                    accidentInformationKeys += it.name
-                }
-                onAccident.forEach { it(name, death) }
-            }//TODO: spread rumors. But think if it is a good game design.
+    fun killWorkersInPlace(death: Int) {
+        //Kill workers in the place.
+        var sum = death
+        workers?.forEach { worker ->
+            if (sum <= 0) return@forEach
+            val killed = min(sum, worker.reliant)
+            worker.killReliant(killed)
+            sum -= killed
         }
-
-
+        if (sum > 0) {
+            Logger.write("Warning: $sum workers were not killed in $name", Logger.LogLevel.WARNING)
+        }
     }
 
-    fun generateOverflowAccident(resourceType: String) {
+    fun generateAccident() {
         //Generate casualties.
+        val death = currentWorker / 100 + 1 //At least one worker dies.
+        killWorkersInPlace(death)
 
-        workers?.firstOrNull()?.let { workerToKill ->
-
-            val death = min(currentWorker / 100 + 1, workerToKill.reliant) //TODO: what about injuries?
-            workerToKill.killReliant(death)
-
-            //Generate resource loss.
-            val loss = resources[resourceType] / 2
-            resources[resourceType] -= loss
+        //Generate apparatus damage.
+        apparatuses.forEach { app ->
+            maxResources
+            app.durability -= 30
             Information(
                 author = null,
                 creationTime = parent.time,
-                type = InformationType.LOST_RESOURCES,
+                type = InformationType.DAMAGED_APPARATUS,
                 tgtPlace = name,
-                resources = Resources(resourceType to loss)
+                amount = 30,
+                tgtApparatus = app.name
             )/*store info*/.also {
                 parent.addInformation(it)
                 //Add all people in the place to the known list.
                 it.knownTo.addAll(characters)
                 accidentInformationKeys += it.name
             }
-
-            //Do not Generate apparatus damage.
         }
+        onAccident.forEach { it(name, death) }
+
+
+    }
+
+    fun generateOverflowAccident(resourceType: String) {
+        //Generate casualties.
+        val death = currentWorker / 100 + 1 //At least one worker dies.
+        killWorkersInPlace(death)
+        //Generate resource loss.
+        val loss = resources[resourceType] / 2
+        resources[resourceType] -= loss
+        Information(
+            author = null,
+            creationTime = parent.time,
+            type = InformationType.LOST_RESOURCES,
+            tgtPlace = name,
+            resources = Resources(resourceType to loss)
+        )/*store info*/.also {
+            parent.addInformation(it)
+            //Add all people in the place to the known list.
+            it.knownTo.addAll(characters)
+            accidentInformationKeys += it.name
+        }
+        onAccident.forEach { it(name, death) }
+        //Do not Generate apparatus damage.
     }
 
     fun generateCatastrophicAccident() {
         //Generate casualties.
-        workers?.firstOrNull()?.let { workerToKill ->
-
-            val death = min(currentWorker / 5 + 1, workerToKill.reliant) //TODO: what about injuries?
-            workerToKill.killReliant(death)
-
-            //Generate apparatus damage.
-            apparatuses.forEach { app ->
-                maxResources
-                app.durability -= 75
-                Information(
-                    author = null,
-                    creationTime = parent.time,
-                    type = InformationType.DAMAGED_APPARATUS,
-                    tgtPlace = name,
-                    amount = 75,
-                    tgtApparatus = app.name
-                )/*store info*/.also {
-                    parent.addInformation(it)
-                    //Add all people in the place to the known list.
-                    it.knownTo.addAll(characters)
-                    accidentInformationKeys += it.name
-                }
+        val death = currentWorker / 5 + 1 //At least one worker dies.
+        killWorkersInPlace(death)
+        //Generate apparatus damage.
+        apparatuses.forEach { app ->
+            maxResources
+            app.durability -= 75
+            Information(
+                author = null,
+                creationTime = parent.time,
+                type = InformationType.DAMAGED_APPARATUS,
+                tgtPlace = name,
+                amount = 75,
+                tgtApparatus = app.name
+            )/*store info*/.also {
+                parent.addInformation(it)
+                //Add all people in the place to the known list.
+                it.knownTo.addAll(characters)
+                accidentInformationKeys += it.name
             }
-            onAccident.forEach { it(name, death) }
-            //TODO: spread rumors. But think if it is a good game design.
         }
+        onAccident.forEach { it(name, death) }
+
     }
 
     fun distanceTo(targetName: String): Int? {
-        return if (connectedPlaces.contains(targetName)) 1 else null
+        return if (connectedPlaces.contains(targetName)) (parent.places[targetName]!!.coordinates - coordinates).amplitude.toInt() + 1 else null
     }
 
     fun shortestPathAndTimeTo(targetName: String): Pair<List<String>, Int>? {

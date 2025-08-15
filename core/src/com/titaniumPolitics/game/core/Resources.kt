@@ -23,6 +23,9 @@ class Resources(var positive: Boolean = false) {
     }
 
     operator fun set(key: String, value: Double): Double? {
+        if (value.isNaN() || value.isInfinite()) {
+            throw Exception("Resource value must be finite: $key, $value")
+        }
         return if (this[key] + value >= 0 || !positive) {
             _resources.put(key, value)
         } else {

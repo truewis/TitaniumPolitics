@@ -11,6 +11,7 @@ class Logger {
         lateinit var writer: BufferedWriter
         lateinit var writer1: BufferedWriter
         lateinit var writer2: BufferedWriter
+        lateinit var writer3: BufferedWriter
         lateinit var gState: GameState
         fun format(txt: String, level: LogLevel): String {
             return "[${gState.time}::${gState.formatTime()}]$level: $txt"
@@ -21,6 +22,7 @@ class Logger {
             writer = File(gState.workingDirectory + "/log.txt").bufferedWriter()
             writer1 = File(gState.workingDirectory + "/actions.txt").bufferedWriter()
             writer2 = File(gState.workingDirectory + "/apparatus.txt").bufferedWriter()
+            writer3 = File(gState.workingDirectory + "/conditions.txt").bufferedWriter()
         }
 
         fun write(txt: String, level: LogLevel = LogLevel.WARNING) {
@@ -44,12 +46,13 @@ class Logger {
 
                 LogLevel.ACTION_VERBOSE -> writer1.write(format(txt, level) + '\n')
                 LogLevel.APPARATUS_VERBOSE -> writer2.write(format(txt, level) + '\n')
+                LogLevel.CONDITION_VERBOSE -> writer3.write(format(txt, level) + '\n')
             }
 
         }
     }
 
     enum class LogLevel {
-        INFO, WARNING, ERROR, ACTION_VERBOSE, APPARATUS_VERBOSE
+        INFO, WARNING, ERROR, ACTION_VERBOSE, APPARATUS_VERBOSE, CONDITION_VERBOSE
     }
 }

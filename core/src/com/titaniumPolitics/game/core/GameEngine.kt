@@ -1,10 +1,9 @@
 package com.titaniumPolitics.game.core
 
 import com.badlogic.gdx.Gdx
+import com.titaniumPolitics.game.core.Character.Type
 import com.titaniumPolitics.game.core.ReadOnly.const
 import com.titaniumPolitics.game.core.ReadOnly.DT
-import com.titaniumPolitics.game.core.ReadOnly.DTH
-import com.titaniumPolitics.game.core.ReadOnly.IDTH
 import com.titaniumPolitics.game.core.ReadOnly.S_PER_HR
 import com.titaniumPolitics.game.core.gameActions.GameAction
 import com.titaniumPolitics.game.core.gameActions.Wait
@@ -16,6 +15,7 @@ import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 import kotlin.math.abs
 import kotlin.math.log
+import kotlin.math.max
 import kotlin.random.Random
 import kotlin.system.exitProcess
 
@@ -89,7 +89,7 @@ class GameEngine(val gameState: GameState) {
         workApparatusesHourly()
         ageInformationHourly()
         spreadPublicInfo()
-        checkMarketResourcesHourly(gameState)
+        checkMarketResourcesHourly()
     }
 
     private fun dailyProgression() {
@@ -107,10 +107,7 @@ class GameEngine(val gameState: GameState) {
 
         diffuseGas()
         calculateMutuality()
-
         conditionCheck()
-
-
 
         gameState.ongoingMeetings.forEach {
             it.value.onTimeChange(gameState)
@@ -118,10 +115,6 @@ class GameEngine(val gameState: GameState) {
         gameState.requests.forEach {
             it.value.refresh(gameState)
         }
-
-
-        //Logger.write("Time: ${gameState.time}", Logger.LogLevel.INFO)
-        //Logger.write("My approval:${gameState.characters[gameState.playerAgent]!!.approval}", Logger.LogLevel.INFO)
         onObserverCall.forEach { it(gameState) }
 
     }
@@ -144,12 +137,8 @@ class GameEngine(val gameState: GameState) {
                 } else
                     println(
                         "Invalid action: ${action.javaClass.simpleName} by ${char.name} at ${
-                            gameState.places.values.find {
-                                it.characters.contains(
-                                    char.name
-                                )
-                            }!!.name
-                        }"
+                            char.place.name
+                        }, reason: ${action.invalidReason}"
                     )
             } while (true)
 
@@ -392,7 +381,6 @@ class GameEngine(val gameState: GameState) {
         }
 
         //Cabinet has a conference every day. The conference is attended by the division leaders
-
         val conference = Meeting(
             gameState.time + 12 * 3600 / DT /*12 in the afternoon*/,
             Meeting.MeetingType.CABINET_DAILY_CONFERENCE,
@@ -411,11 +399,6 @@ class GameEngine(val gameState: GameState) {
         ).also { it.involvedParty = "triumvirate" }
 
         gameState.addScheduledMeeting(conference2)
-
-        //Garbage removal for performance.
-//        gameState.scheduledMeetings.filter { it.value.time + ReadOnly.constInt("MeetingStartTolerance") < gameState.time }.keys.forEach {
-//            gameState.scheduledMeetings.remove(it)
-//        }
 
     }
 
@@ -449,13 +432,7 @@ class GameEngine(val gameState: GameState) {
         gameState.places.forEach { it.value.workApparatusHourly() }
     }
 
-    fun checkMarketResourcesHourly(tgtState: GameState) {
-        gameState.places.forEach { place ->
-
-        }
-
-
-
+    fun checkMarketResourcesHourly() {
         gameState.places.forEach { (placeName, place) ->
             place.gasResources.forEach {
                 place.gasResources[it.key] = it.value * 0.999
@@ -468,27 +445,6 @@ class GameEngine(val gameState: GameState) {
             if (place.gasResources["oxygen"] > consumptionOxygen) {
                 place.gasResources["oxygen"] -= consumptionOxygen
                 place.gasResources["carbonDioxide"] += consumptionOxygen * 44 / 32 //Oxygen is converted to carbonDioxide.
-            }
-            if (place.gasPressure("oxygen") < const("CriticalOxygenPressure") || place.gasPressure("carbonDioxide") / place.gasPressure(
-                    "oxygen"
-                ) > const("CriticalCarbonDioxideRatio")
-            ) {
-                if (place.responsibleDivision == null) return//TODO: currently oxygen deaths don't happen in places without responsibleParty.
-                val death =
-                    place.currentTotalPop / 100 + 1//TODO: adjust deaths. Also, productivity starts to drop when oxygen is low. Use the gas system.
-                place.apply {
-                    gameState.parties[responsibleDivision]!!.causeDeaths(death)
-                    Logger.write(
-                        "Casualties: at most $death, due to suffocation at $placeName. Pop left: ${gameState.pop}",
-                        Logger.LogLevel.INFO
-                    )
-                    createRumor(tgtState).apply {
-                        type = InformationType.CASUALTY
-                        tgtPlace = placeName
-                        amount = death
-                        auxParty = responsibleDivision
-                    }
-                }
             }
 
         }
@@ -507,53 +463,94 @@ class GameEngine(val gameState: GameState) {
 
     }
 
-    fun createRumor(tgtState: GameState) = Information(
-        author = null,
-        creationTime = tgtState.time
-    ).also { /*spread rumor*/
-        tgtState.addInformation(it) //cpy.publicity = 5
-        it.knownTo += tgtState.pickRandomCharacter.name
-    }
-
 
     //TODO: Check for win/lose/interrupt conditions
     fun conditionCheck() {
         gameState.aliveCharacters.forEach { entry ->
-            //If air is not breathable, take damage.
-            if (entry.value.place.gasPressure("oxygen") < const("CriticalOxygenPressure") || entry.value.place.gasPressure(
-                    "carbonDioxide"
-                ) / entry.value.place.gasPressure(
-                    "oxygen"
-                ) > const("CriticalCarbonDioxideRatio")
-            ) {
-                entry.value.health -= DT / const("SuffocationTau") * const("HealthMax")
-                //If in a workplace, party integrity decreases, if I am not the leader
-                entry.value.division?.also {
-                    if (entry.value.place.responsibleDivision == it.name && it.leader != entry.key)
-                        gameState.setPartyMutuality(
-                            it.name,
-                            delta = -DT / const("SuffocationTau") * const("mutualityMax")
-                        )
-                }
+            val char = entry.value
 
-            }
-            //If temperature is extreme, take damage.
-            if (entry.value.place.temperature - 300 /*[K]*/ !in -const("TemperatureDifferenceTolerance")..const("TemperatureDifferenceTolerance")
-            ) {
-//                entry.value.health -= dt / const("TemperatureDamageTau") * abs(entry.value.place.temperature / 300 /*[K]*/ - 1) * const(
-//                    "HealthMax"
-//                )//TODO: balance this
-                //If in a workplace, party integrity decreases, if I am not the leader
-                entry.value.division?.also {
-                    if (entry.value.place.responsibleDivision == it.name && it.leader != entry.key)
-                        gameState.setPartyMutuality(
-                            it.name,
-                            delta = -DT / const("TemperatureIntegrityDamageTau") * const("mutualityMax") * abs(entry.value.place.temperature / 300 /*[K]*/ - 1)
-                        )
+            //Robots do not need to eat, breathe, or suffer from extreme temperatures.
+            if ("robot" !in char.trait) {
+                //If air is not breathable, take damage.
+                if (char.place.gasPressure("oxygen") < const("CriticalOxygenPressure") || char.place.gasPressure(
+                        "carbonDioxide"
+                    ) / char.place.gasPressure(
+                        "oxygen"
+                    ) > const("CriticalCarbonDioxideRatio")
+                ) {
+                    char.health -= DT / const("SuffocationTau") * const("HealthMax")
+                    //If in a workplace, opinion of the leader decreases.
+                    char.place.workplaceParty?.let {
+                        if (char.name in it.members) {
+                            it.leader?.let { wkLeader ->
+                                gameState.setMutuality(
+                                    char.name, wkLeader,
+                                    delta = -DT / const("SuffocationIntegrityDamageTau") * const("mutualityMax") * abs(
+                                        char.place.temperature / 300 /*[K]*/ - 1
+                                    )
+                                )
+                            }
+                            //If the character is in a division, the opinion of the division leader also decreases.
+                            char.division?.leader?.let { divisionLeader ->
+                                gameState.setMutuality(
+                                    char.name, divisionLeader,
+                                    delta = -DT / const("SuffocationIntegrityDamageTau") * const("mutualityMax") * abs(
+                                        char.place.temperature / 300 /*[K]*/ - 1
+                                    )
+                                )
+                            }
+
+                        }
+                    }
+
                 }
-            }
-            if (entry.value.alive && entry.value.health <= 0) {
-                killCharacter(entry)
+                //If temperature is extreme, take damage.
+                if (char.place.temperature - 300 /*[K]*/ !in -const("TemperatureDifferenceTolerance")..const("TemperatureDifferenceTolerance")
+                ) {
+                    char.health -= DT / const("TemperatureDamageTau") * abs(char.place.temperature / 300 /*[K]*/ - 1) * const(
+                        "HealthMax"
+                    )
+                    //If in a workplace, opinion of the leader decreases.
+                    char.place.workplaceParty?.let {
+                        if (char.name in it.members) {
+                            it.leader?.let { wkLeader ->
+                                gameState.setMutuality(
+                                    char.name, wkLeader,
+                                    delta = -DT / const("TemperatureIntegrityDamageTau") * const("mutualityMax") * abs(
+                                        char.place.temperature / 300 /*[K]*/ - 1
+                                    )
+                                )
+                            }
+                            //If the character is in a division, the opinion of the division leader also decreases.
+                            char.division?.leader?.let { divisionLeader ->
+                                gameState.setMutuality(
+                                    char.name, divisionLeader,
+                                    delta = -DT / const("TemperatureIntegrityDamageTau") * const("mutualityMax") * abs(
+                                        char.place.temperature / 300 /*[K]*/ - 1
+                                    )
+                                )
+                            }
+
+                        }
+                    }
+                }
+                with(char) {
+                    if ((hunger > const("hungerThreshold") || thirst > const("thirstThreshold")) && reliant > 1)
+                        killReliant(max(reliant / 10, 1))
+                    if (alive && health <= 0) {
+                        if (type == Type.ANON) {
+                            killReliant(
+                                max(
+                                    reliant / 10,
+                                    1
+                                )
+                            ) //If the character is an anon, kill an arbitrary fraction of them.
+                            //If the number of reliant becomes 0, the anon does not die but does not provide any labor.
+                            health = const("HealthMax") //Reset health to max.
+                        } else
+                            killCharacter(char)
+                    }
+                }
             }
         }
         val l = gameState.aliveCharacters.filter { !it.value.trait.contains("robot") }
@@ -616,16 +613,24 @@ class GameEngine(val gameState: GameState) {
 
     }
 
-    private fun killCharacter(entry: Map.Entry<String, Character>) {
-        Logger.write("${entry.key} died.", Logger.LogLevel.INFO)
-        gameState.places.values.find { it.characters.contains(entry.key) }!!.characters -= entry.key
+    private fun killCharacter(char: Character) {
+        if (!char.alive)
+            Logger.write("${char.name} is already dead.", Logger.LogLevel.ERROR)
+        if (char.type == Type.ANON)
+            Logger.write(
+                "${char.name} is an anon, killing them is not allowed.",
+                Logger.LogLevel.ERROR
+            )
+        Logger.write("${char.name} died.", Logger.LogLevel.INFO)
+        char.place.resources.plusAssign(Resources("corpse" to 100.0 * char.reliant)) //Add corpses to the place.
+        char.place.characters -= char.name //Remove from the place.
         gameState.parties.values.forEach {
-            it.members -= entry.key
-            if (it.leader == entry.key) {
-                it.leader == null
+            it.members -= char.name
+            if (it.leader == char.name) {
+                it.leader = null
             }
         } //Remove from all parties.
-        entry.value.alive = false
+        char.alive = false
     }
 
     companion object {
@@ -691,8 +696,8 @@ class GameEngine(val gameState: GameState) {
         }
 
         //When someone else requests an action, request class will check isValid function of the action, not this function.
-        fun availableActions(gameState: GameState, place: String, character: String): ArrayList<String> {
-            val actions = arrayListOf<String>()
+        fun availableActions(gameState: GameState, place: String, character: String): HashSet<String> {
+            val actions = hashSetOf<String>()
             val placeObj = gameState.places[place]!!
             if (gameState.ongoingMeetings.any { it.value.currentCharacters.contains(character) }) {
                 val conf = gameState.ongoingMeetings.filter {

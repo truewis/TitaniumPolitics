@@ -272,7 +272,6 @@ class GameState {
         parties.forEach {
             if (it.value.type != "division") return@forEach //
             val party = it.value
-            it.value.places.sumOf { it.apparatuses.sumOf { it.idealWorker } }
 
             //Create anonymous characters if the party is big enough.
             //TODO: maybe assign more then one anon agent per place.
@@ -316,12 +315,13 @@ class GameState {
                 val liveBy = this@GameState.characters[char.key]!!.livingBy
                 connectedPlaces.add(liveBy)
                 coordinates = this@GameState.places[liveBy]!!.coordinates
-                volume = 100.0f * (char.value.reliant + 1) //Set a default volume for the home.
+                volume =
+                    100.0f * (char.value.reliant + 1) //Set a default volume for the home. There are virtual anon agents with 0 reliant, so we add 1 to avoid division by zero.
                 gasResources = Resources(
                     "oxygen" to 300.0,
                     "carbonDioxide" to 1.5,
                     "nitrogen" to 900.0
-                ) * (char.value.reliant + 1.0)
+                ) * (char.value.reliant).toDouble()
             }
             places[this@GameState.characters[char.key]!!.livingBy]!!.connectedPlaces.add("home_" + char.key)
             if (places.none { it.value.characters.contains(char.key) })
@@ -370,7 +370,7 @@ class GameState {
         return _mutuality[indexA][indexB]
     }
 
-    //Return value [-1, 1].
+    /**Return value [-1, 1].*/
     fun getMutNorm(a: String?, b: String? = a) = if (a == null || b == null) .0 else normMut(getMutuality(a, b))
 
     private fun normMut(mutuality: Double) =
@@ -399,7 +399,7 @@ class GameState {
         }
     }
 
-    //Return value [-1, 1].
+    /**Return value [-1, 1].*/
     fun getPartyMutNorm(a: String?, b: String? = a) =
         if (a == null || b == null) .0 else normMut(getPartyMutuality(a, b))
 
@@ -428,14 +428,19 @@ class GameState {
         return if (count > 0) totalMutuality / count else 0.0
     }
 
-    fun setPartyMutuality(a: String, b: String = a, delta: Double) {
+
+    /**
+    Sets mutuality for all members of the party a to all members of the party b.
+    This is weighted by the size of the party a, so that larger parties have less influence on individual mutualities.
+     */
+    fun setPartyMutuality(a: String, b: String = a, weightedDelta: Double) {
         if (!parties.containsKey(a) || !parties.containsKey(b)) throw Exception("Setting party mutuality $a -> $b invalid.")
         val membersA = (parties[a]?.members ?: emptyList()) - (parties[a]?.directorMembers ?: emptyList())
         val membersB = parties[b]?.members ?: emptyList()
         for (memberA in membersA) {
             for (memberB in membersB) {
                 if (memberA == memberB) continue //Skip self-mutuality.
-                setMutuality(memberA, memberB, delta)
+                setMutuality(memberA, memberB, weightedDelta / parties[a]!!.size)
             }
         }
     }
@@ -508,7 +513,7 @@ class GameState {
     }
 
 
-    //Market price per Kg, units of mutuality
+    /**Market price per Kg, units of mutuality*/
     fun getMarketPrice(item: String): Double {
 
         val totalMarketSupplyEstimateWeekly = places.values.sumOf { it.marketSupplyEstimateWeekly[item] }

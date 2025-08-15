@@ -96,16 +96,16 @@ class LogUI(val gameState: GameState) : Table(defaultSkin) {
         ctnuButton.addAction(
             Actions.forever(
                 Actions.sequence(
-                Actions.delay(0.5f),
-                AlphaAction().apply {
-                    duration = 0.2f
-                    alpha = 0f
-                },
-                AlphaAction().apply {
-                    duration = 0.2f
-                    alpha = 1f
-                }
-            )))
+                    Actions.delay(0.5f),
+                    AlphaAction().apply {
+                        duration = 0.2f
+                        alpha = 0f
+                    },
+                    AlphaAction().apply {
+                        duration = 0.2f
+                        alpha = 1f
+                    }
+                )))
         addActor(ctnuButton)
         ctnuButton.isVisible = false
         ctnuButton.addListener(object : ClickListener() {
@@ -125,9 +125,9 @@ class LogUI(val gameState: GameState) : Table(defaultSkin) {
         GameEngine.acquireEvent += {//Print the action list. This is unnecessary if tall the action has the corresponding UI.
             if (it.type == "Action") {
                 appendText(
-                    (it.variables["actionList"] as ArrayList<String>).toString().replace("[", "").replace("]", "")
+                    (it.variables["actionList"] as HashSet<String>).toString().replace("[", "").replace("]", "")
                 )
-                playerActionList = it.variables["actionList"] as ArrayList<String>
+                playerActionList = ArrayList(it.variables["actionList"] as HashSet<String>)
                 isInputEnabled = true
             }
         }

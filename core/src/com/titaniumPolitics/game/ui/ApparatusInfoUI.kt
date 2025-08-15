@@ -33,7 +33,7 @@ class ApparatusInfoUI : WindowUI("ApparatusInfoTitle") {
     fun refresh(information: Information) {
         dataTable.clear()
         dataTable.apply {
-            this.image("CogGrunge") {
+            image("CogGrunge") {
                 it.size(200f, 200f)
                 try {
                     drawable = TextureRegionDrawable(
@@ -46,28 +46,33 @@ class ApparatusInfoUI : WindowUI("ApparatusInfoTitle") {
                     Logger.write("Portrait Image Error: ${information.tgtApparatus}", Logger.LogLevel.INFO)
                 }
             }
-            this.row()
+            row()
 
 
-            this.label("Apparatus Name: ${information.tgtApparatus}") {
+            label("Apparatus Name: ${information.tgtApparatus}", "description") {
                 setAlignment(Align.center)
-                setFontScale(3f)
+                setFontScale(0.5f)
             }
-            this.row()
-            this.label("Durability: ${information.amount}") {
+            row()
+            label(ReadOnly.appProp(information.tgtApparatus!!), "description") {
                 setAlignment(Align.center)
-                setFontScale(3f)
+                setFontScale(0.3f)
+            }
+            row()
+            label("Durability: ${information.amount}", "description") {
+                setAlignment(Align.center)
+                setFontScale(0.5f)
             }
 
-            this.row()
-            this.label("Author: ${information.author}") {
+            row()
+            label("Author: ${information.author}", "description") {
                 setAlignment(Align.center)
-                setFontScale(2f)
+                setFontScale(0.3f)
             }
-            this.row()
-            this.label("Creation Time: ${information.creationTime}") {
+            row()
+            label("Creation Time: ${information.creationTime}", "description") {
                 setAlignment(Align.center)
-                setFontScale(2f)
+                setFontScale(0.3f)
             }
 
         }

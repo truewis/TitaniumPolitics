@@ -251,6 +251,14 @@ class PlaceMarkerWindowUI(var gameState: GameState, var owner: MapUI) : Table() 
             add(resourceInformation).fillX().expandX()
             row()
             add(managementInformation).fillX().expandX()
+            row()
+
+            add(scene2d.label(ReadOnly.placeProp("$placeDisplayed-desc"), "description") {
+                setFontScale(0.2f)
+                setAlignment(Align.left)
+                color = Color.LIGHT_GRAY
+                wrap = true
+            }).growX().fill().padTop(50f)
         }
         setSize(350f, 50f + content.prefHeight)
         //Update the resource information and management information tables.

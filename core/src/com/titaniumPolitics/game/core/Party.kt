@@ -1,5 +1,6 @@
 package com.titaniumPolitics.game.core
 
+import com.badlogic.gdx.math.MathUtils.clamp
 import kotlinx.serialization.Serializable
 import kotlin.collections.set
 
@@ -103,14 +104,24 @@ class Party : GameStateElement() {
     }
 
 
+    /**
+     * Kills anonymous members of the party.
+     * The amount of killed members is distributed evenly among the anonymous members.
+     * If the amount of killed members is not evenly divisible by the number of anonymous members,
+     * the last anonymous member will receive the remaining amount.
+     */
     private fun killAnonMembers(num: Int) {
         val anons = members.filter { it.contains("Anon") }
+        var sum = num
         anons.forEachIndexed { index, string ->
             val char = parent.characters[string]!!
             if (index == anons.size - 1) {
-                char.killReliant(num - (num / anons.size) * (anons.size - 1))
+                char.killReliant(sum)
             } else {
-                char.killReliant(num / anons.size)
+                val amount = clamp(num / anons.size, 0, char.reliant)
+                sum -= amount
+                char.killReliant(amount)
+
             }
         }
     }//Managers will have to rehire people after this.

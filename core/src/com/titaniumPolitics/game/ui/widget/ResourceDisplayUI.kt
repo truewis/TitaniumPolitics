@@ -36,28 +36,33 @@ class ResourceDisplayUI(var current: Resources = Resources(), var callback: (Str
         with(docTable) {
             this@ResourceDisplayUI.current.forEach { (resourceName, resourceAmount) ->
                 if (resourceAmount > .0) {
-                    image("CogGrunge") {
-                        it.size(30f)
-                        it.fill()
-                    }
-                    this@ResourceDisplayUI.labelList.add(label("$resourceName: $resourceAmount", "docTitle") {
-                        setFontScale(0.5f)
-                        setAlignment(Align.left)
-                        addListener(object : ClickListener() {
-                            override fun clicked(
-                                event: com.badlogic.gdx.scenes.scene2d.InputEvent?,
-                                x: Float,
-                                y: Float
-                            ) {
-                                this@ResourceDisplayUI.deselectAllLabels()
-                                this@ResourceDisplayUI.selectLabel(this@label)
-                                this@ResourceDisplayUI.callback(
-                                    resourceName,
-                                    this@ResourceDisplayUI.current[resourceName]
-                                )
-                            }
+                    table {
+                        it.grow()
+                        val tooltip = ResourceTooltipUI(resourceName)
+                        addListener(tooltip)
+                        image("CogGrunge") {
+                            it.size(30f)
+                            it.fill()
+                        }
+                        this@ResourceDisplayUI.labelList.add(label("$resourceName: $resourceAmount", "docTitle") {
+                            setFontScale(0.5f)
+                            setAlignment(Align.left)
+                            addListener(object : ClickListener() {
+                                override fun clicked(
+                                    event: com.badlogic.gdx.scenes.scene2d.InputEvent?,
+                                    x: Float,
+                                    y: Float
+                                ) {
+                                    this@ResourceDisplayUI.deselectAllLabels()
+                                    this@ResourceDisplayUI.selectLabel(this@label)
+                                    this@ResourceDisplayUI.callback(
+                                        resourceName,
+                                        this@ResourceDisplayUI.current[resourceName]
+                                    )
+                                }
+                            })
                         })
-                    })
+                    }
                     row()
                 }
             }

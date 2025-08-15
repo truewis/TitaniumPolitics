@@ -16,7 +16,7 @@ class SetWorkHours(override val sbjCharacter: String, override val tgtPlace: Str
         tgtPlaceObj.workHoursEnd = end
         parent.setPartyMutuality(
             sbjCharObj.division!!.name,
-            delta = -workHoursDelta * 1.0 * tgtPlaceObj.plannedWorker / sbjCharObj.division!!.size
+            weightedDelta = -workHoursDelta * 1.0 * tgtPlaceObj.plannedWorker / sbjCharObj.division!!.size
         )
     }
 

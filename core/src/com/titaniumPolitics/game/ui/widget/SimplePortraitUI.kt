@@ -66,6 +66,6 @@ class SimplePortraitUI(character: String, scale: Float, interactable: Boolean) :
 
     init {
         tgtCharacter = character
-        add(portrait).size(500f * scale, 700f * scale)
+        add(portrait).size(500f * scale, 1000f * scale)
     }
 }

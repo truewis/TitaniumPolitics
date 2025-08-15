@@ -16,8 +16,8 @@ class CharacterInteractionWindowUI(var gameState: GameState) :
     var characterDisplayed = ""
     var mode = ""
     private val talkButton = scene2d.button {
-        label("Talk With...") {
-            setFontScale(2f)
+        label("Talk With...", "description") {
+            setFontScale(0.5f)
         }
 
         addListener(object : com.badlogic.gdx.scenes.scene2d.utils.ClickListener() {
@@ -36,8 +36,8 @@ class CharacterInteractionWindowUI(var gameState: GameState) :
     }
 
     private val giveResourceButton = scene2d.button {
-        label("Give resources...") {
-            setFontScale(2f)
+        label("Give resources...", "description") {
+            setFontScale(0.5f)
         }
 
         addListener(object : com.badlogic.gdx.scenes.scene2d.utils.ClickListener() {
@@ -56,14 +56,28 @@ class CharacterInteractionWindowUI(var gameState: GameState) :
     }
 
     private val selectButton = scene2d.button {
-        label("Select Character") {
-            setFontScale(2f)
+        label("Select Character", "description") {
+            setFontScale(0.5f)
         }
 
         addListener(object : com.badlogic.gdx.scenes.scene2d.utils.ClickListener() {
             override fun clicked(event: com.badlogic.gdx.scenes.scene2d.InputEvent?, x: Float, y: Float) {
                 //Select place.
                 PlaceSelectionUI.instance.selectedPlaceCallback(this@CharacterInteractionWindowUI.characterDisplayed)
+            }
+        }
+        )
+    }
+
+    private val descButton = scene2d.button {
+        label("More...", "description") {
+            setFontScale(0.5f)
+        }
+
+        addListener(object : com.badlogic.gdx.scenes.scene2d.utils.ClickListener() {
+            override fun clicked(event: com.badlogic.gdx.scenes.scene2d.InputEvent?, x: Float, y: Float) {
+                CharacterInfoUI.instance.refresh(this@CharacterInteractionWindowUI.gameState.characters[this@CharacterInteractionWindowUI.characterDisplayed]!!)
+                CharacterInfoUI.instance.isVisible = true
             }
         }
         )
@@ -121,6 +135,8 @@ class CharacterInteractionWindowUI(var gameState: GameState) :
                         row()
                     }
                 }
+                add(descButton).fill().size(200f, 50f)
+                row()
                 add(closeButton).fill().size(200f, 50f)
 
             }

@@ -49,10 +49,11 @@ data class Information(//If there is no author, it is a rumor.
             generateName()
     }
 
-    var life: Double = ReadOnly.const("InfoLifetime")//How long this information will last in seconds
+    /**How long this information will last in seconds*/
+    var life: Double = ReadOnly.const("InfoLifetime")
 
-    //We try to keep track of every aspect of our lives, but we can't. They eventually fade away.
-    //But these characters has prepared this information. As far as rememberedBy is not empty, this information does not expire.
+    /**We try to keep track of every aspect of our lives, but we can't. They eventually fade away.
+    But these characters has prepared this information. As far as rememberedBy is not empty, this information does not expire.*/
     val rememberedBy = hashSetOf<String>()
 
     var knownTo = hashSetOf<String>()
@@ -142,6 +143,16 @@ data class Information(//If there is no author, it is a rumor.
             InformationType.HUMAN_RESOURCES -> {
                 "There are $amount current workers at $tgtPlace"
             }
+        }
+    }
+
+    companion object {
+        fun createRumor(tgtState: GameState) = Information(
+            author = null,
+            creationTime = tgtState.time
+        ).also { /*spread rumor*/
+            tgtState.addInformation(it) //cpy.publicity = 5
+            it.knownTo += tgtState.pickRandomCharacter.name
         }
     }
 }

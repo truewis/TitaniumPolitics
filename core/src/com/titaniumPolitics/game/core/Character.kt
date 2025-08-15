@@ -7,11 +7,11 @@ import com.titaniumPolitics.game.core.gameActions.BlockAccess
 import com.titaniumPolitics.game.core.gameActions.ClearAccidentScene
 import com.titaniumPolitics.game.core.gameActions.GameAction
 import com.titaniumPolitics.game.core.gameActions.InvestigateAccidentScene
-import com.titaniumPolitics.game.core.gameActions.Move
 import com.titaniumPolitics.game.core.gameActions.NewAgenda
 import com.titaniumPolitics.game.core.gameActions.OfficialResourceTransfer
 import com.titaniumPolitics.game.core.gameActions.Repair
 import com.titaniumPolitics.game.core.gameActions.UnofficialResourceTransfer
+import com.titaniumPolitics.game.debugTools.Logger
 import kotlinx.serialization.Serializable
 import kotlin.math.max
 
@@ -41,18 +41,15 @@ class Character : GameStateElement() {
             parent.places["home_$name"]!!.resources = value
         }
 
+    /**Information that can be presented in meetings. Note that preparing the information prevents it from expiring.*/
     var preparedInfoKeys =
-        arrayListOf<String>()//Information that can be presented in meetings. Note that preparing the information prevents it from expiring.
+        arrayListOf<String>()
 
     var stats = Stat() //Stats of the character. Used to calculate the effectiveness of actions.
 
     var health = .0
         set(value) {
             field = if (value < const("HealthMax")) value else const("HealthMax")//Max health is 100.
-            if (field < const("CriticalHealth") && (hunger > const("hungerThreshold") || thirst > const("thirstThreshold"))) {
-                if (reliant > 1)
-                    killReliant(max(reliant / 10, 1))
-            }
         }
     var hunger = .0
         set(value) {
@@ -70,8 +67,10 @@ class Character : GameStateElement() {
                 else -> value
             }//Max thirst is 100.
         }
+
+    /**Characters that this character is responsible for. If they die, this character will be sad. They consume water and ration every day. Always bigger or equal to 1*/
     var reliant =
-        1 //Characters that this character is responsible for. If they die, this character will be sad. They consume water and ration every day. Always bigger or equal to 1
+        1
     val scheduledMeetings: HashMap<String, Meeting>
         get() = parent.scheduledMeetings.filter { it.value.scheduledCharacters.contains(name) } as HashMap<String, Meeting>
     var livingBy = ""
@@ -92,14 +91,16 @@ class Character : GameStateElement() {
     var mercenaries = hashSetOf<String>()
 
     val history = arrayListOf<String>()
+
+    /**Requests that this character thinks are finished. The recipient of the request may not be aware of this yet. This is handled in Request.refresh().*/
     val executedRequests =
-        HashSet<String>() //Requests that this character thinks are finished. The recipient of the request may not be aware of this yet. This is handled in Request.refresh().
+        HashSet<String>()
 
     fun hireCost(): Double {
         return 10000.0 / parent.idlePop
     }
 
-    //Item value is normalized to mutuality.
+    /**Item value is normalized to mutuality.*/
     fun itemValue(resources: Resources): Double {
         var sum = .0
         resources.forEach { (key, value) -> sum += itemValue(key) * value }
@@ -137,16 +138,17 @@ class Character : GameStateElement() {
         parent.popChanged.forEach { it() }
         hunger = 0.0//This character ate the reliant.
         thirst = 0.0
-        resources["corpse"] += num * 1.0
-        Information(
-            author = null,
-            creationTime = parent.time,
-            type = InformationType.CASUALTY,
-            tgtPlace = place.name,
-            auxParty = place.responsibleDivision,
+        resources["corpse"] += num * 100.0 //1 corpse is 100 kg.
+        Logger.write(
+            "Killed $num reliant of $name at ${place.name}. Now has ${reliant} reliant.",
+            Logger.LogLevel.INFO
+        )
+        Information.createRumor(parent).apply {
+            type = InformationType.CASUALTY
+            tgtPlace = place.name
+            auxParty = place.responsibleDivision
             amount = num
-        ).also {
-            parent.addInformation(it) //cpy.publicity = 5
+        }.also {
             it.knownTo += name
         }
 
@@ -163,7 +165,7 @@ class Character : GameStateElement() {
         return 1.0 //TODO: Implement item value modifier based on the character's trait.
     }
 
-    //Item value is normalized to mutuality.
+    /**Item value is normalized to mutuality.*/
     //TODO: value may be affected by power dynamics.
     fun itemValue(item: String): Double {
         val ret = parent.getMarketPrice(item)
@@ -286,7 +288,7 @@ class Character : GameStateElement() {
         return .0
     }
 
-    //The character's preference of this information spreading. -1 is hate, 0 is neutral, 1 is like.
+    /**The character's preference of this information spreading. -1 is hate, 0 is neutral, 1 is like.*/
     //TODO: preference depend on the trait of the character. When other characters use this function, the trait must be not reflected since they don't know the trait.
     fun infoPreference(info: Information): Double {
         var ret = .0
@@ -361,30 +363,6 @@ class Character : GameStateElement() {
 
         //Otherwise, the character is neutral to the information.
         return ret * const("mutualityMax")
-    }
-
-    @Deprecated("This function has lost its purpose with the removal of trade.")
-    fun infoValue(info: Information): Double {
-        //Known information is less valuable.
-        if (info.knownTo.contains(name))
-            return 0.0
-        //Information about the character itself is more valuable.
-        if (info.tgtCharacter == name)
-            return 2.0
-        //Information about the character's party is more valuable.
-        if (parent.parties[info.tgtParty]?.members?.contains(name) == true)
-            return 2.0
-        //Information about valuable resource is more valuable.
-        if (info.type == InformationType.RESOURCES)
-            return info.resources.keys.sumOf { itemValue(it) * info.resources[it]!! }
-        //UnofficialTransfer is more valuable if it is not known to the other character.
-        if (info.type == InformationType.ACTION && info.action!!.javaClass.simpleName == "unofficialResourceTransfer" && !info.knownTo.contains(
-                name
-            )
-        )
-            return 10.0
-
-        return 1.0
     }
 
 }

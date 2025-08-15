@@ -44,6 +44,22 @@ object ReadOnly {
         Properties().apply { load(it) }
     } ?: Properties().apply { load(FileInputStream(File("../assets/texts/ui.properties"))) }
 
+    val appProps = javaClass.classLoader.getResourceAsStream("texts/apparatus.properties")?.use {
+        Properties().apply { load(it) }
+    } ?: Properties().apply { load(FileInputStream(File("../assets/texts/apparatus.properties"))) }
+
+    val placeProps = javaClass.classLoader.getResourceAsStream("texts/place.properties")?.use {
+        Properties().apply { load(it) }
+    } ?: Properties().apply { load(FileInputStream(File("../assets/texts/place.properties"))) }
+
+    val charProps = javaClass.classLoader.getResourceAsStream("texts/character.properties")?.use {
+        Properties().apply { load(it) }
+    } ?: Properties().apply { load(FileInputStream(File("../assets/texts/character.properties"))) }
+
+    val itemProps = javaClass.classLoader.getResourceAsStream("texts/resources.properties")?.use {
+        Properties().apply { load(it) }
+    } ?: Properties().apply { load(FileInputStream(File("../assets/texts/resources.properties"))) }
+
     val script = javaClass.classLoader.getResourceAsStream("texts/DefaultCharacter.properties")?.use {
         Properties().apply { load(it) }
     } ?: Properties().apply { load(FileInputStream(File("../assets/texts/DefaultCharacter.properties"))) }
@@ -63,13 +79,20 @@ object ReadOnly {
         return prop(charId)
     }
 
-    //A timestep in seconds.
+    /**A timestep in seconds.
+     *
+     */
     val DT = (86400 / const("lengthOfDay")).toInt()
 
-    //A timestep in hours.
+    /**A timestep in hours.
+     *
+     */
     val DTH = (24 / const("lengthOfDay"))
 
-    val IDTH = (const("lengthOfDay") / 24.0).toInt() //Integer timestep in hours.
+    /**An hour in timestep units.
+     *
+     */
+    val IDTH = (const("lengthOfDay") / 24.0).toInt()
 
     const val S_PER_HR = 3600 //How many seconds in an hour.
     fun toMinutes(time: Int): Int =
@@ -91,6 +114,62 @@ object ReadOnly {
                 ?: "Unknown".also { Logger.write("Warning: Could not find property $key", Logger.LogLevel.INFO) }
         else
             (props.getProperty(key)) ?: "Unknown".also {
+                Logger.write(
+                    "Warning: Could not find property $key",
+                    Logger.LogLevel.INFO
+                )
+            }
+    }
+
+    fun appProp(key: String, obj: Any? = null): String {
+
+        return if (obj != null)
+            (appProps.getProperty(key)?.replacePlaceholders(obj))
+                ?: "Unknown".also { Logger.write("Warning: Could not find property $key", Logger.LogLevel.INFO) }
+        else
+            (appProps.getProperty(key)) ?: "Unknown".also {
+                Logger.write(
+                    "Warning: Could not find property $key",
+                    Logger.LogLevel.INFO
+                )
+            }
+    }
+
+    fun placeProp(key: String, obj: Any? = null): String {
+
+        return if (obj != null)
+            (placeProps.getProperty(key)?.replacePlaceholders(obj))
+                ?: "Unknown".also { Logger.write("Warning: Could not find property $key", Logger.LogLevel.INFO) }
+        else
+            (placeProps.getProperty(key)) ?: "Unknown".also {
+                Logger.write(
+                    "Warning: Could not find property $key",
+                    Logger.LogLevel.INFO
+                )
+            }
+    }
+
+    fun charProp(key: String, obj: Any? = null): String {
+
+        return if (obj != null)
+            (charProps.getProperty(key)?.replacePlaceholders(obj))
+                ?: "Unknown".also { Logger.write("Warning: Could not find property $key", Logger.LogLevel.INFO) }
+        else
+            (charProps.getProperty(key)) ?: "Unknown".also {
+                Logger.write(
+                    "Warning: Could not find property $key",
+                    Logger.LogLevel.INFO
+                )
+            }
+    }
+
+    fun itemProp(key: String, obj: Any? = null): String {
+
+        return if (obj != null)
+            (itemProps.getProperty(key)?.replacePlaceholders(obj))
+                ?: "Unknown".also { Logger.write("Warning: Could not find property $key", Logger.LogLevel.INFO) }
+        else
+            (itemProps.getProperty(key)) ?: "Unknown".also {
                 Logger.write(
                     "Warning: Could not find property $key",
                     Logger.LogLevel.INFO

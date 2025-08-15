@@ -1,6 +1,7 @@
 package com.titaniumPolitics.game.ui.map
 
 import com.badlogic.gdx.graphics.Color
+import com.badlogic.gdx.scenes.scene2d.Touchable
 import com.badlogic.gdx.scenes.scene2d.actions.Actions
 import com.badlogic.gdx.scenes.scene2d.actions.AlphaAction
 import com.badlogic.gdx.scenes.scene2d.ui.Button
@@ -38,6 +39,7 @@ open class PlaceMarker(var gameState: GameState, var owner: MapUI, var place: St
                 setFontScale(0.2f)
                 setAlignment(Align.center)
                 color = Color.RED
+                touchable = Touchable.disabled // Make the label not interactable as it will cover other markers
             }
             addActor(infoText)
             infoText.setPosition(
