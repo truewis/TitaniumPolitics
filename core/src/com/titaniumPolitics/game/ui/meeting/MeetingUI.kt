@@ -210,6 +210,8 @@ class MeetingUI(var gameState: GameState) : Table(defaultSkin), KTable {
 
     private fun addCharacterPortrait(characterName: String) {
 
+        //If the character already has a portrait, do not add a new one.
+        if (portraits.any { it.tgtCharacter == characterName }) return
         val portrait = SimpleHeadPortraitUI(characterName, true)
         portrait.setSize(200f, 200f)
         portraits.add(portrait)
