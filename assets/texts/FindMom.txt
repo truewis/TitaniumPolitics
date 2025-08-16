@@ -1,15 +1,17 @@
-{ANON}Yuri: Hey there!
-Rui: Do you know me?
-{ANON}Yuri: I saw you at the square. You were with my mom!
+ENTER Rui
+ENTER Yuri
+{ANON}Yuri, smile: Hey there!
+Rui, confused: Do you know me?
+{ANON}Yuri, smile: I saw you at the square. You were with my mom!
 Rui: Oh, cool. Anything else?
 {ANON}Yuri: Can you give this to my mom? She left it when she went to work.
-Rui: I don't even know who your mom is. I meet a lot of people at the square.
+Rui, smile: I don't even know who your mom is. I meet a lot of people at the square.
 {ANON}Yuri: She works in the mine. She'll see you if you wait there with the box!
-Rui: I'm sorry, but I can't do that. First of all, I am far too busy to just stand in the mine entrance indefinitely. Second, people can be very hesitant to approach strangers. I don't want to make your mom uncomfortable.
+Rui, smile: I'm sorry, but I can't do that. First of all, I am far too busy to just stand in the mine entrance indefinitely. Second, people can be very hesitant to approach strangers. I don't want to make your mom uncomfortable.
 {ANON}Yuri: If you don't take this, I'll let my mom know that an engineer with the name Rui harassed me.
-Rui: (Ick...) That's not true at all. I'm not harassing you. I'm just trying to explain why I can't help you.
+Rui, confused: (Ick...) That's not true at all. I'm not harassing you. I'm just trying to explain why I can't help you.
 {ANON}Yuri: Doesn't matter. Why would my mom believe you over me?
 Rui: Darn it. Give me the box. I'll try my best to give it to your mom.
-Yuri: Thanks! If you are not sure where my mom is, just shout out this is from Yuri.
+Yuri, smile: Thanks! If you are not sure where my mom is, just shout out this is from Yuri.
 Rui: Sure. And one last word, young man. You better be more polite to strangers. Some people will not accept this kind of behavior.
 Yuri: Sure they won't!

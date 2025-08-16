@@ -1,6 +1,11 @@
-Mentor: ...You told me this time it would be ready. I believed you. But you lied to me again. Not once, not twice, but three times now.
-Dr.Paik: I know, I know. But we are doing everything we can. The pill is on its way, I promise. Just a little more patience.
-Mentor: Patience? How can you ask me to be patient? My wife is dying!
-Dr.Paik: Sylvia is doing better than we expected.
-Mentor: How on earth can I believe you? Everything you said so far is a lie.
+ENTER Yuhoa
+ENTER DrPaik
+Yuhoa, angry: ...You told me this time it would be ready. I believed you. But you lied to me again. Not once, not twice, but three times now.
+DrPaik: I know, I know. But we are doing everything we can. The pill is on its way, I promise. Just a little more patience.
+Yuhoa, fury: Patience? How can you ask me to be patient? My wife is dying!
+DrPaik: Sylvia is doing better than we expected.
+Yuhoa, angry: How on earth can I believe you? Everything you said so far is a lie.
+EXIT Yuhoa
+EXIT DrPaik
+ENTER Rui
 Rui: (So that's why he was so nervous. He was waiting for the pill to be delivered. I need to help him somehow. But not today, it's too obvious. I should wait for a better moment.)

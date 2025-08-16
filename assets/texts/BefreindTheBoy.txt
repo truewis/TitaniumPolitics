@@ -1,20 +1,23 @@
+ENTER Rui
 Rui: (Another evening in the station. Market is crowded as always.)
 Rui: (Impoverished people negotiating to their death over the price of a piece of biscuit, as if that will eventually make them rich......)
 Rui: (Alas, such is the perpetual struggle of the working class!)
-{SLAM}
-Rui: Ouch! What was that?
+SLAM
+Rui, confused: Ouch! What was that?
 Narrator: The ball which hit Rui is rolling down the corridor. Two boys run out from the corner.
+ENTER Boy1
+ENTER Yuri
 Boy1: Ahw Shit! Yuri, come and see who you've hit!
-Yuri: Who the fuck are you talking about?
+Yuri, confused: Who the fuck are you talking about?
 Boy1: A tech bro, oh not a bro, a gal!
 Yuri: No way!
-Rui: Uhm... so whose ball is this?
+Rui, confused: Uhm... so whose ball is this?
 Yuri: Dear engineer, that is my ball!
-Rui: Oh, nice to see you again, Yuri. Were you playing the ball?
+Rui, smile: Oh, nice to see you again, Yuri. Were you playing the ball?
 Yuri: Nice to see you too! But no, dear engineer, I didn't! The ball just bounced off my foot!
-Rui: Sounds good. Who decided to play ball here then?
+Rui, smile: Sounds good. Who decided to play ball here then?
 Yuri: Not me! Those other kids always come to me and beg me for the ball! I just can't say no all the time.
-Rui: Good for you, young man. Just try not to lose it, it's expensive as hell.
+Rui, smile: Good for you, young man. Just try not to lose it, it's expensive as hell.
 Rui: Even my parents couldn't afford one when I was young, believe or not. Where did you get the ball, by the way?
 Yuri: My father bought it for me!
 Rui: Oh that is interesting. Who is your father?
