@@ -28,7 +28,10 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable 
     val actionSheetContainer = Container<ActionSheetUI>()
 
     init {
-        gameState.updateUI += { _ -> refreshList(); }
+        gameState.updateUI += { _ ->
+            refreshList();
+            close()
+        }
 
         val docScr = ScrollPane(docList)
         docList.align(Align.center)

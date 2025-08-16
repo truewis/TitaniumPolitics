@@ -245,6 +245,7 @@ class DialogueUI(val gameState: GameState) : Table(defaultSkin), KTable {
         }
         activePortraits[name] = portrait
         portraitsTable.addActor(portrait)
+        portrait.setPosition(0f, 0f, Align.bottomLeft) // Adjust position as needed
     }
 
     /** Removes a portrait from the scene */
