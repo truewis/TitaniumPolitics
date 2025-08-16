@@ -5,9 +5,11 @@ import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.badlogic.gdx.utils.Align
+import com.rafaskoberg.gdx.typinglabel.TypingLabel
 import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.core.Information
 import com.titaniumPolitics.game.core.InformationType
+import ktx.scene2d.Scene2DSkin
 import ktx.scene2d.Scene2DSkin.defaultSkin
 import ktx.scene2d.button
 import ktx.scene2d.checkBox
@@ -85,8 +87,8 @@ class InformationViewUI(var gameState: GameState) : Table(defaultSkin) {
         val informationList: List<Information>
         val knownInfos = gameState.informations.values.filter { it.knownTo.contains(gameState.playerName) }
         if (knownInfos.isEmpty()) {
-            informationTable.add(scene2d.label("No information available", "trnsprtConsole") {
-                setFontScale(3f)
+            informationTable.add(scene2d.label("No information available", "docTitle") {
+                setFontScale(0.75f)
                 setAlignment(Align.center)
             }).grow()
             return
@@ -94,17 +96,17 @@ class InformationViewUI(var gameState: GameState) : Table(defaultSkin) {
         if (!toggleButton.isChecked)//Simple view
         {
             if (mode == InformationViewMode.SELECT) {
-                informationTable.add(scene2d.label("Prep", "trnsprtConsole") {
-                    setFontScale(2f)
+                informationTable.add(scene2d.label("Prep", "docTitle") {
+                    setFontScale(0.5f)
                     setAlignment(Align.left)
                 }).size(100f, 100f).left()
             }
-            informationTable.add(scene2d.label("Time", "trnsprtConsole") {
-                setFontScale(2f)
+            informationTable.add(scene2d.label("Time", "docTitle") {
+                setFontScale(0.5f)
                 setAlignment(Align.left)
             }).size(200f, 100f).left()
-            informationTable.add(scene2d.label("Description", "trnsprtConsole") {
-                setFontScale(2f)
+            informationTable.add(scene2d.label("Description", "docTitle") {
+                setFontScale(0.5f)
                 setAlignment(Align.left)
             }).growX().left()
             informationTable.row()
@@ -112,25 +114,24 @@ class InformationViewUI(var gameState: GameState) : Table(defaultSkin) {
             informationList.forEach { information ->
                 val timeLabel = scene2d.label(
                     GameState.formatTime(information.creationTime),
-                    "trnsprtConsole"
+                    "docTitle"
                 ).also {
                     it.setAlignment(Align.left)
-                    it.setFontScale(2f)
+                    it.setFontScale(0.5f)
                     if (gameState.player.preparedInfoKeys.contains(information.name))
                         it.color = com.badlogic.gdx.graphics.Color.GREEN
                     else
                         it.color = com.badlogic.gdx.graphics.Color.WHITE
                 }
-                val label = scene2d.label(
+                val label = TypingLabel(
                     information.simpleDescription(),
-                    "trnsprtConsole"
+                    Scene2DSkin.defaultSkin,
+                    "docTitle"
                 ).also {
                     it.setAlignment(Align.left)
-                    it.setFontScale(2f)
+                    it.setFontScale(0.5f)
                     if (gameState.player.preparedInfoKeys.contains(information.name))
-                        it.color = com.badlogic.gdx.graphics.Color.GREEN
-                    else
-                        it.color = com.badlogic.gdx.graphics.Color.WHITE
+                        it.setFontScale(0.6f)
                     it.addListener(object : ClickListener() {
                         //When clicked, open the information in a new window, depending on the type of information.
                         override fun clicked(
@@ -210,8 +211,8 @@ class InformationViewUI(var gameState: GameState) : Table(defaultSkin) {
             if (informationList.isNotEmpty()) {
 
                 if (mode == InformationViewMode.SELECT) {
-                    informationTable.add(scene2d.label("Prep", "trnsprtConsole") {
-                        setFontScale(2f)
+                    informationTable.add(scene2d.label("Prep", "docTitle") {
+                        setFontScale(0.5f)
                         setAlignment(Align.left)
                     }).size(100f, 100f).left()
                 }
@@ -220,8 +221,8 @@ class InformationViewUI(var gameState: GameState) : Table(defaultSkin) {
                 firstInformation::class.java.declaredFields.forEach { field ->
                     if (field.name == "author" || field.name == "creationTime" || field.name == "type" || field.name == "tgtTime" || field.name == "tgtPlace" || field.name == "tgtCharacter" || field.name == "amount") {
                         val button = scene2d.button {
-                            label(field.name, "trnsprtConsole") {
-                                setFontScale(2f)
+                            label(field.name, "docTitle") {
+                                setFontScale(0.5f)
                             }
                             addListener(object : ClickListener() {
                                 override fun clicked(
@@ -263,10 +264,10 @@ class InformationViewUI(var gameState: GameState) : Table(defaultSkin) {
                             val label = Label(
                                 "${field.get(information)?.toString() ?: "null"}",
                                 defaultSkin,
-                                "trnsprtConsole"
+                                "docTitle"
                             ).also {
                                 it.setAlignment(Align.center)
-                                it.setFontScale(2f)
+                                it.setFontScale(0.5f)
 
                                 if (gameState.player.preparedInfoKeys.contains(information.name))
                                     it.color = com.badlogic.gdx.graphics.Color.GREEN

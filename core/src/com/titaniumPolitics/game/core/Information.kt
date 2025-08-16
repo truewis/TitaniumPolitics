@@ -115,39 +115,39 @@ data class Information(
                 val actionStr = action!!::class.simpleName
                 val target = tgtCharacter?.let { "to $it" } ?: ""
                 val place = if (tgtPlace.isNotEmpty()) "at $tgtPlace" else ""
-                "$actor performed $actionStr $target $place"
+                "$actor performed $actionStr $target $place."
             }
 
             InformationType.RESOURCES -> {
                 val who = tgtCharacter ?: "Someone"
-                "$who has $amount resources at $tgtPlace"
+                "$who has $amount resources at $tgtPlace."
             }
 
             InformationType.CASUALTY -> {
                 val who = tgtCharacter ?: "Someone"
-                "$who suffered $amount casualties at $tgtPlace"
+                "$who suffered $amount casualties at $tgtPlace."
             }
 
             InformationType.LOST_RESOURCES -> {
                 val who = tgtCharacter ?: "Someone"
-                "$who lost $amount resources at $tgtPlace"
+                "$who lost $amount resources at $tgtPlace."
             }
 
             InformationType.DAMAGED_APPARATUS -> {
                 val apparatus = tgtApparatus ?: "an apparatus"
-                "$apparatus was damaged at $tgtPlace"
+                "$apparatus was damaged at $tgtPlace."
             }
 
             InformationType.APPARATUS -> {
                 val apparatus = tgtApparatus ?: ReadOnly.appProp("unknownApparatus")
                 if (variables["durability"]!! > 0)
-                    ReadOnly.appProp("status-functional").format(variables["durability"]!!)
+                    ReadOnly.appProp("status-running").format(ReadOnly.appProp(apparatus), variables["durability"]!!)
                 else
                     ReadOnly.appProp("status-broken")
             }
 
             InformationType.HUMAN_RESOURCES -> {
-                "There are $amount current workers at $tgtPlace"
+                "There are $amount current workers at $tgtPlace."
             }
         }
     }

@@ -8,6 +8,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable
 
 import com.badlogic.gdx.utils.Align
 import com.rafaskoberg.gdx.typinglabel.TypingLabel
+import com.titaniumPolitics.game.core.GameEngine
+import com.titaniumPolitics.game.core.GameState
 
 import com.titaniumPolitics.game.core.Information
 import com.titaniumPolitics.game.core.ReadOnly
@@ -51,7 +53,7 @@ class ApparatusInfoUI : WindowUI("ApparatusInfoTitle") {
             row()
 
 
-            label("Apparatus Name: ${ReadOnly.appProp(information.tgtApparatus!!)}", "description") {
+            label(ReadOnly.appProp(information.tgtApparatus!!), "description") {
                 setAlignment(Align.center)
                 setFontScale(0.5f)
             }
@@ -69,15 +71,13 @@ class ApparatusInfoUI : WindowUI("ApparatusInfoTitle") {
             }
             add(desc).size(400f, 100f).fill()
             row()
-            label("${ReadOnly.prop("durability")}: ${information.variables["durability"] ?: "?"}", "description") {
-                setAlignment(Align.center)
-                setFontScale(0.5f)
-            }
-
-            row()
-            label("", "description") {
+            add(TypingLabel("", Scene2DSkin.defaultSkin, "description").apply {
                 val text1 = if ((information.variables["durability"] ?: 1.0) > .0) {
-                    ReadOnly.appProp("status-running").format(information.variables["durability"])
+                    ReadOnly.appProp("status-running")
+                        .format(
+                            ReadOnly.appProp(information.tgtApparatus ?: ReadOnly.appProp("unknownApparatus")),
+                            information.variables["durability"]
+                        )
                 } else {
                     ReadOnly.appProp("status-broken")
                 }
@@ -96,13 +96,16 @@ class ApparatusInfoUI : WindowUI("ApparatusInfoTitle") {
                 else ""
                 val text3 =
                     ReadOnly.appProp("status-worker")
-                        .format(information.variables["efficiency"], information.variables["currentWorker"])
-                val text4 = if ((information.variables["currentWorker"] ?: .0) > (information.variables["idealWorker"]
-                        ?: .0)
+                        .format(
+                            information.variables["efficiency"] ?: (0 * 100),
+                            information.variables["currentWorker"]?.toInt() ?: 0
+                        )
+                val text4 = if ((information.variables["currentWorker"]?.toInt()
+                        ?: 0) > (information.variables["idealWorker"]?.toInt() ?: 0)
                 )
                     ReadOnly.appProp("status-overWorked")
-                else if ((information.variables["currentWorker"] ?: .0) < (information.variables["idealWorker"]
-                        ?: .0)
+                else if ((information.variables["currentWorker"]?.toInt()
+                        ?: 0) < (information.variables["idealWorker"]?.toInt() ?: 0)
                 ) ReadOnly.appProp("status-underWorked")
                 else ""
                 val text5 = if ((information.variables["graveDanger"] ?: 0.0) > 0.0) {
@@ -115,7 +118,7 @@ class ApparatusInfoUI : WindowUI("ApparatusInfoTitle") {
                 )
                 setAlignment(Align.left)
                 setFontScale(0.2f)
-            }
+            })
 
             row()
             label("${ReadOnly.prop("author")}: ${information.author}", "description") {
@@ -123,7 +126,7 @@ class ApparatusInfoUI : WindowUI("ApparatusInfoTitle") {
                 setFontScale(0.3f)
             }
             row()
-            label("${ReadOnly.prop("reportTime")}: ${information.creationTime}", "description") {
+            label("${ReadOnly.prop("reportTime")}: ${GameState.formatTime(information.creationTime)}", "description") {
                 setAlignment(Align.center)
                 setFontScale(0.3f)
             }
