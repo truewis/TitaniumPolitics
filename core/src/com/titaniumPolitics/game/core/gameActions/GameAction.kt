@@ -64,8 +64,15 @@ sealed class GameAction() {
                 sbjCharObj.frozen += 3 * ReadOnly.constInt(this::class.simpleName!! + "Duration")
             else if (this is Sleep || this is Move)
                 sbjCharObj.frozen += 2 * ReadOnly.constInt(this::class.simpleName!! + "Duration")
+            else
+                sbjCharObj.frozen += ReadOnly.constInt(this::class.simpleName!! + "Duration")
         } else if (parent.getMutuality(sbjCharacter) < ReadOnly.const("DowntimeWill")) {
-            sbjCharObj.frozen += 3 * ReadOnly.constInt(this::class.simpleName!! + "Duration") / 2
+            if (this is NewAgenda || this is Intercept || this is InvestigateAccidentScene || this is ClearAccidentScene || this is PrepareInfo)
+                sbjCharObj.frozen += 3 * ReadOnly.constInt(this::class.simpleName!! + "Duration") / 2
+            else if (this is Sleep || this is Move)
+                sbjCharObj.frozen += ReadOnly.constInt(this::class.simpleName!! + "Duration")
+            else
+                sbjCharObj.frozen += ReadOnly.constInt(this::class.simpleName!! + "Duration")
 
         } else
             sbjCharObj.frozen += ReadOnly.constInt(this::class.simpleName!! + "Duration")

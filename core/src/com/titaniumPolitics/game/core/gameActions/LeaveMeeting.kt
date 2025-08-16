@@ -19,12 +19,12 @@ class LeaveMeeting(override val sbjCharacter: String, override val tgtPlace: Str
             //End meeting if there is only one character left.
             meeting.endMeeting(parent)
 
-        } else
+        }
         //If you were the speaker, the next random character will be the speaker.
-            if (meeting.currentSpeaker == sbjCharacter) {
-                meeting.currentSpeaker = meeting.currentCharacters.random()
-                Logger.write("Speaker is now ${meeting.currentSpeaker}", Logger.LogLevel.INFO)
-            }
+        else if (meeting.currentSpeaker == sbjCharacter) {
+            meeting.currentSpeaker = meeting.currentCharacters.random()
+            Logger.write("Speaker is now ${meeting.currentSpeaker}", Logger.LogLevel.INFO)
+        }
         super.execute()
     }
 

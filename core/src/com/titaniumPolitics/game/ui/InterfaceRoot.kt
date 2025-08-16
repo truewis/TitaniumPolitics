@@ -26,6 +26,7 @@ class InterfaceRoot(val gameState: GameState) : Table(defaultSkin), KTable {
     init {
         instance = this
         gameState.updateUI += {
+            println("InterfaceRoot updateUI called")
             if (it.player.currentMeeting != null) {
                 meetingUI.isVisible = true
                 meetingUI.newMeeting(it.player.currentMeeting!!)
