@@ -10,6 +10,7 @@ import com.titaniumPolitics.game.core.*
 import com.titaniumPolitics.game.core.GameEngine.Companion.AcquireParams
 import com.titaniumPolitics.game.core.gameActions.GameAction
 import com.titaniumPolitics.game.core.gameActions.Sleep
+import com.titaniumPolitics.game.core.gameActions.StartMeeting
 import com.titaniumPolitics.game.core.gameActions.Wait
 import com.titaniumPolitics.game.debugTools.Logger
 import com.titaniumPolitics.game.ui.widget.ActionSheetUI
@@ -29,6 +30,7 @@ class WaitUI(val gameState: GameState, actionCallback: (GameAction) -> Unit) :
     }
 
     init {
+        gameState.onAddInfo += this::waitInterruptCondition
         val st = stack {
             it.grow()
             table {
@@ -65,11 +67,13 @@ class WaitUI(val gameState: GameState, actionCallback: (GameAction) -> Unit) :
     fun spendTime(AcquireParams: GameEngine.Companion.AcquireParams) {
         if (interrupted) {
             GameEngine.acquireEvent -= this::spendTime
+            gameState.onAddInfo -= this::waitInterruptCondition
             ProgressBackgroundUI.instance.setVisibleWithFade(false, if (mode == WaitUIMode.WAIT) "Wait" else "Sleep")
             return
         }
         if (amount <= 0) {
             GameEngine.acquireEvent -= this::spendTime
+            gameState.onAddInfo -= this::waitInterruptCondition
             ProgressBackgroundUI.instance.setVisibleWithFade(false, if (mode == WaitUIMode.WAIT) "Wait" else "Sleep")
             return
         }
@@ -131,13 +135,23 @@ class WaitUI(val gameState: GameState, actionCallback: (GameAction) -> Unit) :
     private fun waitInterruptCondition(info: Information) {
         if (interrupted)
             return // If already interrupted, do not process further.
+
+        // If the meeting has just started, interrupt once so that the player can see the meeting.
+        if (info.tgtPlace == gameState.player.place.name && info.tgtCharacter != gameState.playerName &&
+            info.knownTo.contains(gameState.playerName) && info.action is StartMeeting
+        ) {
+            AlertUI.instance.addAlert("interrupted", ReadOnly.prop(info.tgtCharacter ?: "Someone"))
+            interrupted = true
+            Logger.write("WaitUI: Wait interrupted by ${info.author} at ${info.tgtPlace}", Logger.LogLevel.INFO)
+        }
+
         if (gameState.player.currentMeeting != null) {
             // If the player is in a meeting, do not interrupt.
             return
         }
         //Interrupt if a character performs an action other than wait in this place.
         if (info.tgtPlace == gameState.player.place.name && info.tgtCharacter != gameState.playerName &&
-            !(info.type == InformationType.ACTION && info.action is Wait) && info.knownTo.contains(gameState.playerName)
+            info.action !is Wait && info.knownTo.contains(gameState.playerName)
         ) {
 
             AlertUI.instance.addAlert("interrupted", ReadOnly.prop(info.tgtCharacter ?: "Someone"))
@@ -149,9 +163,6 @@ class WaitUI(val gameState: GameState, actionCallback: (GameAction) -> Unit) :
 
     //Override this method instead of remove, remove is not called properly.
     override fun setParent(parent: Group?) {
-        if (parent == null) {
-            gameState.onAddInfo -= this::waitInterruptCondition
-        }
         super.setParent(parent)
     }
 

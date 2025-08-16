@@ -11,7 +11,11 @@ class Wait(override val sbjCharacter: String, override val tgtPlace: String) : G
     }
 
     override fun isValid(): Boolean {
+        //If there is a meeting which I am the current speaker, I cannot wait.
+        if (sbjCharObj.currentMeeting != null && sbjCharObj.currentMeeting!!.currentSpeaker == sbjCharacter)
+            return false
         return true
+
     }
 
 }
