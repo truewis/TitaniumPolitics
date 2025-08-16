@@ -229,9 +229,7 @@ class Place : GameStateElement() {
         apparatuses.forEach app@{ apparatus ->
             apparatus.temperature = temperature //Update the temperature of the apparatus to the ambient temperature.
 
-            //Consume durability, no matter it is currently being worked or not. For storages, keep the durability if they are fully staffed.
-            if (!apparatus.isStorage || apparatus.currentWorker >= apparatus.idealWorker)
-                apparatus.durability -= S_PER_HR * const("DurabilityMax") / const("DurabilityTau")//Apparatuses are damaged over time. TODO: get rid of unexpected behaviors, if any
+            apparatus.depreciateHourly()
             //Check if it is workable------------------------------------------------------------------------------
             if (apparatus.durability <= .0) {
                 apparatus.durability = .0
@@ -302,9 +300,6 @@ class Place : GameStateElement() {
                 generateAccident()
 
             }
-            if (apparatus.isStorage) {
-                apparatus.durability += S_PER_HR * const("DurabilityMax") / const("DurabilityTau")//Storages are repaired if they are worked.
-            }
         }
 
         maxResources.forEach { //TODO: Note that if maxResources is undefined, the resource type is not checked. This prevents having to define storage for all sorts of resources.
@@ -360,14 +355,7 @@ class Place : GameStateElement() {
         apparatuses.forEach { app ->
             maxResources
             app.durability -= 30
-            Information(
-                author = null,
-                creationTime = parent.time,
-                type = InformationType.DAMAGED_APPARATUS,
-                tgtPlace = name,
-                amount = 30,
-                tgtApparatus = app.name
-            )/*store info*/.also {
+            app.getInformation(null, name, parent.time).also {
                 parent.addInformation(it)
                 //Add all people in the place to the known list.
                 it.knownTo.addAll(characters)
@@ -408,16 +396,8 @@ class Place : GameStateElement() {
         killWorkersInPlace(death)
         //Generate apparatus damage.
         apparatuses.forEach { app ->
-            maxResources
             app.durability -= 75
-            Information(
-                author = null,
-                creationTime = parent.time,
-                type = InformationType.DAMAGED_APPARATUS,
-                tgtPlace = name,
-                amount = 75,
-                tgtApparatus = app.name
-            )/*store info*/.also {
+            app.getInformation(null, name, parent.time).also {
                 parent.addInformation(it)
                 //Add all people in the place to the known list.
                 it.knownTo.addAll(characters)

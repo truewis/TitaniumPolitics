@@ -41,6 +41,13 @@ class Apparatus {
      * Temperature of this apparatus. Updated every hour to be equal to the temperature of the place.
      * */
     var temperature = 300.0
+    val statusText
+        get() = status_durability + '\n' +
+                status_temperature + '\n' +
+                status_danger
+    var status_durability = ""
+    var status_temperature = ""
+    var status_danger = ""
 
     val isStorage
         get() = jsonData.jsonObject["variables"]?.jsonObject?.get("storageType") != null
@@ -67,13 +74,13 @@ class Apparatus {
     /**
      * When T>Tmax, Efficiency is multiplied by exp[(1-T/Tmax)*10].  Damaged is scaled by 1+(T/Tmax). Danger is scaled by 1+(T/Tmax).
      */
-    private val maxTemp
+    val maxTemp
         get() = jsonData.jsonObject["maxTemp"]?.jsonPrimitive?.double ?: Double.POSITIVE_INFINITY
 
     /**
      * When T<Tmin, Efficiency is multiplied by exp[(1-Tmin/T)*10].  Damaged is scaled by 1+(Tmin/T). Danger is scaled by 1+(Tmin/T).
      */
-    private val minTemp
+    val minTemp
         get() = jsonData.jsonObject["minTemp"]?.jsonPrimitive?.double ?: 4.0
 
     private val damageTempScale
@@ -189,6 +196,28 @@ class Apparatus {
             Logger.write("$name is freezing: $temperature K < $minTemp K", Logger.LogLevel.APPARATUS_VERBOSE)
 
     }
+
+    fun getInformation(sbjCharacter: String?, tgtPlace: String, time: Int) = Information(
+        author = sbjCharacter,
+        creationTime = time,
+        type = InformationType.APPARATUS,
+        tgtTime = time,
+        tgtPlace = tgtPlace,
+        tgtApparatus = name,
+        amount = durability.toInt(),
+        variables = hashMapOf(
+            "durability" to durability,
+            "maxTemp" to maxTemp,
+            "temperature" to temperature,
+            "minTemp" to minTemp,
+            "currentWorker" to currentWorker.toDouble(),
+            "idealWorker" to idealWorker.toDouble(),
+            "efficiency" to netEfficiency,
+            "danger" to currentDanger,
+            "graveDanger" to currentGraveDanger
+
+        )
+    )
 
     override fun toString(): String {
         return "Apparatus(name='$name', durability=$durability, baseDanger=$baseDanger, idealProduction=$idealProduction, idealWorker=$idealWorker, currentWorker=$currentWorker, currentProduction=$currentProduction, currentDanger=$currentDanger, currentGraveDanger=$currentGraveDanger)"

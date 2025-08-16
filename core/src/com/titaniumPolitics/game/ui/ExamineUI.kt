@@ -50,7 +50,7 @@ class ExamineUI(var gameState: GameState, actionCallback: (GameAction) -> Unit) 
                                 Examine(
                                     this@ExamineUI.gameState.playerName,
                                     this@ExamineUI.gameState.player.place.name,
-                                    InformationType.APPARATUS_DURABILITY
+                                    InformationType.APPARATUS
                                 )
                             )
                             ProgressBackgroundUI.instance.setVisibleWithFade(true, "Examine")

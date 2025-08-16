@@ -11,7 +11,8 @@ import kotlin.math.min
 * Information can be used to make a decision. It can be used to blame or blackmail someone.
 * */
 @Serializable
-data class Information(//If there is no author, it is a rumor.
+data class Information(
+//If there is no author, it is a rumor.
     var author: String? = null,
     var creationTime: Int = 0,
     var type: InformationType = InformationType.ACTION,
@@ -23,7 +24,8 @@ data class Information(//If there is no author, it is a rumor.
     var action: GameAction? = null,
     var tgtParty: String? = null,
     var auxParty: String? = null,
-    var resources: Resources = Resources()
+    var resources: Resources = Resources(),
+    var variables: HashMap<String, Double> = hashMapOf(),
 ) {
     //Do not copy the name. It is unique.
     constructor(info: Information) : this(
@@ -38,7 +40,8 @@ data class Information(//If there is no author, it is a rumor.
         info.action,
         info.tgtParty,
         info.auxParty,
-        info.resources
+        info.resources,
+        info.variables
     )
 
     var name: String = ""
@@ -135,9 +138,12 @@ data class Information(//If there is no author, it is a rumor.
                 "$apparatus was damaged at $tgtPlace"
             }
 
-            InformationType.APPARATUS_DURABILITY -> {
-                val apparatus = tgtApparatus ?: "an apparatus"
-                "$apparatus durability is $amount at $tgtPlace"
+            InformationType.APPARATUS -> {
+                val apparatus = tgtApparatus ?: ReadOnly.appProp("unknownApparatus")
+                if (variables["durability"]!! > 0)
+                    ReadOnly.appProp("status-functional").format(variables["durability"]!!)
+                else
+                    ReadOnly.appProp("status-broken")
             }
 
             InformationType.HUMAN_RESOURCES -> {
@@ -159,5 +165,5 @@ data class Information(//If there is no author, it is a rumor.
 
 @Serializable
 enum class InformationType {
-    ACTION, RESOURCES, CASUALTY, LOST_RESOURCES, DAMAGED_APPARATUS, APPARATUS_DURABILITY, HUMAN_RESOURCES
+    ACTION, RESOURCES, CASUALTY, LOST_RESOURCES, DAMAGED_APPARATUS, APPARATUS, HUMAN_RESOURCES
 }

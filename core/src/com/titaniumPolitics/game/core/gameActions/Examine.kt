@@ -3,7 +3,6 @@ package com.titaniumPolitics.game.core.gameActions
 import com.titaniumPolitics.game.core.GameEngine
 import com.titaniumPolitics.game.core.Information
 import com.titaniumPolitics.game.core.InformationType
-import com.titaniumPolitics.game.core.ReadOnly
 import com.titaniumPolitics.game.debugTools.Logger
 import kotlinx.serialization.Serializable
 
@@ -13,7 +12,7 @@ class Examine(override val sbjCharacter: String, override val tgtPlace: String, 
     override fun chooseParams() {
         what = when (GameEngine.acquire(arrayListOf("HR", "apparatus", "resources"))) {
             "HR" -> InformationType.HUMAN_RESOURCES
-            "apparatus" -> InformationType.APPARATUS_DURABILITY
+            "apparatus" -> InformationType.APPARATUS
             "resources" -> InformationType.RESOURCES
             else -> throw Exception("")
         }
@@ -44,20 +43,12 @@ class Examine(override val sbjCharacter: String, override val tgtPlace: String, 
                 }
             }
 
-            InformationType.APPARATUS_DURABILITY -> {
+            InformationType.APPARATUS -> {
                 Logger.write("Apparatus: ${parent.places[tgtPlace]!!.apparatuses}", Logger.LogLevel.INFO)
 
                 //Acquire apparatus information.
                 parent.places[tgtPlace]!!.apparatuses.forEach { entry ->
-                    Information(
-                        author = sbjCharacter,
-                        creationTime = parent.time,
-                        type = InformationType.APPARATUS_DURABILITY,
-                        tgtTime = parent.time,
-                        tgtPlace = tgtPlace,
-                        tgtApparatus = entry.name,
-                        amount = entry.durability.toInt()
-                    ).also {
+                    entry.getInformation(sbjCharacter, tgtPlace, parent.time).also {
                         it.knownTo.add(sbjCharacter);parent.addInformation(it)
                     }
 
@@ -115,7 +106,7 @@ class Examine(override val sbjCharacter: String, override val tgtPlace: String, 
         }
 
         when (what) {
-            InformationType.APPARATUS_DURABILITY -> if (!reason(
+            InformationType.APPARATUS -> if (!reason(
                     "engineer" in sbjCharObj.trait,
                     "examine-engineer"
                 )

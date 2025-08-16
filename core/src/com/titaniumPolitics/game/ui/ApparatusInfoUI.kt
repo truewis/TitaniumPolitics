@@ -1,11 +1,13 @@
 package com.titaniumPolitics.game.ui
 
 
+import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.scenes.scene2d.ui.*
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable
 
 import com.badlogic.gdx.utils.Align
+import com.rafaskoberg.gdx.typinglabel.TypingLabel
 
 import com.titaniumPolitics.game.core.Information
 import com.titaniumPolitics.game.core.ReadOnly
@@ -54,23 +56,74 @@ class ApparatusInfoUI : WindowUI("ApparatusInfoTitle") {
                 setFontScale(0.5f)
             }
             row()
-            label(ReadOnly.appProp(information.tgtApparatus!! + "-desc"), "description") {
+            val desc = TypingLabel(
+                ReadOnly.appProp(information.tgtApparatus!! + "-desc"),
+                Scene2DSkin.defaultSkin,
+                "description"
+            ).apply {
+                setFontScale(0.2f)
                 setAlignment(Align.left)
-                setFontScale(0.3f)
+                color = Color.LIGHT_GRAY
+                wrap = true
+                restart()
             }
+            add(desc).size(400f, 100f).fill()
             row()
-            label("${ReadOnly.prop("durability")}: ${information.amount}", "description") {
+            label("${ReadOnly.prop("durability")}: ${information.variables["durability"] ?: "?"}", "description") {
                 setAlignment(Align.center)
                 setFontScale(0.5f)
             }
 
             row()
-            label("Author: ${information.author}", "description") {
+            label("", "description") {
+                val text1 = if ((information.variables["durability"] ?: 1.0) > .0) {
+                    ReadOnly.appProp("status-running").format(information.variables["durability"])
+                } else {
+                    ReadOnly.appProp("status-broken")
+                }
+                val text2 = if ((information.variables["temperature"] ?: 300.0) > (information.variables["maxTemp"]
+                        ?: Double.POSITIVE_INFINITY)
+                ) ReadOnly.appProp("status-highTemp").format(
+                    information.variables["maxTemp"] ?: Double.POSITIVE_INFINITY,
+                    information.variables["temperature"]
+                )
+                else if ((information.variables["temperature"] ?: 300.0) < (information.variables["minTemp"]
+                        ?: .0)
+                ) ReadOnly.appProp("status-lowTemp").format(
+                    information.variables["minTemp"] ?: 0.0,
+                    information.variables["temperature"]
+                )
+                else ""
+                val text3 =
+                    ReadOnly.appProp("status-worker")
+                        .format(information.variables["efficiency"], information.variables["currentWorker"])
+                val text4 = if ((information.variables["currentWorker"] ?: .0) > (information.variables["idealWorker"]
+                        ?: .0)
+                )
+                    ReadOnly.appProp("status-overWorked")
+                else if ((information.variables["currentWorker"] ?: .0) < (information.variables["idealWorker"]
+                        ?: .0)
+                ) ReadOnly.appProp("status-underWorked")
+                else ""
+                val text5 = if ((information.variables["graveDanger"] ?: 0.0) > 0.0) {
+                    ReadOnly.appProp("status-highDanger")
+                } else if ((information.variables["danger"] ?: 0.0) > 0.0) {
+                    ReadOnly.appProp("status-mediumDanger")
+                } else ReadOnly.appProp("status-minimumDanger")
+                setText(
+                    text1 + "\n" + text2 + "\n" + text3 + "\n" + text4 + "\n" + text5
+                )
+                setAlignment(Align.left)
+                setFontScale(0.2f)
+            }
+
+            row()
+            label("${ReadOnly.prop("author")}: ${information.author}", "description") {
                 setAlignment(Align.center)
                 setFontScale(0.3f)
             }
             row()
-            label("Creation Time: ${information.creationTime}", "description") {
+            label("${ReadOnly.prop("reportTime")}: ${information.creationTime}", "description") {
                 setAlignment(Align.center)
                 setFontScale(0.3f)
             }

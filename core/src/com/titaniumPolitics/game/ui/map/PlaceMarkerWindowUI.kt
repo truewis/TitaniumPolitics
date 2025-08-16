@@ -3,13 +3,16 @@ package com.titaniumPolitics.game.ui.map
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.ui.Label
+import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.utils.Align
+import com.rafaskoberg.gdx.typinglabel.TypingLabel
 import com.titaniumPolitics.game.core.*
 import com.titaniumPolitics.game.core.gameActions.Move
 import com.titaniumPolitics.game.debugTools.Logger
 import com.titaniumPolitics.game.ui.AlertUI
 import com.titaniumPolitics.game.ui.ProgressBackgroundUI
+import ktx.scene2d.Scene2DSkin
 import ktx.scene2d.button
 import ktx.scene2d.label
 import ktx.scene2d.scene2d
@@ -253,11 +256,12 @@ class PlaceMarkerWindowUI(var gameState: GameState, var owner: MapUI) : Table() 
             add(managementInformation).fillX().expandX()
             row()
 
-            add(scene2d.label(ReadOnly.placeProp("$placeDisplayed-desc"), "description") {
+            add(TypingLabel(ReadOnly.placeProp("$placeDisplayed-desc"), Scene2DSkin.defaultSkin, "description").apply {
                 setFontScale(0.2f)
                 setAlignment(Align.left)
                 color = Color.LIGHT_GRAY
                 wrap = true
+                restart()
             }).growX().fill().padTop(50f)
         }
         setSize(350f, 50f + content.prefHeight)

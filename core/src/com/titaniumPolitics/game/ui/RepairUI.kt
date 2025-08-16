@@ -13,6 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable
 import com.badlogic.gdx.utils.Align
 import com.badlogic.gdx.utils.Array
+import com.rafaskoberg.gdx.typinglabel.TypingLabel
 import com.titaniumPolitics.game.core.*
 import com.titaniumPolitics.game.core.gameActions.GameAction
 import com.titaniumPolitics.game.core.gameActions.NewAgenda
@@ -68,13 +69,14 @@ class RepairUI(val gameState: GameState, actionCallback: (GameAction) -> Unit) :
                 setFontScale(0.5f)
             }
             row()
-            val desc = label("Apparatus Description:", "description") {
-                it.size(400f, 100f)
-                it.fill()
-                setAlignment(Align.left)
+            val desc = TypingLabel("", Scene2DSkin.defaultSkin, "description").apply {
                 setFontScale(0.2f)
+                setAlignment(Align.left)
+                color = Color.LIGHT_GRAY
                 wrap = true
+                restart()
             }
+            add(desc).size(400f, 100f).fill()
             row()
             val dur = label("Durability:", "docTitle") {
                 it.size(400f, 50f)

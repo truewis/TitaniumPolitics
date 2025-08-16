@@ -4,7 +4,6 @@ import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.ui.VerticalGroup
-import com.titaniumPolitics.game.core.AnonAgent
 import com.titaniumPolitics.game.core.Character
 import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.core.InformationType
@@ -89,7 +88,7 @@ class AlertUI(var gameState: GameState) : Table(defaultSkin) {
 
                 }
 
-                InformationType.APPARATUS_DURABILITY -> {
+                InformationType.APPARATUS -> {
                     addAlert("apparatus") {
                         ApparatusInfoUI.instance.refresh(info)
                         ApparatusInfoUI.instance.isVisible = true

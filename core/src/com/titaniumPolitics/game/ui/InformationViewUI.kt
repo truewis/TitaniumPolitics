@@ -145,7 +145,7 @@ class InformationViewUI(var gameState: GameState) : Table(defaultSkin) {
                                     ResourceInfoUI.instance.refresh(information)
                                 }
 
-                                InformationType.APPARATUS_DURABILITY -> {
+                                InformationType.APPARATUS -> {
                                     //Open apparatus window
                                     ApparatusInfoUI.instance.isVisible = true
                                     ApparatusInfoUI.instance.refresh(information)
@@ -286,7 +286,7 @@ class InformationViewUI(var gameState: GameState) : Table(defaultSkin) {
                                                 ResourceInfoUI.instance.refresh(information)
                                             }
 
-                                            InformationType.APPARATUS_DURABILITY -> {
+                                            InformationType.APPARATUS -> {
                                                 //Open apparatus window
                                                 ApparatusInfoUI.instance.isVisible = true
                                                 ApparatusInfoUI.instance.refresh(information)
