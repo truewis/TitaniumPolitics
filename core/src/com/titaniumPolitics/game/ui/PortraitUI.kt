@@ -13,6 +13,7 @@ import com.titaniumPolitics.game.core.ReadOnly
 import com.titaniumPolitics.game.core.gameActions.GameAction
 import com.titaniumPolitics.game.core.gameActions.NewAgenda
 import com.titaniumPolitics.game.debugTools.Logger
+import com.titaniumPolitics.game.ui.widget.SimplePortraitUI
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
 import ktx.scene2d.*
@@ -20,36 +21,11 @@ import ktx.scene2d.Scene2DSkin.defaultSkin
 
 class PortraitUI(character: String, var gameState: GameState) : Table(defaultSkin), KTable {
     var displayTextBubble = true
-    val portrait = scene2d.image("UserGrunge") {
-        addListener(object : com.badlogic.gdx.scenes.scene2d.utils.ClickListener() {
-            override fun clicked(event: com.badlogic.gdx.scenes.scene2d.InputEvent?, x: Float, y: Float) {
-                //Open Character Marker UI
-                CharacterInteractionWindowUI.instance.isVisible = true
-                val coord = localToStageCoordinates(Vector2(x, y))
-                CharacterInteractionWindowUI.instance.refresh(coord.x, coord.y, this@PortraitUI.tgtCharacter)
-            }
-        })
-    }
+    val portrait = SimplePortraitUI(character, 1f, true)
     var tgtCharacter = character
         set(value) {
-            //TODO: Also check SimplePortraitUI for this.
             field = value
-            try {
-                portrait.drawable = TextureRegionDrawable(
-                    CapsuleStage.instance.assetManager.get( //TODO: Temporary solution for portrait image loading. PortraitUI does not have a stage.
-                        ReadOnly.charJson[tgtCharacter]!!.jsonObject["image"]!!.jsonPrimitive.content,
-                        Texture::class.java
-                    )!!
-                )
-            } catch (e: Exception) {
-                Logger.write("Portrait Image Error: $value", Logger.LogLevel.INFO)
-                portrait.drawable = TextureRegionDrawable(
-                    CapsuleStage.instance.assetManager.get(
-                        "portraits/default.png",
-                        Texture::class.java
-                    )!!
-                )
-            }
+            portrait.tgtCharacter = tgtCharacter
         }
     val speech = TypingLabel("", defaultSkin, "description").apply {
         setFontScale(0.5f)
@@ -142,7 +118,6 @@ class PortraitUI(character: String, var gameState: GameState) : Table(defaultSki
         }
         row()
         add(portrait).size(500f, 1000f).fill()
-        debug()
         gameState.updateUI += refresh
         refresh(gameState)
 

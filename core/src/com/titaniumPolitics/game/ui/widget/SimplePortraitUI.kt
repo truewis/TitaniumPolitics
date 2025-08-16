@@ -31,7 +31,7 @@ class SimplePortraitUI(character: String, scale: Float, interactable: Boolean) :
     }
 
     init {
-        background = skin.getDrawable("simpleBorder")
+        //background = skin.getDrawable("simpleBorder")
     }
 
 
@@ -73,6 +73,6 @@ class SimplePortraitUI(character: String, scale: Float, interactable: Boolean) :
 
     init {
         tgtCharacter = character
-        add(portrait).size(500f * scale, 1000f * scale)
+        add(portrait).size(500f * scale, 1000f * scale).fill()
     }
 }

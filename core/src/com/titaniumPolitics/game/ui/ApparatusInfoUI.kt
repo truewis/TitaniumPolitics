@@ -49,17 +49,17 @@ class ApparatusInfoUI : WindowUI("ApparatusInfoTitle") {
             row()
 
 
-            label("Apparatus Name: ${information.tgtApparatus}", "description") {
+            label("Apparatus Name: ${ReadOnly.appProp(information.tgtApparatus!!)}", "description") {
                 setAlignment(Align.center)
                 setFontScale(0.5f)
             }
             row()
-            label(ReadOnly.appProp(information.tgtApparatus!!), "description") {
-                setAlignment(Align.center)
+            label(ReadOnly.appProp(information.tgtApparatus!! + "-desc"), "description") {
+                setAlignment(Align.left)
                 setFontScale(0.3f)
             }
             row()
-            label("Durability: ${information.amount}", "description") {
+            label("${ReadOnly.prop("durability")}: ${information.amount}", "description") {
                 setAlignment(Align.center)
                 setFontScale(0.5f)
             }

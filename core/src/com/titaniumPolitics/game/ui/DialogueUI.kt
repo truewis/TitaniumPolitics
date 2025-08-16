@@ -45,7 +45,7 @@ class DialogueUI(val gameState: GameState) : Table(defaultSkin), KTable {
         }
     }
 
-    val speakerNameDisplay = Label("", skin, "description").apply {
+    val speakerNameDisplay = Label("", skin, "docTitle").apply {
         setFontScale(0.7f)
         touchable = Touchable.disabled
         setAlignment(Align.bottomLeft)
@@ -57,7 +57,7 @@ class DialogueUI(val gameState: GameState) : Table(defaultSkin), KTable {
     //Logs to be played.
     // Called and cleared when the ctnuButton is pressed.
     var ctnuCallback: () -> Unit = {}
-    val portraitsTable = Table(defaultSkin)
+    val portraitsTable = Table(defaultSkin).also { it.add().grow() }
 
     init {
         isVisible = false
@@ -245,7 +245,7 @@ class DialogueUI(val gameState: GameState) : Table(defaultSkin), KTable {
         }
         activePortraits[name] = portrait
         portraitsTable.addActor(portrait)
-        portrait.setPosition(0f, 0f, Align.bottomLeft) // Adjust position as needed
+        portrait.setPosition(0f, 300f, Align.bottomLeft) // Adjust position as needed
     }
 
     /** Removes a portrait from the scene */
@@ -263,26 +263,45 @@ class DialogueUI(val gameState: GameState) : Table(defaultSkin), KTable {
 
     /** Moves the given portrait to the foreground and pushes others back */
     private fun bringPortraitToFront(speaker: String, emotion: String) {
-        activePortraits.forEach { (name, portrait) ->
-            if (name == speaker) {
-                // Move to center & brighten alpha
-                portrait.addAction(
-                    Actions.parallel(
-                        Actions.moveTo(portraitsTable.width / 2f - portrait.width / 2f, portrait.y, 0.4f),
-                        Actions.fadeIn(0.4f)
-                    )
-                )
-                portrait.setEmotion(emotion)
-            } else {
-                // Move away & dim alpha
-                portrait.addAction(
-                    Actions.parallel(
-                        Actions.moveBy(-50f, 0f, 0.4f), // Example: slide back
-                        Actions.alpha(0.5f, 0.4f)
-                    )
-                )
+        // Split portraits into two stacks (left/right)
+        val portraitsList = activePortraits.values.toList()
+        val half = (portraitsList.size + 1) / 2
+        val leftStack = portraitsList.take(half).toMutableList()
+        val rightStack = portraitsList.drop(half).toMutableList()
+        // Layout parameters
+        val centerX = portraitsTable.width / 2f
+        val spacing = if (activePortraits.size == 1) 0f else 150f // tweak stack spacing
+        val leftStart = centerX - (leftStack.size * spacing)
+        val rightStart = centerX + spacing
+
+        // Helper to move speaker to top of their stack
+        fun bringToTop(stack: MutableList<SimplePortraitUI>, speaker: String) {
+            val idx = stack.indexOfFirst { it.tgtCharacter == speaker }
+            if (idx != -1) {
+                val portrait = stack.removeAt(idx)
+                stack.add(portrait) // put on top
             }
         }
+
+        // Position + zIndex assignment
+        fun positionStack(stack: List<SimplePortraitUI>, startX: Float, spacing: Float) {
+            stack.forEachIndexed { i, portrait ->
+                val targetX = startX + i * spacing
+                portrait.addAction(
+                    Actions.parallel(
+                        Actions.moveTo(targetX, portrait.y, 0.4f),
+                        Actions.alpha(if (portrait.tgtCharacter == speaker) 1f else 0.5f, 0.4f)
+                    )
+                )
+                portrait.zIndex = i // lower = behind, last = top
+            }
+        }
+
+        bringToTop(leftStack, speaker)
+        bringToTop(rightStack, speaker)
+        positionStack(leftStack, leftStart, spacing)
+        positionStack(rightStack, rightStart, spacing)
+        activePortraits[speaker]?.setEmotion(emotion)
     }
 
 

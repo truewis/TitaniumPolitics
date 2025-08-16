@@ -56,35 +56,46 @@ class RepairUI(val gameState: GameState, actionCallback: (GameAction) -> Unit) :
 
     private lateinit var agendaSelectBox: Table
     val apparatusDetailTable = scene2d.table {
-        val name = label("Apparatus Name:", "docTitle") {
-            setAlignment(Align.center)
-            setFontScale(0.5f)
-        }
-        row()
-        val desc = label("Apparatus Description:", "docTitle") {
-            setAlignment(Align.center)
-            setFontScale(0.3f)
-        }
-        row()
-        val dur = label("Durability:", "docTitle") {
-            setAlignment(Align.center)
-            setFontScale(0.5f)
-        }
 
-        row()
         val requiredRes = ResourceDisplayUI()
+        table {
+            it.size(400f, 200f)
+            it.fill()
+            val name = label("Apparatus Name:", "docTitle") {
+                it.size(400f, 50f)
+                it.fill()
+                setAlignment(Align.center)
+                setFontScale(0.5f)
+            }
+            row()
+            val desc = label("Apparatus Description:", "description") {
+                it.size(400f, 100f)
+                it.fill()
+                setAlignment(Align.left)
+                setFontScale(0.2f)
+                wrap = true
+            }
+            row()
+            val dur = label("Durability:", "docTitle") {
+                it.size(400f, 50f)
+                it.fill()
+                setAlignment(Align.center)
+                setFontScale(0.5f)
+            }
+            this@RepairUI.onUpdateSelectedApp += {
+                name.setText(ReadOnly.appProp(it.name))
+                desc.setText(ReadOnly.appProp(it.name + "-desc"))
+                dur.setText(ReadOnly.prop("durability") + ": " + String.format("%.1f", it.durability))
+                requiredRes.current = (
+                        it.requiredResourcePerRepair[Repair.checkRepairLevel(it).first]
+                        )
+                requiredRes.refresh()
+
+            }
+        }
         add(requiredRes)
 
-        this@RepairUI.onUpdateSelectedApp += {
-            name.setText(it.name)
-            desc.setText(ReadOnly.appProp(it.name))
-            dur.setText(it.durability.toString())
-            requiredRes.current = (
-                    it.requiredResourcePerRepair[Repair.checkRepairLevel(it).first]
-                    )
-            requiredRes.refresh()
 
-        }
     }
     val st = scene2d.stack {
         table {
@@ -99,7 +110,7 @@ class RepairUI(val gameState: GameState, actionCallback: (GameAction) -> Unit) :
             row()
             //Fill in agenda details.
             this@RepairUI.agendaDetailStack = stack {
-                it.grow()
+                it.size(800f, 200f)
                 add(this@RepairUI.apparatusDetailTable)
                 //TODO: also make changes to NewAgenda.kt.
             }
