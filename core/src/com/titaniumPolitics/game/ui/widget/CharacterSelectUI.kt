@@ -43,43 +43,7 @@ class CharacterSelectUI(val gameState: GameState) : WindowUI("CharacterSelectTit
                     it.fill(0.66f, 0.66f)
                     it.align(Align.center)
                     image("Help") {
-
-
-                        when (tobj) {
-                            //TODO: also make changes to NewAgendaUI.kt.
-                            "infrastructure" -> {
-                                this.setDrawable(Scene2DSkin.defaultSkin, "icon_traffic_39")
-                            }
-
-                            "interior" -> {
-                                this.setDrawable(Scene2DSkin.defaultSkin, "icon_common_98")
-                            }
-
-                            "safety" -> {
-                                this.setDrawable(Scene2DSkin.defaultSkin, "Shield2Grunge")
-                            }
-
-                            "bioengineering" -> {
-                                this.setDrawable(Scene2DSkin.defaultSkin, "icon_activity_110")
-                            }
-
-                            "mining" -> {
-                                this.setDrawable(Scene2DSkin.defaultSkin, "ShovelGrunge")
-                            }
-
-                            "education" -> {
-                                this.setDrawable(Scene2DSkin.defaultSkin, "icon_tool_87")
-                            }
-
-                            "industry" -> {
-                                this.setDrawable(Scene2DSkin.defaultSkin, "icon_tool_11")
-                            }
-                            //Default case for any other division, or if no division is selected.
-                            else -> {
-                                this.setDrawable(Scene2DSkin.defaultSkin, "Help")
-                            }
-                        }
-
+                        this.setDrawable(Scene2DSkin.defaultSkin, tobj + "Division")
 
                     }
                 }
@@ -111,8 +75,8 @@ class CharacterSelectUI(val gameState: GameState) : WindowUI("CharacterSelectTit
         val fcharacters = characters.filter { division == "" || gameState.characters[it]!!.division?.name == division }
         with(charactersTable) {
             if (fcharacters.isEmpty()) {
-                label("No characters available", "trnsprtConsole") {
-                    setFontScale(3f)
+                label("No characters available", "docTitle") {
+                    setFontScale(0.5f)
                     setAlignment(Align.center, Align.center)
                     color = Color.RED
                 }
@@ -123,7 +87,13 @@ class CharacterSelectUI(val gameState: GameState) : WindowUI("CharacterSelectTit
                     it.fillX()
                     it.height(150f)
                     it.width(150f)
-                    add(SimpleHeadPortraitUI(character, interactable = false))
+                    add(SimpleHeadPortraitUI(character, interactable = false)).size(100f)
+                    row()
+                    label(ReadOnly.charProp(character), "docTitle") {
+                        setAlignment(Align.center, Align.center)
+                        color = Color.WHITE
+                        setFontScale(0.2f)
+                    }
                     addListener(object : ClickListener() {
                         override fun clicked(event: InputEvent?, x: Float, y: Float) {
                             this@CharacterSelectUI.selectedCharacterCallback(character)

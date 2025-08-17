@@ -17,7 +17,7 @@ class CharacterSelectButton(skin: Skin, callback: (String) -> Unit) : Button(ski
         charPortrait = SimpleHeadPortraitUI("", false)
         add(charPortrait).size(100f)
         row()
-        charLabel = label("", "docTitle") { setFontScale(0.5f) }
+        charLabel = label("", "docTitle") { setFontScale(0.2f) }
         addListener(object : ClickListener() {
             override fun clicked(event: com.badlogic.gdx.scenes.scene2d.InputEvent?, x: Float, y: Float) {
                 CharacterSelectUI.instance.isVisible = true
@@ -30,6 +30,7 @@ class CharacterSelectButton(skin: Skin, callback: (String) -> Unit) : Button(ski
                 CharacterSelectUI.instance.selectedCharacterCallback = {
                     CharacterSelectUI.instance.isVisible = false
                     setLabel(it)
+                    charPortrait.tgtCharacter = it
                     callback(it)
                 }
             }
