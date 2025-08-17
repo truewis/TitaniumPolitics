@@ -34,9 +34,13 @@ class ActionTooltipUI(actionName: String) : Tooltip<Table>(scene2d.table {
             setColor(0f, 0f, 0f, 1f)
         }
         table {
+            val PADDING = 3f
+            pad(PADDING)
             stack {
-                it.size(350f, 50f)
-                image("TooltipTitle")
+                it.size(350f - PADDING * 2, 50f) /*With the padding, they add up to 350.*/
+                image("TooltipTitle") {
+                    setColor(0.5f, 0.5f, 0.5f, 1f)
+                }
                 table {
                     val txt = ReadOnly.prop(actionName)
                     label(txt, "description") {
@@ -49,25 +53,33 @@ class ActionTooltipUI(actionName: String) : Tooltip<Table>(scene2d.table {
                         }
                         color = Color.BLACK
                     }
-                    add(TimeAmountUI(ReadOnly.constInt(actionName + "Duration"))).fill()
+                    add(
+                        TimeAmountUI(
+                            ReadOnly.constInt(actionName + "Duration"),
+                            unknown = actionName in setOf("Wait", "Sleep")
+                        )
+                    ).fill()
                 }
             }
             row()
             label(ReadOnly.prop("$actionName-description"), "description") {
-                it.size(350f, 200f)
+                it.size(350f - PADDING * 2, 200f - PADDING * 2)
                 setFontScale(0.25f)
                 setAlignment(Align.topLeft)
                 wrap = true
             }
             row()
             label("", "description") {
-                it.size(350f, 100f)
+                it.size(350f - PADDING * 2, 100f)
                 name = "reasonText"
                 setFontScale(0.25f)
                 color = Color.RED
                 setAlignment(Align.topLeft)
                 wrap = true
             }
+        }
+        image("Stroke500x500") {
+            setColor(0f, 0f, 0f, 1f)
         }
     }
 

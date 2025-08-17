@@ -8,7 +8,7 @@ import ktx.scene2d.Scene2DSkin
 import ktx.scene2d.image
 import ktx.scene2d.label
 
-class TimeAmountUI(amount: Int) : Table(Scene2DSkin.defaultSkin), KTable {
+class TimeAmountUI(amount: Int, unknown: Boolean = false) : Table(Scene2DSkin.defaultSkin), KTable {
     init {
         image("ClockGrunge") {
             it.size(50f)
@@ -18,7 +18,13 @@ class TimeAmountUI(amount: Int) : Table(Scene2DSkin.defaultSkin), KTable {
                 color = Color.BLACK
             }
         }
-        if (amount < 0) {
+        if (unknown) {
+            label("?", "docTitle") {
+                it.fill()
+                setFontScale(0.4f)
+                color = Color.BLACK
+            }
+        } else if (amount < 0) {
             label("${ReadOnly.toMinutes(-amount)}M", "docTitle") {
                 it.fill()
                 setFontScale(0.4f)

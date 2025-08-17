@@ -23,7 +23,6 @@ class ResourceTooltipUI(itemName: String) : Tooltip<Table>(scene2d.table {
         touchable = Touchable.disabled//This is a shadow outside the tooltip
     })
     stack {
-
         it.size(350f)
         image("BlackPx")
 
@@ -34,8 +33,10 @@ class ResourceTooltipUI(itemName: String) : Tooltip<Table>(scene2d.table {
             setColor(0f, 0f, 0f, 1f)
         }
         table {
+            val PADDING = 3f
+            pad(PADDING)
             stack {
-                it.size(350f, 50f)
+                it.size(350f - PADDING * 2, 50f)
                 image("TooltipTitle")
                 table {
                     label(ReadOnly.itemProp(itemName), "description") {
@@ -49,21 +50,25 @@ class ResourceTooltipUI(itemName: String) : Tooltip<Table>(scene2d.table {
             }
             row()
             label(ReadOnly.itemProp("$itemName-desc"), "description") {
-                it.size(350f, 200f)
+                it.size(350f - PADDING * 2, 200f)
                 setFontScale(0.25f)
                 setAlignment(Align.topLeft)
                 wrap = true
             }
-            //Uncomment to display invalid reason text
-//            row()
-//            label("", "description") {
-//                it.size(350f, 100f)
-//                name = "reasonText"
-//                setFontScale(0.25f)
-//                color = Color.RED
-//                setAlignment(Align.topLeft)
-//                wrap = true
-//            }
+            //Optional: display invalid reason text here
+            row()
+            label("", "description") {
+                it.size(350f, 100f)
+                name = "reasonText"
+                setFontScale(0.25f)
+                color = Color.RED
+                setAlignment(Align.topLeft)
+                wrap = true
+            }
+        }
+
+        image("Stroke500x500") {
+            setColor(0f, 0f, 0f, 1f)
         }
     }
 

@@ -24,6 +24,26 @@ sealed class GameAction() {
     val sbjCharObj get() = parent.characters[sbjCharacter]!!
     val tgtPlaceObj get() = parent.places[tgtPlace]!!
 
+    val expectedDuration
+        get() = //Execution time penalty when the will is low.
+            if (parent.getMutuality(sbjCharacter) < ReadOnly.const("CriticalWill")) {
+                if (this is NewAgenda || this is Intercept || this is InvestigateAccidentScene || this is ClearAccidentScene || this is PrepareInfo)
+                    3 * ReadOnly.constInt(this::class.simpleName!! + "Duration")
+                else if (this is Sleep || this is Move)
+                    2 * ReadOnly.constInt(this::class.simpleName!! + "Duration")
+                else
+                    ReadOnly.constInt(this::class.simpleName!! + "Duration")
+            } else if (parent.getMutuality(sbjCharacter) < ReadOnly.const("DowntimeWill")) {
+                if (this is NewAgenda || this is Intercept || this is InvestigateAccidentScene || this is ClearAccidentScene || this is PrepareInfo)
+                    3 * ReadOnly.constInt(this::class.simpleName!! + "Duration") / 2
+                else if (this is Sleep || this is Move)
+                    ReadOnly.constInt(this::class.simpleName!! + "Duration")
+                else
+                    ReadOnly.constInt(this::class.simpleName!! + "Duration")
+
+            } else
+                ReadOnly.constInt(this::class.simpleName!! + "Duration")
+
 
     //This is used to store why the action is invalid, used by the UI elements to display the reason why the action cannot be performed.
     @Transient
@@ -57,25 +77,7 @@ sealed class GameAction() {
 
     //Some gameActions have more complicated freezing mechanism, so they don't call this function.
     open fun execute() {
-
-        //Execution time penalty when the will is low.
-        if (parent.getMutuality(sbjCharacter) < ReadOnly.const("CriticalWill")) {
-            if (this is NewAgenda || this is Intercept || this is InvestigateAccidentScene || this is ClearAccidentScene || this is PrepareInfo)
-                sbjCharObj.frozen += 3 * ReadOnly.constInt(this::class.simpleName!! + "Duration")
-            else if (this is Sleep || this is Move)
-                sbjCharObj.frozen += 2 * ReadOnly.constInt(this::class.simpleName!! + "Duration")
-            else
-                sbjCharObj.frozen += ReadOnly.constInt(this::class.simpleName!! + "Duration")
-        } else if (parent.getMutuality(sbjCharacter) < ReadOnly.const("DowntimeWill")) {
-            if (this is NewAgenda || this is Intercept || this is InvestigateAccidentScene || this is ClearAccidentScene || this is PrepareInfo)
-                sbjCharObj.frozen += 3 * ReadOnly.constInt(this::class.simpleName!! + "Duration") / 2
-            else if (this is Sleep || this is Move)
-                sbjCharObj.frozen += ReadOnly.constInt(this::class.simpleName!! + "Duration")
-            else
-                sbjCharObj.frozen += ReadOnly.constInt(this::class.simpleName!! + "Duration")
-
-        } else
-            sbjCharObj.frozen += ReadOnly.constInt(this::class.simpleName!! + "Duration")
+        sbjCharObj.frozen += expectedDuration
     }
 
     open fun deltaWill(): Double {
