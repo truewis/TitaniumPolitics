@@ -502,10 +502,17 @@ class GameState {
         return formatTime(time)
     }
 
-    fun formatDate(): String {
-        val year = day / 90 + 27 // Assuming 90 days per year
-        val month = (day % 90) / 30 // Assuming 15 days per month
-        return "Megaros $year. ${month + 1}. ${day % 15 + 1}"
+    fun formatDate(type: String = "full", addTime: Int = 0): String {
+        val tmpDay = ReadOnly.toDays(_time + addTime)
+        val year = tmpDay / 90 + 27 // Assuming 90 days per year
+        val month = (tmpDay % 90) / 30 // Assuming 15 days per month
+        when (type) {
+            "full" -> return "Megaros $year. ${month + 1}. ${tmpDay % 15 + 1}"
+            "year" -> return "Megaros $year."
+            "month" -> return "${month + 1}"
+            "monthDate" -> return "${month + 1}. ${tmpDay % 15 + 1}"
+            else -> return "Megaros $year. ${month + 1}. ${tmpDay % 15 + 1}"
+        }
     }
 
     fun formatClock(): String {

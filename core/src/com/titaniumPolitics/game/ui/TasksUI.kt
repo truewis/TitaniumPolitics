@@ -82,13 +82,13 @@ class TasksUI(var gameState: GameState) : Table(defaultSkin) {
         init {
             stack {
                 it.size(50f, 50f)
-                image("icon_simpleshape_45") {
-                    setColor(Color.GREEN)
+                image("icon_app_133") {
+                    setColor(0.6f, 0.3f, 0.3f, 0.5f) // Semi-transparent red
                 }
-                label((quest.index).toString()) {
+                label((quest.index).toString(), "docTitle") {
                     setColor(Color.WHITE)
                     setAlignment(Align.center)
-                    setFontScale(2f)
+                    setFontScale(0.5f)
                 }
             }
         }

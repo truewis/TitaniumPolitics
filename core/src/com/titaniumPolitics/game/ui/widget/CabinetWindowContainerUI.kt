@@ -164,9 +164,15 @@ open class CabinetWindowContainerUI(
         }
     }
 
+    /**
+     * Changes the marked state of the cabinet window.
+     * If marked is true, it adds a green marker to the cabinet window.
+     * The title label color is changed to green when marked.
+     */
     fun changeMarkedState(marked: Boolean) {
         if (marked) {
             titleLabel.color = Color.GREEN
+            if (findActor<Image>("GreenMarker") != null) return // If the marker already exists, do nothing.
             val marker = scene2d.image("BadgeRound") {
                 name = "GreenMarker"
                 color = Color.GREEN

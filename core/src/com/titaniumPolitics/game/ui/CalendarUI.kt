@@ -8,8 +8,10 @@ import com.badlogic.gdx.utils.Align
 import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.core.ReadOnly
 import ktx.scene2d.Scene2DSkin
+import ktx.scene2d.image
 import ktx.scene2d.label
 import ktx.scene2d.scene2d
+import ktx.scene2d.stack
 
 class CalendarUI(val gameState: GameState) : Table(Scene2DSkin.defaultSkin) {
     private val dataTable = Table(skin)
@@ -77,6 +79,18 @@ class CalendarUI(val gameState: GameState) : Table(Scene2DSkin.defaultSkin) {
         // 현재 시간
         val currentHour = (gameState.hour)
 
+        val yearLabel =
+            Label(gameState.formatDate("year") + " " + ReadOnly.prop("CalendarTitle"), skin, "docTitle").also {
+                it.setFontScale(0.5f)
+                it.setAlignment(Align.center)
+            }
+        addActor(yearLabel)
+        yearLabel.setPosition(
+            width / 2,
+            height + 50f /*Somehow it overlaps with date label otherwise*/,
+            Align.center
+        ) // Set position of the year label
+
 
         // 헤더: 시간/요일
         dayTable.add(Label("H\\D", skin, "docTitle").also {
@@ -84,9 +98,9 @@ class CalendarUI(val gameState: GameState) : Table(Scene2DSkin.defaultSkin) {
         }) // 왼쪽 상단 빈 칸
         for (i in 0 until DAYS) {
 
-            val dayLabel = Label("D${i + gameState.day}", skin, "docTitle")
+            val dayLabel = Label(gameState.formatDate("monthDate", 60 * 24 * i), skin, "docTitle")
             if (i == 0) {
-                dayLabel.color == Color.GREEN
+                dayLabel.color = Color.GREEN
             } else {
                 //Change color here if needed
             }
@@ -116,6 +130,10 @@ class CalendarUI(val gameState: GameState) : Table(Scene2DSkin.defaultSkin) {
                     entries.filter { ReadOnly.toHours(it.time) == hour && ReadOnly.toDays(it.time) == gameState.day + dayOffset }
                 if (entriesAtThisHour.isNotEmpty()) {
                     val cellTable = Table()
+                    val st = scene2d.stack {
+                        add(createCellBackground(hour == currentHour && dayOffset == 0))
+                        add(cellTable)
+                    }
                     entriesAtThisHour.forEach { entry ->
                         //if there is a quest, add a quest label
                         if (entry.associatedQuestName != null) {
@@ -130,9 +148,9 @@ class CalendarUI(val gameState: GameState) : Table(Scene2DSkin.defaultSkin) {
                         cellTable.add(meetingLabel).left()
                         cellTable.row()
                     }
-                    dataTable.add(cellTable).growX().left()
+                    dataTable.add(st).growX().left()
                 } else {
-                    dataTable.add("")
+                    dataTable.add(createCellBackground(hour == currentHour && dayOffset == 0)).fill()
                 }
             }
             dataTable.row()
@@ -141,8 +159,16 @@ class CalendarUI(val gameState: GameState) : Table(Scene2DSkin.defaultSkin) {
         // 현재 시간 행으로 스크롤
         dataTable.invalidate()
         scrollPane.layout()
-        val rowHeight = dataTable.cells[DAYS + 1].actor.height // 첫 시간 라벨의 높이
-        scrollPane.scrollTo(0f, dataTable.height - rowHeight * (currentHour - 2), 10f, rowHeight)
+        val rowHeight = dataTable.getRowHeight(1)
+        println("Calendar height:$rowHeight")
+        scrollPane.scrollTo(0f, dataTable.height - rowHeight * (currentHour), 10f, rowHeight)
+    }
+
+    fun createCellBackground(highlight: Boolean) = scene2d.image("icon_simpleshape_4").apply {
+        if (highlight)
+            setColor(0f, 1f, 0f, 0.5f)
+        else
+            setColor(0.5f, 0.5f, 0.5f, 0.5f)
     }
 
     data class CalendarEntry(
