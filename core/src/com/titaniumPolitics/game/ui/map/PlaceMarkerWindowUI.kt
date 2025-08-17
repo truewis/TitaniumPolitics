@@ -13,11 +13,13 @@ import com.titaniumPolitics.game.debugTools.Logger
 import com.titaniumPolitics.game.ui.AlertUI
 import com.titaniumPolitics.game.ui.ProgressBackgroundUI
 import com.titaniumPolitics.game.ui.widget.DescriptionLabel
+import com.titaniumPolitics.game.ui.widget.ResourceDisplayUI
 import com.titaniumPolitics.game.ui.widget.TitleLabel
 import ktx.scene2d.Scene2DSkin
 import ktx.scene2d.button
 import ktx.scene2d.label
 import ktx.scene2d.scene2d
+import ktx.scene2d.stack
 import ktx.scene2d.table
 
 class PlaceMarkerWindowUI(var gameState: GameState, var owner: MapUI) : Table() {
@@ -29,9 +31,7 @@ class PlaceMarkerWindowUI(var gameState: GameState, var owner: MapUI) : Table() 
     private val onRefresh = mutableListOf<() -> Unit>()
     val onClose = mutableListOf<() -> Unit>()
     val content = Table()
-    val titleLabel = TitleLabel("").apply {
-        label.setFontScale(0.5f)
-    }
+    val titleLabel = TitleLabel("", 0.5f)
 
     init {
         add(titleLabel).growX().fill()
@@ -107,47 +107,60 @@ class PlaceMarkerWindowUI(var gameState: GameState, var owner: MapUI) : Table() 
     val resourceInformation = scene2d.table {
         name = "resourceInformation"
         it.height = 50f
-        label("Resource Information", "description") {
-            setFontScale(0.4f)
-            setAlignment(Align.center)
-            color = Color.WHITE
-        }
+        add(TitleLabel(ReadOnly.prop("resourceInformation"), 0.3f)).height(50f).growX().fill()
         row()
-        val shortLabel = label("No resource information available", "description") {
-            setFontScale(0.25f)
-            setAlignment(Align.center)
-            color = Color.WHITE
-        }
-        this@PlaceMarkerWindowUI.onRefresh += {
-            //Update the resource information label with the most recent information about the place.
-            val gState = this@PlaceMarkerWindowUI.gameState
-            gState.informations.values.filter {
-                it.type == InformationType.RESOURCES && it.tgtPlace == this@PlaceMarkerWindowUI.placeDisplayed && it.knownTo.contains(
-                    gState.playerName
-                )
-            }.minByOrNull { it.tgtTime }?.let { info ->
-                val resources = info.resources
-                //TODO: resource display
-                shortLabel.setText("Most recent resource information: $resources")
+        stack {
+            it.growX()
+            val shortLabel = label("No resource information available", "description") {
+                setFontScale(0.25f)
+                setAlignment(Align.center)
+                color = Color.WHITE
+                wrap = true
             }
-                ?: run {
-                    //If no information is available, display a message.
-                    shortLabel.setText(
-                        "No resource information available"
+            val rdUI = ResourceDisplayUI()
+            val timeLabel = scene2d.label("", "docTitle") {
+                setFontScale(0.25f)
+                setAlignment(Align.center)
+                color = Color.WHITE
+            }
+
+            val tb = table {
+                add(rdUI).grow()
+                row()
+                add(timeLabel).growX()
+            }
+            this@PlaceMarkerWindowUI.onRefresh += {
+                //Update the resource information label with the most recent information about the place.
+                val gState = this@PlaceMarkerWindowUI.gameState
+                gState.informations.values.filter {
+                    it.type == InformationType.RESOURCES && it.tgtPlace == this@PlaceMarkerWindowUI.placeDisplayed && it.knownTo.contains(
+                        gState.playerName
                     )
-
+                }.maxByOrNull { it.tgtTime }?.let { info ->
+                    rdUI.current = info.resources
+                    rdUI.refresh()
+                    timeLabel.setText(GameState.formatTime(info.tgtTime))
+                    shortLabel.isVisible = false
+                    tb.isVisible = true
                 }
+                    ?: run {
+                        //If no information is available, display a message.
+                        shortLabel.isVisible = true
+                        tb.isVisible = false
+                        shortLabel.setText(
+                            ReadOnly.prop("noResourceInformationAvailable")
+                        )
 
+                    }
+
+            }
         }
+
     }
     val managementInformation = scene2d.table {
         name = "managementInformation"
         it.height = 50f
-        label("Management Information", "description") {
-            setFontScale(0.4f)
-            setAlignment(Align.center)
-            color = Color.WHITE
-        }
+        add(TitleLabel(ReadOnly.prop("managementInformation"), 0.3f)).height(50f).growX().fill()
         row()
         val divisionLabel = label("Division: ", "description") {
             setFontScale(0.25f)

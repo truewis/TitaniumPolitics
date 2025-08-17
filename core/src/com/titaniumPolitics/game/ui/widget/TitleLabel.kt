@@ -14,10 +14,11 @@ import ktx.scene2d.label
 import ktx.scene2d.scene2d
 import ktx.scene2d.stack
 
-class TitleLabel(text: String) : Table(Scene2DSkin.defaultSkin), KTable {
+class TitleLabel(text: String, fontSize: Float = 1f) : Table(Scene2DSkin.defaultSkin), KTable {
     val label = scene2d.label(text, "docTitle") {
         setAlignment(com.badlogic.gdx.utils.Align.center)
         color = com.badlogic.gdx.graphics.Color.WHITE
+        setFontScale(fontSize)
     }
 
     init {

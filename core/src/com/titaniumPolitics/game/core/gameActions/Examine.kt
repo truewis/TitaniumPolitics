@@ -66,6 +66,7 @@ class Examine(override val sbjCharacter: String, override val tgtPlace: String, 
                         type = InformationType.RESOURCES,
                         tgtTime = parent.time,
                         tgtCharacter = sbjCharacter,
+                        tgtPlace = tgtPlace,
                         resources = parent.characters[sbjCharacter]!!.resources
                     ).also {
                         it.knownTo.add(sbjCharacter);parent.addInformation(it)
@@ -113,13 +114,15 @@ class Examine(override val sbjCharacter: String, override val tgtPlace: String, 
             ) return false
 
             InformationType.HUMAN_RESOURCES -> if (!reason(
-                    sbjCharacter == tgtPlaceObj.workplaceParty?.overseer,
+                    tgtPlaceObj.workplaceParty?.let { sbjCharacter == (it.overseer ?: true) }
+                        ?: true, //If there is an overseer, I must be the overseer to examine HR.
                     "examine-HR-notOverseer"
                 )
             ) return false
 
             InformationType.RESOURCES -> if (!reason(
-                    sbjCharacter == tgtPlaceObj.workplaceParty?.treasurer,
+                    tgtPlaceObj.workplaceParty?.let { sbjCharacter == (it.treasurer ?: true) }
+                        ?: true, //If there is a treasurer, I must be the treasurer to examine resources.
                     "examine-resources-notTreasurer"
                 )
             ) return false

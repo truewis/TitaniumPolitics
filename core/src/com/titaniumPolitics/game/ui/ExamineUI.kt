@@ -26,7 +26,6 @@ class ExamineUI(var gameState: GameState, actionCallback: (GameAction) -> Unit) 
         docList.grow()
         docList.addActor(scene2d.container {
             button("document") {
-                isDisabled = true // Disable this button, as it is not implemented yet.
                 image("UserGrunge") {
                     it.size(70f)
                     val action = Examine(
