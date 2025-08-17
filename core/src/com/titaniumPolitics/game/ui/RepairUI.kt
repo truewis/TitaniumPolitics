@@ -26,6 +26,7 @@ import com.titaniumPolitics.game.ui.widget.CharacterSelectButton
 import com.titaniumPolitics.game.ui.widget.DescriptionLabel
 import com.titaniumPolitics.game.ui.widget.PlaceSelectButton
 import com.titaniumPolitics.game.ui.widget.ResourceDisplayUI
+import com.titaniumPolitics.game.ui.widget.SubmitButton
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
 import ktx.scene2d.*
@@ -36,10 +37,8 @@ import kotlin.collections.get
 class RepairUI(val gameState: GameState, actionCallback: (GameAction) -> Unit) :
     ActionSheetUI("RepairTitle", gameState, actionCallback) {
     val sbjChar = gameState.characters[subject]!!
-    val submitButton: Button
     val agendaDetailStack: Stack
     val onUpdateSelectedApp = arrayListOf<(Apparatus) -> Unit>()
-    val tooltip = ActionTooltipUI("Repair")
     var selectedApp: Apparatus? = null
         set(value) {
             if (value == null) throw Exception("")
@@ -49,14 +48,14 @@ class RepairUI(val gameState: GameState, actionCallback: (GameAction) -> Unit) :
                 injectParent(gameState)
                 apparatusID = value.ID
             }
-            if (!action.isValid()) {
-                submitButton.isDisabled = true
-                tooltip.displayInvalidReason(this@RepairUI.action.invalidReason)
-            }
+            submitButton.refresh(action)
         }
-    lateinit var action: Repair
+    var action = Repair(sbjChar.name, sbjChar.place.name).apply {
+        injectParent(gameState)
+        apparatusID = gameState.places[tgtPlace]!!.apparatuses.first().ID
+    }
 
-    private lateinit var agendaSelectBox: Table
+    private var agendaSelectBox: Table
     val apparatusDetailTable = scene2d.table {
 
         val requiredRes = ResourceDisplayUI()
@@ -112,23 +111,7 @@ class RepairUI(val gameState: GameState, actionCallback: (GameAction) -> Unit) :
                 //TODO: also make changes to NewAgenda.kt.
             }
             row()
-            this@RepairUI.submitButton = button {
-                addListener(this@RepairUI.tooltip)
-                it.size(300f, 100f).fill()
-                label("Submit", "docTitle") {
-                    color = Color.BLACK
-                    setAlignment(Align.center)
-
-                }
-                addListener(object : ChangeListener() {
-                    override fun changed(event: ChangeEvent?, actor: Actor?) {
-                        this@RepairUI.actionCallback(
-                            this@RepairUI.action
-                        )
-                        this@RepairUI.onClose.forEach { it() }
-                    }
-                })
-            }
+            add(this@RepairUI.submitButton).size(200f, 75f).fill()
 //            button {
 //                it.fill().size(300f, 100f)
 //                label("Cancel") {

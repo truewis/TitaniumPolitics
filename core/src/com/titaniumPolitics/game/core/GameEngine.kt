@@ -822,7 +822,8 @@ class GameEngine(val gameState: GameState) {
             if (!place.contains("home")) {
                 if (character in gameState.parties["infrastructure"]!!.members && gameState.characters[character]!!.trait.contains(
                         "engineer"
-                    )
+                    ) && /*If there is an apparatus in this place*/
+                    placeObj.apparatuses.isNotEmpty()
                 )
                     actions.add("Repair") //Infrastructure party members can repair the place.
                 if (character in gameState.parties["safety"]!!.members && gameState.characters[character]!!.trait.contains(

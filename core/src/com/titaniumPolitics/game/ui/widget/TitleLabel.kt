@@ -25,9 +25,9 @@ class TitleLabel(text: String, fontSize: Float = 1f) : Table(Scene2DSkin.default
         stack {
             it.grow()
             add(this@TitleLabel.label)
-            image("TitleBarTiled") {
-                setColor(0f, 0f, 0f, 76 / 256f) // Semi-transparent black
-            }
+//            image("TitleBarTiled") {
+//                setColor(0f, 0f, 0f, 76 / 256f) // Semi-transparent black
+//            }
         }
         row()
         image("Stroke5pxHorizontal") {

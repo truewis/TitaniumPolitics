@@ -39,51 +39,7 @@ class ResourceTransferUI(var gameState: GameState, actionCallback: (GameAction) 
     var toWhere = ""
     var modeLabel: Label
     var placeButton: Button
-    val submitButton: Button = scene2d.button {
-        isDisabled = true//Disabled until a place is selected.
-        label("Transfer", "docTitle") {
-            setFontScale(0.5f)
-            setAlignment(Align.center)
-            color = Color.BLACK
-        }
-        addListener(object : ChangeListener() {
-            override fun changed(event: ChangeEvent?, actor: Actor?) {
-                if (this@ResourceTransferUI.mode == "official") {
-                    this@ResourceTransferUI.actionCallback(
-                        OfficialResourceTransfer(
-                            this@ResourceTransferUI.subject,
-                            this@ResourceTransferUI.sbjChar.place.name
-                        ).apply {
-                            this.resources = Resources(this@ResourceTransferUI.target)
-                            this.toWhere = this@ResourceTransferUI.toWhere
-                        }
-                    )
-                } else if (this@ResourceTransferUI.mode == "unofficial") {
-                    this@ResourceTransferUI.actionCallback(
-                        UnofficialResourceTransfer(
-                            this@ResourceTransferUI.subject,
-                            this@ResourceTransferUI.sbjChar.place.name
-                        ).apply {
-                            this.resources = Resources(this@ResourceTransferUI.target)
-                            this.toWhere = this@ResourceTransferUI.toWhere
-                        }
-                    )
-                } else if (this@ResourceTransferUI.mode == "private") {
-                    this@ResourceTransferUI.actionCallback(
-                        UnofficialResourceTransfer(
-                            this@ResourceTransferUI.subject,
-                            this@ResourceTransferUI.sbjChar.place.name
-                        ).apply {
-                            this.resources = Resources(this@ResourceTransferUI.target)
-                            this.toWhere = this@ResourceTransferUI.toWhere
-                            this.fromHome = true
-                        }
-                    )
-                }
-                this@ResourceTransferUI.onClose.forEach { it() }
-            }
-        })
-    }
+    var action: GameAction? = null
 
     init {
         val st = stack {
@@ -96,7 +52,6 @@ class ResourceTransferUI(var gameState: GameState, actionCallback: (GameAction) 
                 //Select place to transfer resources to.
                 this@ResourceTransferUI.placeButton = PlaceSelectButton(skin, {
                     this@ResourceTransferUI.toWhere = it
-                    this@ResourceTransferUI.submitButton.isDisabled = false
                 })
                 add(this@ResourceTransferUI.placeButton).size(400f, 75f)
 
@@ -105,21 +60,7 @@ class ResourceTransferUI(var gameState: GameState, actionCallback: (GameAction) 
                 add(this@ResourceTransferUI.targetTable)
                 row()
                 add(this@ResourceTransferUI.submitButton).size(400f, 75f)
-                    .fill()//TODO: official transfer is only to my division
-                button {
-                    it.fill()
-                    it.size(400f, 75f)
-                    label("Cancel", "docTitle") {
-                        setFontScale(0.5f)
-                        setAlignment(Align.center)
-                        color = Color.BLACK
-                    }
-                    addListener(object : ClickListener() {
-                        override fun clicked(event: com.badlogic.gdx.scenes.scene2d.InputEvent?, x: Float, y: Float) {
-                            this@ResourceTransferUI.onClose.forEach { it() }
-                        }
-                    })
-                }
+                    .fill().colspan(2)
             }
         }
         content.add(st).grow()
@@ -142,6 +83,7 @@ class ResourceTransferUI(var gameState: GameState, actionCallback: (GameAction) 
         dataTable.callback = { resourceName, amount ->
             current[resourceName] = current[resourceName]!! - 1
             target[resourceName] = (target[resourceName] ?: .0) + 1
+            refreshAction()
             this@ResourceTransferUI.refresh(mode, current, target)
         }
         dataTable.refresh()
@@ -150,12 +92,46 @@ class ResourceTransferUI(var gameState: GameState, actionCallback: (GameAction) 
         targetTable.callback = { resourceName, amount ->
             target[resourceName] = target[resourceName]!! - 1
             current[resourceName] = (current[resourceName] ?: .0) + 1
+            refreshAction()
             this@ResourceTransferUI.refresh(mode, current, target)
         }
 
         targetTable.refresh()
 
 
+    }
+
+    private fun refreshAction() {
+        action = if (this@ResourceTransferUI.mode == "official") {
+            OfficialResourceTransfer(
+                this@ResourceTransferUI.subject,
+                this@ResourceTransferUI.sbjChar.place.name
+            ).apply {
+                this.resources = Resources(this@ResourceTransferUI.target)
+                this.toWhere = this@ResourceTransferUI.toWhere
+            }
+        } else if (this@ResourceTransferUI.mode == "unofficial") {
+            UnofficialResourceTransfer(
+                this@ResourceTransferUI.subject,
+                this@ResourceTransferUI.sbjChar.place.name
+            ).apply {
+                this.resources = Resources(this@ResourceTransferUI.target)
+                this.toWhere = this@ResourceTransferUI.toWhere
+            }
+        } else if (this@ResourceTransferUI.mode == "private") {
+            UnofficialResourceTransfer(
+                this@ResourceTransferUI.subject,
+                this@ResourceTransferUI.sbjChar.place.name
+            ).apply {
+                this.resources = Resources(this@ResourceTransferUI.target)
+                this.toWhere = this@ResourceTransferUI.toWhere
+                this.fromHome = true
+            }
+        } else {
+            throw IllegalArgumentException("Invalid mode: $mode")
+        }
+        action!!.injectParent(gameState)
+        submitButton.refresh(action!!)
     }
 
 }

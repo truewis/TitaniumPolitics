@@ -38,9 +38,15 @@ class ActionTooltipUI(actionName: String) : Tooltip<Table>(scene2d.table {
                 it.size(350f, 50f)
                 image("TooltipTitle")
                 table {
-                    label(ReadOnly.prop(actionName), "description") {
+                    val txt = ReadOnly.prop(actionName)
+                    label(txt, "description") {
                         it.growX()
-                        setFontScale(0.4f)
+                        //If the action name is too long, set the font scale smaller.
+                        if (txt.length > 20) {
+                            setFontScale(0.25f)
+                        } else {
+                            setFontScale(0.4f)
+                        }
                         color = Color.BLACK
                     }
                     add(TimeAmountUI(ReadOnly.constInt(actionName + "Duration"))).fill()

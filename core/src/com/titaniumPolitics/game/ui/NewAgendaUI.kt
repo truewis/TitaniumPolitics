@@ -25,15 +25,12 @@ import ktx.scene2d.Scene2DSkin.defaultSkin
 class NewAgendaUI(val gameState: GameState, actionCallback: (GameAction) -> Unit) :
     ActionSheetUI("NewAgendaTitle", gameState, actionCallback) {
     val sbjChar = gameState.characters[subject]!!
-    val submitButton: Button
     var agenda: MeetingAgenda? = null
         set(value) {
             field = value
             if (value != null)
-                submitButton.isDisabled =
-                    !NewAgenda(this.subject, this.tgtPlace).apply { agenda = value;injectParent(gameState) }.isValid()
-            else
-                submitButton.isDisabled = true
+                submitButton.refresh(
+                    NewAgenda(this.subject, this.tgtPlace).apply { agenda = value;injectParent(gameState) })
 
 
         }
@@ -44,7 +41,7 @@ class NewAgendaUI(val gameState: GameState, actionCallback: (GameAction) -> Unit
         agenda?.attachedRequest = Request(action, hashSetOf(action.sbjCharacter), hashSetOf(gameState.playerName))
     }
 
-    private lateinit var agendaSelectBox: Table
+    private var agendaSelectBox: Table
     private val praiseTable = scene2d.table {
         label(ReadOnly.prop("praise"), "docTitle") {
             color = Color.BLACK
@@ -155,25 +152,7 @@ class NewAgendaUI(val gameState: GameState, actionCallback: (GameAction) -> Unit
                 //TODO: also make changes to NewAgenda.kt.
             }
             row()
-            this@NewAgendaUI.submitButton = button {
-                isDisabled = true
-                it.size(300f, 100f).fill()
-                label("Submit", "docTitle") {
-                    color = Color.BLACK
-                    setAlignment(Align.center)
-
-                }
-                addListener(object : ChangeListener() {
-                    override fun changed(event: ChangeEvent?, actor: Actor?) {
-                        this@NewAgendaUI.actionCallback(
-                            NewAgenda(
-                                this@NewAgendaUI.subject,
-                                this@NewAgendaUI.tgtPlace
-                            ).apply { agenda = this@NewAgendaUI.agenda!! })
-                        this@NewAgendaUI.onClose.forEach { it() }
-                    }
-                })
-            }
+            add(this@NewAgendaUI.submitButton).size(200f, 75f).fill()
 //            button {
 //                it.fill().size(300f, 100f)
 //                label("Cancel") {
