@@ -6,11 +6,13 @@ import com.badlogic.gdx.scenes.scene2d.ui.*
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable
 
 import com.badlogic.gdx.utils.Align
+import com.rafaskoberg.gdx.typinglabel.TypingLabel
 import com.titaniumPolitics.game.core.Character
 
 import com.titaniumPolitics.game.core.Information
 import com.titaniumPolitics.game.core.ReadOnly
 import com.titaniumPolitics.game.debugTools.Logger
+import com.titaniumPolitics.game.ui.widget.DescriptionLabel
 import com.titaniumPolitics.game.ui.widget.WindowUI
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
@@ -41,10 +43,9 @@ class CharacterInfoUI : WindowUI("CharacterInfoTitle") {
                     setFontScale(0.5f)
                 }
                 row()
-                label(ReadOnly.charProp(character.name + "-desc"), "description") {
-                    setAlignment(Align.center)
-                    setFontScale(0.3f)
-                }
+                add(
+                    DescriptionLabel(ReadOnly.charProp(character.name + "-desc"))
+                ).size(500f, 200f).fill()
                 row()
                 label("Stats: ${character.stats}", "description") {
                     setAlignment(Align.center)

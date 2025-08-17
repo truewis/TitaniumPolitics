@@ -26,14 +26,14 @@ class PoliticiansInfoUI(val gameState: GameState) : Table(defaultSkin) {
         dataTable.clear()
 
         // Header row
-        dataTable.add(Label("Name", defaultSkin, "trnsprtConsole").apply { setFontScale(2f) }).width(400f).left()
-        dataTable.add(Label("Position", defaultSkin, "trnsprtConsole").apply { setFontScale(2f) }).width(400f).left()
+        dataTable.add(Label("Name", defaultSkin, "docTitle").apply { setFontScale(0.5f) }).width(400f).left()
+        dataTable.add(Label("Position", defaultSkin, "docTitle").apply { setFontScale(0.5f) }).width(400f).left()
         dataTable.add(
             Label(
                 "Mutuality",
                 defaultSkin,
-                "trnsprtConsole"
-            ).apply { setFontScale(2f); setAlignment(Align.center) }).width(600f).center()
+                "docTitle"
+            ).apply { setFontScale(0.5f); setAlignment(Align.center) }).width(600f).center()
         dataTable.row()
 
         // List all characters except the player
@@ -45,12 +45,12 @@ class PoliticiansInfoUI(val gameState: GameState) : Table(defaultSkin) {
                 Label(
                     ReadOnly.charName(character.key),
                     defaultSkin,
-                    "trnsprtConsole"
-                ).apply { setFontScale(2f) }).width(400f).left()
+                    "docTitle"
+                ).apply { setFontScale(0.5f) }).width(400f).left()
 
             // Position (replace with your own logic)
             val position = getCharacterPosition(character.value) // Implement this method as needed
-            dataTable.add(Label(position, defaultSkin, "trnsprtConsole").apply { setFontScale(2f) }).width(400f).left()
+            dataTable.add(Label(position, defaultSkin, "docTitle").apply { setFontScale(0.5f) }).width(400f).left()
 
             // Mutuality Meter
             val meter = MutualityMeter(gameState, character.key, player)
