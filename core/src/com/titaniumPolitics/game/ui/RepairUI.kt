@@ -23,6 +23,7 @@ import com.titaniumPolitics.game.ui.widget.ActionSelectButton
 import com.titaniumPolitics.game.ui.widget.ActionSheetUI
 import com.titaniumPolitics.game.ui.widget.ActionTooltipUI
 import com.titaniumPolitics.game.ui.widget.CharacterSelectButton
+import com.titaniumPolitics.game.ui.widget.DescriptionLabel
 import com.titaniumPolitics.game.ui.widget.PlaceSelectButton
 import com.titaniumPolitics.game.ui.widget.ResourceDisplayUI
 import kotlinx.serialization.json.jsonObject
@@ -69,13 +70,7 @@ class RepairUI(val gameState: GameState, actionCallback: (GameAction) -> Unit) :
                 setFontScale(0.5f)
             }
             row()
-            val desc = TypingLabel("", Scene2DSkin.defaultSkin, "description").apply {
-                setFontScale(0.2f)
-                setAlignment(Align.left)
-                color = Color.LIGHT_GRAY
-                wrap = true
-                restart()
-            }
+            val desc = DescriptionLabel("")
             add(desc).size(400f, 100f).fill()
             row()
             val dur = label("Durability:", "docTitle") {
@@ -86,7 +81,7 @@ class RepairUI(val gameState: GameState, actionCallback: (GameAction) -> Unit) :
             }
             this@RepairUI.onUpdateSelectedApp += {
                 name.setText(ReadOnly.appProp(it.name))
-                desc.setText(ReadOnly.appProp(it.name + "-desc"))
+                desc.label.setText(ReadOnly.appProp(it.name + "-desc"))
                 dur.setText(ReadOnly.prop("durability") + ": " + String.format("%.1f", it.durability))
                 requiredRes.current = (
                         it.requiredResourcePerRepair[Repair.checkRepairLevel(it).first]

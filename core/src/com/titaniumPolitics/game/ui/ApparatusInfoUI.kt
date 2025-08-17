@@ -14,6 +14,7 @@ import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.core.Information
 import com.titaniumPolitics.game.core.ReadOnly
 import com.titaniumPolitics.game.debugTools.Logger
+import com.titaniumPolitics.game.ui.widget.DescriptionLabel
 import com.titaniumPolitics.game.ui.widget.WindowUI
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
@@ -58,18 +59,7 @@ class ApparatusInfoUI : WindowUI("ApparatusInfoTitle") {
                 setFontScale(0.5f)
             }
             row()
-            val desc = TypingLabel(
-                ReadOnly.appProp(information.tgtApparatus!! + "-desc"),
-                Scene2DSkin.defaultSkin,
-                "description"
-            ).apply {
-                setFontScale(0.2f)
-                setAlignment(Align.left)
-                color = Color.LIGHT_GRAY
-                wrap = true
-                restart()
-            }
-            add(desc).size(400f, 100f).fill()
+            add(DescriptionLabel(ReadOnly.appProp(information.tgtApparatus!! + "-desc"))).size(400f, 100f).fill()
             row()
             add(TypingLabel("", Scene2DSkin.defaultSkin, "description").apply {
                 val text1 = if ((information.variables["durability"] ?: 1.0) > .0) {
@@ -121,12 +111,12 @@ class ApparatusInfoUI : WindowUI("ApparatusInfoTitle") {
             })
 
             row()
-            label("${ReadOnly.prop("author")}: ${information.author}", "description") {
+            label("${ReadOnly.prop("author")}: ${information.author}", "docTitle") {
                 setAlignment(Align.center)
                 setFontScale(0.3f)
             }
             row()
-            label("${ReadOnly.prop("reportTime")}: ${GameState.formatTime(information.creationTime)}", "description") {
+            label("${ReadOnly.prop("reportTime")}: ${GameState.formatTime(information.creationTime)}", "docTitle") {
                 setAlignment(Align.center)
                 setFontScale(0.3f)
             }

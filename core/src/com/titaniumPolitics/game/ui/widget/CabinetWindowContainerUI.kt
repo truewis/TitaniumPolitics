@@ -59,6 +59,9 @@ open class CabinetWindowContainerUI(
         text.isTransform = true // Enable transformations for the text actor
         text.rotateBy(90f)
         val UI = scene2d.stack {
+            image("white-pixel") {
+                it.color = Color.DARK_GRAY
+            }
             image("GradientBottom") {
                 color = Color.BLACK
             }

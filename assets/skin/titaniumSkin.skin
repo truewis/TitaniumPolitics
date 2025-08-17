@@ -87,6 +87,14 @@ com.badlogic.gdx.scenes.scene2d.ui.Skin$TintedDrawable: {
 		color: RGBA_0_0_0_255
 	}
 }
+com.badlogic.gdx.scenes.scene2d.utils.TiledDrawable: {
+	TitleBarTiled: {
+		region: TitleBar
+		color: RGBA_255_255_255_255
+		minWidth: 600
+		minHeight: 140
+	}
+}
 com.ray3k.tenpatch.TenPatchDrawable: {
 	ButtonRegularBgDisabled: {
 		region: ButtonRegularBg
@@ -427,10 +435,7 @@ com.badlogic.gdx.scenes.scene2d.ui.ProgressBar$ProgressBarStyle: {
 }
 com.badlogic.gdx.scenes.scene2d.ui.ScrollPane$ScrollPaneStyle: {
 	default: {
-		hScroll: SliderHorizontalNormal
-		hScrollKnob: SliderHandleHorizontalNormal
-		vScroll: SliderVerticalDefault
-		vScrollKnob: SliderHandleVerticalNormal
+		background: TitleBarTiled
 	}
 }
 com.badlogic.gdx.scenes.scene2d.ui.SelectBox$SelectBoxStyle: {

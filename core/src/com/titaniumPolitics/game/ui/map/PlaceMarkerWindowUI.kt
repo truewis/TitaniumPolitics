@@ -12,6 +12,8 @@ import com.titaniumPolitics.game.core.gameActions.Move
 import com.titaniumPolitics.game.debugTools.Logger
 import com.titaniumPolitics.game.ui.AlertUI
 import com.titaniumPolitics.game.ui.ProgressBackgroundUI
+import com.titaniumPolitics.game.ui.widget.DescriptionLabel
+import com.titaniumPolitics.game.ui.widget.TitleLabel
 import ktx.scene2d.Scene2DSkin
 import ktx.scene2d.button
 import ktx.scene2d.label
@@ -27,9 +29,8 @@ class PlaceMarkerWindowUI(var gameState: GameState, var owner: MapUI) : Table() 
     private val onRefresh = mutableListOf<() -> Unit>()
     val onClose = mutableListOf<() -> Unit>()
     val content = Table()
-    val titleLabel = scene2d.label("", "docTitle") {
-        setFontScale(0.5f)
-        setAlignment(Align.center)
+    val titleLabel = TitleLabel("").apply {
+        label.setFontScale(0.5f)
     }
 
     init {
@@ -231,13 +232,14 @@ class PlaceMarkerWindowUI(var gameState: GameState, var owner: MapUI) : Table() 
 
     fun refresh(x: Float, y: Float, placeName: String) {
         //setPosition(x + XOFFSET, y + YOFFSET)
-        if (placeName.contains("home")) this.titleLabel.setText(ReadOnly.prop("home"))
+        if (placeName.contains("home")) this.titleLabel.label.setText(ReadOnly.prop("home"))
         else
-            this.titleLabel.setText(ReadOnly.prop(placeName))
+            this.titleLabel.label.setText(ReadOnly.prop(placeName))
         placeDisplayed = placeName
 
         //Clear the list of any previous buttons.
         content.apply {
+            top()
             clear()
             //If place selection mode is active, add the selection button and nothing else.
             if (mode == "PlaceSelection") {
@@ -255,14 +257,11 @@ class PlaceMarkerWindowUI(var gameState: GameState, var owner: MapUI) : Table() 
             row()
             add(managementInformation).fillX().expandX()
             row()
-
-            add(TypingLabel(ReadOnly.placeProp("$placeDisplayed-desc"), Scene2DSkin.defaultSkin, "description").apply {
-                setFontScale(0.2f)
-                setAlignment(Align.left)
-                color = Color.LIGHT_GRAY
-                wrap = true
-                restart()
-            }).growX().fill().padTop(50f)
+            add(DescriptionLabel(ReadOnly.placeProp("$placeDisplayed-desc")).apply {
+                with(label) {
+                    color = Color.LIGHT_GRAY
+                }
+            }).growX().height(200f).fill().padTop(50f)
         }
         setSize(350f, 50f + content.prefHeight)
         //Update the resource information and management information tables.
