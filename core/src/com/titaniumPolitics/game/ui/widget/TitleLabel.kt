@@ -1,5 +1,7 @@
 package com.titaniumPolitics.game.ui.widget
 
+import com.badlogic.gdx.graphics.Color
+import com.badlogic.gdx.graphics.Color.WHITE
 import com.badlogic.gdx.scenes.scene2d.InputEvent
 import com.badlogic.gdx.scenes.scene2d.ui.Button
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
@@ -14,10 +16,11 @@ import ktx.scene2d.label
 import ktx.scene2d.scene2d
 import ktx.scene2d.stack
 
-class TitleLabel(text: String, fontSize: Float = 1f) : Table(Scene2DSkin.defaultSkin), KTable {
+class TitleLabel(text: String, fontSize: Float = 1f, textColor: Color = WHITE) : Table(Scene2DSkin.defaultSkin),
+    KTable {
     val label = scene2d.label(text, "docTitle") {
         setAlignment(com.badlogic.gdx.utils.Align.center)
-        color = com.badlogic.gdx.graphics.Color.WHITE
+        color = textColor
         setFontScale(fontSize)
     }
 

@@ -50,6 +50,12 @@ class ExamineUI(var gameState: GameState, actionCallback: (GameAction) -> Unit) 
                     }
                     )
                 }
+                row()
+                label(ReadOnly.prop("Examine-HR"), "docTitle") {
+                    setAlignment(Align.center)
+                    color = Color.WHITE
+                    setFontScale(0.1f)
+                }
             }
             size(100f, 100f)
         })
@@ -78,6 +84,12 @@ class ExamineUI(var gameState: GameState, actionCallback: (GameAction) -> Unit) 
                         }
                     }
                     )
+                }
+                row()
+                label(ReadOnly.prop("Examine-Apparatus"), "docTitle") {
+                    setAlignment(Align.center)
+                    color = Color.WHITE
+                    setFontScale(0.1f)
                 }
             }
             size(100f, 100f)
@@ -109,7 +121,12 @@ class ExamineUI(var gameState: GameState, actionCallback: (GameAction) -> Unit) 
                     }
                     )
                 }
-
+                row()
+                label(ReadOnly.prop("Examine-Resources"), "docTitle") {
+                    setAlignment(Align.center)
+                    color = Color.WHITE
+                    setFontScale(0.1f)
+                }
             }
             size(100f, 100f)
         })

@@ -1,6 +1,7 @@
 package com.titaniumPolitics.game.ui.map
 
 import com.badlogic.gdx.graphics.Color
+import com.badlogic.gdx.graphics.Color.BLACK
 import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
@@ -107,20 +108,25 @@ class PlaceMarkerWindowUI(var gameState: GameState, var owner: MapUI) : Table() 
     val resourceInformation = scene2d.table {
         name = "resourceInformation"
         it.height = 50f
-        add(TitleLabel(ReadOnly.prop("resourceInformation"), 0.3f)).height(50f).growX().fill()
+        add(
+            TitleLabel(
+                ReadOnly.prop("resourceInformation"),
+                0.3f,
+                BLACK
+            ).apply { left();label.setAlignment(Align.left) }).height(50f).growX().fill()
         row()
         stack {
             it.growX()
             val shortLabel = label("No resource information available", "description") {
-                setFontScale(0.25f)
-                setAlignment(Align.center)
+                setFontScale(0.2f)
+                setAlignment(Align.left)
                 color = Color.WHITE
                 wrap = true
             }
             val rdUI = ResourceDisplayUI()
             val timeLabel = scene2d.label("", "docTitle") {
-                setFontScale(0.25f)
-                setAlignment(Align.center)
+                setFontScale(0.2f)
+                setAlignment(Align.left)
                 color = Color.WHITE
             }
 
@@ -160,17 +166,24 @@ class PlaceMarkerWindowUI(var gameState: GameState, var owner: MapUI) : Table() 
     val managementInformation = scene2d.table {
         name = "managementInformation"
         it.height = 50f
-        add(TitleLabel(ReadOnly.prop("managementInformation"), 0.3f)).height(50f).growX().fill()
+        add(
+            TitleLabel(
+                ReadOnly.prop("managementInformation"),
+                0.3f,
+                BLACK
+            ).apply { left();label.setAlignment(Align.left) }).height(50f).growX().fill()
         row()
         val divisionLabel = label("Division: ", "description") {
-            setFontScale(0.25f)
-            setAlignment(Align.center)
+            it.left()
+            setFontScale(0.2f)
+            setAlignment(Align.left)
             color = Color.WHITE
         }
         row()
         val managerLabel = label("Manager: ", "description") {
-            setFontScale(0.25f)
-            setAlignment(Align.center)
+            it.left()
+            setFontScale(0.2f)
+            setAlignment(Align.left)
             color = Color.WHITE
         }
         this@PlaceMarkerWindowUI.onRefresh += {
