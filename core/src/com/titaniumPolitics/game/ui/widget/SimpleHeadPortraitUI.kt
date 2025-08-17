@@ -1,5 +1,6 @@
 package com.titaniumPolitics.game.ui.widget
 
+import com.badlogic.gdx.graphics.Color.LIGHT_GRAY
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.scenes.scene2d.InputEvent
@@ -45,7 +46,11 @@ class SimpleHeadPortraitUI(character: String, interactable: Boolean) : Table(Sce
             try {
                 portrait.drawable = TextureRegionDrawable(
                     CapsuleStage.instance.assetManager.get( //TODO: Temporary solution for portrait image loading. PortraitUI does not have a stage.
-                        ReadOnly.charJson[tgtCharacter]!!.jsonObject["headImage"]!!.jsonPrimitive.content,
+                        ReadOnly.charJson[tgtCharacter]!!.jsonObject["headImage"]!!.jsonPrimitive.content.also {
+                            if (it == "portraits/defaultHead.png") {
+                                portrait.color = LIGHT_GRAY
+                            }
+                        },
                         Texture::class.java
                     )!!
                 )
@@ -53,10 +58,11 @@ class SimpleHeadPortraitUI(character: String, interactable: Boolean) : Table(Sce
                 Logger.write("Portrait Image Error: $value", Logger.LogLevel.INFO)
                 portrait.drawable = TextureRegionDrawable(
                     CapsuleStage.instance.assetManager.get( //TODO: Temporary solution for portrait image loading. PortraitUI does not have a stage.
-                        "portraits/default.png",
+                        "portraits/defaultHead.png",
                         Texture::class.java
                     )!!
                 )
+                portrait.color = LIGHT_GRAY
             }
         }
 

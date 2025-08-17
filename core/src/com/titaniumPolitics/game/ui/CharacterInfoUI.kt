@@ -1,6 +1,10 @@
 package com.titaniumPolitics.game.ui
 
 
+import com.badlogic.gdx.graphics.Color.BLACK
+import com.badlogic.gdx.graphics.Color.DARK_GRAY
+import com.badlogic.gdx.graphics.Color.LIGHT_GRAY
+import com.badlogic.gdx.graphics.Color.WHITE
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.scenes.scene2d.ui.*
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable
@@ -13,6 +17,8 @@ import com.titaniumPolitics.game.core.Information
 import com.titaniumPolitics.game.core.ReadOnly
 import com.titaniumPolitics.game.debugTools.Logger
 import com.titaniumPolitics.game.ui.widget.DescriptionLabel
+import com.titaniumPolitics.game.ui.widget.SimplePortraitUI
+import com.titaniumPolitics.game.ui.widget.StatRadarGraph
 import com.titaniumPolitics.game.ui.widget.WindowUI
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
@@ -47,34 +53,45 @@ class CharacterInfoUI : WindowUI("CharacterInfoTitle") {
                     DescriptionLabel(ReadOnly.charProp(character.name + "-desc"))
                 ).size(500f, 200f).fill()
                 row()
-                label("Stats: ${character.stats}", "description") {
-                    setAlignment(Align.center)
-                    setFontScale(0.5f)
-                }
+                add(StatRadarGraph(character.stats)).pad(50f)
                 row()
-                add(
-                    MutualityMeter(
-                        character.parent,
-                        tgtCharacter = character.name,
-                        who = character.parent.playerName
-                    ).also {
-                        it.remove() //Do not refresh the meter, since this window is not persistent.
-                    })
+                //Only add the mutuality meter if the character is not the player.
+                if (character.name != character.parent.playerName) {
+                    add(
+                        MutualityMeter(
+                            character.parent,
+                            tgtCharacter = character.name,
+                            who = character.parent.playerName
+                        ).also {
+                            it.remove() //Do not refresh the meter, since this window is not persistent.
+                        })
+                }
 
             }
 
-            image("CogGrunge") {
+            stack {
+
                 it.size(500f, 1000f)
-                try {
-                    drawable = TextureRegionDrawable(
-                        CapsuleStage.instance.assetManager.get( //TODO: Temporary solution for portrait image loading. PortraitUI does not have a stage.
-                            ReadOnly.charJson[character.name]!!.jsonObject["image"]!!.jsonPrimitive.content,
-                            Texture::class.java
-                        )!!
-                    )
-                } catch (e: Exception) {
-                    Logger.write("Portrait Image Error: ${character.name}", Logger.LogLevel.INFO)
+                character.division?.let { div ->
+                    table {
+                        align(Align.topLeft)
+                        container {
+                            image(div.name + "Division") {
+                                color = LIGHT_GRAY
+                            }
+                            size(200f)
+                            align(Align.topLeft)
+                        }
+                        row()
+                        label(ReadOnly.prop(div.name), "docTitle") {
+                            it.padTop(-15f) /*Division name closer to the logo for aesthetics*/
+                            setAlignment(Align.top)
+                            setFontScale(0.2f)
+                            color = LIGHT_GRAY
+                        }
+                    }
                 }
+                add(SimplePortraitUI(character.name, scale = 1f, interactable = false))
             }
         }
 

@@ -18,6 +18,9 @@ open class WindowUI(titleKey: String) : Table(Scene2DSkin.defaultSkin), KTable {
     init {
         stack {
             it.grow()
+            image("white-pixel") {
+                it.color = Color.DARK_GRAY
+            }
             image("GradientBottom") {
                 color = Color.BLACK
             }

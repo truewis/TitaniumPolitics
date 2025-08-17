@@ -16,8 +16,8 @@ class CharacterInteractionWindowUI(var gameState: GameState) :
     var characterDisplayed = ""
     var mode = ""
     private val talkButton = scene2d.button {
-        label("Talk With...", "description") {
-            setFontScale(0.5f)
+        label(ReadOnly.prop("characterInteractionWindowUI-talkWith"), "description") {
+            setFontScale(0.3f)
         }
 
         addListener(object : com.badlogic.gdx.scenes.scene2d.utils.ClickListener() {
@@ -36,8 +36,8 @@ class CharacterInteractionWindowUI(var gameState: GameState) :
     }
 
     private val giveResourceButton = scene2d.button {
-        label("Give resources...", "description") {
-            setFontScale(0.5f)
+        label(ReadOnly.prop("characterInteractionWindowUI-giveResources"), "description") {
+            setFontScale(0.3f)
         }
 
         addListener(object : com.badlogic.gdx.scenes.scene2d.utils.ClickListener() {
@@ -56,8 +56,8 @@ class CharacterInteractionWindowUI(var gameState: GameState) :
     }
 
     private val selectButton = scene2d.button {
-        label("Select Character", "description") {
-            setFontScale(0.5f)
+        label(ReadOnly.prop("characterInteractionWindowUI-selectCharacter"), "description") {
+            setFontScale(0.3f)
         }
 
         addListener(object : com.badlogic.gdx.scenes.scene2d.utils.ClickListener() {
@@ -70,8 +70,8 @@ class CharacterInteractionWindowUI(var gameState: GameState) :
     }
 
     private val descButton = scene2d.button {
-        label("More...", "description") {
-            setFontScale(0.5f)
+        label(ReadOnly.prop("characterInteractionWindowUI-more"), "description") {
+            setFontScale(0.3f)
         }
 
         addListener(object : com.badlogic.gdx.scenes.scene2d.utils.ClickListener() {
@@ -87,7 +87,6 @@ class CharacterInteractionWindowUI(var gameState: GameState) :
     init {
         instance = this
         isVisible = false
-        titleLabel.setFontScale(2f)
         setSize(300f, 200f)
         setPosition(100f, 100f)
 
@@ -107,7 +106,7 @@ class CharacterInteractionWindowUI(var gameState: GameState) :
             if (gameState.characters[charName]!!.type != Character.Type.ANON)
                 this.titleLabel.setText(ReadOnly.prop(charName))
             else
-                this.titleLabel.setText("Survivor")
+                this.titleLabel.setText(ReadOnly.prop("characterInteractionWindowUI-survivor"))
             characterDisplayed = charName
 
             //Clear the list of any previous buttons.

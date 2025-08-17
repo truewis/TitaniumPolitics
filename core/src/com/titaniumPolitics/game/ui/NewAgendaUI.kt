@@ -316,7 +316,6 @@ class NewAgendaUI(val gameState: GameState, actionCallback: (GameAction) -> Unit
                                         y: Float
                                     ) {
                                         this@NewAgendaUI.hideAllAgendaDetailsTable()
-                                        this@NewAgendaUI.denouncePartyTable.isVisible = true
                                     }
                                 })
                             }
@@ -330,7 +329,6 @@ class NewAgendaUI(val gameState: GameState, actionCallback: (GameAction) -> Unit
                                         y: Float
                                     ) {
                                         this@NewAgendaUI.hideAllAgendaDetailsTable()
-                                        this@NewAgendaUI.denouncePartyTable.isVisible = true
                                     }
                                 })
                             }
@@ -344,7 +342,6 @@ class NewAgendaUI(val gameState: GameState, actionCallback: (GameAction) -> Unit
                                         y: Float
                                     ) {
                                         this@NewAgendaUI.hideAllAgendaDetailsTable()
-                                        this@NewAgendaUI.denouncePartyTable.isVisible = true
                                     }
                                 })
                             }
