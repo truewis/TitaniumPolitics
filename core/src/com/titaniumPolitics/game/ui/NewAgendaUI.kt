@@ -197,7 +197,7 @@ class NewAgendaUI(val gameState: GameState, actionCallback: (GameAction) -> Unit
             val t = scene2d.button("check") {
                 //TODO:Agenda Tooltip addListener(ActionTooltipUI(tobj))
                 container {
-                    it.size(100f)
+                    it.size(80f)
                     it.fill(0.66f, 0.66f)
                     it.align(Align.center)
                     image("Help") {
@@ -371,7 +371,7 @@ class NewAgendaUI(val gameState: GameState, actionCallback: (GameAction) -> Unit
                     }
                 }
             }
-            agendaSelectBox.add(t).size(150f).fill()
+            agendaSelectBox.add(t).size(100f).fill()
         }
     }
 

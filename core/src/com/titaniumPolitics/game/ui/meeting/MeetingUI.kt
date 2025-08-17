@@ -209,9 +209,6 @@ class MeetingUI(var gameState: GameState) : Table(defaultSkin), KTable {
     }
 
     private fun addCharacterPortrait(characterName: String) {
-
-        //If the character already has a portrait, do not add a new one.
-        if (portraits.any { it.tgtCharacter == characterName }) return
         val portrait = SimpleHeadPortraitUI(characterName, true)
         portrait.setSize(200f, 200f)
         portraits.add(portrait)
@@ -233,10 +230,10 @@ class MeetingUI(var gameState: GameState) : Table(defaultSkin), KTable {
         }
         //If there are fewer portraits than characters, add the missing portraits.
         if (portraits.size < currentMeeting.currentCharacters.size - 1) {
-            val missingCharacters = currentMeeting.currentCharacters.filter { char ->
-                portraits.none { it.tgtCharacter == char }
+            val missingCount = currentMeeting.currentCharacters.size - 1 - portraits.size
+            repeat(missingCount) {
+                addCharacterPortrait(currentMeeting.currentCharacters.first())
             }
-            missingCharacters.forEach { addCharacterPortrait(it) }
         }
         //Assign the speaker portrait to the current speaker.
         speakerPortrait.tgtCharacter = currentMeeting.currentSpeaker!!
