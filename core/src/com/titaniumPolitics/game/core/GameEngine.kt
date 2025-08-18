@@ -260,7 +260,8 @@ class GameEngine(val gameState: GameState) {
                         -it.value.amount * gameState.publicity(
                             it.key,
                             party.key
-                        ) / party.value.size * factor * S_PER_HR / const("MutualityFromInfoTau") * ReadOnly.mutualityScale
+                        ) / party.value.size * factor * S_PER_HR / const("MutualityFromInfoTau") * ReadOnly.mutualityScale,
+                        "CasualtyNews"
                     )
                 //if our party is responsible, integrity drops.
 
@@ -280,7 +281,8 @@ class GameEngine(val gameState: GameState) {
                             ) * gameState.publicity(
                                 it.key,
                                 party.key
-                            ) / party.value.size * factor * S_PER_HR / const("MutualityFromInfoTau") * ReadOnly.mutualityScale
+                            ) / party.value.size * factor * S_PER_HR / const("MutualityFromInfoTau") * ReadOnly.mutualityScale,
+                            "ResourceStolenNews"
                         )
                     }
                 }
@@ -487,7 +489,8 @@ class GameEngine(val gameState: GameState) {
                                     char.name, wkLeader,
                                     delta = -DT / const("SuffocationIntegrityDamageTau") * const("mutualityMax") * abs(
                                         char.place.temperature / 300 /*[K]*/ - 1
-                                    )
+                                    ),
+                                    "SuffocationIntegrityDamage"
                                 )
                             }
                             //If the character is in a division, the opinion of the division leader also decreases.
@@ -496,7 +499,8 @@ class GameEngine(val gameState: GameState) {
                                     char.name, divisionLeader,
                                     delta = -DT / const("SuffocationIntegrityDamageTau") * const("mutualityMax") * abs(
                                         char.place.temperature / 300 /*[K]*/ - 1
-                                    )
+                                    ),
+                                    "SuffocationLeaderTrustDamage"
                                 )
                             }
 
@@ -518,7 +522,8 @@ class GameEngine(val gameState: GameState) {
                                     char.name, wkLeader,
                                     delta = -DT / const("TemperatureIntegrityDamageTau") * const("mutualityMax") * abs(
                                         char.place.temperature / 300 /*[K]*/ - 1
-                                    )
+                                    ),
+                                    "TemperatureIntegrityDamage"
                                 )
                             }
                             //If the character is in a division, the opinion of the division leader also decreases.
@@ -527,7 +532,8 @@ class GameEngine(val gameState: GameState) {
                                     char.name, divisionLeader,
                                     delta = -DT / const("TemperatureIntegrityDamageTau") * const("mutualityMax") * abs(
                                         char.place.temperature / 300 /*[K]*/ - 1
-                                    )
+                                    ),
+                                    "TemperatureLeaderTrustDamage"
                                 )
                             }
 
@@ -707,10 +713,10 @@ class GameEngine(val gameState: GameState) {
                 }.values.first()
                 if (character == gameState.playerName) {
                     Logger.write("You are in a meeting.", Logger.LogLevel.INFO)
-                    println(
+                    Logger.write(
                         "Attendees: ${
                             conf.currentCharacters
-                        }"
+                        }", Logger.LogLevel.INFO
                     )
                 }
                 val subject = conf.type

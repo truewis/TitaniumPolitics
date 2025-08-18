@@ -123,11 +123,21 @@ class NewAgenda(override val sbjCharacter: String, override val tgtPlace: String
                 }
 
                 AgendaType.PRAISE -> {
-                    parent.setMutuality(agenda.subjectParams["character"]!!, sbjCharacter, 5.0 * effectivity)
+                    parent.setMutuality(
+                        agenda.subjectParams["character"]!!,
+                        sbjCharacter,
+                        5.0 * effectivity,
+                        "praise;$sbjCharacter"
+                    )
                 }
 
                 AgendaType.DENOUNCE -> {
-                    parent.setMutuality(agenda.subjectParams["character"]!!, sbjCharacter, -7.0 * effectivity)
+                    parent.setMutuality(
+                        agenda.subjectParams["character"]!!,
+                        sbjCharacter,
+                        -7.0 * effectivity,
+                        "denounce;$sbjCharacter"
+                    )
                 }
 
                 AgendaType.PRAISE_PARTY -> {
@@ -135,7 +145,8 @@ class NewAgenda(override val sbjCharacter: String, override val tgtPlace: String
                         parent.setPartyMutuality(
                             this,
                             agenda.subjectParams["party"]!!,
-                            3.0 * effectivity
+                            3.0 * effectivity,
+                            "praiseParty;$sbjCharacter"
                         )
                     }
                 }
@@ -145,19 +156,37 @@ class NewAgenda(override val sbjCharacter: String, override val tgtPlace: String
                         parent.setPartyMutuality(
                             this,
                             agenda.subjectParams["party"]!!,
-                            -5.0 * effectivity
+                            -5.0 * effectivity,
+                            "denounceParty;$sbjCharacter"
                         )
                     }
                     //Increase party integrity
-                    meeting.involvedParty?.run { parent.setPartyMutuality(this, this, 3.0 * effectivity) }
+                    meeting.involvedParty?.run {
+                        parent.setPartyMutuality(
+                            this,
+                            this,
+                            3.0 * effectivity,
+                            "denounceEnemyParty;$sbjCharacter"
+                        )
+                    }
                 }
 
                 AgendaType.NOMINATE -> {
-                    parent.setMutuality(agenda.subjectParams["character"]!!, sbjCharacter, 20.0 * effectivity)
+                    parent.setMutuality(
+                        agenda.subjectParams["character"]!!,
+                        sbjCharacter,
+                        20.0 * effectivity,
+                        "nominate;$sbjCharacter"
+                    )
                 }
 
                 AgendaType.FIRE_MANAGER -> {
-                    parent.setMutuality(agenda.subjectParams["character"]!!, sbjCharacter, -20.0 * effectivity)
+                    parent.setMutuality(
+                        agenda.subjectParams["character"]!!,
+                        sbjCharacter,
+                        -20.0 * effectivity,
+                        "fireManager;$sbjCharacter"
+                    )
                 }
 
                 //request is not executed until the end of the meeting. Check Meeting.kt

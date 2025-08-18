@@ -347,7 +347,7 @@ class GameState {
         characters.keys.forEach { a ->
             characters.keys.forEach { b ->
                 if (a != b) {
-                    setMutuality(a, b, (Math.random() * 50 - 25))
+                    setMutuality(a, b, (Math.random() * 50 - 25), "randomize")
                 }
             }
         }
@@ -378,7 +378,7 @@ class GameState {
             "mutualityMin"
         ))
 
-    fun setMutuality(a: String, b: String = a, delta: Double) {
+    fun setMutuality(a: String, b: String = a, delta: Double, reasonKey: String? = null) {
         if (delta.absoluteValue > 50f) throw Exception("Setting mutuality $a -> $b with delta $delta is too high. Use smaller values.")
         if (!delta.isFinite()) throw Exception("Setting mutuality $a -> $b with delta $delta is not finite.")
         if (!characters.containsKey(a) || !characters.containsKey(b)) throw Exception("Setting mutuality $a -> $b invalid.")
@@ -389,12 +389,13 @@ class GameState {
             ReadOnly.const("mutualityMax")
         if (getMutuality(a, b) < ReadOnly.const("mutualityMin")) _mutuality[indexA][indexB] =
             ReadOnly.const("mutualityMin")
+        characters[a]!!.history += formatTime() + "Mutuality Change:%.1f".format(delta) + ":" + reasonKey
     }
 
-    fun setMutuality(a: Collection<String>, b: Collection<String> = a, delta: Double) {
+    fun setMutuality(a: Collection<String>, b: Collection<String> = a, delta: Double, reasonKey: String? = null) {
         a.forEach { a1 ->
             b.forEach { b1 ->
-                setMutuality(a1, b1, delta)
+                setMutuality(a1, b1, delta, reasonKey)
             }
         }
     }
@@ -433,14 +434,14 @@ class GameState {
     Sets mutuality for all members of the party a to all members of the party b.
     This is weighted by the size of the party a, so that larger parties have less influence on individual mutualities.
      */
-    fun setPartyMutuality(a: String, b: String = a, weightedDelta: Double) {
+    fun setPartyMutuality(a: String, b: String = a, weightedDelta: Double, reasonKey: String? = null) {
         if (!parties.containsKey(a) || !parties.containsKey(b)) throw Exception("Setting party mutuality $a -> $b invalid.")
         val membersA = (parties[a]?.members ?: emptyList()) - (parties[a]?.directorMembers ?: emptyList())
         val membersB = parties[b]?.members ?: emptyList()
         for (memberA in membersA) {
             for (memberB in membersB) {
                 if (memberA == memberB) continue //Skip self-mutuality.
-                setMutuality(memberA, memberB, weightedDelta / parties[a]!!.size)
+                setMutuality(memberA, memberB, weightedDelta / parties[a]!!.size, reasonKey)
             }
         }
     }

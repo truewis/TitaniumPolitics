@@ -21,6 +21,35 @@ class WorkRoutine() : Routine() {
     override fun newRoutineCondition(name: String, place: String, subroutines: List<Routine>): Routine? {
         val character = gState.characters[name]!!
 
+        //These routines will start even if the character is in a meeting./////////////////////////////////////////////////////////////////////////////////
+
+
+        //0. Execute a command if there is any. Here, we can move to the place actively if the command is not in the current place.
+        //If there is a command that is within the set time window, issued party is trusted enough, and seems to be executable at some place(AvailableActions), start execution routine.
+        //Note that the command may not be valid even if it in AvailableActions list. For example, if the character is already at the place, move command is not valid.
+
+        gState.requests.values.firstOrNull {
+            if (name !in it.issuedTo) return@firstOrNull false
+            val eta =
+                gState.places[it.action.tgtPlace]!!.shortestPathAndTimeTo(place)?.second ?: return@firstOrNull false
+            return@firstOrNull (it.executeTime in gState.time - ReadOnly.constInt("CommandExecuteTolerance") + eta..gState.time + ReadOnly.constInt(
+                "CommandExecuteTolerance"
+            ) + eta || it.executeTime == 0) && (it.issuedBy.isEmpty() /*System request must be executed regardless of mutualities.*/ || it.issuedBy.sumOf {
+                gState.getMutuality(
+                    name,
+                    it
+                )
+            } / it.issuedBy.size > it.difficulty()) && GameEngine.availableActions(
+                gState,
+                it.action.tgtPlace,
+                name
+            )
+                .contains(it.action.javaClass.simpleName) //Here, we can move to other places to execute the command, so we do not check if the place is here.
+        }?.also { request ->
+            if (subroutines.none { it is ExecuteCommandRoutine && it.variables["request"] == request.name })
+                return ExecuteCommandRoutine().also { it.variables["request"] = request.name }
+        }
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         if (subroutines.any { it is IMeetingRoutine })//I am already in a meeting, do not start a new routine.
             return null
 
@@ -30,7 +59,7 @@ class WorkRoutine() : Routine() {
                 return null//LeaveMeeting must be issued by NonPlayerAgent.
             return pickMeetingRoutine(name, character.currentMeeting!!)
         }
-
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         //1. If an accident happened in the place of my control, investigate and clear it.
         gState.places.values.firstOrNull {
             it.responsibleDivision != null && gState.parties[it.responsibleDivision]!!.members.contains(
@@ -105,31 +134,6 @@ class WorkRoutine() : Routine() {
                     }
                 }
             }
-
-        //5. Execute a command if there is any. Here, we can move to the place actively if the command is not in the current place.
-        //If there is a command that is within the set time window, issued party is trusted enough, and seems to be executable at some place(AvailableActions), start execution routine.
-        //Note that the command may not be valid even if it in AvailableActions list. For example, if the character is already at the place, move command is not valid.
-
-        gState.requests.values.firstOrNull {
-            val eta =
-                gState.places[it.action.tgtPlace]!!.shortestPathAndTimeTo(place)?.second ?: return@firstOrNull false
-            return@firstOrNull (it.executeTime in gState.time - ReadOnly.constInt("CommandExecuteTolerance") + eta..gState.time + ReadOnly.constInt(
-                "CommandExecuteTolerance"
-            ) + eta || it.executeTime == 0) && (it.issuedBy.isEmpty() || it.issuedBy.sumOf {
-                gState.getMutuality(
-                    name,
-                    it
-                )
-            } / it.issuedBy.size > it.difficulty()) && GameEngine.availableActions(
-                gState,
-                it.action.tgtPlace,
-                name
-            )
-                .contains(it.action.javaClass.simpleName) //Here, we can move to other places to execute the command, so we do not check if the place is here.
-        }?.also { request ->
-            if (subroutines.none({ it is ExecuteCommandRoutine && it.variables["request"] == request.name }))
-                return ExecuteCommandRoutine().also { it.variables["request"] = request.name }
-        }
 
         //6. Supply resource
         gState.places.values.forEach { place1 ->
