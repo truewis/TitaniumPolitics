@@ -66,10 +66,6 @@ class AttendDivisionMeetingRoutine : Routine(), IMeetingRoutine {
             }
             StartMeeting(name, place).apply {
                 injectParent(gState)
-                meetingName =
-                    gState.scheduledMeetings.filter { it.value.type == Meeting.MeetingType.DIVISION_DAILY_CONFERENCE && it.value.place == place }
-                        .keys.firstOrNull()
-                        ?: return@apply
                 if (isValid())
                     return this
             }
@@ -84,6 +80,12 @@ class AttendDivisionMeetingRoutine : Routine(), IMeetingRoutine {
         } else {
             val party = gState.parties[conf.involvedParty]!!
 
+            //0. Execute a command if there is any. Here, we can move to the place actively if the command is not in the current place.
+            //If there is a command that is within the set time window, issued party is trusted enough, and seems to be executable at some place(AvailableActions), start execution routine.
+            //Note that the command may not be valid even if it in AvailableActions list. For example, if the character is already at the place, move command is not valid.
+            executeRequestInMeeting(name, place)?.let { return it }
+
+            //1. Propose proof of work if there is no proof of work agenda.
             proposeProofOfWork(conf, name, place)?.let { return it }
 
             //If not division leader and salary is not paid, request salary.

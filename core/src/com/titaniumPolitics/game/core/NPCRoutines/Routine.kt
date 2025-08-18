@@ -7,6 +7,7 @@ import com.titaniumPolitics.game.core.Meeting
 import com.titaniumPolitics.game.core.MeetingAgenda
 import com.titaniumPolitics.game.core.ReadOnly
 import com.titaniumPolitics.game.core.ReadOnly.DTH
+import com.titaniumPolitics.game.core.ReadOnly.IDTH
 import com.titaniumPolitics.game.core.Request
 import com.titaniumPolitics.game.core.Resources
 import com.titaniumPolitics.game.core.gameActions.EndMeeting
@@ -226,6 +227,25 @@ sealed class Routine() {
         return null
     }
 
+    fun executeRequestInMeeting(name: String, place: String): GameAction? {
+        gState.requests.values.firstOrNull {
+            if (name !in it.issuedTo) return@firstOrNull false
+            val eta =
+                gState.places[it.action.tgtPlace]!!.shortestPathAndTimeTo(place)?.second ?: return@firstOrNull false
+            return@firstOrNull (it.executeTime in gState.time - ReadOnly.constInt("CommandExecuteTolerance") + eta..gState.time + ReadOnly.constInt(
+                "CommandExecuteTolerance"
+            ) + eta || it.executeTime == 0) && (it.issuedBy.isEmpty() /*System request must be executed regardless of mutualities.*/ || it.issuedBy.sumOf {
+                gState.getMutuality(
+                    name,
+                    it
+                )
+            } / it.issuedBy.size > it.difficulty()) && it.action.let { it.injectParent(gState);return@let it.isValid() }
+        }?.also { request ->
+            return request.action.apply { injectParent(gState) }
+        }
+        return null
+    }
+
     fun askForValuableAction(who: String, name: String): GameAction? {
         val tgtChar = gState.characters[who] ?: return null
         if ("engineer" in tgtChar.trait) {
@@ -274,9 +294,12 @@ sealed class Routine() {
     }
 
     fun meetingRoutineEndCondition(name: String, type: Meeting.MeetingType): Boolean {
-        return routineStartTime + 7200 / ReadOnly.DT <= gState.time || gState.characters[name]!!.currentMeeting?.let { it.type != type } ?: false || (gState.characters[name]!!.currentMeeting?.currentAttention
-            ?: 100) < 10
+        if (gState.characters[name]!!.currentMeeting == null) return false //The meeting has not started yet.
+        val conf = gState.characters[name]!!.currentMeeting!!
+        if (conf.time + 1800 / ReadOnly.DT >= gState.time) return false //At least, wait until the meeting has happened for 30 minutes.
+        return routineStartTime + 7200 / ReadOnly.DT <= gState.time || conf.type != type || conf.currentAttention < 10
         /*Sometimes characters are transferred between different meetings without their turn. In that case, the previous meeting routine is killed here.*/
+        /*Of course, if the new meeting has the same type as the old one, no need to switch routine.*/
     }
 
     override fun toString(): String {
@@ -288,7 +311,7 @@ sealed class Routine() {
             //Consider the estimated time to workplace, if the character is not at home.
             val eta = gState.places[place]!!.shortestPathAndTimeTo(workplace)?.second ?: 0
             val extendedWorkHours =
-                (gState.places[workplace]!!.workHours.first / DTH).toInt() - eta - padding..(gState.places[workplace]!!.workHours.last / DTH).toInt() + eta + padding
+                gState.places[workplace]!!.workHours.first * IDTH - eta - padding..gState.places[workplace]!!.workHours.last * IDTH + eta + padding
             return (gState.timeInDay in extendedWorkHours)
         }
     }

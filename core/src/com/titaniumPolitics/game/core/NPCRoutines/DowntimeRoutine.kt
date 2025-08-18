@@ -41,10 +41,10 @@ class DowntimeRoutine() : Routine() {
         //return false must be checked first, otherwise the routine will be created again.
         return true
         if (gState.getMutuality(name) < const("DowntimeWill")) return false
-        if (variables["workPlace"] == null)
+        if (variables["workplace"] == null)
             return (gState.hour in 8..18)
         else
-            return isWorkHourWithETA(gState, place, variables["workPlace"]!!)
+            return isWorkHourWithETA(gState, place, variables["workplace"]!!)
     }
 
     @Transient

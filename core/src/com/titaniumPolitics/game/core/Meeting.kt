@@ -110,7 +110,8 @@ class Meeting(
                             gameState.setMutuality(
                                 issuedBy,
                                 issuedTo,
-                                -const("RequestFinishDeltaMutuality") * 2
+                                -const("RequestFinishDeltaMutuality") * 2,
+                                "RequestFinishDeltaMutuality-Psychopath"
                             )
                         }
                     else {
@@ -118,7 +119,8 @@ class Meeting(
                             gameState.setMutuality(
                                 issuedBy,
                                 issuedTo,
-                                -const("RequestFinishDeltaMutuality")
+                                -const("RequestFinishDeltaMutuality"),
+                                "RequestFinishDeltaMutuality"
                             )
                         }
                     }
@@ -142,12 +144,18 @@ class Meeting(
         if (type == MeetingType.TALK) {
             //Chill meeting
             currentCharacters.forEach {
-                gameState.setMutuality(it, delta = DT / const("ChillMeetingWillTau") * const("mutualityMax"))
+                gameState.setMutuality(
+                    it, it, delta = DT / const("ChillMeetingWillTau") * const("mutualityMax"),
+                    "ChillMeetingWill"
+                )
             }
         } else {
             //Work meeting
             currentCharacters.forEach {
-                gameState.setMutuality(it, delta = DT / const("WorkMeetingWillTau") * const("mutualityMax"))
+                gameState.setMutuality(
+                    it, it, delta = DT / const("WorkMeetingWillTau") * const("mutualityMax"),
+                    "WorkMeetingWill"
+                )
             }
         }
         agendas.forEach { agenda ->

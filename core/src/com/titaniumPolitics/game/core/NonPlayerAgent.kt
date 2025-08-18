@@ -2,6 +2,7 @@ package com.titaniumPolitics.game.core
 
 import com.titaniumPolitics.game.core.NPCRoutines.*
 import com.titaniumPolitics.game.core.ReadOnly.DTH
+import com.titaniumPolitics.game.core.ReadOnly.IDTH
 import com.titaniumPolitics.game.core.gameActions.GameAction
 import com.titaniumPolitics.game.core.gameActions.LeaveMeeting
 import com.titaniumPolitics.game.core.gameActions.Wait
@@ -58,7 +59,7 @@ class NonPlayerAgent : Agent() {
 
                         priority = pri
                         variables["stealResource"] = wantedResource
-                        intVariables["routineStartTime"] = parent.time
+                        routineStartTime = parent.time
                     })//Add a routine, priority higher than work.
                     return
                 }
@@ -69,7 +70,7 @@ class NonPlayerAgent : Agent() {
 
                         priority = pri
                         variables["wantedResource"] = wantedResource
-                        intVariables["routineStartTime"] = parent.time
+                        routineStartTime = parent.time
                     })//Add a routine, priority higher than work.
                     return
                 }
@@ -81,10 +82,10 @@ class NonPlayerAgent : Agent() {
                 routines.add(RestRoutine().apply {
 
                     priority = pri
-                    variables["workplace"] = parent.places.filter {
-                        name in (it.value.workplaceParty?.members ?: return@filter false)
-                    }.keys.first()
-                    intVariables["routineStartTime"] = parent.time
+                    parent.getWorkplace(name)?.let {
+                        variables["workplace"] = it.name
+                    }
+                    routineStartTime = parent.time
                 })//Add a routine, priority higher than work.
                 return
             }
@@ -96,7 +97,7 @@ class NonPlayerAgent : Agent() {
                 routines.add(DowntimeRoutine().apply {
 
                     priority = pri
-                    intVariables["routineStartTime"] = parent.time
+                    routineStartTime = parent.time
                 })//Add a routine, priority higher than work.
                 return
             }
@@ -118,7 +119,7 @@ class NonPlayerAgent : Agent() {
 //
 //                        priority = pri
 //                        variables["request"] = request.name
-//                        intVariables["routineStartTime"] = parent.time
+//                        routineStartTime = parent.time
 //                    }
 //                )//Add the routine with higher priority.
 //                return
@@ -191,7 +192,6 @@ class NonPlayerAgent : Agent() {
             it.injectParent(parent)
         }
         routines.sortByDescending { routine -> routine.priority }//WARNING: Soring must be done here, after the routines are updated and before the blockExecution.
-        blockExecution()?.also { return it }
         return routines[0].execute(name, place)
 
     }
@@ -202,40 +202,27 @@ class NonPlayerAgent : Agent() {
         removeList += (routine)
     }
 
-    //Any action that has to be executed before executing the current routine.
-    fun blockExecution(): GameAction? {
-        //Leave meeting or conference if the routine was changed.
-        //This allows the character to leave the meeting if it has a higher priority routine.
-        //In this case, attendMeetingRoutine is still alive in the queue,
-        //but it will be removed immediately when it becomes the current routine, as the character is not in a meeting.
-        if (routines.isEmpty()) return null
-        if ((routines[0] !is IMeetingRoutine && character.currentMeeting != null)) {
-            return LeaveMeeting(name, place)
-        }
-        return null
-    }
-
 
     private fun whenIdle() {
         //When work hours, work
         parent.getWorkplace(name)?.let { wkplace ->
-            if (Routine.isWorkHourWithETA(parent, place, wkplace.name, (1 / DTH).toInt())) {
+            if (Routine.isWorkHourWithETA(parent, place, wkplace.name, IDTH)) {
                 routines.add(WorkRoutine().also {
                     it.variables["workplace"] = wkplace.name
-                    it.intVariables["routineStartTime"] = parent.time
+                    it.routineStartTime = parent.time
                 })
                 return
             } else
             //When not work hours, rest
                 routines.add(RestRoutine().also {
                     it.variables["workplace"] = wkplace.name
-                    it.intVariables["routineStartTime"] = parent.time
+                    it.routineStartTime = parent.time
                 })
         }
             ?:
-            //When no workplace, rest
-            routines.add(RestRoutine().also {
-                it.intVariables["routineStartTime"] = parent.time
+            //When no workplace, play
+            routines.add(DowntimeRoutine().also {
+                it.routineStartTime = parent.time
             })
 
     }

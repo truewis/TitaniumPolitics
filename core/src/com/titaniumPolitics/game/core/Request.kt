@@ -7,7 +7,7 @@ import kotlinx.serialization.Transient
 @Serializable
 class Request(
     //This is the action to be executed.
-    //IMPORTANT! tgtCharacter param of action is not used, as we want to support issuing requests to multiple characters.
+    //IMPORTANT! sbjCharacter param of action is used, as we don't support issuing requests to multiple characters, and sbjCharacter variable is immutable.
     var action: GameAction,
     var issuedTo: HashSet<String>,/*If unspecified, anyone can finish this request.*/
     var issuedBy: HashSet<String> = hashSetOf() //If unspecified, it is a system request.

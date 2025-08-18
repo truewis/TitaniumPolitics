@@ -63,6 +63,8 @@ class GameEngineTest {
             gameState.debug()
             if (gameState.time % 60 == 0)
                 gdh.writeEveryTurn(gState)
+            if (gameState.time % 1440 == 0)
+                gState.dump(directory + "/data" + gState.time + ".json")
         }
     }
 
@@ -88,14 +90,17 @@ class GameEngineTest {
 
     val missedMeetings = hashSetOf<String>()
     fun GameState.debug() {
+        characters.forEach {
+            it.value.health += 10 //For testing purposes, increase health of all characters by 10.
+        }
 
         //If there are characters with zero will, print their names.
         val zeroWillCharacters = characters.filter { it.value.will <= 0.0 }
         if (zeroWillCharacters.isNotEmpty()) {
-            Logger.write(
-                "Characters with zero will: ${zeroWillCharacters.keys.joinToString(", ")}",
-                Logger.LogLevel.INFO
-            )
+//            Logger.write(
+//                "Characters with zero will: ${zeroWillCharacters.keys.joinToString(", ")}",
+//                Logger.LogLevel.INFO
+//            )
         }
 
         scheduledMeetings.filter {
@@ -110,7 +115,7 @@ class GameEngineTest {
             Logger.write("What people are doing:", Logger.LogLevel.INFO)
             it.value.scheduledCharacters.forEach { ch ->
                 Logger.write(
-                    "\t$ch:${characters[ch]!!.history.last()}",
+                    "\t$ch:${characters[ch]!!.history.last { it.startsWith("Action") }}",
                     Logger.LogLevel.INFO
                 )
                 if (nonPlayerAgents[ch] is NonPlayerAgent) {
@@ -139,14 +144,17 @@ class GameEngineTest {
         }
 
         if (time % 60 == 0 && hour == 12)
-            if (!characters.filter { it.value.history.last().split(":")[0] == "sleep" }.keys.isEmpty()) {
+            if (!characters.filter {
+                    it.value.history.last { it.startsWith("Action") }.split(":")[0] == "sleep"
+                }.keys.isEmpty()) {
                 Logger.write("////////////////////////////////////////////////", Logger.LogLevel.INFO)
-                characters.filter { it.value.history.last().split(":")[0] == "sleep" }.forEach {
-                    Logger.write(
-                        "${it.key} is still asleep at noon: health:${it.value.health}, will:${it.value.will}, hunger:${it.value.hunger}, thirst:${it.value.thirst}",
-                        Logger.LogLevel.INFO
-                    )
-                }
+                characters.filter { it.value.history.last { it.startsWith("Action") }.split(":")[0] == "sleep" }
+                    .forEach {
+                        Logger.write(
+                            "${it.key} is still asleep at noon: health:${it.value.health}, will:${it.value.will}, hunger:${it.value.hunger}, thirst:${it.value.thirst}",
+                            Logger.LogLevel.INFO
+                        )
+                    }
                 Logger.write("////////////////////////////////////////////////", Logger.LogLevel.INFO)
             }
 

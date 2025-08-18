@@ -181,7 +181,8 @@ class GameEngine(val gameState: GameState) {
 
         }
         char.history.add(
-            action.javaClass.simpleName + ":" +
+            "Action" +
+                    action.javaClass.simpleName + ":" +
                     gameState.formatTime() + " at " + gameState.places.values.find { it.characters.contains(char.name) }!!.name
         )
         val place = gameState.places.values.find {

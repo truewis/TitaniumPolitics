@@ -55,7 +55,7 @@ class AnonAgent : Agent() {
 
                         priority = pri
                         variables["stealResource"] = wantedResource
-                        intVariables["routineStartTime"] = parent.time
+                        routineStartTime = parent.time
                     })//Add a routine, priority higher than work.
 
             } else if (parent.characters[name]!!.trait.contains("bargainer")) {
@@ -64,7 +64,7 @@ class AnonAgent : Agent() {
 
                         priority = pri
                         variables["wantedResource"] = wantedResource
-                        intVariables["routineStartTime"] = parent.time
+                        routineStartTime = parent.time
                     })//Add a routine, priority higher than work.
             }
         }
@@ -76,7 +76,7 @@ class AnonAgent : Agent() {
                 routines.add(RestRoutine().apply {
 
                     priority = pri
-                    intVariables["routineStartTime"] = parent.time
+                    routineStartTime = parent.time
                 })//Add a routine, priority higher than work.
                 return
             }
@@ -88,7 +88,7 @@ class AnonAgent : Agent() {
                 routines.add(DowntimeRoutine().apply {
 
                     priority = pri
-                    intVariables["routineStartTime"] = parent.time
+                    routineStartTime = parent.time
                 })//Add a routine, priority higher than work.
                 return
             }
@@ -139,7 +139,6 @@ class AnonAgent : Agent() {
         }
 
         routines.sortByDescending { routine -> routine.priority }//WARNING: Soring must be done here, after the routines are updated and before the blockExecution.
-        blockExecution()?.also { return it }
 
         return routines[0].execute(name, place)
 
@@ -151,31 +150,17 @@ class AnonAgent : Agent() {
         removeList += (routine)
     }
 
-    //Any action that has to be executed before executing the current routine.
-    fun blockExecution(): GameAction? {
-        //Leave meeting or conference if the routine was changed.
-        //This allows the character to leave the meeting if it has a higher priority routine.
-        //In this case, attendMeetingRoutine is still alive in the queue,
-        //but it will be removed immediately when it becomes the current routine, as the character is not in a meeting.
-        if (routines.isEmpty())
-            return null
-        if ((routines[0] !is IMeetingRoutine && character.currentMeeting != null)) {
-            return LeaveMeeting(name, place)
-        }
-        return null
-    }
-
     private fun whenIdle() {
         //When work hours, work
         if (Routine.isWorkHourWithETA(parent, place, workPlace, (1 / DTH).toInt())) {
             routines.add(WorkAnonRoutine().also {
-                it.variables["workPlace"] = workPlace
+                it.variables["workplace"] = workPlace
             })
             return
         } else
         //When not work hours, rest
             routines.add(RestRoutine().also {
-                it.variables["workPlace"] = workPlace
+                it.variables["workplace"] = workPlace
             })
     }
 

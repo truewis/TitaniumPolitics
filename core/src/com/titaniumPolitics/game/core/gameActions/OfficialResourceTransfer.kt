@@ -29,7 +29,7 @@ class OfficialResourceTransfer(override val sbjCharacter: String, override val t
         parent.places[toWhere]!!.responsibleDivision?.run {
             sbjCharObj.division?.also {
                 val partyLeader = parent.characters[parent.parties[this]!!.leader]
-                parent.setPartyMutuality(this, it.name, partyLeader?.itemValue(resources) ?: .0)
+                parent.setPartyMutuality(this, it.name, clamp((partyLeader?.itemValue(resources) ?: .0), 0.0, 10.0))
             }
         }
         super.execute()

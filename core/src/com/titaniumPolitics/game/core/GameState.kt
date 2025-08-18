@@ -12,6 +12,7 @@ import kotlinx.serialization.json.jsonPrimitive
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.math.abs
 import kotlin.math.absoluteValue
 
 @Serializable
@@ -379,6 +380,7 @@ class GameState {
         ))
 
     fun setMutuality(a: String, b: String = a, delta: Double, reasonKey: String? = null) {
+        if (abs(delta) < 1e-2) return //No change in mutuality, do nothing.
         if (delta.absoluteValue > 50f) throw Exception("Setting mutuality $a -> $b with delta $delta is too high. Use smaller values.")
         if (!delta.isFinite()) throw Exception("Setting mutuality $a -> $b with delta $delta is not finite.")
         if (!characters.containsKey(a) || !characters.containsKey(b)) throw Exception("Setting mutuality $a -> $b invalid.")
@@ -389,7 +391,8 @@ class GameState {
             ReadOnly.const("mutualityMax")
         if (getMutuality(a, b) < ReadOnly.const("mutualityMin")) _mutuality[indexA][indexB] =
             ReadOnly.const("mutualityMin")
-        characters[a]!!.history += formatTime() + "Mutuality Change:%.1f".format(delta) + ":" + reasonKey
+        if (a == b)
+            characters[a]!!.history += formatTime() + "Mutuality Change:%.1f to $b".format(delta) + ":" + reasonKey
     }
 
     fun setMutuality(a: Collection<String>, b: Collection<String> = a, delta: Double, reasonKey: String? = null) {

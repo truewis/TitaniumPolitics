@@ -37,10 +37,6 @@ class LeadDivisionElectionRoutine : Routine(), IMeetingRoutine {
         if (conf == null) {
             StartMeeting(name, place).apply {
                 injectParent(gState)
-                meetingName =
-                    gState.scheduledMeetings.filter { it.value.type == Meeting.MeetingType.DIVISION_LEADER_ELECTION && it.value.place == place }
-                        .keys.firstOrNull()
-                        ?: return@apply
                 if (isValid())
                     return this
             }
@@ -58,11 +54,17 @@ class LeadDivisionElectionRoutine : Routine(), IMeetingRoutine {
             if (name == "ctrler" && conf.agendas.count { it.type == AgendaType.NOMINATE } >= 3) {
                 return FinishNomination(name, place)
             }
+
+            //0. Execute a command if there is any. Here, we can move to the place actively if the command is not in the current place.
+            //If there is a command that is within the set time window, issued party is trusted enough, and seems to be executable at some place(AvailableActions), start execution routine.
+            //Note that the command may not be valid even if it in AvailableActions list. For example, if the character is already at the place, move command is not valid.
+            executeRequestInMeeting(name, place)?.let { return it }
+
+
+            //1. Nominate the person with the highest mutuality, if not nominated yet.
+            //Note that nomination is only valid at the beginning of the conference.
             val nominee = gState.characters.keys.filter { it != name && party.members.contains(it) }
                 .maxByOrNull { gState.getMutuality(name, it) }!!
-            //Nominate the person with the highest mutuality, if not nominated yet.
-            //Note that nomination is only valid at the beginning of the conference.
-
             if (conf.agendas.none { it.type == AgendaType.NOMINATE && it.subjectParams["character"] == nominee } && conf.time == gState.time) {
                 return NewAgenda(name, place).also {
                     it.agenda =

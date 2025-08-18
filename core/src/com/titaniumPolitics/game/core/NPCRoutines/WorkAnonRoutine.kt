@@ -7,7 +7,7 @@ import kotlinx.serialization.Transient
 
 @Serializable
 class WorkAnonRoutine() : Routine() {
-    val workPlace get() = gState.places[this@WorkAnonRoutine.variables["workPlace"]!!]!!
+    val workPlace get() = gState.places[this@WorkAnonRoutine.variables["workplace"]!!]!!
     override fun newRoutineCondition(name: String, place: String, subroutines: List<Routine>): Routine? {
         if (place != workPlace.name)
             if (subroutines.none { it is MoveRoutine })

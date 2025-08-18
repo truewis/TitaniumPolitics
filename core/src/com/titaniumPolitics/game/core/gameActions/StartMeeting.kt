@@ -1,42 +1,48 @@
 package com.titaniumPolitics.game.core.gameActions
 
-import com.titaniumPolitics.game.core.GameEngine
 import com.titaniumPolitics.game.core.Meeting
 import com.titaniumPolitics.game.debugTools.Logger
 import kotlinx.serialization.Serializable
 
 @Serializable
 class StartMeeting(override val sbjCharacter: String, override val tgtPlace: String) : GameAction() {
-    var meetingName = ""
-    override fun chooseParams() {
-        meetingName =
-            GameEngine.acquire(parent.scheduledMeetings.filter {
+    val targetMeeting
+        get() =
+            parent.scheduledMeetings.filter {
                 it.value.isValidTimeToStart(parent.time)
                         && it.value.place == tgtPlace
             }
                 .filter { !parent.ongoingMeetings.containsKey(it.key) }
-                .filter { it.value.scheduledCharacters.contains(sbjCharacter) }.keys.toList())
+                .filter { it.value.scheduledCharacters.contains(sbjCharacter) }.keys.firstOrNull()
+
+    override fun chooseParams() {
+
     }
 
     //Also refer to Talk.execute()
     override fun execute() {
-        parent.addOngoingMeeting(parent.scheduledMeetings[meetingName]!!)
-        parent.removeScheduledMeeting(meetingName)
-        parent.ongoingMeetings[meetingName]!!.currentCharacters.add(sbjCharacter)
+        val oldTgtMeeting = this.targetMeeting
+        parent.addOngoingMeeting(parent.scheduledMeetings[oldTgtMeeting]!!)
+        parent.removeScheduledMeeting(oldTgtMeeting!!)
+        parent.ongoingMeetings[oldTgtMeeting]!!.currentCharacters.add(sbjCharacter)
         // Interrupt other required characters and add them to the meeting.
-        val meeting = parent.ongoingMeetings[meetingName]!!
+        val meeting = parent.ongoingMeetings[oldTgtMeeting]!!
         meeting.currentSpeaker = sbjCharacter
         meeting.currentAttention = 100
         val requiredCharacters = meeting.scheduledCharacters.intersect(tgtPlaceObj.characters)
             .filter { s -> parent.characters[s]!!.currentMeeting == null /*Forcing characters out of meetings causes bunch of problems, such as missing speaker. Don't do this.*/ }
         requiredCharacters.forEach {
             parent.characters[it]!!.frozen = 1 //Force them to join the meeting.
-            parent.ongoingMeetings[meetingName]!!.currentCharacters.add(it)
+            parent.ongoingMeetings[oldTgtMeeting]!!.currentCharacters.add(it)
             Logger.write(
                 "Interrupt: $it is forced to join by $sbjCharacter starting the meeting.",
                 Logger.LogLevel.INFO
             )
         }
+        Logger.write(
+            "Meeting $oldTgtMeeting started by $sbjCharacter at ${parent.time} in $tgtPlace.",
+            Logger.LogLevel.INFO
+        )
         super.execute()
 
     }
@@ -44,19 +50,11 @@ class StartMeeting(override val sbjCharacter: String, override val tgtPlace: Str
     override fun isValid(): Boolean {
         if (sbjCharObj.currentMeeting != null) {
             Logger.write(
-                "Cannot start a meeting $meetingName while already in one: ${sbjCharObj.currentMeeting}",
+                "Cannot start a meeting $targetMeeting while already in one: ${sbjCharObj.currentMeeting}",
                 Logger.LogLevel.ERROR
             )
             return false
         }
-
-        val targetMeeting =
-            parent.scheduledMeetings.filter {
-                it.value.isValidTimeToStart(parent.time)
-                        && it.value.place == tgtPlace
-            }
-                .filter { !parent.ongoingMeetings.containsKey(it.key) }
-                .filter { it.value.scheduledCharacters.contains(sbjCharacter) }.keys.firstOrNull()
         return targetMeeting != null &&
                 //Check if there are enough characters scheduled to attend the meeting.
                 parent.scheduledMeetings[targetMeeting]!!.scheduledCharacters.intersect(parent.places[tgtPlace]!!.characters.filter { s -> parent.characters[s]!!.currentMeeting == null }).size >= 2 &&

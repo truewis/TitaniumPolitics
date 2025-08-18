@@ -29,11 +29,9 @@ class AttendDivisionElectionRoutine : Routine(), IMeetingRoutine {
         //If not speaker, wait if the mutuality to the speaker is high. Otherwise, if possible, interrupt the speaker.
         if (conf.currentSpeaker != name) {
         } else {
+            //1. Support the nominee with the highest mutuality.
             val nominee = gState.characters.keys.filter { it != name && party.members.contains(it) }
                 .maxByOrNull { gState.getMutuality(name, it) }!!
-            //Nominate the person with the highest mutuality, if not nominated yet.
-            //Note that nomination is only valid at the beginning of the conference.
-
             if (conf.agendas.none { it.type == AgendaType.NOMINATE && it.subjectParams["character"] == nominee } && conf.time == gState.time) {
             }
             //otherwise, support the nominee.
@@ -89,11 +87,16 @@ class AttendDivisionElectionRoutine : Routine(), IMeetingRoutine {
             return interceptCondition(conf, name, place)
         } else //If it is my turn to speak
         {
+
+            //0. Execute a command if there is any. Here, we can move to the place actively if the command is not in the current place.
+            //If there is a command that is within the set time window, issued party is trusted enough, and seems to be executable at some place(AvailableActions), start execution routine.
+            //Note that the command may not be valid even if it in AvailableActions list. For example, if the character is already at the place, move command is not valid.
+            executeRequestInMeeting(name, place)?.let { return it }
+
+            //1.Nominate the person with the highest mutuality, if not nominated yet.
+            //Note that nomination is only valid at the beginning of the conference.
             val nominee = gState.characters.keys.filter { it != name && party.members.contains(it) }
                 .maxByOrNull { gState.getMutuality(name, it) }!!
-            //Nominate the person with the highest mutuality, if not nominated yet.
-            //Note that nomination is only valid at the beginning of the conference.
-
             if (conf.agendas.none { it.type == AgendaType.NOMINATE && it.subjectParams["character"] == nominee } && conf.time == gState.time) {
                 return NewAgenda(name, place).also {
                     it.agenda =
