@@ -10,7 +10,7 @@ import com.titaniumPolitics.game.core.gameActions.Wait
 import kotlinx.serialization.Serializable
 
 @Serializable
-class SupportAgendaRoutine() : Routine(), IMeetingRoutine {
+class SupportAgendaRoutine(val agendaIndex: Int) : Routine(), IMeetingRoutine {
     override fun newRoutineCondition(name: String, place: String, subroutines: List<Routine>): Routine? {
         return null
     }
@@ -27,14 +27,14 @@ class SupportAgendaRoutine() : Routine(), IMeetingRoutine {
         {
             //Check if I have any information to support the agenda.
             val supportingInfo = character.preparedInfoKeys.filter {
-                conf.agendas[intVariables["agendaIndex"]!!].effectivity(
+                conf.agendas[agendaIndex].effectivity(
                     gState,
                     conf,
                     gState.informations[it]!!,
                     character
                 ) > 0.0
             }.maxByOrNull {
-                conf.agendas[intVariables["agendaIndex"]!!].effectivity(
+                conf.agendas[agendaIndex].effectivity(
                     gState,
                     conf,
                     gState.informations[it]!!,
@@ -46,7 +46,7 @@ class SupportAgendaRoutine() : Routine(), IMeetingRoutine {
                 return AddInfo(name, place).also {
                     it.injectParent(gState)
                     it.infoKey = supportingInfo
-                    it.agendaIndex = intVariables["agendaIndex"]!!
+                    it.agendaIndex = this@SupportAgendaRoutine.agendaIndex
                 }
             }
             //If there is no supporting information, end speech.

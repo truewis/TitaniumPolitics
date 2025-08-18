@@ -55,10 +55,8 @@ class NonPlayerAgent : Agent() {
             if (parent.characters[name]!!.trait.contains("thief")) {
                 //Find a place within my division with maximum res.
                 if (routines.none { it is StealRoutine }) {
-                    routines.add(StealRoutine().apply {
-
+                    routines.add(StealRoutine(wantedResource).apply {
                         priority = pri
-                        variables["stealResource"] = wantedResource
                         routineStartTime = parent.time
                     })//Add a routine, priority higher than work.
                     return
@@ -66,10 +64,8 @@ class NonPlayerAgent : Agent() {
 
             } else if (parent.characters[name]!!.trait.contains("bargainer")) {
                 if (routines.none { it is BuyRoutine }) {
-                    routines.add(BuyRoutine().apply {
-
+                    routines.add(BuyRoutine(wantedResource).apply {
                         priority = pri
-                        variables["wantedResource"] = wantedResource
                         routineStartTime = parent.time
                     })//Add a routine, priority higher than work.
                     return

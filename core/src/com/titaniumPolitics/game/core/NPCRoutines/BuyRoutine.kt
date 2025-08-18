@@ -5,7 +5,7 @@ import com.titaniumPolitics.game.core.gameActions.GameAction
 import kotlinx.serialization.Serializable
 
 @Serializable
-class BuyRoutine() : Routine() {
+class BuyRoutine(val buyResource: String) : Routine() {
     var err = false
     lateinit var tradeCharacter: String
     override fun newRoutineCondition(name: String, place: String, subroutines: List<Routine>): Routine? {
@@ -14,8 +14,8 @@ class BuyRoutine() : Routine() {
 
         val info = gState.informations.values.filter {
             it.type == InformationType.RESOURCES && it.tgtCharacter != null && it.tgtCharacter != name && it.resources.containsKey(
-                variables["wantedResource"]!!
-            ) && it.resources[variables["wantedResource"]!!] > 10 && it.knownTo.contains(
+                buyResource
+            ) && it.resources[buyResource] > 10 && it.knownTo.contains(
                 name
             )
         }
@@ -44,11 +44,11 @@ class BuyRoutine() : Routine() {
                 if (subroutines.none { it is TalkRoutine })
                     return TalkRoutine().apply {
                         intention = "requestResource"
-                        variables["requestResourceType"] = variables["wantedResource"]!!
-                        doubleVariables["requestResourceAmount"] =
+                        requestResourceType = buyResource
+                        requestResourceAmount =
                             gState.characters[name]!!.reliant * 1.0 //The amount of resource to request is proportional to the number of reliants.
                         //TODO: the amount of resource to request should be determined by the character's trait.
-                        variables["requestTo"] = tradeCharacter
+                        requestTo = tradeCharacter
                     }
                 //Since this is a request, the success of this routine cannot be known because it is up to tradeCharacter whether they send resource or not.
             }

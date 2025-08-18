@@ -10,12 +10,12 @@ import kotlinx.serialization.Serializable
 import kotlin.math.min
 
 @Serializable
-class StealRoutine() : Routine() {
+class StealRoutine(val stealResource: String, val stealFor: String? = null /*If null, steal for myself.*/) : Routine() {
     fun findResource(name: String): Place? {
         return gState.publicPlaces.values.filter {
             it.workplaceParty?.treasurer == null ||
                     it.workplaceParty?.treasurer == name //If the character is the treasurer of the party, they can steal from any place.
-        }.maxByOrNull { it.resources[variables["stealResource"]!!] }
+        }.maxByOrNull { it.resources[stealResource] }
     }
 
     override fun newRoutineCondition(name: String, place: String, subroutines: List<Routine>): Routine? {
@@ -36,8 +36,8 @@ class StealRoutine() : Routine() {
         val character = gState.characters[name]!!
         return UnofficialResourceTransfer(name, place).apply {
             resources = Resources(
-                variables["stealResource"]!! to min(
-                    resplace.resources[variables["stealResource"]!!] / 2,
+                stealResource to min(
+                    resplace.resources[stealResource] / 2,
                     (character.reliant) * ReadOnly.const("StealAmountMultiplier")
                 )
             )

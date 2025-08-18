@@ -37,10 +37,7 @@ class AttendDivisionMeetingRoutine : Routine(), IMeetingRoutine {
                 if (intVariables["try_support_salary"] != 1) {
                     //If the agenda is already proposed, and we have a supporting information, support it.
                     intVariables["try_support_salary"] = 1
-                    return SupportAgendaRoutine().apply {
-                        intVariables["agendaIndex"] =
-                            conf.agendas.indexOfFirst { it.type == AgendaType.REQUEST && it.attachedRequest!!.action is Salary }
-                    }//Add a routine, priority higher than work.
+                    return SupportAgendaRoutine(conf.agendas.indexOfFirst { it.type == AgendaType.REQUEST && it.attachedRequest!!.action is Salary })//Add a routine, priority higher than work.
                 }
 
             }

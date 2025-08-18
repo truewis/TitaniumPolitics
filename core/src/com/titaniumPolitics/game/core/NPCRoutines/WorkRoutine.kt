@@ -117,8 +117,7 @@ class WorkRoutine() : Routine() {
                         if (character.resources["ration"] <= rationThreshold * (character.reliant)
                         ) "ration" else "water"
                     intVariables["corruptionTimer"] = gState.time
-                    return StealRoutine().apply {
-                        variables["stealResource"] = wantedResource; variables["stealFor"] = member
+                    return StealRoutine(wantedResource, member).apply {
                         priority = PRIORITY_WORK + 90 //Higher priority than work.
                     }
                 }

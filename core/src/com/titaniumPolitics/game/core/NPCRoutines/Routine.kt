@@ -34,7 +34,6 @@ sealed class Routine() {
     var routineStartTime: Int = 0 //The time when the routine starts, used to calculate the duration of the routine.
     val variables: HashMap<String, String> = hashMapOf()
     val intVariables: HashMap<String, Int> = hashMapOf()
-    val doubleVariables: HashMap<String, Double> = hashMapOf()
     val PRIORITY_WORK = 1000
     val PRIORITY_MEETING = 1500
     val PRIORITY_REST = 0
@@ -104,10 +103,7 @@ sealed class Routine() {
                 //If the agenda is already proposed, and we have a supporting information, support it.
                 intVariables["try_support_proofOfWork"] = 1
                 return (
-                        SupportAgendaRoutine().apply {
-                            intVariables["agendaIndex"] =
-                                conf.agendas.indexOfFirst { it.type == AgendaType.PROOF_OF_WORK }
-                        })//Add a routine, priority higher than work.
+                        SupportAgendaRoutine(conf.agendas.indexOfFirst { it.type == AgendaType.PROOF_OF_WORK }))//Add a routine, priority higher than work.
             }
         }
         return null
@@ -303,7 +299,7 @@ sealed class Routine() {
     }
 
     override fun toString(): String {
-        return "${this::class.simpleName}(ID='$ID', priority=$priority, subroutines=$subroutines, routineStartTime=$routineStartTime, variables=$variables, intVariables=$intVariables, doubleVariables=$doubleVariables, executeDone=$executeDone)"
+        return "${this::class.simpleName}(ID='$ID', priority=$priority, subroutines=$subroutines, routineStartTime=$routineStartTime, variables=$variables, intVariables=$intVariables, executeDone=$executeDone)"
     }
 
     companion object {

@@ -8,6 +8,11 @@ import kotlinx.serialization.Serializable
 class TalkRoutine : Routine(), IMeetingRoutine {
     var toWho = "" //The character to whom I want to talk
     var intention = "" //The intention of the character. It can be "requestResource" or "" (no particular intention).
+    var requestResourceAmount = 0.0 //The amount of the resource to request.
+    var requestResourceType = "" //The type of the resource to request.
+    var requestTo = ""
+
+
     override fun newRoutineCondition(name: String, place: String, subroutines: List<Routine>): Routine? {
         val character = gState.characters[name]!!
         val conf =
@@ -36,19 +41,19 @@ class TalkRoutine : Routine(), IMeetingRoutine {
                             MeetingAgenda(
                                 AgendaType.REQUEST, name, attachedRequest = Request(
                                     UnofficialResourceTransfer(
-                                        variables["requestTo"]!!,
+                                        requestTo,
                                         tgtPlace = place
                                     ).apply {
                                         toWhere = "home_$name"
                                         fromHome =
-                                            true//Transfer the {variables["requestTo"]!!}'s private resources to me.
+                                            true//Transfer the requestTo's private resources to me.
                                         resources = Resources(
-                                            variables["requestResourceType"]!! to
-                                                    doubleVariables["requestResourceAmount"]!!
+                                            requestResourceType to
+                                                    requestResourceAmount
                                         )
                                     }//Created a command to transfer the resource.
                                     ,
-                                    issuedTo = hashSetOf(variables["requestTo"]!!)
+                                    issuedTo = hashSetOf(requestTo)
                                 ).apply {
 
                                     executeTime = gState.time
@@ -73,17 +78,8 @@ class TalkRoutine : Routine(), IMeetingRoutine {
 
     }
 
-    //TODO: Also check AttendMeetingRoutine for the same function.
     override fun endCondition(name: String, place: String): Boolean {
-        val character = gState.characters[name]!!
-        //If the conference is over, leave the routine.
-        if (character.currentMeeting == null) {
-            return true
-        }
-        character.currentMeeting!!
-        //If two hours has passed since the meeting started, leave the meeting. TODO: what if the meeting has started late?
-        //TODO: stay in the meeting until I have something else to do, or the work hours are over.
-        return routineStartTime + 7200 / ReadOnly.DT <= gState.time
+        return meetingRoutineEndCondition(name, Meeting.MeetingType.TALK)
     }
 
     companion object {
