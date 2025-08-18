@@ -18,4 +18,27 @@ class Wait(override val sbjCharacter: String, override val tgtPlace: String) : G
 
     }
 
+    override fun deltaWill(): Double {
+        val ret = super.deltaWill()
+        // If in one of the public places, the will is increased.
+        if (tgtPlace in listOf("market", "squareSouth", "squareNorth")) {
+            // Unless the character has trait "agoraphobia", in which case the will is decreased.
+            if ("agoraphobia" in sbjCharObj.trait) {
+                sbjCharObj.will -= expectedDuration * 0.5f
+            } else {
+                sbjCharObj.will += expectedDuration * 1f
+            }
+        }
+        // If in one of the remote places, the will is increased.
+        else if (tgtPlace in listOf("reservoirEast", "reservoirWest", "observatory", "cemetery", "spaceport")) {
+            if ("introvert" in sbjCharObj.trait) {
+                sbjCharObj.will += expectedDuration * 1.5f
+            } else {
+                sbjCharObj.will += expectedDuration * 1f
+            }
+
+        }
+        return ret
+    }
+
 }

@@ -11,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable
 import com.badlogic.gdx.utils.Align
 import com.titaniumPolitics.game.core.ReadOnly
 import com.titaniumPolitics.game.core.Stat
+import com.titaniumPolitics.game.ui.SimpleTextTooltipUI
 import ktx.scene2d.KTable
 import ktx.scene2d.Scene2DSkin
 import ktx.scene2d.image
@@ -30,15 +31,21 @@ class StatRadarGraph(
     // Create and place logos, ethos, and pathos labels
     val logos = scene2d.label(ReadOnly.prop("logos") + ": ${stat.logos}", "docTitle") {
         setFontScale(0.2f)
+        setSize(50f, 20f)
         setAlignment(Align.center)
+        addListener(SimpleTextTooltipUI(ReadOnly.prop("logos-desc")))
     }
     val ethos = scene2d.label(ReadOnly.prop("ethos") + ": ${stat.ethos}", "docTitle") {
         setFontScale(0.2f)
+        setSize(50f, 20f)
         setAlignment(Align.center)
+        addListener(SimpleTextTooltipUI(ReadOnly.prop("ethos-desc")))
     }
     val pathos = scene2d.label(ReadOnly.prop("pathos") + ": ${stat.pathos}", "docTitle") {
         setFontScale(0.2f)
+        setSize(50f, 20f)
         setAlignment(Align.center)
+        addListener(SimpleTextTooltipUI(ReadOnly.prop("pathos-desc")))
     }
     val image = image("triangleRadar") {
         it.size(this@StatRadarGraph.radius) // Set a default size for the background image
