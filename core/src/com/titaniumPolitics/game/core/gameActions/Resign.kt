@@ -17,7 +17,7 @@ class Resign(override val sbjCharacter: String, override val tgtPlace: String) :
             return
         }
         parent.parties[party]!!.members.remove(sbjCharacter)
-        parent.parties[party]!!.leader = ""
+        parent.parties[party]!!.leader = null
         Logger.write("$sbjCharacter resigns from $party.", Logger.LogLevel.INFO)
         //If member of cabinet, also leave the cabinet
         if (parent.parties["cabinet"]!!.members.contains(sbjCharacter)) {

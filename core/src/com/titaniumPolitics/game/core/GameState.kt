@@ -201,6 +201,10 @@ class GameState {
     }
 
     fun getWorkplace(character: String): Place? {
+        if (character == "ctrler")
+            return places["mainControlRoom"]
+        if (character == "observer")
+            return places["observatory"]
         //Returns the workplace of the character, if it exists.
         return places.values.find { character in (it.workplaceParty?.members ?: return@find false) }
     }
@@ -348,10 +352,17 @@ class GameState {
         characters.keys.forEach { a ->
             characters.keys.forEach { b ->
                 if (a != b) {
-                    setMutuality(a, b, (Math.random() * 50 - 25), "randomize")
-                }
+                    setMutuality(a, b, (Math.random() * 30 - 15), "randomize")
+                } else
+                    setMutuality(
+                        a,
+                        b,
+                        50.0,
+                        "randomize"
+                    ) //Will for self is always initialized at 50 for predictability.
             }
         }
+        setHardcodedMutuality()
         characters.forEach {
             it.value.randomizeTraitAndStats()
         }
@@ -362,6 +373,17 @@ class GameState {
                 it.durability = (Math.random() * 50 + 50)
             }
         }
+    }
+
+    fun setHardcodedMutuality() {
+        //Set hardcoded mutualities for some characters.
+        setMutuality("Rui", "Yuhoa", 30.0, "hardcoded")
+        setMutuality("Yuhoa", "Rui", 30.0, "hardcoded")
+        setMutuality("Alina", "Rui", 30.0, "hardcoded")
+        setMutuality("Rui", "Alina", 30.0, "hardcoded")
+        setMutuality("Alina", "Krailin", -15.0, "hardcoded")
+        setMutuality("Krailin", "Alina", -15.0, "hardcoded")
+        setMutuality("Rui", "Vaeme", -15.0, "hardcoded")
     }
 
     fun getMutuality(a: String, b: String = a): Double {
@@ -384,6 +406,8 @@ class GameState {
         if (delta.absoluteValue > 50f) throw Exception("Setting mutuality $a -> $b with delta $delta is too high. Use smaller values.")
         if (!delta.isFinite()) throw Exception("Setting mutuality $a -> $b with delta $delta is not finite.")
         if (!characters.containsKey(a) || !characters.containsKey(b)) throw Exception("Setting mutuality $a -> $b invalid.")
+        if (a == b && "robot" in characters[a]!!.trait)
+            return //Do not change will for robots, they are not affected by will.
         val indexA = characterIndexCache[a]!!
         val indexB = characterIndexCache[b]!!
         _mutuality[indexA][indexB] = getMutuality(a, b) + delta

@@ -139,7 +139,7 @@ class AnonAgent : Agent() {
         }
 
         routines.sortByDescending { routine -> routine.priority }//WARNING: Soring must be done here, after the routines are updated and before the blockExecution.
-
+        blockExecution(routines)?.also { return it }
         return routines[0].execute(name, place)
 
     }

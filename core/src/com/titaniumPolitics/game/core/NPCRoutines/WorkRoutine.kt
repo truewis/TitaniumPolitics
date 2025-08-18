@@ -31,7 +31,9 @@ class WorkRoutine() : Routine() {
         if (character.currentMeeting != null) {
             if (gState.meetingName(character.currentMeeting!!) in meetingsAttended)
                 return null//LeaveMeeting must be issued by NonPlayerAgent.
-            return pickMeetingRoutine(name, character.currentMeeting!!)
+            return pickMeetingRoutine(name, character.currentMeeting!!).apply {
+                priority = PRIORITY_MEETING //Higher priority than work.
+            }
         }
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         //1. If an accident happened in the place of my control, investigate and clear it.
@@ -44,6 +46,7 @@ class WorkRoutine() : Routine() {
                 //If there is no routine to investigate and clear the accident in this place, create a new one.
                 return InvestigateAndClearAccidentRoutine().apply {
                     variables["place"] = place.name
+                    priority = PRIORITY_WORK + 100 //Higher priority than work.
                 }
             }
         }
@@ -63,7 +66,9 @@ class WorkRoutine() : Routine() {
                     }
                 }
             } else {
-                return pickMeetingRoutine(name, missingMeeting)
+                return pickMeetingRoutine(name, missingMeeting).apply {
+                    priority = PRIORITY_MEETING //Higher priority than work.
+                }
 
             }
         }
@@ -83,7 +88,9 @@ class WorkRoutine() : Routine() {
                     }
             } else {
                 if (conf.isValidTimeToStart(gState.time))
-                    return pickMeetingRoutine(name, conf)
+                    return pickMeetingRoutine(name, conf).apply {
+                        priority = PRIORITY_MEETING //Higher priority than work.
+                    }
                 else
                     if (subroutines.none { it is WaitRoutine })
                         return WaitRoutine().apply {
@@ -112,6 +119,7 @@ class WorkRoutine() : Routine() {
                     intVariables["corruptionTimer"] = gState.time
                     return StealRoutine().apply {
                         variables["stealResource"] = wantedResource; variables["stealFor"] = member
+                        priority = PRIORITY_WORK + 90 //Higher priority than work.
                     }
                 }
             }
@@ -164,6 +172,7 @@ class WorkRoutine() : Routine() {
                         if (resplace.resources[res] > 0 && subroutines.none { it is TransferResourceRoutine }) {
                             return TransferResourceRoutine().also {
                                 it.res = res; it.source = resplace.name; it.dest = place1.name
+                                priority = PRIORITY_WORK + 80 //Higher priority than work.
                             }
                         }
 
@@ -187,7 +196,9 @@ class WorkRoutine() : Routine() {
                 //If we haven't tried this branch in the current routine
                 if (intVariables["try_prepare_info"] != 1) {
                     intVariables["try_prepare_info"] = 1
-                    return PrepareInfoRoutine()
+                    return PrepareInfoRoutine().apply {
+                        priority = PRIORITY_WORK + 70 //Higher priority than work.
+                    }
                 }
             }
         }
@@ -200,6 +211,7 @@ class WorkRoutine() : Routine() {
                 if (subroutines.none { it is HireRoutine }) {
                     return HireRoutine().apply {
                         variables["party"] = party.name; variables["role"] = it
+                        priority = PRIORITY_WORK + 60 //Higher priority than work.
                     }
                 }
             }
