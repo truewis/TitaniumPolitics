@@ -58,7 +58,8 @@ class Request(
                             gState.setMutuality(
                                 issuedBy,
                                 issuedTo,
-                                ReadOnly.const("RequestFinishDeltaMutuality") / 3
+                                ReadOnly.const("RequestFinishDeltaMutuality") / 3,
+                                "RequestFinish-Psychopath"
                             )
                         }
                     else {
@@ -66,7 +67,8 @@ class Request(
                             gState.setMutuality(
                                 issuedBy,
                                 issuedTo,
-                                ReadOnly.const("RequestFinishDeltaMutuality")
+                                ReadOnly.const("RequestFinishDeltaMutuality"),
+                                "RequestFinish"
                             )
                         }
                     }
@@ -74,7 +76,8 @@ class Request(
                 executedAndFinishedRequests.forEach {
                     gState.setMutuality(
                         it.value.tgtCharacter!!,
-                        delta = deltaWill(it.value.tgtCharacter!!, gState)
+                        delta = deltaWill(it.value.tgtCharacter!!, gState),
+                        reasonKey = "RequestFinishWill"
                     )
                 }
                 onComplete.forEach { it() }

@@ -352,13 +352,13 @@ class GameState {
         characters.keys.forEach { a ->
             characters.keys.forEach { b ->
                 if (a != b) {
-                    setMutuality(a, b, (Math.random() * 30 - 15), "randomize")
+                    setMutuality(a, b, (Math.random() * 30 - 15), "Randomize")
                 } else
                     setMutuality(
                         a,
                         b,
                         50.0,
-                        "randomize"
+                        "Randomize"
                     ) //Will for self is always initialized at 50 for predictability.
             }
         }
@@ -377,13 +377,13 @@ class GameState {
 
     fun setHardcodedMutuality() {
         //Set hardcoded mutualities for some characters.
-        setMutuality("Rui", "Yuhoa", 30.0, "hardcoded")
-        setMutuality("Yuhoa", "Rui", 30.0, "hardcoded")
-        setMutuality("Alina", "Rui", 30.0, "hardcoded")
-        setMutuality("Rui", "Alina", 30.0, "hardcoded")
-        setMutuality("Alina", "Krailin", -15.0, "hardcoded")
-        setMutuality("Krailin", "Alina", -15.0, "hardcoded")
-        setMutuality("Rui", "Vaeme", -15.0, "hardcoded")
+        setMutuality("Rui", "Yuhoa", 30.0, "Hardcoded")
+        setMutuality("Yuhoa", "Rui", 30.0, "Hardcoded")
+        setMutuality("Alina", "Rui", 30.0, "Hardcoded")
+        setMutuality("Rui", "Alina", 30.0, "Hardcoded")
+        setMutuality("Alina", "Krailin", -15.0, "Hardcoded")
+        setMutuality("Krailin", "Alina", -15.0, "Hardcoded")
+        setMutuality("Rui", "Vaeme", -15.0, "Hardcoded")
     }
 
     fun getMutuality(a: String, b: String = a): Double {

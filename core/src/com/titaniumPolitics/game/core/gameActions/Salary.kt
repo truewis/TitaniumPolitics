@@ -39,14 +39,14 @@ class Salary(override val sbjCharacter: String, override val tgtPlace: String) :
                 character,
                 party.leader!!,
                 ReadOnly.const("salaryMutualityIncrease"),
-                "salaryMutualityIncrease"
+                "SalaryLeaderTrustIncrease"
             )
         }
         //Party integrity increases
         parent.setPartyMutuality(
             party.name,
             weightedDelta = ReadOnly.const("salaryMutualityIncrease"),
-            reasonKey = "salaryMutualityIncrease"
+            reasonKey = "SalaryIntegrityIncrease"
         )
 
         party.isSalaryPaid =

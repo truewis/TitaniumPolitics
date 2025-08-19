@@ -14,10 +14,12 @@ class SetWorkHours(override val sbjCharacter: String, override val tgtPlace: Str
         val workHoursDelta = tgtPlaceObj.workHoursEnd - tgtPlaceObj.workHoursStart - end + start
         tgtPlaceObj.workHoursStart = start
         tgtPlaceObj.workHoursEnd = end
-        parent.setPartyMutuality(
-            sbjCharObj.division!!.name,
-            weightedDelta = -workHoursDelta * 1.0 * tgtPlaceObj.plannedWorker / sbjCharObj.division!!.size
-        )
+        if (workHoursDelta > 0)
+            parent.setPartyMutuality(
+                sbjCharObj.division!!.name,
+                weightedDelta = -workHoursDelta * 1.0 * tgtPlaceObj.plannedWorker / sbjCharObj.division!!.size,
+                reasonKey = "SetWorkHoursIncrease"
+            )
     }
 
     override fun isValid(): Boolean {

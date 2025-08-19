@@ -45,7 +45,8 @@ class Talk(override val sbjCharacter: String, override val tgtPlace: String) : G
         parent.setMutuality(
             who,
             sbjCharacter,
-            -ReadOnly.const("talkMutualityDecrease") * parent.characters[who]!!.stats.pScale
+            -ReadOnly.const("talkMutualityDecrease") * parent.characters[who]!!.stats.pScale,
+            "TalkWithoutNotice"
         )
     }
 

@@ -127,7 +127,7 @@ class NewAgenda(override val sbjCharacter: String, override val tgtPlace: String
                         agenda.subjectParams["character"]!!,
                         sbjCharacter,
                         5.0 * effectivity,
-                        "praise;$sbjCharacter"
+                        "Praise;$sbjCharacter"
                     )
                 }
 
@@ -136,7 +136,7 @@ class NewAgenda(override val sbjCharacter: String, override val tgtPlace: String
                         agenda.subjectParams["character"]!!,
                         sbjCharacter,
                         -7.0 * effectivity,
-                        "denounce;$sbjCharacter"
+                        "Denounce;$sbjCharacter"
                     )
                 }
 
@@ -146,7 +146,7 @@ class NewAgenda(override val sbjCharacter: String, override val tgtPlace: String
                             this,
                             agenda.subjectParams["party"]!!,
                             3.0 * effectivity,
-                            "praiseParty;$sbjCharacter"
+                            "PraiseParty;$sbjCharacter"
                         )
                     }
                 }
@@ -157,7 +157,7 @@ class NewAgenda(override val sbjCharacter: String, override val tgtPlace: String
                             this,
                             agenda.subjectParams["party"]!!,
                             -5.0 * effectivity,
-                            "denounceParty;$sbjCharacter"
+                            "DenounceParty;$sbjCharacter"
                         )
                     }
                     //Increase party integrity
@@ -166,7 +166,7 @@ class NewAgenda(override val sbjCharacter: String, override val tgtPlace: String
                             this,
                             this,
                             3.0 * effectivity,
-                            "denounceEnemyParty;$sbjCharacter"
+                            "DenounceEnemyParty;$sbjCharacter"
                         )
                     }
                 }
@@ -176,7 +176,7 @@ class NewAgenda(override val sbjCharacter: String, override val tgtPlace: String
                         agenda.subjectParams["character"]!!,
                         sbjCharacter,
                         20.0 * effectivity,
-                        "nominate;$sbjCharacter"
+                        "Nominate;$sbjCharacter"
                     )
                 }
 
@@ -185,7 +185,7 @@ class NewAgenda(override val sbjCharacter: String, override val tgtPlace: String
                         agenda.subjectParams["character"]!!,
                         sbjCharacter,
                         -20.0 * effectivity,
-                        "fireManager;$sbjCharacter"
+                        "FireManager;$sbjCharacter"
                     )
                 }
 

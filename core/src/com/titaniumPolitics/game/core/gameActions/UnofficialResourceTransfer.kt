@@ -44,7 +44,14 @@ class UnofficialResourceTransfer(override val sbjCharacter: String, override val
         if (toWhere.contains("home"))
         //The mutuality from the recipient increases.
             Place.whoseHome(toWhere)
-                ?.also { parent.setMutuality(it, sbjCharacter, parent.characters[it]!!.itemValue(resources)) }
+                ?.also {
+                    parent.setMutuality(
+                        it,
+                        sbjCharacter,
+                        parent.characters[it]!!.itemValue(resources),
+                        "UnofficialResourceTransfer"
+                    )
+                }
         super.execute()
 
     }
