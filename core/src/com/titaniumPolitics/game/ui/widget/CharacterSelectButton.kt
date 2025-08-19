@@ -6,9 +6,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.titaniumPolitics.game.core.ReadOnly
 import ktx.scene2d.KTable
+import ktx.scene2d.Scene2DSkin
 import ktx.scene2d.label
 
-class CharacterSelectButton(skin: Skin, callback: (String) -> Unit) : Button(skin, "default"), KTable {
+class CharacterSelectButton(callback: (String) -> Unit) : Button(Scene2DSkin.defaultSkin, "default"), KTable {
     val charPortrait: SimpleHeadPortraitUI
     val charLabel: Label
     var availableCharacters: Set<String>? = null
@@ -40,5 +41,10 @@ class CharacterSelectButton(skin: Skin, callback: (String) -> Unit) : Button(ski
 
     fun setLabel(characterName: String) {
         charLabel.setText(ReadOnly.prop(characterName))
+    }
+
+    fun clearSelection() {
+        charLabel.setText("")
+        charPortrait.tgtCharacter = ""
     }
 }

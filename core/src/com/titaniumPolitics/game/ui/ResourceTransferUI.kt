@@ -50,7 +50,7 @@ class ResourceTransferUI(var gameState: GameState, actionCallback: (GameAction) 
                 row()
                 label("Transfer resources to", "docTitle") { setFontScale(0.5f);color = Color.BLACK }
                 //Select place to transfer resources to.
-                this@ResourceTransferUI.placeButton = PlaceSelectButton(skin, {
+                this@ResourceTransferUI.placeButton = PlaceSelectButton({
                     this@ResourceTransferUI.toWhere = it
                 })
                 add(this@ResourceTransferUI.placeButton).size(400f, 75f)

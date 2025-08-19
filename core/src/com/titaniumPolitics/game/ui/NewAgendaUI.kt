@@ -49,7 +49,7 @@ class NewAgendaUI(val gameState: GameState, actionCallback: (GameAction) -> Unit
         row()
         label("Target:", "docTitle") { color = Color.BLACK }
         //Select character to perform the request.
-        add(CharacterSelectButton(skin, { char ->
+        add(CharacterSelectButton({ char ->
             this@NewAgendaUI.agenda =
                 MeetingAgenda(AgendaType.PRAISE, this@NewAgendaUI.subject, hashMapOf("character" to char))
         })).size(180f)
@@ -61,7 +61,7 @@ class NewAgendaUI(val gameState: GameState, actionCallback: (GameAction) -> Unit
         row()
         label("Target:", "docTitle") { color = Color.BLACK }
         //Select character to perform the request.
-        add(CharacterSelectButton(skin, { char ->
+        add(CharacterSelectButton({ char ->
             this@NewAgendaUI.agenda =
                 MeetingAgenda(AgendaType.DENOUNCE, this@NewAgendaUI.subject, hashMapOf("character" to char))
         })).size(180f)
@@ -111,8 +111,8 @@ class NewAgendaUI(val gameState: GameState, actionCallback: (GameAction) -> Unit
             color = Color.BLACK
         }
         row()
-        add(PlaceSelectButton(skin, { this@NewAgendaUI.actionSelButton.changeTgtPlace(it) })).size(300f, 150f)
-        val csButton = CharacterSelectButton(skin, { char ->
+        add(PlaceSelectButton({ this@NewAgendaUI.actionSelButton.changeTgtPlace(it) })).size(300f, 150f)
+        val csButton = CharacterSelectButton({ char ->
             this@NewAgendaUI.actionSelButton.changeSubject(char)
         })
         csButton.availableCharacters =

@@ -6,9 +6,10 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.titaniumPolitics.game.core.ReadOnly
 import com.titaniumPolitics.game.ui.map.PlaceSelectionUI
 import ktx.scene2d.KTable
+import ktx.scene2d.Scene2DSkin
 import ktx.scene2d.label
 
-class PlaceSelectButton(skin: Skin, callback: (String) -> Unit) : Button(skin, "default"), KTable {
+class PlaceSelectButton(callback: (String) -> Unit) : Button(Scene2DSkin.defaultSkin, "default"), KTable {
     val placeLabel = label("Place:", "docTitle") { setFontScale(0.5f) }
 
     init {
@@ -25,5 +26,9 @@ class PlaceSelectButton(skin: Skin, callback: (String) -> Unit) : Button(skin, "
             }
         })
 
+    }
+
+    fun clearSelection() {
+        placeLabel.setText("Place:")
     }
 }
