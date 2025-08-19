@@ -6,6 +6,8 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 class AttendDivisionMeetingRoutine : Routine(), IMeetingRoutine {
+    var try_support_salary = 0
+
     init {
         priority = PRIORITY_MEETING
     }
@@ -34,9 +36,9 @@ class AttendDivisionMeetingRoutine : Routine(), IMeetingRoutine {
             } else //If the agenda already exists, support it.
             {
                 //If we haven't tried this branch in the current routine
-                if (intVariables["try_support_salary"] != 1) {
+                if (try_support_salary == 0) {
+                    try_support_salary += 1
                     //If the agenda is already proposed, and we have a supporting information, support it.
-                    intVariables["try_support_salary"] = 1
                     return SupportAgendaRoutine(conf.agendas.indexOfFirst { it.type == AgendaType.REQUEST && it.attachedRequest!!.action is Salary })//Add a routine, priority higher than work.
                 }
 

@@ -12,6 +12,8 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 class WorkRoutine() : Routine() {
+    var corruptionTimer = 0
+    var try_prepare_info = 0
     val meetingsAttended = hashSetOf<String>()
 
     init {
@@ -102,7 +104,7 @@ class WorkRoutine() : Routine() {
 
         //4. Corruption for power: If the character is the leader of a party, and a party member is short of resources, steal resources from workplace to party member's home
         //Only attempted once a day or once a work, whichever is shorter.
-        if (gState.time - (intVariables["corruptionTimer"] ?: 0) > ReadOnly.constInt("CorruptionTau") / ReadOnly.DT)
+        if (gState.time - corruptionTimer > ReadOnly.constInt("CorruptionTau") / ReadOnly.DT)
             if (gState.parties.values.any { it.leader == name }) {
                 val party = gState.parties.values.find { it.leader == name }!!
                 val rationThreshold =
@@ -116,7 +118,7 @@ class WorkRoutine() : Routine() {
                     val wantedResource =
                         if (character.resources["ration"] <= rationThreshold * (character.reliant)
                         ) "ration" else "water"
-                    intVariables["corruptionTimer"] = gState.time
+                    corruptionTimer = gState.time
                     return StealRoutine(wantedResource, member).apply {
                         priority = PRIORITY_WORK + 90 //Higher priority than work.
                     }
@@ -193,8 +195,8 @@ class WorkRoutine() : Routine() {
                             && gState.time - information.creationTime > ReadOnly.constInt("lengthOfDay") * 2
                 } && subroutines.none { it is PrepareInfoRoutine }) {
                 //If we haven't tried this branch in the current routine
-                if (intVariables["try_prepare_info"] != 1) {
-                    intVariables["try_prepare_info"] = 1
+                if (try_prepare_info == 0) {
+                    try_prepare_info += 1
                     return PrepareInfoRoutine().apply {
                         priority = PRIORITY_WORK + 70 //Higher priority than work.
                     }

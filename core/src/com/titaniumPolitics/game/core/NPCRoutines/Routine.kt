@@ -33,7 +33,6 @@ sealed class Routine() {
     val subroutines = arrayListOf<String>() //Store the IDs of subroutines that are currently running.
     var routineStartTime: Int = 0 //The time when the routine starts, used to calculate the duration of the routine.
     val variables: HashMap<String, String> = hashMapOf()
-    val intVariables: HashMap<String, Int> = hashMapOf()
     val PRIORITY_WORK = 1000
     val PRIORITY_MEETING = 1500
     val PRIORITY_REST = 0
@@ -88,6 +87,7 @@ sealed class Routine() {
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //Shared Functions
 
+    var try_support_proofOfWork = 0
     fun supportProofOfWork(conf: Meeting, name: String): Routine? {
 
         //If speaker, try supporting proof of work if I am involved.
@@ -99,9 +99,9 @@ sealed class Routine() {
             }) {
 
             //If we haven't tried this branch in the current routine
-            if (intVariables["try_support_proofOfWork"] != 1) {
+            if (try_support_proofOfWork == 0) {
                 //If the agenda is already proposed, and we have a supporting information, support it.
-                intVariables["try_support_proofOfWork"] = 1
+                try_support_proofOfWork += 1
                 return (
                         SupportAgendaRoutine(conf.agendas.indexOfFirst { it.type == AgendaType.PROOF_OF_WORK }))//Add a routine, priority higher than work.
             }
@@ -299,7 +299,7 @@ sealed class Routine() {
     }
 
     override fun toString(): String {
-        return "${this::class.simpleName}(ID='$ID', priority=$priority, subroutines=$subroutines, routineStartTime=$routineStartTime, variables=$variables, intVariables=$intVariables, executeDone=$executeDone)"
+        return "${this::class.simpleName}(ID='$ID', priority=$priority, subroutines=$subroutines, routineStartTime=$routineStartTime, variables=$variables, executeDone=$executeDone)"
     }
 
     companion object {

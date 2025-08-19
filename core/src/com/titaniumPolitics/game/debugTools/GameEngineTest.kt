@@ -135,9 +135,6 @@ class GameEngineTest {
                     (nonPlayerAgents[ch] as NonPlayerAgent).routines[0].variables.forEach { (key, value) ->
                         Logger.write("\t\t$key: $value", Logger.LogLevel.INFO)
                     }
-                    (nonPlayerAgents[ch] as NonPlayerAgent).routines[0].intVariables.forEach { (key, value) ->
-                        Logger.write("\t\t$key: $value", Logger.LogLevel.INFO)
-                    }
                 }
             }
             Logger.write("////////////////////////////////////////////////", Logger.LogLevel.INFO)

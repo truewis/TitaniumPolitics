@@ -9,6 +9,8 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 class AttendDivisionElectionRoutine : Routine(), IMeetingRoutine {
+    var try_support_nomination = 0
+
     init {
         priority = PRIORITY_MEETING
     }
@@ -37,9 +39,9 @@ class AttendDivisionElectionRoutine : Routine(), IMeetingRoutine {
             //otherwise, support the nominee.
             else {
                 //If we haven't tried this branch in the current routine
-                if (intVariables["try_support_nomination"] != 1) {
+                if (try_support_nomination == 0) {
                     //If the agenda is already proposed, and we have a supporting information, support it.
-                    intVariables["try_support_nomination"] = 1
+                    try_support_nomination += 1
                     return SupportAgendaRoutine(conf.agendas.indexOfFirst { it.type == AgendaType.NOMINATE && it.subjectParams["character"] == nominee })
                 }
                 //After you support the nominee, attack the other nominees.
