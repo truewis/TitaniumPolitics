@@ -109,7 +109,11 @@ class InformationViewUI(var gameState: GameState) : Table(defaultSkin) {
         submitButton.isVisible = mode == InformationViewMode.SELECT
         submitCallback = callback
         val informationList: List<Information>
-        val knownInfos = gameState.informations.values.filter { it.knownTo.contains(gameState.playerName) }
+        val knownInfos = gameState.informations.values.filter {
+            it.knownTo.contains(gameState.playerName) &&
+                    it.tgtCharacter?.let { it in gameState.knownCharactersToPlayer } ?: true
+            // Filter out information that is not known to the player or about unknown characters.
+        }
         if (knownInfos.isEmpty()) {
             informationTable.add(scene2d.label(ReadOnly.prop("InformationViewUI-NoInfo"), "docTitle") {
                 setFontScale(0.75f)

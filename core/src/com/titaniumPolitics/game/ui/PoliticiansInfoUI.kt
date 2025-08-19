@@ -38,7 +38,8 @@ class PoliticiansInfoUI(val gameState: GameState) : Table(defaultSkin) {
 
         // List all characters except the player
         val player = gameState.playerName
-        val allCharacters = gameState.characters.filter { it.key != player && it.value.type != Character.Type.ANON }
+        val allCharacters =
+            gameState.characters.filter { it.key != player && it.key in gameState.knownCharactersToPlayer }
         for (character in allCharacters) {
             // Name
             dataTable.add(

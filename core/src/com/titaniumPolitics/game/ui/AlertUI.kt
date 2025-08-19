@@ -47,8 +47,8 @@ class AlertUI(var gameState: GameState) : Table(defaultSkin) {
         newInformation.forEach {
             //Decide whether to show the alert based on the type of information.
             val info = gameState.informations[it]!!
-            if (info.tgtCharacter == null || gameState.characters[info.tgtCharacter]?.type == Character.Type.ANON
-            ) return@forEach //Never show information about anonymous characters.
+            if (info.tgtCharacter == null || info.tgtCharacter !in gameState.knownCharactersToPlayer
+            ) return@forEach //Never show information about unknown characters to the player.
             when (info.type) {
                 InformationType.CASUALTY -> {
                     addAlert("accident") {

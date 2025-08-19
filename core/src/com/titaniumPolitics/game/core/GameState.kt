@@ -93,6 +93,13 @@ class GameState {
     var nonPlayerAgents = hashMapOf<String, Agent>()
     var playerName = ""
 
+    /**
+     * Characters that the player knows about, including themselves.
+     * This is used to filter information on UI.
+     * Never intended to be used in core logic.
+     */
+    var knownCharactersToPlayer = hashSetOf<String>() //
+
     val player get() = characters[playerName]!!
     var log = Log()
     var parties = hashMapOf<String, Party>()
@@ -340,6 +347,12 @@ class GameState {
         _mutuality = Array(characters.size) { DoubleArray(characters.size) { ReadOnly.const("mutualityDefault") } }
         characters.keys.forEachIndexed { index, name ->
             characterIndexCache[name] = index //Cache the index of the character for faster access.
+        }
+        characters.forEach {
+            if (it.value.type == Character.Type.DIRECTOR || (it.value.type == Character.Type.EMPLOYEE &&
+                        it.value.division == player.division) //Add all directors and above. Only add employees that are in the same division as the player.
+            )
+                knownCharactersToPlayer += it.key //Add characters to the known characters of the player.
         }
 
         randomize()

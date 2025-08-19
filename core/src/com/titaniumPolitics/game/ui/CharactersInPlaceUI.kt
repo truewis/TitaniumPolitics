@@ -50,7 +50,7 @@ class CharactersInPlaceUI(var gameState: GameState) : Table(defaultSkin) {
         gameState.places[place]!!.characters.forEach {
 
             //Player cannot see themselves.
-            if (it != gameState.playerName && gameState.characters[it]!!.type == Character.Type.DIRECTOR)
+            if (it != gameState.playerName && it in gameState.knownCharactersToPlayer)
                 addCharacterPortrait(it)
         }
         placeCharacterPortrait()

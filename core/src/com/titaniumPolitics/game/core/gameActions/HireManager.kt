@@ -25,6 +25,8 @@ class HireManager(override val sbjCharacter: String, override val tgtPlace: Stri
                 party.overseer = employee
             }
         }
+        if (sbjCharObj.division == parent.player.division)
+            parent.knownCharactersToPlayer += employee!! //If hired into the player's division, add the employee to known characters.
         super.execute()
     }
 

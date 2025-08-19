@@ -63,7 +63,7 @@ class CharacterSelectUI(val gameState: GameState) : WindowUI("CharacterSelectTit
 
     fun refresh(
         division: String = "",
-        characters: Set<String> = gameState.characters.filter { it.value.alive && it.value.type != Character.Type.ANON }.keys
+        characters: Set<String> = gameState.characters.filter { it.value.alive && it.key in gameState.knownCharactersToPlayer }.keys
     )//This function refreshes the character selection UI based on the selected division. If no division is selected, it shows all characters.
     {
         divisionSelectionBox.isVisible =
