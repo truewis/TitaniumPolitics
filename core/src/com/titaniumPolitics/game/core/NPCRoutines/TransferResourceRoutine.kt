@@ -15,7 +15,7 @@ class TransferResourceRoutine() : Routine() {
 
         if (place != source) {
             if (subroutines.none { it is MoveRoutine })
-                return MoveRoutine().apply { variables["movePlace"] = source }
+                return MoveRoutine(source)
         }
         return null
     }

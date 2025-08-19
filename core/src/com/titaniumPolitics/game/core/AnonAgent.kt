@@ -69,7 +69,7 @@ class AnonAgent : Agent() {
         //If health is low, rest
         if (character.health < ReadOnly.const("TiredHealth")) {
             if (routines.none { it is RestRoutine }) {
-                routines.add(RestRoutine().apply {
+                routines.add(RestRoutine(workPlace).apply {
 
                     priority = pri
                     routineStartTime = parent.time
@@ -149,15 +149,11 @@ class AnonAgent : Agent() {
     private fun whenIdle() {
         //When work hours, work
         if (Routine.isWorkHourWithETA(parent, place, workPlace, (1 / DTH).toInt())) {
-            routines.add(WorkAnonRoutine().also {
-                it.variables["workplace"] = workPlace
-            })
+            routines.add(WorkAnonRoutine(workPlace))
             return
         } else
         //When not work hours, rest
-            routines.add(RestRoutine().also {
-                it.variables["workplace"] = workPlace
-            })
+            routines.add(RestRoutine(workPlace))
     }
 
     @Deprecated("This function is not used anymore because we don't have trade action anymore.")

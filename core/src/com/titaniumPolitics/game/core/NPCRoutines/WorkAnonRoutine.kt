@@ -6,15 +6,12 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 
 @Serializable
-class WorkAnonRoutine() : Routine() {
-    val workPlace get() = gState.places[this@WorkAnonRoutine.variables["workplace"]!!]!!
+class WorkAnonRoutine(var workplace: String? = null) : Routine() {
+    val workplaceObj get() = gState.places[this@WorkAnonRoutine.workplace]!!
     override fun newRoutineCondition(name: String, place: String, subroutines: List<Routine>): Routine? {
-        if (place != workPlace.name)
+        if (place != workplaceObj.name)
             if (subroutines.none { it is MoveRoutine })
-                return MoveRoutine().apply {
-                    variables["movePlace"] =
-                        workPlace.name
-                }//Add a move routine with higher priority.
+                return MoveRoutine(workplaceObj.name)//Add a move routine with higher priority.
         return null
     }
 
@@ -23,7 +20,7 @@ class WorkAnonRoutine() : Routine() {
     }
 
     override fun endCondition(name: String, place: String): Boolean {
-        return (gState.hour !in workPlace.workHoursStart..workPlace.workHoursEnd)
+        return (gState.hour !in workplaceObj.workHoursStart..workplaceObj.workHoursEnd)
     }
 
     @Transient

@@ -75,12 +75,8 @@ class NonPlayerAgent : Agent() {
         //If health is low, rest
         if (character.health < ReadOnly.const("TiredHealth")) {
             if (routines.none { it is RestRoutine }) {
-                routines.add(RestRoutine().apply {
-
+                routines.add(RestRoutine(parent.getWorkplace(name)?.name).apply {
                     priority = pri
-                    parent.getWorkplace(name)?.let {
-                        variables["workplace"] = it.name
-                    }
                     routineStartTime = parent.time
                 })//Add a routine, priority higher than work.
                 return
@@ -178,15 +174,13 @@ class NonPlayerAgent : Agent() {
         //When work hours, work
         parent.getWorkplace(name)?.let { wkplace ->
             if (Routine.isWorkHourWithETA(parent, place, wkplace.name, IDTH)) {
-                routines.add(WorkRoutine().also {
-                    it.variables["workplace"] = wkplace.name
+                routines.add(WorkRoutine(wkplace.name).also {
                     it.routineStartTime = parent.time
                 })
                 return
             } else
             //When not work hours, rest
-                routines.add(RestRoutine().also {
-                    it.variables["workplace"] = wkplace.name
+                routines.add(RestRoutine(wkplace.name).also {
                     it.routineStartTime = parent.time
                 })
         }

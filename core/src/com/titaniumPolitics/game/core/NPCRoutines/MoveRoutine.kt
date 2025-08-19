@@ -5,8 +5,14 @@ import com.titaniumPolitics.game.core.gameActions.Move
 import com.titaniumPolitics.game.debugTools.Logger
 import kotlinx.serialization.Serializable
 
+/**
+ * A routine that moves a character to a destination.
+ * The routine ends when the character reaches the destination.
+ * Shortest path is used to determine the next stop.
+ * If there is no path to the destination, the routine ends with an error.
+ */
 @Serializable
-class MoveRoutine() : Routine() {
+class MoveRoutine(var destination: String) : Routine() {
     var nextStop = ""
     override fun newRoutineCondition(name: String, place: String, subroutines: List<Routine>): Routine? {
         return null
@@ -19,16 +25,16 @@ class MoveRoutine() : Routine() {
     }
 
     override fun endCondition(name: String, place: String): Boolean {
-        if (place == variables["movePlace"]) {
+        if (place == destination) {
             executeDone = true
             return true
         } else {
-            if (gState.places[place]!!.shortestPathAndTimeTo(variables["movePlace"]!!)?.also {
+            if (gState.places[place]!!.shortestPathAndTimeTo(destination)?.also {
                     nextStop = it.first[1]
                 } == null) {
 
                 Logger.write(
-                    "There is no path from $place to ${variables["movePlace"]}! Terminating moveRoutine...",
+                    "There is no path from $place to ${destination}! Terminating moveRoutine...",
                     Logger.LogLevel.INFO
                 )
                 executeDone = false

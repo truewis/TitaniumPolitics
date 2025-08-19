@@ -22,10 +22,7 @@ class FindCharacterRoutine() : Routine() {
         }
 
         if (subroutines.none { it is MoveRoutine })
-            return MoveRoutine().also {
-                it.variables["movePlace"] =
-                    gState.places.values.find { it.characters.contains(variables["character"]) }!!.name
-            }
+            return MoveRoutine(gState.places.values.find { it.characters.contains(variables["character"]) }!!.name)
         return null
     }
 

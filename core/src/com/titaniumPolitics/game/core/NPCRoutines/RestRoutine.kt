@@ -8,7 +8,7 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 
 @Serializable
-class RestRoutine() : Routine() {
+class RestRoutine(var workplace: String? = null) : Routine() {
     init {
         priority = PRIORITY_LIFE_SUPPORT
     }
@@ -16,9 +16,7 @@ class RestRoutine() : Routine() {
     override fun newRoutineCondition(name: String, place: String, subroutines: List<Routine>): Routine? {
 
         if (place != "home_$name" && subroutines.none { it is MoveRoutine })
-            return MoveRoutine().apply {
-                variables["movePlace"] = "home_$name"
-            }//Add a move routine with higher priority.
+            return MoveRoutine("home_$name")//Add a move routine with higher priority.
         return null
     }
 
@@ -29,13 +27,13 @@ class RestRoutine() : Routine() {
     override fun endCondition(name: String, place: String): Boolean {
         // Wake up based on eta to workplace and workplace work hours.
         if (gState.characters[name]!!.health < ReadOnly.const("CriticalHealth")) return false
-        if (variables["workplace"] == null)
+        if (workplace == null)
             return (gState.hour in 8..18)
         else {
             return isWorkHourWithETA(
                 gState,
                 place,
-                variables["workplace"]!!,
+                workplace!!,
                 IDTH
             )//Allow waking up 1 hour before commuting to work.
         }

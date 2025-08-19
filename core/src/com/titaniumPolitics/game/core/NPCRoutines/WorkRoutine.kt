@@ -11,7 +11,7 @@ import com.titaniumPolitics.game.debugTools.Logger
 import kotlinx.serialization.Serializable
 
 @Serializable
-class WorkRoutine() : Routine() {
+class WorkRoutine(var workplace: String) : Routine() {
     var corruptionTimer = 0
     var try_prepare_info = 0
     val meetingsAttended = hashSetOf<String>()
@@ -44,10 +44,9 @@ class WorkRoutine() : Routine() {
                 name
             ) && it.isAccidentScene
         }?.also { place ->
-            if (subroutines.none { it is InvestigateAndClearAccidentRoutine && it.variables["place"] == place.name }) {
+            if (subroutines.none { it is InvestigateAndClearAccidentRoutine && it.investigatePlace == place.name }) {
                 //If there is no routine to investigate and clear the accident in this place, create a new one.
-                return InvestigateAndClearAccidentRoutine().apply {
-                    variables["place"] = place.name
+                return InvestigateAndClearAccidentRoutine(place.name).apply {
                     priority = PRIORITY_WORK + 100 //Higher priority than work.
                 }
             }
@@ -62,8 +61,7 @@ class WorkRoutine() : Routine() {
             // Move to the meeting if not already there
             if (place != missingMeeting.place) {
                 if (subroutines.none { it is MoveRoutine }) {
-                    return MoveRoutine().apply {
-                        variables["movePlace"] = missingMeeting.place
+                    return MoveRoutine(missingMeeting.place).apply {
                         priority = PRIORITY_MEETING//Higher priority
                     }
                 }
@@ -84,8 +82,7 @@ class WorkRoutine() : Routine() {
             //----------------------------------------------------------------------------------Move to the Meeting
             if (place != conf.place) {
                 if (subroutines.none { it is MoveRoutine })
-                    return MoveRoutine().apply {
-                        variables["movePlace"] = conf.place
+                    return MoveRoutine(conf.place).apply {
                         priority = PRIORITY_MEETING//Higher priority
                     }
             } else {
@@ -296,7 +293,7 @@ class WorkRoutine() : Routine() {
 
     override fun endCondition(name: String, place: String): Boolean {
         //If work hours are over, rest. Also, if the character is too hungry, thirsty, or sick, rest. (Which is checked earlier.)
-        return !isWorkHourWithETA(gState, place, variables["workplace"]!!, (1 / ReadOnly.DTH).toInt())
+        return !isWorkHourWithETA(gState, place, workplace, (1 / ReadOnly.DTH).toInt())
                 || gState.characters[name]!!.health <= ReadOnly.const("CriticalHealth")
     }
 

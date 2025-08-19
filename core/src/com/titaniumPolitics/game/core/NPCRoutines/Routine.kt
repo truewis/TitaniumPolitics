@@ -37,8 +37,11 @@ sealed class Routine() {
     val PRIORITY_MEETING = 1500
     val PRIORITY_REST = 0
     val PRIORITY_LIFE_SUPPORT = 2000
+
+    /**This is used to check if the routine execution is successful. Otherwise, there is a problem executing the routine and the parent routine should be notified.
+     */
     var executeDone =
-        false //This is used to check if the routine execution is successful. Otherwise, there is a problem executing the routine and the parent routine should be notified.
+        false
 
     fun injectParent(gState: GameState) {
         this.gState = gState

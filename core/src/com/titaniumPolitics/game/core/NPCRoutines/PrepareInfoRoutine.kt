@@ -13,9 +13,7 @@ class PrepareInfoRoutine() : Routine() {
     override fun newRoutineCondition(name: String, place: String, subroutines: List<Routine>): Routine? {
         if (place != "home_${name}") {
             if (subroutines.none { it is MoveRoutine })
-                return MoveRoutine().apply {
-                    variables["movePlace"] = "home_${name}"
-                }//Add a move routine with higher priority.
+                return MoveRoutine("home_${name}")//Add a move routine with higher priority.
         }
         return null
     }

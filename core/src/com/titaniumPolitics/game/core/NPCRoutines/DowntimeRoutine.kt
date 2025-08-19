@@ -17,18 +17,14 @@ class DowntimeRoutine() : Routine() {
         if (char.trait.contains("extrovert")) {
             if (place !in Place.publicPlaces)
                 if (subroutines.none { it is MoveRoutine })
-                    return MoveRoutine().apply {
-                        variables["movePlace"] = Place.publicPlaces.random()
-                    }//Add a move routine with higher priority.
+                    return MoveRoutine(Place.publicPlaces.random())//Add a move routine with higher priority.
 
         }
 
         //Otherwise, go home
         if (place != "home_$name")
             if (subroutines.none { it is MoveRoutine })
-                return MoveRoutine().apply {
-                    variables["movePlace"] = "home_$name"
-                }//Add a move routine with higher priority.
+                return MoveRoutine("home_$name")//Add a move routine with higher priority.
         return null
     }
 

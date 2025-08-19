@@ -17,9 +17,7 @@ class ExecuteCommandRoutine() : Routine() {
 
         if (place != executableRequest.action.tgtPlace) {
             if (subroutines.none { it is MoveRoutine })
-                return MoveRoutine().apply {
-                    variables["movePlace"] = executableRequest.action.tgtPlace
-                }//Add a move routine with higher priority.
+                return MoveRoutine(executableRequest.action.tgtPlace)//Add a move routine with higher priority.
         }
         return null
     }

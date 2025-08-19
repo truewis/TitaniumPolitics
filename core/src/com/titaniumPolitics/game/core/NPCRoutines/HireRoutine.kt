@@ -12,9 +12,7 @@ class HireRoutine() : Routine() {
         //If not in market, move to market.
         if (place != "market") {
             if (subroutines.none { it is MoveRoutine }) {
-                return MoveRoutine().apply {
-                    variables["movePlace"] = "market"
-                } //Add a move routine with higher priority.
+                return MoveRoutine("market")//Add a move routine with higher priority.
             }
         }
         return null
