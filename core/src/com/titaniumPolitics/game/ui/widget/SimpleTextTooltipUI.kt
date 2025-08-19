@@ -1,10 +1,14 @@
-package com.titaniumPolitics.game.ui
+package com.titaniumPolitics.game.ui.widget
 
 import com.badlogic.gdx.scenes.scene2d.Touchable
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.ui.Tooltip
 import com.badlogic.gdx.utils.Align
-import ktx.scene2d.*
+import ktx.scene2d.image
+import ktx.scene2d.label
+import ktx.scene2d.scene2d
+import ktx.scene2d.stack
+import ktx.scene2d.table
 
 class SimpleTextTooltipUI(text: String, width: Float = 350f, height: Float = 200f) : Tooltip<Table>(scene2d.table {
     addActor(scene2d.image("TooltipShadow10p") {

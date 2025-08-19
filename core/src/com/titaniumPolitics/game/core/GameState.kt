@@ -14,6 +14,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.math.abs
 import kotlin.math.absoluteValue
+import kotlin.math.sqrt
 
 @Serializable
 class GameState {
@@ -104,9 +105,6 @@ class GameState {
     var log = Log()
     var parties = hashMapOf<String, Party>()
     var requests = hashMapOf<String, Request>()
-
-    @Serializable
-    private var _mutuality = Array(1) { DoubleArray(1) }
 
     private var _scheduledMeetings = hashMapOf<String, Meeting>()
     val scheduledMeetings: Map<String, Meeting> = Collections.unmodifiableMap(_scheduledMeetings)
@@ -345,6 +343,8 @@ class GameState {
 
         //After all characters are created, create mutuality matrix.
         _mutuality = Array(characters.size) { DoubleArray(characters.size) { ReadOnly.const("mutualityDefault") } }
+        _mutualityReasons =
+            Array(characters.size) { ArrayList(characters.map { "" }) }
         characters.keys.forEachIndexed { index, name ->
             characterIndexCache[name] = index //Cache the index of the character for faster access.
         }
@@ -388,6 +388,11 @@ class GameState {
         }
     }
 
+    @Serializable
+    private var _mutuality = Array(1) { DoubleArray(1) }
+    private var _mutualityReasons =
+        Array(1) { ArrayList<String>() } //Reasons for mutuality changes, indexed by character index.
+
     fun setHardcodedMutuality() {
         //Set hardcoded mutualities for some characters.
         setMutuality("Rui", "Yuhoa", 30.0, "Hardcoded")
@@ -428,8 +433,21 @@ class GameState {
             ReadOnly.const("mutualityMax")
         if (getMutuality(a, b) < ReadOnly.const("mutualityMin")) _mutuality[indexA][indexB] =
             ReadOnly.const("mutualityMin")
-        if (a == b)
-            characters[a]!!.history += formatTime() + "Mutuality Change:%.1f to $b".format(delta) + ":" + reasonKey
+        _mutualityReasons[indexA][indexB] += "$time:$delta:$reasonKey\n"
+    }
+
+    fun getSignificantMutualityReasons(a: String, b: String): List<Pair<Double, String>> {
+        if (!characters.containsKey(a) || !characters.containsKey(b)) throw Exception("Getting mutuality reasons $a -> $b invalid.")
+        val indexA = characterIndexCache[a]!!
+        val indexB = characterIndexCache[b]!!
+        val reason = _mutualityReasons[indexA][indexB].split('\n')
+        //Pick three most significant reasons, i.e. those with the highest absolute delta. It should be weighted with time since the delta.
+        return reason.map { it.split(':') }
+            .filter { it.size >= 3 && it[1].toDouble().absoluteValue > 1e-2 } //Filter out insignificant reasons.
+            .sortedByDescending { it[1].toDouble().absoluteValue / (sqrt(time - it[0].toInt() + 1.0)) } //Sort by significance.
+            .toSet()
+            .take(3) //Take three most significant reasons.
+            .map { Pair(it[1].toDouble(), it[2]) } //Format the reason.
     }
 
     fun setMutuality(a: Collection<String>, b: Collection<String> = a, delta: Double, reasonKey: String? = null) {

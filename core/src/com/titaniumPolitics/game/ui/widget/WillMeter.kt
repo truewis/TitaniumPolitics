@@ -38,3 +38,4 @@ class WillMeter(gameState: GameState) : Table(defaultSkin), KTable {
         bar.setValue(value.toFloat() / 100)
     }
 }
+

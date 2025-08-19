@@ -5,6 +5,8 @@ import com.badlogic.gdx.scenes.scene2d.Group
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.core.ReadOnly
+import com.titaniumPolitics.game.ui.widget.MutualityTooltipUI
+import com.titaniumPolitics.game.ui.widget.SimpleTextTooltipUI
 import ktx.scene2d.*
 import ktx.scene2d.Scene2DSkin.defaultSkin
 
@@ -45,27 +47,7 @@ class MutualityMeter(var gameState: GameState, var tgtCharacter: String, var who
 //        }
         gameState.updateUI += refresh
         refresh(gameState)
-        val tgtName = ReadOnly.charName(tgtCharacter)
-        var text = if (gameState.getMutNorm(tgtCharacter, who) > 0.5) {
-            "You think of $tgtName as trustworthy.\n"
-        } else if (gameState.getMutNorm(tgtCharacter, who) > 0) {
-            "You think of $tgtName as reasonable.\n"
-        } else if (gameState.getMutNorm(tgtCharacter, who) > -0.5) {
-            "You think of $tgtName as untrustworthy.\n"
-        } else {
-            "You hates $tgtName.\n"
-        }
-
-        if (gameState.getMutNorm(who, tgtCharacter) > 0.5) {
-            text += "They think of you as trustworthy."
-        } else if (gameState.getMutNorm(who, tgtCharacter) > 0) {
-            text += "They think of you as reasonable."
-        } else if (gameState.getMutNorm(who, tgtCharacter) > -0.5) {
-            text += "They think of you as untrustworthy."
-        } else {
-            text += "They hates you."
-        }
-        addListener(SimpleTextTooltipUI(text))
+        addListener(MutualityTooltipUI(tgtCharacter, who, gameState))
     }
 
     //Override this method instead of remove, remove is not called properly.
