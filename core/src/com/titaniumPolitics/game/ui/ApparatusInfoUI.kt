@@ -87,7 +87,7 @@ class ApparatusInfoUI : WindowUI("ApparatusInfoTitle") {
                 val text3 =
                     ReadOnly.appProp("status-worker")
                         .format(
-                            information.variables["efficiency"] ?: (0 * 100),
+                            (information.variables["efficiency"] ?: .0) * 100,
                             information.variables["currentWorker"]?.toInt() ?: 0
                         )
                 val text4 = if ((information.variables["currentWorker"]?.toInt()
@@ -108,6 +108,7 @@ class ApparatusInfoUI : WindowUI("ApparatusInfoTitle") {
                 )
                 setAlignment(Align.left)
                 setFontScale(0.2f)
+                skipToTheEnd() //Skip the typing effect for this label.
             })
 
             row()
