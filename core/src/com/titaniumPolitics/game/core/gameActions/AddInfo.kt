@@ -40,7 +40,7 @@ class AddInfo(override val sbjCharacter: String, override val tgtPlace: String) 
         //Call the mutuality modifier function of the agenda. If the added information is effective, the mutuality effect of the agenda is reinforced, and vice versa.
         NewAgenda.extracted(effectivity(), meeting, agenda, agenda.author, parent)
         //affect relation with the agenda author
-        parent.setMutuality(agenda.author, sbjCharacter, effectivity())
+        parent.setMutuality(agenda.author, sbjCharacter, effectivity(), "addInfo")
         super.execute()
     }
 

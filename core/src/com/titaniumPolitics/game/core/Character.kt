@@ -22,11 +22,13 @@ class Character : GameStateElement() {
         DIRECTOR, EMPLOYEE, ANON
     }
 
-    var will: Double
+    /**
+     * The will of the character to do something.
+     * It is calculated based on the mutuality with the character.
+     * Do not set it here,  as it has to be set with reasonKey with setMutuality() function.
+     */
+    val will: Double
         get() = parent.getMutuality(name)
-        set(value) {
-            parent.setMutuality(name, delta = value - will)
-        }
     private var _name: String? = null
     override val name: String
         get() = _name ?: parent.characters.filter { it.value == this }.keys.first().also { _name = it }

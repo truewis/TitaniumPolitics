@@ -20,7 +20,7 @@ class NewAgenda(override val sbjCharacter: String, override val tgtPlace: String
         )
         super.execute()
         //affect mutuality based on the agenda.
-        parent.setMutuality(sbjCharacter, sbjCharacter, deltaWill())
+        parent.setMutuality(sbjCharacter, sbjCharacter, deltaWill(), "newAgenda")
         extracted(effectivity, meeting, agenda, sbjCharacter, parent)
     }
 

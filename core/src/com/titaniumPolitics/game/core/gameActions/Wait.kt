@@ -24,17 +24,17 @@ class Wait(override val sbjCharacter: String, override val tgtPlace: String) : G
         if (tgtPlace in listOf("market", "squareSouth", "squareNorth")) {
             // Unless the character has trait "agoraphobia", in which case the will is decreased.
             if ("agoraphobia" in sbjCharObj.trait) {
-                sbjCharObj.will -= expectedDuration * 0.5f
+                parent.setMutuality(sbjCharacter, delta = -expectedDuration * 0.5, reasonKey = "publicPlaceAgoraphobia")
             } else {
-                sbjCharObj.will += expectedDuration * 1f
+                parent.setMutuality(sbjCharacter, delta = +expectedDuration * 1.0, reasonKey = "publicPlace")
             }
         }
         // If in one of the remote places, the will is increased.
         else if (tgtPlace in listOf("reservoirEast", "reservoirWest", "observatory", "cemetery", "spaceport")) {
             if ("introvert" in sbjCharObj.trait) {
-                sbjCharObj.will += expectedDuration * 1.5f
+                parent.setMutuality(sbjCharacter, delta = expectedDuration * 1.5, reasonKey = "remotePlaceIntrovert")
             } else {
-                sbjCharObj.will += expectedDuration * 1f
+                parent.setMutuality(sbjCharacter, delta = expectedDuration * 1.0, reasonKey = "remotePlace")
             }
 
         }
