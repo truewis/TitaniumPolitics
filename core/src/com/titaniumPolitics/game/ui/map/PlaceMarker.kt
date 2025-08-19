@@ -57,7 +57,7 @@ open class PlaceMarker(var gameState: GameState, var owner: MapUI, var place: St
         this.addListener(object : com.badlogic.gdx.scenes.scene2d.utils.ClickListener() {
             override fun clicked(event: com.badlogic.gdx.scenes.scene2d.InputEvent?, x: Float, y: Float) {
                 //Open Place UI
-                owner.currentPlaceMarkerWindow.refresh(getX(), getY(), place)
+                owner.currentPlaceMarkerWindow.refresh(place)
             }
         })
 

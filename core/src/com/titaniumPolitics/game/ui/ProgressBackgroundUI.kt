@@ -58,7 +58,7 @@ class ProgressBackgroundUI(var gameState: GameState, skin: Skin) : Table(skin), 
             addAction(Actions.fadeIn(0f))// No fade in, just show it immediately, but still need to change alpha to 1f here.
             status = actionName
             val displayText =
-                if (this@ProgressBackgroundUI.status != "") ReadOnly.prop(this@ProgressBackgroundUI.status + "_ProgressBackgroundUI") else "Loading"
+                if (this@ProgressBackgroundUI.status != "") ReadOnly.prop("ProgressBackgroundUI-" + this@ProgressBackgroundUI.status) else "Loading"
             with(progressLabel) {
                 clearActions()
                 addAction(

@@ -122,6 +122,9 @@ open class MapUI(val gameState: GameState) : Table(defaultSkin) {
             scrollPane.height
         )
 
+        currentPlaceMarkerWindow.refresh(gameState.player.place.name)
+        //Refresh the place marker window.
+
     }
 
     fun convertToScreenCoords(x: Float, y: Float): Pair<Float, Float> {

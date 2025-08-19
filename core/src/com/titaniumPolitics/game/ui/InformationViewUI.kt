@@ -37,30 +37,34 @@ class InformationViewUI(var gameState: GameState) : Table(defaultSkin) {
     } //Default predicate, shows all information.
 
     val filters = scene2d.table {
-        val charFilter = CharacterSelectButton {
-            //Filter the information by character.
-            selectedCharacter = it
-            refresh("creationTime", mode)
-        }
-        val placeFilter = PlaceSelectButton {
-            selectedPlace = it
-            refresh("creationTime", mode)
-        }
         val clearFilterButton = scene2d.button {
             label("Clear Filter", "docTitle") {
                 setAlignment(Align.center)
                 setFontScale(0.5f)
             }
-            addListener(object : ClickListener() {
-                override fun clicked(event: com.badlogic.gdx.scenes.scene2d.InputEvent?, x: Float, y: Float) {
-                    charFilter.clearSelection()
-                    selectedCharacter = null
-                    placeFilter.clearSelection()
-                    selectedPlace = null
-                    refresh("creationTime", mode)
-                }
-            })
+            this@button.isVisible = false
         }
+        val charFilter = CharacterSelectButton {
+            //Filter the information by character.
+            selectedCharacter = it
+            refresh("creationTime", mode)
+            clearFilterButton.isVisible = true
+        }
+        val placeFilter = PlaceSelectButton {
+            selectedPlace = it
+            refresh("creationTime", mode)
+            clearFilterButton.isVisible = true
+        }
+        clearFilterButton.addListener(object : ClickListener() {
+            override fun clicked(event: com.badlogic.gdx.scenes.scene2d.InputEvent?, x: Float, y: Float) {
+                charFilter.clearSelection()
+                selectedCharacter = null
+                placeFilter.clearSelection()
+                selectedPlace = null
+                refresh("creationTime", mode)
+                clearFilterButton.isVisible = false
+            }
+        })
         add(charFilter).size(150f).fill()
         add(placeFilter).size(300f, 150f).fill()
         add(clearFilterButton).size(200f, 150f).fill()

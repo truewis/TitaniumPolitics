@@ -108,7 +108,6 @@ object ReadOnly {
     val mutualityScale = const("mutualityMax") - const("mutualityMin")
 
     fun prop(key: String, obj: Any? = null): String {
-
         return if (obj != null)
             (props.getProperty(key)?.replacePlaceholders(obj))
                 ?: "Unknown".also { Logger.write("Warning: Could not find property $key", Logger.LogLevel.INFO) }
@@ -136,7 +135,11 @@ object ReadOnly {
     }
 
     fun placeProp(key: String, obj: Any? = null): String {
-
+        if (key.startsWith("home_"))
+            if (key.contains("desc"))
+                return placeProps.getProperty("home-desc")
+            else
+                return placeProps.getProperty("home").format(key.substringAfter("home_"))
         return if (obj != null)
             (placeProps.getProperty(key)?.replacePlaceholders(obj))
                 ?: "Unknown".also { Logger.write("Warning: Could not find property $key", Logger.LogLevel.INFO) }

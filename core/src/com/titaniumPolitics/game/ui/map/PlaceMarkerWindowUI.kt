@@ -98,7 +98,7 @@ class PlaceMarkerWindowUI(var gameState: GameState, var owner: MapUI) : Table() 
         addListener(object : com.badlogic.gdx.scenes.scene2d.utils.ChangeListener() {
             override fun changed(event: ChangeEvent?, actor: Actor?) {
                 //Select place.
-                (owner as PlaceSelectionUI).selectedPlaceCallback(this@PlaceMarkerWindowUI.placeDisplayed)
+                PlaceSelectionUI.instance.selectedPlaceCallback(this@PlaceMarkerWindowUI.placeDisplayed)
             }
         }
         )
@@ -199,7 +199,7 @@ class PlaceMarkerWindowUI(var gameState: GameState, var owner: MapUI) : Table() 
             )
             gState.places[this@PlaceMarkerWindowUI.placeDisplayed]!!.manager?.run {
                 managerLabel.setText(
-                    "Manager: " + ReadOnly.prop(this)
+                    "Manager: " + ReadOnly.charProp(this)
                 )
             }
                 ?: managerLabel.setText(
@@ -218,7 +218,7 @@ class PlaceMarkerWindowUI(var gameState: GameState, var owner: MapUI) : Table() 
 //            !(info.type == InformationType.ACTION && info.action is Wait) && info.knownTo.contains(gameState.playerName)
         ) {
 
-            AlertUI.instance.addAlert("interruptedMove", ReadOnly.prop(info.tgtCharacter ?: "Someone"))
+            AlertUI.instance.addAlert("interruptedMove", ReadOnly.charProp(info.tgtCharacter ?: "Someone"))
             interrupted = true
             Logger.write("MoveUI: Move interrupted by ${info.author} at ${info.tgtPlace}", Logger.LogLevel.INFO)
         }
@@ -256,11 +256,9 @@ class PlaceMarkerWindowUI(var gameState: GameState, var owner: MapUI) : Table() 
 
     }
 
-    fun refresh(x: Float, y: Float, placeName: String) {
+    fun refresh(placeName: String) {
         //setPosition(x + XOFFSET, y + YOFFSET)
-        if (placeName.contains("home")) this.titleLabel.label.setText(ReadOnly.prop("home"))
-        else
-            this.titleLabel.label.setText(ReadOnly.prop(placeName))
+        this.titleLabel.label.setText(ReadOnly.placeProp(placeName))
         placeDisplayed = placeName
 
         //Clear the list of any previous buttons.

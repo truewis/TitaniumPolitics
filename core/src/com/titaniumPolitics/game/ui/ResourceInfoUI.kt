@@ -4,7 +4,10 @@ package com.titaniumPolitics.game.ui
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.utils.Align
+import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.core.Information
+import com.titaniumPolitics.game.core.ReadOnly
+import com.titaniumPolitics.game.ui.widget.ResourceDisplayUI
 import com.titaniumPolitics.game.ui.widget.WindowUI
 import ktx.scene2d.label
 import ktx.scene2d.table
@@ -29,21 +32,13 @@ class ResourceInfoUI : WindowUI("ResourceInfoTitle") {
 
             add(label("Author: ${information.author}") { setAlignment(Align.center) })
             row()
-            add(label("Creation Time: ${information.creationTime}") { setAlignment(Align.center) })
-
-            row()
             add(label("Type: ${information.type}") { setAlignment(Align.center) })
             row()
-            add(label("Target Time: ${information.tgtTime}") { setAlignment(Align.center) })
+            add(label("Target Time: ${GameState.formatTime(information.tgtTime)}") { setAlignment(Align.center) })
             row()
-            add(label("Target Place: ${information.tgtPlace}") { setAlignment(Align.center) })
+            add(label("Target Place: ${ReadOnly.placeProp(information.tgtPlace)}") { setAlignment(Align.center) })
             row()
-            add(table {
-                information.resources.forEach { (resourceName, resourceAmount) ->
-                    label("$resourceName: $resourceAmount") { setAlignment(Align.center) }
-                    row()
-                }
-            })
+            add(ResourceDisplayUI(information.resources)).size(500f, 300f).fill()
         }
 
     }

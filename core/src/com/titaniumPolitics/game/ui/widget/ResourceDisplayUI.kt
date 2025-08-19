@@ -21,6 +21,10 @@ import kotlin.collections.component1
 import kotlin.collections.component2
 import kotlin.collections.set
 
+/**
+ * A UI component that displays resources in a scrollable table format.
+ * Callback is invoked when a resource label is clicked, passing the resource name and amount.
+ */
 class ResourceDisplayUI(var current: Resources = Resources(), var callback: (String, Double) -> Unit = { _, _ -> }) :
     Table(defaultSkin), KTable {
     val labelList = arrayListOf<Label>()
@@ -28,7 +32,7 @@ class ResourceDisplayUI(var current: Resources = Resources(), var callback: (Str
 
     init {
         add(ScrollPane(docTable).also { it.setScrollingDisabled(true, false) }).grow()
-
+        refresh()
     }
 
     fun refresh() {

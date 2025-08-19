@@ -22,7 +22,7 @@ open class ActionSheetUI(
         color = Color.BLACK
     }
     val submitButton = SubmitButton {
-        GameEngine.acquireCallback(it)
+        actionCallback(it)
         onClose.forEach { it() }
     }
     val onClose = ArrayList<() -> Unit>()

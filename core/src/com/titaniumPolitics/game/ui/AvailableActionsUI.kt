@@ -151,7 +151,7 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable 
         docList.clear()
         dateLabel.setText(gameState.formatDate())
         timeLabel.setText(gameState.formatClock())
-        placeLabel.setText(ReadOnly.prop(gameState.player.place.name))
+        placeLabel.setText(ReadOnly.placeProp(gameState.player.place.name))
         GameEngine.availableActions(
             gameState,
             gameState.player.place.name,
@@ -228,8 +228,9 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable 
             actionCallback: (GameAction) -> Unit
         ): Button {
             return scene2d.button("document") {
+                //Dangerous actions are those that can be persecuted by the law, such as UnofficialResourceTransfer from workplaces,  i.e. stealing resources from the workplace.
                 val dangerous =
-                    actionName == "UnofficialResourceTransfer" && gameState.player.place.whoseHome == gameState.playerName
+                    actionName == "UnofficialResourceTransfer" && gameState.player.place.whoseHome != gameState.playerName
                 val tooltip = ActionTooltipUI(actionName, dangerous)
                 addListener(tooltip)
                 stack {
