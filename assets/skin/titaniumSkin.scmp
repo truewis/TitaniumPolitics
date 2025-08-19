@@ -23532,7 +23532,7 @@ jsonData: {
 						type: com.badlogic.gdx.graphics.g2d.BitmapFont
 						name: font
 						optional: false
-						value: fixedsys
+						value: Martius
 					}
 					fontColor: {
 						type: com.badlogic.gdx.graphics.Color

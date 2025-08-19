@@ -380,7 +380,7 @@ com.badlogic.gdx.scenes.scene2d.ui.CheckBox$CheckBoxStyle: {
 		checkboxOff: StarOutline
 		checkboxOnDisabled: ButtonRegularBgDisabled
 		checkboxOffDisabled: ButtonRegularBgDisabled
-		font: fixedsys
+		font: Martius
 	}
 }
 com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle: {
