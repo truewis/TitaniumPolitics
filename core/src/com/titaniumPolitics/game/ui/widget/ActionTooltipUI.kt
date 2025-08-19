@@ -13,7 +13,7 @@ import ktx.scene2d.scene2d
 import ktx.scene2d.stack
 import ktx.scene2d.table
 
-class ActionTooltipUI(actionName: String) : Tooltip<Table>(scene2d.table {
+class ActionTooltipUI(actionName: String, dangerous: Boolean = false) : Tooltip<Table>(scene2d.table {
     addActor(scene2d.image("TooltipShadow10p") {
         it.width = 450f
         it.height = 450f
@@ -39,7 +39,10 @@ class ActionTooltipUI(actionName: String) : Tooltip<Table>(scene2d.table {
             stack {
                 it.size(350f - PADDING * 2, 50f) /*With the padding, they add up to 350.*/
                 image("TooltipTitle") {
-                    setColor(0.5f, 0.5f, 0.5f, 1f)
+                    if (dangerous)
+                        setColor(0.7f, 0.0f, 0.0f, 1f)
+                    else
+                        setColor(0.5f, 0.5f, 0.5f, 1f)
                 }
                 table {
                     val txt = ReadOnly.prop(actionName)
@@ -66,6 +69,8 @@ class ActionTooltipUI(actionName: String) : Tooltip<Table>(scene2d.table {
                 it.size(350f - PADDING * 2, 200f - PADDING * 2)
                 setFontScale(0.25f)
                 setAlignment(Align.topLeft)
+                if (dangerous)
+                    color = Color.RED
                 wrap = true
             }
             row()

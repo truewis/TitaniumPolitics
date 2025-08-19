@@ -21,7 +21,7 @@
   },
   "Eat": {
     "image": "AppleGrunge",
-    "sound": "data/eat.mp3"
+    "sound": "data/sounds/eat.mp3"
   },
   "Repair": {
     "image": "CogGrunge",

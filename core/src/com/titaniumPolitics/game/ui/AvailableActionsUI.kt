@@ -228,12 +228,17 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable 
             actionCallback: (GameAction) -> Unit
         ): Button {
             return scene2d.button("document") {
-                val tooltip = ActionTooltipUI(actionName)
+                val dangerous =
+                    actionName == "UnofficialResourceTransfer" && gameState.player.place.whoseHome == gameState.playerName
+                val tooltip = ActionTooltipUI(actionName, dangerous)
                 addListener(tooltip)
                 stack {
                     it.size(100f)
                     image("Help") {
                         color = Color.BLACK
+                        if (dangerous) {
+                            color = Color.RED
+                        }
                         try {
                             this.setDrawable(
                                 defaultSkin,
