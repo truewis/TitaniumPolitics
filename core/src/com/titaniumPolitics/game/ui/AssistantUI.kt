@@ -12,21 +12,51 @@ class AssistantUI(gameState: GameState) : Table(defaultSkin) {
 
     val cabinetWindowUIs = mutableListOf<CabinetWindowContainerUI>()
 
+    val buttonWidth = 180f
+    val buttonHeight = 540f
+    val buttonYGap = 70f
+    val buttonXGap = -7f
+    val mapUI = MapUI(gameState)
+    val mapButton = CabinetWindowContainerUI(
+        title = "MAP",
+        content = mapUI,
+        xOffset = buttonXGap,
+        yOffset = 0f,
+        openAction = { mapUI.refresh() }
+    )
+    val infoUI = InformationViewUI(gameState)
+    val informationButton =
+        CabinetWindowContainerUI(
+            title = "INFORMATION",
+            content = infoUI,
+            xOffset = buttonXGap,
+            yOffset = buttonYGap,
+            openAction = { infoUI.refresh("creationTime") }
+        )
+
+    val calendarUI = CalendarUI(gameState)
+    val calendarButton =
+        CabinetWindowContainerUI(
+            title = "CALENDAR",
+            content = calendarUI,
+            xOffset = 2 * buttonXGap,
+            yOffset = 2 * buttonYGap,
+            openAction = { calendarUI.refresh() }
+        )
+
+    val politiciansUI = PoliticiansInfoUI(gameState)
+    val politiciansInfoButton = CabinetWindowContainerUI(
+        title = "POLITICS",
+        content = politiciansUI,
+        xOffset = 3 * buttonXGap,
+        yOffset = 3 * buttonYGap,
+        openAction = { politiciansUI.refresh() }
+    )
+
     init {
-        val buttonWidth = 180f
-        val buttonHeight = 540f
-        val buttonYGap = 70f
-        val buttonXGap = -7f
+        instance = this
         padLeft(-20f)
 
-        val mapUI = MapUI(gameState)
-        val mapButton = CabinetWindowContainerUI(
-            title = "MAP",
-            content = mapUI,
-            xOffset = buttonXGap,
-            yOffset = 0f,
-            openAction = { mapUI.refresh() }
-        )
         // Close the map window when the move button is clicked
         mapUI.currentPlaceMarkerWindow.onClose += {
             mapButton.changeOpenState(false)
@@ -36,42 +66,16 @@ class AssistantUI(gameState: GameState) : Table(defaultSkin) {
         mapButton.setSize(buttonWidth, buttonHeight + 10f)
         mapButton.setPosition(0f, 0f)
 
-        val infoUI = InformationViewUI(gameState)
-        val informationButton =
-            CabinetWindowContainerUI(
-                title = "INFORMATION",
-                content = infoUI,
-                xOffset = buttonXGap,
-                yOffset = buttonYGap,
-                openAction = { infoUI.refresh("creationTime") }
-            )
         addActor(informationButton)
         cabinetWindowUIs.add(informationButton)
         informationButton.setSize(buttonWidth, buttonHeight + 10f)
         informationButton.setPosition(buttonXGap, buttonYGap)
 
-        val calendarUI = CalendarUI(gameState)
-        val calendarButton =
-            CabinetWindowContainerUI(
-                title = "CALENDAR",
-                content = calendarUI,
-                xOffset = 2 * buttonXGap,
-                yOffset = 2 * buttonYGap,
-                openAction = { calendarUI.refresh() }
-            )
         addActor(calendarButton)
         cabinetWindowUIs.add(calendarButton)
         calendarButton.setSize(buttonWidth, buttonHeight + 10f)
         calendarButton.setPosition(2 * buttonXGap, 2 * buttonYGap)
 
-        val politiciansUI = PoliticiansInfoUI(gameState)
-        val politiciansInfoButton = CabinetWindowContainerUI(
-            title = "POLITICS",
-            content = politiciansUI,
-            xOffset = 3 * buttonXGap,
-            yOffset = 3 * buttonYGap,
-            openAction = { politiciansUI.refresh() }
-        )
         addActor(politiciansInfoButton)
         cabinetWindowUIs.add(politiciansInfoButton)
         politiciansInfoButton.setSize(buttonWidth, buttonHeight + 10f)
@@ -90,6 +94,10 @@ class AssistantUI(gameState: GameState) : Table(defaultSkin) {
                 }
             }
         }
+    }
+
+    companion object {
+        lateinit var instance: AssistantUI
     }
 
 

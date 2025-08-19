@@ -519,19 +519,9 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable 
                                 this@button.addListener(object : ChangeListener() {
                                     override fun changed(event: ChangeEvent, actor: Actor) {
                                         if (!this@button.isChecked) return
-                                        InformationViewUI.instance.isVisible = true
-                                        InformationViewUI.instance.refresh(
-                                            "tgtTime",
-                                            InformationViewMode.SELECT
-                                        ) { keys ->
-                                            actionCallback(
-                                                PrepareInfo(
-                                                    gameState.playerName,
-                                                    gameState.player.place.name
-                                                ).also {
-                                                    it.newSetOfPrepInfoKeys = ArrayList(keys)
-                                                })
-                                        }
+                                        val prepareInfoUI =
+                                            PrepareInfoUI(gameState, actionCallback)
+                                        setActionSheet(prepareInfoUI)
                                     }
                                 })
                             }

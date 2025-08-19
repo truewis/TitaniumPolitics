@@ -62,7 +62,6 @@ class InformationViewUI(var gameState: GameState) : Table(defaultSkin) {
     }
 
     init {
-        instance = this
         val informationPane = ScrollPane(informationTable)
         informationPane.setScrollingDisabled(false, false)
         add(toggleButton).align(Align.right).pad(10f).size(200f, 50f)

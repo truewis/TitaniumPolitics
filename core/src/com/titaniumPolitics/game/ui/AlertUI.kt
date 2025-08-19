@@ -52,8 +52,7 @@ class AlertUI(var gameState: GameState) : Table(defaultSkin) {
             when (info.type) {
                 InformationType.CASUALTY -> {
                     addAlert("accident") {
-                        InformationViewUI.instance.refresh("creationTime")
-                        InformationViewUI.instance.isVisible = true
+                        AssistantUI.instance.informationButton.changeOpenState(true)
                     }
                 }
 
@@ -75,8 +74,7 @@ class AlertUI(var gameState: GameState) : Table(defaultSkin) {
                                 ReadOnly.prop((info.action as Move).placeTo)
                             )
                         ) {
-                            InformationViewUI.instance.refresh("creationTime")
-                            InformationViewUI.instance.isVisible = true
+                            AssistantUI.instance.informationButton.changeOpenState(true)
                         }
                     } else {
                         //TODO: Anything else are hidden for now. Display action alerts that are important for the player.
