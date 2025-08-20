@@ -504,7 +504,8 @@
         "reservoirEast",
         "squareSouth",
         "securityCheckCenter",
-        "rescueStationWest"
+        "rescueStationWest",
+        "interiorHeadquarters"
       ],
       "apparatuses": [
         {
@@ -536,9 +537,48 @@
         "ctrler"
       ],
       "responsibleDivision": "interior",
-      "manager": "Charles",
       "workHoursStart": 0,
       "workHoursEnd": 24
+    },
+    "interiorHeadquarters": {
+      "coordinates": {
+        "x": 0,
+        "y": 0,
+        "z": -1
+      },
+      "resources": {
+        "_resources": {
+          "oxygen": 50,
+          "water": 15000,
+          "ration": 500,
+          "phosphorus": 1
+        }
+      },
+      "connectedPlaces": [
+        "mainControlRoom"
+      ],
+      "apparatuses": [
+        {
+          "name": "energyStorage",
+          "durability": 95
+        },
+        {
+          "name": "waterStorage",
+          "durability": 95
+        },
+        {
+          "name": "oxygenStorage",
+          "durability": 95
+        },
+        {
+          "name": "rationStorage",
+          "durability": 95
+        }
+      ],
+      "responsibleDivision": "interior",
+      "manager": "Charles",
+      "workHoursStart": 9,
+      "workHoursEnd": 17
     },
     "welfareStationWest": {
       "coordinates": {
@@ -670,7 +710,8 @@
         "reservoirWest",
         "securityCheckWest",
         "rescueStationWest",
-        "theEngine"
+        "theEngine",
+        "miningHeadquarters"
       ],
       "apparatuses": [
         {
@@ -715,6 +756,45 @@
         }
       ],
       "characters": [
+      ],
+      "responsibleDivision": "mining",
+      "workHoursStart": 9,
+      "workHoursEnd": 17
+    },
+    "miningHeadquarters": {
+      "coordinates": {
+        "x": -11,
+        "y": 0,
+        "z": -10
+      },
+      "resources": {
+        "_resources": {
+          "oxygen": 50,
+          "water": 15000,
+          "ration": 500,
+          "phosphorus": 1
+        }
+      },
+      "connectedPlaces": [
+        "excavationShaftA"
+      ],
+      "apparatuses": [
+        {
+          "name": "energyStorage",
+          "durability": 95
+        },
+        {
+          "name": "waterStorage",
+          "durability": 95
+        },
+        {
+          "name": "oxygenStorage",
+          "durability": 95
+        },
+        {
+          "name": "rationStorage",
+          "durability": 95
+        }
       ],
       "responsibleDivision": "mining",
       "manager": "Maisarah",
@@ -908,7 +988,8 @@
       "connectedPlaces": [
         "recycleFacilityWest",
         "observatory",
-        "outerBarrierCenter"
+        "outerBarrierCenter",
+        "infrastructureHeadquarters"
       ],
       "apparatuses": [
         {
@@ -925,9 +1006,48 @@
         }
       ],
       "responsibleDivision": "infrastructure",
-      "manager": "Alina",
       "workHoursStart": 0,
       "workHoursEnd": 24
+    },
+    "infrastructureHeadquarters": {
+      "coordinates": {
+        "x": -11,
+        "y": 0,
+        "z": 15
+      },
+      "resources": {
+        "_resources": {
+          "oxygen": 50,
+          "water": 15000,
+          "ration": 500,
+          "phosphorus": 1
+        }
+      },
+      "connectedPlaces": [
+        "outerBarrierWest"
+      ],
+      "apparatuses": [
+        {
+          "name": "energyStorage",
+          "durability": 95
+        },
+        {
+          "name": "waterStorage",
+          "durability": 95
+        },
+        {
+          "name": "oxygenStorage",
+          "durability": 95
+        },
+        {
+          "name": "rationStorage",
+          "durability": 95
+        }
+      ],
+      "responsibleDivision": "infrastructure",
+      "manager": "Alina",
+      "workHoursStart": 9,
+      "workHoursEnd": 17
     },
     "outerBarrierEast": {
       "coordinates": {
@@ -1014,7 +1134,8 @@
       },
       "connectedPlaces": [
         "techSchool",
-        "excavationShaftB"
+        "excavationShaftB",
+        "industryHeadquarters"
       ],
       "apparatuses": [
         {
@@ -1039,6 +1160,45 @@
         }
       ],
       "characters": [
+      ],
+      "responsibleDivision": "industry",
+      "workHoursStart": 9,
+      "workHoursEnd": 17
+    },
+    "industryHeadquarters": {
+      "coordinates": {
+        "x": 11,
+        "y": 0,
+        "z": -8
+      },
+      "resources": {
+        "_resources": {
+          "oxygen": 50,
+          "water": 15000,
+          "ration": 500,
+          "phosphorus": 1
+        }
+      },
+      "connectedPlaces": [
+        "constructionYardSouth"
+      ],
+      "apparatuses": [
+        {
+          "name": "energyStorage",
+          "durability": 95
+        },
+        {
+          "name": "waterStorage",
+          "durability": 95
+        },
+        {
+          "name": "oxygenStorage",
+          "durability": 95
+        },
+        {
+          "name": "rationStorage",
+          "durability": 95
+        }
       ],
       "responsibleDivision": "industry",
       "manager": "Hiroshi",
@@ -1699,7 +1859,8 @@
       },
       "connectedPlaces": [
         "miningSchool",
-        "constructionYardSouth"
+        "constructionYardSouth",
+        "educationHeadquarters"
       ],
       "apparatuses": [
         {
@@ -1729,6 +1890,46 @@
       "workHoursStart": 9,
       "workHoursEnd": 17
     },
+    "educationHeadquarters": {
+      "coordinates": {
+        "x": 11,
+        "y": 0,
+        "z": -2
+      },
+      "resources": {
+        "_resources": {
+          "oxygen": 50,
+          "water": 15000,
+          "ration": 500,
+          "phosphorus": 1
+        }
+      },
+      "connectedPlaces": [
+        "techSchool"
+      ],
+      "apparatuses": [
+        {
+          "name": "energyStorage",
+          "durability": 95
+        },
+        {
+          "name": "waterStorage",
+          "durability": 95
+        },
+        {
+          "name": "oxygenStorage",
+          "durability": 95
+        },
+        {
+          "name": "rationStorage",
+          "durability": 95
+        }
+      ],
+      "responsibleDivision": "education",
+      "manager": "Eugene",
+      "workHoursStart": 9,
+      "workHoursEnd": 17
+    },
     "farm": {
       "coordinates": {
         "x": 0,
@@ -1745,7 +1946,8 @@
         }
       },
       "connectedPlaces": [
-        "reservoirEast"
+        "reservoirEast",
+        "bioengineeringHeadquarters"
       ],
       "apparatuses": [
         {
@@ -1812,6 +2014,45 @@
       "characters": [
       ],
       "responsibleDivision": "bioengineering",
+      "workHoursStart": 9,
+      "workHoursEnd": 17
+    },
+    "bioengineeringHeadquarters": {
+      "coordinates": {
+        "x": 1,
+        "y": 10,
+        "z": 0
+      },
+      "resources": {
+        "_resources": {
+          "oxygen": 50,
+          "water": 15000,
+          "ration": 500,
+          "phosphorus": 1
+        }
+      },
+      "connectedPlaces": [
+        "farm"
+      ],
+      "apparatuses": [
+        {
+          "name": "energyStorage",
+          "durability": 95
+        },
+        {
+          "name": "waterStorage",
+          "durability": 95
+        },
+        {
+          "name": "oxygenStorage",
+          "durability": 95
+        },
+        {
+          "name": "rationStorage",
+          "durability": 95
+        }
+      ],
+      "responsibleDivision": "bioengineering",
       "manager": "Evan",
       "workHoursStart": 9,
       "workHoursEnd": 17
@@ -1833,7 +2074,8 @@
         "outerBarrierEast",
         "market",
         "recycleFacilityEast",
-        "securityCheckEast"
+        "securityCheckEast",
+        "safetyHeadquarters"
       ],
       "apparatuses": [
         {
@@ -1864,9 +2106,48 @@
       "characters": [
       ],
       "responsibleDivision": "safety",
-      "manager": "Astinomis",
       "workHoursStart": 0,
       "workHoursEnd": 24
+    },
+    "safetyHeadquarters": {
+      "coordinates": {
+        "x": 8,
+        "y": 0,
+        "z": 7
+      },
+      "resources": {
+        "_resources": {
+          "oxygen": 50,
+          "water": 15000,
+          "ration": 500,
+          "phosphorus": 1
+        }
+      },
+      "connectedPlaces": [
+        "rescueStationNorth"
+      ],
+      "apparatuses": [
+        {
+          "name": "energyStorage",
+          "durability": 95
+        },
+        {
+          "name": "waterStorage",
+          "durability": 95
+        },
+        {
+          "name": "oxygenStorage",
+          "durability": 95
+        },
+        {
+          "name": "rationStorage",
+          "durability": 95
+        }
+      ],
+      "responsibleDivision": "safety",
+      "manager": "Astinomis",
+      "workHoursStart": 9,
+      "workHoursEnd": 17
     },
     "rescueStationSouth": {
       "coordinates": {
@@ -2418,7 +2699,7 @@
         "Boulos",
         "Agros"
       ],
-      "home": "mainControlRoom"
+      "home": "interiorHeadquarters"
     },
     "mining": {
       "type": "division",
@@ -2428,7 +2709,7 @@
         "Metros",
         "Dion"
       ],
-      "home": "excavationShaftA"
+      "home": "miningHeadquarters"
     },
     "education": {
       "type": "division",
@@ -2436,7 +2717,7 @@
       "members": [
         "Eugene"
       ],
-      "home": "miningSchool"
+      "home": "educationHeadquarters"
     },
     "industry": {
       "type": "division",
@@ -2445,7 +2726,7 @@
         "Hiroshi",
         "Indu"
       ],
-      "home": "constructionYardSouth"
+      "home": "industryHeadquarters"
     },
     "safety": {
       "type": "division",
@@ -2458,7 +2739,7 @@
         "Kasem",
         "Bahriye"
       ],
-      "home": "rescueStationNorth"
+      "home": "safetyHeadquarters"
     },
     "bioengineering": {
       "type": "division",
@@ -2468,7 +2749,7 @@
         "DrPaik",
         "DrHess"
       ],
-      "home": "farm"
+      "home": "bioengineeringHeadquarters"
     },
     "infrastructure": {
       "type": "division",
@@ -2481,7 +2762,7 @@
         "Yuhoa",
         "Salvor"
       ],
-      "home": "outerBarrierWest"
+      "home": "infrastructureHeadquarters"
     }
   },
   "eventSystem": {
