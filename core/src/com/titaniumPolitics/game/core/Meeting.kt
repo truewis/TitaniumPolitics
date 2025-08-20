@@ -5,6 +5,7 @@ import com.titaniumPolitics.game.core.ReadOnly.constInt
 import com.titaniumPolitics.game.core.ReadOnly.DT
 import com.titaniumPolitics.game.debugTools.Logger
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.Transient
 
 /*
 *  This class represents a meeting in the game. It is used to represent meetings that are scheduled to happen in the future.
@@ -31,7 +32,11 @@ class Meeting(
         }
     var agendas = arrayListOf<MeetingAgenda>()
     var voteResults = hashMapOf<String, Int>()
+
+    @Transient
     var onCandidatesSet = ArrayList<(Set<String>) -> Unit>() //Called when the candidates for the election are set.
+
+    @Transient
     var onVoteResults = ArrayList<() -> Unit>()
 
     fun finishNomination() {

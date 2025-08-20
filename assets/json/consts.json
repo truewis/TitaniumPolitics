@@ -68,6 +68,7 @@
   "SleepDuration": 60,
   "StartMeetingDuration": 5,
   "TalkDuration": 5,
+  "SalaryDuration": 20,
   "maxAttentionIntercept": 30,
   "InterceptDeltaWill": -5,
   "WaitDeltaWill": -1,

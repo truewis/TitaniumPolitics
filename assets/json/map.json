@@ -1,9 +1,77 @@
 {
+  "infrastructureHeadquarters": {
+    "image": "data/mainControlRoom.png",
+    "sound": "data/sounds/mainControlRoom.mp3",
+    "light": [
+      0,
+      0,
+      0.4,
+      0.2
+    ]
+  },
+  "bioengineeringHeadquarters": {
+    "image": "data/mainControlRoom.png",
+    "sound": "data/sounds/mainControlRoom.mp3",
+    "light": [
+      0,
+      0,
+      0.4,
+      0.2
+    ]
+  },
+  "industryHeadquarters": {
+    "image": "data/mainControlRoom.png",
+    "sound": "data/sounds/mainControlRoom.mp3",
+    "light": [
+      0,
+      0,
+      0.4,
+      0.2
+    ]
+  },
+  "safetyHeadquarters": {
+    "image": "data/mainControlRoom.png",
+    "sound": "data/sounds/mainControlRoom.mp3",
+    "light": [
+      0,
+      0,
+      0.4,
+      0.2
+    ]
+  },
+  "miningHeadquarters": {
+    "image": "data/mainControlRoom.png",
+    "sound": "data/sounds/mainControlRoom.mp3",
+    "light": [
+      0,
+      0,
+      0.4,
+      0.2
+    ]
+  },
+  "educationHeadquarters": {
+    "image": "data/mainControlRoom.png",
+    "sound": "data/sounds/mainControlRoom.mp3",
+    "light": [
+      0,
+      0,
+      0.4,
+      0.2
+    ]
+  },
+  "interiorHeadquarters": {
+    "image": "data/mainControlRoom.png",
+    "sound": "data/sounds/mainControlRoom.mp3",
+    "light": [
+      0,
+      0,
+      0.4,
+      0.2
+    ]
+  },
   "mainControlRoom": {
     "image": "data/mainControlRoom.png",
     "sound": "data/sounds/mainControlRoom.mp3",
-    "desc": "Fore frame of the hexagonal frame.",
-    "ind": "capsuleMapIndForeFrame",
     "light": [
       0,
       0,
@@ -14,7 +82,6 @@
   "home": {
     "image": "data/home.png",
     "sound": "data/sounds/home.mp3",
-    "ind": "capsuleMapIndStarboardAftPlane",
     "light": [
       0,
       0,
