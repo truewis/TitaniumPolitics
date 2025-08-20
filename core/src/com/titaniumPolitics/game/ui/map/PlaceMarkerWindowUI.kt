@@ -113,7 +113,7 @@ class PlaceMarkerWindowUI(var gameState: GameState, var owner: MapUI) : Table() 
                 ReadOnly.prop("resourceInformation"),
                 0.3f,
                 BLACK
-            ).apply { left();label.setAlignment(Align.left) }).height(50f).growX().fill()
+            ).apply { left(); label.setAlignment(Align.left) }).height(50f).growX().fill()
         row()
         stack {
             it.growX()
@@ -171,7 +171,7 @@ class PlaceMarkerWindowUI(var gameState: GameState, var owner: MapUI) : Table() 
                 ReadOnly.prop("managementInformation"),
                 0.3f,
                 BLACK
-            ).apply { left();label.setAlignment(Align.left) }).height(50f).growX().fill()
+            ).apply { left(); label.setAlignment(Align.left) }).height(50f).growX().fill()
         row()
         val divisionLabel = label("Division: ", "description") {
             it.left()
@@ -258,7 +258,12 @@ class PlaceMarkerWindowUI(var gameState: GameState, var owner: MapUI) : Table() 
 
     fun refresh(placeName: String) {
         //setPosition(x + XOFFSET, y + YOFFSET)
-        this.titleLabel.label.setText(ReadOnly.placeProp(placeName))
+        val txt = ReadOnly.placeProp(placeName)
+        this.titleLabel.label.setText(txt)
+        if (txt.length > 27)
+            this.titleLabel.label.setFontScale(0.4f) //TODO: This is a temporary fix, should be replaced with Issue #124
+        else
+            this.titleLabel.label.setFontScale(0.5f)
         placeDisplayed = placeName
 
         //Clear the list of any previous buttons.
