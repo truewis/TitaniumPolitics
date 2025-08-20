@@ -81,7 +81,7 @@ sealed class Routine() {
         return availableActions.intersect(GameEngine.availableActions(gState, place, name).toSet()).map {
             (Class.forName("com.titaniumPolitics.game.core.gameActions.$it")
                 .getConstructor(String::class.java, String::class.java)
-                .newInstance(name, place) as GameAction).apply { injectParent(gState);chooseParams() }
+                .newInstance(name, place) as GameAction).apply { injectParent(gState); chooseParams() }
 
         }.filter { it.isValid() }.maxBy { it.optimizeWill() }
     }
@@ -238,7 +238,7 @@ sealed class Routine() {
                     name,
                     it
                 )
-            } / it.issuedBy.size > it.difficulty()) && it.action.let { it.injectParent(gState);return@let it.isValid() }
+            } / it.issuedBy.size > it.difficulty()) && it.action.let { it.injectParent(gState); return@let it.isValid() }
         }?.also { request ->
             return request.action.apply { injectParent(gState) }
         }
@@ -295,6 +295,7 @@ sealed class Routine() {
     fun meetingRoutineEndCondition(name: String, type: Meeting.MeetingType): Boolean {
         if (gState.characters[name]!!.currentMeeting == null) return false //The meeting has not started yet.
         val conf = gState.characters[name]!!.currentMeeting!!
+        if (conf.type == Meeting.MeetingType.DIVISION_LEADER_ELECTION && conf.voteResults.isEmpty()) return false //If the meeting is a division leader election and there are no vote results, the meeting is not over yet.
         if (conf.time + 1800 / ReadOnly.DT >= gState.time) return false //At least, wait until the meeting has happened for 30 minutes.
         return routineStartTime + 7200 / ReadOnly.DT <= gState.time || conf.type != type || conf.currentAttention < 10
         /*Sometimes characters are transferred between different meetings without their turn. In that case, the previous meeting routine is killed here.*/

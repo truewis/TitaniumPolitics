@@ -39,6 +39,9 @@ class Meeting(
     @Transient
     var onVoteResults = ArrayList<() -> Unit>()
 
+    var nominationFinishedTime: Int? =
+        null //This is the time when the nomination is finished. It is used to determine when the election is over.
+
     fun finishNomination() {
         //This is called when the nomination is finished.
         //It will call the onCandidatesSet callbacks with the candidates.
@@ -46,6 +49,31 @@ class Meeting(
             .map { it.subjectParams["character"]!! }
             .toSet()
         onCandidatesSet.forEach { it(candidates) }
+        //Set the nomination finished time to the current time.
+        nominationFinishedTime = time
+        Logger.write("Nomination finished at time $time with candidates: $candidates", Logger.LogLevel.INFO)
+    }
+
+    fun startVoting(gameState: GameState) {
+        //involvedParty is not empty for divisionLeaderElections.
+        val party = gameState.parties[involvedParty]!!
+
+        if (party.leader != "") {
+            Logger.write("The leader of the party $involvedParty exists as ${party.leader}, but the election is still happening.")
+            throw IllegalStateException("The leader of the party $involvedParty exists as ${party.leader}, but the election is still happening.")
+        }
+        val candidates = party.members.filter { char ->
+            agendas.any {
+                it.type == AgendaType.NOMINATE && it.subjectParams["character"] == char
+            }
+        }
+        voteResults = party.getVotes(candidates.toSet())
+        onVoteResults.forEach { it() }
+
+        val leader = voteResults.maxByOrNull { it.value }?.key ?: ""
+
+        gameState.parties[involvedParty]!!.leader = leader
+        Logger.write("The leader of the party $involvedParty is elected as $leader.", Logger.LogLevel.INFO)
     }
 
     fun endMeeting(gameState: GameState) {
@@ -53,25 +81,7 @@ class Meeting(
         when (type) {
             MeetingType.DIVISION_LEADER_ELECTION -> {
 
-                //involvedParty is not empty for divisionLeaderElections.
-                val party = gameState.parties[involvedParty]!!
 
-                if (party.leader != "") {
-                    Logger.write("The leader of the party $involvedParty exists as ${party.leader}, but the election is still happening.")
-                    throw IllegalStateException("The leader of the party $involvedParty exists as ${party.leader}, but the election is still happening.")
-                }
-                val candidates = party.members.filter { char ->
-                    agendas.any {
-                        it.type == AgendaType.NOMINATE && it.subjectParams["character"] == char
-                    }
-                }
-                voteResults = party.getVotes(candidates.toSet())
-                onVoteResults.forEach { it() }
-
-                val leader = voteResults.maxByOrNull { it.value }?.key ?: ""
-
-                gameState.parties[involvedParty]!!.leader = leader
-                Logger.write("The leader of the party $involvedParty is elected as $leader.", Logger.LogLevel.INFO)
             }
 
             MeetingType.DIVISION_DAILY_CONFERENCE -> {

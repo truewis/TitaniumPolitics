@@ -50,9 +50,17 @@ class LeadDivisionElectionRoutine : Routine(), IMeetingRoutine {
             return interceptCondition(conf, name, place)
         } else //If it is my turn to speak
         {
-            //If I am the controller, finish nomination if there are three candidates or more.
-            if (name == "ctrler" && conf.agendas.count { it.type == AgendaType.NOMINATE } >= 3) {
-                return FinishNomination(name, place)
+            //finish nomination if there are three candidates or more.
+            if (conf.agendas.count { it.type == AgendaType.NOMINATE } >= 3) {
+                FinishNomination(name, place).let {
+                    it.injectParent(gState)
+                    if (it.isValid()) return it
+                }
+            }
+            //Start voting if it is valid to do so.
+            StartVoting(name, place).let {
+                it.injectParent(gState)
+                if (it.isValid()) return it
             }
 
             //0. Execute a command if there is any. Here, we can move to the place actively if the command is not in the current place.
