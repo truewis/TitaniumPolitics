@@ -103,43 +103,6 @@ class GameEngineTest {
 //            )
         }
 
-        scheduledMeetings.filter {
-            it.value.time + ReadOnly.constInt("MeetingStartTolerance") < time && !missedMeetings.contains(
-                it.key
-            )
-        }.forEach {
-            missedMeetings.add(it.key)
-            Logger.write("////////////////////////////////////////////////", Logger.LogLevel.INFO)
-            Logger.write("!Missed meeting:${it.key} at ${it.value.place}.", Logger.LogLevel.INFO)
-            Logger.write("Scheduled: ${GameState.formatTime(it.value.time)}", Logger.LogLevel.INFO)
-            Logger.write("What people are doing:", Logger.LogLevel.INFO)
-            it.value.scheduledCharacters.forEach { ch ->
-                Logger.write(
-                    "\t$ch:${characters[ch]!!.history.last { it.startsWith("Action") }}",
-                    Logger.LogLevel.INFO
-                )
-                if (nonPlayerAgents[ch] is NonPlayerAgent) {
-                    Logger.write(
-                        "\t\tunder ${(nonPlayerAgents[ch] as NonPlayerAgent).routines[0]::class.java.simpleName}",
-                        Logger.LogLevel.INFO
-                    )
-                    Logger.write(
-                        "\t\troutine started: ${
-                            GameState.formatTime(
-                                (nonPlayerAgents[ch] as NonPlayerAgent
-                                        ).routines[0].routineStartTime
-                            )
-                        }",
-                        Logger.LogLevel.INFO
-                    )
-                    (nonPlayerAgents[ch] as NonPlayerAgent).routines[0].variables.forEach { (key, value) ->
-                        Logger.write("\t\t$key: $value", Logger.LogLevel.INFO)
-                    }
-                }
-            }
-            Logger.write("////////////////////////////////////////////////", Logger.LogLevel.INFO)
-        }
-
         if (time % 60 == 0 && hour == 12)
             if (!characters.filter {
                     it.value.history.last { it.startsWith("Action") }.split(":")[0] == "sleep"

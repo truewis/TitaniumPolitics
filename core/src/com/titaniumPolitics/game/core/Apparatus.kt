@@ -72,13 +72,14 @@ class Apparatus {
         get() = jsonData.jsonObject["tempCoef"]?.jsonPrimitive?.double ?: .0
 
     /**
-     * When T>Tmax, Efficiency is multiplied by exp[(1-T/Tmax)*10].  Damaged is scaled by 1+(T/Tmax). Danger is scaled by 1+(T/Tmax).
+     * When T>Tmax, Efficiency is multiplied by exp[(1-T/Tmax)*30].  Damaged is scaled by 1+(T/Tmax). Danger is scaled by 1+(T/Tmax).
      */
     val maxTemp
-        get() = jsonData.jsonObject["maxTemp"]?.jsonPrimitive?.double ?: Double.POSITIVE_INFINITY
+        get() = jsonData.jsonObject["maxTemp"]?.jsonPrimitive?.double
+            ?: 4000.0 //Default is 4000 K, which is the melting point of steel. Do not put infinite value here, as it will cause json parsing error.
 
     /**
-     * When T<Tmin, Efficiency is multiplied by exp[(1-Tmin/T)*10].  Damaged is scaled by 1+(Tmin/T). Danger is scaled by 1+(Tmin/T).
+     * When T<Tmin, Efficiency is multiplied by exp[(1-Tmin/T)*30].  Damaged is scaled by 1+(Tmin/T). Danger is scaled by 1+(Tmin/T).
      */
     val minTemp
         get() = jsonData.jsonObject["minTemp"]?.jsonPrimitive?.double ?: 4.0

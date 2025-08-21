@@ -33,8 +33,8 @@ class CalendarUI(val gameState: GameState) : Table(Scene2DSkin.defaultSkin) {
                 addEntry(
                     meeting.time,
                     ReadOnly.prop(meeting.type.toString()),
-                    ReadOnly.prop(meeting.place),
-                    "A new meeting has been scheduled at ${ReadOnly.prop(meeting.place)}.",
+                    ReadOnly.placeProp(meeting.place),
+                    "A new meeting has been scheduled at ${ReadOnly.placeProp(meeting.place)}.",
                     gameState.scheduledMeetings.entries.find { it.value == meeting }?.key
                 )
         }

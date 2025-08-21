@@ -90,6 +90,7 @@ class GameEngine(val gameState: GameState) {
         ageInformationHourly()
         spreadPublicInfo()
         checkMarketResourcesHourly()
+        cancelMeetings()
     }
 
     private fun dailyProgression() {
@@ -346,63 +347,99 @@ class GameEngine(val gameState: GameState) {
 
     }
 
+    /**
+     * This method must be called when gameState.time is midnight.
+     */
     fun scheduleDailyConferences() {
-        //Each division has a conference every day. The conference is attended by the head of the division and the directors of the division.
-        gameState.parties.values.filter { it.type == "division" }.forEach { party ->
-            if (party.leader != null) {
-                val conference = Meeting(
-                    gameState.time + 9 * 3600 / DT /*9 in the morning*/,
-                    Meeting.MeetingType.DIVISION_DAILY_CONFERENCE,
-                    place = party.home!!,
-                    scheduledCharacters = party.directorMembers //Without low level members
-                ).also { it.involvedParty = party.name }
+        for (daysAhead in 0 until 5) {
+            //Schedule meetings for the next 5 days.
+            val tgtMidnight = gameState.time + 24 * 3600 / DT * daysAhead
+            //Each division has a conference every day. The conference is attended by the head of the division and the directors of the division.
+            gameState.parties.values.filter { it.type == "division" }.forEach { party ->
+                if (party.leader != null) {
+                    //If there is no division daily conference scheduled that day at the same location,
+                    if (gameState.scheduledMeetings.values.none {
+                            it.time == tgtMidnight + 9 * 3600 / DT /*9 in the morning*/ && it.place == party.home &&
+                                    it.type == Meeting.MeetingType.DIVISION_DAILY_CONFERENCE
+                        }) {
+                        //If the division leader is assigned, the daily conference is scheduled.
+                        val conference = Meeting(
+                            tgtMidnight + 9 * 3600 / DT /*9 in the morning*/,
+                            Meeting.MeetingType.DIVISION_DAILY_CONFERENCE,
+                            place = party.home!!,
+                            scheduledCharacters = party.directorMembers //Without low level members
+                        ).also { it.involvedParty = party.name }
 
-                gameState.addScheduledMeeting(conference)
-            } else {
-                //If the division leader is not assigned, the conference for electing the division leader is scheduled.
+                        gameState.addScheduledMeeting(conference)
+                    }
+                } else {
+                    //If the division leader is not assigned, the conference for electing the division leader is scheduled.
+                    //If there is no election scheduled at all, schedule a division leader election.
+                    if (gameState.scheduledMeetings.values.none {
+                            it.place == party.home &&
+                                    it.type == Meeting.MeetingType.DIVISION_LEADER_ELECTION
+                        }) {
+                        //If the division leader is not assigned, the division leader election is scheduled.
+                        //The conference is attended by the director of the workplace and all division members.
+                        val conference = Meeting(
+                            tgtMidnight + 9 * 3600 / DT /*9 in the morning*/,
+                            Meeting.MeetingType.DIVISION_LEADER_ELECTION,
+                            place = party.home!!,
+                            scheduledCharacters = (setOf("ctrler") + party.directorMembers).toHashSet() //Without low level members
+                        ).also { it.involvedParty = party.name }
+                        gameState.addScheduledMeeting(conference)
+                    }
+                }
+            }
+            //Each division has a conference every day. The conference is attended by the director of the workplace.
+            gameState.parties.values.filter { it.type == "workplace" }.forEach { party ->
+                if (party.leader != null) {
+                    if (gameState.scheduledMeetings.values.none {
+                            it.time == tgtMidnight + 12 * 3600 / DT /*9 in the morning*/ && it.place == party.home &&
+                                    it.type == Meeting.MeetingType.DIVISION_DAILY_CONFERENCE
+                        }) {
+                        val conference = Meeting(
+                            tgtMidnight + 12 * 3600 / DT /*12 in the afternoon*/,
+                            Meeting.MeetingType.DIVISION_DAILY_CONFERENCE,
+                            place = party.home!!,
+                            scheduledCharacters = party.realMembers //Without anonymous members
+                        ).also { it.involvedParty = party.name }
+
+                        gameState.addScheduledMeeting(conference)
+                    }
+                }
+            }
+
+            //Cabinet has a conference every day. The conference is attended by the division leaders
+            if (gameState.scheduledMeetings.values.none {
+                    it.time == tgtMidnight + 12 * 3600 / DT /*9 in the morning*/ && it.place == gameState.parties["cabinet"]!!.home!! &&
+                            it.type == Meeting.MeetingType.CABINET_DAILY_CONFERENCE
+                }) {
                 val conference = Meeting(
-                    gameState.time + 9 * 3600 / DT /*9 in the morning*/,
-                    Meeting.MeetingType.DIVISION_LEADER_ELECTION,
-                    place = party.home!!,
-                    scheduledCharacters = (setOf("ctrler") + party.directorMembers).toHashSet() //Without low level members
-                ).also { it.involvedParty = party.name }
+                    tgtMidnight + 12 * 3600 / DT /*12 in the afternoon*/,
+                    Meeting.MeetingType.CABINET_DAILY_CONFERENCE,
+                    place = gameState.parties["cabinet"]!!.home!!,
+                    scheduledCharacters = gameState.parties["cabinet"]!!.members
+                ).also { it.involvedParty = "cabinet" }
+
                 gameState.addScheduledMeeting(conference)
             }
-        }
-        //Each division has a conference every day. The conference is attended by the director of the workplace.
-        gameState.parties.values.filter { it.type == "workplace" }.forEach { party ->
-            if (party.leader != null) {
-                val conference = Meeting(
-                    gameState.time + 12 * 3600 / DT /*12 in the afternoon*/,
-                    Meeting.MeetingType.DIVISION_DAILY_CONFERENCE,
-                    place = party.home!!,
-                    scheduledCharacters = party.realMembers //Without anonymous members
-                ).also { it.involvedParty = party.name }
 
-                gameState.addScheduledMeeting(conference)
+            if (gameState.scheduledMeetings.values.none {
+                    it.time == tgtMidnight + 15 * 3600 / DT /*9 in the morning*/ && it.place == gameState.parties["triumvirate"]!!.home!! &&
+                            it.type == Meeting.MeetingType.TRIUMVIRATE_DAILY_CONFERENCE
+                }) {
+                val conference2 = Meeting(
+                    tgtMidnight + 15 * 3600 / DT /*3 in the afternoon*/,
+                    Meeting.MeetingType.TRIUMVIRATE_DAILY_CONFERENCE,
+                    place = gameState.parties["triumvirate"]!!.home!!,
+                    scheduledCharacters = gameState.parties["triumvirate"]!!.members
+                ).also { it.involvedParty = "triumvirate" }
+
+                gameState.addScheduledMeeting(conference2)
             }
+
         }
-
-        //Cabinet has a conference every day. The conference is attended by the division leaders
-        val conference = Meeting(
-            gameState.time + 12 * 3600 / DT /*12 in the afternoon*/,
-            Meeting.MeetingType.CABINET_DAILY_CONFERENCE,
-            place = gameState.parties["cabinet"]!!.home!!,
-            scheduledCharacters = gameState.parties["cabinet"]!!.members
-        ).also { it.involvedParty = "cabinet" }
-
-        gameState.addScheduledMeeting(conference)
-
-
-        val conference2 = Meeting(
-            gameState.time + 15 * 3600 / DT /*3 in the afternoon*/,
-            Meeting.MeetingType.TRIUMVIRATE_DAILY_CONFERENCE,
-            place = gameState.parties["triumvirate"]!!.home!!,
-            scheduledCharacters = gameState.parties["triumvirate"]!!.members
-        ).also { it.involvedParty = "triumvirate" }
-
-        gameState.addScheduledMeeting(conference2)
-
     }
 
     fun distributeResourcesHourly() {
@@ -464,6 +501,87 @@ class GameEngine(val gameState: GameState) {
         gameState.characters.filter { it.value.type == Character.Type.ANON }
             .forEach { it.value.resources = marketResources * (it.value.reliant * 1.0 / anonPeople) }
 
+    }
+
+    fun cancelMeetings() {
+        val missedMeetings = hashSetOf<String>()
+
+        with(gameState) {
+            scheduledMeetings.filter {
+                it.value.time + ReadOnly.constInt("MeetingStartTolerance") < time && !missedMeetings.contains(
+                    it.key
+                )
+            }.forEach {
+                missedMeetings.add(it.key)
+                Logger.write("////////////////////////////////////////////////", Logger.LogLevel.INFO)
+                Logger.write("!Missed meeting:${it.key} at ${it.value.place}.", Logger.LogLevel.INFO)
+                Logger.write("Scheduled: ${GameState.formatTime(it.value.time)}", Logger.LogLevel.INFO)
+                Logger.write("What people are doing:", Logger.LogLevel.INFO)
+                it.value.scheduledCharacters.forEach { ch ->
+                    Logger.write(
+                        "\t$ch:${characters[ch]!!.history.last { it.startsWith("Action") }}",
+                        Logger.LogLevel.INFO
+                    )
+                    if (nonPlayerAgents[ch] is NonPlayerAgent) {
+                        Logger.write(
+                            "\t\tunder ${(nonPlayerAgents[ch] as NonPlayerAgent).routines[0]::class.java.simpleName}",
+                            Logger.LogLevel.INFO
+                        )
+                        Logger.write(
+                            "\t\troutine started: ${
+                                GameState.formatTime(
+                                    (nonPlayerAgents[ch] as NonPlayerAgent
+                                            ).routines[0].routineStartTime
+                                )
+                            }",
+                            Logger.LogLevel.INFO
+                        )
+                        (nonPlayerAgents[ch] as NonPlayerAgent).routines[0].variables.forEach { (key, value) ->
+                            Logger.write("\t\t$key: $value", Logger.LogLevel.INFO)
+                        }
+                    }
+                }
+                Logger.write("////////////////////////////////////////////////", Logger.LogLevel.INFO)
+
+
+                //TODO: Check ScheduleDailyConferences functions, try to unify the logic of scheduling meetings.
+                //If we missed an election meeting, schedule a new one.
+                if (it.value.type == Meeting.MeetingType.DIVISION_LEADER_ELECTION) {
+                    //If the division leader election is missed, schedule a new one.
+                    val newElection = Meeting(
+                        it.value.time + 24 * 3600 / DT * 3, //same time as the missed meeting, 3 days later
+                        Meeting.MeetingType.DIVISION_LEADER_ELECTION,
+                        place = it.value.place,
+                        scheduledCharacters = it.value.scheduledCharacters
+                    ).also { new -> new.involvedParty = it.value.involvedParty }
+                    addScheduledMeeting(newElection)
+                }
+                //If the budget proposal meeting is missed, schedule a new one.
+                if (it.value.type == Meeting.MeetingType.BUDGET_PROPOSAL) {
+                    val newBudgetProposal = Meeting(
+                        it.value.time + 24 * 3600 / DT, //Next day
+                        Meeting.MeetingType.BUDGET_PROPOSAL,
+                        place = it.value.place,
+                        scheduledCharacters = it.value.scheduledCharacters
+                    ).also { new -> new.involvedParty = it.value.involvedParty }
+                    addScheduledMeeting(newBudgetProposal)
+                }
+            }
+
+            //For some meeting types, check if the leader is assigned. If not, remove the meeting.
+            scheduledMeetings.filter {
+                (it.value.type == Meeting.MeetingType.DIVISION_DAILY_CONFERENCE || it.value.type == Meeting.MeetingType.CABINET_DAILY_CONFERENCE ||
+                        it.value.type == Meeting.MeetingType.BUDGET_PROPOSAL
+                        ) && parties[it.value.involvedParty!!]!!.leader == null && !missedMeetings.contains(
+                    it.key
+                )
+            }.forEach {
+                missedMeetings.add(it.key)
+            }
+            missedMeetings.forEach {
+                removeScheduledMeeting(it)
+            }
+        }
     }
 
 
