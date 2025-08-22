@@ -215,4 +215,26 @@ class InformationViewUI(var gameState: GameState) : Table(defaultSkin) {
 
     }
 
+    companion object {
+        fun displayInformation(information: Information) {
+            when (information.type) {
+                InformationType.RESOURCES -> {
+                    //Open resource window
+                    ResourceInfoUI.instance.isVisible = true
+                    ResourceInfoUI.instance.refresh(information)
+                }
+
+                InformationType.APPARATUS -> {
+                    //Open apparatus window
+                    ApparatusInfoUI.instance.isVisible = true
+                    ApparatusInfoUI.instance.refresh(information)
+                }
+
+                else -> {
+                    //Do nothing
+                }
+            }
+        }
+    }
+
 }

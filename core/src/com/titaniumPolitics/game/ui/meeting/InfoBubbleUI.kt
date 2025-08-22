@@ -1,8 +1,13 @@
 package com.titaniumPolitics.game.ui.meeting
 
+import com.badlogic.gdx.scenes.scene2d.actions.Actions
 import com.badlogic.gdx.scenes.scene2d.ui.Table
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.titaniumPolitics.game.core.Information
 import com.titaniumPolitics.game.core.InformationType
+import com.titaniumPolitics.game.ui.ApparatusInfoUI
+import com.titaniumPolitics.game.ui.InformationViewUI
+import com.titaniumPolitics.game.ui.ResourceInfoUI
 import ktx.scene2d.*
 
 class InfoBubbleUI(val info: Information) : Table(), KTable {
@@ -43,12 +48,29 @@ class InfoBubbleUI(val info: Information) : Table(), KTable {
                         }
 
                         else -> {
-                            label("${type.name}", "description") {
+                            label(type.name, "description") {
                                 setFontScale(0.2f)
                             }
                         }
                     }
                 }
+                addListener(
+                    object : ClickListener() {
+                        override fun clicked(event: com.badlogic.gdx.scenes.scene2d.InputEvent?, x: Float, y: Float) {
+                            super.clicked(event, x, y)
+                            InformationViewUI.displayInformation(this@InfoBubbleUI.info)
+                        }
+                    }
+                )
+                //Add a blinking effect to draw attention.
+                addAction(
+                    Actions.forever(
+                        Actions.sequence(
+                            Actions.alpha(0.5f, 0.5f),
+                            Actions.alpha(1f, 0.5f)
+                        )
+                    )
+                )
             }
         }
     }

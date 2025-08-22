@@ -26,6 +26,7 @@ data class Information(
     var auxParty: String? = null,
     var resources: Resources = Resources(),
     var variables: HashMap<String, Double> = hashMapOf(),
+    var graphInformationKeys: HashSet<String> = hashSetOf() //If this is not empty, this information is a graph: it contains time series data of multiple information.
 ) {
     //Do not copy the name. It is unique.
     constructor(info: Information) : this(
@@ -133,11 +134,6 @@ data class Information(
                 "$who lost $amount resources at $tgtPlace."
             }
 
-            InformationType.DAMAGED_APPARATUS -> {
-                val apparatus = tgtApparatus ?: "an apparatus"
-                "$apparatus was damaged at $tgtPlace."
-            }
-
             InformationType.APPARATUS -> {
                 val apparatus = tgtApparatus ?: ReadOnly.appProp("unknownApparatus")
                 if (variables["durability"]!! > 0)
@@ -165,5 +161,5 @@ data class Information(
 
 @Serializable
 enum class InformationType {
-    ACTION, RESOURCES, CASUALTY, LOST_RESOURCES, DAMAGED_APPARATUS, APPARATUS, HUMAN_RESOURCES
+    ACTION, RESOURCES, CASUALTY, LOST_RESOURCES, APPARATUS, HUMAN_RESOURCES
 }
