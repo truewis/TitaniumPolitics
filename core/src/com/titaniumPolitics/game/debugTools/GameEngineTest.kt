@@ -14,8 +14,6 @@ import java.util.Locale
 class GameEngineTest {
     lateinit var gState: GameState
     val directory = "data" + Calendar.getInstance().time.toString("YYYYMMdd_HHmmss")
-    val gdh =
-        GameDataHandler(directory)
 
     private fun Date.toString(format: String, locale: Locale = Locale.getDefault()): String {
         val formatter = SimpleDateFormat(format, locale)
@@ -24,8 +22,6 @@ class GameEngineTest {
 
     @Test
     fun runFor2Days() {
-
-        gdh.initializeColumns()
         println("Working Directory = " + System.getProperty("user.dir"))
         gState = Json.Default.decodeFromString(
             GameState.serializer(), File("../assets/json/init.json").readText()
@@ -61,8 +57,6 @@ class GameEngineTest {
         while (gameState.ongoingMeetings.none { it.value.type == Meeting.MeetingType.DIVISION_LEADER_ELECTION }) {
             gameLoop()
             gameState.debug()
-            if (gameState.time % 60 == 0)
-                gdh.writeEveryTurn(gState)
             if (gameState.time % 1440 == 0)
                 gState.dump(directory + "/data" + gState.time + ".json")
         }
@@ -75,8 +69,6 @@ class GameEngineTest {
         while (gameState.time < days * const("lengthOfDay")) {
             gameLoop()
             gameState.debug()
-            if (gameState.time % 60 == 0)
-                gdh.writeEveryTurn(gState)
             if (gameState.time % 1440 == 0)
                 gState.dump(directory + "/data" + gState.time + ".json")
         }
@@ -85,7 +77,6 @@ class GameEngineTest {
     @AfterEach
     fun after() {
         gState.dump(directory + "/data" + gState.time + ".json")
-        gdh.close()
     }
 
     val missedMeetings = hashSetOf<String>()

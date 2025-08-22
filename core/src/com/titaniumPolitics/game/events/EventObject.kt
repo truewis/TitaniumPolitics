@@ -29,7 +29,6 @@ sealed class EventObject(var name: String, val oneTime: Boolean) {
     fun deactivate() {
         completed = true
         if (this is IQuestEventObject) {
-            quest.isCompleted = true
             parent.eventSystem.updateQuest(quest)
         }
     }

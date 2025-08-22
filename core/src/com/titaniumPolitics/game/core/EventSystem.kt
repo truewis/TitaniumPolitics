@@ -3,6 +3,7 @@ package com.titaniumPolitics.game.core
 import com.titaniumPolitics.game.events.*
 import com.titaniumPolitics.game.ui.Quest
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.Transient
 
 
 //Events are quests that never expire. Some can be triggered many times, some only once.
@@ -12,6 +13,8 @@ class EventSystem : GameStateElement() {
         get() = "EventSystem" //There is only one EventSystem object in the game.
     private val dataBase = arrayListOf<EventObject>()
     private val tmpdataBase = arrayListOf<EventObject>()
+
+    @Transient
     val quests =
         arrayListOf<Quest>() //Do not use haseSet, it is not meant to be used with objects that can be modified.
 
@@ -23,6 +26,7 @@ class EventSystem : GameStateElement() {
         //dataBase.add(Event_ObserverIntro())
         add(Event_AlinaIllTheory1())
         add(Event_SalvorElection())
+        add(Event_SecureOuterBarrierEast())
     }
 
     fun updateQuest(quest: Quest) {

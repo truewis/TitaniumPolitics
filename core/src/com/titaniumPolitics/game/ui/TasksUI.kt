@@ -5,6 +5,7 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.ui.VerticalGroup
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.badlogic.gdx.utils.Align
 import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.ui.widget.TimeAmountUI
@@ -73,6 +74,12 @@ class TasksUI(var gameState: GameState) : Table(defaultSkin) {
                     add(TimeAmountUI(quest.dueTime - gameState.time))
                 }
 
+                addListener(object : ClickListener() {
+                    override fun clicked(event: com.badlogic.gdx.scenes.scene2d.InputEvent?, x: Float, y: Float) {
+                        quest.onClick?.invoke()
+                    }
+                })
+
             })
         }
         isVisible = quests.isNotEmpty()
@@ -90,6 +97,11 @@ class TasksUI(var gameState: GameState) : Table(defaultSkin) {
                     setAlignment(Align.center)
                     setFontScale(0.5f)
                 }
+                addListener(object : ClickListener() {
+                    override fun clicked(event: com.badlogic.gdx.scenes.scene2d.InputEvent?, x: Float, y: Float) {
+                        quest.onClick?.invoke()
+                    }
+                })
             }
         }
 
@@ -103,7 +115,11 @@ class TasksUI(var gameState: GameState) : Table(defaultSkin) {
 
 }
 
-@Serializable
+/**
+ * A quest assigned to the player.
+ * This class is solely for UI representation of quests and should not contain any game state variable.
+ * This class is not serializable, as quests are recreated on game load from the event system injectParent function.
+ */
 data class Quest(
     val name: String,
     val description: String,
@@ -111,10 +127,11 @@ data class Quest(
     val tgtCharacter: String? = null,
     val tgtMeeting: String? = null,
     val dueTime: Int? = null,
+    val onClick: (() -> Unit)? = null
 ) {
-    @Transient
     lateinit var parent: GameState
-    var isCompleted: Boolean = false
+
+    //Do not check completion here, use eventObject completion instead.
     val index: Int
         get() = parent.eventSystem.quests.indexOf(this) + 1
 

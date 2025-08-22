@@ -38,6 +38,7 @@ class GameDataHandler(val directoryName: String) {
         resourceMap["currentWorkerPerParty"] = GameDataFrame("$directoryName/currentWorkerPerParty.csv")
         resourceMap["plannedWorkerPerParty"] = GameDataFrame("$directoryName/plannedWorkerPerParty.csv")
         resourceMap["currentPop"] = GameDataFrame("$directoryName/currentPop.csv")
+        resourceMap["apparatusDurability"] = GameDataFrame("$directoryName/apparatusDurability.csv")
 
     }
 
@@ -74,6 +75,12 @@ class GameDataHandler(val directoryName: String) {
         }.filter { !it.first.contains("home") }.toTypedArray()))
         //For the current pop display, we add the population of all homes in the place.
 
+        resourceMap["apparatusDurability"]!![gState.time] = hashMapOf(*(gState.places.flatMap { (pName, place) ->
+            place.apparatuses.map { app ->
+                app.ID to app.durability.toFloat()
+            }
+        }.toTypedArray()))
+
         gState.existingResourceList.forEach {
             createIfNull("${it}Storage")
             resourceMap["${it}Storage"]!![gState.time] = hashMapOf(*(gState.places.map { (pName, place) ->
@@ -90,6 +97,7 @@ class GameDataHandler(val directoryName: String) {
     }
 
     fun close() {
+        println("Closing GameDataHandler and all its resources.")
         resourceMap.values.forEach { it.close() }
     }
 }
@@ -127,7 +135,7 @@ data class GameDataFrame(var fName: String) {
     }
 
     fun column(name: String): HashMap<Int, Float> {
-        writer.close()
+        writer.flush()
 
         val res = hashMapOf<Int, Float>()
         val s = file.readText()
@@ -145,21 +153,18 @@ data class GameDataFrame(var fName: String) {
             if (keys[0] != "keys") continue
             keyColumn = keys.takeLast(keys.size - 1).indexOf(name) + 1//keyColumn remains 0 if the key is not found
         } while (keyColumn == 0)
-        for (i in keyRow..rows.size) {
+        for (i in keyRow..<rows.size) {
             var values = rows[i].split(',')
-            if (values[0] == "keys") continue
+            if (values[0] == "keys") continue // Skip the key row
+            if (values[0] == "") continue // Last line may be empty
             res[values[0].toInt()] = values[keyColumn].toFloat()
         }
 
-
-
-
-        writer = file.bufferedWriter()
         return res
     }
 
     fun columnSum(): HashMap<Int, Float> {
-        writer.close()
+        writer.flush()
 
         val res = hashMapOf<Int, Float>()
         val s = file.readText()
@@ -172,9 +177,6 @@ data class GameDataFrame(var fName: String) {
         }
 
 
-
-
-        writer = file.bufferedWriter()
         return res
     }
 

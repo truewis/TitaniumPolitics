@@ -9,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.utils.ObjectMap
 import com.badlogic.gdx.utils.ScreenUtils
+import com.titaniumPolitics.game.ui.CapsuleStage
 import com.titaniumPolitics.game.ui.MainMenu
 import ktx.scene2d.Scene2DSkin
 
@@ -67,6 +68,7 @@ class EntryClass : ApplicationAdapter() {
 
     override fun dispose() {
         stage.dispose()
+        GameEngineThreadHandler.stopEngine()
     }
 
     override fun resize(width: Int, height: Int) {

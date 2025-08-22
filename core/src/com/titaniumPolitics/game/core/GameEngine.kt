@@ -29,6 +29,7 @@ class GameEngine(val gameState: GameState) {
     //Let UI or other monitors to come in and read gamestate.
     var onObserverCall = arrayListOf<(GameState) -> Unit>()
 
+
     init {
         Logger.gState = gameState
         Logger.init()
@@ -756,6 +757,10 @@ class GameEngine(val gameState: GameState) {
             }
         } //Remove from all parties.
         char.alive = false
+    }
+
+    fun destroy() {
+        gameState.destroy()
     }
 
     companion object {

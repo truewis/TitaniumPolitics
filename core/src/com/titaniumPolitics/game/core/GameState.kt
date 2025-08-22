@@ -1,6 +1,7 @@
 package com.titaniumPolitics.game.core
 
 import com.badlogic.gdx.math.MathUtils.clamp
+import com.titaniumPolitics.game.core.ReadOnly.IDTH
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
@@ -19,6 +20,20 @@ import kotlin.math.sqrt
 @Serializable
 class GameState {
     var workingDirectory = ""
+        set(value) {
+            field = value
+            gdh = GameDataHandler(value)
+            gdh.initializeColumns()
+            timeChanged += { old, new ->
+                if (new % IDTH == 0) {
+                    gdh.writeEveryTurn(this)
+                }
+            }
+        }
+
+    @Transient
+    lateinit var gdh:
+            GameDataHandler
     private var _time = 0
     var time: Int
         get() = _time
@@ -602,6 +617,11 @@ class GameState {
         return (ReadOnly.resJson[item]?.jsonObject?.get("baseEGP(g/g)")?.jsonPrimitive?.double
             ?: .0) * 1000 /* Convert to Kg */ *
                 (ReadOnly.const("mutualityMax") * 1e-3 /*1000 egP = 100 mutuality*/) * elasticityModifier
+    }
+
+    fun destroy() {
+        //Destroy the game state, clear all data.
+        gdh.close()
     }
 
     companion object {

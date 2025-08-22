@@ -14,7 +14,7 @@ import space.earlygrey.shapedrawer.ShapeDrawer
 import kotlin.math.abs
 
 
-class GraphScreen(private val data: HashMap<Int, Double>) : Table() {
+class GraphScreen(private var data: Map<Int, Float>) : Table() {
 
 
     private val font = BitmapFont()
@@ -36,36 +36,6 @@ class GraphScreen(private val data: HashMap<Int, Double>) : Table() {
         //pixmap.dispose()
         pixelTexture = TextureRegion(texture, 0, 0, 1, 1)
         generateAxisLabels()
-
-        Gdx.input.inputProcessor = object : InputAdapter() {
-            override fun mouseMoved(screenX: Int, screenY: Int): Boolean {
-                hoveredPoint = null
-                hoveredLabel = null
-
-                val (minX, maxX, minY, maxY) = getBounds()
-                val sorted = data.toSortedMap()
-
-                val width = width - 2 * axesPadding
-                val height = height - 2 * axesPadding
-
-                val localY = screenY.toFloat()
-
-                sorted.forEach { (x, y) ->
-                    val normX = (x - minX) / (maxX - minX).toFloat()
-                    val normY = (y - minY) / (maxY - minY).toFloat()
-                    val px = x.toFloat().map(minX.toFloat(), maxX.toFloat(), axesPadding, width + axesPadding)
-                    val py = y.toFloat().map(minY.toFloat(), maxY.toFloat(), axesPadding, height + axesPadding)
-
-                    val dist = 10f
-                    if (abs(screenX - px) < dist && abs(Gdx.graphics.height - screenY - py) < dist) {
-                        hoveredPoint = px to py
-                        hoveredLabel = "($x, ${"%.2f".format(y)})"
-                    }
-                }
-
-                return true
-            }
-        }
     }
 
     override fun draw(batch: Batch?, parentAlpha: Float) {
@@ -116,17 +86,22 @@ class GraphScreen(private val data: HashMap<Int, Double>) : Table() {
     }
 
 
-    private fun getBounds(): Quadruple<Int, Int, Double, Double> {
+    private fun getBounds(): Quadruple<Int, Int, Float, Float> {
         val xs = data.keys
         val ys = data.values
-        return Quadruple(xs.minOrNull() ?: 0, xs.maxOrNull() ?: 1, ys.minOrNull() ?: 0.0, ys.maxOrNull() ?: 1.0)
+        return Quadruple(xs.minOrNull() ?: 0, xs.maxOrNull() ?: 1, ys.minOrNull() ?: 0f, ys.maxOrNull() ?: 1f)
     }
 
     override fun layout() {
         super.layout()
         generateAxisLabels()
     }
-    
+
+    fun refresh(new: HashMap<Int, Float>) {
+        data = new
+        generateAxisLabels()
+    }
+
 
     /**
      * Add Scene2D Labels for axes
@@ -138,8 +113,8 @@ class GraphScreen(private val data: HashMap<Int, Double>) : Table() {
         yAxisLabels.clear()
         val minX = data.keys.minOrNull() ?: 0
         val maxX = data.keys.maxOrNull() ?: 1
-        val minY = data.values.minOrNull() ?: 0.0
-        val maxY = data.values.maxOrNull() ?: 1.0
+        val minY = data.values.minOrNull() ?: 0.0f
+        val maxY = data.values.maxOrNull() ?: 1.0f
         val xBins = 10
         val yBins = 10
         val xStep = (maxX - minX) / xBins.toFloat()

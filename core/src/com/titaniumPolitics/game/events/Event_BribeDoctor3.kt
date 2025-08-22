@@ -3,9 +3,12 @@ package com.titaniumPolitics.game.events
 import com.titaniumPolitics.game.core.InformationType
 import com.titaniumPolitics.game.ui.Quest
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.Transient
 
 @Serializable
 class Event_BribeDoctor3(var searchFrom: Int) : EventObject("Talking with Dr Paik.", true), IQuestEventObject {
+
+    @Transient
     override val quest = Quest(
         "Investigate the water storage",
         "Talk to Dr Paik about the water storage at the Welfare Station East.",

@@ -2,10 +2,13 @@ package com.titaniumPolitics.game.events
 
 import com.titaniumPolitics.game.ui.Quest
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.Transient
 
 @Serializable
 class Event_PrologueAlinaSpeech : EventObject("Introduction of Alina.", true), IQuestEventObject {
 
+
+    @Transient
     override val quest = Quest(
         "Alina's speech",
         "Alina is giving a speech to the Infrastructure Division.",

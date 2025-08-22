@@ -16,6 +16,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable
 import com.badlogic.gdx.utils.Align
 import com.badlogic.gdx.utils.viewport.FitViewport
 import com.titaniumPolitics.game.EntryClass
+import com.titaniumPolitics.game.GameEngineThreadHandler
 import com.titaniumPolitics.game.core.GameEngine
 import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.core.ReadOnly
@@ -151,24 +152,7 @@ class MainMenu(val entry: EntryClass) : Stage(FitViewport(1920F, 1080F)) {
             }
         }
         println("Starting game engine.")
-
-        thread(start = true) {
-            val engine = GameEngine(newGame)
-            engine.onObserverCall += {
-                runBlocking {
-                    suspendCoroutine { cont ->
-                        Gdx.app.postRunnable {
-                            val current =
-                                newGame.updateUI.clone() as ArrayList<(GameState) -> Unit> //Clone the list to prevent concurrent modification, because updateUI can be modified by UI elements during the update.
-                            current.forEach { it(newGame) }//Update UI
-                            cont.resume(Unit)
-                        }
-                    }
-                }
-
-            }
-            engine.startGame()
-        }
+        GameEngineThreadHandler.startEngine(newGame)
     }
 
     private fun Date.toString(format: String, locale: Locale = Locale.getDefault()): String {

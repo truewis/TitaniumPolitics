@@ -5,6 +5,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.titaniumPolitics.game.EntryClass
+import com.titaniumPolitics.game.GameEngineThreadHandler
 import com.titaniumPolitics.game.core.GameEngine
 import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.debugTools.Logger
@@ -43,23 +44,7 @@ class QuickLoad() : Table(defaultSkin), KTable {
 
                     Logger.write("Starting game engine.", Logger.LogLevel.INFO)
 
-                    thread(start = true) {
-                        val engine = GameEngine(newGame)
-                        engine.onObserverCall += {
-                            runBlocking {
-                                suspendCoroutine { cont ->
-                                    Gdx.app.postRunnable {
-                                        val current =
-                                            newGame.updateUI.clone() as ArrayList<(GameState) -> Unit> //Clone the list to prevent concurrent modification, because updateUI can be modified by UI elements during the update.
-                                        current.forEach { it(newGame) }//Update UI
-                                        cont.resume(Unit)
-                                    }
-                                }
-                            }
-
-                        }
-                        engine.startGame()
-                    }
+                    GameEngineThreadHandler.startEngine(newGame)
                 }
             })
         }

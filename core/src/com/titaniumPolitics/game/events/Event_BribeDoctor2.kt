@@ -2,9 +2,11 @@ package com.titaniumPolitics.game.events
 
 import com.titaniumPolitics.game.ui.Quest
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.Transient
 
 @Serializable
 class Event_BribeDoctor2 : EventObject("Talking with Dr Paik.", true), IQuestEventObject {
+    @Transient
     override val quest = Quest(
         "Talking with Dr Paik.",
         description = "Talk to Dr Paik in the Welfare Station East.",
