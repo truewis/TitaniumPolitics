@@ -6,21 +6,27 @@ import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.Batch
 import com.badlogic.gdx.graphics.g2d.BitmapFont
 import com.badlogic.gdx.graphics.g2d.TextureRegion
-import com.titaniumPolitics.game.ui.widget.WindowUI
+import com.badlogic.gdx.scenes.scene2d.ui.Table
+import com.badlogic.gdx.utils.Align
+import ktx.scene2d.label
+import ktx.scene2d.scene2d
 import space.earlygrey.shapedrawer.ShapeDrawer
 import kotlin.math.abs
 
 
-class GraphScreen(private val data: HashMap<Int, Double>) : WindowUI("Graph") {
+class GraphScreen(private val data: HashMap<Int, Double>) : Table() {
 
 
     private val font = BitmapFont()
     private lateinit var drawer: ShapeDrawer
     private var pixelTexture: TextureRegion
 
-    private val padding = 50f
+    private val axesPadding = 50f
     private var hoveredPoint: Pair<Float, Float>? = null
     private var hoveredLabel: String? = null
+
+    private val xAxisLabels = mutableListOf<com.badlogic.gdx.scenes.scene2d.ui.Label>()
+    private val yAxisLabels = mutableListOf<com.badlogic.gdx.scenes.scene2d.ui.Label>()
 
     init {
         val pixmap = Pixmap(1, 1, Pixmap.Format.RGBA8888)
@@ -29,7 +35,7 @@ class GraphScreen(private val data: HashMap<Int, Double>) : WindowUI("Graph") {
         val texture = Texture(pixmap) //remember to dispose of later
         //pixmap.dispose()
         pixelTexture = TextureRegion(texture, 0, 0, 1, 1)
-        setSize(800f, 600f)
+        generateAxisLabels()
 
         Gdx.input.inputProcessor = object : InputAdapter() {
             override fun mouseMoved(screenX: Int, screenY: Int): Boolean {
@@ -39,16 +45,16 @@ class GraphScreen(private val data: HashMap<Int, Double>) : WindowUI("Graph") {
                 val (minX, maxX, minY, maxY) = getBounds()
                 val sorted = data.toSortedMap()
 
-                val width = width - 2 * padding
-                val height = height - 2 * padding
+                val width = width - 2 * axesPadding
+                val height = height - 2 * axesPadding
 
                 val localY = screenY.toFloat()
 
                 sorted.forEach { (x, y) ->
                     val normX = (x - minX) / (maxX - minX).toFloat()
                     val normY = (y - minY) / (maxY - minY).toFloat()
-                    val px = x.toFloat().map(minX.toFloat(), maxX.toFloat(), padding, width + padding)
-                    val py = y.toFloat().map(minY.toFloat(), maxY.toFloat(), padding, height + padding)
+                    val px = x.toFloat().map(minX.toFloat(), maxX.toFloat(), axesPadding, width + axesPadding)
+                    val py = y.toFloat().map(minY.toFloat(), maxY.toFloat(), axesPadding, height + axesPadding)
 
                     val dist = 10f
                     if (abs(screenX - px) < dist && abs(Gdx.graphics.height - screenY - py) < dist) {
@@ -63,6 +69,7 @@ class GraphScreen(private val data: HashMap<Int, Double>) : WindowUI("Graph") {
     }
 
     override fun draw(batch: Batch?, parentAlpha: Float) {
+        super.draw(batch, parentAlpha)
         if (batch == null) return
         if (!::drawer.isInitialized) {
             drawer = ShapeDrawer(batch, pixelTexture)
@@ -71,13 +78,13 @@ class GraphScreen(private val data: HashMap<Int, Double>) : WindowUI("Graph") {
         val sorted = data.toSortedMap()
         val (minX, maxX, minY, maxY) = getBounds()
 
-        val width = width - 2 * padding
-        val height = height - 2 * padding
+        val width = width - 2 * axesPadding
+        val height = height - 2 * axesPadding
 
         // Axes
         //drawer.color = Color.BLACK
-        drawer.line(padding, padding, padding, height + padding) // Y-axis
-        drawer.line(padding, padding, width + padding, padding) // X-axis
+        drawer.line(axesPadding, axesPadding, axesPadding, height + axesPadding) // Y-axis
+        drawer.line(axesPadding, axesPadding, width + axesPadding, axesPadding) // X-axis
 
         // Graph lines and points
         //drawer.color = Color.BLUE
@@ -85,8 +92,8 @@ class GraphScreen(private val data: HashMap<Int, Double>) : WindowUI("Graph") {
         var prevY: Float? = null
 
         sorted.forEach { (x, y) ->
-            val px = x.toFloat().map(minX.toFloat(), maxX.toFloat(), padding, width + padding)
-            val py = y.toFloat().map(minY.toFloat(), maxY.toFloat(), padding, height + padding)
+            val px = x.toFloat().map(minX.toFloat(), maxX.toFloat(), axesPadding, width + axesPadding)
+            val py = y.toFloat().map(minY.toFloat(), maxY.toFloat(), axesPadding, height + axesPadding)
 
             drawer.filledCircle(px, py, 4f)
             if (prevX != null && prevY != null) {
@@ -113,6 +120,62 @@ class GraphScreen(private val data: HashMap<Int, Double>) : WindowUI("Graph") {
         val xs = data.keys
         val ys = data.values
         return Quadruple(xs.minOrNull() ?: 0, xs.maxOrNull() ?: 1, ys.minOrNull() ?: 0.0, ys.maxOrNull() ?: 1.0)
+    }
+
+    override fun layout() {
+        super.layout()
+        generateAxisLabels()
+    }
+    
+
+    /**
+     * Add Scene2D Labels for axes
+     */
+    private fun generateAxisLabels() {
+        xAxisLabels.forEach { it.remove() }
+        yAxisLabels.forEach { it.remove() }
+        xAxisLabels.clear()
+        yAxisLabels.clear()
+        val minX = data.keys.minOrNull() ?: 0
+        val maxX = data.keys.maxOrNull() ?: 1
+        val minY = data.values.minOrNull() ?: 0.0
+        val maxY = data.values.maxOrNull() ?: 1.0
+        val xBins = 10
+        val yBins = 10
+        val xStep = (maxX - minX) / xBins.toFloat()
+        val yStep = (maxY - minY) / yBins.toFloat()
+        val xLabelDistanceToAxis = 10f
+        val yLabelDistanceToAxis = 0f
+        for (i in 0..<xBins) {
+            val xValue = minX + i * xStep
+            // Create and position labels accordingly
+            scene2d.label("%.1f".format(xValue), "docTitle") {
+                setFontScale(0.3f)
+                this@GraphScreen.addActor(this)
+                xAxisLabels.add(this)
+                setPosition(
+                    axesPadding + i * (this@GraphScreen.width - 2 * axesPadding) / xBins,
+                    axesPadding - xLabelDistanceToAxis,
+                    Align.center
+                )
+            }
+        }
+        for (i in 0..<yBins) {
+            val yValue = minY + i * yStep
+            // Create and position labels accordingly
+            scene2d.label("%.1f".format(yValue), "docTitle") {
+                setFontScale(0.3f)
+                this@GraphScreen.addActor(this)
+                setAlignment(Align.right)
+                yAxisLabels.add(this)
+                setPosition(
+                    axesPadding - yLabelDistanceToAxis,
+                    axesPadding + i * (this@GraphScreen.height - 2 * axesPadding) / yBins,
+                    Align.right
+                )
+            }
+        }
+
     }
 
     private fun Float.map(fromMin: Float, fromMax: Float, toMin: Float, toMax: Float): Float {
