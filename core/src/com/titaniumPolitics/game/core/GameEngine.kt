@@ -825,7 +825,10 @@ class GameEngine(val gameState: GameState) {
             return@runBlocking wanted as T
         }
 
-        //When someone else requests an action, request class will check isValid function of the action, not this function.
+        /**When someone else requests an action, request class will check isValid function of the action, not this function.
+         * However, NPC routines will use this function to plan their actions ahead.
+         * Hence, do not include temporal conditions such as "is it your turn now".
+         */
         fun availableActions(gameState: GameState, place: String, character: String): HashSet<String> {
             val actions = hashSetOf<String>()
             val placeObj = gameState.places[place]!!
@@ -885,8 +888,7 @@ class GameEngine(val gameState: GameState) {
                 return actions
             }
             ////////////////////////////////////////////////////MEETING ACTIONS//////////////////////////////////////////////////////////
-            if (placeObj.realCharacters.count() > 1)
-                actions.add("Talk")
+            actions.add("Talk") //if (placeObj.realCharacters.count() > 1), but this condition is temporal.
             if (placeObj.isAccidentScene) {
                 if (placeObj.responsibleDivision != null && gameState.parties[placeObj.responsibleDivision]!!.members.contains(
                         character

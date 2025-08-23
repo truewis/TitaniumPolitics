@@ -1,5 +1,7 @@
 package com.titaniumPolitics.game.events
 
+import com.titaniumPolitics.game.core.Request
+import com.titaniumPolitics.game.core.gameActions.Talk
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -11,6 +13,14 @@ class Event_BoyFindingMom : EventObject("A boy with a box.", true) {
         ) {
             onPlayDialogue("FindMom")
             parent.knownCharactersToPlayer += "Yuri"
+            Request(
+                action = Talk("Yuri", "market").apply {
+                    who = "Rui"
+                },
+                issuedTo = hashSetOf("Yuri"),
+            ).apply {
+                parent.requests[generateName()] = this
+            }
             parent.eventSystem.add(Event_BoyFindingMom2())
             deactivate()
         }
