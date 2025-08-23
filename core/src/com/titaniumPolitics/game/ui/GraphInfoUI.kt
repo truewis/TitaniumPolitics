@@ -20,14 +20,14 @@ class GraphInfoUI : WindowUI("GraphTitle") {
                     8 to 6.0f,
                     9 to 5.5f,
                     10 to 7.0f
-                )
+                ),
+                GraphScreen.DataType.COUNT
             )
         ).grow()
     }
 
-    fun refreshGraph(data: Map<Int, Float>) {
-        content.clear()
-        content.add(GraphScreen(data)).grow()
+    fun refreshGraph(data: Map<Int, Float>, yDataType: GraphScreen.DataType) {
+        (content.getChild(0) as GraphScreen).refresh(data, yDataType)
     }
 
     companion object {

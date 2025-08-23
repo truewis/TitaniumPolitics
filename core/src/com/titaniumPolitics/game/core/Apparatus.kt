@@ -190,7 +190,7 @@ class Apparatus {
     fun depreciateHourly() {
         //Consume durability, no matter it is currently being worked or not. For storages, keep the durability if they are fully staffed.
         if (!isStorage || currentWorker >= idealWorker)
-            durability -= S_PER_HR / currentDurabilityTau
+            durability -= S_PER_HR / currentDurabilityTau * const("DurabilityMax")
         if (temperature > maxTemp)
             Logger.write("$name is overheated: $temperature K > $maxTemp K", Logger.LogLevel.APPARATUS_VERBOSE)
         if (temperature < minTemp)

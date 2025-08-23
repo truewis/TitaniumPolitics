@@ -86,7 +86,7 @@
   },
   "barrier": {
     "image": "defaultApparatus.png",
-    "durabilityTau": 8.64e7,
+    "durabilityTau": 8.64e5,
     "baseDanger": 3.0E-4,
     "requiredResourcePerRepair": [
       {

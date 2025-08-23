@@ -1,20 +1,24 @@
-import com.badlogic.gdx.Gdx
-import com.badlogic.gdx.InputAdapter
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.Pixmap
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.Batch
 import com.badlogic.gdx.graphics.g2d.BitmapFont
 import com.badlogic.gdx.graphics.g2d.TextureRegion
+import com.badlogic.gdx.scenes.scene2d.Actor
+import com.badlogic.gdx.scenes.scene2d.ui.Image
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.utils.Align
+import com.titaniumPolitics.game.core.GameState
+import com.titaniumPolitics.game.ui.widget.SimpleTextTooltipUI
+import ktx.scene2d.Scene2DSkin
+import ktx.scene2d.container
+import ktx.scene2d.image
 import ktx.scene2d.label
 import ktx.scene2d.scene2d
 import space.earlygrey.shapedrawer.ShapeDrawer
-import kotlin.math.abs
 
 
-class GraphScreen(private var data: Map<Int, Float>) : Table() {
+class GraphScreen(private var data: Map<Int, Float>, yDataType: DataType) : Table() {
 
 
     private val font = BitmapFont()
@@ -27,6 +31,62 @@ class GraphScreen(private var data: Map<Int, Float>) : Table() {
 
     private val xAxisLabels = mutableListOf<com.badlogic.gdx.scenes.scene2d.ui.Label>()
     private val yAxisLabels = mutableListOf<com.badlogic.gdx.scenes.scene2d.ui.Label>()
+
+    var xAxisTitle: Actor? = null
+    var xAxisTitleText: String? = null
+    var yAxisTitle: Actor? = null
+    var yAxisTitleText: String? = null
+    var xDataType = DataType.TIME
+        set(value) {
+            field = value
+            generateAxisLabels()
+        }
+    var yDataType = yDataType
+        set(value) {
+            field = value
+            generateAxisLabels()
+        }
+
+
+    val minX
+        get() = when (xDataType) {
+            DataType.DURABILITY -> 0f
+            DataType.TIME -> getBounds().first.toFloat()
+            DataType.PERCENT -> 0f
+            DataType.COUNT -> 0f
+            DataType.MUTUALITY -> 0f
+            DataType.PRICE -> 0f
+        }
+    val maxX
+        get() = when (xDataType) {
+            DataType.DURABILITY -> 100f
+            DataType.TIME -> getBounds().second.toFloat()
+            DataType.PERCENT -> 100f
+            DataType.COUNT -> getBounds().second.toFloat()
+            DataType.MUTUALITY -> 100f
+            DataType.PRICE -> getBounds().second.toFloat()
+        }
+    val minY
+        get() = when (yDataType) {
+            DataType.DURABILITY -> 0f
+            DataType.TIME -> getBounds().second.toFloat()
+            DataType.PERCENT -> 0f
+            DataType.COUNT -> 0f
+            DataType.MUTUALITY -> 0f
+            DataType.PRICE -> 0f
+        }
+    val maxY
+        get() = when (yDataType) {
+            DataType.DURABILITY -> 100f
+            DataType.TIME -> getBounds().fourth
+            DataType.PERCENT -> 100f
+            DataType.COUNT -> getBounds().fourth
+            DataType.MUTUALITY -> 100f
+            DataType.PRICE -> getBounds().fourth
+        }
+
+    val effWidth get() = width - 2 * axesPadding
+    val effHeight get() = height - 2 * axesPadding
 
     init {
         val pixmap = Pixmap(1, 1, Pixmap.Format.RGBA8888)
@@ -46,15 +106,12 @@ class GraphScreen(private var data: Map<Int, Float>) : Table() {
         }
 
         val sorted = data.toSortedMap()
-        val (minX, maxX, minY, maxY) = getBounds()
 
-        val width = width - 2 * axesPadding
-        val height = height - 2 * axesPadding
 
         // Axes
         //drawer.color = Color.BLACK
-        drawer.line(axesPadding, axesPadding, axesPadding, height + axesPadding) // Y-axis
-        drawer.line(axesPadding, axesPadding, width + axesPadding, axesPadding) // X-axis
+        drawer.line(axesPadding, axesPadding, axesPadding, effHeight + axesPadding) // Y-axis
+        drawer.line(axesPadding, axesPadding, effWidth + axesPadding, axesPadding) // X-axis
 
         // Graph lines and points
         //drawer.color = Color.BLUE
@@ -62,8 +119,8 @@ class GraphScreen(private var data: Map<Int, Float>) : Table() {
         var prevY: Float? = null
 
         sorted.forEach { (x, y) ->
-            val px = x.toFloat().map(minX.toFloat(), maxX.toFloat(), axesPadding, width + axesPadding)
-            val py = y.toFloat().map(minY.toFloat(), maxY.toFloat(), axesPadding, height + axesPadding)
+            val px = x.toFloat().map(minX.toFloat(), maxX.toFloat(), axesPadding, effWidth + axesPadding)
+            val py = y.toFloat().map(minY.toFloat(), maxY.toFloat(), axesPadding, effHeight + axesPadding)
 
             drawer.filledCircle(px, py, 4f)
             if (prevX != null && prevY != null) {
@@ -95,11 +152,22 @@ class GraphScreen(private var data: Map<Int, Float>) : Table() {
     override fun layout() {
         super.layout()
         generateAxisLabels()
+        vertices.forEach { it.value.forEach { v -> v.remove() } }
+        vertices.clear()
+        data.forEach {
+            createVertex("default", it.key.toFloat(), it.value)
+        }
     }
 
-    fun refresh(new: HashMap<Int, Float>) {
+    fun refresh(new: Map<Int, Float>, yDataType: DataType = this.yDataType) {
         data = new
-        generateAxisLabels()
+        this.yDataType = yDataType
+        print(data)
+        layout()
+    }
+
+    private fun generateLegend() {
+        // Implement legend generation if needed
     }
 
 
@@ -111,20 +179,16 @@ class GraphScreen(private var data: Map<Int, Float>) : Table() {
         yAxisLabels.forEach { it.remove() }
         xAxisLabels.clear()
         yAxisLabels.clear()
-        val minX = data.keys.minOrNull() ?: 0
-        val maxX = data.keys.maxOrNull() ?: 1
-        val minY = data.values.minOrNull() ?: 0.0f
-        val maxY = data.values.maxOrNull() ?: 1.0f
         val xBins = 10
         val yBins = 10
         val xStep = (maxX - minX) / xBins.toFloat()
         val yStep = (maxY - minY) / yBins.toFloat()
         val xLabelDistanceToAxis = 10f
         val yLabelDistanceToAxis = 0f
-        for (i in 0..<xBins) {
+        for (i in 1..<xBins) { //Do not draw on the axis itself, so start at 1.
             val xValue = minX + i * xStep
             // Create and position labels accordingly
-            scene2d.label("%.1f".format(xValue), "docTitle") {
+            scene2d.label(formatValue(xValue, xDataType), "docTitle") {
                 setFontScale(0.3f)
                 this@GraphScreen.addActor(this)
                 xAxisLabels.add(this)
@@ -135,10 +199,21 @@ class GraphScreen(private var data: Map<Int, Float>) : Table() {
                 )
             }
         }
-        for (i in 0..<yBins) {
+        xAxisTitle?.remove()
+        xAxisTitle = scene2d.label(xAxisTitleText ?: xDataType.name, "docTitle") {
+            setFontScale(0.4f)
+            this@GraphScreen.addActor(this)
+            setAlignment(Align.center)
+            setPosition(
+                axesPadding + (this@GraphScreen.width - 2 * axesPadding) / 2,
+                axesPadding - xLabelDistanceToAxis - 20f,
+                Align.center
+            )
+        }
+        for (i in 1..<yBins) { //Do not draw on the axis itself, so start at 1.
             val yValue = minY + i * yStep
             // Create and position labels accordingly
-            scene2d.label("%.1f".format(yValue), "docTitle") {
+            scene2d.label(formatValue(yValue, yDataType), "docTitle") {
                 setFontScale(0.3f)
                 this@GraphScreen.addActor(this)
                 setAlignment(Align.right)
@@ -150,13 +225,77 @@ class GraphScreen(private var data: Map<Int, Float>) : Table() {
                 )
             }
         }
+        yAxisTitle?.remove()
+        yAxisTitle = scene2d.container(scene2d.label(yAxisTitleText ?: yDataType.name, "docTitle") {
+            setFontScale(0.4f)
+            this@GraphScreen.addActor(this)
+            setAlignment(Align.center)
+        }) {
+            this.isTransform = true
+        }
+        addActor(yAxisTitle)
+        yAxisTitle!!.setPosition(
+            axesPadding - yLabelDistanceToAxis - 40f,
+            axesPadding + (this@GraphScreen.height - 2 * axesPadding) / 2,
+            Align.center
+        )
+        yAxisTitle!!
+        yAxisTitle!!.rotateBy(90f)
 
+    }
+
+    val vertices = mutableMapOf<String, ArrayList<Actor>>()
+
+    fun createVertex(key: String, xValue: Float, yValue: Float): Actor {
+        return object : Image(Scene2DSkin.defaultSkin.getDrawable("white-pixel")) {
+            val xValue = xValue
+            val yValue = yValue
+            override fun layout() {
+                super.layout()
+                setPosition(
+                    this.xValue.map(minX, maxX, axesPadding, effWidth + axesPadding),
+                    this.yValue.map(minY, maxY, axesPadding, effHeight + axesPadding), Align.center
+                )
+            }
+
+        }.apply {
+            setSize(15f, 15f)
+            color = Color.RED
+            if (!vertices.containsKey(key)) {
+                vertices[key] = arrayListOf()
+            }
+            vertices[key]!!.add(this)
+            addActor(this)
+            addListener(
+                SimpleTextTooltipUI(
+                    "(${formatValue(xValue, xDataType)}, ${
+                        formatValue(
+                            yValue,
+                            yDataType
+                        )
+                    })"
+                )
+            )//TODO: does not work currently. Why?
+            this.layout()
+            this.debug()
+        }
     }
 
     private fun Float.map(fromMin: Float, fromMax: Float, toMin: Float, toMax: Float): Float {
         return ((this - fromMin) / (fromMax - fromMin)) * (toMax - toMin) + toMin
     }
 
-    data class Quadruple<A, B, C, D>(val first: A, val second: B, val third: C, val fourth: D)
+    fun formatValue(value: Float, type: DataType): String {
+        return when (type) {
+            DataType.TIME -> GameState.formatTime(value.toInt())
+            DataType.DURABILITY -> "%.1f".format(value)
+            DataType.PERCENT -> "%.1f%%".format(value)
+            DataType.COUNT -> "%.0f".format(value)
+            DataType.MUTUALITY -> "%.1f%%".format(value)
+            DataType.PRICE -> "$%.0f".format(value)
+        }
+    }
 
+    data class Quadruple<A, B, C, D>(val first: A, val second: B, val third: C, val fourth: D)
+    enum class DataType { DURABILITY, TIME, PERCENT, COUNT, MUTUALITY, PRICE }
 }
