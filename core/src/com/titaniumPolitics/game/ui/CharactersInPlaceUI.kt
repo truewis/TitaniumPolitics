@@ -8,6 +8,7 @@ import com.titaniumPolitics.game.core.GameEngine
 import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.core.gameActions.Wait
 import com.titaniumPolitics.game.debugTools.Logger
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.runBlocking
 import ktx.scene2d.Scene2DSkin.defaultSkin
 import kotlin.coroutines.resume
@@ -17,6 +18,8 @@ import kotlin.coroutines.suspendCoroutine
 //This UI is used to display the portraits of the characters in the current place.
 class CharactersInPlaceUI(var gameState: GameState) : Table(defaultSkin) {
     private val portraits = arrayListOf<PortraitUI>()
+
+    //Also check MeetingUI for similar code.
     private val animationQueue = ArrayDeque<Action>()
     var onAnimationEnd: () -> Unit = {}
 
@@ -42,7 +45,7 @@ class CharactersInPlaceUI(var gameState: GameState) : Table(defaultSkin) {
                         Actions.run {
                             portraits.forEach { portrait ->
                                 if (portrait.tgtCharacter == action.sbjCharacter) {
-                                    portrait.displaySpeech(action)
+                                    portrait.speechUI.displaySpeech(action)
                                 }
                             }
                         }
@@ -50,7 +53,12 @@ class CharactersInPlaceUI(var gameState: GameState) : Table(defaultSkin) {
                     suspendCoroutine { continuation ->
                         Gdx.app.postRunnable {
                             onAnimationEnd =
-                                { continuation.resume(Unit) }
+                                {
+                                    try {
+                                        continuation.resume(Unit)
+                                    } catch (e: IllegalStateException) {
+                                    }
+                                }
                         }
                     }
                 }
@@ -85,7 +93,7 @@ class CharactersInPlaceUI(var gameState: GameState) : Table(defaultSkin) {
 
     private fun addCharacterPortrait(characterName: String) {
         val portrait = PortraitUI(characterName, gameState)
-        portrait.onSpeechEnd += {
+        portrait.speechUI.onSpeechEnd += {
             if (animationQueue.isEmpty())
                 onAnimationEnd()
             else

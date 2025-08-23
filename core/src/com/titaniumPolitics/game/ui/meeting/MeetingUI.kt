@@ -2,6 +2,7 @@ package com.titaniumPolitics.game.ui.meeting
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Color
+import com.badlogic.gdx.scenes.scene2d.Action
 import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.actions.Actions
 import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction
@@ -16,17 +17,34 @@ import com.titaniumPolitics.game.core.Meeting
 import com.titaniumPolitics.game.core.gameActions.Wait
 import com.titaniumPolitics.game.debugTools.Logger
 import com.titaniumPolitics.game.ui.CapsuleStage
+import com.titaniumPolitics.game.ui.HeadPortraitUI
 import com.titaniumPolitics.game.ui.PortraitUI
 import com.titaniumPolitics.game.ui.widget.SimpleHeadPortraitUI
+import kotlinx.coroutines.isActive
+import kotlinx.coroutines.runBlocking
 import ktx.scene2d.*
 import ktx.scene2d.Scene2DSkin.defaultSkin
 import java.lang.Thread.sleep
+import kotlin.coroutines.resume
+import kotlin.coroutines.suspendCoroutine
 
 
 //This UI is used for both meetings and conferences
 class MeetingUI(var gameState: GameState) : Table(defaultSkin), KTable {
-    val portraits = arrayListOf<SimpleHeadPortraitUI>()
-    val speakerPortrait = PortraitUI("", gameState)
+    val portraits = arrayListOf<HeadPortraitUI>()
+    private val animationQueue = ArrayDeque<Action>()
+    var onAnimationEnd: () -> Unit = {}
+
+    val speakerPortrait = PortraitUI("", gameState).apply {
+
+        //Also check CharactersInPlaceUI for similar code.
+        speechUI.onSpeechEnd += {
+            if (this@MeetingUI.animationQueue.isEmpty())
+                this@MeetingUI.onAnimationEnd()
+            else
+                this@MeetingUI.addAction(this@MeetingUI.animationQueue.removeFirst())
+        }
+    }
     val deployedInfos = arrayListOf<InfoBubbleUI>()
     val currentAgendas = arrayListOf<AgendaBubbleUI>()
     val currentAttention = Label("0", defaultSkin, "docTitle")
@@ -55,23 +73,31 @@ class MeetingUI(var gameState: GameState) : Table(defaultSkin), KTable {
         }
         GameEngine.onBeforeNonPlayerCharacterAction += { action ->
             if (isVisible && gameState.player.currentMeeting?.currentCharacters?.contains(action.sbjCharacter) ?: false && action !is Wait) {
-                //If the action is related to the current meeting, play the animation of mutuality arrows.
-                Gdx.app.postRunnable {
-                    if (speakerPortrait.tgtCharacter == action.sbjCharacter) {
-                        speakerPortrait.displaySpeech(action)
-                    }
-//                portraits.forEach { portrait ->
-//                    if (portrait.tgtCharacter == action.sbjCharacter) {
-//                        portrait.displayAction(action)
-//                    } else
-//                        portrait.clearAction()
-//                }
-                }
                 Logger.write(
-                    "MeetingUI: Non-player character action detected: ${action.sbjCharacter} performed ${action::class.simpleName}",
+                    "CharacterPortraits: Non-player character action detected: ${action.sbjCharacter} performed ${action::class.simpleName}",
                     Logger.LogLevel.INFO
                 )
-                sleep(1000)//TODO:
+                //Block the game engine until the animation is done.
+                runBlocking {
+                    animationQueue.add(
+                        Actions.run {
+                            if (speakerPortrait.tgtCharacter == action.sbjCharacter) {
+                                speakerPortrait.speechUI.displaySpeech(action)
+                            }
+                        }
+                    )
+                    suspendCoroutine { continuation ->
+                        Gdx.app.postRunnable {
+                            onAnimationEnd =
+                                {
+                                    try {
+                                        continuation.resume(Unit)
+                                    } catch (e: IllegalStateException) {
+                                    }
+                                }
+                        }
+                    }
+                }
             }
         }
         discussionTable = stack {
@@ -209,7 +235,7 @@ class MeetingUI(var gameState: GameState) : Table(defaultSkin), KTable {
     }
 
     private fun addCharacterPortrait(characterName: String) {
-        val portrait = SimpleHeadPortraitUI(characterName, true)
+        val portrait = HeadPortraitUI(characterName, gameState)
         portrait.setSize(200f, 200f)
         portraits.add(portrait)
         addActor(portrait)
@@ -254,7 +280,7 @@ class MeetingUI(var gameState: GameState) : Table(defaultSkin), KTable {
         val leftPortraits = portraits.take(leftSideCount)
         val rightPortraits = portraits.takeLast(rightSideCount)
 
-        fun distributeVertically(portraits: List<SimpleHeadPortraitUI>, x: Float) {
+        fun distributeVertically(portraits: List<HeadPortraitUI>, x: Float) {
             portraits.forEachIndexed { index, portrait ->
                 val y =
                     discussionTable.y + discussionTable.height / 2 + portraitUIHeight * (index + 0.5f - portraits.size / 2f)

@@ -22,6 +22,7 @@ class InterfaceRoot(val gameState: GameState) : Table(defaultSkin), KTable {
     val avAUI = AvailableActionsUI(this@InterfaceRoot.gameState)
     val charactersView = CharactersInPlaceUI(gameState)
     val meetingUI = MeetingUI(gameState)
+    val assistantUI = AssistantUI(gameState)
 
     init {
         instance = this
@@ -30,9 +31,12 @@ class InterfaceRoot(val gameState: GameState) : Table(defaultSkin), KTable {
                 meetingUI.isVisible = true
                 meetingUI.newMeeting(it.player.currentMeeting!!)
                 charactersView.isVisible = false
+                assistantUI.cabinetWindowUIs.firstOrNull()?.changeOpenState(false) // Close the cabinet if open
+                assistantUI.isVisible = false
             } else {
                 meetingUI.isVisible = false
                 charactersView.isVisible = true
+                assistantUI.isVisible = true
             }
         }
         stack = stack { cell ->
@@ -67,7 +71,7 @@ class InterfaceRoot(val gameState: GameState) : Table(defaultSkin), KTable {
                     it.fill()
                     add(TasksUI(this@InterfaceRoot.gameState)).align(Align.topLeft).fill()
                     row()
-                    add(AssistantUI(this@InterfaceRoot.gameState)).align(Align.bottomLeft).expandY().fill()
+                    add(this@InterfaceRoot.assistantUI).align(Align.bottomLeft).expandY().fill()
                 }
 
                 val centerSeparator = table {
