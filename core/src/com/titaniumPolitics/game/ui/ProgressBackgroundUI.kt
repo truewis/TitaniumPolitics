@@ -21,15 +21,6 @@ class ProgressBackgroundUI(var gameState: GameState) : Table(Scene2DSkin.default
         instance = this
         isVisible = false
 
-        GameEngine.acquireEvent += {
-            // If the action is moving, PlaceMarkerWindowUI set this text to "Moving", and shows this UI.
-            // We want to hide this UI when next turn starts, so we check the text.
-            //These actions take multiple turns, so we don't hide the UI next turn.
-            if (status != "Wait" && status != "Sleep") {//TODO: This is a temporary fix, should be replaced with a better solution.
-                setVisibleWithFade(false, status)
-            }
-        }
-
         stack {
             it.grow()
             this@ProgressBackgroundUI.bkg = image("white-pixel") {
@@ -57,8 +48,7 @@ class ProgressBackgroundUI(var gameState: GameState) : Table(Scene2DSkin.default
     fun setVisibleWithFade(visible: Boolean, actionName: String) {
         if (visible) {
             isVisible = true
-            bkg.color = if (actionName == "Wait") Color(0f, 0f, 0f, 0.4f) // Semi-transparent black background
-            else Color(0f, 0f, 0f, 1f) // More opaque black background
+            bkg.color = Color(0f, 0f, 0f, 0.6f) // Semi-transparent black background
             addAction(Actions.fadeIn(0f))// No fade in, just show it immediately, but still need to change alpha to 1f here.
             status = actionName
             val displayText =

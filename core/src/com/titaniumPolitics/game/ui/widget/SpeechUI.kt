@@ -19,7 +19,7 @@ import ktx.scene2d.stack
 class SpeechUI : Table(defaultSkin), KTable {
 
     val onSpeechEnd = arrayListOf<() -> Unit>()
-    val speech = TypingLabel("", defaultSkin, "description").apply {
+    private val speech = TypingLabel("", defaultSkin, "description").apply {
         setFontScale(0.5f)
         color = Color.WHITE
         wrap = true
@@ -29,9 +29,10 @@ class SpeechUI : Table(defaultSkin), KTable {
             }
 
             override fun end() {
+                if (this@apply.originalText.isEmpty()) return // If text is empty, do nothing. End event is triggered when label is initialized with empty text.
                 addAction(
                     Actions.sequence(
-                        Actions.delay(0.5f),
+                        Actions.delay(1f),
                         Actions.run {
                             clearSpeech()
                             onSpeechEnd.forEach { it() }
@@ -91,6 +92,7 @@ class SpeechUI : Table(defaultSkin), KTable {
         } else {
             text = ReadOnly.script(action.javaClass.simpleName, action)
         }
+        println("Displaying speech: $text")
         speech.restart(text)
 
     }
@@ -113,7 +115,7 @@ class SpeechUI : Table(defaultSkin), KTable {
 
     fun clearSpeech() {
         bubble.isVisible = false
-        speech.setText("")
+        //speech.setText("") Do not, as it will trigger the end event again immediately.
     }
 
     init {

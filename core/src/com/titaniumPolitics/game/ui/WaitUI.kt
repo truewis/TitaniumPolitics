@@ -9,6 +9,7 @@ import com.badlogic.gdx.utils.Align
 import com.titaniumPolitics.game.core.*
 import com.titaniumPolitics.game.core.GameEngine.Companion.AcquireParams
 import com.titaniumPolitics.game.core.gameActions.GameAction
+import com.titaniumPolitics.game.core.gameActions.Move
 import com.titaniumPolitics.game.core.gameActions.Sleep
 import com.titaniumPolitics.game.core.gameActions.StartMeeting
 import com.titaniumPolitics.game.core.gameActions.Wait
@@ -64,6 +65,10 @@ class WaitUI(val gameState: GameState, actionCallback: (GameAction) -> Unit) :
 
     }
 
+    /**
+     * This function is called every time the player turn starts while the player is waiting
+     * It is called last time when the wait amount is exhausted or the wait is interrupted, but it does not add a new wait action in that case.
+     */
     fun spendTime(AcquireParams: GameEngine.Companion.AcquireParams) {
         if (interrupted) {
             GameEngine.acquireEvent -= this::spendTime
@@ -149,9 +154,9 @@ class WaitUI(val gameState: GameState, actionCallback: (GameAction) -> Unit) :
             // If the player is in a meeting, do not interrupt.
             return
         }
-        //Interrupt if a character performs an action other than wait in this place.
-        if (info.tgtPlace == gameState.player.place.name && info.tgtCharacter != gameState.playerName &&
-            info.action !is Wait && info.knownTo.contains(gameState.playerName)
+        //Interrupt if a character performs an action other than wait or move in this place.
+        if (info.tgtPlace == gameState.player.place.name && info.tgtCharacter != gameState.playerName && info.tgtCharacter in gameState.knownCharactersToPlayer &&
+            info.action !is Wait && info.action !is Move && info.knownTo.contains(gameState.playerName)
         ) {
 
             AlertUI.instance.addAlert("interrupted", ReadOnly.prop(info.tgtCharacter ?: "Someone"))

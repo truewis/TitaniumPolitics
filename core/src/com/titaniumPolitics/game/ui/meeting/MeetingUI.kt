@@ -34,6 +34,15 @@ class MeetingUI(var gameState: GameState) : Table(defaultSkin), KTable {
     val portraits = arrayListOf<HeadPortraitUI>()
     private val animationQueue = ArrayDeque<Action>()
     var onAnimationEnd: () -> Unit = {}
+    fun startAnimation() {
+        if (animationQueue.isNotEmpty()) {
+            addAction(animationQueue.removeFirst())
+        }
+    }
+
+    fun addAnimation(action: Action) {
+        animationQueue.add(action)
+    }
 
     val speakerPortrait = PortraitUI("", gameState).apply {
 
@@ -79,13 +88,14 @@ class MeetingUI(var gameState: GameState) : Table(defaultSkin), KTable {
                 )
                 //Block the game engine until the animation is done.
                 runBlocking {
-                    animationQueue.add(
+                    addAnimation(
                         Actions.run {
                             if (speakerPortrait.tgtCharacter == action.sbjCharacter) {
                                 speakerPortrait.speechUI.displaySpeech(action)
                             }
                         }
                     )
+                    startAnimation()
                     suspendCoroutine { continuation ->
                         Gdx.app.postRunnable {
                             onAnimationEnd =

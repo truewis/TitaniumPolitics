@@ -9,7 +9,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.utils.Align
 import com.rafaskoberg.gdx.typinglabel.TypingLabel
 import com.titaniumPolitics.game.core.*
+import com.titaniumPolitics.game.core.GameEngine.Companion.AcquireParams
 import com.titaniumPolitics.game.core.gameActions.Move
+import com.titaniumPolitics.game.core.gameActions.Wait
 import com.titaniumPolitics.game.debugTools.Logger
 import com.titaniumPolitics.game.ui.AlertUI
 import com.titaniumPolitics.game.ui.ProgressBackgroundUI
@@ -52,36 +54,11 @@ class PlaceMarkerWindowUI(var gameState: GameState, var owner: MapUI) : Table() 
 
         addListener(object : com.badlogic.gdx.scenes.scene2d.utils.ChangeListener() {
             override fun changed(event: ChangeEvent?, actor: Actor?) {
-                //Move to place.
-                val place = this@PlaceMarkerWindowUI.gameState.places[this@PlaceMarkerWindowUI.placeDisplayed]!!
-                //If place is connect to the player's current place, move there.
-                if (place.connectedPlaces.contains(this@PlaceMarkerWindowUI.gameState.player.place.name)) {
-                    val action = Move(
-                        this@PlaceMarkerWindowUI.gameState.playerName,
-                        this@PlaceMarkerWindowUI.gameState.player.place.name
-                    )
-                    action.placeTo = this@PlaceMarkerWindowUI.placeDisplayed
-                    action.injectParent(this@PlaceMarkerWindowUI.gameState)
-                    ProgressBackgroundUI.instance.setVisibleWithFade(true, "Move")
-
-                    GameEngine.acquireCallback(action)
-                }
-                //If place is not connected, set the destination and start the move process.
-                else {
-                    this@PlaceMarkerWindowUI.tgtDestination = this@PlaceMarkerWindowUI.placeDisplayed
-                    this@PlaceMarkerWindowUI.interrupted = false
-                    GameEngine.acquireEvent += this@PlaceMarkerWindowUI::spendTime
-                    val action = Move(
-                        this@PlaceMarkerWindowUI.gameState.playerName,
-                        this@PlaceMarkerWindowUI.gameState.player.place.name
-                    )
-                    action.placeTo = this@PlaceMarkerWindowUI.placeDisplayed
-                    action.injectParent(this@PlaceMarkerWindowUI.gameState)
-
-                    ProgressBackgroundUI.instance.setVisibleWithFade(true, "Move")
-
-                    GameEngine.acquireCallback(action)
-                }
+                this@PlaceMarkerWindowUI.interrupted = false
+                this@PlaceMarkerWindowUI.tgtDestination = this@PlaceMarkerWindowUI.placeDisplayed
+                GameEngine.acquireEvent += this@PlaceMarkerWindowUI::spendTime
+                spendTime(AcquireParams("", hashMapOf()))
+                ProgressBackgroundUI.instance.setVisibleWithFade(true, "Move")
                 //Close the window after the move action is initiated.
                 onClose.forEach { it() }
             }
@@ -212,10 +189,8 @@ class PlaceMarkerWindowUI(var gameState: GameState, var owner: MapUI) : Table() 
     private fun moveInterruptCondition(info: Information) {
         if (interrupted)
             return // If already interrupted, do not process further.
-        if (false
-        //Do not interrupt moving
-//        if (info.tgtPlace == gameState.player.place.name && info.tgtCharacter != gameState.playerName &&
-//            !(info.type == InformationType.ACTION && info.action is Wait) && info.knownTo.contains(gameState.playerName)
+        if (info.tgtPlace == gameState.player.place.name && info.tgtCharacter != gameState.playerName &&
+            info.action !is Wait && info.action !is Move && info.knownTo.contains(gameState.playerName) && info.tgtCharacter in gameState.knownCharactersToPlayer
         ) {
 
             AlertUI.instance.addAlert("interruptedMove", ReadOnly.charProp(info.tgtCharacter ?: "Someone"))
@@ -225,7 +200,12 @@ class PlaceMarkerWindowUI(var gameState: GameState, var owner: MapUI) : Table() 
 
     }
 
+    /**
+     * This function is called every time the player turn starts while the player is moving to the target destination.
+     * It is called last time when the player arrives at the destination or the move is interrupted, but it does not add a new move action in that case.
+     */
     fun spendTime(AcquireParams: GameEngine.Companion.AcquireParams) {
+        println("Spend time called in PlaceMarkerWindowUI: ${gameState.time}")
         if (interrupted) {
             GameEngine.acquireEvent -= this::spendTime
             ProgressBackgroundUI.instance.setVisibleWithFade(false, "Move")
@@ -252,7 +232,6 @@ class PlaceMarkerWindowUI(var gameState: GameState, var owner: MapUI) : Table() 
                 placeTo = nextStop
             }
         )
-        ProgressBackgroundUI.instance.setVisibleWithFade(true, "Move")
 
     }
 

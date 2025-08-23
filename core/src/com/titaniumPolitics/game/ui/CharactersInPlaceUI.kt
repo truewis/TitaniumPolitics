@@ -22,6 +22,15 @@ class CharactersInPlaceUI(var gameState: GameState) : Table(defaultSkin) {
     //Also check MeetingUI for similar code.
     private val animationQueue = ArrayDeque<Action>()
     var onAnimationEnd: () -> Unit = {}
+    fun startAnimation() {
+        if (animationQueue.isNotEmpty()) {
+            addAction(animationQueue.removeFirst())
+        }
+    }
+
+    fun addAnimation(action: Action) {
+        animationQueue.add(action)
+    }
 
     init {
         instance = this
@@ -41,7 +50,7 @@ class CharactersInPlaceUI(var gameState: GameState) : Table(defaultSkin) {
                 )
                 //Block the game engine until the animation is done.
                 runBlocking {
-                    animationQueue.add(
+                    addAnimation(
                         Actions.run {
                             portraits.forEach { portrait ->
                                 if (portrait.tgtCharacter == action.sbjCharacter) {
@@ -50,13 +59,17 @@ class CharactersInPlaceUI(var gameState: GameState) : Table(defaultSkin) {
                             }
                         }
                     )
+                    startAnimation()
                     suspendCoroutine { continuation ->
                         Gdx.app.postRunnable {
                             onAnimationEnd =
                                 {
                                     try {
                                         continuation.resume(Unit)
+                                        println("Resuming game engine after character ${action.sbjCharacter} action animation.")
                                     } catch (e: IllegalStateException) {
+                                        // This can happen if the coroutine was already resumed.
+                                        println("Continuation was already resumed: ${action.sbjCharacter}")
                                     }
                                 }
                         }
