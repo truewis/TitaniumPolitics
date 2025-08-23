@@ -1,5 +1,6 @@
 package com.titaniumPolitics.game.events
 
+import com.badlogic.gdx.graphics.Color.RED
 import com.titaniumPolitics.game.core.Apparatus
 import com.titaniumPolitics.game.core.GameDataHandler
 import com.titaniumPolitics.game.ui.GraphInfoUI
@@ -22,6 +23,7 @@ class Event_SecureOuterBarrierEast : EventObject("Introduction of Alina.", true)
                 parent.gdh.resourceMap["apparatusDurability"]!!.column(targetApparatus.ID),
                 GraphScreen.DataType.DURABILITY
             )
+            GraphInfoUI.instance.addHorizontalLine(40f, RED, 2f, "Critical")
             GraphInfoUI.instance.isVisible = true
         }
     )

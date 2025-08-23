@@ -1,9 +1,15 @@
 package com.titaniumPolitics.game.ui
 
 import GraphScreen
+import GraphScreen.LineAttributes
+import com.badlogic.gdx.graphics.Color
 import com.titaniumPolitics.game.ui.widget.WindowUI
+import kotlin.collections.set
 
 class GraphInfoUI : WindowUI("GraphTitle") {
+
+    private val graph get() = (content.getChild(0) as GraphScreen)
+
     init {
         instance = this
         isVisible = false
@@ -27,7 +33,24 @@ class GraphInfoUI : WindowUI("GraphTitle") {
     }
 
     fun refreshGraph(data: Map<Int, Float>, yDataType: GraphScreen.DataType) {
-        (content.getChild(0) as GraphScreen).refresh(data, yDataType)
+        graph.refresh(data, yDataType)
+    }
+
+
+    fun addHorizontalLine(yValue: Float, color: Color = Color.BLACK, thickness: Float = 2f, key: String) {
+        graph.addHorizontalLine(yValue, color, thickness, key)
+    }
+
+    fun removeHorizontalLine(key: String) {
+        graph.removeHorizontalLine(key)
+    }
+
+    fun addVerticalLine(xValue: Float, color: Color = Color.BLACK, thickness: Float = 2f, key: String) {
+        graph.addVerticalLine(xValue, color, thickness, key)
+    }
+
+    fun removeVerticalLine(key: String) {
+        graph.removeVerticalLine(key)
     }
 
     companion object {

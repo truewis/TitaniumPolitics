@@ -6,13 +6,14 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont
 import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.ui.Image
+import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.utils.Align
+import com.titaniumPolitics.game.EntryClass
 import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.ui.widget.SimpleTextTooltipUI
 import ktx.scene2d.Scene2DSkin
 import ktx.scene2d.container
-import ktx.scene2d.image
 import ktx.scene2d.label
 import ktx.scene2d.scene2d
 import space.earlygrey.shapedrawer.ShapeDrawer
@@ -21,16 +22,19 @@ import space.earlygrey.shapedrawer.ShapeDrawer
 class GraphScreen(private var data: Map<Int, Float>, yDataType: DataType) : Table() {
 
 
-    private val font = BitmapFont()
+    private val cache = BitmapFont() //TODO: use a skin font instead
     private lateinit var drawer: ShapeDrawer
     private var pixelTexture: TextureRegion
 
     private val axesPadding = 50f
-    private var hoveredPoint: Pair<Float, Float>? = null
-    private var hoveredLabel: String? = null
 
     private val xAxisLabels = mutableListOf<com.badlogic.gdx.scenes.scene2d.ui.Label>()
     private val yAxisLabels = mutableListOf<com.badlogic.gdx.scenes.scene2d.ui.Label>()
+
+    private val xLines = hashMapOf<String, LineAttributes>()
+    private val yLines = hashMapOf<String, LineAttributes>()
+
+    data class LineAttributes(val y: Float, val color: Color, val thickness: Float)
 
     var xAxisTitle: Actor? = null
     var xAxisTitleText: String? = null
@@ -113,6 +117,30 @@ class GraphScreen(private var data: Map<Int, Float>, yDataType: DataType) : Tabl
         drawer.line(axesPadding, axesPadding, axesPadding, effHeight + axesPadding) // Y-axis
         drawer.line(axesPadding, axesPadding, effWidth + axesPadding, axesPadding) // X-axis
 
+        // Horizontal lines
+        yLines.forEach { (key, attr) ->
+            val y = attr.y.map(minY, maxY, axesPadding, effHeight + axesPadding)
+            drawer.setColor(attr.color)
+            drawer.line(axesPadding, y, effWidth + axesPadding, y, attr.thickness)
+            cache.color = attr.color
+            cache.draw(batch, key, effWidth - axesPadding, y + 15)
+        }
+        // Vertical lines
+        xLines.forEach { (key, attr) ->
+            val x = attr.y.map(
+                minX, maxX, axesPadding,
+                effWidth + axesPadding
+            )
+            drawer.setColor(attr.color)
+            drawer.line(
+                x, axesPadding, x, effHeight + axesPadding, attr.thickness
+            )
+            cache.color = attr.color
+            cache.draw(batch, key, x + 15, effHeight - axesPadding)
+        }
+        drawer.setColor(Color.WHITE)
+        cache.color = Color.WHITE
+
         // Graph lines and points
         //drawer.color = Color.BLUE
         var prevX: Float? = null
@@ -130,16 +158,10 @@ class GraphScreen(private var data: Map<Int, Float>, yDataType: DataType) : Tabl
             prevY = py
         }
 
-        // Tooltip
-        hoveredPoint?.let {
-            font.color = Color.BLACK
-            font.draw(batch, hoveredLabel, it.first + 10, it.second + 10)
-        }
-
         // Legend
         drawer.filledCircle(width - 100, height + 30, 5f)
-        font.draw(batch, "Legend:", width - 90, height + 45)
-        font.draw(batch, "Data Point", width - 90, height + 30)
+        cache.draw(batch, "Legend:", width - 90, height + 45)
+        cache.draw(batch, "Data Point", width - 90, height + 30)
     }
 
 
@@ -163,13 +185,32 @@ class GraphScreen(private var data: Map<Int, Float>, yDataType: DataType) : Tabl
         data = new
         this.yDataType = yDataType
         print(data)
-        layout()
+        invalidate()
     }
 
     private fun generateLegend() {
         // Implement legend generation if needed
     }
 
+    fun addHorizontalLine(yValue: Float, color: Color = Color.BLACK, thickness: Float = 2f, key: String) {
+        yLines[key] = LineAttributes(yValue, color, thickness)
+        invalidate()
+    }
+
+    fun removeHorizontalLine(key: String) {
+        yLines.remove(key)
+        invalidate()
+    }
+
+    fun addVerticalLine(xValue: Float, color: Color = Color.BLACK, thickness: Float = 2f, key: String) {
+        xLines[key] = LineAttributes(xValue, color, thickness)
+        invalidate()
+    }
+
+    fun removeVerticalLine(key: String) {
+        xLines.remove(key)
+        invalidate()
+    }
 
     /**
      * Add Scene2D Labels for axes
