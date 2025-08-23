@@ -3,86 +3,6 @@
   "_alertLevel": 0,
   "_idlePop": 1000,
   "playerName": "Rui",
-  "nonPlayerAgents": {
-    "Charles": {
-      "type": "com.titaniumPolitics.game.core.NonPlayerAgent"
-    },
-    "Astinomis": {
-      "type": "com.titaniumPolitics.game.core.NonPlayerAgent"
-    },
-    "Muos": {
-      "type": "com.titaniumPolitics.game.core.NonPlayerAgent"
-    },
-    "Kae": {
-      "type": "com.titaniumPolitics.game.core.NonPlayerAgent"
-    },
-    "Peiyu": {
-      "type": "com.titaniumPolitics.game.core.NonPlayerAgent"
-    },
-    "Kasem": {
-      "type": "com.titaniumPolitics.game.core.NonPlayerAgent"
-    },
-    "Bahriye": {
-      "type": "com.titaniumPolitics.game.core.NonPlayerAgent"
-    },
-    "Alina": {
-      "type": "com.titaniumPolitics.game.core.NonPlayerAgent"
-    },
-    "Maisarah": {
-      "type": "com.titaniumPolitics.game.core.NonPlayerAgent"
-    },
-    "Eugene": {
-      "type": "com.titaniumPolitics.game.core.NonPlayerAgent"
-    },
-    "Hiroshi": {
-      "type": "com.titaniumPolitics.game.core.NonPlayerAgent"
-    },
-    "Indu": {
-      "type": "com.titaniumPolitics.game.core.NonPlayerAgent"
-    },
-    "Evan": {
-      "type": "com.titaniumPolitics.game.core.NonPlayerAgent"
-    },
-    "Krailin": {
-      "type": "com.titaniumPolitics.game.core.NonPlayerAgent"
-    },
-    "Vaeme": {
-      "type": "com.titaniumPolitics.game.core.NonPlayerAgent"
-    },
-    "Yuhoa": {
-      "type": "com.titaniumPolitics.game.core.NonPlayerAgent"
-    },
-    "Salvor": {
-      "type": "com.titaniumPolitics.game.core.NonPlayerAgent"
-    },
-    "Metros": {
-      "type": "com.titaniumPolitics.game.core.NonPlayerAgent"
-    },
-    "Dion": {
-      "type": "com.titaniumPolitics.game.core.NonPlayerAgent"
-    },
-    "DrPaik": {
-      "type": "com.titaniumPolitics.game.core.NonPlayerAgent"
-    },
-    "DrHess": {
-      "type": "com.titaniumPolitics.game.core.NonPlayerAgent"
-    },
-    "Boulos": {
-      "type": "com.titaniumPolitics.game.core.NonPlayerAgent"
-    },
-    "Agros": {
-      "type": "com.titaniumPolitics.game.core.NonPlayerAgent"
-    },
-    "Megaros": {
-      "type": "com.titaniumPolitics.game.core.NonPlayerAgent"
-    },
-    "ctrler": {
-      "type": "com.titaniumPolitics.game.core.NonPlayerAgent"
-    },
-    "observer": {
-      "type": "com.titaniumPolitics.game.core.NonPlayerAgent"
-    }
-  },
   "characters": {
     "Megaros": {
       "trait": [
@@ -163,6 +83,19 @@
       },
       "health": 80,
       "livingBy": "mainControlRoom"
+    },
+    "Yuri": {
+      "type": "EMPLOYEE",
+      "trait": [
+        "bargainer"
+      ],
+      "stats": {
+        "logos": 10,
+        "ethos": 10,
+        "pathos": 10
+      },
+      "health": 80,
+      "livingBy": "market"
     },
     "Peiyu": {
       "trait": [

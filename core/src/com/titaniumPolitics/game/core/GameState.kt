@@ -236,6 +236,14 @@ class GameState {
         println("Initializing game state...")
         injectDependency()
 
+        //Create NonPlayerAgents for predefined characters.
+        characters.forEach { char ->
+            if (char.key == playerName || char.value.type == Character.Type.ANON) return@forEach //Skip player character and anon characters.
+            nonPlayerAgents[char.key] = NonPlayerAgent().also {
+                it.injectParent(this)
+            }
+        }
+
         //Create workplace party for each workplace.
         places.forEach { place ->
             parties["workplace_${place.key}"] = Party().apply {
