@@ -1,19 +1,24 @@
 package com.titaniumPolitics.game.ui
 
 import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.scenes.scene2d.Action
+import com.badlogic.gdx.scenes.scene2d.actions.Actions
 import com.badlogic.gdx.scenes.scene2d.ui.Table
-import com.titaniumPolitics.game.core.Character
 import com.titaniumPolitics.game.core.GameEngine
 import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.core.gameActions.Wait
 import com.titaniumPolitics.game.debugTools.Logger
+import kotlinx.coroutines.runBlocking
 import ktx.scene2d.Scene2DSkin.defaultSkin
-import java.lang.Thread.sleep
+import kotlin.coroutines.resume
+import kotlin.coroutines.suspendCoroutine
 
 //TODO: Make this scrollable to deal with many characters.
 //This UI is used to display the portraits of the characters in the current place.
 class CharactersInPlaceUI(var gameState: GameState) : Table(defaultSkin) {
-    val portraits = arrayListOf<PortraitUI>()
+    private val portraits = arrayListOf<PortraitUI>()
+    private val animationQueue = ArrayDeque<Action>()
+    var onAnimationEnd: () -> Unit = {}
 
     init {
         instance = this
@@ -27,22 +32,44 @@ class CharactersInPlaceUI(var gameState: GameState) : Table(defaultSkin) {
                     action.sbjCharacter
                 ) && action !is Wait
             ) {
-                //If the action is related to the current meeting, play the animation of mutuality arrows.
-                Gdx.app.postRunnable {
-                    portraits.forEach { portrait ->
-                        if (portrait.tgtCharacter == action.sbjCharacter) {
-                            portrait.displaySpeech(action)
+                Logger.write(
+                    "CharacterPortraits: Non-player character action detected: ${action.sbjCharacter} performed ${action::class.simpleName}",
+                    Logger.LogLevel.INFO
+                )
+                //Block the game engine until the animation is done.
+                runBlocking {
+                    animationQueue.add(
+                        Actions.run {
+                            portraits.forEach { portrait ->
+                                if (portrait.tgtCharacter == action.sbjCharacter) {
+                                    portrait.displaySpeech(action)
+                                }
+                            }
+                        }
+                    )
+                    suspendCoroutine { continuation ->
+                        Gdx.app.postRunnable {
+                            onAnimationEnd =
+                                { continuation.resume(Unit) }
                         }
                     }
-                    Logger.write(
-                        "CharacterPortraits: Non-player character action detected: ${action.sbjCharacter} performed ${action::class.simpleName}",
-                        Logger.LogLevel.INFO
-                    )
-                    sleep(1000)//TODO:
                 }
             }
         }
     }
+//
+//    override fun act(delta: Float) {
+//        super.act(delta)
+//        if (isAnimating) {
+//            //OtherCharacterProgressBackgroundUI.instance.isVisible = true
+//        } else if (animationQueue.isNotEmpty()) {
+//
+//            isAnimating = true
+//        } else {
+//            // No animation to play, hide the background UI.
+//            //OtherCharacterProgressBackgroundUI.instance.isVisible = false
+//        }
+//    }
 
     fun refresh(place: String) {
         portraits.forEach { it.remove() }
@@ -58,6 +85,12 @@ class CharactersInPlaceUI(var gameState: GameState) : Table(defaultSkin) {
 
     private fun addCharacterPortrait(characterName: String) {
         val portrait = PortraitUI(characterName, gameState)
+        portrait.onSpeechEnd += {
+            if (animationQueue.isEmpty())
+                onAnimationEnd()
+            else
+                this@CharactersInPlaceUI.addAction(animationQueue.removeFirst())
+        }
         portraits.add(portrait)
         addActor(portrait)
 

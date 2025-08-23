@@ -87,7 +87,7 @@ class InterfaceRoot(val gameState: GameState) : Table(defaultSkin), KTable {
 
 
             add(ProgressBackgroundUI(this@InterfaceRoot.gameState))
-            add(OtherCharacterProgressBackgroundUI(this@InterfaceRoot.gameState))
+            //add(OtherCharacterProgressBackgroundUI(this@InterfaceRoot.gameState))
 
 
             add(ActionSelectUI(this@InterfaceRoot.gameState, {

@@ -7,6 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.Group
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable
 import com.rafaskoberg.gdx.typinglabel.TypingLabel
+import com.rafaskoberg.gdx.typinglabel.TypingListener
 import com.titaniumPolitics.game.core.AgendaType
 import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.core.ReadOnly
@@ -27,10 +28,31 @@ class PortraitUI(character: String, var gameState: GameState) : Table(defaultSki
             field = value
             portrait.tgtCharacter = tgtCharacter
         }
+
+
+    val onSpeechEnd = arrayListOf<() -> Unit>()
     val speech = TypingLabel("", defaultSkin, "description").apply {
         setFontScale(0.5f)
         color = Color.WHITE
         wrap = true
+        typingListener = object : TypingListener {
+            override fun event(event: String?) {
+
+            }
+
+            override fun end() {
+                onSpeechEnd.forEach { it() }
+            }
+
+            override fun replaceVariable(variable: String?): String? {
+                return null
+            }
+
+            override fun onChar(ch: Char?) {
+
+            }
+        }
+
     }
     val bubble = scene2d.stack {
         image("textbubble") {

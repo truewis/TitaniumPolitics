@@ -1,6 +1,7 @@
 package com.titaniumPolitics.game.ui
 
 import com.badlogic.gdx.graphics.Color
+import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.actions.Actions
 import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
@@ -14,6 +15,7 @@ import ktx.scene2d.*
 class ProgressBackgroundUI(var gameState: GameState) : Table(Scene2DSkin.defaultSkin), KTable {
     private var status = ""
     private val progressLabel: Label
+    val bkg: Actor
 
     init {
         instance = this
@@ -30,7 +32,7 @@ class ProgressBackgroundUI(var gameState: GameState) : Table(Scene2DSkin.default
 
         stack {
             it.grow()
-            image("white-pixel") {
+            this@ProgressBackgroundUI.bkg = image("white-pixel") {
                 color = Color.BLACK
             }
             table {
@@ -55,6 +57,8 @@ class ProgressBackgroundUI(var gameState: GameState) : Table(Scene2DSkin.default
     fun setVisibleWithFade(visible: Boolean, actionName: String) {
         if (visible) {
             isVisible = true
+            bkg.color = if (actionName == "Wait") Color(0f, 0f, 0f, 0.4f) // Semi-transparent black background
+            else Color(0f, 0f, 0f, 1f) // More opaque black background
             addAction(Actions.fadeIn(0f))// No fade in, just show it immediately, but still need to change alpha to 1f here.
             status = actionName
             val displayText =
