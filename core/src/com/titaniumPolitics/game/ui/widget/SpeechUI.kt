@@ -2,6 +2,7 @@ package com.titaniumPolitics.game.ui.widget
 
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.scenes.scene2d.actions.Actions
+import com.badlogic.gdx.scenes.scene2d.actions.AddAction
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.rafaskoberg.gdx.typinglabel.TypingLabel
 import com.rafaskoberg.gdx.typinglabel.TypingListener
@@ -120,8 +121,20 @@ class SpeechUI : Table(defaultSkin), KTable {
 
     init {
         stack {
-            it.grow()
-            add(this@SpeechUI.theEmoji)
+            it.size(450f, 150f).fill()
+            container(this@SpeechUI.theEmoji) {
+                size(100f)
+                bottom()
+                //Add blink action.
+                addAction(
+                    Actions.forever(
+                        Actions.sequence(
+                            Actions.alpha(0f, 0.5f),
+                            Actions.alpha(1f, 0.5f)
+                        )
+                    )
+                )
+            }
             add(this@SpeechUI.bubble)
         }
     }

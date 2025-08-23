@@ -44,11 +44,7 @@ class PortraitUI(character: String, var gameState: GameState) : Table(defaultSki
 
     init {
         tgtCharacter = character
-        stack {
-            it.size(600f, 200f)
-            it.fill()
-            add(this@PortraitUI.speechUI)
-        }
+        add(this@PortraitUI.speechUI).size(600f, 200f).fill().padBottom(-50f)
         row()
         add(portrait).size(500f, 1000f).fill()
         gameState.updateUI += refresh

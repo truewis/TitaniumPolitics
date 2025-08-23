@@ -45,6 +45,7 @@ class TasksUI(var gameState: GameState) : Table(defaultSkin) {
                 table {
                     it.size(500f, 50f)
                     it.fill()
+                    it.left()
                     label(quest.name, "description") {
                         it.left()
                         it.fill()

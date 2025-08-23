@@ -20,13 +20,29 @@ import kotlinx.serialization.Serializable
 * */
 @Serializable
 class NonPlayerAgent : Agent() {
-
+    /**Routines are sorted by priority. The first element is the current routine. All other routines are executed when the current routine is finished.
+     *
+     */
     var routines =
-        arrayListOf<Routine>()//Routines are sorted by priority. The first element is the current routine. All other routines are executed when the current routine is finished.
+        arrayListOf<Routine>()
+
+    /**
+     * Routines that are to be removed after the current routine is executed.
+     */
     private val removeList =
-        arrayListOf<Routine>() //Routines that are to be removed after the current routine is executed.
+        arrayListOf<Routine>()
+
+    /**
+     * Routines that are to be added after the current routine is executed.
+     */
     private val addList =
-        arrayListOf<Routine>() //Routines that are to be added after the current routine is executed.
+        arrayListOf<Routine>()
+
+    /**
+     * Several events will set this flag to true, indicating that the character wants to talk to the player.
+     * This will change the character's routine to talk to the player when possible.
+     */
+    var wantsToTalkToPlayer = false
 
     override fun chooseAction(): GameAction {
         //1. High priority routine change
