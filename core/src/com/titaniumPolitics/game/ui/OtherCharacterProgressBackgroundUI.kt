@@ -9,9 +9,10 @@ import com.badlogic.gdx.utils.Align
 import com.titaniumPolitics.game.core.GameEngine
 import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.core.ReadOnly
+import com.titaniumPolitics.game.debugTools.Logger
 import ktx.scene2d.*
 
-class ProgressBackgroundUI(var gameState: GameState) : Table(Scene2DSkin.defaultSkin), KTable {
+class OtherCharacterProgressBackgroundUI(var gameState: GameState) : Table(Scene2DSkin.defaultSkin), KTable {
     private var status = ""
     private val progressLabel: Label
 
@@ -30,18 +31,13 @@ class ProgressBackgroundUI(var gameState: GameState) : Table(Scene2DSkin.default
 
         stack {
             it.grow()
+            setColor(0f, 0f, 0f, 0.1f)
             image("white-pixel") {
                 color = Color.BLACK
             }
             table {
-                add(ClockUI(this@ProgressBackgroundUI.gameState).apply {
-                    cells.first().center()
-                    l.setAlignment(Align.center)
-                }).size(300f, 100f)
-                row()
-
-                this@ProgressBackgroundUI.progressLabel = label("Loading...", "description") {
-                    setFontScale(0.5f)
+                this@OtherCharacterProgressBackgroundUI.progressLabel = label("Loading...", "description") {
+                    setFontScale(3f)
                     setColor(Color.WHITE)
                     setAlignment(Align.center)
 
@@ -58,7 +54,7 @@ class ProgressBackgroundUI(var gameState: GameState) : Table(Scene2DSkin.default
             addAction(Actions.fadeIn(0f))// No fade in, just show it immediately, but still need to change alpha to 1f here.
             status = actionName
             val displayText =
-                if (this@ProgressBackgroundUI.status != "") ReadOnly.prop("ProgressBackgroundUI-" + this@ProgressBackgroundUI.status) else "Loading"
+                if (this@OtherCharacterProgressBackgroundUI.status != "") ReadOnly.prop("ProgressBackgroundUI-" + this@OtherCharacterProgressBackgroundUI.status) else ""
             with(progressLabel) {
                 clearActions()
                 addAction(
@@ -80,8 +76,8 @@ class ProgressBackgroundUI(var gameState: GameState) : Table(Scene2DSkin.default
             }
         } else {
             if (status != actionName) {
-                com.titaniumPolitics.game.debugTools.Logger.write(
-                    "Tried to hide ProgressBackgroundUI with action $actionName, but current status is $status"
+                Logger.write(
+                    "Tried to hide OtherCharacterProgressBackgroundUI with action $actionName, but current status is $status"
                 )
                 return
             }
@@ -91,7 +87,7 @@ class ProgressBackgroundUI(var gameState: GameState) : Table(Scene2DSkin.default
 
 
     companion object {
-        lateinit var instance: ProgressBackgroundUI
+        lateinit var instance: OtherCharacterProgressBackgroundUI
     }
 
 }
