@@ -7,13 +7,8 @@ import kotlin.collections.get
 @Serializable
 //Salary is performed by the party leader. It decides the amount of resources to be paid to the party members.
 class Salary(override val sbjCharacter: String, override val tgtPlace: String) : GameAction() {
-    val resources
-        get() = when (parent.parties[sbjCharObj.currentMeeting!!.involvedParty!!]!!.type) {
-            "cabinet" -> hashMapOf("ration" to 50.0, "water" to 50.0, "phosphorite" to 0.1)
-            "division" -> hashMapOf("ration" to 30.0, "water" to 30.0, "phosphorite" to 0.03)
-            "workplace" -> hashMapOf("ration" to 15.0, "water" to 15.0, "phosphorite" to 0.01)
-            else -> throw IllegalArgumentException("Salary can only be performed in cabinet or division daily conferences.")
-        }
+    val standardRate
+        get() = standardQuarterlyRate(parent.parties[sbjCharObj.currentMeeting!!.involvedParty!!]!!.type!!)
 
     override fun chooseParams() {
     }
@@ -27,7 +22,7 @@ class Salary(override val sbjCharacter: String, override val tgtPlace: String) :
         val guildHall = party.home
 
         who.forEach { character ->
-            resources.forEach { (what, amount) ->
+            standardRate.forEach { (what, amount) ->
                 parent.places[guildHall]!!.resources[what] =
                     parent.places[guildHall]!!.resources[what] - amount
                 parent.characters[character]!!.resources[what] =
@@ -61,9 +56,20 @@ class Salary(override val sbjCharacter: String, override val tgtPlace: String) :
 
         val party = parent.parties.values.find { it.name == sbjCharObj.currentMeeting!!.involvedParty }!!
         return !party.isSalaryPaid && who.isNotEmpty() && sbjCharacter == party.leader && reason(
-            resources.all { (what, amount) -> parent.places[party.home]!!.resources[what] >= amount },
+            standardRate.all { (what, amount) -> parent.places[party.home]!!.resources[what] >= amount },
             "salary-resources"
         )
+    }
+
+    companion object {
+        fun standardQuarterlyRate(partyType: String): Map<String, Double> {
+            return when (partyType) {
+                "cabinet" -> hashMapOf("ration" to 50.0, "water" to 50.0, "phosphorite" to 0.1)
+                "division" -> hashMapOf("ration" to 30.0, "water" to 30.0, "phosphorite" to 0.03)
+                "workplace" -> hashMapOf("ration" to 15.0, "water" to 15.0, "phosphorite" to 0.01)
+                else -> throw IllegalArgumentException("Salary can only be performed in cabinet or division daily conferences.")
+            }
+        }
     }
 
 }

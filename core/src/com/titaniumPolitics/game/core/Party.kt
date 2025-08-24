@@ -1,6 +1,7 @@
 package com.titaniumPolitics.game.core
 
 import com.badlogic.gdx.math.MathUtils.clamp
+import com.titaniumPolitics.game.core.gameActions.Salary
 import kotlinx.serialization.Serializable
 import kotlin.collections.set
 
@@ -36,13 +37,58 @@ class Party : GameStateElement() {
     var isBudgetProposed = false
     var isBudgetResolved = false
 
-    //Party name to resource budget map. This is cleared each quarter, and filled when the budget is resolved.
+    /**Party name to resource budget map. This is cleared each quarter, and filled when the budget is resolved.*/
     var budget = Budget(hashMapOf())
 
-    //Budgets proposed in the current quarter. These are cleared when the budget is resolved.
+    /**Budgets proposed in the current quarter. These are cleared when the budget is resolved.*/
     val proposedBudgets = hashMapOf<String, Budget>()
 
-    //This is average person to person mutuality of all members.
+    /**
+     * This is a standard budget for the party, calculated based on its type and members' standard salary.
+     */
+    val standardBudget: Budget
+        get() {
+            when (type) {
+                "cabinet" -> {
+                    val divisions = parent.parties.filter { it.value.type == "division" }.values
+                    val resMap = hashMapOf<String, Resources>()
+                    divisions.forEach { division ->
+                        val directorWage =
+                            Resources(Salary.standardQuarterlyRate("division")) * (division.directorMembers - division.leader).size
+                        resMap[division.name] = division.standardBudget.sum() + directorWage
+                    }
+                    return Budget(resMap)
+                }
+
+                "division" -> {
+                    val workplaces = parent.places.filter { it.value.responsibleDivision == name }.values
+                    val resMap = hashMapOf<String, Resources>()
+                    workplaces.forEach {
+                        resMap[it.name] = it.workplaceParty?.standardBudget?.sum() ?: Resources()
+                    }
+                    return Budget(resMap)
+                }
+
+                "workplace" -> {
+                    val employeeWage =
+                        Resources(Salary.standardQuarterlyRate("workplace")) * (realMembers - directorMembers).size
+                    //Workplace directors are paid from the division budget, not workplace budget.
+                    //Laborer salary is included in apparatus operation cost.
+                    val workplace = places.first { place -> place.workplaceParty == this }
+                    val apparatusOperationCost = Resources()
+                    workplace.apparatuses.forEach {
+                        apparatusOperationCost += it.hourlyOperationBudget * workplace.workHoursLength * ReadOnly.constInt(
+                            "quarterInDays"
+                        )//Length of quarter
+                    }
+                    return Budget(hashMapOf(name to (employeeWage + apparatusOperationCost)))
+                }
+
+                else -> return Budget(hashMapOf())
+            }
+        }
+
+    /**This is average person to person mutuality of all members.*/
     fun individualMutuality(name: String): Double = members.sumOf { parent.getMutuality(it, name) } / members.size
 
     var resources = hashMapOf<String, Int>()

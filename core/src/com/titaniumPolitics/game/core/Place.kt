@@ -228,6 +228,7 @@ class Place : GameStateElement() {
         if (isAccidentScene) return //If there is an accident, no one works until it is resolved.
         apparatuses.forEach app@{ apparatus ->
             apparatus.temperature = temperature //Update the temperature of the apparatus to the ambient temperature.
+            apparatus.laborValuePerHour = parent.laborValuePerHour
 
             apparatus.depreciateHourly()
             //Check if it is workable------------------------------------------------------------------------------

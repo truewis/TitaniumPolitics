@@ -1,5 +1,6 @@
 {
   "lengthOfDay": 1440,
+  "quarterInDays": 15,
   "InfoLifetime": 80000,
   "startTime": 180,
   "HungerMax": 100,

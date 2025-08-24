@@ -7,7 +7,6 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.builtins.MapSerializer
 import kotlinx.serialization.builtins.serializer
 import kotlinx.serialization.json.*
-import java.lang.Math.pow
 import java.util.*
 import kotlin.math.exp
 import kotlin.math.pow
@@ -147,16 +146,33 @@ class Apparatus {
         get() = jsonData.jsonObject["idealHeatProduction"]?.jsonPrimitive?.double ?: .0
     val idealWorker
         get() = jsonData.jsonObject["idealWorker"]?.jsonPrimitive?.int ?: 0
-    val wages get() = currentWorker * laborValuePerHour * const("WorkerWaterConsumptionRate")
+    val currentWages get() = currentWorker * laborValuePerHour * const("WorkerWaterConsumptionRate")
 
     val currentProduction: Resources
         get() = idealProduction * netEfficiency
     val currentConsumption: Resources
-        get() = idealConsumption * netEfficiency + Resources("ration" to wages)
+        get() = idealConsumption * netEfficiency + Resources("ration" to currentWages, "water" to currentWages)
+
+    /**
+     * Hourly operation budget of this apparatus, including the consumption of workers.
+     * Only ration, water, and phosphorus are included in budget.
+     * Other resources are assumed to be intermediary goods and are not included in budget.
+     */
+    val hourlyOperationBudget: Resources
+        get() = idealConsumption.filter { (string, d) ->
+            string in listOf(
+                "ration",
+                "water",
+                "phosphorus"
+            )
+        } * 1 + Resources(
+            "ration" to idealWorker * laborValuePerHour * const("WorkerWaterConsumptionRate"),
+            "water" to idealWorker * laborValuePerHour * const("WorkerWaterConsumptionRate")
+        )
     val currentAbsorption: Resources
         get() = idealAbsorption * netEfficiency
     val currentDistribution: Resources
-        get() = idealDistribution * netEfficiency + Resources("ration" to wages)
+        get() = idealDistribution * netEfficiency + Resources("ration" to currentWages, "water" to currentWages)
     val currentHeatProduction: Double
         get() = idealHeatProduction * netEfficiency + currentWorker * const("WorkingHumanHeatProduction")
     val currentDanger: Double

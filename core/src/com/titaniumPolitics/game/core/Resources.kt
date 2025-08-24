@@ -62,7 +62,21 @@ class Resources(var positive: Boolean = false) {
         return result
     }
 
+    operator fun times(r: Int): Resources {
+        val result = Resources()
+        _resources.forEach { (key, value) ->
+            result[key] += value * r
+        }
+        return result
+    }
+
     operator fun timesAssign(r: Double) {
+        _resources.forEach { (key, value) ->
+            this[key] = value * r
+        }
+    }
+
+    operator fun timesAssign(r: Int) {
         _resources.forEach { (key, value) ->
             this[key] = value * r
         }
@@ -89,6 +103,14 @@ class Resources(var positive: Boolean = false) {
         _resources.forEach {
             function(it)
         }
+    }
+
+    fun filter(function: (Map.Entry<String, Double>) -> Boolean): Resources {
+        val result = Resources()
+        _resources.forEach {
+            if (function(it)) result[it.key] = it.value
+        }
+        return result
     }
 
     fun all(function: (Map.Entry<String, Double>) -> Boolean): Boolean {

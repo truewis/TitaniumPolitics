@@ -777,7 +777,7 @@ class GameEngine(val gameState: GameState) {
             exitProcess(0)
         }
 
-        if (gameState.time % (ReadOnly.constInt("lengthOfDay") * 15) == 0) { //Every 15 days, reset the budget.
+        if (gameState.time % (ReadOnly.constInt("lengthOfDay") * ReadOnly.constInt("quarterInDays")) == 0) { //Every 15 days, reset the budget.
             gameState.parties.values.forEach {
                 it.isBudgetProposed = false
                 it.isBudgetResolved = false
