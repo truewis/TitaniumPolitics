@@ -19,7 +19,7 @@ class BudgetResolution(override val sbjCharacter: String, override val tgtPlace:
             //take the time of all characters present.
             ongoingMeetings.filter { it.value.type == Meeting.MeetingType.BUDGET_RESOLUTION }.values.first().currentCharacters.forEach { characters[it]!!.frozen++ }
             //Distribute resources according to the budget plan.
-            places["reservoirNorth"]!!.resources["water"] -= budget.values.sum()
+            places["reservoirEast"]!!.resources["water"] -= budget.values.sum()
 
             places["farm"]!!.resources["ration"] -= budget.values.sum()
 

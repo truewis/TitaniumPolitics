@@ -2,6 +2,13 @@ package com.titaniumPolitics.game.core
 
 import kotlinx.serialization.Serializable
 
+/**
+ * A class representing a collection of in-game resources, where each resource is identified by a string key and has a double value.
+ * The class supports various operations such as addition, subtraction, and scaling of resources.
+ * It also includes functionality to ensure that resource values remain non-negative if specified.
+ *
+ * @property positive A boolean flag indicating whether the resources should be non-negative.
+ */
 @Serializable
 class Resources(var positive: Boolean = false) {
     private val _resources = hashMapOf<String, Double>()
@@ -83,7 +90,7 @@ class Resources(var positive: Boolean = false) {
     }
 
     operator fun minus(r1: Resources): Resources {
-        if (!contains(r1)) throw Exception("OHH!")
+        if (!contains(r1) && positive) throw Exception("Tried to subtract more resources than available: $this - $r1")
         val result = Resources()
         _resources.forEach { (key, value) ->
             result[key] = value - r1[key]

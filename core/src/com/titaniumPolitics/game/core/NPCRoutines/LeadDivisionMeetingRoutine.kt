@@ -163,7 +163,7 @@ class LeadDivisionMeetingRoutine : Routine(), IMeetingRoutine {
         val charObj = gState.characters[name]!!
         //1. If the party is short of workers, reduce the production of the section which has the minimum productivity per worker hour
         val minProdApp = charObj
-            .division!!.places.flatMap { it.apparatuses }.filter { it.currentWorker != 0 }.minByOrNull {
+            .division!!.divisionPlaces.flatMap { it.apparatuses }.filter { it.currentWorker != 0 }.minByOrNull {
                 productivity(name, it)
             }
         if (minProdApp != null)
@@ -199,7 +199,7 @@ class LeadDivisionMeetingRoutine : Routine(), IMeetingRoutine {
 
         //2. Increase the production of the section which has the maximum productivity per worker hour. The productivity must be higher than the labor cost.
         val maxProdApp = charObj
-            .division!!.places.flatMap { it.apparatuses }.filter { it.currentWorker != 0 }.maxByOrNull {
+            .division!!.divisionPlaces.flatMap { it.apparatuses }.filter { it.currentWorker != 0 }.maxByOrNull {
                 productivity(name, it)
             }
         if (maxProdApp != null)

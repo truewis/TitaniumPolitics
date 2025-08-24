@@ -62,12 +62,14 @@ class GameDataHandler(val directoryName: String) {
             pName to place.plannedWorker.toFloat()
         }.filter { !it.first.contains("home") }.toTypedArray()))
 
-        resourceMap["currentWorkerPerParty"]!![gState.time] = hashMapOf(*(gState.parties.map { (pName, party) ->
-            pName to party.currentWorker.toFloat()
-        }.toTypedArray()))
-        resourceMap["plannedWorkerPerParty"]!![gState.time] = hashMapOf(*(gState.parties.map { (pName, party) ->
-            pName to party.plannedWorker.toFloat()
-        }.toTypedArray()))
+        resourceMap["currentWorkerPerParty"]!![gState.time] =
+            hashMapOf(*(gState.parties.filter { it.value.type == "division" }.map { (pName, party) ->
+                pName to party.currentWorker.toFloat()
+            }.toTypedArray()))
+        resourceMap["plannedWorkerPerParty"]!![gState.time] =
+            hashMapOf(*(gState.parties.filter { it.value.type == "division" }.map { (pName, party) ->
+                pName to party.plannedWorker.toFloat()
+            }.toTypedArray()))
 
 
         resourceMap["currentPop"]!![gState.time] = hashMapOf(*(gState.places.map { (pName, place) ->

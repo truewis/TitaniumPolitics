@@ -279,6 +279,14 @@ class WorkRoutine(var workplace: String) : Routine() {
                 return AttendTriumvirateRoutine()
             }
 
+            Meeting.MeetingType.BUDGET_PROPOSAL -> {
+                return AttendDivisionBudgetProposalRoutine()
+            }
+
+            Meeting.MeetingType.BUDGET_RESOLUTION -> {
+                return AttendDivisionBudgetResolutionRoutine()
+            }
+
             else -> {
                 TODO(conf.type.toString())
             }

@@ -63,8 +63,11 @@ class Party : GameStateElement() {
                 "division" -> {
                     val workplaces = parent.places.filter { it.value.responsibleDivision == name }.values
                     val resMap = hashMapOf<String, Resources>()
-                    workplaces.forEach {
-                        resMap[it.name] = it.workplaceParty?.standardBudget?.sum() ?: Resources()
+                    workplaces.forEach { place ->
+                        place.workplaceParty?.let { party ->
+                            resMap[party.name] = party.standardBudget.sum()
+                        }
+
                     }
                     return Budget(resMap)
                 }
@@ -74,7 +77,7 @@ class Party : GameStateElement() {
                         Resources(Salary.standardQuarterlyRate("workplace")) * (realMembers - directorMembers).size
                     //Workplace directors are paid from the division budget, not workplace budget.
                     //Laborer salary is included in apparatus operation cost.
-                    val workplace = places.first { place -> place.workplaceParty == this }
+
                     val apparatusOperationCost = Resources()
                     workplace.apparatuses.forEach {
                         apparatusOperationCost += it.hourlyOperationBudget * workplace.workHoursLength * ReadOnly.constInt(
@@ -90,19 +93,23 @@ class Party : GameStateElement() {
 
     /**This is average person to person mutuality of all members.*/
     fun individualMutuality(name: String): Double = members.sumOf { parent.getMutuality(it, name) } / members.size
-
-    var resources = hashMapOf<String, Int>()
     val integrity: Double
         get() = parent.getPartyMutuality(this.name, this.name)
 
-    val places: Collection<Place>
-        get() = parent.places.filter { it.value.responsibleDivision == name }.values
+    val divisionPlaces: Collection<Place>
+        get() = parent.places.filter { it.value.responsibleDivision == name }.values.also {
+            assert(it.isNotEmpty() && type == "division")
+        }
+
+    val workplace
+        get() = parent.places.values.firstOrNull { place -> place.workplaceParty == this }
+            ?: throw Exception("Party $name has no workplace.")
 
     val currentWorker: Int
-        get() = places.sumOf { it.currentWorker }
+        get() = divisionPlaces.sumOf { it.currentWorker }
 
     val plannedWorker: Int
-        get() = places.sumOf { it.plannedWorker }
+        get() = divisionPlaces.sumOf { it.plannedWorker }
 
     fun causeDeaths(num: Int) {
         if (numAnonMembers >= num) {

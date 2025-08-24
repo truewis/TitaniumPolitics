@@ -130,7 +130,7 @@ class GameState {
         meeting: Meeting
     ) {
         if (_scheduledMeetings.containsValue(meeting)) throw Exception("Scheduled meeting $meeting already exists.")
-        _scheduledMeetings["conference-${meeting.place}-${meeting.time}"] = meeting
+        _scheduledMeetings["${meeting.type}-${meeting.place}-${meeting.time}"] = meeting
         onAddScheduledMeeting.forEach { it(meeting) }
     }
 
@@ -156,7 +156,7 @@ class GameState {
         meeting: Meeting
     ) {
         if (_ongoingMeetings.containsValue(meeting)) throw Exception("Ongoing meeting $meeting already exists.")
-        _ongoingMeetings["conference-${meeting.place}-${meeting.time}"] = meeting
+        _ongoingMeetings["${meeting.type}-${meeting.place}-${meeting.time}"] = meeting
         onAddOngoingMeeting.forEach { it(meeting) }
     }
 
@@ -302,13 +302,13 @@ class GameState {
         //Gain division anonymous member size from work place requirements.
         parties.forEach {
             if (it.value.type != "division") return@forEach //
-            val party = it.value
+            val division = it.value
 
             //Create anonymous characters if the party is big enough.
             //TODO: maybe assign more then one anon agent per place.
-            party.places.forEach { place ->
+            division.divisionPlaces.forEach { place ->
 
-                val name = party.name + "-Anon-" + place.name
+                val name = division.name + "-Anon-" + place.name
                 characters[name] =
                     Character().apply {
                         //They live by one of their work places.
@@ -316,7 +316,8 @@ class GameState {
                         type = Character.Type.ANON
                         try {
 
-                            this.livingBy = places.filter { it.value.responsibleDivision == party.name }.keys.random()
+                            this.livingBy =
+                                places.filter { it.value.responsibleDivision == division.name }.keys.random()
 
                         } catch (e: Exception) {
                             this.livingBy = Place.publicPlaces.random()
@@ -330,7 +331,7 @@ class GameState {
                     it.workPlace = place.name
                 }
                 place.workplaceParty?.members?.add(name)
-                party.members.add(name)
+                division.members.add(name)
 
             }
 

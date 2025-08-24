@@ -36,11 +36,64 @@ class NewAgenda(override val sbjCharacter: String, override val tgtPlace: String
             AgendaType.PROOF_OF_WORK -> return mt.type == Meeting.MeetingType.DIVISION_DAILY_CONFERENCE || mt.type == Meeting.MeetingType.CABINET_DAILY_CONFERENCE //TODO: how do we handle command issued?
             //You have to choose which command you are responding to. The character who issued the command must be present in the meeting.
             //Other people may add supporting or disapproving information.
-            AgendaType.BUDGET_PROPOSAL -> return mt.type == Meeting.MeetingType.BUDGET_PROPOSAL
-            //TODO: this is done by the mandatory cabinet voting.
+            AgendaType.BUDGET_PROPOSAL -> return mt.type == Meeting.MeetingType.BUDGET_PROPOSAL && with(parent) {
+                ////////////////////Stationwide budget proposal//////////////////
+                if (mt.involvedParty == "cabinet") {
+                    val resourceTypes = setOf("water", "ration", "phosphorus")
+                    return reason(
+                        places["reservoirEast"]!!.resources["water"] >= agenda.attachedBudget!!.sum("water")
+                                && places["farm"]!!.resources["ration"] >= agenda.attachedBudget!!.sum("ration")
+                                && places["mainControlRoom"]!!.resources["phosphorus"] >= agenda.attachedBudget!!.sum("phosphorus"),
+                        "newAgenda-BudgetProposal-resources"
+                    )
+                            &&
+                            reason(
+                                agenda.attachedBudget!!.value.values.none { resources -> resources.keys.any { resource -> resource !in resourceTypes } },
+                                "newAgenda-BudgetProposal-key"
+                            )
+                }
+                ////////////////////Division budget proposal//////////////////
+                else {
+                    val division = parties[mt.involvedParty]!!
+                    val resourceTypes = setOf("water", "ration", "phosphorus")
+                    return reason(
+                        places[division.home]!!.resources.contains(
+                            agenda.attachedBudget!!.sum()
+                        ), "newAgenda-BudgetProposal-resources"
+                    ) &&
+                            reason(
+                                agenda.attachedBudget!!.value.values.none { resources -> resources.keys.any { resource -> resource !in resourceTypes } },
+                                "newAgenda-BudgetProposal-key"
+                            )
+                }
+            }
+
             AgendaType.BUDGET_RESOLUTION -> return mt.type == Meeting.MeetingType.BUDGET_RESOLUTION && mt.agendas.none {
                 it.type == AgendaType.BUDGET_RESOLUTION
             } //Only one budget resolution agenda can be proposed in a meeting.
+                    && with(parent) {
+                ////////////////////Stationwide budget resolution//////////////////
+                if (mt.involvedParty == "triumvirate") {
+                    val finalBudget =
+                        parties["cabinet"]!!.proposedBudgets[agenda.subjectParams["whoseProposal"]!!]!!
+                    return reason(
+                        places["reservoirEast"]!!.resources["water"] >= finalBudget.sum("water")
+                                && places["farm"]!!.resources["ration"] >= finalBudget.sum("ration")
+                                && places["mainControlRoom"]!!.resources["phosphorus"] >= finalBudget.sum("phosphorus"),
+                        "newAgenda-BudgetResolution-resources"
+                    )
+                }
+                ////////////////////Division budget resolution//////////////////
+                else {
+                    val division = parties[mt.involvedParty]!!
+                    val finalBudget = division.proposedBudgets[agenda.subjectParams["whoseProposal"]!!]!!
+                    return reason(
+                        !places[division.home]!!.resources.contains(
+                            finalBudget.sum()
+                        ), "newAgenda-BudgetResolution-resources"
+                    )
+                }
+            }
 
             AgendaType.PRAISE -> return true
 
@@ -124,48 +177,19 @@ class NewAgenda(override val sbjCharacter: String, override val tgtPlace: String
 
                 AgendaType.BUDGET_PROPOSAL -> {
                     with(parent) {
-                        ////////////////////Stationwide budget resolution//////////////////
-                        if (meeting.involvedParty == "triumvirate") {
+                        ////////////////////Stationwide budget proposal//////////////////
+                        if (meeting.involvedParty == "cabinet") {
                             //triumvirate and cabinet share the same budget.
                             parties["cabinet"]!!.isBudgetProposed = true
                             parties["triumvirate"]!!.isBudgetProposed = true
                             parties["cabinet"]!!.proposedBudgets[agenda.author] = agenda.attachedBudget!!
                             parties["triumvirate"]!!.proposedBudgets[agenda.author] = agenda.attachedBudget!!
-                            //Distribute resources according to the budget plan.
-                            //Check if there are enough resources in the places.
-                            if (places["reservoirNorth"]!!.resources["water"] < agenda.attachedBudget!!.sum("water")
-                                || places["farm"]!!.resources["ration"] < agenda.attachedBudget!!.sum("ration")
-                                || places["mainControlRoom"]!!.resources["phosphorus"] < agenda.attachedBudget!!.sum("phosphorus")
-                            ) {
-                                Logger.write(
-                                    "Not enough resources to distribute according to the budget plan.",
-                                    Logger.LogLevel.ERROR
-                                )
-                            }
-                            //If there are any resource type not covered in the budget, log an error.
-                            val resourceTypes = setOf("water", "ration", "phosphorus")
-                            if (agenda.attachedBudget!!.value.values.any { resources -> resources.keys.any { resource -> resource !in resourceTypes } }) {
-                                Logger.write("The budget plan contains invalid resource types.", Logger.LogLevel.ERROR)
-                            }
                         }
-                        ////////////////////Division budget resolution//////////////////
+                        ////////////////////Division budget proposal//////////////////
                         else {
                             val division = parties[meeting.involvedParty]!!
-                            //triumvirate and cabinet share the same budget.
-                            division.isBudgetResolved = true
+                            division.isBudgetProposed = true
                             division.proposedBudgets[agenda.author] = agenda.attachedBudget!!
-                            //Distribute resources according to the budget plan.
-                            //Check if there are enough resources in the places.
-                            if (
-                                !places[division.home]!!.resources.contains(
-                                    agenda.attachedBudget!!.sum()
-                                )
-                            ) {
-                                Logger.write(
-                                    "Not enough resources to distribute according to the budget plan.",
-                                    Logger.LogLevel.ERROR
-                                )
-                            }
                         }
                     }
                 }
@@ -184,24 +208,9 @@ class NewAgenda(override val sbjCharacter: String, override val tgtPlace: String
                             parties["cabinet"]!!.budget = finalBudget
                             parties["triumvirate"]!!.budget = finalBudget
                             //Distribute resources according to the budget plan.
-                            //Check if there are enough resources in the places.
-                            if (places["reservoirNorth"]!!.resources["water"] < finalBudget.sum("water")
-                                || places["farm"]!!.resources["ration"] < finalBudget.sum("ration")
-                                || places["mainControlRoom"]!!.resources["phosphorus"] < finalBudget.sum("phosphorus")
-                            ) {
-                                Logger.write(
-                                    "Not enough resources to distribute according to the budget plan.",
-                                    Logger.LogLevel.ERROR
-                                )
-                            }
-                            places["reservoirNorth"]!!.resources["water"] -= finalBudget.sum("water")
+                            places["reservoirEast"]!!.resources["water"] -= finalBudget.sum("water")
                             places["farm"]!!.resources["ration"] -= finalBudget.sum("ration")
                             places["mainControlRoom"]!!.resources["phosphorus"] -= finalBudget.sum("phosphorus")
-                            //If there are any resource type not covered in the budget, log an error.
-                            val resourceTypes = setOf("water", "ration", "phosphorus")
-                            if (finalBudget.value.values.any { resources -> resources.keys.any { resource -> resource !in resourceTypes } }) {
-                                Logger.write("The budget plan contains invalid resource types.", Logger.LogLevel.ERROR)
-                            }
 
                             finalBudget.value.forEach { budget ->
                                 val guildHall = parties[budget.key]!!.home
@@ -216,17 +225,6 @@ class NewAgenda(override val sbjCharacter: String, override val tgtPlace: String
                             division.isBudgetResolved = true
                             division.budget = finalBudget
                             //Distribute resources according to the budget plan.
-                            //Check if there are enough resources in the places.
-                            if (
-                                !places[division.home]!!.resources.contains(
-                                    finalBudget.sum()
-                                )
-                            ) {
-                                Logger.write(
-                                    "Not enough resources to distribute according to the budget plan.",
-                                    Logger.LogLevel.ERROR
-                                )
-                            }
                             places[division.home]!!.resources -= finalBudget.sum()
                             finalBudget.value.forEach { budget ->
                                 val workplace = parties[budget.key]!!.home

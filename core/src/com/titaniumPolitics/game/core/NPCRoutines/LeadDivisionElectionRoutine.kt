@@ -50,8 +50,11 @@ class LeadDivisionElectionRoutine : Routine(), IMeetingRoutine {
             return interceptCondition(conf, name, place)
         } else //If it is my turn to speak
         {
-            //finish nomination if there are three candidates or more.
-            if (conf.agendas.count { it.type == AgendaType.NOMINATE } >= 3) {
+            //finish nomination if there are three candidates or more
+            //or the nomination time is over.
+            if (conf.agendas.count { it.type == AgendaType.NOMINATE } >= 3 || gState.time - conf.time >= ReadOnly.constInt(
+                    "maxNominationDuration"
+                )) {
                 FinishNomination(name, place).let {
                     it.injectParent(gState)
                     if (it.isValid()) return it
@@ -97,12 +100,9 @@ class LeadDivisionElectionRoutine : Routine(), IMeetingRoutine {
 
     }
 
-    //TODO: Also check AttendMeetingRoutine for the same function.
     override fun endCondition(name: String, place: String): Boolean {
         //If the conference is over, leave the routine. But the condition is not checked here, because the routine is not ended until the action is executed.
-        //See NonPlayerAgent.selectRoutine()
-        //If two hours has passed since the meeting started, leave the meeting. TODO: what if the meeting has started late?
-        //TODO: stay in the meeting until I have something else to do, or the work hours are over.
-        return meetingRoutineEndCondition(name, Meeting.MeetingType.DIVISION_LEADER_ELECTION)
+        //Don't end the routine until the election is over.
+        return gState.parties[gState.characters[name]!!.currentMeeting!!.involvedParty]!!.leader != null
     }
 }
