@@ -1,4 +1,4 @@
-package com.titaniumPolitics.game.ui
+package com.titaniumPolitics.game.ui.actions
 
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.scenes.scene2d.Actor
@@ -10,6 +10,7 @@ import com.titaniumPolitics.game.core.InformationType
 import com.titaniumPolitics.game.core.ReadOnly
 import com.titaniumPolitics.game.core.gameActions.Examine
 import com.titaniumPolitics.game.core.gameActions.GameAction
+import com.titaniumPolitics.game.ui.ProgressBackgroundUI
 import com.titaniumPolitics.game.ui.widget.ActionSheetUI
 import ktx.scene2d.*
 
@@ -44,7 +45,7 @@ class ExamineUI(var gameState: GameState, actionCallback: (GameAction) -> Unit) 
                             actionCallback(
                                 action
                             )
-                            ProgressBackgroundUI.instance.setVisibleWithFade(true, "Examine")
+                            ProgressBackgroundUI.Companion.instance.setVisibleWithFade(true, "Examine")
                             this@ExamineUI.onClose.forEach { it() }
                         }
                     }
@@ -79,7 +80,7 @@ class ExamineUI(var gameState: GameState, actionCallback: (GameAction) -> Unit) 
                             actionCallback(
                                 action
                             )
-                            ProgressBackgroundUI.instance.setVisibleWithFade(true, "Examine")
+                            ProgressBackgroundUI.Companion.instance.setVisibleWithFade(true, "Examine")
                             this@ExamineUI.onClose.forEach { it() }
                         }
                     }
@@ -115,7 +116,7 @@ class ExamineUI(var gameState: GameState, actionCallback: (GameAction) -> Unit) 
                             actionCallback(
                                 action
                             )
-                            ProgressBackgroundUI.instance.setVisibleWithFade(true, "Examine")
+                            ProgressBackgroundUI.Companion.instance.setVisibleWithFade(true, "Examine")
                             this@ExamineUI.onClose.forEach { it() }
                         }
                     }

@@ -1,10 +1,9 @@
-package com.titaniumPolitics.game.ui
+package com.titaniumPolitics.game.ui.actions
 
 
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.InputEvent
-import com.badlogic.gdx.scenes.scene2d.ui.Button
 import com.badlogic.gdx.scenes.scene2d.ui.Stack
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener
@@ -20,6 +19,7 @@ import com.titaniumPolitics.game.ui.widget.CharacterSelectButton
 import com.titaniumPolitics.game.ui.widget.PlaceSelectButton
 import ktx.scene2d.*
 import ktx.scene2d.Scene2DSkin.defaultSkin
+import kotlin.collections.get
 
 
 class NewAgendaUI(val gameState: GameState, actionCallback: (GameAction) -> Unit) :
@@ -30,7 +30,7 @@ class NewAgendaUI(val gameState: GameState, actionCallback: (GameAction) -> Unit
             field = value
             if (value != null)
                 submitButton.refresh(
-                    NewAgenda(this.subject, this.tgtPlace).apply { agenda = value;injectParent(gameState) })
+                    NewAgenda(this.subject, this.tgtPlace).apply { agenda = value; injectParent(gameState) })
 
 
         }

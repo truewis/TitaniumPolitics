@@ -1,15 +1,9 @@
-package com.titaniumPolitics.game.ui
+package com.titaniumPolitics.game.ui.actions
 
 
 import com.badlogic.gdx.graphics.Color
-import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.ui.Button
 import com.badlogic.gdx.scenes.scene2d.ui.Label
-import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane
-import com.badlogic.gdx.scenes.scene2d.ui.Table
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
-import com.badlogic.gdx.utils.Align
 import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.core.Resources
 import com.titaniumPolitics.game.core.gameActions.GameAction
@@ -48,7 +42,7 @@ class ResourceTransferUI(var gameState: GameState, actionCallback: (GameAction) 
                 this@ResourceTransferUI.modeLabel =
                     label("Transaction", "docTitle") { setFontScale(0.5f); color = Color.BLACK }
                 row()
-                label("Transfer resources to", "docTitle") { setFontScale(0.5f);color = Color.BLACK }
+                label("Transfer resources to", "docTitle") { setFontScale(0.5f); color = Color.BLACK }
                 //Select place to transfer resources to.
                 this@ResourceTransferUI.placeButton = PlaceSelectButton({
                     this@ResourceTransferUI.toWhere = it

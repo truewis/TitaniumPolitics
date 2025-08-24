@@ -1,4 +1,4 @@
-package com.titaniumPolitics.game.ui
+package com.titaniumPolitics.game.ui.actions
 
 
 import com.badlogic.gdx.graphics.Color

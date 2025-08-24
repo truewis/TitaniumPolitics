@@ -1,4 +1,4 @@
-package com.titaniumPolitics.game.ui
+package com.titaniumPolitics.game.ui.actions
 
 
 import com.badlogic.gdx.graphics.Color
@@ -14,6 +14,8 @@ import com.titaniumPolitics.game.core.gameActions.Sleep
 import com.titaniumPolitics.game.core.gameActions.StartMeeting
 import com.titaniumPolitics.game.core.gameActions.Wait
 import com.titaniumPolitics.game.debugTools.Logger
+import com.titaniumPolitics.game.ui.AlertUI
+import com.titaniumPolitics.game.ui.ProgressBackgroundUI
 import com.titaniumPolitics.game.ui.widget.ActionSheetUI
 import ktx.scene2d.*
 
@@ -49,9 +51,9 @@ class WaitUI(val gameState: GameState, actionCallback: (GameAction) -> Unit) :
                             GameEngine.acquireEvent += this@WaitUI::spendTime
                             this@WaitUI.spendTime(AcquireParams("", hashMapOf()))
                             if (this@WaitUI.mode == WaitUIMode.SLEEP) {
-                                ProgressBackgroundUI.instance.setVisibleWithFade(true, "Sleep")
+                                ProgressBackgroundUI.Companion.instance.setVisibleWithFade(true, "Sleep")
                             } else {
-                                ProgressBackgroundUI.instance.setVisibleWithFade(true, "Wait")
+                                ProgressBackgroundUI.Companion.instance.setVisibleWithFade(true, "Wait")
                             }
 
                             this@WaitUI.onClose.forEach { it() }
@@ -73,13 +75,19 @@ class WaitUI(val gameState: GameState, actionCallback: (GameAction) -> Unit) :
         if (interrupted) {
             GameEngine.acquireEvent -= this::spendTime
             gameState.onAddInfo -= this::waitInterruptCondition
-            ProgressBackgroundUI.instance.setVisibleWithFade(false, if (mode == WaitUIMode.WAIT) "Wait" else "Sleep")
+            ProgressBackgroundUI.Companion.instance.setVisibleWithFade(
+                false,
+                if (mode == WaitUIMode.WAIT) "Wait" else "Sleep"
+            )
             return
         }
         if (amount <= 0) {
             GameEngine.acquireEvent -= this::spendTime
             gameState.onAddInfo -= this::waitInterruptCondition
-            ProgressBackgroundUI.instance.setVisibleWithFade(false, if (mode == WaitUIMode.WAIT) "Wait" else "Sleep")
+            ProgressBackgroundUI.Companion.instance.setVisibleWithFade(
+                false,
+                if (mode == WaitUIMode.WAIT) "Wait" else "Sleep"
+            )
             return
         }
         if (mode == WaitUIMode.SLEEP) {
@@ -145,7 +153,7 @@ class WaitUI(val gameState: GameState, actionCallback: (GameAction) -> Unit) :
         if (info.tgtPlace == gameState.player.place.name && info.tgtCharacter != gameState.playerName &&
             info.knownTo.contains(gameState.playerName) && info.action is StartMeeting
         ) {
-            AlertUI.instance.addAlert("interrupted", ReadOnly.prop(info.tgtCharacter ?: "Someone"))
+            AlertUI.Companion.instance.addAlert("interrupted", ReadOnly.prop(info.tgtCharacter ?: "Someone"))
             interrupted = true
             Logger.write("WaitUI: Wait interrupted by ${info.author} at ${info.tgtPlace}", Logger.LogLevel.INFO)
         }
@@ -159,7 +167,7 @@ class WaitUI(val gameState: GameState, actionCallback: (GameAction) -> Unit) :
             info.action !is Wait && info.action !is Move && info.knownTo.contains(gameState.playerName)
         ) {
 
-            AlertUI.instance.addAlert("interrupted", ReadOnly.prop(info.tgtCharacter ?: "Someone"))
+            AlertUI.Companion.instance.addAlert("interrupted", ReadOnly.prop(info.tgtCharacter ?: "Someone"))
             interrupted = true
             Logger.write("WaitUI: Wait interrupted by ${info.author} at ${info.tgtPlace}", Logger.LogLevel.INFO)
         }

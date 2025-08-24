@@ -12,6 +12,15 @@ import com.titaniumPolitics.game.core.GameEngine
 import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.core.ReadOnly
 import com.titaniumPolitics.game.core.gameActions.*
+import com.titaniumPolitics.game.ui.actions.AddInfoUI
+import com.titaniumPolitics.game.ui.actions.EndSpeechUI
+import com.titaniumPolitics.game.ui.actions.ExamineUI
+import com.titaniumPolitics.game.ui.actions.NewAgendaUI
+import com.titaniumPolitics.game.ui.actions.PrepareInfoUI
+import com.titaniumPolitics.game.ui.actions.RepairUI
+import com.titaniumPolitics.game.ui.actions.ResourceTransferUI
+import com.titaniumPolitics.game.ui.actions.WaitUI
+import com.titaniumPolitics.game.ui.actions.WaitUIMode
 import com.titaniumPolitics.game.ui.widget.ActionSheetUI
 import com.titaniumPolitics.game.ui.widget.ActionTooltipUI
 import kotlinx.serialization.json.jsonObject

@@ -1,37 +1,24 @@
-package com.titaniumPolitics.game.ui
+package com.titaniumPolitics.game.ui.actions
 
 
-import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.scenes.scene2d.Actor
-import com.badlogic.gdx.scenes.scene2d.InputEvent
-import com.badlogic.gdx.scenes.scene2d.ui.Button
 import com.badlogic.gdx.scenes.scene2d.ui.Stack
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable
 import com.badlogic.gdx.utils.Align
-import com.badlogic.gdx.utils.Array
-import com.rafaskoberg.gdx.typinglabel.TypingLabel
 import com.titaniumPolitics.game.core.*
 import com.titaniumPolitics.game.core.gameActions.GameAction
-import com.titaniumPolitics.game.core.gameActions.NewAgenda
 import com.titaniumPolitics.game.core.gameActions.Repair
 import com.titaniumPolitics.game.debugTools.Logger
-import com.titaniumPolitics.game.ui.widget.ActionSelectButton
+import com.titaniumPolitics.game.ui.CapsuleStage
 import com.titaniumPolitics.game.ui.widget.ActionSheetUI
-import com.titaniumPolitics.game.ui.widget.ActionTooltipUI
-import com.titaniumPolitics.game.ui.widget.CharacterSelectButton
 import com.titaniumPolitics.game.ui.widget.DescriptionLabel
-import com.titaniumPolitics.game.ui.widget.PlaceSelectButton
 import com.titaniumPolitics.game.ui.widget.ResourceDisplayUI
-import com.titaniumPolitics.game.ui.widget.SubmitButton
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
 import ktx.scene2d.*
-import ktx.scene2d.Scene2DSkin.defaultSkin
-import kotlin.collections.get
 
 
 class RepairUI(val gameState: GameState, actionCallback: (GameAction) -> Unit) :
@@ -154,7 +141,7 @@ class RepairUI(val gameState: GameState, actionCallback: (GameAction) -> Unit) :
                     image("CogGrunge") {
                         try {
                             drawable = TextureRegionDrawable(
-                                CapsuleStage.instance.assetManager.get( //TODO: Temporary solution for portrait image loading. PortraitUI does not have a stage.
+                                CapsuleStage.Companion.instance.assetManager.get( //TODO: Temporary solution for portrait image loading. PortraitUI does not have a stage.
                                     ReadOnly.appJson[app.name]!!.jsonObject["image"]!!.jsonPrimitive.content,
                                     Texture::class.java
                                 )!!

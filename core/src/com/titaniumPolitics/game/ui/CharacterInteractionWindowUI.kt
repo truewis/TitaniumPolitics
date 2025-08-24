@@ -5,6 +5,7 @@ import com.titaniumPolitics.game.core.GameEngine
 import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.core.ReadOnly
 import com.titaniumPolitics.game.core.gameActions.Talk
+import com.titaniumPolitics.game.ui.actions.ResourceTransferUI
 import com.titaniumPolitics.game.ui.map.PlaceSelectionUI
 import ktx.scene2d.button
 import ktx.scene2d.label
