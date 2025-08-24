@@ -2,7 +2,6 @@ package com.titaniumPolitics.game.ui.widget
 
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.scenes.scene2d.actions.Actions
-import com.badlogic.gdx.scenes.scene2d.actions.AddAction
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.rafaskoberg.gdx.typinglabel.TypingLabel
 import com.rafaskoberg.gdx.typinglabel.TypingListener
@@ -109,9 +108,18 @@ class SpeechUI : Table(defaultSkin), KTable {
     }
     val theEmoji = scene2d.image("HelpGrunge")
 
-    fun displayEmojiOnPortrait(emojiTexture: String) {
-        theEmoji.isVisible = emojiTexture != ""
-        //theEmoji.setDrawable(defaultSkin, emojiTexture)
+    fun displayEmojiOnPortrait(emojiType: EmojiType) {
+        theEmoji.isVisible = emojiType != EmojiType.NONE
+        val emojiTexture = when (emojiType) {
+            EmojiType.HELP -> "HelpGrunge"
+            EmojiType.LIGHT -> "LightGrunge"
+            EmojiType.HEART -> "HeartGrunge"
+            EmojiType.TALK -> "HelpGrunge"
+            EmojiType.NONE -> ""
+        }
+        if (emojiType == EmojiType.NONE) return
+        theEmoji.setDrawable(defaultSkin, emojiTexture)
+        theEmoji.addListener(SimpleTextTooltipUI(ReadOnly.prop("EmojiTooltip-" + emojiType.name)))
     }
 
     fun clearSpeech() {
@@ -137,5 +145,9 @@ class SpeechUI : Table(defaultSkin), KTable {
             }
             add(this@SpeechUI.bubble)
         }
+    }
+
+    enum class EmojiType {
+        HELP, LIGHT, HEART, NONE, TALK
     }
 }

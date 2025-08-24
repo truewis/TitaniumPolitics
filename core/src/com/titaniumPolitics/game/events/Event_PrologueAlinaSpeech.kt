@@ -1,6 +1,7 @@
 package com.titaniumPolitics.game.events
 
 import com.titaniumPolitics.game.ui.Quest
+import com.titaniumPolitics.game.ui.widget.SpeechUI
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 
@@ -29,8 +30,4 @@ class Event_PrologueAlinaSpeech : EventObject("Introduction of Alina.", true), I
         }
     }
 
-
-    override fun displayEmoji(who: String): Boolean {
-        return who == "Alina" && parent.player.place.name == parent.parties["infrastructure"]!!.home && parent.characters["Alina"]!!.currentMeeting != null
-    }
 }

@@ -1,6 +1,7 @@
 package com.titaniumPolitics.game.events
 
 import com.titaniumPolitics.game.ui.Quest
+import com.titaniumPolitics.game.ui.widget.SpeechUI
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 
@@ -23,8 +24,8 @@ class Event_BribeDoctor2 : EventObject("Talking with Dr Paik.", true), IQuestEve
         }
     }
 
-    override fun displayEmoji(who: String): Boolean {
-        return who == "DrPaik"
+    override fun displayEmoji(who: String): SpeechUI.EmojiType {
+        return if (who == "DrPaik") SpeechUI.EmojiType.TALK else SpeechUI.EmojiType.NONE
     }
 
 

@@ -34,11 +34,7 @@ class PortraitUI(character: String, var gameState: GameState) : Table(defaultSki
     val refresh = { state: GameState ->
         speechUI.clearSpeech()
         //Display emoji based on event conditions.
-        if (state.eventSystem.displayEmoji(tgtCharacter)) {
-            speechUI.displayEmojiOnPortrait("HelpGrunge")
-        } else {
-            speechUI.displayEmojiOnPortrait("")
-        }
+        speechUI.displayEmojiOnPortrait(state.eventSystem.displayEmoji(tgtCharacter))
     }
 
 

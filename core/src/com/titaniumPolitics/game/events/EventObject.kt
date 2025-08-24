@@ -2,6 +2,7 @@ package com.titaniumPolitics.game.events
 
 import com.titaniumPolitics.game.core.EventSystem
 import com.titaniumPolitics.game.core.GameState
+import com.titaniumPolitics.game.ui.widget.SpeechUI
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 
@@ -33,8 +34,8 @@ sealed class EventObject(var name: String, val oneTime: Boolean) {
         }
     }
 
-    open fun displayEmoji(who: String): Boolean {
-        return false
+    open fun displayEmoji(who: String): SpeechUI.EmojiType {
+        return SpeechUI.EmojiType.NONE
     }
 
     fun onPlayDialogue(dialogueKey: String) {

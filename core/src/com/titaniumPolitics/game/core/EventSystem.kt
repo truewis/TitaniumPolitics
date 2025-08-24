@@ -2,6 +2,7 @@ package com.titaniumPolitics.game.core
 
 import com.titaniumPolitics.game.events.*
 import com.titaniumPolitics.game.ui.Quest
+import com.titaniumPolitics.game.ui.widget.SpeechUI
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 
@@ -54,8 +55,9 @@ class EventSystem : GameStateElement() {
         event.injectParent(parent)
     }
 
-    fun displayEmoji(who: String): Boolean {
-        return dataBase.any { !it.completed && it.displayEmoji(who) }
+    fun displayEmoji(who: String): SpeechUI.EmojiType {
+        return dataBase.firstOrNull { !it.completed && it.displayEmoji(who) != SpeechUI.EmojiType.NONE }
+            ?.displayEmoji(who) ?: SpeechUI.EmojiType.NONE
     }
 
     companion object {

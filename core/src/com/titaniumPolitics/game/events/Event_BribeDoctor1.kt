@@ -1,5 +1,6 @@
 package com.titaniumPolitics.game.events
 
+import com.titaniumPolitics.game.ui.widget.SpeechUI
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -20,8 +21,8 @@ class Event_BribeDoctor1 : EventObject("Illness of Sylvia.", true) {
         }
     }
 
-    override fun displayEmoji(who: String): Boolean {
-        return who == "Yuhoa"
+    override fun displayEmoji(who: String): SpeechUI.EmojiType {
+        return if (who == "Yuhoa") SpeechUI.EmojiType.TALK else SpeechUI.EmojiType.NONE
     }
 
 
