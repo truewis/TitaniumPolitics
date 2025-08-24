@@ -13,7 +13,7 @@ class BudgetResolution(override val sbjCharacter: String, override val tgtPlace:
 
 
     override fun execute() {
-        parent.isBudgetResolved = true
+        //parent.isBudgetResolved = true
 
         with(parent) {
             //take the time of all characters present.

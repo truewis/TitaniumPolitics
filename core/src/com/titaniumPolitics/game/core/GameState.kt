@@ -168,8 +168,6 @@ class GameState {
     }
 
     var budget = hashMapOf<String, Double>()//Party name to budget
-    var isBudgetProposed = false
-    var isBudgetResolved = false
     private var _informations = hashMapOf<String, Information>()
     val informations: Map<String, Information> = Collections.unmodifiableMap<String, Information>(_informations)
 

@@ -153,6 +153,25 @@ class NewAgendaUI(val gameState: GameState, actionCallback: (GameAction) -> Unit
                 }
         }).size(180f)
     }
+    private val budgetProposalTable = scene2d.table {
+        label(ReadOnly.prop("budgetProposal"), "docTitle") {
+            color = Color.BLACK
+        }
+        row()
+        label("Target:", "docTitle") { color = Color.BLACK }
+        //Select character to perform the request.
+        add(CharacterSelectButton({ char ->
+            this@NewAgendaUI.agenda =
+                MeetingAgenda(AgendaType.FIRE_MANAGER, this@NewAgendaUI.subject, hashMapOf("character" to char))
+        }).apply {
+            //If subject is division leader, they can only fire directors.
+            //If subject is workplace manager, they can only fire workers in their own workplace party.
+            availableCharacters =
+                this@NewAgendaUI.sbjChar.currentMeeting!!.involvedParty?.let { partyName ->
+                    (this@NewAgendaUI.gameState.parties[partyName]!!.members - this@NewAgendaUI.sbjChar.name).toSet()
+                }
+        }).size(180f)
+    }
     val st = scene2d.stack {
         table {
             this@NewAgendaUI.agendaSelectBox = buttonGroup(1, 1).also {
@@ -407,11 +426,13 @@ class NewAgendaUI(val gameState: GameState, actionCallback: (GameAction) -> Unit
         if (this@NewAgendaUI.sbjChar.currentMeeting == null)
             throw Exception("Player is not in a meeting.")
         val mt = this@NewAgendaUI.sbjChar.currentMeeting!!
+
+        val party = gameState.parties[mt.involvedParty]
         if (mt.type == Meeting.MeetingType.DIVISION_LEADER_ELECTION)
             availableAgendas += AgendaType.NOMINATE
-        if (mt.involvedParty == "cabinet" && !gameState.isBudgetProposed)
+        if (mt.involvedParty in listOf("cabinet", "division") && !party!!.isBudgetProposed)
             availableAgendas += AgendaType.BUDGET_PROPOSAL
-        if (mt.involvedParty == "triumvirate" && !gameState.isBudgetResolved)
+        if (mt.involvedParty in listOf("triumvirate", "division") && !party!!.isBudgetResolved)
             availableAgendas += AgendaType.BUDGET_RESOLUTION
         //If the player is a division leader, they can fire managers.
         if (mt.type == Meeting.MeetingType.DIVISION_DAILY_CONFERENCE && gameState.parties[mt.involvedParty]!!.leader == subject)

@@ -9,7 +9,8 @@ data class MeetingAgenda(
     var subjectParams: HashMap<String, String> = hashMapOf(),
     var subjectIntParams: HashMap<String, Int> = hashMapOf(),
     var informationKeys: ArrayList<String> = arrayListOf(),
-    var attachedRequest: Request? = null
+    var attachedRequest: Request? = null,
+    var attachedBudget: Budget? = null
 
 
 ) {

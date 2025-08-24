@@ -33,6 +33,15 @@ class Party : GameStateElement() {
     val size: Int
         get() = members.sumOf { getMultiplier(it) }
 
+    var isBudgetProposed = false
+    var isBudgetResolved = false
+
+    //Party name to resource budget map. This is cleared each quarter, and filled when the budget is resolved.
+    var budget = Budget(hashMapOf())
+
+    //Budgets proposed in the current quarter. These are cleared when the budget is resolved.
+    val proposedBudgets = hashMapOf<String, Budget>()
+
     //This is average person to person mutuality of all members.
     fun individualMutuality(name: String): Double = members.sumOf { parent.getMutuality(it, name) } / members.size
 

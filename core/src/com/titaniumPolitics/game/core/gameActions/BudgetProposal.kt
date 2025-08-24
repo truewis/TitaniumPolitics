@@ -26,7 +26,7 @@ class BudgetProposal(override val sbjCharacter: String, override val tgtPlace: S
         //TODO: vote on the budget proposal
 
         Logger.write("Budget proposal executed.", Logger.LogLevel.INFO)
-        parent.isBudgetProposed = true
+        //parent.isBudgetProposed = true
         parent.budget = budget
         //Now, take the time of all characters present.
         parent.ongoingMeetings.filter { it.value.type == Meeting.MeetingType.BUDGET_PROPOSAL }.values.first().currentCharacters.forEach { parent.characters[it]!!.frozen++ }
