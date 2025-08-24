@@ -38,7 +38,7 @@ class NewAgendaUI(val gameState: GameState, actionCallback: (GameAction) -> Unit
     val agendaDetailStack: Stack
     private val actionSelButton = ActionSelectButton(this::setRequestAction)
     fun setRequestAction(action: GameAction) {
-        agenda?.attachedRequest = Request(action, hashSetOf(action.sbjCharacter), hashSetOf(gameState.playerName))
+        agenda?.attachedRequest = Request(action, hashSetOf(action.sbjCharacter), hashSetOf(sbjChar.name))
     }
 
     private var agendaSelectBox: Table
@@ -134,6 +134,25 @@ class NewAgendaUI(val gameState: GameState, actionCallback: (GameAction) -> Unit
             "ClearAccidentScene"
         )
     }
+    private val fireTable = scene2d.table {
+        label(ReadOnly.prop("praise"), "docTitle") {
+            color = Color.BLACK
+        }
+        row()
+        label("Target:", "docTitle") { color = Color.BLACK }
+        //Select character to perform the request.
+        add(CharacterSelectButton({ char ->
+            this@NewAgendaUI.agenda =
+                MeetingAgenda(AgendaType.FIRE_MANAGER, this@NewAgendaUI.subject, hashMapOf("character" to char))
+        }).apply {
+            //If subject is division leader, they can only fire directors.
+            //If subject is workplace manager, they can only fire workers in their own workplace party.
+            availableCharacters =
+                this@NewAgendaUI.sbjChar.currentMeeting!!.involvedParty?.let { partyName ->
+                    (this@NewAgendaUI.gameState.parties[partyName]!!.members - this@NewAgendaUI.sbjChar.name).toSet()
+                }
+        }).size(180f)
+    }
     val st = scene2d.stack {
         table {
             this@NewAgendaUI.agendaSelectBox = buttonGroup(1, 1).also {
@@ -185,6 +204,7 @@ class NewAgendaUI(val gameState: GameState, actionCallback: (GameAction) -> Unit
         praisePartyTable.isVisible = false
         denouncePartyTable.isVisible = false
         requestTable.isVisible = false
+        fireTable.isVisible = false
         agenda = null
     }
 
@@ -215,7 +235,7 @@ class NewAgendaUI(val gameState: GameState, actionCallback: (GameAction) -> Unit
                                     ) {
                                         this@NewAgendaUI.hideAllAgendaDetailsTable()
                                         this@NewAgendaUI.agenda = MeetingAgenda(
-                                            AgendaType.PROOF_OF_WORK, gameState.playerName
+                                            AgendaType.PROOF_OF_WORK, this@NewAgendaUI.sbjChar.name
                                         )
                                     }
                                 })
@@ -355,6 +375,7 @@ class NewAgendaUI(val gameState: GameState, actionCallback: (GameAction) -> Unit
                                         y: Float
                                     ) {
                                         this@NewAgendaUI.hideAllAgendaDetailsTable()
+                                        this@NewAgendaUI.fireTable.isVisible = true
                                     }
                                 })
                             }
