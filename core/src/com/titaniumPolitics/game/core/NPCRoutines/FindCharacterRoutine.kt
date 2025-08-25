@@ -4,7 +4,7 @@ import com.titaniumPolitics.game.core.gameActions.GameAction
 import kotlinx.serialization.Serializable
 
 @Serializable
-class FindCharacterRoutine() : Routine() {
+class FindCharacterRoutine(val character: String) : Routine() {
     var time = 0
     override fun newRoutineCondition(name: String, place: String, subroutines: List<Routine>): Routine? {
         //Stop if spent too much time
@@ -22,7 +22,7 @@ class FindCharacterRoutine() : Routine() {
         }
 
         if (subroutines.none { it is MoveRoutine })
-            return MoveRoutine(gState.places.values.find { it.characters.contains(variables["character"]) }!!.name)
+            return MoveRoutine(gState.places.values.find { it.characters.contains(character) }!!.name)
         return null
     }
 
@@ -32,7 +32,7 @@ class FindCharacterRoutine() : Routine() {
 
     override fun endCondition(name: String, place: String): Boolean {
         //Stop if the character is at the same place
-        return executeDone || place == gState.places.values.find { it.characters.contains(variables["character"]) }!!.name
+        return executeDone || place == gState.places.values.find { it.characters.contains(character) }!!.name
         //TODO: when pathfinding fails, return true.
     }
 }

@@ -4,17 +4,21 @@ import com.titaniumPolitics.game.core.gameActions.GameAction
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 
+/**
+ * @param action This is the action to be executed. IMPORTANT! sbjCharacter param of action is used, as we don't support issuing requests to multiple characters, and sbjCharacter variable is immutable.
+ * @param issuedTo If unspecified, anyone can finish this request.
+ * @param issuedBy If unspecified, it is a system request.
+ * @param executeTime The time the requester want the action to be executed. If 0, it can be executed anytime.
+ */
 @Serializable
 class Request(
-    //This is the action to be executed.
-    //IMPORTANT! sbjCharacter param of action is used, as we don't support issuing requests to multiple characters, and sbjCharacter variable is immutable.
     var action: GameAction,
-    var issuedTo: HashSet<String>,/*If unspecified, anyone can finish this request.*/
-    var issuedBy: HashSet<String> = hashSetOf() //If unspecified, it is a system request.
+    var issuedTo: HashSet<String>,
+    var issuedBy: HashSet<String> = hashSetOf(),
+    var executeTime: Int? = null
 ) {
     var name = ""
         private set
-    var executeTime = 0//The time the requester want the action to be executed. If 0, it can be executed anytime.
 
 
     @Transient

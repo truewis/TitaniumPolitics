@@ -103,11 +103,9 @@ class AttendDivisionMeetingRoutine : Routine(), IMeetingRoutine {
                                     //TODO: adjust the salary, it.resources.
                                 }//Created a command to transfer the resource.
                                 ,
-                                issuedTo = hashSetOf(party.leader!!), issuedBy = hashSetOf(name)
-                            ).apply {
+                                issuedTo = hashSetOf(party.leader!!), issuedBy = hashSetOf(name),
                                 executeTime = gState.time
-
-                            }
+                            )
                         }
                         return NewAgenda(name, place).also {
                             it.agenda = agenda

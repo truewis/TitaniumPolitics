@@ -183,10 +183,9 @@ class LeadDivisionMeetingRoutine : Routine(), IMeetingRoutine {
                                 apparatusID = minProdApp.ID
                             },
                             issuedTo = hashSetOf(wantPlace.workplaceParty!!.overseer!!),
-                            issuedBy = hashSetOf(name)
-                        ).apply {
+                            issuedBy = hashSetOf(name),
                             executeTime = gState.time
-                        }
+                        )
                     }
                     return NewAgenda(name, place).also {
                         it.agenda = agenda
@@ -216,11 +215,9 @@ class LeadDivisionMeetingRoutine : Routine(), IMeetingRoutine {
                                 apparatusID = maxProdApp.ID
                             },
                             issuedTo = hashSetOf(wantPlace.workplaceParty!!.overseer!!),
-                            issuedBy = hashSetOf(name)
-                        ).apply {
+                            issuedBy = hashSetOf(name),
                             executeTime = gState.time
-
-                        }
+                        )
                     }
                     return NewAgenda(name, place).also {
                         it.agenda = agenda

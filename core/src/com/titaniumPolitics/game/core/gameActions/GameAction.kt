@@ -6,6 +6,7 @@ import com.titaniumPolitics.game.core.InformationType
 import com.titaniumPolitics.game.core.ReadOnly
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
+import kotlin.reflect.full.memberFunctions
 
 /**
  *  This is the base class for all game actions. It is used to represent actions that characters can take.
@@ -101,6 +102,13 @@ sealed class GameAction() {
     //This function is used by agents to pick the best action they want.
     open fun optimizeWill(): Double {
         return deltaWill()
+    }
+
+    //Stupid cloning using reflection, assumes all subclasses are data classes.
+    //Surely this can't strike me back.
+    fun copy(newSbj: String): GameAction {
+        val copyFun = this::class.memberFunctions.first { it.name == "copy" }
+        return copyFun.callBy(mapOf(copyFun.parameters[0] to newSbj)) as GameAction
     }
 
 }

@@ -1,7 +1,12 @@
 package com.titaniumPolitics.game.core.NPCRoutines
 
+import com.titaniumPolitics.game.core.AgendaType
 import com.titaniumPolitics.game.core.InformationType
+import com.titaniumPolitics.game.core.MeetingAgenda
+import com.titaniumPolitics.game.core.Request
+import com.titaniumPolitics.game.core.Resources
 import com.titaniumPolitics.game.core.gameActions.GameAction
+import com.titaniumPolitics.game.core.gameActions.UnofficialResourceTransfer
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -28,9 +33,7 @@ class BuyRoutine(val buyResource: String) : Routine() {
         // if the character is not in the same place.
         if (place != gState.places.values.find { it.characters.contains(tradeCharacter) }!!.name) {
             if (subroutines.none { it is FindCharacterRoutine })
-                return FindCharacterRoutine().apply {
-                    variables["character"] = tradeCharacter
-                }
+                return FindCharacterRoutine(tradeCharacter)
         } else {
             //If the character is in the same place, start a conversation first
             if (gState.ongoingMeetings.none {
@@ -42,14 +45,26 @@ class BuyRoutine(val buyResource: String) : Routine() {
                     )
                 }) {
                 if (subroutines.none { it is TalkRoutine })
-                    return TalkRoutine().apply {
-                        intention = "requestResource"
-                        requestResourceType = buyResource
-                        requestResourceAmount =
-                            gState.characters[name]!!.reliant * 1.0 //The amount of resource to request is proportional to the number of reliants.
-                        //TODO: the amount of resource to request should be determined by the character's trait.
-                        requestTo = tradeCharacter
-                    }
+                    return TalkRoutine(
+                        tradeCharacter, MeetingAgenda(
+                            AgendaType.REQUEST, name, attachedRequest = Request(
+                                UnofficialResourceTransfer(
+                                    tradeCharacter,
+                                    tgtPlace = place,
+                                    "home_$name",
+                                    true,
+                                    Resources(
+                                        buyResource to
+                                                gState.characters[name]!!.reliant * 1.0 //The amount of resource to request is proportional to the number of reliants.
+                                    )
+                                )//Created a command to transfer the resource.
+                                ,
+                                issuedTo = hashSetOf(tradeCharacter),
+                                issuedBy = hashSetOf(name),
+                                executeTime = gState.time
+                            )
+                        )
+                    )
                 //Since this is a request, the success of this routine cannot be known because it is up to tradeCharacter whether they send resource or not.
             }
         }

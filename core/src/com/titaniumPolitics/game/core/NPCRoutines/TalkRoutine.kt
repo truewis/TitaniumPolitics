@@ -5,12 +5,7 @@ import com.titaniumPolitics.game.core.gameActions.*
 import kotlinx.serialization.Serializable
 
 @Serializable
-class TalkRoutine : Routine(), IMeetingRoutine {
-    var toWho = "" //The character to whom I want to talk
-    var intention = "" //The intention of the character. It can be "requestResource" or "" (no particular intention).
-    var requestResourceAmount = 0.0 //The amount of the resource to request.
-    var requestResourceType = "" //The type of the resource to request.
-    var requestTo = ""
+class TalkRoutine(val toWho: String? = null, val agenda: MeetingAgenda? = null) : Routine(), IMeetingRoutine {
 
 
     override fun newRoutineCondition(name: String, place: String, subroutines: List<Routine>): Routine? {
@@ -24,45 +19,23 @@ class TalkRoutine : Routine(), IMeetingRoutine {
     override fun execute(name: String, place: String): GameAction {
         val character = gState.characters[name]!!
         val conf =
-            character.currentMeeting ?: return Talk(name, place, toWho)
+            character.currentMeeting ?: return Talk(name, place, toWho!!)
         //If not speaker, wait if the mutuality to the speaker is high. Otherwise, if possible, interrupt the speaker.
         if (conf.currentSpeaker != name) {
             return interceptCondition(conf, name, place)
         } else {
             //If it is my turn to speak
             //Check if I had an intention
-            when (intention) {
-                "requestResource" -> {
-                    intention = "" //The intention is resolved.
-                    return NewAgenda(name, place).also {
-                        it.agenda =
-                            MeetingAgenda(
-                                AgendaType.REQUEST, name, attachedRequest = Request(
-                                    UnofficialResourceTransfer(
-                                        requestTo,
-                                        tgtPlace = place,
-                                        "home_$name",
-                                        true,
-                                        Resources(
-                                            requestResourceType to
-                                                    requestResourceAmount
-                                        )
-                                    )//Created a command to transfer the resource.
-                                    ,
-                                    issuedTo = hashSetOf(requestTo)
-                                ).apply {
+            if (agenda != null) {
+                return NewAgenda(name, place).also {
+                    it.agenda = agenda
 
-                                    executeTime = gState.time
-                                    issuedBy = hashSetOf(name)
-                                })
-                    }
                 }
-
-                else -> {
-                    //No particular intention
-                    gossip(this.gState, name, place)?.also { return it }
-                }
+            } else {
+                //No particular intention
+                gossip(this.gState, name, place)?.also { return it }
             }
+
             //If nothing else to talk about, end the speech. The next speaker is the character with the highest mutuality.
             return EndSpeech(
                 name, place, conf.currentCharacters.minus(name)
