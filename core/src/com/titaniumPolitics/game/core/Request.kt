@@ -1,5 +1,6 @@
 package com.titaniumPolitics.game.core
 
+import com.titaniumPolitics.game.core.ReadOnly.IDTH
 import com.titaniumPolitics.game.core.gameActions.GameAction
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
@@ -44,49 +45,52 @@ class Request(
         //This function is called every turn.
         //Each time one of the issuedTo completes this request,
         //Add the key of this request to finishedRequests of the character.
-        val executedRequests =
-            gState.informations.filter { it.value.type == InformationType.ACTION && it.value.action == action && (issuedTo.isEmpty() || it.value.tgtCharacter in issuedTo) }
-        executedRequests.forEach {
-            gState.characters[it.value.tgtCharacter]!!.executedRequests.add(name)
+        val proofOfExecutionInfos =
+            gState.informations.filter {
+                (executeTime == null || executeTime in it.value.tgtTime - IDTH..it.value.tgtTime + IDTH) && action.isProofOfWork(
+                    it.value
+                ) //&& (issuedTo.isEmpty() || it.value.tgtCharacter in issuedTo) issuedTo is not checked here because the request could have been delegated.
+            }
+        proofOfExecutionInfos.forEach {
+            gState.characters[it.value.tgtCharacter]?.executedRequests?.add(name) //Works only for Action Information
+            gState.characters[it.value.author]?.executedRequests?.add(name) //Works for other information which proves work.
         }
-        val executedAndFinishedRequests = executedRequests.filter {
+        val proofOfExecutionInfosHaveBeenShared = proofOfExecutionInfos.filter {
             it.value.knownTo.containsAll(issuedBy)
-
         }
-        if ((executeTime in gState.time - 3..gState.time + 3 || executeTime == 0))
-            if (executedAndFinishedRequests.isNotEmpty()) {
-                //Mutuality increases.
-                issuedBy.forEach { issuedBy ->
-                    if (gState.characters[issuedBy]!!.trait.contains("psychopath"))
-                        issuedTo.forEach { issuedTo ->
-                            gState.setMutuality(
-                                issuedBy,
-                                issuedTo,
-                                ReadOnly.const("RequestFinishDeltaMutuality") / 3,
-                                "RequestFinish-Psychopath"
-                            )
-                        }
-                    else {
-                        issuedTo.forEach { issuedTo ->
-                            gState.setMutuality(
-                                issuedBy,
-                                issuedTo,
-                                ReadOnly.const("RequestFinishDeltaMutuality"),
-                                "RequestFinish"
-                            )
-                        }
+        if (proofOfExecutionInfosHaveBeenShared.isNotEmpty()) {
+            //Mutuality increases.
+            issuedBy.forEach { issuedBy ->
+                if (gState.characters[issuedBy]!!.trait.contains("psychopath"))
+                    issuedTo.forEach { issuedTo ->
+                        gState.setMutuality(
+                            issuedBy,
+                            issuedTo,
+                            ReadOnly.const("RequestFinishDeltaMutuality") / 3,
+                            "RequestFinish-Psychopath"
+                        )
+                    }
+                else {
+                    issuedTo.forEach { issuedTo ->
+                        gState.setMutuality(
+                            issuedBy,
+                            issuedTo,
+                            ReadOnly.const("RequestFinishDeltaMutuality"),
+                            "RequestFinish"
+                        )
                     }
                 }
-                executedAndFinishedRequests.forEach {
-                    gState.setMutuality(
-                        it.value.tgtCharacter!!,
-                        delta = deltaWill(it.value.tgtCharacter!!, gState),
-                        reasonKey = "RequestFinishWill"
-                    )
-                }
-                onComplete.forEach { it() }
-                completed = true
             }
+            proofOfExecutionInfosHaveBeenShared.forEach {
+                gState.setMutuality(
+                    it.value.tgtCharacter!!,
+                    delta = deltaWill(it.value.tgtCharacter!!, gState),
+                    reasonKey = "RequestFinishWill"
+                )
+            }
+            onComplete.forEach { it() }
+            completed = true
+        }
 
     }
 

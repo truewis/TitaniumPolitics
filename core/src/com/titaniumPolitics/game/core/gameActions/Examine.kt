@@ -139,4 +139,10 @@ data class Examine(override val sbjCharacter: String, override val tgtPlace: Str
         return w * sbjCharObj.stats.lScale
     }
 
+    override fun isProofOfWork(info: Information): Boolean {
+        return super.isProofOfWork(info) || (info.action is Examine && (info.action as Examine).let {
+            it.what == this.what && it.tgtPlace == this.tgtPlace
+        }) || (info.type == what && info.tgtPlace == this.tgtPlace) /*Do not check time for now, it is quite tricky.*/
+    }
+
 }

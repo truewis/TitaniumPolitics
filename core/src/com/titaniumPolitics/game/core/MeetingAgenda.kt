@@ -21,9 +21,8 @@ data class MeetingAgenda(
             AgendaType.PROOF_OF_WORK -> {
                 //if there is any supporting information, add it.
 
-                if (info.type == InformationType.ACTION
-                    && sbjCharObj.executedRequests.any {
-                        parent.requests[it]!!.action == info.action &&
+                if (sbjCharObj.executedRequests.any {
+                        parent.requests[it]!!.action.isProofOfWork(info) &&
                                 parent.requests[it]!!.issuedBy.any {
                                     meeting.currentCharacters.contains(
                                         it

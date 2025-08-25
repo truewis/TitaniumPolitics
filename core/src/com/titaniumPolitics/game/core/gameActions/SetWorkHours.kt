@@ -1,17 +1,27 @@
 package com.titaniumPolitics.game.core.gameActions
 
 import com.titaniumPolitics.game.core.GameState
+import com.titaniumPolitics.game.core.Information
+import com.titaniumPolitics.game.core.InformationType
 import kotlinx.serialization.Serializable
 
 @Serializable
 //SetWorkHours is performed by the workplace manager. It sets work hours of the workplace.
-data class SetWorkHours(override val sbjCharacter: String, override val tgtPlace: String) : GameAction() {
-    constructor(sbjCharacter: String, tgtPlace: String, gameState: GameState) : this(sbjCharacter, tgtPlace) {
+data class SetWorkHours(
+    override val sbjCharacter: String,
+    override val tgtPlace: String,
+    var start: Int,
+    var end: Int
+) : GameAction() {
+    constructor(sbjCharacter: String, tgtPlace: String, start: Int, end: Int, gameState: GameState) : this(
+        sbjCharacter,
+        tgtPlace,
+        start,
+        end
+    ) {
         injectParent(gameState)
     }
 
-    var start = 8
-    var end = 17
     override fun chooseParams() {
     }
 
@@ -39,6 +49,12 @@ data class SetWorkHours(override val sbjCharacter: String, override val tgtPlace
 
     override fun deltaWill(): Double {
         return super.deltaWill() * sbjCharObj.stats.pScale
+    }
+
+    override fun isProofOfWork(info: Information): Boolean {
+        return super.isProofOfWork(info) || (info.action is SetWorkHours && (info.action as SetWorkHours).let {
+            it.start == this.start && it.end == this.end && it.tgtPlace == this.tgtPlace
+        }) || (info.type == InformationType.HUMAN_RESOURCES && info.tgtPlace == this.tgtPlace) /*Do not check time for now, it is quite tricky.*/
     }
 
 }

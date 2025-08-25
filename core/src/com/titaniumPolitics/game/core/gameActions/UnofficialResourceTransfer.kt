@@ -1,6 +1,7 @@
 package com.titaniumPolitics.game.core.gameActions
 
 import com.titaniumPolitics.game.core.GameState
+import com.titaniumPolitics.game.core.Information
 import com.titaniumPolitics.game.core.Place
 import com.titaniumPolitics.game.core.Resources
 import kotlinx.serialization.Serializable
@@ -73,6 +74,12 @@ data class UnofficialResourceTransfer(
         return parent.places[tgtPlace]!!.resources.contains(
             resources
         )
+    }
+
+    override fun isProofOfWork(info: Information): Boolean {
+        return super.isProofOfWork(info) || (info.action is UnofficialResourceTransfer && (info.action as UnofficialResourceTransfer).let {
+            it.toWhere == this.toWhere && it.resources == this.resources //Compare by reference.
+        })
     }
 
 }

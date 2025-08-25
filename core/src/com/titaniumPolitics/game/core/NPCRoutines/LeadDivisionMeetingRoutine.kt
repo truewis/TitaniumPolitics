@@ -177,11 +177,10 @@ class LeadDivisionMeetingRoutine : Routine(), IMeetingRoutine {
                         attachedRequest = Request(
                             SetWorkers(
                                 wantPlace.workplaceParty!!.overseer!!,
-                                tgtPlace = wantPlace.name
-                            ).apply {
-                                workers = minProdApp.plannedWorker - reductionAmount
+                                tgtPlace = wantPlace.name,
+                                workers = minProdApp.plannedWorker - reductionAmount,
                                 apparatusID = minProdApp.ID
-                            },
+                            ),
                             issuedTo = hashSetOf(wantPlace.workplaceParty!!.overseer!!),
                             issuedBy = hashSetOf(name),
                             executeTime = gState.time
@@ -209,11 +208,10 @@ class LeadDivisionMeetingRoutine : Routine(), IMeetingRoutine {
                         attachedRequest = Request(
                             SetWorkers(
                                 wantPlace.workplaceParty!!.overseer!!,
-                                tgtPlace = wantPlace.name
-                            ).apply {
-                                workers = maxProdApp.plannedWorker + increaseAmount
+                                tgtPlace = wantPlace.name,
+                                workers = maxProdApp.plannedWorker + increaseAmount,
                                 apparatusID = maxProdApp.ID
-                            },
+                            ),
                             issuedTo = hashSetOf(wantPlace.workplaceParty!!.overseer!!),
                             issuedBy = hashSetOf(name),
                             executeTime = gState.time

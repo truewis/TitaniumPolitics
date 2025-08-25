@@ -2,6 +2,7 @@ package com.titaniumPolitics.game.core.gameActions
 
 import com.titaniumPolitics.game.core.Apparatus
 import com.titaniumPolitics.game.core.GameState
+import com.titaniumPolitics.game.core.Information
 import com.titaniumPolitics.game.debugTools.Logger
 import kotlinx.serialization.Serializable
 
@@ -11,7 +12,6 @@ data class Repair(override val sbjCharacter: String, override val tgtPlace: Stri
         injectParent(gameState)
     }
 
-    var amount = 30
     var apparatusID = ""
     override fun execute() {
 
@@ -37,6 +37,12 @@ data class Repair(override val sbjCharacter: String, override val tgtPlace: Stri
 
     override fun deltaWill(): Double {
         return super.deltaWill() * sbjCharObj.stats.lScale
+    }
+
+    override fun isProofOfWork(info: Information): Boolean {
+        return super.isProofOfWork(info) || (info.action is Repair && (info.action as Repair).let {
+            it.apparatusID == this.apparatusID
+        })
     }
 
     companion object {

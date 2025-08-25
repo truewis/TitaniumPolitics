@@ -79,7 +79,7 @@ sealed class GameAction() {
      *
      * For some actions such as examine or investigate, resulting information is also sufficient. Other actions such as UnofficialResourceTransfer allows the subject and source to differ from the original action. Hence, these actions override this method.
      */
-    fun isProofOfWork(info: Information): Boolean {
+    open fun isProofOfWork(info: Information): Boolean {
         return (info.type == InformationType.ACTION && info.action == this)
 
     }

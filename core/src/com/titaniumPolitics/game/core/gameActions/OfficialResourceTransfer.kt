@@ -2,6 +2,7 @@ package com.titaniumPolitics.game.core.gameActions
 
 import com.badlogic.gdx.math.MathUtils.clamp
 import com.titaniumPolitics.game.core.GameState
+import com.titaniumPolitics.game.core.Information
 import com.titaniumPolitics.game.core.Resources
 import com.titaniumPolitics.game.debugTools.Logger
 import kotlinx.serialization.Serializable
@@ -61,6 +62,12 @@ data class OfficialResourceTransfer(
         return parent.places[tgtPlace]!!.responsibleDivision == sbjCharObj.division?.name && parent.places[tgtPlace]!!.resources.contains(
             resources
         )
+    }
+
+    override fun isProofOfWork(info: Information): Boolean {
+        return super.isProofOfWork(info) || (info.action is OfficialResourceTransfer && (info.action as OfficialResourceTransfer).let {
+            it.toWhere == this.toWhere && it.resources == this.resources //Compare by reference.
+        })
     }
 
 }

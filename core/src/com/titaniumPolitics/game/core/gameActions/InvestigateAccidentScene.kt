@@ -1,6 +1,8 @@
 package com.titaniumPolitics.game.core.gameActions
 
 import com.titaniumPolitics.game.core.GameState
+import com.titaniumPolitics.game.core.Information
+import com.titaniumPolitics.game.core.InformationType
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -28,6 +30,13 @@ data class InvestigateAccidentScene(override val sbjCharacter: String, override 
 
     override fun deltaWill(): Double {
         return super.deltaWill() * sbjCharObj.stats.lScale
+    }
+
+    override fun isProofOfWork(info: Information): Boolean {
+        return super.isProofOfWork(info) || (info.action is InvestigateAccidentScene && (info.action as InvestigateAccidentScene).let {
+            it.tgtPlace == this.tgtPlace
+        }) || (info.type == InformationType.CASUALTY && info.tgtPlace == this.tgtPlace) /*Do not check time for now, it is quite tricky.*/
+                || (info.type == InformationType.CASUALTY && info.tgtPlace == this.tgtPlace)
     }
 
 }

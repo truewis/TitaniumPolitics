@@ -29,13 +29,6 @@ data class Resign(override val sbjCharacter: String, override val tgtPlace: Stri
             parent.parties["cabinet"]!!.members.remove(sbjCharacter)
             Logger.write("$sbjCharacter resigns from cabinet.", Logger.LogLevel.INFO)
         }
-        //Should immediately leave the party meeting if it is ongoing
-        if (parent.ongoingMeetings.any { it.value.currentCharacters.contains(sbjCharacter) && it.value.involvedParty == party }) {
-            LeaveMeeting(sbjCharacter, tgtPlace).also {
-                it.injectParent(parent)
-                it.execute()
-            }
-        }
         super.execute()
 
     }
