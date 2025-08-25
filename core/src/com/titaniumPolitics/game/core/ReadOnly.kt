@@ -76,7 +76,7 @@ object ReadOnly {
     }
 
     fun charName(charId: String): String {
-        return prop(charId)
+        return charProp(charId)
     }
 
     /**A timestep in seconds.

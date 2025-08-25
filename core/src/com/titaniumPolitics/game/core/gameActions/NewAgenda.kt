@@ -227,6 +227,9 @@ class NewAgenda(override val sbjCharacter: String, override val tgtPlace: String
                             //Distribute resources according to the budget plan.
                             places[division.home]!!.resources -= finalBudget.sum()
                             finalBudget.value.forEach { budget ->
+
+                                //Set workplace budget. Note that this budget only consists of a single entry.
+                                parties[budget.key]!!.budget = Budget(hashMapOf(budget.key to budget.value))
                                 val workplace = parties[budget.key]!!.home
                                 places[workplace]!!.resources.plusAssign(budget.value)
                             }
