@@ -22854,7 +22854,7 @@ jsonData: {
 						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
 						name: background
 						optional: true
-						value: TitleBarTiled
+						value: Stroke500x500
 					}
 					corner: {
 						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
@@ -23799,6 +23799,13 @@ preferences: {
 	id: {
 		class: java.lang.Integer
 		value: 826247778
+	}
+	preview-bg-color: {
+		class: com.badlogic.gdx.graphics.Color
+		r: 0
+		g: 0
+		b: 0
+		a: 1
 	}
 	last-import-export-path: {
 		class: java.lang.String
