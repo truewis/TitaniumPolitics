@@ -108,7 +108,7 @@ sealed class GameAction() {
     //Surely this can't strike me back.
     fun copy(newSbj: String): GameAction {
         val copyFun = this::class.memberFunctions.first { it.name == "copy" }
-        return copyFun.callBy(mapOf(copyFun.parameters[0] to newSbj)) as GameAction
+        return copyFun.callBy(mapOf(copyFun.parameters[0] to this, copyFun.parameters[1] to newSbj)) as GameAction
     }
 
 }

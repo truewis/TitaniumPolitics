@@ -32,7 +32,7 @@
   "mutualityMin": 0,
   "mutualityDefault": 50,
   "mutualityMax": 100,
-  "RequestRejectAverageMutuality": 30,
+  "RequestRejectAverageMutuality": 70,
   "EnemyPartyMutualityThreshold": 25,
   "FriendMutualityThreshold": 75,
   "EnemyMutualityThreshold": 25,
