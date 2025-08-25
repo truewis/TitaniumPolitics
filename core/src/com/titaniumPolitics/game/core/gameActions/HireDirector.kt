@@ -1,11 +1,16 @@
 package com.titaniumPolitics.game.core.gameActions
 
 import com.titaniumPolitics.game.core.Character
+import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.debugTools.Logger
 import kotlinx.serialization.Serializable
 
 @Serializable
 class HireDirector(override val sbjCharacter: String, override val tgtPlace: String) : GameAction() {
+    constructor(sbjCharacter: String, tgtPlace: String, gameState: GameState) : this(sbjCharacter, tgtPlace) {
+        injectParent(gameState)
+    }
+
     val div get() = parent.parties.filter { (_, value) -> value.leader == sbjCharacter && value.type == "division" }.values.first()
     var employee: String? = null
     var workplace = ""

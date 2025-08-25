@@ -65,7 +65,7 @@ class LeadCabinetMeetingRoutine : Routine(), IMeetingRoutine {
             //Note that the command may not be valid even if it in AvailableActions list. For example, if the character is already at the place, move command is not valid.
             executeRequestInMeeting(name, place)?.let { return it }
 
-            
+
             //1. No salary in cabinet meeting, so no need to support salary agenda.
 
 
@@ -129,9 +129,7 @@ class LeadCabinetMeetingRoutine : Routine(), IMeetingRoutine {
             val nextSpeaker = conf.currentCharacters.minus(name)
                 .maxByOrNull { gState.getMutuality(name, it) }
                 ?: return EndMeeting(name, place)
-            return EndSpeech(name, place).also {
-                it.nextSpeaker = nextSpeaker
-            }
+            return EndSpeech(name, place, nextSpeaker, gState)
         }
 
         //TODO: do something in the meeting. Leave the meeting if nothing to do.

@@ -1,9 +1,14 @@
 package com.titaniumPolitics.game.core.gameActions
 
 import com.titaniumPolitics.game.core.GameEngine
+import com.titaniumPolitics.game.core.GameState
 
 @Deprecated("This class is deprecated. Only internal division leader can announce.")
 class InfoAnnounce(override val sbjCharacter: String, override val tgtPlace: String) : GameAction() {
+    constructor(sbjCharacter: String, tgtPlace: String, gameState: GameState) : this(sbjCharacter, tgtPlace) {
+        injectParent(gameState)
+    }
+
     var who = hashSetOf<String>()
     var what = ""
     override fun chooseParams() {

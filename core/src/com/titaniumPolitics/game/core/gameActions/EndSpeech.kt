@@ -1,12 +1,20 @@
 package com.titaniumPolitics.game.core.gameActions
 
+import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.debugTools.Logger
 import kotlinx.serialization.Serializable
 
 @Serializable
 //This class is used to end a speech and nominate a new speaker. This action is used by the current speaker.
-class EndSpeech(override val sbjCharacter: String, override val tgtPlace: String) : GameAction() {
-    lateinit var nextSpeaker: String
+class EndSpeech(override val sbjCharacter: String, override val tgtPlace: String, var nextSpeaker: String) :
+    GameAction() {
+    constructor(sbjCharacter: String, tgtPlace: String, nextSpeaker: String, gameState: GameState) : this(
+        sbjCharacter,
+        tgtPlace,
+        nextSpeaker
+    ) {
+        injectParent(gameState)
+    }
 
     override fun execute() {
         val meeting = parent.characters[sbjCharacter]!!.currentMeeting!!

@@ -90,10 +90,10 @@ class LeadDivisionElectionRoutine : Routine(), IMeetingRoutine {
 
 
 //If nothing else to talk about, end the speech. The next speaker is the character with the highest mutuality.
-            return EndSpeech(name, place).also {
-                it.nextSpeaker = conf.currentCharacters.minus(name)
-                    .maxByOrNull { gState.getMutuality(name, it) }!!
-            }
+            val nextSpeaker = conf.currentCharacters.minus(name)
+                .maxByOrNull { gState.getMutuality(name, it) }
+                ?: return EndMeeting(name, place)
+            return EndSpeech(name, place, nextSpeaker, gState)
         }
 
         //TODO: do something in the meeting. Leave the meeting if nothing to do.

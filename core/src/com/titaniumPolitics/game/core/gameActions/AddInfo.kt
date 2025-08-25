@@ -2,14 +2,23 @@ package com.titaniumPolitics.game.core.gameActions
 
 import com.badlogic.gdx.math.MathUtils.clamp
 import com.titaniumPolitics.game.core.AgendaType
+import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.core.InformationType
 import com.titaniumPolitics.game.core.ReadOnly
 import kotlinx.serialization.Serializable
 
 @Serializable
-class AddInfo(override val sbjCharacter: String, override val tgtPlace: String) : GameAction() {
-    lateinit var infoKey: String
-    var agendaIndex = 0
+class AddInfo(
+    override val sbjCharacter: String, override val tgtPlace: String, var infoKey: String,
+    var agendaIndex: Int
+) : GameAction() {
+    constructor(
+        sbjCharacter: String, tgtPlace: String, infoKey: String,
+        agendaIndex: Int, gameState: GameState
+    ) : this(sbjCharacter, tgtPlace, infoKey, agendaIndex) {
+        injectParent(gameState)
+    }
+
     val agenda
         get() = sbjCharObj.currentMeeting!!.agendas[agendaIndex]
     val info

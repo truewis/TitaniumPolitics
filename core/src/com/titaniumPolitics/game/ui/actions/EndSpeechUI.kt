@@ -40,10 +40,9 @@ class EndSpeechUI(val gameState: GameState, actionCallback: (GameAction) -> Unit
                             this@EndSpeechUI.actionCallback(
                                 EndSpeech(
                                     this@EndSpeechUI.subject,
-                                    this@EndSpeechUI.sbjChar.place.name
-                                ).apply {
-                                    nextSpeaker = this@EndSpeechUI.nextSpeaker
-                                }
+                                    this@EndSpeechUI.sbjChar.place.name,
+                                    this@EndSpeechUI.nextSpeaker
+                                )
                             )
                             this@EndSpeechUI.onClose.forEach { it() }
                         }

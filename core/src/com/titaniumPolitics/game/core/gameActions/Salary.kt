@@ -1,5 +1,6 @@
 package com.titaniumPolitics.game.core.gameActions
 
+import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.core.ReadOnly
 import kotlinx.serialization.Serializable
 import kotlin.collections.get
@@ -7,6 +8,10 @@ import kotlin.collections.get
 @Serializable
 //Salary is performed by the party leader. It decides the amount of resources to be paid to the party members.
 class Salary(override val sbjCharacter: String, override val tgtPlace: String) : GameAction() {
+    constructor(sbjCharacter: String, tgtPlace: String, gameState: GameState) : this(sbjCharacter, tgtPlace) {
+        injectParent(gameState)
+    }
+
     val standardRate
         get() = standardQuarterlyRate(parent.parties[sbjCharObj.currentMeeting!!.involvedParty!!]!!.type!!)
 
@@ -64,9 +69,9 @@ class Salary(override val sbjCharacter: String, override val tgtPlace: String) :
     companion object {
         fun standardQuarterlyRate(partyType: String): Map<String, Double> {
             return when (partyType) {
-                "cabinet" -> hashMapOf("ration" to 50.0, "water" to 50.0, "phosphorite" to 0.1)
-                "division" -> hashMapOf("ration" to 30.0, "water" to 30.0, "phosphorite" to 0.03)
-                "workplace" -> hashMapOf("ration" to 15.0, "water" to 15.0, "phosphorite" to 0.01)
+                "cabinet" -> hashMapOf("ration" to 50.0, "water" to 50.0, "phosphorus" to 0.1)
+                "division" -> hashMapOf("ration" to 30.0, "water" to 30.0, "phosphorus" to 0.03)
+                "workplace" -> hashMapOf("ration" to 15.0, "water" to 15.0, "phosphorus" to 0.01)
                 else -> throw IllegalArgumentException("Salary can only be performed in cabinet or division daily conferences.")
             }
         }

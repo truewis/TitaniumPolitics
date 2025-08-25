@@ -1,11 +1,15 @@
 package com.titaniumPolitics.game.core.gameActions
 
+import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.core.ReadOnly
 import com.titaniumPolitics.game.debugTools.Logger
 import kotlinx.serialization.Serializable
 
 @Serializable
 class Sleep(override val sbjCharacter: String, override val tgtPlace: String) : GameAction() {
+    constructor(sbjCharacter: String, tgtPlace: String, gameState: GameState) : this(sbjCharacter, tgtPlace) {
+        injectParent(gameState)
+    }
 
     override fun execute() {
         Logger.write("$sbjCharacter slept.", Logger.LogLevel.ACTION_VERBOSE)

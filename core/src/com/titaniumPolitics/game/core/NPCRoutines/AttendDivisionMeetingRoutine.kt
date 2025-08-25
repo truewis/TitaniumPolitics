@@ -120,9 +120,7 @@ class AttendDivisionMeetingRoutine : Routine(), IMeetingRoutine {
             val nextSpeaker = conf.currentCharacters.minus(name)
                 .maxByOrNull { gState.getMutuality(name, it) }
                 ?: return EndMeeting(name, place)
-            return EndSpeech(name, place).also {
-                it.nextSpeaker = nextSpeaker
-            }
+            return EndSpeech(name, place, nextSpeaker, gState)
         }
 
         //If everything else, wait.

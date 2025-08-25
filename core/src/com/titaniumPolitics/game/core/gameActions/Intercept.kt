@@ -1,11 +1,15 @@
 package com.titaniumPolitics.game.core.gameActions
 
+import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.core.ReadOnly
 import kotlinx.serialization.Serializable
 
 @Serializable
 //This class is used to end a speech and nominate a new speaker. This action is used by the current speaker.
 class Intercept(override val sbjCharacter: String, override val tgtPlace: String) : GameAction() {
+    constructor(sbjCharacter: String, tgtPlace: String, gameState: GameState) : this(sbjCharacter, tgtPlace) {
+        injectParent(gameState)
+    }
 
     override fun execute() {
         val meeting = parent.characters[sbjCharacter]!!.currentMeeting!!

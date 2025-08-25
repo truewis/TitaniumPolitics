@@ -192,11 +192,11 @@ sealed class Routine() {
                         AgendaType.REQUEST,
                         author = name,
                         attachedRequest = Request(
-                            action = UnofficialResourceTransfer(bestIssuer, "home_$bestIssuer").apply {
-                                fromHome = true
-                                toWhere = "home_$name"
+                            action = UnofficialResourceTransfer(
+                                bestIssuer, "home_$bestIssuer", fromHome = true,
+                                toWhere = "home_$name",
                                 resources = Resources(resourcesToTransferMap)
-                            },
+                            ),
                             issuedTo = hashSetOf(bestIssuer),
                             issuedBy = hashSetOf(name)
                         )

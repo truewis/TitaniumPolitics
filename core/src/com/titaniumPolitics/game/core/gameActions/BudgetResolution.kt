@@ -1,9 +1,14 @@
 package com.titaniumPolitics.game.core.gameActions
 
+import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.core.Meeting
 
 @Deprecated("This class is deprecated. BudgetResolution is a separate agenda item.")
 class BudgetResolution(override val sbjCharacter: String, override val tgtPlace: String) : GameAction() {
+    constructor(sbjCharacter: String, tgtPlace: String, gameState: GameState) : this(sbjCharacter, tgtPlace) {
+        injectParent(gameState)
+    }
+
     // If budgetResolution conference is ongoing and has the triumvirate, then the action is valid.
     override fun isValid(): Boolean =
         parent.ongoingMeetings.any { it.value.type == Meeting.MeetingType.BUDGET_RESOLUTION } &&

@@ -1,11 +1,16 @@
 package com.titaniumPolitics.game.core.gameActions
 
 import com.titaniumPolitics.game.core.GameEngine
+import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.core.Request
 import com.titaniumPolitics.game.debugTools.Logger
 
 @Deprecated("This class is deprecated. Use Use request as meeting agenda instead.")
 class Command(override val sbjCharacter: String, override val tgtPlace: String) : GameAction() {
+    constructor(sbjCharacter: String, tgtPlace: String, gameState: GameState) : this(sbjCharacter, tgtPlace) {
+        injectParent(gameState)
+    }
+
     var who = ""
 
     var request: Request? = null

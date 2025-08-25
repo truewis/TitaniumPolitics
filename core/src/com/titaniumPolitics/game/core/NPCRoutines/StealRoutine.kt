@@ -32,14 +32,15 @@ class StealRoutine(val stealResource: String, val stealFor: String? = null /*If 
         executeDone = true
         val resplace = gState.places[place]!!
         val character = gState.characters[name]!!
-        return UnofficialResourceTransfer(name, place).apply {
-            resources = Resources(
+        return UnofficialResourceTransfer(
+            name, place,
+            "home_$name", false, Resources(
                 stealResource to min(
                     resplace.resources[stealResource] / 2,
                     (character.reliant) * ReadOnly.const("StealAmountMultiplier")
                 )
             )
-            toWhere = "home_$name"
+        ).apply {
             Logger.write("$name is stealing $resources from ${resplace.name}!", Logger.LogLevel.INFO)
         }
 

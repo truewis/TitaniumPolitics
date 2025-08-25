@@ -1,10 +1,15 @@
 package com.titaniumPolitics.game.core.gameActions
 
+import com.titaniumPolitics.game.core.GameState
 import kotlinx.serialization.Serializable
 
 @Serializable
 //SetWorkHours is performed by the workplace manager. It sets work hours of the workplace.
 class SetWorkHours(override val sbjCharacter: String, override val tgtPlace: String) : GameAction() {
+    constructor(sbjCharacter: String, tgtPlace: String, gameState: GameState) : this(sbjCharacter, tgtPlace) {
+        injectParent(gameState)
+    }
+
     var start = 8
     var end = 17
     override fun chooseParams() {

@@ -1,6 +1,7 @@
 package com.titaniumPolitics.game.core.gameActions
 
 import com.titaniumPolitics.game.core.GameEngine
+import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.core.Meeting
 import com.titaniumPolitics.game.core.ReadOnly
 import com.titaniumPolitics.game.debugTools.Logger
@@ -10,8 +11,18 @@ import kotlinx.serialization.Serializable
 //Talk is considered as an on-the-fly meeting.
 //If the object (who) is already in a meeting, join the meeting if possible. Otherwise, create a new meeting with me(tgtCharacter) and the object (who).
 //Note that if the me(tgtCharacter) is in the meeting, this action is invalid.
-class Talk(override val sbjCharacter: String, override val tgtPlace: String) : GameAction() {
-    var who = ""
+class Talk(
+    override val sbjCharacter: String, override val tgtPlace: String,
+    var who: String
+) : GameAction() {
+    constructor(sbjCharacter: String, tgtPlace: String, who: String, gameState: GameState) : this(
+        sbjCharacter,
+        tgtPlace,
+        who
+    ) {
+        injectParent(gameState)
+    }
+
     override fun chooseParams() {
         who =
             GameEngine.acquire(tgtPlaceObj.characters.filter { it != sbjCharacter }.toList())

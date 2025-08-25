@@ -26,10 +26,10 @@ class CharacterInteractionWindowUI(var gameState: GameState) :
                 //Move to place.
                 val action = Talk(
                     this@CharacterInteractionWindowUI.gameState.playerName,
-                    this@CharacterInteractionWindowUI.gameState.player.place.name
+                    this@CharacterInteractionWindowUI.gameState.player.place.name,
+                    this@CharacterInteractionWindowUI.characterDisplayed,
+                    this@CharacterInteractionWindowUI.gameState
                 )
-                action.who = this@CharacterInteractionWindowUI.characterDisplayed
-                action.injectParent(this@CharacterInteractionWindowUI.gameState)
                 this@CharacterInteractionWindowUI.isVisible = false
                 GameEngine.acquireCallback(action)
             }

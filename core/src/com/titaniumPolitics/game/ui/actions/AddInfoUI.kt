@@ -57,12 +57,12 @@ class AddInfoUI(val gameState: GameState, actionCallback: (GameAction) -> Unit) 
                             this@AddInfoUI.actionCallback(
                                 AddInfo(
                                     this@AddInfoUI.subject,
-                                    this@AddInfoUI.sbjChar.place.name
-                                ).apply {
-                                    infoKey = this@AddInfoUI.infoKey
+                                    this@AddInfoUI.sbjChar.place.name,
+                                    infoKey = this@AddInfoUI.infoKey,
                                     agendaIndex =
-                                        this@AddInfoUI.gameState.player.currentMeeting!!.agendas.indexOf(this@AddInfoUI.agenda)
-                                }
+                                        this@AddInfoUI.gameState.player.currentMeeting!!.agendas.indexOf(this@AddInfoUI.agenda),
+                                    this@AddInfoUI.gameState
+                                )
                             )
                             this@AddInfoUI.onClose.forEach { it() }
                         }

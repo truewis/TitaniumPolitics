@@ -1,14 +1,25 @@
 package com.titaniumPolitics.game.core.gameActions
 
+import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.core.Place
 import com.titaniumPolitics.game.core.Resources
 import kotlinx.serialization.Serializable
 
 @Serializable
-class UnofficialResourceTransfer(override val sbjCharacter: String, override val tgtPlace: String) : GameAction() {
-    var resources = Resources()
-    var toWhere = ""
-    var fromHome = false
+class UnofficialResourceTransfer(
+    override val sbjCharacter: String, override val tgtPlace: String,
+    var toWhere: String,
+    var fromHome: Boolean,
+    var resources: Resources,
+) : GameAction() {
+    constructor(
+        sbjCharacter: String, tgtPlace: String, toWhere: String,
+        fromHome: Boolean,
+        resources: Resources, gameState: GameState
+    ) : this(sbjCharacter, tgtPlace, toWhere, fromHome, resources) {
+        injectParent(gameState)
+    }
+
 
     override fun execute() {
         if (fromHome) {

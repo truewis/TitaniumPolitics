@@ -99,28 +99,29 @@ class ResourceTransferUI(var gameState: GameState, actionCallback: (GameAction) 
         action = if (this@ResourceTransferUI.mode == "official") {
             OfficialResourceTransfer(
                 this@ResourceTransferUI.subject,
-                this@ResourceTransferUI.sbjChar.place.name
-            ).apply {
-                this.resources = Resources(this@ResourceTransferUI.target)
-                this.toWhere = this@ResourceTransferUI.toWhere
-            }
+                this@ResourceTransferUI.sbjChar.place.name,
+                this@ResourceTransferUI.toWhere,
+                Resources(this@ResourceTransferUI.target),
+                gameState
+            )
         } else if (this@ResourceTransferUI.mode == "unofficial") {
             UnofficialResourceTransfer(
                 this@ResourceTransferUI.subject,
-                this@ResourceTransferUI.sbjChar.place.name
-            ).apply {
-                this.resources = Resources(this@ResourceTransferUI.target)
-                this.toWhere = this@ResourceTransferUI.toWhere
-            }
+                this@ResourceTransferUI.sbjChar.place.name,
+                toWhere = this@ResourceTransferUI.toWhere,
+                false,
+                Resources(this@ResourceTransferUI.target),
+                gameState
+            )
         } else if (this@ResourceTransferUI.mode == "private") {
             UnofficialResourceTransfer(
                 this@ResourceTransferUI.subject,
-                this@ResourceTransferUI.sbjChar.place.name
-            ).apply {
-                this.resources = Resources(this@ResourceTransferUI.target)
-                this.toWhere = this@ResourceTransferUI.toWhere
-                this.fromHome = true
-            }
+                this@ResourceTransferUI.sbjChar.place.name,
+                this@ResourceTransferUI.toWhere,
+                true,
+                Resources(this@ResourceTransferUI.target),
+                gameState
+            )
         } else {
             throw IllegalArgumentException("Invalid mode: $mode")
         }

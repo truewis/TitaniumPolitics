@@ -110,12 +110,11 @@ class AttendCabinetMeetingRoutine : Routine(), IMeetingRoutine {
                                     val agenda = MeetingAgenda(AgendaType.REQUEST, name).apply {
                                         attachedRequest = Request(
                                             OfficialResourceTransfer(
-                                                leader, tgtPlace.name
-                                            ).apply {
-                                                resources =
-                                                    Resources(res to apparatus.currentConsumption[res]!! * place1.workHoursLength * 3)
-                                                toWhere = place1.name
-                                            },
+                                                leader,
+                                                tgtPlace.name,
+                                                place1.name,
+                                                Resources(res to apparatus.currentConsumption[res]!! * place1.workHoursLength * 3)
+                                            ),
                                             issuedTo = hashSetOf(leader),
                                             issuedBy = hashSetOf(name)
                                         ) //Created a command to transfer the resource.
@@ -134,9 +133,7 @@ class AttendCabinetMeetingRoutine : Routine(), IMeetingRoutine {
             val nextSpeaker = conf.currentCharacters.minus(name)
                 .maxByOrNull { gState.getMutuality(name, it) }
                 ?: return EndMeeting(name, place)
-            return EndSpeech(name, place).also {
-                it.nextSpeaker = nextSpeaker
-            }
+            return EndSpeech(name, place, nextSpeaker, gState)
         }
         //TODO: do something in the meeting. Leave the meeting if nothing to do.
 

@@ -24,9 +24,7 @@ class TalkRoutine : Routine(), IMeetingRoutine {
     override fun execute(name: String, place: String): GameAction {
         val character = gState.characters[name]!!
         val conf =
-            character.currentMeeting ?: return Talk(name, place).also {
-                it.who = toWho
-            }
+            character.currentMeeting ?: return Talk(name, place, toWho)
         //If not speaker, wait if the mutuality to the speaker is high. Otherwise, if possible, interrupt the speaker.
         if (conf.currentSpeaker != name) {
             return interceptCondition(conf, name, place)
@@ -42,16 +40,14 @@ class TalkRoutine : Routine(), IMeetingRoutine {
                                 AgendaType.REQUEST, name, attachedRequest = Request(
                                     UnofficialResourceTransfer(
                                         requestTo,
-                                        tgtPlace = place
-                                    ).apply {
-                                        toWhere = "home_$name"
-                                        fromHome =
-                                            true//Transfer the requestTo's private resources to me.
-                                        resources = Resources(
+                                        tgtPlace = place,
+                                        "home_$name",
+                                        true,
+                                        Resources(
                                             requestResourceType to
                                                     requestResourceAmount
                                         )
-                                    }//Created a command to transfer the resource.
+                                    )//Created a command to transfer the resource.
                                     ,
                                     issuedTo = hashSetOf(requestTo)
                                 ).apply {
@@ -68,10 +64,10 @@ class TalkRoutine : Routine(), IMeetingRoutine {
                 }
             }
             //If nothing else to talk about, end the speech. The next speaker is the character with the highest mutuality.
-            return EndSpeech(name, place).also {
-                it.nextSpeaker = conf.currentCharacters.minus(name)
+            return EndSpeech(
+                name, place, conf.currentCharacters.minus(name)
                     .maxByOrNull { gState.getMutuality(name, it) }!!
-            }
+            )
 
         }
 

@@ -4,6 +4,7 @@ import com.titaniumPolitics.game.core.AgendaType
 import com.titaniumPolitics.game.core.InformationType
 import com.titaniumPolitics.game.core.ReadOnly
 import com.titaniumPolitics.game.core.gameActions.AddInfo
+import com.titaniumPolitics.game.core.gameActions.EndMeeting
 import com.titaniumPolitics.game.core.gameActions.EndSpeech
 import com.titaniumPolitics.game.core.gameActions.GameAction
 import com.titaniumPolitics.game.core.gameActions.Wait
@@ -43,17 +44,13 @@ class SupportAgendaRoutine(val agendaIndex: Int) : Routine(), IMeetingRoutine {
             }
             if (supportingInfo != null) {
                 //If I have supporting information, add it to the agenda.
-                return AddInfo(name, place).also {
-                    it.injectParent(gState)
-                    it.infoKey = supportingInfo
-                    it.agendaIndex = this@SupportAgendaRoutine.agendaIndex
-                }
+                return AddInfo(name, place, supportingInfo, this@SupportAgendaRoutine.agendaIndex, gState)
             }
             //If there is no supporting information, end speech.
-            return EndSpeech(name, place).also {
-                it.nextSpeaker = conf.currentCharacters.filter { it != name }
-                    .maxByOrNull { gState.getMutuality(name, it) }!!
-            }
+            val nextSpeaker = conf.currentCharacters.minus(name)
+                .maxByOrNull { gState.getMutuality(name, it) }
+                ?: return EndMeeting(name, place)
+            return EndSpeech(name, place, nextSpeaker, gState)
         }
     }
 

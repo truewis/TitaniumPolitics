@@ -1,10 +1,15 @@
 package com.titaniumPolitics.game.core.gameActions
 
+import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.core.InformationType
 import kotlinx.serialization.Serializable
 
 @Serializable
 class PrepareInfo(override val sbjCharacter: String, override val tgtPlace: String) : GameAction() {
+    constructor(sbjCharacter: String, tgtPlace: String, gameState: GameState) : this(sbjCharacter, tgtPlace) {
+        injectParent(gameState)
+    }
+
     var newSetOfPrepInfoKeys = arrayListOf<String>()
     fun recommendKeys() {
         newSetOfPrepInfoKeys.clear()
@@ -22,7 +27,7 @@ class PrepareInfo(override val sbjCharacter: String, override val tgtPlace: Stri
             }
 
         //If you hate someone in your party, prepare information about them which they hate.
-        parent.parties.filter { (key, value) -> sbjCharacter in value.members }.forEach {
+        parent.parties.filter { (_, value) -> sbjCharacter in value.members }.forEach {
             val party = it.value
             party.members.filter { it != sbjCharacter && parent.getMutNorm(sbjCharacter, it) < -0.5 }
                 .forEach { hatedChar ->

@@ -1,10 +1,15 @@
 package com.titaniumPolitics.game.core.gameActions
 
+import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.core.Meeting
 import com.titaniumPolitics.game.debugTools.Logger
 
 @Deprecated("This class is deprecated. BudgetProposal is a separate agenda item.")
 class BudgetProposal(override val sbjCharacter: String, override val tgtPlace: String) : GameAction() {
+    constructor(sbjCharacter: String, tgtPlace: String, gameState: GameState) : this(sbjCharacter, tgtPlace) {
+        injectParent(gameState)
+    }
+
     val budget = hashMapOf<String, Double>()//"mainControlRoom" to 11520, "redMine" to 38400, "blackMine" to 38400,
 
     override fun chooseParams() {

@@ -14,9 +14,7 @@ class Event_BoyFindingMom : EventObject("A boy with a box.", true) {
             onPlayDialogue("FindMom")
             parent.knownCharactersToPlayer += "Yuri"
             Request(
-                action = Talk("Yuri", "market").apply {
-                    who = "Rui"
-                },
+                action = Talk("Yuri", "market", "Rui"),
                 issuedTo = hashSetOf("Yuri"),
             ).apply {
                 parent.requests[generateName()] = this

@@ -1,11 +1,16 @@
 package com.titaniumPolitics.game.core.gameActions
 
 import com.titaniumPolitics.game.core.GameEngine
+import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.core.ReadOnly
 import kotlinx.serialization.Serializable
 
 @Serializable
 class Move(override val sbjCharacter: String, override val tgtPlace: String) : GameAction() {
+    constructor(sbjCharacter: String, tgtPlace: String, gameState: GameState) : this(sbjCharacter, tgtPlace) {
+        injectParent(gameState)
+    }
+
     var placeTo = ""
     val distance get() = tgtPlaceObj.distanceTo(placeTo)
     override fun chooseParams() {

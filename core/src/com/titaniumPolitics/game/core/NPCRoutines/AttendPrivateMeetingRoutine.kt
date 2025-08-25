@@ -74,9 +74,7 @@ class AttendPrivateMeetingRoutine : Routine(), IMeetingRoutine {
             val nextSpeaker = conf.currentCharacters.minus(name)
                 .maxByOrNull { gState.getMutuality(name, it) }
                 ?: return EndMeeting(name, place)
-            return EndSpeech(name, place).also {
-                it.nextSpeaker = nextSpeaker
-            }
+            return EndSpeech(name, place, nextSpeaker, gState)
         }
 
         //TODO: do something in the meeting. Leave the meeting if nothing to do.

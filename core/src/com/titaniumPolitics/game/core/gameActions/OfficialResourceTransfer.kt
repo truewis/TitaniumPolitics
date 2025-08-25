@@ -1,14 +1,23 @@
 package com.titaniumPolitics.game.core.gameActions
 
 import com.badlogic.gdx.math.MathUtils.clamp
+import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.core.Resources
 import com.titaniumPolitics.game.debugTools.Logger
 import kotlinx.serialization.Serializable
 
 @Serializable
-class OfficialResourceTransfer(override val sbjCharacter: String, override val tgtPlace: String) : GameAction() {
-    var toWhere = ""
-    var resources = Resources()
+class OfficialResourceTransfer(
+    override val sbjCharacter: String, override val tgtPlace: String,
+    var toWhere: String,
+    var resources: Resources
+) : GameAction() {
+    constructor(
+        sbjCharacter: String, tgtPlace: String, toWhere: String,
+        resources: Resources, gameState: GameState
+    ) : this(sbjCharacter, tgtPlace, toWhere, resources) {
+        injectParent(gameState)
+    }
 
     override fun execute() {
 

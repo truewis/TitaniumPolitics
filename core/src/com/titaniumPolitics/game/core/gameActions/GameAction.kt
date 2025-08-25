@@ -5,20 +5,23 @@ import com.titaniumPolitics.game.core.ReadOnly
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 
-/*
-*  This is the base class for all game actions. It is used to represent actions that characters can take.
-*  It is also used to represent actions that are taken by the game itself.
-*
-*  Game actions are serialized to JSON and sent to the client. The client then displays the action to the user.
-*  The user then chooses the parameters for the action. The client then sends the action back to the server.
-*
-*  The server then checks the parameters for validity and then executes the action.
-* */
+/**
+ *  This is the base class for all game actions. It is used to represent actions that characters can take.
+ *  It is also used to represent actions that are taken by the game itself.
+ *
+ *  Game actions are serialized to JSON and sent to the client. The client then displays the action to the user.
+ *  The user then chooses the parameters for the action. The client then sends the action back to the server.
+ *
+ *  The server then checks the parameters for validity and then executes the action.
+ * */
 @Serializable
 sealed class GameAction() {
+
+    //Anyone thinks this is a stupid design, I agree, but this is due to fundamental design of Kotlinx Serialization library.
+    //Read github.com/Kotlin/kotlinx.serialization/issues/599
     abstract val sbjCharacter: String
 
-    //This can be different from the current place of the subject, in case of a hypothetical action.
+    /**This can be different from the current place of the subject, in case of a hypothetical action.*/
     abstract val tgtPlace: String
 
     val sbjCharObj get() = parent.characters[sbjCharacter]!!
@@ -61,6 +64,7 @@ sealed class GameAction() {
         this.parent = parent
     }
 
+    @Deprecated("In CUI, actions are prepared through player input using this method. Not implemented anymore.")
     open fun chooseParams() {
     }
 

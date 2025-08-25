@@ -1,10 +1,15 @@
 package com.titaniumPolitics.game.core.gameActions
 
+import com.titaniumPolitics.game.core.GameState
 import kotlinx.serialization.Serializable
 
 @Serializable
 //SetWorkers is performed by the workplace manager. It sets the number of unnamed workers per apparatus.
 class SetWorkers(override val sbjCharacter: String, override val tgtPlace: String) : GameAction() {
+    constructor(sbjCharacter: String, tgtPlace: String, gameState: GameState) : this(sbjCharacter, tgtPlace) {
+        injectParent(gameState)
+    }
+
     var workers = 0
     var apparatusID = ""
     val agent
