@@ -259,6 +259,33 @@ class PoliticiansInfoUI(val gameState: GameState) : Table(defaultSkin), KTable {
                 setFontScale(0.5f)
                 setAlignment(Align.left)
             }
+            row()
+            label(ReadOnly.prop("PoliticiansInfoUI-WorkHours"), "docTitle").apply {
+                setFontScale(0.5f)
+                setAlignment(Align.left)
+            }
+            label(
+                "%02d00 - %02d00".format(
+                    workplace.workplace.workHoursStart,
+                    workplace.workplace.workHoursEnd
+                ), "docTitle"
+            ).apply {
+                setFontScale(0.5f)
+                setAlignment(Align.left)
+            }
+            row()
+            label(ReadOnly.prop("PoliticiansInfoUI-CurrentEfficiency"), "docTitle").apply {
+                setFontScale(0.5f)
+                setAlignment(Align.left)
+            }
+            val averageCurrentEfficiency =
+                if (workplace.workplace.apparatuses.isEmpty()) 0.0 else workplace.workplace.apparatuses.sumOf {
+                    it.netEfficiency
+                } / workplace.workplace.apparatuses.size
+            label("%.1f %%".format(averageCurrentEfficiency * 100.0), "docTitle").apply {
+                setFontScale(0.5f)
+                setAlignment(Align.left)
+            }
         }
     }
     private val workplaceInformationPane = ScrollPane(workplaceDataTable)
