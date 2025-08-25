@@ -1,6 +1,8 @@
 package com.titaniumPolitics.game.core.gameActions
 
 import com.titaniumPolitics.game.core.GameState
+import com.titaniumPolitics.game.core.Information
+import com.titaniumPolitics.game.core.InformationType
 import com.titaniumPolitics.game.core.ReadOnly
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
@@ -68,8 +70,16 @@ sealed class GameAction() {
     open fun chooseParams() {
     }
 
-    //Return all declared properties.
-    fun returnParams() {
+    /**
+     * Checks if the given information is a sufficient proof of this action.
+     * Base implementation checks reference. In this case, delegation is impossible.
+     * Every override of this method must return true for action information with the only difference in the subject.
+     * Otherwise, ExecuteCommandRoutine delegation does not work properly.
+     *
+     * For some actions such as examine or investigate, resulting information is also sufficient. Other actions such as UnofficialResourceTransfer allows the subject and source to differ from the original action. Hence, these actions override this method.
+     */
+    fun isProofOfWork(info: Information): Boolean {
+        return (info.type == InformationType.ACTION && info.action == this)
 
     }
 

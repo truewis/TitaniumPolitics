@@ -1,5 +1,6 @@
 package com.titaniumPolitics.game.core.NPCRoutines
 
+import com.titaniumPolitics.game.core.Information
 import com.titaniumPolitics.game.core.ReadOnly
 import com.titaniumPolitics.game.core.gameActions.GameAction
 import com.titaniumPolitics.game.core.gameActions.Wait
@@ -11,14 +12,29 @@ class ExecuteCommandRoutine() : Routine() {
     var err = false
     val executableRequest get() = gState.requests[variables["request"]!!]!!
     var timeout = ReadOnly.const("ExecuteCommandRoutineInvalidActionTimeout")
+    var delegationAttemptCount = ReadOnly.const("ExecuteCommandRoutineDelegationAttemptCount")
 
     override fun newRoutineCondition(name: String, place: String, subroutines: List<Routine>): Routine? {
-        //Logger.write("$name is executing the command ${executableRequest}.", Logger.LogLevel.INFO)
-
-        if (place != executableRequest.action.tgtPlace) {
-            if (subroutines.none { it is MoveRoutine })
-                return MoveRoutine(executableRequest.action.tgtPlace)//Add a move routine with higher priority.
+        Logger.write("$name is executing the command ${executableRequest}.", Logger.LogLevel.INFO)
+        gState.characters.filter {
+            it.key != name &&
+                    gState.getMutuality(
+                        name,
+                        it.key
+                    ) > executableRequest.difficulty() //Someone I trust, does not matter if they trust me or not
         }
+        //Check if the action is delegatable
+        if (executableRequest.action.isProofOfWork(
+                Information(
+                    action = executableRequest.action
+                )
+            )
+        )
+
+            if (place != executableRequest.action.tgtPlace) {
+                if (subroutines.none { it is MoveRoutine })
+                    return MoveRoutine(executableRequest.action.tgtPlace)//Add a move routine with higher priority.
+            }
         return null
     }
 

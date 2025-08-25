@@ -84,6 +84,7 @@
   "ChillMeetingWillTau": 30000,
   "GlobalAccidentTau": 1e7,
   "ExecuteCommandRoutineInvalidActionTimeout": 4,
+  "ExecuteCommandRoutineDelegationAttemptCount": 3,
   "GasDiffusionTau": 10000,
   "TemperatureDiffusionTau": 10000,
   "MutualityReinforcementTau": 864000,
