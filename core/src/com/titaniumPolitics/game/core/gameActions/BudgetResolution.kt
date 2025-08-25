@@ -4,7 +4,7 @@ import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.core.Meeting
 
 @Deprecated("This class is deprecated. BudgetResolution is a separate agenda item.")
-class BudgetResolution(override val sbjCharacter: String, override val tgtPlace: String) : GameAction() {
+data class BudgetResolution(override val sbjCharacter: String, override val tgtPlace: String) : GameAction() {
     constructor(sbjCharacter: String, tgtPlace: String, gameState: GameState) : this(sbjCharacter, tgtPlace) {
         injectParent(gameState)
     }

@@ -6,7 +6,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 //Called when a character resigns from a party, in a daily party meeting
-class Resign(override val sbjCharacter: String, override val tgtPlace: String) : GameAction() {
+data class Resign(override val sbjCharacter: String, override val tgtPlace: String) : GameAction() {
     constructor(sbjCharacter: String, tgtPlace: String, gameState: GameState) : this(sbjCharacter, tgtPlace) {
         injectParent(gameState)
     }

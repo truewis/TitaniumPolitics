@@ -6,7 +6,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 //This class is used to end a speech and nominate a new speaker. This action is used by the current speaker.
-class Intercept(override val sbjCharacter: String, override val tgtPlace: String) : GameAction() {
+data class Intercept(override val sbjCharacter: String, override val tgtPlace: String) : GameAction() {
     constructor(sbjCharacter: String, tgtPlace: String, gameState: GameState) : this(sbjCharacter, tgtPlace) {
         injectParent(gameState)
     }

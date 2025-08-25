@@ -11,7 +11,7 @@ import kotlinx.serialization.Serializable
 //Talk is considered as an on-the-fly meeting.
 //If the object (who) is already in a meeting, join the meeting if possible. Otherwise, create a new meeting with me(tgtCharacter) and the object (who).
 //Note that if the me(tgtCharacter) is in the meeting, this action is invalid.
-class Talk(
+data class Talk(
     override val sbjCharacter: String, override val tgtPlace: String,
     var who: String
 ) : GameAction() {

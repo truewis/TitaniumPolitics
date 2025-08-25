@@ -7,7 +7,7 @@ import com.titaniumPolitics.game.debugTools.Logger
 import kotlinx.serialization.Serializable
 
 @Serializable
-class Examine(override val sbjCharacter: String, override val tgtPlace: String, var what: InformationType) :
+data class Examine(override val sbjCharacter: String, override val tgtPlace: String, var what: InformationType) :
     GameAction() {
     override fun chooseParams() {
         what = when (GameEngine.acquire(arrayListOf("HR", "apparatus", "resources"))) {

@@ -6,7 +6,7 @@ import com.titaniumPolitics.game.core.Resources
 import kotlinx.serialization.Serializable
 
 @Serializable
-class UnofficialResourceTransfer(
+data class UnofficialResourceTransfer(
     override val sbjCharacter: String, override val tgtPlace: String,
     var toWhere: String,
     var fromHome: Boolean,

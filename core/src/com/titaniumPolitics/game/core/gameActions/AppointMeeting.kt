@@ -6,7 +6,7 @@ import com.titaniumPolitics.game.core.Meeting
 import kotlinx.serialization.Serializable
 
 @Serializable
-class AppointMeeting(override val sbjCharacter: String, override val tgtPlace: String) : GameAction() {
+data class AppointMeeting(override val sbjCharacter: String, override val tgtPlace: String) : GameAction() {
     constructor(sbjCharacter: String, tgtPlace: String, gameState: GameState) : this(sbjCharacter, tgtPlace) {
         injectParent(gameState)
     }

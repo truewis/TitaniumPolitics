@@ -8,7 +8,7 @@ import com.titaniumPolitics.game.core.ReadOnly
 import kotlinx.serialization.Serializable
 
 @Serializable
-class AddInfo(
+data class AddInfo(
     override val sbjCharacter: String, override val tgtPlace: String, var infoKey: String,
     var agendaIndex: Int
 ) : GameAction() {

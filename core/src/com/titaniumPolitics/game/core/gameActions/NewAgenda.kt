@@ -9,7 +9,7 @@ import kotlin.collections.get
 import kotlin.math.max
 
 @Serializable
-class NewAgenda(override val sbjCharacter: String, override val tgtPlace: String) : GameAction() {
+data class NewAgenda(override val sbjCharacter: String, override val tgtPlace: String) : GameAction() {
     constructor(sbjCharacter: String, tgtPlace: String, gameState: GameState) : this(sbjCharacter, tgtPlace) {
         injectParent(gameState)
     }

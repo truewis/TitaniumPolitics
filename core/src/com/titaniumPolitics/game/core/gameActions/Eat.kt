@@ -5,7 +5,7 @@ import com.titaniumPolitics.game.debugTools.Logger
 import kotlinx.serialization.Serializable
 
 @Serializable
-class Eat(override val sbjCharacter: String, override val tgtPlace: String) : GameAction() {
+data class Eat(override val sbjCharacter: String, override val tgtPlace: String) : GameAction() {
     constructor(sbjCharacter: String, tgtPlace: String, gameState: GameState) : this(sbjCharacter, tgtPlace) {
         injectParent(gameState)
     }

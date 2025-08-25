@@ -6,7 +6,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 //This class is used to end a speech and nominate a new speaker. This action is used by the current speaker.
-class EndSpeech(override val sbjCharacter: String, override val tgtPlace: String, var nextSpeaker: String) :
+data class EndSpeech(override val sbjCharacter: String, override val tgtPlace: String, var nextSpeaker: String) :
     GameAction() {
     constructor(sbjCharacter: String, tgtPlace: String, nextSpeaker: String, gameState: GameState) : this(
         sbjCharacter,

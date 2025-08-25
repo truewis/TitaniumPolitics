@@ -4,7 +4,7 @@ import com.titaniumPolitics.game.core.GameEngine
 import com.titaniumPolitics.game.core.GameState
 
 @Deprecated("This class is deprecated. Division leaders are elected by the party members.")
-class LeaderAssignment(override val sbjCharacter: String, override val tgtPlace: String) : GameAction() {
+data class LeaderAssignment(override val sbjCharacter: String, override val tgtPlace: String) : GameAction() {
     constructor(sbjCharacter: String, tgtPlace: String, gameState: GameState) : this(sbjCharacter, tgtPlace) {
         injectParent(gameState)
     }

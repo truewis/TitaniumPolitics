@@ -5,7 +5,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 //SetWorkHours is performed by the workplace manager. It sets work hours of the workplace.
-class SetWorkHours(override val sbjCharacter: String, override val tgtPlace: String) : GameAction() {
+data class SetWorkHours(override val sbjCharacter: String, override val tgtPlace: String) : GameAction() {
     constructor(sbjCharacter: String, tgtPlace: String, gameState: GameState) : this(sbjCharacter, tgtPlace) {
         injectParent(gameState)
     }

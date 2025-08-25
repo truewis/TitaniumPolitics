@@ -7,7 +7,7 @@ import kotlin.collections.get
 
 @Serializable
 //Salary is performed by the party leader. It decides the amount of resources to be paid to the party members.
-class Salary(override val sbjCharacter: String, override val tgtPlace: String) : GameAction() {
+data class Salary(override val sbjCharacter: String, override val tgtPlace: String) : GameAction() {
     constructor(sbjCharacter: String, tgtPlace: String, gameState: GameState) : this(sbjCharacter, tgtPlace) {
         injectParent(gameState)
     }

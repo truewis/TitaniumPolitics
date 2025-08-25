@@ -6,7 +6,7 @@ import kotlinx.serialization.Serializable
 import kotlin.collections.contains
 
 @Serializable
-class HireManager(override val sbjCharacter: String, override val tgtPlace: String) : GameAction() {
+data class HireManager(override val sbjCharacter: String, override val tgtPlace: String) : GameAction() {
     constructor(sbjCharacter: String, tgtPlace: String, gameState: GameState) : this(sbjCharacter, tgtPlace) {
         injectParent(gameState)
     }

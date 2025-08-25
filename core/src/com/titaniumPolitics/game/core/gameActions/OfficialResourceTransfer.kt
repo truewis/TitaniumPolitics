@@ -7,7 +7,7 @@ import com.titaniumPolitics.game.debugTools.Logger
 import kotlinx.serialization.Serializable
 
 @Serializable
-class OfficialResourceTransfer(
+data class OfficialResourceTransfer(
     override val sbjCharacter: String, override val tgtPlace: String,
     var toWhere: String,
     var resources: Resources

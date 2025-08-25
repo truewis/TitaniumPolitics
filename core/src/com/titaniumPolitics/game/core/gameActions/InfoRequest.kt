@@ -6,7 +6,7 @@ import com.titaniumPolitics.game.debugTools.Logger
 
 //TODO: party integrity affects the chances. Party integrity is affected.
 @Deprecated("This class is deprecated. Info requests are done naturally through agendas.")
-class InfoRequest(override val sbjCharacter: String, override val tgtPlace: String) : GameAction() {
+data class InfoRequest(override val sbjCharacter: String, override val tgtPlace: String) : GameAction() {
     constructor(sbjCharacter: String, tgtPlace: String, gameState: GameState) : this(sbjCharacter, tgtPlace) {
         injectParent(gameState)
     }

@@ -6,7 +6,7 @@ import com.titaniumPolitics.game.core.ReadOnly
 import kotlinx.serialization.Serializable
 
 @Serializable
-class Move(override val sbjCharacter: String, override val tgtPlace: String) : GameAction() {
+data class Move(override val sbjCharacter: String, override val tgtPlace: String) : GameAction() {
     constructor(sbjCharacter: String, tgtPlace: String, gameState: GameState) : this(sbjCharacter, tgtPlace) {
         injectParent(gameState)
     }
