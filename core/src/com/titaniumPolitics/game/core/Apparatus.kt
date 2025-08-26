@@ -159,13 +159,15 @@ class Apparatus {
      * Other resources are assumed to be intermediary goods and are not included in budget.
      */
     val hourlyOperationBudget: Resources
-        get() = idealConsumption.filter { (string, d) ->
+        get() = hourlyOperationResource.filter { (string, d) ->
             string in listOf(
                 "ration",
                 "water",
                 "phosphorus"
             )
-        } * 1 + Resources(
+        }
+    val hourlyOperationResource: Resources
+        get() = idealConsumption * 1 + Resources(
             "ration" to idealWorker * laborValuePerHour * const("WorkerWaterConsumptionRate"),
             "water" to idealWorker * laborValuePerHour * const("WorkerWaterConsumptionRate")
         )

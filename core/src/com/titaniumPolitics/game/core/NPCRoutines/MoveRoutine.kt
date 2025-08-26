@@ -4,6 +4,7 @@ import com.titaniumPolitics.game.core.gameActions.GameAction
 import com.titaniumPolitics.game.core.gameActions.Move
 import com.titaniumPolitics.game.debugTools.Logger
 import kotlinx.serialization.Serializable
+import org.junit.jupiter.api.fail
 
 /**
  * A routine that moves a character to a destination.
@@ -26,7 +27,6 @@ class MoveRoutine(var destination: String) : Routine() {
 
     override fun endCondition(name: String, place: String): Boolean {
         if (place == destination) {
-            executeDone = true
             return true
         } else {
             if (gState.places[place]!!.shortestPathAndTimeTo(destination)?.also {
@@ -37,9 +37,7 @@ class MoveRoutine(var destination: String) : Routine() {
                     "There is no path from $place to ${destination}! Terminating moveRoutine...",
                     Logger.LogLevel.INFO
                 )
-                executeDone = false
-                return true
-
+                failed = true
             }
 
         }

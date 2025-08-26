@@ -12,6 +12,12 @@ data class Salary(override val sbjCharacter: String, override val tgtPlace: Stri
         injectParent(gameState)
     }
 
+    val who
+        get() =
+            party.members - sbjCharacter
+
+    val party get() = parent.parties[sbjCharObj.currentMeeting!!.involvedParty]!!
+
     val standardRate
         get() = standardQuarterlyRate(parent.parties[sbjCharObj.currentMeeting!!.involvedParty!!]!!.type!!)
 
@@ -19,11 +25,7 @@ data class Salary(override val sbjCharacter: String, override val tgtPlace: Stri
     }
 
     override fun execute() {
-        val who =
-            (parent.ongoingMeetings.filter { it.value.currentCharacters.contains(sbjCharacter) }
-                .flatMap { it.value.currentCharacters }).toHashSet()
 
-        val party = parent.parties.values.find { it.members.containsAll(who + sbjCharacter) }!!
         val guildHall = party.home
 
         who.forEach { character ->
@@ -51,15 +53,11 @@ data class Salary(override val sbjCharacter: String, override val tgtPlace: Stri
 
         party.isSalaryPaid =
             true//Even if some members are not paid, the salary is considered paid, and cannot be paid again this quarter.
+        super.execute()
 
     }
 
     override fun isValid(): Boolean {
-        val who =
-            sbjCharObj.currentMeeting?.currentCharacters
-                ?: return false //If there is no meeting, the salary cannot be paid.
-
-        val party = parent.parties.values.find { it.name == sbjCharObj.currentMeeting!!.involvedParty }!!
         return !party.isSalaryPaid && who.isNotEmpty() && sbjCharacter == party.leader && reason(
             standardRate.all { (what, amount) -> parent.places[party.home]!!.resources[what] >= amount },
             "salary-resources"

@@ -39,12 +39,14 @@ class HireRoutine() : Routine() {
                     return it
             }
         }
+        //If no hiring action is valid,
+        failed = true //In case the role is filled already, wait one turn, then end the routine.
         return Wait(name, place).also {
             it.injectParent(gState)
-        } //If no hiring action is valid, wait.
+        }
     }
 
     override fun endCondition(name: String, place: String): Boolean {
-        return executeDone //In case the role is filled already, wait one turn, then end the routine.
+        return executeDone
     }
 }

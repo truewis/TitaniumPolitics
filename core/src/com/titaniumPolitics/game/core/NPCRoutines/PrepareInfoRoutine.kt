@@ -8,8 +8,6 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 class PrepareInfoRoutine() : Routine() {
-    var err = false
-
     override fun newRoutineCondition(name: String, place: String, subroutines: List<Routine>): Routine? {
         if (place != "home_${name}") {
             if (subroutines.none { it is MoveRoutine })
@@ -27,12 +25,12 @@ class PrepareInfoRoutine() : Routine() {
             }
         }
         Logger.write("$name: Cannot move to home_${name}. Terminating the prepareInfoRoutine......")
-        err = true
+        failed = true
         return Wait(name, place)
     }
 
     override fun endCondition(name: String, place: String): Boolean {
-        return executeDone || err
+        return executeDone
     }
 
 }

@@ -212,9 +212,8 @@ class GameState {
                 health = 100.0
                 reliant = idlePop
             }
-        nonPlayerAgents[name] = AnonAgent().also {
+        nonPlayerAgents[name] = NonPlayerAgent().also {
             it.injectParent(this@GameState)
-            it.workPlace = Place.publicPlaces.random()
         }
     }
 
@@ -326,9 +325,8 @@ class GameState {
                         this.health = 100.0
                         this.reliant = place.plannedWorker
                     }
-                nonPlayerAgents[name] = AnonAgent().also {
+                nonPlayerAgents[name] = NonPlayerAgent().also {
                     it.injectParent(this@GameState)
-                    it.workPlace = place.name
                 }
                 place.workplaceParty?.members?.add(name)
                 division.members.add(name)

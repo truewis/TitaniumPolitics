@@ -38,12 +38,6 @@ class NonPlayerAgent : Agent() {
     private val addList =
         arrayListOf<Routine>()
 
-    /**
-     * Several events will set this flag to true, indicating that the character wants to talk to the player.
-     * This will change the character's routine to talk to the player when possible.
-     */
-    var wantsToTalkToPlayer = false
-
     override fun chooseAction(): GameAction {
         //1. High priority routine change
         selectRoutine()
@@ -141,6 +135,12 @@ class NonPlayerAgent : Agent() {
                     endRoutine(it)
                 }
             }
+            routines.forEach {
+                if (it.failed) {
+                    routineSettled = false
+                    failRoutine(it)
+                }
+            }
             routines.removeAll(removeList)
             routines.forEach { routine -> routine.subroutines.removeIf { s -> routines.none { it.ID == s } } } //Remove the subroutines that were removed.
             if (loopCounter > maxLoopCounter)
@@ -179,10 +179,22 @@ class NonPlayerAgent : Agent() {
 
     }
 
-    //Recursively stop the routine and all its subroutines.
+    /**Recursively stop the routine and all its subroutines.
+     *
+     */
     fun endRoutine(routine: Routine) {
         routine.subroutines.forEach { id -> routines.firstOrNull { it.ID == id }?.let { endRoutine(it) } }
         removeList += (routine)
+    }
+
+    /**Recursively stop the routine and all its subroutines.
+     * Also call the parent routine's onSubroutineFail if exists.
+     */
+    fun failRoutine(routine: Routine) {
+        routine.subroutines.forEach { id -> endRoutine(routines.first { it.ID == id }) }
+        removeList += (routine)
+        //Call parent routine's onSubroutineFail if exists.
+        routines.filter { it.subroutines.contains(routine.ID) }.forEach { it.onSubroutineFail(routine) }
     }
 
 
@@ -190,9 +202,15 @@ class NonPlayerAgent : Agent() {
         //When work hours, work
         parent.getWorkplace(name)?.let { wkplace ->
             if (Routine.isWorkHourWithETA(parent, place, wkplace.name, IDTH)) {
-                routines.add(WorkRoutine(wkplace.name).also {
-                    it.routineStartTime = parent.time
-                })
+                if (name.contains("Anon")) {
+                    routines.add(WorkAnonRoutine(wkplace.name).also {
+                        it.routineStartTime = parent.time
+                    })
+                } else {
+                    routines.add(WorkRoutine(wkplace.name).also {
+                        it.routineStartTime = parent.time
+                    })
+                }
                 return
             } else
             //When not work hours, rest

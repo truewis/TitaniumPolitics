@@ -43,6 +43,11 @@ sealed class Routine() {
     var executeDone =
         false
 
+    /**This is used to check if the routine has failed.
+     * Once set to true, the routine will be killed regardless of the endCondition, and onSubroutineFail method of the parent routine will be called.
+     * */
+    var failed = false
+
     fun injectParent(gState: GameState) {
         this.gState = gState
     }
@@ -51,10 +56,20 @@ sealed class Routine() {
     abstract fun execute(name: String, place: String): GameAction
     abstract fun endCondition(name: String, place: String): Boolean
 
-    //The actions in this list are compared with GameEngine.availableActions() to see if the command is available.
-    //Then, instances of the actions are created, their parameters are optimized for deltaWill, and their validity is checked.
-    //If the action is valid, one with the highest deltaWill is executed.
-    //Routines can switch to other routines in the meanwhile.
+    /**
+     * This function is called when a subroutine ends with error.
+     * The default implementation is to fail the current routine as well.
+     * Override this function to implement custom behaviour.
+     */
+    open fun onSubroutineFail(subroutine: Routine) {
+        failed = true
+    }
+
+    /**The actions in this list are compared with GameEngine.availableActions() to see if the command is available.
+     *Then, instances of the actions are created, their parameters are optimized for deltaWill, and their validity is checked.
+     *If the action is valid, one with the highest deltaWill is executed.
+     *Routines can switch to other routines in the meanwhile.
+     * */
     @Transient
     open val availableActions: List<String> = listOf("Wait")
 

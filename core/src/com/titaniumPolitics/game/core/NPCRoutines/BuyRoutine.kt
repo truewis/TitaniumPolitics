@@ -3,15 +3,16 @@ package com.titaniumPolitics.game.core.NPCRoutines
 import com.titaniumPolitics.game.core.AgendaType
 import com.titaniumPolitics.game.core.InformationType
 import com.titaniumPolitics.game.core.MeetingAgenda
+import com.titaniumPolitics.game.core.ReadOnly.IDTH
 import com.titaniumPolitics.game.core.Request
 import com.titaniumPolitics.game.core.Resources
 import com.titaniumPolitics.game.core.gameActions.GameAction
 import com.titaniumPolitics.game.core.gameActions.UnofficialResourceTransfer
+import com.titaniumPolitics.game.core.gameActions.Wait
 import kotlinx.serialization.Serializable
 
 @Serializable
 class BuyRoutine(val buyResource: String) : Routine() {
-    var err = false
     lateinit var tradeCharacter: String
     override fun newRoutineCondition(name: String, place: String, subroutines: List<Routine>): Routine? {
         //Try to trade for resources
@@ -27,7 +28,7 @@ class BuyRoutine(val buyResource: String) : Routine() {
         tradeCharacter = if (info.isNotEmpty()) {//If this character knows a character with the resource
             info.random().tgtCharacter!!
         } else
-            gState.characters.keys.filter { it != name }.random()
+            gState.aliveCharacters.keys.filter { it != name }.random()
 
         //FindCharacter
         // if the character is not in the same place.
@@ -68,14 +69,19 @@ class BuyRoutine(val buyResource: String) : Routine() {
                 //Since this is a request, the success of this routine cannot be known because it is up to tradeCharacter whether they send resource or not.
             }
         }
+        //If too much time has passed, end the routine.
+        if (gState.time - routineStartTime > IDTH) {
+            failed = true
+        }
         return null
     }
 
     override fun execute(name: String, place: String): GameAction {
-        TODO("Not supposed to be called")
+        executeDone = true
+        return Wait(name, place) //TODO: temporary implementation
     }
 
     override fun endCondition(name: String, place: String): Boolean {
-        return true
+        return executeDone
     }
 }

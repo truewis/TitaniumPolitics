@@ -66,6 +66,10 @@ data class Talk(
         if (sbjCharObj.currentMeeting != null)
             return false
 
+        //Can't talk to oneself.
+        if (sbjCharacter == who)
+            throw Exception("Invalid Talk action: subject and object are the same.")
+
         if (parent.characters[who]!!.currentMeeting == null)
             return tgtPlaceObj.characters.contains(who)
         else {

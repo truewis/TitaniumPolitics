@@ -15,6 +15,7 @@ class WorkRoutine(var workplace: String) : Routine() {
     var corruptionTimer = 0
     var try_prepare_info = 0
     val meetingsAttended = hashSetOf<String>()
+    val failedRequests = hashSetOf<String>()
 
     init {
         priority = PRIORITY_WORK
@@ -127,6 +128,7 @@ class WorkRoutine(var workplace: String) : Routine() {
 
         gState.requests.values.firstOrNull {
             if (name !in it.issuedTo) return@firstOrNull false
+            if (it.name in failedRequests) return@firstOrNull false //If I have already failed to execute this request, do not try again.
             val eta =
                 gState.places[it.action.tgtPlace]!!.shortestPathAndTimeTo(place)?.second ?: return@firstOrNull false
             return@firstOrNull (it.executeTime in gState.time - ReadOnly.constInt("CommandExecuteTolerance") + eta..gState.time + ReadOnly.constInt(
@@ -167,7 +169,8 @@ class WorkRoutine(var workplace: String) : Routine() {
                             .maxByOrNull { it.resources[res] }
                     if (resplace != null && place1.name != resplace.name)
                     //start new routine if there is a place with all the conditions met.
-                        if (resplace.resources[res] > 0 && subroutines.none { it is TransferResourceRoutine }) {
+                    //If the place with the resource has enough resource to supply apparatus for one hour, and there is no existing transfer routine
+                        if (resplace.resources[res] > apparatus.hourlyOperationResource[res] && subroutines.none { it is TransferResourceRoutine }) {
                             return TransferResourceRoutine().also {
                                 it.res = res; it.source = resplace.name; it.dest = place1.name
                                 priority = PRIORITY_WORK + 80 //Higher priority than work.
@@ -297,6 +300,14 @@ class WorkRoutine(var workplace: String) : Routine() {
 
         //Wait until there is some routine available above.
         return Wait(name, place) //If no subroutine is found, wait at the current place.
+    }
+
+    override fun onSubroutineFail(subroutine: Routine) {
+        if (subroutine is ExecuteCommandRoutine) {
+            val requestName = subroutine.variables["request"]!!
+            failedRequests += requestName
+        }
+        //Never fail the work routine itself.
     }
 
     override fun endCondition(name: String, place: String): Boolean {

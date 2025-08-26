@@ -38,6 +38,5 @@ class TransferResourceRoutine() : Routine() {
 
     override fun endCondition(name: String, place: String): Boolean {
         return executeDone
-        //TODO: when pathfinding fails, return true.
     }
 }
