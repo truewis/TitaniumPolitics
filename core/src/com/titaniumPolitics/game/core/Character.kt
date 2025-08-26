@@ -36,15 +36,9 @@ class Character : GameStateElement() {
     var trait = hashSetOf<String>()
     var type = Type.DIRECTOR
 
-    var resources: Resources
+    val resources: Resources
         get() =
             parent.places["home_$name"]!!.resources
-        set(value) {
-            value.forEach {
-                //Since place resources are immutable, we have to set the resources of the home place directly.
-                parent.places["home_$name"]!!.resources[it.key] = it.value
-            }
-        }
 
     /**Information that can be presented in meetings. Note that preparing the information prevents it from expiring.*/
     var preparedInfoKeys =
@@ -125,9 +119,14 @@ class Character : GameStateElement() {
             "introvert",
             "extrovert",
             "lazy",
-            "hardworking"
+            "hardworking",
         )
         trait.add(traits.random())
+        //Everyone is either a thief or a bargainer.
+        if ((0..1).random() == 0)
+            trait.add("thief")
+        else
+            trait.add("bargainer")
         //Randomly assign stats to the character.
         stats = Stat(
             logos = (0..20).random(),

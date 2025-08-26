@@ -550,12 +550,7 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable 
                                             JoinMeeting(
                                                 gameState.playerName,
                                                 gameState.player.place.name
-                                            ).also {
-                                                it.meetingName =
-                                                    gameState.ongoingMeetings.filter {
-                                                        it.value.scheduledCharacters.contains(gameState.playerName) && it.value.place == gameState.player.place.name
-                                                    }.keys.first()
-                                            }
+                                            )
                                         )
                                     }
                                 })

@@ -8,7 +8,7 @@ import com.titaniumPolitics.game.core.gameActions.*
 import kotlinx.serialization.Serializable
 
 @Serializable
-class AttendDivisionElectionRoutine : Routine(), IMeetingRoutine {
+class AttendDivisionElectionRoutine(override val meetingName: String) : Routine(), IMeetingRoutine {
     var try_support_nomination = 0
 
     init {
@@ -16,16 +16,11 @@ class AttendDivisionElectionRoutine : Routine(), IMeetingRoutine {
     }
 
     override fun newRoutineCondition(name: String, place: String, subroutines: List<Routine>): Routine? {
-        val character = gState.characters[name]!!
         val conf =
-            character.currentMeeting ?: return null
-        check(conf.type == Meeting.MeetingType.DIVISION_LEADER_ELECTION) {
-            "LeadDivisionElectionRoutine can only be used in divisionLeaderElection , but got ${conf.type}"
-        }
+            gState.ongoingMeetings[meetingName] ?: gState.scheduledMeetings[meetingName]
+        meetingStartMethod(conf, place)?.let { return it }
+        if (conf == null) return null
         val party = gState.parties[conf.involvedParty]!!
-        check(party.members.contains(name)) {
-            "AttendDivisionElectionRoutine can only be used for divisionLeaderElection when the character is a member of the party, but got $name not in ${party.name}"
-        }
 
 
         //If not speaker, wait if the mutuality to the speaker is high. Otherwise, if possible, interrupt the speaker.
@@ -42,14 +37,20 @@ class AttendDivisionElectionRoutine : Routine(), IMeetingRoutine {
                 if (try_support_nomination == 0) {
                     //If the agenda is already proposed, and we have a supporting information, support it.
                     try_support_nomination += 1
-                    return SupportAgendaRoutine(conf.agendas.indexOfFirst { it.type == AgendaType.NOMINATE && it.subjectParams["character"] == nominee })
+                    return SupportAgendaRoutine(
+                        conf.agendas.indexOfFirst { it.type == AgendaType.NOMINATE && it.subjectParams["character"] == nominee },
+                        meetingName
+                    )
                 }
                 //After you support the nominee, attack the other nominees.
                 val otherNominees =
                     gState.characters.keys.filter { it != name && it != nominee && conf.agendas.any { it.type == AgendaType.NOMINATE && it.subjectParams["character"] == nominee } }
                 if (otherNominees.isNotEmpty()) {
                     return (
-                            AttackAgendaRoutine(conf.agendas.indexOfFirst { it.type == AgendaType.NOMINATE && it.subjectParams["character"] == nominee }))//Add a routine, priority higher than work.
+                            AttackAgendaRoutine(
+                                conf.agendas.indexOfFirst { it.type == AgendaType.NOMINATE && it.subjectParams["character"] == nominee },
+                                meetingName
+                            ))//Add a routine, priority higher than work.
 
                 }
             }
@@ -66,10 +67,6 @@ class AttendDivisionElectionRoutine : Routine(), IMeetingRoutine {
         if (conf == null) {
             JoinMeeting(name, place).apply {
                 injectParent(gState)
-                meetingName =
-                    gState.ongoingMeetings.filter { it.value.type == Meeting.MeetingType.DIVISION_LEADER_ELECTION && it.value.place == place }
-                        .keys.firstOrNull()
-                        ?: return@apply
                 if (isValid())
                     return this
             }

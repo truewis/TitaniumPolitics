@@ -1,3 +1,5 @@
 package com.titaniumPolitics.game.core.NPCRoutines
 
-interface IMeetingRoutine
+interface IMeetingRoutine {
+    val meetingName: String
+}

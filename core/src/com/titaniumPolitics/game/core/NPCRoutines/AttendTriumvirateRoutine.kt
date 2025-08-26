@@ -8,7 +8,7 @@ import com.titaniumPolitics.game.core.gameActions.*
 import kotlinx.serialization.Serializable
 
 @Serializable
-class AttendTriumvirateRoutine : Routine(), IMeetingRoutine {
+class AttendTriumvirateRoutine(override val meetingName: String) : Routine(), IMeetingRoutine {
     init {
         priority = PRIORITY_MEETING
     }
@@ -16,10 +16,9 @@ class AttendTriumvirateRoutine : Routine(), IMeetingRoutine {
     override fun newRoutineCondition(name: String, place: String, subroutines: List<Routine>): Routine? {
         val character = gState.characters[name]!!
         val conf =
-            character.currentMeeting ?: return null
-        check(conf.type == Meeting.MeetingType.TRIUMVIRATE_DAILY_CONFERENCE) {
-            "AttendTriumvirateRoutine can only be used for triumvirateDailyConference, but got ${conf.type}"
-        }
+            gState.ongoingMeetings[meetingName] ?: gState.scheduledMeetings[meetingName]
+        meetingStartMethod(conf, place)?.let { return it }
+        if (conf == null) return null
 
         val party = gState.parties[conf.involvedParty]!!
         check(party.members.contains(name)) {
@@ -39,10 +38,6 @@ class AttendTriumvirateRoutine : Routine(), IMeetingRoutine {
         if (conf == null) {
             JoinMeeting(name, place).apply {
                 injectParent(gState)
-                meetingName =
-                    gState.ongoingMeetings.filter { it.value.type == Meeting.MeetingType.TRIUMVIRATE_DAILY_CONFERENCE && it.value.place == place }
-                        .keys.firstOrNull()
-                        ?: return@apply
                 if (isValid())
                     return this
             }
@@ -121,7 +116,7 @@ class AttendTriumvirateRoutine : Routine(), IMeetingRoutine {
             //6. Triumvirate does not manage resources, so no need to adjust resource production.
 
             //7. Gossip
-            TalkRoutine.gossip(gState, name, place)?.also { return it }
+            AttendPrivateMeetingRoutine.gossip(gState, name, place)?.also { return it }
             //If nothing else to talk about, end the speech. The next speaker is the character with the highest mutuality.
             val nextSpeaker = conf.currentCharacters.minus(name)
                 .maxByOrNull { gState.getMutuality(name, it) }

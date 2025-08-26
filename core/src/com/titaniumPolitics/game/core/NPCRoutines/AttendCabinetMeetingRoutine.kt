@@ -10,23 +10,16 @@ import com.titaniumPolitics.game.core.gameActions.*
 import kotlinx.serialization.Serializable
 
 @Serializable
-class AttendCabinetMeetingRoutine : Routine(), IMeetingRoutine {
+class AttendCabinetMeetingRoutine(override val meetingName: String) : Routine(), IMeetingRoutine {
     init {
         priority = PRIORITY_MEETING
     }
 
     override fun newRoutineCondition(name: String, place: String, subroutines: List<Routine>): Routine? {
-        val character = gState.characters[name]!!
         val conf =
-            character.currentMeeting ?: return null
-        check(conf.type == Meeting.MeetingType.CABINET_DAILY_CONFERENCE) {
-            "AttendCabinetMeetingRoutine can only be used for cabinetDailyConference, but got ${conf.type}"
-        }
-
-        val party = gState.parties[conf.involvedParty]!!
-        check(party.leader != name) {
-            "AttendCabinetMeetingRoutine can only be used for cabinetDailyConference when not the leader, but got $name as the leader of ${party.name}"
-        }
+            gState.ongoingMeetings[meetingName] ?: gState.scheduledMeetings[meetingName]
+        meetingStartMethod(conf, place)?.let { return it }
+        if (conf == null) return null
 
         supportProofOfWork(conf, name)?.let { return it }
 
@@ -41,10 +34,6 @@ class AttendCabinetMeetingRoutine : Routine(), IMeetingRoutine {
         if (conf == null) {
             JoinMeeting(name, place).apply {
                 injectParent(gState)
-                meetingName =
-                    gState.ongoingMeetings.filter { it.value.type == Meeting.MeetingType.CABINET_DAILY_CONFERENCE && it.value.place == place }
-                        .keys.firstOrNull()
-                        ?: return@apply
                 if (isValid())
                     return this
             }

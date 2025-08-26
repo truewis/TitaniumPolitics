@@ -54,7 +54,7 @@ class Party : GameStateElement() {
                     val resMap = hashMapOf<String, Resources>()
                     divisions.forEach { division ->
                         val directorWage =
-                            Resources(Salary.standardQuarterlyRate("division")) * (division.directorMembers - division.leader).size
+                            Salary.standardQuarterlyRate("division") * (division.directorMembers - division.leader).size
                         resMap[division.name] = division.standardBudget.sum() + directorWage
                     }
                     return Budget(resMap)
@@ -74,7 +74,7 @@ class Party : GameStateElement() {
 
                 "workplace" -> {
                     val employeeWage =
-                        Resources(Salary.standardQuarterlyRate("workplace")) * (realMembers - directorMembers).size
+                        Salary.standardQuarterlyRate("workplace") * (realMembers - directorMembers).size
                     //Workplace directors are paid from the division budget, not workplace budget.
                     //Laborer salary is included in apparatus operation cost.
 

@@ -11,22 +11,26 @@ data class JoinMeeting(override val sbjCharacter: String, override val tgtPlace:
         injectParent(gameState)
     }
 
-    var meetingName = ""
-    override fun chooseParams() {
-        meetingName =
-            GameEngine.acquire(parent.ongoingMeetings.filter { it.value.scheduledCharacters.contains(sbjCharacter) && it.value.place == tgtPlace }.keys.toList())
-    }
+    val targetMeeting
+        get() =
+            parent.scheduledMeetings
+                .filter {
+                    parent.ongoingMeetings.containsKey(it.key) &&
+                            sbjCharacter in it.value.scheduledCharacters &&
+                            sbjCharacter !in it.value.currentCharacters &&
+                            it.value.place == tgtPlace
+                }.keys.firstOrNull()
 
     override fun execute() {
-        parent.ongoingMeetings[meetingName]!!.currentCharacters.add(sbjCharacter)
-        Logger.write("$sbjCharacter joined the meeting $meetingName", Logger.LogLevel.INFO)
+        parent.ongoingMeetings[targetMeeting]!!.currentCharacters.add(sbjCharacter)
+        Logger.write("$sbjCharacter joined the meeting $targetMeeting", Logger.LogLevel.INFO)
         super.execute()
     }
 
     override fun isValid(): Boolean {
         if (sbjCharObj.currentMeeting != null) {
             Logger.write(
-                "Cannot join a meeting $meetingName while already in one: ${sbjCharObj.currentMeeting}",
+                "Cannot join a meeting $targetMeeting while already in one: ${sbjCharObj.currentMeeting}",
                 Logger.LogLevel.ERROR
             )
             return false

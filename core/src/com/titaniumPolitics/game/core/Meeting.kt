@@ -147,6 +147,10 @@ class Meeting(
         return tgtTime - time in -constInt("MeetingStartTolerance")..constInt("MeetingStartTolerance")
     }
 
+    override fun toString(): String {
+        return "Meeting(type=$type, time=$time, place='$place', scheduledCharacters=$scheduledCharacters, currentCharacters=$currentCharacters, involvedParty=$involvedParty, currentSpeaker=$currentSpeaker, currentAttention=$currentAttention, agendas=$agendas, voteResults=$voteResults, nominationFinishedTime=$nominationFinishedTime)"
+    }
+
     enum class MeetingType {
         TALK, DIVISION_LEADER_ELECTION, DIVISION_DAILY_CONFERENCE, BUDGET_PROPOSAL, BUDGET_RESOLUTION, CABINET_DAILY_CONFERENCE, TRIUMVIRATE_DAILY_CONFERENCE
     }

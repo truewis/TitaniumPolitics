@@ -9,18 +9,16 @@ import kotlin.math.min
 import kotlin.math.pow
 
 @Serializable
-class AttendDivisionBudgetProposalRoutine : Routine(), IMeetingRoutine {
+class AttendDivisionBudgetProposalRoutine(override val meetingName: String) : Routine(), IMeetingRoutine {
     init {
         priority = PRIORITY_MEETING
     }
 
     override fun newRoutineCondition(name: String, place: String, subroutines: List<Routine>): Routine? {
-        val character = gState.characters[name]!!
         val conf =
-            character.currentMeeting ?: return null
-        check(conf.type == Meeting.MeetingType.BUDGET_PROPOSAL) {
-            "AttendDivisionMeetingRoutine can only be used for budget proposal, but got ${conf.type}"
-        }
+            gState.ongoingMeetings[meetingName] ?: gState.scheduledMeetings[meetingName]
+        meetingStartMethod(conf, place)?.let { return it }
+        if (conf == null) return null
 
         return null
     }
@@ -32,10 +30,6 @@ class AttendDivisionBudgetProposalRoutine : Routine(), IMeetingRoutine {
         if (conf == null) {
             JoinMeeting(name, place).apply {
                 injectParent(gState)
-                meetingName =
-                    gState.ongoingMeetings.filter { it.value.type == Meeting.MeetingType.BUDGET_PROPOSAL && it.value.place == place }
-                        .keys.firstOrNull()
-                        ?: return@apply
                 if (isValid())
                     return this
             }

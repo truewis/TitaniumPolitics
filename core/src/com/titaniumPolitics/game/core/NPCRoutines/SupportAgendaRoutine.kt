@@ -11,7 +11,7 @@ import com.titaniumPolitics.game.core.gameActions.Wait
 import kotlinx.serialization.Serializable
 
 @Serializable
-class SupportAgendaRoutine(val agendaIndex: Int) : Routine(), IMeetingRoutine {
+class SupportAgendaRoutine(val agendaIndex: Int, override val meetingName: String) : Routine(), IMeetingRoutine {
     override fun newRoutineCondition(name: String, place: String, subroutines: List<Routine>): Routine? {
         return null
     }

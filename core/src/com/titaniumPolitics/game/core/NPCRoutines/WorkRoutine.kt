@@ -7,7 +7,6 @@ import com.titaniumPolitics.game.core.ReadOnly
 import com.titaniumPolitics.game.core.gameActions.GameAction
 import com.titaniumPolitics.game.core.gameActions.PrepareInfo
 import com.titaniumPolitics.game.core.gameActions.Wait
-import com.titaniumPolitics.game.debugTools.Logger
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -32,11 +31,14 @@ class WorkRoutine(var workplace: String) : Routine() {
 
         //I am forced into a meeting. Pick a meeting routine. Do not attend the meeting if it is already attended.
         if (character.currentMeeting != null) {
-            if (gState.meetingName(character.currentMeeting!!) in meetingsAttended)
-                return null//LeaveMeeting must be issued by NonPlayerAgent.
-            return pickMeetingRoutine(name, character.currentMeeting!!).apply {
-                priority = PRIORITY_MEETING //Higher priority than work.
-            }
+            if (subroutines.none {
+                    it is IMeetingRoutine && it.meetingName == gState.meetingName(character.currentMeeting!!)
+                }
+                && gState.meetingName(character.currentMeeting!!) !in meetingsAttended
+            )
+                return pickMeetingRoutine(name, character.currentMeeting!!).apply {
+                    priority = PRIORITY_MEETING //Higher priority than work.
+                }
         }
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         //1. If an accident happened in the place of my control, investigate and clear it.
@@ -48,7 +50,7 @@ class WorkRoutine(var workplace: String) : Routine() {
             if (subroutines.none { it is InvestigateAndClearAccidentRoutine && it.investigatePlace == place.name }) {
                 //If there is no routine to investigate and clear the accident in this place, create a new one.
                 return InvestigateAndClearAccidentRoutine(place.name).apply {
-                    priority = PRIORITY_WORK + 100 //Higher priority than work.
+                    priority = PRIORITY_WORK + 10000 //Highest priority
                 }
             }
         }
@@ -59,18 +61,8 @@ class WorkRoutine(var workplace: String) : Routine() {
 
         //Do not attend the meeting if it is already attended.
         if (missingMeeting != null && gState.meetingName(missingMeeting) !in meetingsAttended) {
-            // Move to the meeting if not already there
-            if (place != missingMeeting.place) {
-                if (subroutines.none { it is MoveRoutine }) {
-                    return MoveRoutine(missingMeeting.place).apply {
-                        priority = PRIORITY_MEETING//Higher priority
-                    }
-                }
-            } else {
-                return pickMeetingRoutine(name, missingMeeting).apply {
-                    priority = PRIORITY_MEETING //Higher priority than work.
-                }
-
+            return pickMeetingRoutine(name, missingMeeting).apply {
+                priority = PRIORITY_MEETING //Higher priority than work.
             }
         }
 
@@ -81,22 +73,8 @@ class WorkRoutine(var workplace: String) : Routine() {
             return@firstOrNull it.isValidTimeToStart(gState.time + eta) || it.isValidTimeToStart(gState.time + eta + 30)
         }?.also { conf ->
             //----------------------------------------------------------------------------------Move to the Meeting
-            if (place != conf.place) {
-                if (subroutines.none { it is MoveRoutine })
-                    return MoveRoutine(conf.place).apply {
-                        priority = PRIORITY_MEETING//Higher priority
-                    }
-            } else {
-                if (conf.isValidTimeToStart(gState.time))
-                    return pickMeetingRoutine(name, conf).apply {
-                        priority = PRIORITY_MEETING //Higher priority than work.
-                    }
-                else
-                    if (subroutines.none { it is WaitRoutine })
-                        return WaitRoutine().apply {
-                            priority = PRIORITY_MEETING - 10//Higher priority.
-                            until = this@WorkRoutine.gState.time + 5
-                        } //Wait until the meeting is valid to start. This is necessary if the character arrives early to the meeting place.
+            return pickMeetingRoutine(name, conf).apply {
+                priority = PRIORITY_MEETING //Higher priority than work.
             }
         }
 
@@ -255,42 +233,42 @@ class WorkRoutine(var workplace: String) : Routine() {
         when (conf.type) {
             Meeting.MeetingType.DIVISION_DAILY_CONFERENCE -> {
                 if (name != gState.parties[conf.involvedParty]!!.leader) {
-                    return AttendDivisionMeetingRoutine()
+                    return AttendDivisionMeetingRoutine(gState.meetingName(conf))
                 } else {
-                    return LeadDivisionMeetingRoutine()
+                    return LeadDivisionMeetingRoutine(gState.meetingName(conf))
                 }
             }
 
             Meeting.MeetingType.DIVISION_LEADER_ELECTION -> {
                 if (name != "ctrler") {
-                    return AttendDivisionElectionRoutine()
+                    return AttendDivisionElectionRoutine(gState.meetingName(conf))
                 } else {
-                    return LeadDivisionElectionRoutine()
+                    return LeadDivisionElectionRoutine(gState.meetingName(conf))
                 }
             }
 
             Meeting.MeetingType.TALK -> {
-                return TalkRoutine()
+                return AttendPrivateMeetingRoutine(scheduledMeetingName = gState.meetingName(conf))
             }
 
             Meeting.MeetingType.CABINET_DAILY_CONFERENCE -> {
                 if (name != gState.parties["cabinet"]!!.leader) {
-                    return AttendCabinetMeetingRoutine()
+                    return AttendCabinetMeetingRoutine(gState.meetingName(conf))
                 } else {
-                    return LeadCabinetMeetingRoutine()
+                    return LeadCabinetMeetingRoutine(gState.meetingName(conf))
                 }
             }
 
             Meeting.MeetingType.TRIUMVIRATE_DAILY_CONFERENCE -> {
-                return AttendTriumvirateRoutine()
+                return AttendTriumvirateRoutine(gState.meetingName(conf))
             }
 
             Meeting.MeetingType.BUDGET_PROPOSAL -> {
-                return AttendDivisionBudgetProposalRoutine()
+                return AttendDivisionBudgetProposalRoutine(gState.meetingName(conf))
             }
 
             Meeting.MeetingType.BUDGET_RESOLUTION -> {
-                return AttendDivisionBudgetResolutionRoutine()
+                return AttendDivisionBudgetResolutionRoutine(gState.meetingName(conf))
             }
 
             else -> {

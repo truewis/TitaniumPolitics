@@ -5,7 +5,7 @@ import com.titaniumPolitics.game.core.gameActions.*
 import kotlinx.serialization.Serializable
 
 @Serializable
-class AttendDivisionMeetingRoutine : Routine(), IMeetingRoutine {
+class AttendDivisionMeetingRoutine(override val meetingName: String) : Routine(), IMeetingRoutine {
     var try_support_salary = 0
 
     init {
@@ -15,16 +15,11 @@ class AttendDivisionMeetingRoutine : Routine(), IMeetingRoutine {
     override fun newRoutineCondition(name: String, place: String, subroutines: List<Routine>): Routine? {
         val character = gState.characters[name]!!
         val conf =
-            character.currentMeeting ?: return null
-        check(conf.type == Meeting.MeetingType.DIVISION_DAILY_CONFERENCE) {
-            "AttendDivisionMeetingRoutine can only be used for divisionDailyConference, but got ${conf.type}"
-        }
+            gState.ongoingMeetings[meetingName] ?: gState.scheduledMeetings[meetingName]
+        meetingStartMethod(conf, place)?.let { return it }
+        if (conf == null) return null
 
         val party = gState.parties[conf.involvedParty]!!
-        check(party.leader != name) {
-            "AttendDivisionMeetingRoutine can only be used for divisionDailyConference when not the leader, but got $name as the leader of ${party.name}"
-        }
-
         supportProofOfWork(conf, name)?.let { return it }
 
 
@@ -39,7 +34,10 @@ class AttendDivisionMeetingRoutine : Routine(), IMeetingRoutine {
                 if (try_support_salary == 0) {
                     try_support_salary += 1
                     //If the agenda is already proposed, and we have a supporting information, support it.
-                    return SupportAgendaRoutine(conf.agendas.indexOfFirst { it.type == AgendaType.REQUEST && it.attachedRequest!!.action is Salary })//Add a routine, priority higher than work.
+                    return SupportAgendaRoutine(
+                        conf.agendas.indexOfFirst { it.type == AgendaType.REQUEST && it.attachedRequest!!.action is Salary },
+                        meetingName
+                    )//Add a routine, priority higher than work.
                 }
 
             }
@@ -56,10 +54,6 @@ class AttendDivisionMeetingRoutine : Routine(), IMeetingRoutine {
         if (conf == null) {
             JoinMeeting(name, place).apply {
                 injectParent(gState)
-                meetingName =
-                    gState.ongoingMeetings.filter { it.value.type == Meeting.MeetingType.DIVISION_DAILY_CONFERENCE && it.value.place == place }
-                        .keys.firstOrNull()
-                        ?: return@apply
                 if (isValid())
                     return this
             }

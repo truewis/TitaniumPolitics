@@ -8,7 +8,7 @@ import com.titaniumPolitics.game.core.gameActions.*
 import kotlinx.serialization.Serializable
 
 @Serializable
-class LeadDivisionElectionRoutine : Routine(), IMeetingRoutine {
+class LeadDivisionElectionRoutine(override val meetingName: String) : Routine(), IMeetingRoutine {
     init {
         priority = PRIORITY_MEETING
     }
@@ -16,10 +16,9 @@ class LeadDivisionElectionRoutine : Routine(), IMeetingRoutine {
     override fun newRoutineCondition(name: String, place: String, subroutines: List<Routine>): Routine? {
         val character = gState.characters[name]!!
         val conf =
-            character.currentMeeting ?: return null
-        check(conf.type == Meeting.MeetingType.DIVISION_LEADER_ELECTION) {
-            "LeadDivisionElectionRoutine can only be used in divisionLeaderElection , but got ${conf.type}"
-        }
+            gState.ongoingMeetings[meetingName] ?: gState.scheduledMeetings[meetingName]
+        meetingStartMethod(conf, place)?.let { return it }
+        if (conf == null) return null
         check(name == "ctrler") {
             "LeadDivisionElectionRoutine can only be used by the ctrler, but got $name"
         }

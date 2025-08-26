@@ -360,8 +360,8 @@ class GameState {
             if (places.none { it.value.characters.contains(char.key) })
                 places["home_" + char.key]!!.characters.add(char.key)
 
-            char.value.resources =
-                Resources("ration" to 10.0 * char.value.reliant, "water" to 10.0 * char.value.reliant)
+            char.value.resources["ration"] = 10.0 * char.value.reliant
+            char.value.resources["water"] = 10.0 * char.value.reliant
         }
 
         //After all characters are created, create mutuality matrix.

@@ -92,7 +92,7 @@ data class NewAgenda(override val sbjCharacter: String, override val tgtPlace: S
                     val division = parties[mt.involvedParty]!!
                     val finalBudget = division.proposedBudgets[agenda.subjectParams["whoseProposal"]!!]!!
                     return reason(
-                        !places[division.home]!!.resources.contains(
+                        places[division.home]!!.resources.contains(
                             finalBudget.sum()
                         ), "newAgenda-BudgetResolution-resources"
                     )

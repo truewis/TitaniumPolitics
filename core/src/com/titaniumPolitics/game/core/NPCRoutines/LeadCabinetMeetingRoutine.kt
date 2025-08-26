@@ -8,7 +8,7 @@ import com.titaniumPolitics.game.core.gameActions.*
 import kotlinx.serialization.Serializable
 
 @Serializable
-class LeadCabinetMeetingRoutine : Routine(), IMeetingRoutine {
+class LeadCabinetMeetingRoutine(override val meetingName: String) : Routine(), IMeetingRoutine {
     init {
         priority = PRIORITY_MEETING
     }
@@ -16,10 +16,9 @@ class LeadCabinetMeetingRoutine : Routine(), IMeetingRoutine {
     override fun newRoutineCondition(name: String, place: String, subroutines: List<Routine>): Routine? {
         val character = gState.characters[name]!!
         val conf =
-            character.currentMeeting ?: return null
-        check(conf.type == Meeting.MeetingType.CABINET_DAILY_CONFERENCE) {
-            "For $name, LeadCabinetMeetingRoutine can only be used in cabinetDailyConference, but got ${conf.type}"
-        }
+            gState.ongoingMeetings[meetingName] ?: gState.scheduledMeetings[meetingName]
+        meetingStartMethod(conf, place)?.let { return it }
+        if (conf == null) return null
         val party = gState.parties[conf.involvedParty]!!
         check(party.leader == name) {
             "For $name, LeadCabinetMeetingRoutine can only be used for cabinetDailyConference when the leader, but got $name as the leader of ${party.name}"
@@ -38,10 +37,6 @@ class LeadCabinetMeetingRoutine : Routine(), IMeetingRoutine {
         if (conf == null) {
             JoinMeeting(name, place).apply {
                 injectParent(gState)
-                meetingName =
-                    gState.ongoingMeetings.filter { it.value.type == Meeting.MeetingType.CABINET_DAILY_CONFERENCE && it.value.place == place }
-                        .keys.firstOrNull()
-                        ?: return@apply
                 if (isValid())
                     return this
             }
@@ -120,7 +115,7 @@ class LeadCabinetMeetingRoutine : Routine(), IMeetingRoutine {
             //6. Cabinet does not manage resources, so no need to adjust resource production.
 
             //7. Gossip
-            TalkRoutine.gossip(gState, name, place)?.also { return it }
+            AttendPrivateMeetingRoutine.gossip(gState, name, place)?.also { return it }
 
             //8. End meeting if attention is low.
             endMeetingIfLowAttention(conf, name, place)?.let { return it }

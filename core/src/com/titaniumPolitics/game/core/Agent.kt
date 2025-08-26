@@ -2,6 +2,7 @@ package com.titaniumPolitics.game.core
 
 import com.titaniumPolitics.game.core.NPCRoutines.IMeetingRoutine
 import com.titaniumPolitics.game.core.NPCRoutines.Routine
+import com.titaniumPolitics.game.core.gameActions.EndSpeech
 import com.titaniumPolitics.game.core.gameActions.GameAction
 import com.titaniumPolitics.game.core.gameActions.LeaveMeeting
 import com.titaniumPolitics.game.core.gameActions.Wait
@@ -28,8 +29,23 @@ sealed class Agent : GameStateElement() {
         //In this case, attendMeetingRoutine is still alive in the queue,
         //but it will be removed immediately when it becomes the current routine, as the character is not in a meeting.
         if (routines.isEmpty()) return null
-        if ((routines[0] !is IMeetingRoutine && character.currentMeeting != null)) {
-            return LeaveMeeting(name, place)
+        if (character.currentMeeting != null && routines[0].let {
+                it !is IMeetingRoutine || it.meetingName != parent.meetingName(
+                    character.currentMeeting!!
+                )
+            }) {
+            LeaveMeeting(name, place).also {
+                it.injectParent(parent)
+                if (it.isValid()) return it
+            }
+            //If leaving meeting is not possible, try ending speech.
+            EndSpeech(name, place, character.currentMeeting!!.currentCharacters.first { it != name }).also {
+                it.injectParent(parent)
+                if (it.isValid()) return it
+            }
+
+            //If neither leaving meeting nor ending speech is possible, wait.
+            return Wait(name, place)
         }
         return null
     }

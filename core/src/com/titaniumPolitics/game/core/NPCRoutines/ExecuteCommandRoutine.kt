@@ -5,13 +5,10 @@ import com.titaniumPolitics.game.core.Information
 import com.titaniumPolitics.game.core.MeetingAgenda
 import com.titaniumPolitics.game.core.ReadOnly
 import com.titaniumPolitics.game.core.Request
-import com.titaniumPolitics.game.core.Resources
 import com.titaniumPolitics.game.core.gameActions.GameAction
-import com.titaniumPolitics.game.core.gameActions.UnofficialResourceTransfer
 import com.titaniumPolitics.game.core.gameActions.Wait
 import com.titaniumPolitics.game.debugTools.Logger
 import kotlinx.serialization.Serializable
-import kotlin.math.min
 
 @Serializable
 class ExecuteCommandRoutine() : Routine() {
@@ -49,16 +46,18 @@ class ExecuteCommandRoutine() : Routine() {
                     charactersDelegatableTo.keys.intersect(
                         gState.places[place]!!.characters
                     ).firstOrNull()?.let { executor ->
-                        return TalkRoutine(
-                            executor, MeetingAgenda(
-                                AgendaType.REQUEST, name, attachedRequest = Request(
-                                    executableRequest.action.copy(executor),
-                                    issuedTo = hashSetOf(executor),
-                                    issuedBy = hashSetOf(name),
-                                    executeTime = gState.time
+                        //If there is someone to delegate to in the same place, try to have a private meeting with them to delegate the job.
+                        if (subroutines.none { it is IMeetingRoutine })
+                            return AttendPrivateMeetingRoutine(
+                                executor, MeetingAgenda(
+                                    AgendaType.REQUEST, name, attachedRequest = Request(
+                                        executableRequest.action.copy(executor),
+                                        issuedTo = hashSetOf(executor),
+                                        issuedBy = hashSetOf(name),
+                                        executeTime = gState.time
+                                    )
                                 )
                             )
-                        )
                     }
                     //If there isn't anyone here to delegate the job, but am aware that someone exists,
                     val delegator = charactersDelegatableTo.keys.random()

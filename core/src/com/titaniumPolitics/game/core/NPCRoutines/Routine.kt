@@ -17,6 +17,7 @@ import com.titaniumPolitics.game.core.gameActions.NewAgenda
 import com.titaniumPolitics.game.core.gameActions.Repair
 import com.titaniumPolitics.game.core.gameActions.UnofficialResourceTransfer
 import com.titaniumPolitics.game.core.gameActions.Wait
+import com.titaniumPolitics.game.debugTools.Logger
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 import java.util.*
@@ -121,7 +122,10 @@ sealed class Routine() {
                 //If the agenda is already proposed, and we have a supporting information, support it.
                 try_support_proofOfWork += 1
                 return (
-                        SupportAgendaRoutine(conf.agendas.indexOfFirst { it.type == AgendaType.PROOF_OF_WORK }))//Add a routine, priority higher than work.
+                        SupportAgendaRoutine(
+                            conf.agendas.indexOfFirst { it.type == AgendaType.PROOF_OF_WORK },
+                            gState.meetingName(conf)
+                        ))//Add a routine, priority higher than work.
             }
         }
         return null
@@ -295,6 +299,24 @@ sealed class Routine() {
         }
     }
 
+    fun meetingStartMethod(conf: Meeting?, place: String): Routine? {
+        if (conf == null) {
+            Logger.write(
+                "Meeting routine failed because the character is not in a meeting and there is no meeting to join.",
+                Logger.LogLevel.WARNING
+            )
+            failed = true
+            return null
+        }
+        if (conf !in gState.ongoingMeetings.values) {
+            if (place != conf.place)
+                return MoveRoutine(conf.place)
+            else
+                return null //Wait until the meeting starts.
+        }
+        return null
+    }
+
     fun endMeetingIfLowAttention(
         conf: Meeting,
         name: String,
@@ -308,13 +330,22 @@ sealed class Routine() {
     }
 
     fun meetingRoutineEndCondition(name: String, type: Meeting.MeetingType): Boolean {
-        if (gState.characters[name]!!.currentMeeting == null) return false //The meeting has not started yet.
-        val conf = gState.characters[name]!!.currentMeeting!!
-        if (conf.type == Meeting.MeetingType.DIVISION_LEADER_ELECTION && conf.voteResults.isEmpty()) return false //If the meeting is a division leader election and there are no vote results, the meeting is not over yet.
-        if (conf.time + 1800 / ReadOnly.DT >= gState.time) return false //At least, wait until the meeting has happened for 30 minutes.
-        return routineStartTime + 7200 / ReadOnly.DT <= gState.time || conf.type != type || conf.currentAttention < 10
-        /*Sometimes characters are transferred between different meetings without their turn. In that case, the previous meeting routine is killed here.*/
-        /*Of course, if the new meeting has the same type as the old one, no need to switch routine.*/
+        with(this as IMeetingRoutine) {
+            if (meetingName in gState.scheduledMeetings || (type == Meeting.MeetingType.TALK && meetingName !in gState.ongoingMeetings) /*Talk meetings may not be scheduled in advanced.*/) {
+                return false //The meeting has not started yet.
+            }
+            val conf = gState.characters[name]!!.currentMeeting
+                ?: return true //The meeting has ended, so the routine should end.
+
+            if (conf != gState.ongoingMeetings[meetingName]) {
+                return true //The character has been transferred to another meeting.
+            }
+            //Now, given that we are in the correct meeting, check if the meeting is over.
+            if (conf.type == Meeting.MeetingType.DIVISION_LEADER_ELECTION && conf.voteResults.isEmpty()) return false //If the meeting is a division leader election and there are no vote results, the meeting is not over yet.
+            if (conf.time + 1800 / ReadOnly.DT >= gState.time) return false //At least, wait until the meeting has happened for 30 minutes.
+            return routineStartTime + 7200 / ReadOnly.DT <= gState.time || conf.type != type || conf.currentAttention < 10
+            /*Sometimes characters are transferred between different meetings without their turn. In that case, the previous meeting routine is killed here.*/
+        }
     }
 
     override fun toString(): String {

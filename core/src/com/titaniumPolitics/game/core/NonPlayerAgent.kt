@@ -70,7 +70,7 @@ class NonPlayerAgent : Agent() {
                 //Find a place within my division with maximum res.
                 if (routines.none { it is StealRoutine }) {
                     routines.add(StealRoutine(wantedResource).apply {
-                        priority = pri
+                        priority = PRIORITY_LIFE_SUPPORT
                         routineStartTime = parent.time
                     })//Add a routine, priority higher than work.
                     return
@@ -78,8 +78,8 @@ class NonPlayerAgent : Agent() {
 
             } else if (parent.characters[name]!!.trait.contains("bargainer")) {
                 if (routines.none { it is BuyRoutine }) {
-                    routines.add(BuyRoutine(wantedResource).apply {
-                        priority = pri
+                    routines.add(BuyRoutine(wantedResource, parent.characters[name]!!.reliant * 10.0).apply {
+                        priority = PRIORITY_LIFE_SUPPORT
                         routineStartTime = parent.time
                     })//Add a routine, priority higher than work.
                     return
@@ -151,17 +151,18 @@ class NonPlayerAgent : Agent() {
                 Logger.write("Routines $removeList is being removed.", Logger.LogLevel.INFO)
             removeList.clear()
             routines.forEach {
-                it.newRoutineCondition(name, place, it.subroutines.map { routines.first { rt -> rt.ID == it } })
-                    ?.let { v ->
-                        v.routineStartTime = parent.time
-                        if (v.priority == 0)//Initial priority
-                            v.priority = it.priority + 10 //Set the priority to be higher than the current routine.
-                        it.subroutines += v.ID
-                        addList += v
-                        if (loopCounter > maxLoopCounter)
-                            Logger.write("Adding new routine $v from $it", Logger.LogLevel.INFO)
-                        routineSettled = false
-                    }
+                if (it.subroutines.isEmpty())//Only support one subroutine for now.
+                    it.newRoutineCondition(name, place, it.subroutines.map { routines.first { rt -> rt.ID == it } })
+                        ?.let { v ->
+                            v.routineStartTime = parent.time
+                            if (v.priority == 0)//Initial priority
+                                v.priority = it.priority + 10 //Set the priority to be higher than the current routine.
+                            it.subroutines += v.ID
+                            addList += v
+                            if (loopCounter > maxLoopCounter)
+                                Logger.write("Adding new routine $v from $it", Logger.LogLevel.INFO)
+                            routineSettled = false
+                        }
             }
             routines += addList
             addList.clear()

@@ -618,7 +618,11 @@ class GameEngine(val gameState: GameState) {
         }
 
         gameState.characters.filter { it.value.type == Character.Type.ANON }
-            .forEach { it.value.resources = marketResources * (it.value.reliant * 1.0 / anonPeople) }
+            .forEach {
+                marketResources.forEach { res ->
+                    it.value.resources[res.key] = (it.value.reliant * 1.0 / anonPeople) * res.value
+                }
+            }
 
     }
 

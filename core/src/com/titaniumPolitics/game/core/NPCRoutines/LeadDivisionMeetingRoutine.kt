@@ -6,7 +6,7 @@ import kotlinx.serialization.Serializable
 import kotlin.math.max
 
 @Serializable
-class LeadDivisionMeetingRoutine : Routine(), IMeetingRoutine {
+class LeadDivisionMeetingRoutine(override val meetingName: String) : Routine(), IMeetingRoutine {
     init {
         priority = PRIORITY_MEETING
     }
@@ -14,10 +14,9 @@ class LeadDivisionMeetingRoutine : Routine(), IMeetingRoutine {
     override fun newRoutineCondition(name: String, place: String, subroutines: List<Routine>): Routine? {
         val character = gState.characters[name]!!
         val conf =
-            character.currentMeeting ?: return null
-        check(conf.type == Meeting.MeetingType.DIVISION_DAILY_CONFERENCE) {
-            "For $name, LeadDivisionMeetingRoutine can only be used in divisionDailyConference, but got ${conf.type}."
-        }
+            gState.ongoingMeetings[meetingName] ?: gState.scheduledMeetings[meetingName]
+        meetingStartMethod(conf, place)?.let { return it }
+        if (conf == null) return null
         val party = gState.parties[conf.involvedParty]!!
         check(party.leader == name) {
             "For $name, LeadDivisionMeetingRoutine can only be used by the division leader, but got $name"
@@ -36,10 +35,6 @@ class LeadDivisionMeetingRoutine : Routine(), IMeetingRoutine {
         if (conf == null) {
             JoinMeeting(name, place).apply {
                 injectParent(gState)
-                meetingName =
-                    gState.ongoingMeetings.filter { it.value.type == Meeting.MeetingType.DIVISION_DAILY_CONFERENCE && it.value.place == place }
-                        .keys.firstOrNull()
-                        ?: return@apply
                 if (isValid())
                     return this
             }
@@ -138,7 +133,7 @@ class LeadDivisionMeetingRoutine : Routine(), IMeetingRoutine {
             //In director meetings, the resource production request is not issued, as the director does not manage resources.s
 
             //7. Gossip
-            TalkRoutine.gossip(gState, name, place)?.also { return it }
+            AttendPrivateMeetingRoutine.gossip(gState, name, place)?.also { return it }
 
             //8. End meeting if attention is low.
             endMeetingIfLowAttention(conf, name, place)?.let { return it }

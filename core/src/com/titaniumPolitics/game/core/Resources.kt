@@ -10,16 +10,16 @@ import kotlinx.serialization.Serializable
  * @property positive A boolean flag indicating whether the resources should be non-negative.
  */
 @Serializable
-class Resources(var positive: Boolean = false) {
+class Resources(var positive: Boolean = true) {
     private val _resources = hashMapOf<String, Double>()
 
-    constructor(map: Map<String, Double>, positive: Boolean = false) : this(positive) {
+    constructor(map: Map<String, Double>, positive: Boolean = true) : this(positive) {
         map.forEach {
             _resources[it.key] = it.value
         }
     }
 
-    constructor(vararg pairs: Pair<String, Double>, positive: Boolean = false) : this(positive) {
+    constructor(vararg pairs: Pair<String, Double>, positive: Boolean = true) : this(positive) {
         pairs.forEach {
             _resources[it.first] = it.second
         }
@@ -45,7 +45,7 @@ class Resources(var positive: Boolean = false) {
     }
 
     operator fun plus(r1: Resources): Resources {
-        val result = Resources()
+        val result = Resources(false)
         r1._resources.forEach { (key, value) ->
             result[key] = value
         }
@@ -58,11 +58,12 @@ class Resources(var positive: Boolean = false) {
     operator fun plusAssign(r1: Resources) {
         r1._resources.forEach { (key, value) ->
             this[key] += value
+            if (this[key] < 0 && positive) throw Exception("Resource value must be nonNegative: $key, ${this[key]}")
         }
     }
 
     operator fun times(r: Double): Resources {
-        val result = Resources()
+        val result = Resources(false)
         _resources.forEach { (key, value) ->
             result[key] += value * r
         }
@@ -70,7 +71,7 @@ class Resources(var positive: Boolean = false) {
     }
 
     operator fun times(r: Int): Resources {
-        val result = Resources()
+        val result = Resources(false)
         _resources.forEach { (key, value) ->
             result[key] += value * r
         }
@@ -80,18 +81,19 @@ class Resources(var positive: Boolean = false) {
     operator fun timesAssign(r: Double) {
         _resources.forEach { (key, value) ->
             this[key] = value * r
+            if (this[key] < 0 && positive) throw Exception("Resource value must be nonNegative: $key, ${this[key]}")
         }
     }
 
     operator fun timesAssign(r: Int) {
         _resources.forEach { (key, value) ->
             this[key] = value * r
+            if (this[key] < 0 && positive) throw Exception("Resource value must be nonNegative: $key, ${this[key]}")
         }
     }
 
     operator fun minus(r1: Resources): Resources {
-        if (!contains(r1) && positive) throw Exception("Tried to subtract more resources than available: $this - $r1")
-        val result = Resources()
+        val result = Resources(false)
         _resources.forEach { (key, value) ->
             result[key] = value - r1[key]
         }
@@ -138,4 +140,8 @@ class Resources(var positive: Boolean = false) {
         get() {
             return _resources.keys
         }
+
+    override fun toString(): String {
+        return _resources.toString()
+    }
 }

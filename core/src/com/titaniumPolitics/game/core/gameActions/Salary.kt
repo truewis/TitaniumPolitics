@@ -2,6 +2,7 @@ package com.titaniumPolitics.game.core.gameActions
 
 import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.core.ReadOnly
+import com.titaniumPolitics.game.core.Resources
 import kotlinx.serialization.Serializable
 import kotlin.collections.get
 
@@ -29,12 +30,8 @@ data class Salary(override val sbjCharacter: String, override val tgtPlace: Stri
         val guildHall = party.home
 
         who.forEach { character ->
-            standardRate.forEach { (what, amount) ->
-                parent.places[guildHall]!!.resources[what] =
-                    parent.places[guildHall]!!.resources[what] - amount
-                parent.characters[character]!!.resources[what] =
-                    parent.characters[character]!!.resources[what] + amount
-            }
+            parent.places[guildHall]!!.resources -= standardRate
+            parent.characters[character]!!.resources += standardRate
             //Opinion of the leader of the party increases.
 
             parent.setMutuality(
@@ -59,17 +56,17 @@ data class Salary(override val sbjCharacter: String, override val tgtPlace: Stri
 
     override fun isValid(): Boolean {
         return !party.isSalaryPaid && who.isNotEmpty() && sbjCharacter == party.leader && reason(
-            standardRate.all { (what, amount) -> parent.places[party.home]!!.resources[what] >= amount },
+            standardRate.all { (what, amount) -> parent.places[party.home]!!.resources[what] >= amount * who.size },
             "salary-resources"
         )
     }
 
     companion object {
-        fun standardQuarterlyRate(partyType: String): Map<String, Double> {
+        fun standardQuarterlyRate(partyType: String): Resources {
             return when (partyType) {
-                "cabinet" -> hashMapOf("ration" to 50.0, "water" to 50.0, "phosphorus" to 0.1)
-                "division" -> hashMapOf("ration" to 30.0, "water" to 30.0, "phosphorus" to 0.03)
-                "workplace" -> hashMapOf("ration" to 15.0, "water" to 15.0, "phosphorus" to 0.01)
+                "cabinet" -> Resources("ration" to 50.0, "water" to 50.0, "phosphorus" to 0.1)
+                "division" -> Resources("ration" to 30.0, "water" to 30.0, "phosphorus" to 0.03)
+                "workplace" -> Resources("ration" to 15.0, "water" to 15.0, "phosphorus" to 0.01)
                 else -> throw IllegalArgumentException("Salary can only be performed in cabinet or division daily conferences.")
             }
         }
