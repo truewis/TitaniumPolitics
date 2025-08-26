@@ -61,24 +61,28 @@ class NonPlayerAgent : Agent() {
         if (!routines.isEmpty())
             pri = routines[0].priority + 10
         //If there is almost no food or water, stop all activities and try to get some. ----------------------------------------------------------------------------
-        if (parent.characters[name]!!.resources["ration"] <= (parent.characters[name]!!.reliant) || parent.characters[name]!!.resources["water"] <= (parent.characters[name]!!.reliant)
+        if (character.resources["ration"] <= (character.reliant) || character.resources["water"] <= (character.reliant)
         ) {
             val wantedResource =
-                if (parent.characters[name]!!.resources["ration"] <= (parent.characters[name]!!.reliant)
+                if (character.resources["ration"] <= (character.reliant)
                 ) "ration" else "water"
-            if (parent.characters[name]!!.trait.contains("thief")) {
+            if (character.trait.contains("thief")) {
                 //Find a place within my division with maximum res.
                 if (routines.none { it is StealRoutine }) {
-                    routines.add(StealRoutine(wantedResource).apply {
-                        priority = PRIORITY_LIFE_SUPPORT
-                        routineStartTime = parent.time
-                    })//Add a routine, priority higher than work.
+                    routines.add(
+                        StealRoutine(
+                            wantedResource,
+                            character.reliant * ReadOnly.const("StealAmountMultiplier")
+                        ).apply {
+                            priority = PRIORITY_LIFE_SUPPORT
+                            routineStartTime = parent.time
+                        })//Add a routine, priority higher than work.
                     return
                 }
 
-            } else if (parent.characters[name]!!.trait.contains("bargainer")) {
+            } else if (character.trait.contains("bargainer")) {
                 if (routines.none { it is BuyRoutine }) {
-                    routines.add(BuyRoutine(wantedResource, parent.characters[name]!!.reliant * 10.0).apply {
+                    routines.add(BuyRoutine(wantedResource, character.reliant * 10.0).apply {
                         priority = PRIORITY_LIFE_SUPPORT
                         routineStartTime = parent.time
                     })//Add a routine, priority higher than work.

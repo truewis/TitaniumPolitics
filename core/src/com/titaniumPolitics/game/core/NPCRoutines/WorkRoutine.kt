@@ -8,6 +8,7 @@ import com.titaniumPolitics.game.core.gameActions.GameAction
 import com.titaniumPolitics.game.core.gameActions.PrepareInfo
 import com.titaniumPolitics.game.core.gameActions.Wait
 import kotlinx.serialization.Serializable
+import kotlin.times
 
 @Serializable
 class WorkRoutine(var workplace: String) : Routine() {
@@ -95,7 +96,11 @@ class WorkRoutine(var workplace: String) : Routine() {
                         if (character.resources["ration"] <= rationThreshold * (character.reliant)
                         ) "ration" else "water"
                     corruptionTimer = gState.time
-                    return StealRoutine(wantedResource, member).apply {
+                    return StealRoutine(
+                        wantedResource,
+                        (gState.characters[member]!!.reliant) * ReadOnly.const("StealAmountMultiplier"),
+                        member
+                    ).apply {
                         priority = PRIORITY_WORK + 90 //Higher priority than work.
                     }
                 }

@@ -5,12 +5,17 @@ import com.titaniumPolitics.game.core.ReadOnly
 import com.titaniumPolitics.game.core.Resources
 import com.titaniumPolitics.game.core.gameActions.GameAction
 import com.titaniumPolitics.game.core.gameActions.UnofficialResourceTransfer
+import com.titaniumPolitics.game.core.gameActions.Wait
 import com.titaniumPolitics.game.debugTools.Logger
 import kotlinx.serialization.Serializable
 import kotlin.math.min
 
 @Serializable
-class StealRoutine(val stealResource: String, val stealFor: String? = null /*If null, steal for myself.*/) : Routine() {
+class StealRoutine(
+    val stealResource: String,
+    val stealAmount: Double,
+    val stealFor: String? = null /*If null, steal for myself.*/
+) : Routine() {
     fun findResource(name: String): Place? {
         return gState.publicPlaces.values.filter {
             it.workplaceParty?.treasurer == null ||
@@ -32,17 +37,20 @@ class StealRoutine(val stealResource: String, val stealFor: String? = null /*If 
         executeDone = true
         val resplace = gState.places[place]!!
         val character = gState.characters[name]!!
+        if (resplace.resources[stealResource] < stealAmount) {
+            //Not enough resource to steal, the routine ends.
+            failed = true
+            return Wait(name, place)
+        }
         return UnofficialResourceTransfer(
             name, place,
             "home_$name", false, Resources(
-                stealResource to min(
-                    resplace.resources[stealResource] / 2,
-                    (character.reliant) * ReadOnly.const("StealAmountMultiplier")
-                )
+                stealResource to stealAmount
             )
-        ).apply {
-            Logger.write("$name is stealing $resources from ${resplace.name}!", Logger.LogLevel.INFO)
-        }
+        )
+            .apply {
+                Logger.write("$name is stealing $resources from ${resplace.name}!", Logger.LogLevel.INFO)
+            }
 
     }
 
