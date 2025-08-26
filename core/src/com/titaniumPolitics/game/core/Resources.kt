@@ -13,13 +13,13 @@ import kotlinx.serialization.Serializable
 class Resources(var positive: Boolean = false) {
     private val _resources = hashMapOf<String, Double>()
 
-    constructor(map: Map<String, Double>) : this() {
+    constructor(map: Map<String, Double>, positive: Boolean = false) : this(positive) {
         map.forEach {
             _resources[it.key] = it.value
         }
     }
 
-    constructor(vararg pairs: Pair<String, Double>) : this() {
+    constructor(vararg pairs: Pair<String, Double>, positive: Boolean = false) : this(positive) {
         pairs.forEach {
             _resources[it.first] = it.second
         }
@@ -96,6 +96,13 @@ class Resources(var positive: Boolean = false) {
             result[key] = value - r1[key]
         }
         return result
+    }
+
+    operator fun minusAssign(r1: Resources) {
+        if (!contains(r1) && positive) throw Exception("Tried to subtract more resources than available: $this - $r1")
+        r1._resources.forEach { (key, value) ->
+            this[key] -= value
+        }
     }
 
     fun containsKey(key: String): Boolean {

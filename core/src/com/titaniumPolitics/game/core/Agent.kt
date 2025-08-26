@@ -9,8 +9,9 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 sealed class Agent : GameStateElement() {
+    private var _name: String? = null
     override val name: String
-        get() = parent.nonPlayerAgents.filter { it.value == this }.keys.first()
+        get() = _name ?: parent.nonPlayerAgents.filter { it.value == this }.keys.first().also { _name = it }
     val character: Character
         get() = parent.characters[name]!!
     val place
@@ -31,6 +32,10 @@ sealed class Agent : GameStateElement() {
             return LeaveMeeting(name, place)
         }
         return null
+    }
+
+    open fun printStatus(): String {
+        return ("Agent $name at $place")
     }
 
 }

@@ -2,6 +2,7 @@ package com.titaniumPolitics.game.core
 
 import com.titaniumPolitics.game.core.gameActions.GameAction
 import kotlinx.serialization.Serializable
+import java.util.UUID
 import kotlin.math.max
 import kotlin.math.min
 
@@ -103,7 +104,7 @@ data class Information(
         }
         val name =
             "$author-$type-$creationTime-${
-                Math.random().toString().substring(8)
+                UUID.randomUUID()
             }"
         this.name = name
         return name

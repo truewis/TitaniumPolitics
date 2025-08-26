@@ -154,56 +154,59 @@ class WorkRoutine(var workplace: String) : Routine() {
                 }
         }
         //6. Supply resource
-        gState.places.values.forEach { place1 ->
-            place1.apparatuses.forEach { apparatus ->
-                val res = place1.resourceShortOfHourly(apparatus) //Type of resource that is short of.
-                if (res != null)
-                //if there is a place within my division with the resource
-                {
-                    val resplace =
-                        gState.places.values.filter {
-                            it.responsibleDivision != null && gState.parties[it.responsibleDivision]!!.members.contains(
-                                name
-                            ) && it.shortestPathAndTimeTo(place) != null
-                        }
-                            .maxByOrNull { it.resources[res] }
-                    if (resplace != null && place1.name != resplace.name)
-                    //start new routine if there is a place with all the conditions met.
-                    //If the place with the resource has enough resource to supply apparatus for one hour, and there is no existing transfer routine
-                        if (resplace.resources[res] > apparatus.hourlyOperationResource[res] && subroutines.none { it is TransferResourceRoutine }) {
-                            return TransferResourceRoutine().also {
-                                it.res = res; it.source = resplace.name; it.dest = place1.name
-                                priority = PRIORITY_WORK + 80 //Higher priority than work.
+        if (subroutines.none { it is TransferResourceRoutine }) {
+            gState.places.values.forEach { place1 ->
+                place1.apparatuses.forEach { apparatus ->
+                    val res = place1.resourceShortOfHourly(apparatus) //Type of resource that is short of.
+                    if (res != null)
+                    //if there is a place within my division with the resource
+                    {
+                        val resplace =
+                            gState.places.values.filter {
+                                it.responsibleDivision != null && gState.parties[it.responsibleDivision]!!.members.contains(
+                                    name
+                                ) && it.shortestPathAndTimeTo(place) != null
                             }
-                        }
+                                .maxByOrNull { it.resources[res] }
+                        if (resplace != null && place1.name != resplace.name)
+                        //start new routine if there is a place with all the conditions met.
+                        //If the place with the resource has enough resource to supply apparatus for one hour, and there is no existing transfer routine
+                            if (resplace.resources[res] > apparatus.hourlyOperationResource[res]) {
+                                return TransferResourceRoutine().also {
+                                    it.res = res; it.source = resplace.name; it.dest = place1.name
+                                    priority = PRIORITY_WORK + 80 //Higher priority than work.
+                                }
+                            }
 
-                }
-            }
-        }
-
-        //7. If there is some time, prepare information
-        if (gState.scheduledMeetings.none {
-                val eta =
-                    gState.places[it.value.place]!!.shortestPathAndTimeTo(place)?.second ?: return@none false
-                it.value.scheduledCharacters.contains(name) &&
-                        it.value.isValidTimeToStart(gState.time + eta)
-            })//If a Meeting is not soon
-        {
-            //If we haven't prapared info recently
-            if (gState.informations.none { (_, information) ->
-                    information.author == character.name && information.type == InformationType.ACTION && information.action is PrepareInfo
-                            && gState.time - information.creationTime > ReadOnly.constInt("lengthOfDay") * 2
-                } && subroutines.none { it is PrepareInfoRoutine }) {
-                //If we haven't tried this branch in the current routine
-                if (try_prepare_info == 0) {
-                    try_prepare_info += 1
-                    return PrepareInfoRoutine().apply {
-                        priority = PRIORITY_WORK + 70 //Higher priority than work.
                     }
                 }
             }
         }
 
+        //7. If there is some time, prepare information
+        if (subroutines.none { it is PrepareInfoRoutine }) {
+            if (gState.scheduledMeetings.none {
+                    val eta =
+                        gState.places[it.value.place]!!.shortestPathAndTimeTo(place)?.second ?: return@none false
+                    it.value.scheduledCharacters.contains(name) &&
+                            it.value.isValidTimeToStart(gState.time + eta)
+                })//If a Meeting is not soon
+            {
+                //If we haven't prapared info recently
+                if (gState.informations.none { (_, information) ->
+                        information.author == character.name && information.type == InformationType.ACTION && information.action is PrepareInfo
+                                && gState.time - information.creationTime > ReadOnly.constInt("lengthOfDay") * 2
+                    }) {
+                    //If we haven't tried this branch in the current routine
+                    if (try_prepare_info == 0) {
+                        try_prepare_info += 1
+                        return PrepareInfoRoutine().apply {
+                            priority = PRIORITY_WORK + 70 //Higher priority than work.
+                        }
+                    }
+                }
+            }
+        }
         //8. Hire a new employee if there is a vacancy in the party.
         gState.parties.values.filter { party ->
             party.leader == name

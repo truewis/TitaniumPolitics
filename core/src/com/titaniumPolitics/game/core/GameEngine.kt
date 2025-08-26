@@ -163,6 +163,7 @@ class GameEngine(val gameState: GameState) {
                     }, time=${gameState.formatTime()}, which is not valid. This may be a bug."
                 )
                 Logger.write(Json.encodeToString(GameAction.serializer(), action), Logger.LogLevel.INFO)
+                Logger.write(gameState.nonPlayerAgents[char.name]!!.printStatus(), Logger.LogLevel.INFO)
                 throw Exception("Non player character ${char.name} is performing an invalid action.")
             }
             if (action.sbjCharacter != char.name) {

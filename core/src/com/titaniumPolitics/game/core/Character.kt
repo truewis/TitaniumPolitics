@@ -40,7 +40,10 @@ class Character : GameStateElement() {
         get() =
             parent.places["home_$name"]!!.resources
         set(value) {
-            parent.places["home_$name"]!!.resources = value
+            value.forEach {
+                //Since place resources are immutable, we have to set the resources of the home place directly.
+                parent.places["home_$name"]!!.resources[it.key] = it.value
+            }
         }
 
     /**Information that can be presented in meetings. Note that preparing the information prevents it from expiring.*/

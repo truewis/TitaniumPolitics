@@ -40,23 +40,27 @@ class Request(
         return name
     }
 
+    val proofOfExecutionInfos = arrayListOf<String>()
+    fun onNewInfo(info: Information) {
+        if ((executeTime == null || executeTime in info.tgtTime - IDTH..info.tgtTime + IDTH) && action.isProofOfWork(
+                info
+            )
+        )
+            proofOfExecutionInfos.add(info.name)
+    }
+
     fun refresh(gState: GameState) {
         if (completed) return
         //This function is called every turn.
         //Each time one of the issuedTo completes this request,
         //Add the key of this request to finishedRequests of the character.
-        val proofOfExecutionInfos =
-            gState.informations.filter {
-                (executeTime == null || executeTime in it.value.tgtTime - IDTH..it.value.tgtTime + IDTH) && action.isProofOfWork(
-                    it.value
-                ) //&& (issuedTo.isEmpty() || it.value.tgtCharacter in issuedTo) issuedTo is not checked here because the request could have been delegated.
-            }
-        proofOfExecutionInfos.forEach {
-            gState.characters[it.value.tgtCharacter]?.executedRequests?.add(name) //Works only for Action Information
-            gState.characters[it.value.author]?.executedRequests?.add(name) //Works for other information which proves work.
+        val proofOfExecutionInfoObjs = proofOfExecutionInfos.map { gState.informations[it]!! }
+        proofOfExecutionInfoObjs.forEach {
+            gState.characters[it.tgtCharacter]?.executedRequests?.add(name) //Works only for Action Information
+            gState.characters[it.author]?.executedRequests?.add(name) //Works for other information which proves work.
         }
-        val proofOfExecutionInfosHaveBeenShared = proofOfExecutionInfos.filter {
-            it.value.knownTo.containsAll(issuedBy)
+        val proofOfExecutionInfosHaveBeenShared = proofOfExecutionInfoObjs.filter {
+            it.knownTo.containsAll(issuedBy)
         }
         if (proofOfExecutionInfosHaveBeenShared.isNotEmpty()) {
             //Mutuality increases.
@@ -83,8 +87,8 @@ class Request(
             }
             proofOfExecutionInfosHaveBeenShared.forEach {
                 gState.setMutuality(
-                    it.value.tgtCharacter!!,
-                    delta = deltaWill(it.value.tgtCharacter!!, gState),
+                    it.tgtCharacter!!,
+                    delta = deltaWill(it.tgtCharacter!!, gState),
                     reasonKey = "RequestFinishWill"
                 )
             }

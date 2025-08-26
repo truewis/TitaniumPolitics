@@ -35,7 +35,7 @@ class Place : GameStateElement() {
     var manager: String? = null
 
 
-    var resources = Resources(positive = true)
+    val resources = Resources(positive = true)
     val maxResources: Resources
         get() {
             val result = Resources(positive = true)
@@ -413,7 +413,13 @@ class Place : GameStateElement() {
         return if (connectedPlaces.contains(targetName)) (parent.places[targetName]!!.coordinates - coordinates).amplitude.toInt() + 1 else null
     }
 
+    private val shortestPathCache = mutableMapOf<String, Pair<List<String>, Int>?>()
+    fun clearShortestPathCache() {
+        shortestPathCache.clear()
+    }
+
     fun shortestPathAndTimeTo(targetName: String): Pair<List<String>, Int>? {
+        shortestPathCache[targetName]?.let { return it }
         val distances = mutableMapOf<String, Int>().withDefault { Int.MAX_VALUE }
         val previous = mutableMapOf<String, String?>()
         val visited = mutableSetOf<String>()
@@ -457,8 +463,9 @@ class Place : GameStateElement() {
             path.add(0, current)
             current = previous[current]
         }
-        //Logger.write("The shortest path from $name to $targetName: $path", Logger.LogLevel.INFO)
-        return path to finalCost * ReadOnly.constInt("MoveDuration")
+        val result = path to finalCost * ReadOnly.constInt("MoveDuration")
+        shortestPathCache[targetName] = result
+        return result
     }
 
     companion object {

@@ -60,7 +60,7 @@ class AttendDivisionBudgetProposalRoutine : Routine(), IMeetingRoutine {
                 val availableBudget = if (party.type == "cabinet") Resources(
                     "water" to gState.places["reservoirEast"]!!.resources["water"],
                     "ration" to gState.places["farm"]!!.resources["ration"],
-                    "phosphorus" to gState.places["mainControlRoom"]!!.resources["phosphorus"],
+                    "phosphorus" to gState.places["mainControlRoom"]!!.resources["phosphorus"], positive = true
                 )
                 else gState.places[party.home]!!.resources
                 //Propose a budget.

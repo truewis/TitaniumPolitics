@@ -2,6 +2,7 @@ package com.titaniumPolitics.game.core.NPCRoutines
 
 import com.titaniumPolitics.game.core.gameActions.GameAction
 import com.titaniumPolitics.game.core.gameActions.Move
+import com.titaniumPolitics.game.core.gameActions.Wait
 import com.titaniumPolitics.game.debugTools.Logger
 import kotlinx.serialization.Serializable
 import org.junit.jupiter.api.fail
@@ -20,9 +21,13 @@ class MoveRoutine(var destination: String) : Routine() {
     }
 
     override fun execute(name: String, place: String): GameAction {
-        return Move(name, place).also {
+        Move(name, place, gState).also {
             it.placeTo = nextStop
+            if (it.isValid()) return it
         }
+        //If move is not valid, wait and terminate the routine with an error.
+        failed = true
+        return Wait(name, place)
     }
 
     override fun endCondition(name: String, place: String): Boolean {

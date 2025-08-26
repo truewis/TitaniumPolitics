@@ -180,6 +180,9 @@ class GameState {
     ) {
         if (_informations.containsValue(info)) throw Exception("Information $info already exists.")
         _informations[info.generateName()] = info
+        requests.values.forEach {
+            it.onNewInfo(info)
+        }
         onAddInfo.forEach { it(info) }
     }
 

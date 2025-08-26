@@ -26,6 +26,10 @@ class NonPlayerAgent : Agent() {
     var routines =
         arrayListOf<Routine>()
 
+    override fun printStatus(): String {
+        return "Routines: $routines"
+    }
+
     /**
      * Routines that are to be removed after the current routine is executed.
      */
@@ -191,7 +195,7 @@ class NonPlayerAgent : Agent() {
      * Also call the parent routine's onSubroutineFail if exists.
      */
     fun failRoutine(routine: Routine) {
-        routine.subroutines.forEach { id -> endRoutine(routines.first { it.ID == id }) }
+        routine.subroutines.forEach { id -> routines.firstOrNull { it.ID == id }?.let { endRoutine(it) } }
         removeList += (routine)
         //Call parent routine's onSubroutineFail if exists.
         routines.filter { it.subroutines.contains(routine.ID) }.forEach { it.onSubroutineFail(routine) }
