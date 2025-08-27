@@ -11,21 +11,16 @@ class InvestigateAndClearAccidentRoutine(var investigatePlace: String) : Routine
     override fun newRoutineCondition(name: String, place: String, subroutines: List<Routine>): Routine? {
         if (place != investigatePlace) {
             return MoveRoutine(investigatePlace)
-        } else if (!gState.places[place]!!.isAccidentScene) failed =
-            true //I arrived at the scene, but is no longer accident scene.
+        } else if (!gState.places[place]!!.isAccidentScene) failed() //I arrived at the scene, but is no longer accident scene.
         return null
     }
 
     override fun execute(name: String, place: String): GameAction {
-        success = true
+        success()
         if (!investigated) {
             investigated = true
             return InvestigateAccidentScene(name, place)
         }
         return ClearAccidentScene(name, place)
-    }
-
-    override fun successCondition(name: String, place: String): Boolean {
-        return success
     }
 }

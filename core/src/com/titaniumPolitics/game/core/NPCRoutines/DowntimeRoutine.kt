@@ -13,6 +13,7 @@ class DowntimeRoutine() : Routine() {
     }
 
     override fun newRoutineCondition(name: String, place: String, subroutines: List<Routine>): Routine? {
+        if (condition(name, place)) success()
         val char = gState.characters[name]!!
         if (char.trait.contains("extrovert")) {
             if (place !in Place.publicPlaces)
@@ -32,13 +33,11 @@ class DowntimeRoutine() : Routine() {
         return pickAction(name, place)
     }
 
-    override fun successCondition(name: String, place: String): Boolean {
+    private fun condition(name: String, place: String): Boolean {
         //Pay attention to the condition checking order.
-        //return false must be checked first, otherwise the routine will be created again.
-        return true
         if (gState.getMutuality(name) < const("DowntimeWill")) return false
         if (variables["workplace"] == null)
-            return (gState.hour in 8..18)
+            return false //Jobless = downtime forever.
         else
             return isWorkHourWithETA(gState, place, variables["workplace"]!!)
     }

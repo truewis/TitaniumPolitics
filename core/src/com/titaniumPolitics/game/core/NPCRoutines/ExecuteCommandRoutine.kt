@@ -13,7 +13,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 class ExecuteCommandRoutine() : Routine() {
     val executableRequest get() = gState.requests[variables["request"]!!]!!
-    var timeout = ReadOnly.const("ExecuteCommandRoutineInvalidActionTimeout")
+    var timeout = ReadOnly.constInt("ExecuteCommandRoutineInvalidActionTimeout")
     var delegationAttemptCount = 0
 
 
@@ -95,13 +95,13 @@ class ExecuteCommandRoutine() : Routine() {
                     "$name: The request ${executableRequest.action} is valid. Executing...",
                     Logger.LogLevel.INFO
                 )
-                success = true
+                success()
                 return copy
             } else {
                 timeout -= 1
                 //Wait a bit to see if the action gets valid
                 if (timeout <= 0) {
-                    failed = true
+                    failed()
                     //TODO: executableRequest callback
                 }
                 return Wait(name, place)
@@ -113,12 +113,8 @@ class ExecuteCommandRoutine() : Routine() {
             "$name: Cannot move to ${executableRequest.action.tgtPlace} to execute the request ${executableRequest.action}. Terminating the routine......",
             Logger.LogLevel.INFO
         )
-        failed = true
+        failed()
         return Wait(name, place)
-    }
-
-    override fun successCondition(name: String, place: String): Boolean {
-        return success
     }
 
 }

@@ -6,28 +6,26 @@ import com.titaniumPolitics.game.core.gameActions.*
 import kotlinx.serialization.Serializable
 
 @Serializable
-class AttendDivisionElectionRoutine(override val meetingName: String) : Routine(), IMeetingRoutine {
+class AttendDivisionElectionRoutine(override val meetingName: String) : MeetingRoutine() {
     var try_support_nomination = 0
 
     init {
         priority = PRIORITY_MEETING
     }
 
-    override fun newRoutineCondition(name: String, place: String, subroutines: List<Routine>): Routine? {
-        val conf =
-            gState.ongoingMeetings[meetingName] ?: gState.scheduledMeetings[meetingName]
-        meetingStartMethod(conf, place)?.let { return it }
-        if (conf == null) return null
-        val party = gState.parties[conf.involvedParty]!!
-
-
+    override fun newIMeetingRoutineCondition(
+        name: String,
+        place: String,
+        subroutines: List<Routine>
+    ): IMeetingRoutine? {
+        val party = gState.parties[meeting.involvedParty]!!
         //If not speaker, wait if the mutuality to the speaker is high. Otherwise, if possible, interrupt the speaker.
-        if (conf.currentSpeaker != name) {
+        if (meeting.currentSpeaker != name) {
         } else {
             //1. Support the nominee with the highest mutuality.
             val nominee = gState.characters.keys.filter { it != name && party.members.contains(it) }
                 .maxByOrNull { gState.getMutuality(name, it) }!!
-            if (conf.agendas.none { it.type == AgendaType.NOMINATE && it.subjectParams["character"] == nominee } && conf.time == gState.time) {
+            if (meeting.agendas.none { it.type == AgendaType.NOMINATE && it.subjectParams["character"] == nominee } && meeting.time == gState.time) {
             }
             //otherwise, support the nominee.
             else {
@@ -36,19 +34,17 @@ class AttendDivisionElectionRoutine(override val meetingName: String) : Routine(
                     //If the agenda is already proposed, and we have a supporting information, support it.
                     try_support_nomination += 1
                     return AddInfoToAgendaRoutine(
-                        conf.agendas.indexOfFirst { it.type == AgendaType.NOMINATE && it.subjectParams["character"] == nominee },
-                        meetingName,
+                        meeting.agendas.indexOfFirst { it.type == AgendaType.NOMINATE && it.subjectParams["character"] == nominee },
                         true
                     )
                 }
                 //After you support the nominee, attack the other nominees.
                 val otherNominees =
-                    gState.characters.keys.filter { it != name && it != nominee && conf.agendas.any { it.type == AgendaType.NOMINATE && it.subjectParams["character"] == nominee } }
+                    gState.characters.keys.filter { it != name && it != nominee && meeting.agendas.any { it.type == AgendaType.NOMINATE && it.subjectParams["character"] == nominee } }
                 if (otherNominees.isNotEmpty()) {
                     return (
                             AddInfoToAgendaRoutine(
-                                conf.agendas.indexOfFirst { it.type == AgendaType.NOMINATE && it.subjectParams["character"] == nominee },
-                                meetingName,
+                                meeting.agendas.indexOfFirst { it.type == AgendaType.NOMINATE && it.subjectParams["character"] == nominee },
                                 false
                             ))//Add a routine, priority higher than work.
 
@@ -60,24 +56,11 @@ class AttendDivisionElectionRoutine(override val meetingName: String) : Routine(
         return null
     }
 
-    override fun execute(name: String, place: String): GameAction {
-        val character = gState.characters[name]!!
-        val conf =
-            character.currentMeeting
-        if (conf == null) {
-            JoinMeeting(name, place).apply {
-                injectParent(gState)
-                if (isValid())
-                    return this
-            }
-            return Wait(name, place).also {
-            } //If no meeting found, wait. Note that this action is only executed once because the routine will end after this action.
-            //This happens if the number of people condition of the meeting is not met.
-        }
-        val party = gState.parties[conf.involvedParty]!!
+    override fun executeInMeeting(name: String, place: String): GameAction {
+        val party = gState.parties[meeting.involvedParty]!!
         //If not speaker, wait if the mutuality to the speaker is high. Otherwise, if possible, interrupt the speaker.
-        if (conf.currentSpeaker != name) {
-            return interceptCondition(conf, name, place)
+        if (meeting.currentSpeaker != name) {
+            return interceptCondition(name, place)
         } else //If it is my turn to speak
         {
 
@@ -90,7 +73,7 @@ class AttendDivisionElectionRoutine(override val meetingName: String) : Routine(
             //Note that nomination is only valid at the beginning of the conference.
             val nominee = gState.characters.keys.filter { it != name && party.members.contains(it) }
                 .maxByOrNull { gState.getMutuality(name, it) }!!
-            if (conf.agendas.none { it.type == AgendaType.NOMINATE && it.subjectParams["character"] == nominee } && conf.time == gState.time) {
+            if (meeting.agendas.none { it.type == AgendaType.NOMINATE && it.subjectParams["character"] == nominee } && meeting.time == gState.time) {
                 return NewAgenda(name, place).also {
                     it.agenda =
                         MeetingAgenda(
@@ -104,7 +87,7 @@ class AttendDivisionElectionRoutine(override val meetingName: String) : Routine(
 
 
 //If nothing else to talk about, end the speech. The next speaker is the character with the highest mutuality.
-            val nextSpeaker = conf.currentCharacters.minus(name)
+            val nextSpeaker = meeting.currentCharacters.minus(name)
                 .maxByOrNull { gState.getMutuality(name, it) }
                 ?: return EndMeeting(name, place)
             return EndSpeech(name, place, nextSpeaker, gState)
@@ -112,11 +95,5 @@ class AttendDivisionElectionRoutine(override val meetingName: String) : Routine(
 
         //TODO: do something in the meeting. Leave the meeting if nothing to do.
 
-    }
-
-    override fun successCondition(name: String, place: String): Boolean {
-        //If the conference is over, leave the routine. But the condition is not checked here, because the routine is not ended until the action is executed.
-        //Don't end the routine until the election is over.
-        return gState.parties[gState.characters[name]!!.currentMeeting!!.involvedParty]!!.leader != null
     }
 }

@@ -19,7 +19,6 @@ class HireRoutine() : Routine() {
     }
 
     override fun execute(name: String, place: String): GameAction {
-        success = true
         //If in market, hire a character based on role variable.
         if (variables["role"]!!.contains("director")) {
             val placeForDirector = variables["role"]!!.split('_')[1]
@@ -27,26 +26,26 @@ class HireRoutine() : Routine() {
                 it.injectParent(gState)
                 it.workplace = placeForDirector
                 it.pickBestEmployee()
-                if (it.isValid())
+                if (it.isValid()) {
+                    success()
                     return it
+                }
             }
         } else {
             HireManager(name, place).also {
                 it.injectParent(gState)
                 it.role = variables["role"]!!
                 it.pickBestEmployee()
-                if (it.isValid())
+                if (it.isValid()) {
+                    success()
                     return it
+                }
             }
         }
         //If no hiring action is valid,
-        failed = true //In case the role is filled already, wait one turn, then end the routine.
+        failed() //In case the role is filled already, wait one turn, then end the routine.
         return Wait(name, place).also {
             it.injectParent(gState)
         }
-    }
-
-    override fun successCondition(name: String, place: String): Boolean {
-        return success
     }
 }

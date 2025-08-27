@@ -18,21 +18,46 @@ import kotlinx.serialization.Serializable
 class AttendPrivateMeetingRoutine(
     val toWho: String? = null, val agenda: MeetingAgenda? = null,
     var scheduledMeetingName: String? = null
-) : Routine(),
-    IMeetingRoutine {
-    var newMeetingName: String = ""
-    private var startTalking = false
-    override val meetingName: String get() = scheduledMeetingName ?: newMeetingName
+) : MeetingRoutine() {
+    private var hasUnresolvedAgenda = agenda != null
+    override val meetingName: String
+        get() = scheduledMeetingName
+            ?: gState.ongoingMeetings.filter { toWho in it.value.currentCharacters }.keys.firstOrNull()
+            ?: "NonExistentMeeting" //The meeting does not exist yet, so newRoutineCondition will return null.
 
-    override fun newRoutineCondition(name: String, place: String, subroutines: List<Routine>): Routine? {
-        val conf =
-            gState.ongoingMeetings[meetingName]
+    override fun newIMeetingRoutineCondition(
+        name: String,
+        place: String,
+        subroutines: List<Routine>
+    ): IMeetingRoutine? {
+        supportProofOfWork(name)?.let { return it }
+        return null
+    }
+
+    override fun meetingControl(name: String, place: String): Routine? {
+        //////////////////////Routine End Condition Check/////////////////////////
+        val currentMeeting = gState.characters[name]!!.currentMeeting
+        if (if (currentMeeting == null) {
+                hasAttended //The routine should end iff the meeting has finished.
+            } else {
+                if (toWho?.let { it !in currentMeeting.currentCharacters } == true) {
+                    true //The character has been transferred to another meeting.
+                }
+                if (scheduledMeetingName != gState.meetingName(currentMeeting))
+                    true
+                //if (meeting.time + 1800 / ReadOnly.DT >= gState.time) false //For talks, we don't wait until the meeting has happened for 30 minutes.
+                routineStartTime + 7200 / ReadOnly.DT <= gState.time || meeting.currentAttention < 10 //Leave the meeting if it is boring or it is getting too long.
+
+            }
+        )
+            if (hasAttended && !hasUnresolvedAgenda) success() else failed()
+        //////////////////////////////////////////////////////////////////////////
         //If there is no ongoing meeting, check if there is a scheduled meeting with the specified name or the character to meet.
         //If neither is specified, this routine fails.
-        if (conf == null) {
+        if (currentMeeting == null) {
             if (scheduledMeetingName != null) {
                 if (gState.scheduledMeetings[scheduledMeetingName] == null) {
-                    failed = true
+                    failed()
                     return null
                     //Scheduled meeting name exists but the meeting does not exist. Either the meeting was cancelled or it is already over. Fail the routine.
                 }
@@ -46,47 +71,14 @@ class AttendPrivateMeetingRoutine(
                     FindCharacterRoutine(toWho)
                 else null //Turn to execute
             }
-            failed = true
-            return null
-        } else {
-            supportProofOfWork(conf, name)?.let { return it }
-            return null
+            throw Exception("Either scheduledMeetingName or toWho must be provided.")
         }
+        return null
     }
 
-    override fun execute(name: String, place: String): GameAction {
-        val character = gState.characters[name]!!
-        val conf =
-            character.currentMeeting
-        if (conf == null) {
-            JoinMeeting(name, place).apply {
-                injectParent(gState)
-                if (isValid())
-                    return this
-            }
-            StartMeeting(name, place).apply {
-                injectParent(gState)
-                if (isValid())
-                    return this
-            }
-            toWho?.run {
-                startTalking = true
-                //Note: This character can interfere with the meeting if it is already ongoing.
-                Talk(name, place, this).apply {
-                    injectParent(gState)
-                    if (isValid())
-                        return this
-                }
-            }
-
-
-            //This happens if the number of people condition of the meeting is not met.
-            return Wait(name, place)
-        }
-        //If not speaker, wait if the mutuality to the speaker is high. Otherwise, if possible, interrupt the speaker.
-        newMeetingName = gState.meetingName(conf)
-        if (conf.currentSpeaker != name) {
-            return interceptCondition(conf, name, place)
+    override fun executeInMeeting(name: String, place: String): GameAction {
+        if (meeting.currentSpeaker != name) {
+            return interceptCondition(name, place)
         } else {
             //If it is my turn to speak
             //Check if I had an intention
@@ -103,19 +95,19 @@ class AttendPrivateMeetingRoutine(
                 //Note that the command may not be valid even if it in AvailableActions list. For example, if the character is already at the place, move command is not valid.
                 executeRequestInMeeting(name, place)?.let { return it }
 
-                proposeProofOfWork(conf, name, place)?.let { return it }
+                proposeProofOfWork(name, place)?.let { return it }
 
                 //If there is a new request issued to me, and there is no matching request from me, try to match it.
-                val reqAgendas = conf.agendas.filter { it.type == AgendaType.REQUEST }
+                val reqAgendas = meeting.agendas.filter { it.type == AgendaType.REQUEST }
                 if (reqAgendas.any { name in it.attachedRequest!!.issuedTo } && reqAgendas.none { name in it.attachedRequest!!.issuedBy }) {
-                    matchRequests(conf, name, place)?.let { return it }
+                    matchRequests(name, place)?.let { return it }
                 }
                 gossip(this.gState, name, place)?.also { return it }
             }
 
             //If nothing else to talk about, end the speech. The next speaker is the character with the highest mutuality.
             return EndSpeech(
-                name, place, conf.currentCharacters.minus(name)
+                name, place, meeting.currentCharacters.minus(name)
                     .maxByOrNull { gState.getMutuality(name, it) }!!
             )
 
@@ -124,29 +116,35 @@ class AttendPrivateMeetingRoutine(
 
     }
 
-    override fun successCondition(name: String, place: String): Boolean {
-        with(this as IMeetingRoutine) {
-            if (scheduledMeetingName != null) {
-                if (scheduledMeetingName in gState.scheduledMeetings)
-                    return false //The meeting has not started yet.
-                else if (scheduledMeetingName in gState.ongoingMeetings) {
-                    val conf = gState.ongoingMeetings[scheduledMeetingName]!!
-                    if (conf != gState.characters[name]!!.currentMeeting) return true //The character has been transferred to another meeting.
-                    //Now, given that we are in the correct meeting, check if the meeting is over.
-                    return routineStartTime + 7200 / ReadOnly.DT <= gState.time || conf.currentAttention < 10
-
-                } else {
-                    return true //The meeting has ended before I could join.
+    override fun joinMeetingActions(name: String, place: String): GameAction? {
+        JoinMeeting(name, place).apply {
+            injectParent(gState)
+            if (isValid()) {
+                hasAttended = true
+                return this
+            }
+        }
+        StartMeeting(name, place).apply {
+            injectParent(gState)
+            if (isValid()) {
+                hasAttended = true
+                return this
+            }
+        }
+        toWho?.run {
+            //Note: This character can interfere with the meeting if it is already ongoing.
+            Talk(name, place, this).apply {
+                injectParent(gState)
+                if (isValid()) {
+                    hasAttended = true
+                    return this
                 }
             }
-
-            //The talk is not scheduled in advance.
-            if (!startTalking) return false //I have not started talking yet, so the routine should not end.
-            val conf = gState.characters[name]!!.currentMeeting
-                ?: return true //The meeting has ended, so the routine should end.
-            //Now, given that we are in the correct meeting, check if the meeting is over.
-            return routineStartTime + 7200 / ReadOnly.DT <= gState.time || conf.currentAttention < 10
         }
+
+
+        //This happens if the number of people condition of the meeting is not met.
+        return Wait(name, place)
     }
 
     companion object {

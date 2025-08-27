@@ -5,28 +5,26 @@ import com.titaniumPolitics.game.core.gameActions.*
 import kotlinx.serialization.Serializable
 
 @Serializable
-class AttendDivisionMeetingRoutine(override val meetingName: String) : Routine(), IMeetingRoutine {
+class AttendDivisionMeetingRoutine(override val meetingName: String) : MeetingRoutine() {
     var try_support_salary = 0
 
     init {
         priority = PRIORITY_MEETING
     }
 
-    override fun newRoutineCondition(name: String, place: String, subroutines: List<Routine>): Routine? {
-        gState.characters[name]!!
-        val conf =
-            gState.ongoingMeetings[meetingName] ?: gState.scheduledMeetings[meetingName]
-        meetingStartMethod(conf, place)?.let { return it }
-        if (conf == null) return null
-
-        val party = gState.parties[conf.involvedParty]!!
-        supportProofOfWork(conf, name)?.let { return it }
+    override fun newIMeetingRoutineCondition(
+        name: String,
+        place: String,
+        subroutines: List<Routine>
+    ): IMeetingRoutine? {
+        val party = gState.parties[meeting.involvedParty]!!
+        supportProofOfWork(name)?.let { return it }
 
 
         //Try supporting salary request.
-        if (conf.currentSpeaker == name && !party.isSalaryPaid) {
+        if (meeting.currentSpeaker == name && !party.isSalaryPaid) {
             //Check if there is already a salary request.
-            if (conf.agendas.none { it.type == AgendaType.REQUEST && it.attachedRequest!!.action is Salary }) {
+            if (meeting.agendas.none { it.type == AgendaType.REQUEST && it.attachedRequest!!.action is Salary }) {
 
             } else //If the agenda already exists, support it.
             {
@@ -35,8 +33,7 @@ class AttendDivisionMeetingRoutine(override val meetingName: String) : Routine()
                     try_support_salary += 1
                     //If the agenda is already proposed, and we have a supporting information, support it.
                     return AddInfoToAgendaRoutine(
-                        conf.agendas.indexOfFirst { it.type == AgendaType.REQUEST && it.attachedRequest!!.action is Salary },
-                        meetingName,
+                        meeting.agendas.indexOfFirst { it.type == AgendaType.REQUEST && it.attachedRequest!!.action is Salary },
                         support = true
                     )//Add a routine, priority higher than work.
                 }
@@ -48,7 +45,7 @@ class AttendDivisionMeetingRoutine(override val meetingName: String) : Routine()
         return null
     }
 
-    override fun execute(name: String, place: String): GameAction {
+    override fun executeInMeeting(name: String, place: String): GameAction {
         val character = gState.characters[name]!!
         val conf =
             character.currentMeeting
@@ -70,7 +67,7 @@ class AttendDivisionMeetingRoutine(override val meetingName: String) : Routine()
         //If not speaker, wait if the mutuality to the speaker is high. Otherwise, if possible, interrupt the speaker.
         if (conf.currentSpeaker != name) {
             //If the meeting is not boring, but the mutuality to the speaker is low, intercept the speaker.
-            return interceptCondition(conf, name, place)
+            return interceptCondition(name, place)
         } else {
             val party = gState.parties[conf.involvedParty]!!
 
@@ -80,7 +77,7 @@ class AttendDivisionMeetingRoutine(override val meetingName: String) : Routine()
             executeRequestInMeeting(name, place)?.let { return it }
 
             //1. Propose proof of work if there is no proof of work agenda.
-            proposeProofOfWork(conf, name, place)?.let { return it }
+            proposeProofOfWork(name, place)?.let { return it }
 
             //If not division leader and salary is not paid, request salary.
             if (conf.currentSpeaker == name && !party.isSalaryPaid) {
@@ -121,14 +118,5 @@ class AttendDivisionMeetingRoutine(override val meetingName: String) : Routine()
         //TODO: do something in the meeting. Leave the meeting if nothing to do.
 
 
-    }
-
-    //TODO: Also check AttendMeetingRoutine for the same function.
-    override fun successCondition(name: String, place: String): Boolean {
-        //If the conference is over, leave the routine. But the condition is not checked here, because the routine is not ended until the action is executed.
-        //See NonPlayerAgent.selectRoutine()
-        //If two hours has passed since the meeting started, leave the meeting. TODO: what if the meeting has started late?
-        //TODO: stay in the meeting until I have something else to do, or the work hours are over.
-        return meetingRoutineEndCondition(name, Meeting.MeetingType.DIVISION_DAILY_CONFERENCE)
     }
 }

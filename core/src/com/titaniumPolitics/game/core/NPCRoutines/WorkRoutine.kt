@@ -4,6 +4,7 @@ import com.titaniumPolitics.game.core.GameEngine
 import com.titaniumPolitics.game.core.InformationType
 import com.titaniumPolitics.game.core.Meeting
 import com.titaniumPolitics.game.core.ReadOnly
+import com.titaniumPolitics.game.core.ReadOnly.IDTH
 import com.titaniumPolitics.game.core.Resources
 import com.titaniumPolitics.game.core.gameActions.GameAction
 import com.titaniumPolitics.game.core.gameActions.PrepareInfo
@@ -24,18 +25,22 @@ class WorkRoutine(var workplace: String) : Routine() {
     }
 
     override fun newRoutineCondition(name: String, place: String, subroutines: List<Routine>): Routine? {
+
+        //If work hours are over, rest. Also, if the character is too hungry, thirsty, or sick, rest. (Which is checked earlier.)
+        if (!isWorkHourWithETA(gState, place, workplace, IDTH)
+            || gState.characters[name]!!.health <= ReadOnly.const("CriticalHealth")
+        )
+            success()
         val character = gState.characters[name]!!
 
         //These routines will start even if the character is in a meeting./////////////////////////////////////////////////////////////////////////////////
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        if (subroutines.any { it is IMeetingRoutine })//I am already in a meeting, do not start a new routine.
-            return null
 
         //I am forced into a meeting. Pick a meeting routine. Do not attend the meeting if it is already attended.
         if (character.currentMeeting != null) {
             if (subroutines.none {
-                    it is IMeetingRoutine && it.meetingName == gState.meetingName(character.currentMeeting!!)
+                    it is MeetingRoutine && it.meetingName == gState.meetingName(character.currentMeeting!!)
                 }
                 && gState.meetingName(character.currentMeeting!!) !in meetingsAttended
             )
@@ -100,11 +105,11 @@ class WorkRoutine(var workplace: String) : Routine() {
                     corruptionTimer = gState.time
                     return StealRoutine(
                         wantedResource,
-                        (gState.characters[member]!!.reliant) * ReadOnly.const("StealAmountMultiplier"),
+                        (gState.characters[member]!!.reliant + 1/*Numerically incorrect for anon agents, but ensure non zero value.*/) * ReadOnly.const(
+                            "StealAmountMultiplier"
+                        ),
                         member
-                    ).apply {
-                        priority = PRIORITY_WORK + 90 //Higher priority than work.
-                    }
+                    )
                 }
             }
         //5. Execute a command if there is any. Here, we can move to the place actively if the command is not in the current place.
@@ -242,7 +247,7 @@ class WorkRoutine(var workplace: String) : Routine() {
     }
 
     //TODO: move name to class parameter
-    private fun pickMeetingRoutine(name: String, conf: Meeting): Routine {
+    private fun pickMeetingRoutine(name: String, conf: Meeting): MeetingRoutine {
         meetingsAttended += gState.meetingName(conf)
         when (conf.type) {
             Meeting.MeetingType.DIVISION_DAILY_CONFERENCE -> {
@@ -303,12 +308,6 @@ class WorkRoutine(var workplace: String) : Routine() {
             failedRequests += requestName
         }
         //Never fail the work routine itself.
-    }
-
-    override fun successCondition(name: String, place: String): Boolean {
-        //If work hours are over, rest. Also, if the character is too hungry, thirsty, or sick, rest. (Which is checked earlier.)
-        return !isWorkHourWithETA(gState, place, workplace, (1 / ReadOnly.DTH).toInt())
-                || gState.characters[name]!!.health <= ReadOnly.const("CriticalHealth")
     }
 
     @Transient

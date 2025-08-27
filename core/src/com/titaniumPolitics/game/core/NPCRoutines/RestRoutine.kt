@@ -15,7 +15,8 @@ class RestRoutine(var workplace: String? = null) : Routine() {
 
     override fun newRoutineCondition(name: String, place: String, subroutines: List<Routine>): Routine? {
 
-        if (place != "home_$name" && subroutines.none { it is MoveRoutine })
+        if (condition(name, place)) success()
+        if (place != "home_$name")
             return MoveRoutine("home_$name")//Add a move routine with higher priority.
         return null
     }
@@ -24,7 +25,7 @@ class RestRoutine(var workplace: String? = null) : Routine() {
         return pickAction(name, place)
     }
 
-    override fun successCondition(name: String, place: String): Boolean {
+    private fun condition(name: String, place: String): Boolean {
         // Wake up based on eta to workplace and workplace work hours.
         if (gState.characters[name]!!.health < ReadOnly.const("CriticalHealth")) return false
         if (gState.characters[name]!!.hunger > ReadOnly.const("hungerThreshold")) return false

@@ -67,17 +67,14 @@ class BuyRoutine(val buyResource: String, val buyAmount: Double) : Routine() {
         }
         //If too much time has passed, end the routine.
         if (gState.time - routineStartTime > IDTH) {
-            failed = true
+            failed()
         }
         return null
     }
 
     override fun execute(name: String, place: String): GameAction {
-        success = true
+        success()
         return Wait(name, place) //TODO: temporary implementation
     }
 
-    override fun successCondition(name: String, place: String): Boolean {
-        return success
-    }
 }

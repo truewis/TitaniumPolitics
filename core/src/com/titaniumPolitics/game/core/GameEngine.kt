@@ -612,12 +612,12 @@ class GameEngine(val gameState: GameState) {
         //Total redistribution of resources among anonymous people every hour.
         val marketResources = Resources()
         var anonPeople = 0
-        gameState.characters.filter { it.value.type == Character.Type.ANON }.forEach {
+        gameState.characters.filter { it.value.type == Type.ANON }.forEach {
             marketResources += it.value.resources
             anonPeople += it.value.reliant
         }
 
-        gameState.characters.filter { it.value.type == Character.Type.ANON }
+        gameState.characters.filter { it.value.type == Type.ANON }
             .forEach {
                 marketResources.forEach { res ->
                     it.value.resources[res.key] = (it.value.reliant * 1.0 / anonPeople) * res.value
@@ -647,16 +647,7 @@ class GameEngine(val gameState: GameState) {
                     )
                     if (nonPlayerAgents[ch] is NonPlayerAgent) {
                         Logger.write(
-                            "\t\tunder ${(nonPlayerAgents[ch] as NonPlayerAgent).routines[0]::class.java.simpleName}",
-                            Logger.LogLevel.INFO
-                        )
-                        Logger.write(
-                            "\t\troutine started: ${
-                                GameState.formatTime(
-                                    (nonPlayerAgents[ch] as NonPlayerAgent
-                                            ).routines[0].routineStartTime
-                                )
-                            }",
+                            "\t\tunder ${(nonPlayerAgents[ch] as NonPlayerAgent).printStatus()}",
                             Logger.LogLevel.INFO
                         )
                         (nonPlayerAgents[ch] as NonPlayerAgent).routines[0].variables.forEach { (key, value) ->

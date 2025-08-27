@@ -8,7 +8,7 @@ import com.titaniumPolitics.game.core.gameActions.Wait
 import kotlinx.serialization.Serializable
 
 @Serializable
-class AddInfoToAgendaRoutine(val agendaIndex: Int, override val meetingName: String, val support: Boolean) : Routine(),
+class AddInfoToAgendaRoutine(val agendaIndex: Int, val support: Boolean) : Routine(),
     IMeetingRoutine {
     override fun newRoutineCondition(name: String, place: String, subroutines: List<Routine>): Routine? {
         // If I have no prepared information not presented in the meeting, end the routine.
@@ -17,12 +17,12 @@ class AddInfoToAgendaRoutine(val agendaIndex: Int, override val meetingName: Str
         if (character.preparedInfoKeys.none { key ->
                 (conf.currentCharacters - gState.informations[key]!!.knownTo).isNotEmpty()
             })
-            failed = true
+            failed()
         return null
     }
 
     override fun execute(name: String, place: String): GameAction {
-        success = true
+        success()
         val character = gState.characters[name]!!
         val conf =
             character.currentMeeting!!
@@ -56,9 +56,5 @@ class AddInfoToAgendaRoutine(val agendaIndex: Int, override val meetingName: Str
                 ?: return EndMeeting(name, place)
             return EndSpeech(name, place, nextSpeaker, gState)
         }
-    }
-
-    override fun successCondition(name: String, place: String): Boolean {
-        return success
     }
 }

@@ -18,19 +18,15 @@ class PrepareInfoRoutine() : Routine() {
 
     override fun execute(name: String, place: String): GameAction {
         if (place == "home_${name}") {
-            success = true
+            success()
             return PrepareInfo(name, place).also {
                 it.injectParent(gState)
                 it.recommendKeys()
             }
         }
         Logger.write("$name: Cannot move to home_${name}. Terminating the prepareInfoRoutine......")
-        failed = true
+        failed()
         return Wait(name, place)
-    }
-
-    override fun successCondition(name: String, place: String): Boolean {
-        return success
     }
 
 }

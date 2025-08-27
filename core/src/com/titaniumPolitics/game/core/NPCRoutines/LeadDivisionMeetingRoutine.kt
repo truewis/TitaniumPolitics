@@ -6,29 +6,12 @@ import kotlinx.serialization.Serializable
 import kotlin.math.max
 
 @Serializable
-class LeadDivisionMeetingRoutine(override val meetingName: String) : Routine(), IMeetingRoutine {
+class LeadDivisionMeetingRoutine(override val meetingName: String) : MeetingRoutine() {
     init {
         priority = PRIORITY_MEETING
     }
 
-    override fun newRoutineCondition(name: String, place: String, subroutines: List<Routine>): Routine? {
-        gState.characters[name]!!
-        val conf =
-            gState.ongoingMeetings[meetingName] ?: gState.scheduledMeetings[meetingName]
-        meetingStartMethod(conf, place)?.let { return it }
-        if (conf == null) return null
-        val party = gState.parties[conf.involvedParty]!!
-        check(party.leader == name) {
-            "For $name, LeadDivisionMeetingRoutine can only be used by the division leader, but got $name"
-        }
-
-        //DO not support proof of work, as we are the leader.
-
-
-        return null
-    }
-
-    override fun execute(name: String, place: String): GameAction {
+    override fun executeInMeeting(name: String, place: String): GameAction {
         val character = gState.characters[name]!!
         val conf =
             character.currentMeeting
@@ -50,7 +33,7 @@ class LeadDivisionMeetingRoutine(override val meetingName: String) : Routine(), 
         val party = gState.parties[conf.involvedParty]!!
         //If not speaker, wait if the mutuality to the speaker is high. Otherwise, if possible, interrupt the speaker.
         if (conf.currentSpeaker != name) {
-            return interceptCondition(conf, name, place)
+            return interceptCondition(name, place)
         } else //If it is my turn to speak
         {
             //0. Execute a command if there is any. Here, we can move to the place actively if the command is not in the current place.
@@ -63,7 +46,7 @@ class LeadDivisionMeetingRoutine(override val meetingName: String) : Routine(), 
                 if (it.isValid()) return it
             }
             //2. request information about the commands issued today, by putting ProofOfWork agenda forward.
-            proposeProofOfWork(conf, name, place)?.let { return it }
+            proposeProofOfWork(name, place)?.let { return it }
             //3. Praise or criticize the division members, if there is any relevant information.
             //It should be noted that the content of the information is not checked here. Think about this later.
             party.members.forEach { member ->
@@ -136,7 +119,7 @@ class LeadDivisionMeetingRoutine(override val meetingName: String) : Routine(), 
             AttendPrivateMeetingRoutine.gossip(gState, name, place)?.also { return it }
 
             //8. End meeting if attention is low.
-            endMeetingIfLowAttention(conf, name, place)?.let { return it }
+            endMeetingIfLowAttention(name, place)?.let { return it }
             //If nothing else to talk about, end the speech. The next speaker is the character with the highest mutuality.
             val nextSpeaker = conf.currentCharacters.minus(name)
                 .maxByOrNull { gState.getMutuality(name, it) }
@@ -219,13 +202,5 @@ class LeadDivisionMeetingRoutine(override val meetingName: String) : Routine(), 
 
             }
         return null
-    }
-
-    override fun successCondition(name: String, place: String): Boolean {
-        //If the conference is over, leave the routine. But the condition is not checked here, because the routine is not ended until the action is executed.
-        //See NonPlayerAgent.selectRoutine()
-        //If two hours has passed since the meeting started, leave the meeting. TODO: what if the meeting has started late?
-        //TODO: stay in the meeting until I have something else to do, or the work hours are over.
-        return meetingRoutineEndCondition(name, Meeting.MeetingType.DIVISION_DAILY_CONFERENCE)
     }
 }

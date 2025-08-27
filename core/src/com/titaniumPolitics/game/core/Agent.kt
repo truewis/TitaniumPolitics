@@ -1,6 +1,7 @@
 package com.titaniumPolitics.game.core
 
 import com.titaniumPolitics.game.core.NPCRoutines.IMeetingRoutine
+import com.titaniumPolitics.game.core.NPCRoutines.MeetingRoutine
 import com.titaniumPolitics.game.core.NPCRoutines.Routine
 import com.titaniumPolitics.game.core.gameActions.EndSpeech
 import com.titaniumPolitics.game.core.gameActions.GameAction
@@ -28,7 +29,7 @@ sealed class Agent : GameStateElement() {
         //This allows the character to leave the meeting if it has a higher priority routine.
         if (routines.isEmpty()) return null
         if (character.currentMeeting != null && routines[0].let {
-                it !is IMeetingRoutine || it.meetingName != parent.meetingName(
+                it !is MeetingRoutine || it.meetingName != parent.meetingName(
                     character.currentMeeting!!
                 )
             }) {

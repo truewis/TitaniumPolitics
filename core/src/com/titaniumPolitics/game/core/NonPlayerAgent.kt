@@ -67,7 +67,9 @@ class NonPlayerAgent : Agent() {
                     routines.add(
                         StealRoutine(
                             wantedResource,
-                            character.reliant * const("StealAmountMultiplier")
+                            (character.reliant + 1/*Numerically incorrect for anon agents, but ensure non zero value.*/) * const(
+                                "StealAmountMultiplier"
+                            )
                         ).apply {
                             priority = PRIORITY_LIFE_SUPPORT
                             routineStartTime = parent.time
@@ -136,7 +138,22 @@ class NonPlayerAgent : Agent() {
                 it.injectParent(parent)
             }
             routines.forEach {
-                if (it.successCondition(name, place)) {
+                it.newRoutineCondition(name, place, it.subroutines.map { routines.first { rt -> rt.ID == it } })
+                    ?.let { v ->
+                        if (!it.subroutines.isEmpty()) return@let//Only support one subroutine for now.
+                        v.routineStartTime = parent.time
+                        v.priority = it.priority + 10 //Set the priority to be higher than the current routine.
+                        it.subroutines += v.ID
+                        addList += v
+                        if (loopCounter > maxLoopCounter)
+                            Logger.write("Adding new routine $v from $it", Logger.LogLevel.INFO)
+                        routineSettled = false
+                    }
+            }
+            routines += addList
+            addList.clear()
+            routines.forEach {
+                if (it.success) {
                     routineSettled = false
                     endRoutine(it)
                 }
@@ -147,36 +164,23 @@ class NonPlayerAgent : Agent() {
                     failRoutine(it)
                 }
             }
-            routines.removeAll(removeList)
-            routines.forEach { routine -> routine.subroutines.removeIf { s -> routines.none { it.ID == s } } } //Remove the subroutines that were removed.
+            //////////////////////////////////
             if (loopCounter > maxLoopCounter)
                 Logger.write("Routines $removeList is being removed.", Logger.LogLevel.INFO)
+            routines.removeAll(removeList)
+            routines.forEach { routine -> routine.subroutines.removeIf { s -> routines.none { it.ID == s } } } //Remove the subroutines that were removed.
             removeList.clear()
-            routines.forEach {
-                if (it.subroutines.isEmpty())//Only support one subroutine for now.
-                    it.newRoutineCondition(name, place, it.subroutines.map { routines.first { rt -> rt.ID == it } })
-                        ?.let { v ->
-                            v.routineStartTime = parent.time
-                            if (v.priority == 0)//Initial priority
-                                v.priority = it.priority + 10 //Set the priority to be higher than the current routine.
-                            it.subroutines += v.ID
-                            addList += v
-                            if (loopCounter > maxLoopCounter)
-                                Logger.write("Adding new routine $v from $it", Logger.LogLevel.INFO)
-                            routineSettled = false
-                        }
+            //////////////////////////////////
+            if (routines.isEmpty()) {
+                routineSettled = false
+                whenIdle()
+                if (routines.isEmpty()) {
+                    Logger.write("There is truly nothing to do for $name. This is likely a bug.")
+                    return Wait(name, place)
+                }
             }
-            routines += addList
-            addList.clear()
         }
 
-        if (routines.isEmpty()) {
-            whenIdle()
-            if (routines.isEmpty()) {
-                Logger.write("There is truly nothing to do for $name. This is likely a bug.")
-                return Wait(name, place)
-            }
-        }
         routines.forEach {
             it.injectParent(parent)
         }

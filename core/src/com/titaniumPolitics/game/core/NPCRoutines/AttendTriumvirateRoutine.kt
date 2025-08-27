@@ -1,59 +1,38 @@
 package com.titaniumPolitics.game.core.NPCRoutines
 
 import com.titaniumPolitics.game.core.AgendaType
-import com.titaniumPolitics.game.core.Meeting
 import com.titaniumPolitics.game.core.MeetingAgenda
 import com.titaniumPolitics.game.core.ReadOnly
 import com.titaniumPolitics.game.core.gameActions.*
 import kotlinx.serialization.Serializable
 
 @Serializable
-class AttendTriumvirateRoutine(override val meetingName: String) : Routine(), IMeetingRoutine {
+class AttendTriumvirateRoutine(override val meetingName: String) : MeetingRoutine() {
     init {
         priority = PRIORITY_MEETING
     }
 
-    override fun newRoutineCondition(name: String, place: String, subroutines: List<Routine>): Routine? {
-        gState.characters[name]!!
-        val conf =
-            gState.ongoingMeetings[meetingName] ?: gState.scheduledMeetings[meetingName]
-        meetingStartMethod(conf, place)?.let { return it }
-        if (conf == null) return null
-
-        val party = gState.parties[conf.involvedParty]!!
+    override fun newIMeetingRoutineCondition(
+        name: String,
+        place: String,
+        subroutines: List<Routine>
+    ): IMeetingRoutine? {
+        val party = gState.parties[meeting.involvedParty]!!
         check(party.members.contains(name)) {
             "AttendTriumvirateRoutine can only be used for triumvirateDailyConference when the character is a member of the party, but got $name as a member of ${party.name}"
         }
 
-        supportProofOfWork(conf, name)?.let { return it }
+        supportProofOfWork(name)?.let { return it }
 
 
         return null
     }
 
-    override fun execute(name: String, place: String): GameAction {
-        val character = gState.characters[name]!!
-        val conf =
-            character.currentMeeting
-        if (conf == null) {
-            JoinMeeting(name, place).apply {
-                injectParent(gState)
-                if (isValid())
-                    return this
-            }
-            StartMeeting(name, place).apply {
-                injectParent(gState)
-                if (isValid())
-                    return this
-            }
-            return Wait(name, place).also {
-            } //If no meeting found, wait. Note that this action is only executed once because the routine will end after this action.
-            //This happens if the number of people condition of the meeting is not met.
-        }
-        val party = gState.parties[conf.involvedParty]!!
+    override fun executeInMeeting(name: String, place: String): GameAction {
+        val party = gState.parties[meeting.involvedParty]!!
         //If not speaker, wait if the mutuality to the speaker is high. Otherwise, if possible, interrupt the speaker.
-        if (conf.currentSpeaker != name) {
-            return interceptCondition(conf, name, place)
+        if (meeting.currentSpeaker != name) {
+            return interceptCondition(name, place)
         } else //If it is my turn to speak
         {
             //0. Execute a command if there is any. Here, we can move to the place actively if the command is not in the current place.
@@ -66,7 +45,7 @@ class AttendTriumvirateRoutine(override val meetingName: String) : Routine(), IM
 
 
             //2. request information about the commands issued today, by putting ProofOfWork agenda forward.
-            proposeProofOfWork(conf, name, place)?.let { return it }
+            proposeProofOfWork(name, place)?.let { return it }
             //3. Praise or criticize the members, if there is any relevant information.
             //It should be noted that the content of the information is not checked here. Think about this later.
             party.members.forEach { member ->
@@ -101,10 +80,10 @@ class AttendTriumvirateRoutine(override val meetingName: String) : Routine(), IM
             //However, right now, the resource information is available to everyone immediately, no need to share.
 
             //5. Criticize the common enemies of the division. It is determined by the party with the low mutuality with the division.
-            val enemyParty = gState.parties.values.filter { it.name != conf.involvedParty }
-                .minBy { gState.getPartyMutuality(it.name, conf.involvedParty!!) }.name
+            val enemyParty = gState.parties.values.filter { it.name != meeting.involvedParty }
+                .minBy { gState.getPartyMutuality(it.name, meeting.involvedParty!!) }.name
             if (gState.getPartyMutuality(
-                    conf.involvedParty!!,
+                    meeting.involvedParty!!,
                     enemyParty
                 ) < ReadOnly.const("EnemyPartyMutualityThreshold")
             )
@@ -118,7 +97,7 @@ class AttendTriumvirateRoutine(override val meetingName: String) : Routine(), IM
             //7. Gossip
             AttendPrivateMeetingRoutine.gossip(gState, name, place)?.also { return it }
             //If nothing else to talk about, end the speech. The next speaker is the character with the highest mutuality.
-            val nextSpeaker = conf.currentCharacters.minus(name)
+            val nextSpeaker = meeting.currentCharacters.minus(name)
                 .maxByOrNull { gState.getMutuality(name, it) }
                 ?: return EndMeeting(name, place)
             return EndSpeech(name, place, nextSpeaker, gState)
@@ -129,12 +108,4 @@ class AttendTriumvirateRoutine(override val meetingName: String) : Routine(), IM
 
     }
 
-    //TODO: Also check AttendMeetingRoutine for the same function.
-    override fun successCondition(name: String, place: String): Boolean {
-        //If the conference is over, leave the routine. But the condition is not checked here, because the routine is not ended until the action is executed.
-        //See NonPlayerAgent.selectRoutine()
-        //If two hours has passed since the meeting started, leave the meeting. TODO: what if the meeting has started late?
-        //TODO: stay in the meeting until I have something else to do, or the work hours are over.
-        return meetingRoutineEndCondition(name, Meeting.MeetingType.TRIUMVIRATE_DAILY_CONFERENCE)
-    }
 }

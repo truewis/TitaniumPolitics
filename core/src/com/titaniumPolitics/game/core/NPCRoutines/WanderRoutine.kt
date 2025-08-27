@@ -8,6 +8,7 @@ import kotlinx.serialization.Transient
 @Serializable
 class WanderRoutine() : Routine() {
     override fun newRoutineCondition(name: String, place: String, subroutines: List<Routine>): Routine? {
+        if (gState.hour !in 8..18) success()
         if (subroutines.none { it is MoveRoutine })
             return MoveRoutine(
                 Place.publicPlaces/*Should not wander into other people's homes.*/
@@ -18,10 +19,6 @@ class WanderRoutine() : Routine() {
 
     override fun execute(name: String, place: String): GameAction {
         return pickAction(name, place)
-    }
-
-    override fun successCondition(name: String, place: String): Boolean {
-        return (gState.hour !in 8..18)
     }
 
     @Transient

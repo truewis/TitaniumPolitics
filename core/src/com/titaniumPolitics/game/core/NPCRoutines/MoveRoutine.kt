@@ -17,22 +17,8 @@ import org.junit.jupiter.api.fail
 class MoveRoutine(var destination: String) : Routine() {
     var nextStop = ""
     override fun newRoutineCondition(name: String, place: String, subroutines: List<Routine>): Routine? {
-        return null
-    }
-
-    override fun execute(name: String, place: String): GameAction {
-        Move(name, place, gState).also {
-            it.placeTo = nextStop
-            if (it.isValid()) return it
-        }
-        //If move is not valid, wait and terminate the routine with an error.
-        failed = true
-        return Wait(name, place)
-    }
-
-    override fun successCondition(name: String, place: String): Boolean {
         if (place == destination) {
-            return true
+            success()
         } else {
             if (gState.places[place]!!.shortestPathAndTimeTo(destination)?.also {
                     nextStop = it.first[1]
@@ -42,11 +28,20 @@ class MoveRoutine(var destination: String) : Routine() {
                     "There is no path from $place to ${destination}! Terminating moveRoutine...",
                     Logger.LogLevel.INFO
                 )
-                failed = true
+                failed()
             }
 
         }
+        return null
+    }
 
-        return false
+    override fun execute(name: String, place: String): GameAction {
+        Move(name, place, gState).also {
+            it.placeTo = nextStop
+            if (it.isValid()) return it
+        }
+        //If move is not valid, wait and terminate the routine with an error.
+        failed()
+        return Wait(name, place)
     }
 }
