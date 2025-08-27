@@ -7,12 +7,16 @@ import com.titaniumPolitics.game.debugTools.Logger
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class Repair(override val sbjCharacter: String, override val tgtPlace: String) : GameAction() {
-    constructor(sbjCharacter: String, tgtPlace: String, gameState: GameState) : this(sbjCharacter, tgtPlace) {
+data class Repair(override val sbjCharacter: String, override val tgtPlace: String, var apparatusID: String) :
+    GameAction() {
+    constructor(sbjCharacter: String, tgtPlace: String, apparatusID: String, gameState: GameState) : this(
+        sbjCharacter,
+        tgtPlace,
+        apparatusID
+    ) {
         injectParent(gameState)
     }
 
-    var apparatusID = ""
     override fun execute() {
 
 
@@ -27,8 +31,8 @@ data class Repair(override val sbjCharacter: String, override val tgtPlace: Stri
     }
 
     override fun isValid(): Boolean {
-        val app = parent.places[tgtPlace]!!.getApparatus(apparatusID)
-        return parent.characters[sbjCharacter]!!.trait.contains("engineer")
+        val app = tgtPlaceObj.getApparatus(apparatusID)
+        return sbjCharObj.trait.contains("engineer")
                 && reason(
             tgtPlaceObj.resources.contains(app.requiredResourcePerRepair[checkRepairLevel(app).first]),
             "repair-resources"

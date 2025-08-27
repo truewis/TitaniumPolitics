@@ -201,7 +201,7 @@ class MeetingUI(var gameState: GameState) : Table(defaultSkin), KTable {
         mutualityChanges.forEach { (pair, delta) ->
             val fromPortrait = findPortrait(pair.first) ?: return@forEach
             val toPortrait = findPortrait(pair.second) ?: return@forEach
-            val arrow = MutualityArrowUI(fromPortrait, toPortrait, delta.toFloat(), skin)
+            val arrow = MutualityArrowUI(fromPortrait, toPortrait, delta.toFloat())
             mutualityArrows.add(arrow)
             addActor(arrow)
             arrow.addAction(

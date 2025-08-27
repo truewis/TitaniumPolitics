@@ -31,16 +31,11 @@ class RepairUI(val gameState: GameState, actionCallback: (GameAction) -> Unit) :
             if (value == null) throw Exception("")
             field = value
             onUpdateSelectedApp.forEach { it(value) }
-            action = Repair(sbjChar.name, sbjChar.place.name).apply {
-                injectParent(gameState)
-                apparatusID = value.ID
-            }
+            action = Repair(sbjChar.name, sbjChar.place.name, value.ID, gameState)
             submitButton.refresh(action)
         }
-    var action = Repair(sbjChar.name, sbjChar.place.name).apply {
-        injectParent(gameState)
-        apparatusID = gameState.places[tgtPlace]!!.apparatuses.first().ID
-    }
+    var action =
+        Repair(sbjChar.name, sbjChar.place.name, gameState.places[tgtPlace]!!.apparatuses.first().ID, gameState)
 
     private var agendaSelectBox: Table
     val apparatusDetailTable = scene2d.table {

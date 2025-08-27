@@ -41,7 +41,7 @@ class Resources(var positive: Boolean = true) {
     }
 
     fun contains(r1: Resources): Boolean {
-        return _resources.all { it.value >= r1[it.key] }
+        return r1.all { it.value <= (_resources[it.key] ?: 0.0) }
     }
 
     operator fun plus(r1: Resources): Resources {

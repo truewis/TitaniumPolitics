@@ -269,10 +269,8 @@ sealed class Routine() {
         if ("engineer" in tgtChar.trait) {
             //If the place I am managing has a broken apparatus, request repair.
             gState.places.values.filter { it.manager == name }.forEach { placeObj ->
-                if (placeObj.apparatuses.any { it.durability < 50f })
-                    return Repair(who, placeObj.name).apply {
-                        injectParent(gState)
-                    }
+                if (placeObj.apparatuses.any { it.durability < 70f })
+                    return Repair(who, placeObj.name, placeObj.apparatuses.first { it.durability < 70f }.ID, gState)
             }
 
 
