@@ -55,7 +55,7 @@ class TasksUI(var gameState: GameState) : Table(defaultSkin) {
                     row()
                     label(quest.description, "description") {
                         it.left()
-                        it.fill()
+                        it.grow()
                         setAlignment(Align.left)
                         setFontScale(0.3f)
                     }
