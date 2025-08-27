@@ -47,7 +47,7 @@ class MutualityMeter(var gameState: GameState, var tgtCharacter: String, var who
 //        }
         gameState.updateUI += refresh
         refresh(gameState)
-        addListener(MutualityTooltipUI(tgtCharacter, who, gameState))
+        addListener(MutualityTooltipUI(who, tgtCharacter, gameState))
     }
 
     //Override this method instead of remove, remove is not called properly.

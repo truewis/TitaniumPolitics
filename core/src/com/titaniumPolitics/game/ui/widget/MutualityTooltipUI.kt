@@ -98,23 +98,23 @@ class MutualityTooltipUI(
                 val reasonLabel2 = createReasonLabel(who, tgtCharacter)
 
                 pad(PADDING)
-                label(text1, "description") {
-                    it.size(width - 2 * PADDING, 50f)
-                    setFontScale(0.3f)
-                    setAlignment(Align.topLeft)
-                    wrap = true
-                }
-                row()
-                add(reasonLabel1).size(width - 2 * PADDING, 150f)
-                row()
                 label(text2, "description") {
                     it.size(width - 2 * PADDING, 50f)
-                    setFontScale(0.3f)
+                    setFontScale(0.25f)
                     setAlignment(Align.topLeft)
                     wrap = true
                 }
                 row()
                 add(reasonLabel2).size(width - 2 * PADDING, 150f)
+                row()
+                label(text1, "description") {
+                    it.size(width - 2 * PADDING, 50f)
+                    setFontScale(0.25f)
+                    setAlignment(Align.topLeft)
+                    wrap = true
+                }
+                row()
+                add(reasonLabel1).size(width - 2 * PADDING, 150f)
             }
 
             image("Stroke500x500") {
