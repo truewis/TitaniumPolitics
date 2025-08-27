@@ -25,8 +25,7 @@ class StealRoutine(
 
         val resplace = findResource(name)?.name
         if (resplace == null) {
-            failed()
-            return null
+            return failed()
         }
         if (place != resplace) {
             if (subroutines.none { it is MoveRoutine })
@@ -36,7 +35,6 @@ class StealRoutine(
     }
 
     override fun execute(name: String, place: String): GameAction {
-        success()
         val resplace = gState.places[place]!!
         gState.characters[name]!!
         if (resplace.resources[stealResource] < stealAmount) {
@@ -48,9 +46,11 @@ class StealRoutine(
             name, place,
             stealFor?.let { "home_$it" } ?: "home_$name", false, Resources(
                 stealResource to stealAmount
-            )
+            ),
+            gState
         ).also {
             if (it.isValid()) {
+                success()
                 Logger.write("$name is stealing ${it.resources} from ${resplace.name}!", Logger.LogLevel.INFO)
                 return it
             }

@@ -12,10 +12,10 @@ class WaitRoutine() : Routine() {
     override fun newRoutineCondition(name: String, place: String, subroutines: List<Routine>): Routine? {
         if (gState.hour >= until) {
             Logger.write("$name: Wait routine ended at hour $until.", Logger.LogLevel.INFO)
-            success()
+            return success()
         }
         if (gState.characters[name]!!.currentMeeting != null)
-            failed()
+            return failed()
         return null
     }
 

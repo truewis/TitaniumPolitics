@@ -10,11 +10,10 @@ class FindCharacterRoutine(val character: String) : Routine() {
     private var waitForCharacter = false
     override fun newRoutineCondition(name: String, place: String, subroutines: List<Routine>): Routine? {
         if (place == gState.places.values.find { it.characters.contains(character) }!!.name)
-            success()
+            return success()
         //Stop if spent too much time
         if (gState.time - routineStartTime > IDTH) {
-            failed()
-            return null
+            return failed()
         }
 
         if (!waitForCharacter)

@@ -15,7 +15,7 @@ class RestRoutine(var workplace: String? = null) : Routine() {
 
     override fun newRoutineCondition(name: String, place: String, subroutines: List<Routine>): Routine? {
 
-        if (condition(name, place)) success()
+        if (condition(name, place)) return success()
         if (place != "home_$name")
             return MoveRoutine("home_$name")//Add a move routine with higher priority.
         return null

@@ -17,7 +17,7 @@ class AddInfoToAgendaRoutine(val agendaIndex: Int, val support: Boolean) : Routi
         if (character.preparedInfoKeys.none { key ->
                 (conf.currentCharacters - gState.informations[key]!!.knownTo).isNotEmpty()
             })
-            failed()
+            return failed()
         return null
     }
 

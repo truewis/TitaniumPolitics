@@ -11,7 +11,7 @@ class InvestigateAndClearAccidentRoutine(var investigatePlace: String) : Routine
     override fun newRoutineCondition(name: String, place: String, subroutines: List<Routine>): Routine? {
         if (place != investigatePlace) {
             return MoveRoutine(investigatePlace)
-        } else if (!gState.places[place]!!.isAccidentScene) failed() //I arrived at the scene, but is no longer accident scene.
+        } else if (!gState.places[place]!!.isAccidentScene) return failed() //I arrived at the scene, but is no longer accident scene.
         return null
     }
 

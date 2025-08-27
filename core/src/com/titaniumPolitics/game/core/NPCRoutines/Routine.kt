@@ -1,26 +1,13 @@
 package com.titaniumPolitics.game.core.NPCRoutines
 
-import com.titaniumPolitics.game.core.AgendaType
 import com.titaniumPolitics.game.core.GameEngine
 import com.titaniumPolitics.game.core.GameState
-import com.titaniumPolitics.game.core.Meeting
-import com.titaniumPolitics.game.core.MeetingAgenda
-import com.titaniumPolitics.game.core.ReadOnly
 import com.titaniumPolitics.game.core.ReadOnly.IDTH
-import com.titaniumPolitics.game.core.Request
-import com.titaniumPolitics.game.core.Resources
-import com.titaniumPolitics.game.core.gameActions.EndMeeting
 import com.titaniumPolitics.game.core.gameActions.GameAction
-import com.titaniumPolitics.game.core.gameActions.Intercept
-import com.titaniumPolitics.game.core.gameActions.NewAgenda
-import com.titaniumPolitics.game.core.gameActions.Repair
-import com.titaniumPolitics.game.core.gameActions.UnofficialResourceTransfer
-import com.titaniumPolitics.game.core.gameActions.Wait
 import com.titaniumPolitics.game.debugTools.Logger
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 import java.util.*
-import kotlin.math.min
 
 //Trying implementing design pattern with function call stack is a bad idea because it is hard to debug.
 //Routine was designed to be independent of the gameState, but it is not the case anymore.
@@ -52,7 +39,7 @@ sealed class Routine() {
     var failed = false
         private set
     private var ended = false
-    fun success() {
+    fun success(): Routine? {
         if (!ended)
             success = true
         else {
@@ -62,9 +49,10 @@ sealed class Routine() {
                 Logger.write("Routine Control Flow warning: success called for an already failed routine: $this")
         }
         ended = true
+        return null
     }
 
-    fun failed() {
+    fun failed(): Routine? {
         if (!ended)
             failed = true
         else {
@@ -74,6 +62,7 @@ sealed class Routine() {
                 Logger.write("Routine Control Flow warning: failed called for an already failed routine: $this")
         }
         ended = true
+        return null
     }
 
     fun injectParent(gState: GameState) {

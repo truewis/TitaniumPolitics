@@ -18,7 +18,7 @@ class MoveRoutine(var destination: String) : Routine() {
     var nextStop = ""
     override fun newRoutineCondition(name: String, place: String, subroutines: List<Routine>): Routine? {
         if (place == destination) {
-            success()
+            return success()
         } else {
             if (gState.places[place]!!.shortestPathAndTimeTo(destination)?.also {
                     nextStop = it.first[1]
@@ -28,7 +28,7 @@ class MoveRoutine(var destination: String) : Routine() {
                     "There is no path from $place to ${destination}! Terminating moveRoutine...",
                     Logger.LogLevel.INFO
                 )
-                failed()
+                return failed()
             }
 
         }

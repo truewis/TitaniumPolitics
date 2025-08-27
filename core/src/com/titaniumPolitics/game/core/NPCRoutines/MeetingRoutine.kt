@@ -56,8 +56,7 @@ sealed class MeetingRoutine : Routine() {
 
     open fun meetingControl(name: String, place: String): Routine? {
         if (meetingRoutineEndCondition(name)) {
-            if (hasAttended) success() else failed()
-            return null
+            return if (hasAttended) success() else failed()
         }
         val mt = gState.ongoingMeetings[meetingName] ?: gState.scheduledMeetings[meetingName]
         if (mt == null) {
@@ -65,7 +64,7 @@ sealed class MeetingRoutine : Routine() {
                 "Meeting routine failed because the character is not in a meeting and there is no meeting to join.",
                 Logger.LogLevel.WARNING
             )
-            failed()
+            return failed()
             return null
         }
         if (mt !in gState.ongoingMeetings.values) {

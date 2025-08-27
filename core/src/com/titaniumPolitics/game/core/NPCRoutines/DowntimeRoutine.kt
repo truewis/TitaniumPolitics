@@ -13,7 +13,7 @@ class DowntimeRoutine() : Routine() {
     }
 
     override fun newRoutineCondition(name: String, place: String, subroutines: List<Routine>): Routine? {
-        if (condition(name, place)) success()
+        if (condition(name, place)) return success()
         val char = gState.characters[name]!!
         if (char.trait.contains("extrovert")) {
             if (place !in Place.publicPlaces)

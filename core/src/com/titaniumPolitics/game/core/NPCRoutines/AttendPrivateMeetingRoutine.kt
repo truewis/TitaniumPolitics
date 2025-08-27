@@ -34,31 +34,33 @@ class AttendPrivateMeetingRoutine(
         return null
     }
 
+    private fun condition(name: String): Boolean {
+        val currentMeeting = gState.characters[name]!!.currentMeeting
+        if (currentMeeting == null) {
+            return hasAttended //The routine should end iff the meeting has finished.
+        } else {
+            if (toWho?.let { it !in currentMeeting.currentCharacters } == true) {
+                return true //The character has been transferred to another meeting.
+            }
+            if (scheduledMeetingName != gState.meetingName(currentMeeting))
+                return true
+            //if (meeting.time + 1800 / ReadOnly.DT >= gState.time) false //For talks, we don't wait until the meeting has happened for 30 minutes.
+            return routineStartTime + 7200 / ReadOnly.DT <= gState.time || meeting.currentAttention < 10 //Leave the meeting if it is boring or it is getting too long.
+
+        }
+    }
+
     override fun meetingControl(name: String, place: String): Routine? {
         //////////////////////Routine End Condition Check/////////////////////////
-        val currentMeeting = gState.characters[name]!!.currentMeeting
-        if (if (currentMeeting == null) {
-                hasAttended //The routine should end iff the meeting has finished.
-            } else {
-                if (toWho?.let { it !in currentMeeting.currentCharacters } == true) {
-                    true //The character has been transferred to another meeting.
-                }
-                if (scheduledMeetingName != gState.meetingName(currentMeeting))
-                    true
-                //if (meeting.time + 1800 / ReadOnly.DT >= gState.time) false //For talks, we don't wait until the meeting has happened for 30 minutes.
-                routineStartTime + 7200 / ReadOnly.DT <= gState.time || meeting.currentAttention < 10 //Leave the meeting if it is boring or it is getting too long.
-
-            }
-        )
-            if (hasAttended && !hasUnresolvedAgenda) success() else failed()
+        if (condition(name))
+            return if (hasAttended && !hasUnresolvedAgenda) success() else failed()
         //////////////////////////////////////////////////////////////////////////
         //If there is no ongoing meeting, check if there is a scheduled meeting with the specified name or the character to meet.
         //If neither is specified, this routine fails.
-        if (currentMeeting == null) {
+        if (gState.characters[name]!!.currentMeeting == null) {
             if (scheduledMeetingName != null) {
                 if (gState.scheduledMeetings[scheduledMeetingName] == null) {
-                    failed()
-                    return null
+                    return failed()
                     //Scheduled meeting name exists but the meeting does not exist. Either the meeting was cancelled or it is already over. Fail the routine.
                 }
                 val mtPlace = gState.scheduledMeetings[scheduledMeetingName]!!.place //

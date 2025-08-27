@@ -30,7 +30,7 @@ class WorkRoutine(var workplace: String) : Routine() {
         if (!isWorkHourWithETA(gState, place, workplace, IDTH)
             || gState.characters[name]!!.health <= ReadOnly.const("CriticalHealth")
         )
-            success()
+            return success()
         val character = gState.characters[name]!!
 
         //These routines will start even if the character is in a meeting./////////////////////////////////////////////////////////////////////////////////

@@ -14,7 +14,7 @@ class WorkAnonRoutine(var workplace: String? = null) : Routine() {
         if (!isWorkHourWithETA(gState, place, workplace!!, IDTH)
             || gState.characters[name]!!.health <= ReadOnly.const("CriticalHealth")
         )
-            success()
+            return success()
         if (place != workplaceObj.name)
             return MoveRoutine(workplaceObj.name)//Add a move routine with higher priority.
         return null
