@@ -12,6 +12,7 @@ import com.titaniumPolitics.game.core.ReadOnly
 import com.titaniumPolitics.game.debugTools.Logger
 import ktx.scene2d.*
 
+@Deprecated("Not maintained.")
 class OtherCharacterProgressBackgroundUI(var gameState: GameState) : Table(Scene2DSkin.defaultSkin), KTable {
     private var status = ""
     private val progressLabel: Label

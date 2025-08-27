@@ -20,7 +20,12 @@ class ProgressBackgroundUI(var gameState: GameState) : Table(Scene2DSkin.default
     init {
         instance = this
         isVisible = false
-
+        GameEngine.acquireEvent += {
+            //These actions take multiple turns, so we don't hide the UI next turn.
+            if (status != "Wait" && status != "Sleep" && status != "Move") {//TODO: This is a temporary fix, should be replaced with a better solution.
+                setVisibleWithFade(false, status)
+            }
+        }
         stack {
             it.grow()
             this@ProgressBackgroundUI.bkg = image("white-pixel") {
