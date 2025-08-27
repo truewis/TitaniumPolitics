@@ -55,8 +55,10 @@ sealed class MeetingRoutine : Routine() {
     abstract fun executeInMeeting(name: String, place: String): GameAction
 
     open fun meetingControl(name: String, place: String): Routine? {
-        if (meetingRoutineEndCondition(name))
+        if (meetingRoutineEndCondition(name)) {
             if (hasAttended) success() else failed()
+            return null
+        }
         val mt = gState.ongoingMeetings[meetingName] ?: gState.scheduledMeetings[meetingName]
         if (mt == null) {
             Logger.write(
