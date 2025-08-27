@@ -5,6 +5,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.actions.Actions
 import com.badlogic.gdx.scenes.scene2d.ui.Image
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
+import com.badlogic.gdx.utils.Align
 import kotlin.math.abs
 import kotlin.math.atan2
 import kotlin.math.log
@@ -23,7 +24,7 @@ class MutualityArrowUI(
         val endX = to.x + to.width / 2
         val endY = to.y + to.height / 2
         val angle = atan2(endY - startY, endX - startX)
-        setPosition(startX, startY)
+        setPosition((startX + endX) / 2, (startY + endY) / 2, Align.center)
         rotation = Math.toDegrees(angle.toDouble()).toFloat()
         height = log(abs(delta) + 1, 2f) * 10f // 로그 스케일로 높이 조정
         width = sqrt((endX - startX) * (endX - startX) + (endY - startY) * (endY - startY))

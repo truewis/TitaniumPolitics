@@ -55,7 +55,7 @@ class SpeechUI : Table(defaultSkin), KTable {
     fun displaySpeech(action: GameAction) {
 
         bubble.isVisible = true
-        var text = ""
+        var text: String
         if (action is NewAgenda) {
             when (action.agenda.type) {
                 AgendaType.PROOF_OF_WORK -> text = ReadOnly.script("NewAgenda-ProofOfWork")
@@ -81,8 +81,8 @@ class SpeechUI : Table(defaultSkin), KTable {
                 AgendaType.DENOUNCE_PARTY -> text =
                     ReadOnly.script("NewAgenda-DenounceParty").format(action.agenda.subjectParams["party"])
 
-                AgendaType.BUDGET_PROPOSAL -> ReadOnly.script("NewAgenda-BudgetProposal")
-                AgendaType.BUDGET_RESOLUTION -> ReadOnly.script("NewAgenda-BudgetResolution")
+                AgendaType.BUDGET_PROPOSAL -> text = ReadOnly.script("NewAgenda-BudgetProposal")
+                AgendaType.BUDGET_RESOLUTION -> text = ReadOnly.script("NewAgenda-BudgetResolution")
                 AgendaType.APPOINT_MEETING -> text =
                     ReadOnly.script("NewAgenda-AppointMeeting")
 

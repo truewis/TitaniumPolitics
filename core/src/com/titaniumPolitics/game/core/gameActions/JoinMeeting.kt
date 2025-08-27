@@ -13,7 +13,7 @@ data class JoinMeeting(override val sbjCharacter: String, override val tgtPlace:
 
     val targetMeeting
         get() =
-            parent.scheduledMeetings
+            parent.ongoingMeetings
                 .filter {
                     parent.ongoingMeetings.containsKey(it.key) &&
                             sbjCharacter in it.value.scheduledCharacters &&
