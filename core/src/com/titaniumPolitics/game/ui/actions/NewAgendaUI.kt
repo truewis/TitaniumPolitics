@@ -49,10 +49,10 @@ class NewAgendaUI(val gameState: GameState, actionCallback: (GameAction) -> Unit
         row()
         label("Target:", "docTitle") { color = Color.BLACK }
         //Select character to perform the request.
-        add(CharacterSelectButton({ char ->
+        add(CharacterSelectButton { char ->
             this@NewAgendaUI.agenda =
                 MeetingAgenda(AgendaType.PRAISE, this@NewAgendaUI.subject, hashMapOf("character" to char))
-        })).size(180f)
+        }).size(180f)
     }
     private val denounceTable = scene2d.table {
         label(ReadOnly.prop("denounce"), "docTitle") {
@@ -61,10 +61,10 @@ class NewAgendaUI(val gameState: GameState, actionCallback: (GameAction) -> Unit
         row()
         label("Target:", "docTitle") { color = Color.BLACK }
         //Select character to perform the request.
-        add(CharacterSelectButton({ char ->
+        add(CharacterSelectButton { char ->
             this@NewAgendaUI.agenda =
                 MeetingAgenda(AgendaType.DENOUNCE, this@NewAgendaUI.subject, hashMapOf("character" to char))
-        })).size(180f)
+        }).size(180f)
     }
     private val praisePartyTable = scene2d.table {
         label(ReadOnly.prop("praiseParty"), "docTitle") {
@@ -112,12 +112,12 @@ class NewAgendaUI(val gameState: GameState, actionCallback: (GameAction) -> Unit
         }
         row()
         add(PlaceSelectButton({ this@NewAgendaUI.actionSelButton.changeTgtPlace(it) })).size(300f, 150f)
-        val csButton = CharacterSelectButton({ char ->
-            this@NewAgendaUI.actionSelButton.changeSubject(char)
-        })
-        csButton.availableCharacters =
-            this@NewAgendaUI.sbjChar.currentMeeting!!.currentCharacters.filter { it != this@NewAgendaUI.subject }
+        val csButton =
+            CharacterSelectButton(this@NewAgendaUI.sbjChar.currentMeeting!!.currentCharacters.filter { it != this@NewAgendaUI.subject }
                 .toSet()//TODO: this only works because we don't have to refresh the character list, because everything happens in the same turn.
+            ) { char ->
+                this@NewAgendaUI.actionSelButton.changeSubject(char)
+            }
         add(csButton).size(180f)
         row()
         //Select Action
@@ -141,16 +141,11 @@ class NewAgendaUI(val gameState: GameState, actionCallback: (GameAction) -> Unit
         row()
         label("Target:", "docTitle") { color = Color.BLACK }
         //Select character to perform the request.
-        add(CharacterSelectButton({ char ->
+        add(CharacterSelectButton(this@NewAgendaUI.sbjChar.currentMeeting!!.involvedParty?.let { partyName ->
+            (this@NewAgendaUI.gameState.parties[partyName]!!.members - this@NewAgendaUI.sbjChar.name).toSet()
+        }) { char ->
             this@NewAgendaUI.agenda =
                 MeetingAgenda(AgendaType.FIRE_MANAGER, this@NewAgendaUI.subject, hashMapOf("character" to char))
-        }).apply {
-            //If subject is division leader, they can only fire directors.
-            //If subject is workplace manager, they can only fire workers in their own workplace party.
-            availableCharacters =
-                this@NewAgendaUI.sbjChar.currentMeeting!!.involvedParty?.let { partyName ->
-                    (this@NewAgendaUI.gameState.parties[partyName]!!.members - this@NewAgendaUI.sbjChar.name).toSet()
-                }
         }).size(180f)
     }
     private val budgetProposalTable = scene2d.table {
@@ -160,16 +155,11 @@ class NewAgendaUI(val gameState: GameState, actionCallback: (GameAction) -> Unit
         row()
         label("Target:", "docTitle") { color = Color.BLACK }
         //Select character to perform the request.
-        add(CharacterSelectButton({ char ->
+        add(CharacterSelectButton(this@NewAgendaUI.sbjChar.currentMeeting!!.involvedParty?.let { partyName ->
+            (this@NewAgendaUI.gameState.parties[partyName]!!.members - this@NewAgendaUI.sbjChar.name).toSet()
+        }) { char ->
             this@NewAgendaUI.agenda =
                 MeetingAgenda(AgendaType.FIRE_MANAGER, this@NewAgendaUI.subject, hashMapOf("character" to char))
-        }).apply {
-            //If subject is division leader, they can only fire directors.
-            //If subject is workplace manager, they can only fire workers in their own workplace party.
-            availableCharacters =
-                this@NewAgendaUI.sbjChar.currentMeeting!!.involvedParty?.let { partyName ->
-                    (this@NewAgendaUI.gameState.parties[partyName]!!.members - this@NewAgendaUI.sbjChar.name).toSet()
-                }
         }).size(180f)
     }
     val st = scene2d.stack {

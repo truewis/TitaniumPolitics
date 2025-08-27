@@ -19,7 +19,7 @@ import ktx.scene2d.table
 class EndSpeechUI(val gameState: GameState, actionCallback: (GameAction) -> Unit) :
     ActionSheetUI("EndSpeechTitle", gameState, actionCallback) {
     private val sbjChar get() = gameState.characters[subject]!!
-    private val charSelector = CharacterSelectButton({ nextSpeaker = it })
+    private val charSelector = CharacterSelectButton { nextSpeaker = it }
     var nextSpeaker = ""
 
     init {

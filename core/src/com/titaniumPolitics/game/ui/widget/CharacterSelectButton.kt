@@ -9,16 +9,17 @@ import ktx.scene2d.KTable
 import ktx.scene2d.Scene2DSkin
 import ktx.scene2d.label
 
-class CharacterSelectButton(callback: (String) -> Unit) : Button(Scene2DSkin.defaultSkin, "default"), KTable {
+class CharacterSelectButton(
+    var availableCharacters: Set<String>? = null, callback: (String) -> Unit
+) : Button(Scene2DSkin.defaultSkin, "default"), KTable {
     val charPortrait: SimpleHeadPortraitUI
     val charLabel: Label
-    var availableCharacters: Set<String>? = null
 
     init {
         charPortrait = SimpleHeadPortraitUI("", false)
         add(charPortrait).size(100f)
         row()
-        charLabel = label("", "docTitle") { setFontScale(0.2f) }
+        charLabel = label(availableCharacters?.firstOrNull() ?: "", "docTitle") { setFontScale(0.2f) }
         addListener(object : ClickListener() {
             override fun clicked(event: com.badlogic.gdx.scenes.scene2d.InputEvent?, x: Float, y: Float) {
                 CharacterSelectUI.instance.isVisible = true
