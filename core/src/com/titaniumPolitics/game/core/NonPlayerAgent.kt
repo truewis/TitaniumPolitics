@@ -3,6 +3,7 @@ package com.titaniumPolitics.game.core
 import com.titaniumPolitics.game.core.NPCRoutines.*
 import com.titaniumPolitics.game.core.ReadOnly.DTH
 import com.titaniumPolitics.game.core.ReadOnly.IDTH
+import com.titaniumPolitics.game.core.ReadOnly.const
 import com.titaniumPolitics.game.core.gameActions.GameAction
 import com.titaniumPolitics.game.core.gameActions.LeaveMeeting
 import com.titaniumPolitics.game.core.gameActions.Wait
@@ -54,10 +55,6 @@ class NonPlayerAgent : Agent() {
         var pri = 10
         routines.sortByDescending { it.priority }
 
-        //Remove all meeting routines if the character is not in a meeting.
-        if (character.currentMeeting == null)
-            routines.removeAll { it is IMeetingRoutine }
-
         if (!routines.isEmpty())
             pri = routines[0].priority + 10
         //If there is almost no food or water, stop all activities and try to get some. ----------------------------------------------------------------------------
@@ -91,7 +88,10 @@ class NonPlayerAgent : Agent() {
             }
         }
         //If health is low, rest
-        if (character.health < ReadOnly.const("TiredHealth")) {
+        if (character.health < const("TiredHealth") ||
+            character.hunger > const("hungerThreshold") ||
+            character.thirst > const("thirstThreshold")
+        ) {
             if (routines.none { it is RestRoutine }) {
                 routines.add(RestRoutine(parent.getWorkplace(name)?.name).apply {
                     priority = pri

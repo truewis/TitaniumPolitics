@@ -331,7 +331,7 @@ sealed class Routine() {
 
     fun meetingRoutineEndCondition(name: String, type: Meeting.MeetingType): Boolean {
         with(this as IMeetingRoutine) {
-            if (meetingName in gState.scheduledMeetings || (type == Meeting.MeetingType.TALK && meetingName !in gState.ongoingMeetings) /*Talk meetings may not be scheduled in advanced.*/) {
+            if (meetingName in gState.scheduledMeetings) {
                 return false //The meeting has not started yet.
             }
             val conf = gState.characters[name]!!.currentMeeting

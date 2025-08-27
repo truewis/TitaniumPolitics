@@ -26,8 +26,6 @@ sealed class Agent : GameStateElement() {
     fun blockExecution(routines: List<Routine>): GameAction? {
         //Leave meeting or conference if the routine was changed.
         //This allows the character to leave the meeting if it has a higher priority routine.
-        //In this case, attendMeetingRoutine is still alive in the queue,
-        //but it will be removed immediately when it becomes the current routine, as the character is not in a meeting.
         if (routines.isEmpty()) return null
         if (character.currentMeeting != null && routines[0].let {
                 it !is IMeetingRoutine || it.meetingName != parent.meetingName(

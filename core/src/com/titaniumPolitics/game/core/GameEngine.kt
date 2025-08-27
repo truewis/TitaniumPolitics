@@ -783,8 +783,13 @@ class GameEngine(val gameState: GameState) {
                     }
                 }
                 with(char) {
-                    if ((hunger > const("hungerThreshold") || thirst > const("thirstThreshold")) && reliant > 1)
+                    if ((hunger >= const("HungerMax") * 0.99 || thirst >= const("ThirstMax") * 0.99) && reliant > 1) {
+                        Logger.write(
+                            "$name is starving or dehydrated, killing some of the reliant.",
+                            Logger.LogLevel.INFO
+                        )
                         killReliant(max(reliant / 10, 1))
+                    }
                     if (alive && health <= 0) {
                         if (type == Type.ANON) {
                             killReliant(
