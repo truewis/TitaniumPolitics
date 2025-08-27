@@ -30,6 +30,8 @@ sealed class Routine() {
     @Transient
     lateinit var gState: GameState
     val ID = UUID.randomUUID().toString()
+
+    @Deprecated("Only one subroutine per routine is allowed, so priority must not be set.")
     var priority: Int = 0
     val subroutines = arrayListOf<String>() //Store the IDs of subroutines that are currently running.
     var routineStartTime: Int = 0 //The time when the routine starts, used to calculate the duration of the routine.

@@ -7,10 +7,11 @@ import com.titaniumPolitics.game.core.gameActions.Wait
 import kotlinx.serialization.Serializable
 
 @Serializable
-class TransferResourceRoutine() : Routine() {
-    var res = ""
-    var source = ""
-    var dest = ""
+class TransferResourceRoutine(
+    var resources: Resources,
+    var source: String,
+    var dest: String
+) : Routine() {
     override fun newRoutineCondition(name: String, place: String, subroutines: List<Routine>): Routine? {
 
         if (place != source) {
@@ -27,7 +28,7 @@ class TransferResourceRoutine() : Routine() {
                 name,
                 place,
                 dest,
-                Resources(res to gState.places[place]!!.resources[res] / 2),
+                resources,
                 gState
             ).also {
                 if (it.isValid())

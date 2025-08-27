@@ -4,10 +4,12 @@ import com.titaniumPolitics.game.core.GameEngine
 import com.titaniumPolitics.game.core.InformationType
 import com.titaniumPolitics.game.core.Meeting
 import com.titaniumPolitics.game.core.ReadOnly
+import com.titaniumPolitics.game.core.Resources
 import com.titaniumPolitics.game.core.gameActions.GameAction
 import com.titaniumPolitics.game.core.gameActions.PrepareInfo
 import com.titaniumPolitics.game.core.gameActions.Wait
 import kotlinx.serialization.Serializable
+import kotlin.math.max
 import kotlin.times
 
 @Serializable
@@ -153,12 +155,19 @@ class WorkRoutine(var workplace: String) : Routine() {
                                 .maxByOrNull { it.resources[res] }
                         if (resplace != null && place1.name != resplace.name)
                         //start new routine if there is a place with all the conditions met.
-                        //If the place with the resource has enough resource to supply apparatus for one hour, and there is no existing transfer routine
-                            if (resplace.resources[res] > apparatus.hourlyOperationResource[res]) {
-                                return TransferResourceRoutine().also {
-                                    it.res = res; it.source = resplace.name; it.dest = place1.name
-                                    priority = PRIORITY_WORK + 80 //Higher priority than work.
-                                }
+                        //If the place with the resource has enough resource to supply apparatus for ten hours, and there is no existing transfer routine
+                            if (resplace.resources[res] > apparatus.hourlyOperationResource[res] * 10) {
+                                return TransferResourceRoutine(
+                                    //To reduce the overhead, it is rational to transfer more resource than immediately needed if possible.
+                                    Resources(
+                                        res to max(
+                                            apparatus.hourlyOperationResource[res] * 10,
+                                            resplace.resources[res] * 0.3
+                                        )
+                                    ),
+                                    resplace.name,
+                                    place1.name
+                                )
                             }
 
                     }
