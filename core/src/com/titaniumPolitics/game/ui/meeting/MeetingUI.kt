@@ -83,7 +83,7 @@ class MeetingUI(var gameState: GameState) : Table(defaultSkin), KTable {
         GameEngine.onBeforeNonPlayerCharacterAction += { action ->
             if (isVisible && gameState.player.currentMeeting?.currentCharacters?.contains(action.sbjCharacter) ?: false && action !is Wait) {
                 Logger.write(
-                    "CharacterPortraits: Non-player character action detected: ${action.sbjCharacter} performed ${action::class.simpleName}",
+                    "MeetingUI: Non-player character action detected: ${action.sbjCharacter} performed ${action::class.simpleName}",
                     Logger.LogLevel.INFO
                 )
                 //Block the game engine until the animation is done.
@@ -93,16 +93,24 @@ class MeetingUI(var gameState: GameState) : Table(defaultSkin), KTable {
                             if (speakerPortrait.tgtCharacter == action.sbjCharacter) {
                                 speakerPortrait.speechUI.displaySpeech(action)
                             }
+                            portraits.forEach { portrait ->
+                                if (portrait.tgtCharacter == action.sbjCharacter) {
+                                    portrait.speechUI.displaySpeech(action)
+                                }
+                            }
                         }
                     )
-                    startAnimation()
                     suspendCoroutine { continuation ->
                         Gdx.app.postRunnable {
+                            startAnimation()
                             onAnimationEnd =
                                 {
                                     try {
                                         continuation.resume(Unit)
+                                        println("Resuming game engine after character ${action.sbjCharacter} action animation.")
                                     } catch (e: IllegalStateException) {
+                                        // This can happen if the coroutine was already resumed.
+                                        println("Continuation was already resumed: ${action.sbjCharacter}")
                                     }
                                 }
                         }
@@ -247,6 +255,13 @@ class MeetingUI(var gameState: GameState) : Table(defaultSkin), KTable {
     private fun addCharacterPortrait(characterName: String) {
         val portrait = HeadPortraitUI(characterName, gameState)
         portrait.setSize(200f, 200f)
+        //Also check CharactersInPlaceUI for similar code.
+        portrait.speechUI.onSpeechEnd += {
+            if (this@MeetingUI.animationQueue.isEmpty())
+                this@MeetingUI.onAnimationEnd()
+            else
+                this@MeetingUI.addAction(this@MeetingUI.animationQueue.removeFirst())
+        }
         portraits.add(portrait)
         addActor(portrait)
         portrait.layout()

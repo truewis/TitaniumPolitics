@@ -45,7 +45,7 @@ class CharactersInPlaceUI(var gameState: GameState) : Table(defaultSkin) {
                 ) && action !is Wait
             ) {
                 Logger.write(
-                    "CharacterPortraits: Non-player character action detected: ${action.sbjCharacter} performed ${action::class.simpleName}",
+                    "CharactersInPlaceUI: Non-player character action detected: ${action.sbjCharacter} performed ${action::class.simpleName}",
                     Logger.LogLevel.INFO
                 )
                 //Block the game engine until the animation is done.
@@ -59,9 +59,9 @@ class CharactersInPlaceUI(var gameState: GameState) : Table(defaultSkin) {
                             }
                         }
                     )
-                    startAnimation()
                     suspendCoroutine { continuation ->
                         Gdx.app.postRunnable {
+                            startAnimation()
                             onAnimationEnd =
                                 {
                                     try {
