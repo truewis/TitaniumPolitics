@@ -22,7 +22,7 @@ class FindCharacterRoutine(val character: String) : Routine() {
         TODO("Not supposed to be called.")
     }
 
-    override fun endCondition(name: String, place: String): Boolean {
+    override fun successCondition(name: String, place: String): Boolean {
         //Stop if the character is at the same place
         return place == gState.places.values.find { it.characters.contains(character) }!!.name
     }

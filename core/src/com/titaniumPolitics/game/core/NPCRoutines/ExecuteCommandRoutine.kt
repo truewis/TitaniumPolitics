@@ -95,7 +95,7 @@ class ExecuteCommandRoutine() : Routine() {
                     "$name: The request ${executableRequest.action} is valid. Executing...",
                     Logger.LogLevel.INFO
                 )
-                executeDone = true
+                success = true
                 return copy
             } else {
                 timeout -= 1
@@ -117,8 +117,8 @@ class ExecuteCommandRoutine() : Routine() {
         return Wait(name, place)
     }
 
-    override fun endCondition(name: String, place: String): Boolean {
-        return executeDone
+    override fun successCondition(name: String, place: String): Boolean {
+        return success
     }
 
 }

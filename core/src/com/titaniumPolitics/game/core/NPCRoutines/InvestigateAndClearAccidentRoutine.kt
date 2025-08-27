@@ -7,17 +7,17 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 class InvestigateAndClearAccidentRoutine(var investigatePlace: String) : Routine() {
-    var investigated = false
+    private var investigated = false
     override fun newRoutineCondition(name: String, place: String, subroutines: List<Routine>): Routine? {
         if (place != investigatePlace) {
-            if (subroutines.none { it is MoveRoutine })
-                return MoveRoutine(investigatePlace)
-        }
+            return MoveRoutine(investigatePlace)
+        } else if (!gState.places[place]!!.isAccidentScene) failed =
+            true //I arrived at the scene, but is no longer accident scene.
         return null
     }
 
     override fun execute(name: String, place: String): GameAction {
-        executeDone = true
+        success = true
         if (!investigated) {
             investigated = true
             return InvestigateAccidentScene(name, place)
@@ -25,7 +25,7 @@ class InvestigateAndClearAccidentRoutine(var investigatePlace: String) : Routine
         return ClearAccidentScene(name, place)
     }
 
-    override fun endCondition(name: String, place: String): Boolean {
-        return executeDone || !gState.places[place]!!.isAccidentScene
+    override fun successCondition(name: String, place: String): Boolean {
+        return success
     }
 }

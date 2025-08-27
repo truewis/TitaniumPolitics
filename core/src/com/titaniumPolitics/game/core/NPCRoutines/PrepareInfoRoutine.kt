@@ -18,7 +18,7 @@ class PrepareInfoRoutine() : Routine() {
 
     override fun execute(name: String, place: String): GameAction {
         if (place == "home_${name}") {
-            executeDone = true
+            success = true
             return PrepareInfo(name, place).also {
                 it.injectParent(gState)
                 it.recommendKeys()
@@ -29,8 +29,8 @@ class PrepareInfoRoutine() : Routine() {
         return Wait(name, place)
     }
 
-    override fun endCondition(name: String, place: String): Boolean {
-        return executeDone
+    override fun successCondition(name: String, place: String): Boolean {
+        return success
     }
 
 }

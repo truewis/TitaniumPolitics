@@ -24,7 +24,7 @@ class RestRoutine(var workplace: String? = null) : Routine() {
         return pickAction(name, place)
     }
 
-    override fun endCondition(name: String, place: String): Boolean {
+    override fun successCondition(name: String, place: String): Boolean {
         // Wake up based on eta to workplace and workplace work hours.
         if (gState.characters[name]!!.health < ReadOnly.const("CriticalHealth")) return false
         if (gState.characters[name]!!.hunger > ReadOnly.const("hungerThreshold")) return false

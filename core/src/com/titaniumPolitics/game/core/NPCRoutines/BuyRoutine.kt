@@ -73,11 +73,11 @@ class BuyRoutine(val buyResource: String, val buyAmount: Double) : Routine() {
     }
 
     override fun execute(name: String, place: String): GameAction {
-        executeDone = true
+        success = true
         return Wait(name, place) //TODO: temporary implementation
     }
 
-    override fun endCondition(name: String, place: String): Boolean {
-        return executeDone
+    override fun successCondition(name: String, place: String): Boolean {
+        return success
     }
 }

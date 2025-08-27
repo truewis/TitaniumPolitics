@@ -1,9 +1,7 @@
 package com.titaniumPolitics.game.core.NPCRoutines
 
 import com.titaniumPolitics.game.core.AgendaType
-import com.titaniumPolitics.game.core.Meeting
 import com.titaniumPolitics.game.core.MeetingAgenda
-import com.titaniumPolitics.game.core.ReadOnly
 import com.titaniumPolitics.game.core.gameActions.*
 import kotlinx.serialization.Serializable
 
@@ -37,9 +35,10 @@ class AttendDivisionElectionRoutine(override val meetingName: String) : Routine(
                 if (try_support_nomination == 0) {
                     //If the agenda is already proposed, and we have a supporting information, support it.
                     try_support_nomination += 1
-                    return SupportAgendaRoutine(
+                    return AddInfoToAgendaRoutine(
                         conf.agendas.indexOfFirst { it.type == AgendaType.NOMINATE && it.subjectParams["character"] == nominee },
-                        meetingName
+                        meetingName,
+                        true
                     )
                 }
                 //After you support the nominee, attack the other nominees.
@@ -47,9 +46,10 @@ class AttendDivisionElectionRoutine(override val meetingName: String) : Routine(
                     gState.characters.keys.filter { it != name && it != nominee && conf.agendas.any { it.type == AgendaType.NOMINATE && it.subjectParams["character"] == nominee } }
                 if (otherNominees.isNotEmpty()) {
                     return (
-                            AttackAgendaRoutine(
+                            AddInfoToAgendaRoutine(
                                 conf.agendas.indexOfFirst { it.type == AgendaType.NOMINATE && it.subjectParams["character"] == nominee },
-                                meetingName
+                                meetingName,
+                                false
                             ))//Add a routine, priority higher than work.
 
                 }
@@ -114,7 +114,7 @@ class AttendDivisionElectionRoutine(override val meetingName: String) : Routine(
 
     }
 
-    override fun endCondition(name: String, place: String): Boolean {
+    override fun successCondition(name: String, place: String): Boolean {
         //If the conference is over, leave the routine. But the condition is not checked here, because the routine is not ended until the action is executed.
         //Don't end the routine until the election is over.
         return gState.parties[gState.characters[name]!!.currentMeeting!!.involvedParty]!!.leader != null

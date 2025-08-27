@@ -124,7 +124,7 @@ class AttendPrivateMeetingRoutine(
 
     }
 
-    override fun endCondition(name: String, place: String): Boolean {
+    override fun successCondition(name: String, place: String): Boolean {
         with(this as IMeetingRoutine) {
             if (scheduledMeetingName != null) {
                 if (scheduledMeetingName in gState.scheduledMeetings)

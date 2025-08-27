@@ -14,7 +14,7 @@ class LeadDivisionElectionRoutine(override val meetingName: String) : Routine(),
     }
 
     override fun newRoutineCondition(name: String, place: String, subroutines: List<Routine>): Routine? {
-        val character = gState.characters[name]!!
+        gState.characters[name]!!
         val conf =
             gState.ongoingMeetings[meetingName] ?: gState.scheduledMeetings[meetingName]
         meetingStartMethod(conf, place)?.let { return it }
@@ -99,7 +99,7 @@ class LeadDivisionElectionRoutine(override val meetingName: String) : Routine(),
 
     }
 
-    override fun endCondition(name: String, place: String): Boolean {
+    override fun successCondition(name: String, place: String): Boolean {
         //If the conference is over, leave the routine. But the condition is not checked here, because the routine is not ended until the action is executed.
         //Don't end the routine until the election is over.
         return gState.parties[gState.characters[name]!!.currentMeeting!!.involvedParty]!!.leader != null

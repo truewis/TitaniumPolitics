@@ -17,7 +17,7 @@ class WaitRoutine() : Routine() {
         return Wait(name, place)
     }
 
-    override fun endCondition(name: String, place: String): Boolean {
+    override fun successCondition(name: String, place: String): Boolean {
         if (gState.characters[name]!!.currentMeeting != null)
             return true //If the character is in a meeting, end the wait routine.
         if (gState.hour >= until) {

@@ -1,14 +1,12 @@
 package com.titaniumPolitics.game.core.NPCRoutines
 
 import com.titaniumPolitics.game.core.Place
-import com.titaniumPolitics.game.core.ReadOnly
 import com.titaniumPolitics.game.core.Resources
 import com.titaniumPolitics.game.core.gameActions.GameAction
 import com.titaniumPolitics.game.core.gameActions.UnofficialResourceTransfer
 import com.titaniumPolitics.game.core.gameActions.Wait
 import com.titaniumPolitics.game.debugTools.Logger
 import kotlinx.serialization.Serializable
-import kotlin.math.min
 
 @Serializable
 class StealRoutine(
@@ -25,7 +23,11 @@ class StealRoutine(
 
     override fun newRoutineCondition(name: String, place: String, subroutines: List<Routine>): Routine? {
 
-        val resplace = findResource(name)?.name ?: return null
+        val resplace = findResource(name)?.name
+        if (resplace == null) {
+            failed = true
+            return null
+        }
         if (place != resplace) {
             if (subroutines.none { it is MoveRoutine })
                 return MoveRoutine(resplace)//Add a move routine with higher priority.
@@ -34,9 +36,9 @@ class StealRoutine(
     }
 
     override fun execute(name: String, place: String): GameAction {
-        executeDone = true
+        success = true
         val resplace = gState.places[place]!!
-        val character = gState.characters[name]!!
+        gState.characters[name]!!
         if (resplace.resources[stealResource] < stealAmount) {
             //Not enough resource to steal, the routine ends.
             failed = true
@@ -54,7 +56,7 @@ class StealRoutine(
 
     }
 
-    override fun endCondition(name: String, place: String): Boolean {
-        return executeDone || findResource(name) == null
+    override fun successCondition(name: String, place: String): Boolean {
+        return success
     }
 }

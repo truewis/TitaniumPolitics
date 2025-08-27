@@ -6,7 +6,6 @@ import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.core.Meeting
 import com.titaniumPolitics.game.core.MeetingAgenda
 import com.titaniumPolitics.game.core.ReadOnly
-import com.titaniumPolitics.game.core.ReadOnly.DTH
 import com.titaniumPolitics.game.core.ReadOnly.IDTH
 import com.titaniumPolitics.game.core.Request
 import com.titaniumPolitics.game.core.Resources
@@ -43,11 +42,11 @@ sealed class Routine() {
 
     /**This is used to check if the routine execution is successful. Otherwise, there is a problem executing the routine and the parent routine should be notified.
      */
-    var executeDone =
+    var success =
         false
 
     /**This is used to check if the routine has failed.
-     * Once set to true, the routine will be killed regardless of the endCondition, and onSubroutineFail method of the parent routine will be called.
+     * Once set to true, the routine will be killed regardless of the success variable, and onSubroutineFail method of the parent routine will be called.
      * */
     var failed = false
 
@@ -57,7 +56,7 @@ sealed class Routine() {
 
     abstract fun newRoutineCondition(name: String, place: String, subroutines: List<Routine>): Routine?
     abstract fun execute(name: String, place: String): GameAction
-    abstract fun endCondition(name: String, place: String): Boolean
+    abstract fun successCondition(name: String, place: String): Boolean
 
     /**
      * This function is called when a subroutine ends with error.
@@ -124,9 +123,10 @@ sealed class Routine() {
                 //If the agenda is already proposed, and we have a supporting information, support it.
                 try_support_proofOfWork += 1
                 return (
-                        SupportAgendaRoutine(
+                        AddInfoToAgendaRoutine(
                             conf.agendas.indexOfFirst { it.type == AgendaType.PROOF_OF_WORK },
-                            gState.meetingName(conf)
+                            gState.meetingName(conf),
+                            support = true
                         ))//Add a routine, priority higher than work.
             }
         }
@@ -349,7 +349,7 @@ sealed class Routine() {
     }
 
     override fun toString(): String {
-        return "${this::class.simpleName}(ID='$ID', priority=$priority, subroutines=$subroutines, routineStartTime=$routineStartTime, variables=$variables, executeDone=$executeDone)"
+        return "${this::class.simpleName}(ID='$ID', priority=$priority, subroutines=$subroutines, routineStartTime=$routineStartTime, variables=$variables, executeDone=$success)"
     }
 
     companion object {

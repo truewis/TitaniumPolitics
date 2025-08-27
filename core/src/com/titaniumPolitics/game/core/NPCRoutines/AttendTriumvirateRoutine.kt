@@ -14,7 +14,7 @@ class AttendTriumvirateRoutine(override val meetingName: String) : Routine(), IM
     }
 
     override fun newRoutineCondition(name: String, place: String, subroutines: List<Routine>): Routine? {
-        val character = gState.characters[name]!!
+        gState.characters[name]!!
         val conf =
             gState.ongoingMeetings[meetingName] ?: gState.scheduledMeetings[meetingName]
         meetingStartMethod(conf, place)?.let { return it }
@@ -130,7 +130,7 @@ class AttendTriumvirateRoutine(override val meetingName: String) : Routine(), IM
     }
 
     //TODO: Also check AttendMeetingRoutine for the same function.
-    override fun endCondition(name: String, place: String): Boolean {
+    override fun successCondition(name: String, place: String): Boolean {
         //If the conference is over, leave the routine. But the condition is not checked here, because the routine is not ended until the action is executed.
         //See NonPlayerAgent.selectRoutine()
         //If two hours has passed since the meeting started, leave the meeting. TODO: what if the meeting has started late?

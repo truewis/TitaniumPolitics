@@ -19,7 +19,7 @@ class HireRoutine() : Routine() {
     }
 
     override fun execute(name: String, place: String): GameAction {
-        executeDone = true
+        success = true
         //If in market, hire a character based on role variable.
         if (variables["role"]!!.contains("director")) {
             val placeForDirector = variables["role"]!!.split('_')[1]
@@ -46,7 +46,7 @@ class HireRoutine() : Routine() {
         }
     }
 
-    override fun endCondition(name: String, place: String): Boolean {
-        return executeDone
+    override fun successCondition(name: String, place: String): Boolean {
+        return success
     }
 }

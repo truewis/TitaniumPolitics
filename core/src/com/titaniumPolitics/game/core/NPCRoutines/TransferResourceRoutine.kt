@@ -22,7 +22,7 @@ class TransferResourceRoutine(
     }
 
     override fun execute(name: String, place: String): GameAction {
-        executeDone = true
+        success = true
         if (place == source)//TODO: do not transfer if the amount of resource is not enough for the destination place. Either here or in workRoutine.
             OfficialResourceTransfer(
                 name,
@@ -37,7 +37,7 @@ class TransferResourceRoutine(
         return Wait(name, place)
     }
 
-    override fun endCondition(name: String, place: String): Boolean {
-        return executeDone
+    override fun successCondition(name: String, place: String): Boolean {
+        return success
     }
 }

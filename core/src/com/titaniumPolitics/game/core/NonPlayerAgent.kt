@@ -1,11 +1,9 @@
 package com.titaniumPolitics.game.core
 
 import com.titaniumPolitics.game.core.NPCRoutines.*
-import com.titaniumPolitics.game.core.ReadOnly.DTH
 import com.titaniumPolitics.game.core.ReadOnly.IDTH
 import com.titaniumPolitics.game.core.ReadOnly.const
 import com.titaniumPolitics.game.core.gameActions.GameAction
-import com.titaniumPolitics.game.core.gameActions.LeaveMeeting
 import com.titaniumPolitics.game.core.gameActions.Wait
 import com.titaniumPolitics.game.debugTools.Logger
 import kotlinx.serialization.Serializable
@@ -69,7 +67,7 @@ class NonPlayerAgent : Agent() {
                     routines.add(
                         StealRoutine(
                             wantedResource,
-                            character.reliant * ReadOnly.const("StealAmountMultiplier")
+                            character.reliant * const("StealAmountMultiplier")
                         ).apply {
                             priority = PRIORITY_LIFE_SUPPORT
                             routineStartTime = parent.time
@@ -102,7 +100,7 @@ class NonPlayerAgent : Agent() {
         }
 
         //If will is low, downTime.
-        if (parent.getMutuality(name) < ReadOnly.const("DowntimeWill")) {
+        if (parent.getMutuality(name) < const("DowntimeWill")) {
             if (routines.none { it is DowntimeRoutine }) {
                 routines.add(DowntimeRoutine().apply {
 
@@ -138,7 +136,7 @@ class NonPlayerAgent : Agent() {
                 it.injectParent(parent)
             }
             routines.forEach {
-                if (it.endCondition(name, place)) {
+                if (it.successCondition(name, place)) {
                     routineSettled = false
                     endRoutine(it)
                 }

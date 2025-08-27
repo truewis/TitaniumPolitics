@@ -305,7 +305,7 @@ class WorkRoutine(var workplace: String) : Routine() {
         //Never fail the work routine itself.
     }
 
-    override fun endCondition(name: String, place: String): Boolean {
+    override fun successCondition(name: String, place: String): Boolean {
         //If work hours are over, rest. Also, if the character is too hungry, thirsty, or sick, rest. (Which is checked earlier.)
         return !isWorkHourWithETA(gState, place, workplace, (1 / ReadOnly.DTH).toInt())
                 || gState.characters[name]!!.health <= ReadOnly.const("CriticalHealth")

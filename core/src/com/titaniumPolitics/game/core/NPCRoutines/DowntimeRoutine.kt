@@ -32,7 +32,7 @@ class DowntimeRoutine() : Routine() {
         return pickAction(name, place)
     }
 
-    override fun endCondition(name: String, place: String): Boolean {
+    override fun successCondition(name: String, place: String): Boolean {
         //Pay attention to the condition checking order.
         //return false must be checked first, otherwise the routine will be created again.
         return true

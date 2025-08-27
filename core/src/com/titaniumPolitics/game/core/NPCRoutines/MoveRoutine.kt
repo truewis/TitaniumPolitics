@@ -30,7 +30,7 @@ class MoveRoutine(var destination: String) : Routine() {
         return Wait(name, place)
     }
 
-    override fun endCondition(name: String, place: String): Boolean {
+    override fun successCondition(name: String, place: String): Boolean {
         if (place == destination) {
             return true
         } else {

@@ -13,7 +13,7 @@ class AttendDivisionMeetingRoutine(override val meetingName: String) : Routine()
     }
 
     override fun newRoutineCondition(name: String, place: String, subroutines: List<Routine>): Routine? {
-        val character = gState.characters[name]!!
+        gState.characters[name]!!
         val conf =
             gState.ongoingMeetings[meetingName] ?: gState.scheduledMeetings[meetingName]
         meetingStartMethod(conf, place)?.let { return it }
@@ -34,9 +34,10 @@ class AttendDivisionMeetingRoutine(override val meetingName: String) : Routine()
                 if (try_support_salary == 0) {
                     try_support_salary += 1
                     //If the agenda is already proposed, and we have a supporting information, support it.
-                    return SupportAgendaRoutine(
+                    return AddInfoToAgendaRoutine(
                         conf.agendas.indexOfFirst { it.type == AgendaType.REQUEST && it.attachedRequest!!.action is Salary },
-                        meetingName
+                        meetingName,
+                        support = true
                     )//Add a routine, priority higher than work.
                 }
 
@@ -123,7 +124,7 @@ class AttendDivisionMeetingRoutine(override val meetingName: String) : Routine()
     }
 
     //TODO: Also check AttendMeetingRoutine for the same function.
-    override fun endCondition(name: String, place: String): Boolean {
+    override fun successCondition(name: String, place: String): Boolean {
         //If the conference is over, leave the routine. But the condition is not checked here, because the routine is not ended until the action is executed.
         //See NonPlayerAgent.selectRoutine()
         //If two hours has passed since the meeting started, leave the meeting. TODO: what if the meeting has started late?

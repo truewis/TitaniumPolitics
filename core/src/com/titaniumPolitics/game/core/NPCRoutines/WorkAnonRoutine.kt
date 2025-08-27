@@ -19,7 +19,7 @@ class WorkAnonRoutine(var workplace: String? = null) : Routine() {
         return Wait(name, place)
     }
 
-    override fun endCondition(name: String, place: String): Boolean {
+    override fun successCondition(name: String, place: String): Boolean {
         return (gState.hour !in workplaceObj.workHoursStart..workplaceObj.workHoursEnd)
     }
 
