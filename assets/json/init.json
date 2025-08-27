@@ -66,6 +66,9 @@
     },
     "observer": {
       "type": "com.titaniumPolitics.game.core.NonPlayerAgent"
+    },
+    "merchant": {
+      "type": "com.titaniumPolitics.game.core.NonPlayerAgent"
     }
   },
   "characters": {
@@ -364,6 +367,20 @@
       },
       "health": 100,
       "livingBy": "observatory"
+    },
+    "merchant": {
+      "trait": [
+        "workaholic",
+        "emotionless",
+        "bargainer"
+      ],
+      "resources": {
+        "water": 1000,
+        "ration": 500,
+        "component": 100
+      },
+      "health": 100,
+      "livingBy": "market"
     }
   },
   "places": {
@@ -2423,6 +2440,7 @@
         }
       ],
       "characters": [
+        "merchant"
       ],
       "responsibleParty": "interior",
       "workHoursStart": 9,
