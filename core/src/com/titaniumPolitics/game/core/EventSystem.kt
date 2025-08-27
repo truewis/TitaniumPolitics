@@ -26,6 +26,7 @@ class EventSystem : GameStateElement()
         //dataBase.add(Event_ObserverIntro())
         dataBase.add(Event_AlinaIllTheory1())
         dataBase.add(Event_SalvorElection())
+        dataBase.add(Event_AmmoniaRepairDelay())
         dataBase.forEach {
             it.injectParent(parent)
             it.activate()

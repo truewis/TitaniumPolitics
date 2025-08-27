@@ -2614,6 +2614,20 @@
           }
         },
         {
+          "name": "ammoniaProcessor",
+          "durability": 1,
+          "baseDanger": 4e-4,
+          "idealWorker": 3,
+          "currentWorker": 0,
+          "idealProduction": {
+            "ammonia": 5
+          },
+          "idealConsumption": {
+            "energy": 1,
+            "hydrogen": 3
+          }
+        },
+        {
           "name": "waterStorage",
           "durability": 95,
           "baseDanger": 3e-4,
