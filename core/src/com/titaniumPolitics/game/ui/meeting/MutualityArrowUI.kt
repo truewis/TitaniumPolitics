@@ -32,7 +32,7 @@ class MutualityArrowUI(
         //height = log(abs(delta) + 1, 2f) * 10f // 로그 스케일로 높이 조정
         //width = sqrt((endX - startX) * (endX - startX) + (endY - startY) * (endY - startY))
         label(
-            if (delta > 0) "+${"%.1f".format(delta)}" else "-%.1f".format(delta),
+            if (delta > 0) "+${"%.1f".format(delta)}" else "%.1f".format(delta),
             "docTitle"
         ) {
             setAlignment(Align.center)

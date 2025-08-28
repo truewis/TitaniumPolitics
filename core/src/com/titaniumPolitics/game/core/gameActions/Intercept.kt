@@ -16,7 +16,18 @@ data class Intercept(override val sbjCharacter: String, override val tgtPlace: S
 
         //The amount of attention gained can be modified here.
         meeting.currentAttention += 20
+
+        //Mutuality decreases before changing speaker.
+        parent.setMutuality(
+            meeting.currentSpeaker!!,
+            sbjCharacter,
+            -ReadOnly.const("InterceptSpeakerMutualityDecrease") * parent.characters[meeting.currentSpeaker!!]!!.stats.pScale,
+            reasonKey = "Intercept"
+        )
         meeting.currentSpeaker = sbjCharacter
+
+
+
         super.execute()
     }
 

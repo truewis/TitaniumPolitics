@@ -37,6 +37,7 @@
   "FriendMutualityThreshold": 75,
   "EnemyMutualityThreshold": 25,
   "SpeakerInterceptMutualityThreshold": 40,
+  "InterceptSpeakerMutualityDecrease": 5,
   "RequestFinishDeltaMutuality": 7,
   "talkMutualityDecrease": 7,
   "salaryMutualityIncrease": 5,
