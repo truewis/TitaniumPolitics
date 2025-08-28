@@ -66,7 +66,7 @@ data class OfficialResourceTransfer(
 
     override fun isProofOfWork(info: Information): Boolean {
         return super.isProofOfWork(info) || (info.action is OfficialResourceTransfer && (info.action as OfficialResourceTransfer).let {
-            it.toWhere == this.toWhere && it.resources == this.resources //Compare by reference.
+            it.toWhere == this.toWhere && (this.resources * 0.7).contains(it.resources)  //Compare by amount (70% or more)
         })
     }
 
