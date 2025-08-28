@@ -1,39 +1,40 @@
 package com.titaniumPolitics.game.ui
 
 import com.badlogic.gdx.graphics.Color
-import com.badlogic.gdx.graphics.Texture
-import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.scenes.scene2d.Group
 import com.badlogic.gdx.scenes.scene2d.ui.Table
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable
 import com.badlogic.gdx.utils.Align
-import com.rafaskoberg.gdx.typinglabel.TypingLabel
-import com.rafaskoberg.gdx.typinglabel.TypingListener
-import com.titaniumPolitics.game.core.AgendaType
 import com.titaniumPolitics.game.core.GameState
-import com.titaniumPolitics.game.core.ReadOnly
-import com.titaniumPolitics.game.core.gameActions.GameAction
-import com.titaniumPolitics.game.core.gameActions.NewAgenda
-import com.titaniumPolitics.game.debugTools.Logger
 import com.titaniumPolitics.game.ui.widget.SimpleHeadPortraitUI
-import com.titaniumPolitics.game.ui.widget.SimplePortraitUI
 import com.titaniumPolitics.game.ui.widget.SpeechUI
-import kotlinx.serialization.json.jsonObject
-import kotlinx.serialization.json.jsonPrimitive
 import ktx.scene2d.*
 import ktx.scene2d.Scene2DSkin.defaultSkin
 
 class HeadPortraitUI(character: String, var gameState: GameState) : Table(defaultSkin), KTable {
     val portrait = SimpleHeadPortraitUI(character, true)
-    val characterTitle = "Director"
+    val characterTitle get() = gameState.characters[tgtCharacter]?.generatePositionText() ?: ""
     val speechUI = SpeechUI()
     val speechContainer = scene2d.container(speechUI) {
         size(450f, 150f)
     }
+    private val positionLabel = scene2d.label(this@HeadPortraitUI.characterTitle, "docTitle") {
+        setFontScale(0.2f)
+        color = Color.WHITE
+        setAlignment(Align.center)
+    }
+
+    //This serves as a refresh trigger for the UI.
     var tgtCharacter = character
         set(value) {
             field = value
             portrait.tgtCharacter = tgtCharacter
+            positionLabel.setText(characterTitle)
+            if (positionLabel.text.length > 15)
+                positionLabel.wrap = true
+            else positionLabel.wrap = false
+            if (positionLabel.text.length > 30)
+                positionLabel.setFontScale(0.15f)
+            else positionLabel.setFontScale(0.2f)
         }
 
 
@@ -52,16 +53,13 @@ class HeadPortraitUI(character: String, var gameState: GameState) : Table(defaul
             add(this@HeadPortraitUI.portrait)
             container {
                 align(Align.bottomLeft)
-                size(30f)
+                size(100f, 30f)
+                fill()
                 stack {
                     image("white-pixel") {
                         color = Color.BLACK
                     }
-                    label(this@HeadPortraitUI.characterTitle, "docTitle") {
-                        setFontScale(0.3f)
-                        color = Color.WHITE
-                        setAlignment(Align.center)
-                    }
+                    add(this@HeadPortraitUI.positionLabel)
                 }
             }
         }

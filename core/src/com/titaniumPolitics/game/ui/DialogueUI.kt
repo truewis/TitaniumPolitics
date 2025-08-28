@@ -194,36 +194,9 @@ class DialogueUI(val gameState: GameState) : Table(defaultSkin), KTable {
     }
 
     fun generatePositionIntroduction(char: com.titaniumPolitics.game.core.Character): String {
-        var positionIntroduction = ""
-        val leadingParties = gameState.parties.values.filter { it.leader == char.name }
-        if (leadingParties.isEmpty()) {
-            val workplaceParty =
-                gameState.parties.values.firstOrNull { char.name in it.members && it.type == "workplace" }
-            if (workplaceParty != null) {
-                positionIntroduction = ReadOnly.script("NewTalk-Unknown-workplaceInfo2").format(
-                    ReadOnly.prop(workplaceParty.home!!)
-                )
-            }
-        } else {
-            //Check if char leads cabinet, division, or workplace party
-            if (leadingParties.any { it.type == "cabinet" }) {
-                positionIntroduction = ReadOnly.script("NewTalk-Unknown-workplaceInfo").format(
-
-                    ReadOnly.prop("TheMechanic")
-                )
-            } else if (leadingParties.any { it.type == "division" }) {
-                val divisionParty = leadingParties.first { it.type == "division" }
-                positionIntroduction = ReadOnly.script("NewTalk-Unknown-workplaceInfo").format(
-                    ReadOnly.prop("divisionLeader-dialogue").format(ReadOnly.prop(divisionParty.name))
-                )
-            } else if (leadingParties.any { it.type == "workplace" }) {
-                val workplaceParty = leadingParties.first { it.type == "workplace" }
-                positionIntroduction = ReadOnly.script("NewTalk-Unknown-workplaceInfo").format(
-                    ReadOnly.prop("director-dialogue").format(ReadOnly.prop(workplaceParty.home!!))
-                )
-            }
-        }
-        return positionIntroduction
+        return ReadOnly.script("NewTalk-Unknown-workplaceInfo").format(
+            char.generatePositionText()
+        )
     }
 
     fun playMeetingDialogue(meeting: com.titaniumPolitics.game.core.Meeting) {

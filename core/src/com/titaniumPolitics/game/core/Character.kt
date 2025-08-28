@@ -369,4 +369,32 @@ class Character : GameStateElement() {
         return ret * const("mutualityMax")
     }
 
+    fun generatePositionText(): String {
+        var position = ""
+        if (this.name == "ctrler")
+            return ReadOnly.prop("ctrler")
+        if (this.name == "observer")
+            return ReadOnly.prop("observer")
+        val leadingParties = parent.parties.values.filter { it.leader == this.name }
+        if (leadingParties.isEmpty()) {
+            val workplaceParty =
+                parent.parties.values.firstOrNull { this.name in it.members && it.type == "workplace" }
+            if (workplaceParty != null) {
+                position = ReadOnly.prop(workplaceParty.getRole(this.name)!! + "-dialogue")
+                    .format(ReadOnly.prop(workplaceParty.home!!))
+            }
+        } else {
+            //Check if char leads cabinet, division, or workplace party
+            if (leadingParties.any { it.type == "cabinet" }) {
+                position = ReadOnly.prop("mechanic")
+            } else if (leadingParties.any { it.type == "division" }) {
+                val divisionParty = leadingParties.first { it.type == "division" }
+                position = ReadOnly.prop("divisionLeader-dialogue").format(ReadOnly.prop(divisionParty.name))
+            } else if (leadingParties.any { it.type == "workplace" }) {
+                val workplaceParty = leadingParties.first { it.type == "workplace" }
+                position = ReadOnly.prop("director-dialogue").format(ReadOnly.prop(workplaceParty.home!!))
+            }
+        }
+        return position
+    }
 }
