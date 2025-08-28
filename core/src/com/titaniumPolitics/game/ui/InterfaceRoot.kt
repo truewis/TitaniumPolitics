@@ -29,7 +29,7 @@ class InterfaceRoot(val gameState: GameState) : Table(defaultSkin), KTable {
         gameState.updateUI += {
             if (it.player.currentMeeting != null) {
                 meetingUI.isVisible = true
-                meetingUI.newMeeting(it.player.currentMeeting!!)
+                meetingUI.displayMeeting(it.player.currentMeeting!!)
                 charactersView.isVisible = false
                 //assistantUI.cabinetWindowUIs.firstOrNull()?.changeOpenState(false) TODO: Close the cabinet if open. This generates sound so we comment it out for now.
                 assistantUI.isVisible = false

@@ -33,7 +33,8 @@ data class StartMeeting(override val sbjCharacter: String, override val tgtPlace
         // Interrupt other required characters and add them to the meeting.
         val meeting = parent.ongoingMeetings[oldTgtMeeting]!!
         meeting.currentSpeaker = sbjCharacter
-        meeting.currentAttention = 100
+        meeting.currentAttention = (sbjCharObj.will * sbjCharObj.stats.pScale).toInt()
+        meeting.startTime = parent.time
         val requiredCharacters = meeting.scheduledCharacters.intersect(tgtPlaceObj.characters)
             .filter { s -> parent.characters[s]!!.currentMeeting == null /*Forcing characters out of meetings causes bunch of problems, such as missing speaker. Don't do this.*/ }
         requiredCharacters.forEach {

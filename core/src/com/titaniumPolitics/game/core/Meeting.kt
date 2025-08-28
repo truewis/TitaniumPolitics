@@ -22,6 +22,7 @@ class Meeting(
     var place: String,
     var currentCharacters: HashSet<String> = hashSetOf()
 ) {
+    var startTime = 0 //The time when the meeting actually starts.
     var involvedParty: String? = null
     var currentSpeaker: String? = null
     var currentAttention = 0

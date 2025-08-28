@@ -27,12 +27,11 @@ import ktx.scene2d.*
 import ktx.scene2d.Scene2DSkin.defaultSkin
 
 class DialogueUI(val gameState: GameState) : Table(defaultSkin), KTable {
-    var currentDialogue = ""
-    var currentDialogueLength = 0
-    var currentLineNumber = 0
+    private var currentDialogue = ""
+    private var currentLineNumber = 0
 
     // Displays current dialogue line.
-    val currentTextDisplay = TypingLabel("", skin, "description").apply {
+    private val currentTextDisplay = TypingLabel("", skin, "description").apply {
         setFontScale(0.5f)
         touchable = Touchable.disabled
         wrap = true
@@ -45,19 +44,19 @@ class DialogueUI(val gameState: GameState) : Table(defaultSkin), KTable {
         }
     }
 
-    val speakerNameDisplay = Label("", skin, "docTitle").apply {
+    private val speakerNameDisplay = Label("", skin, "docTitle").apply {
         setFontScale(0.7f)
         touchable = Touchable.disabled
         setAlignment(Align.bottomLeft)
     }
-    val ctnuButton = Label(">>>", skin, "consoleWhite")
+    private val ctnuButton = Label(">>>", skin, "consoleWhite")
     val donePlayingLine = ArrayList<(Int) -> Unit>()
-    val background = Image(defaultSkin, "BackgroundNoiseHD")
+    private val background = Image(defaultSkin, "BackgroundNoiseHD")
 
     //Logs to be played.
     // Called and cleared when the ctnuButton is pressed.
-    var ctnuCallback: () -> Unit = {}
-    val portraitsTable = Table(defaultSkin).also { it.add().grow() }
+    private var ctnuCallback: () -> Unit = {}
+    private val portraitsTable = Table(defaultSkin).also { it.add().grow() }
 
     init {
         isVisible = false
@@ -191,12 +190,121 @@ class DialogueUI(val gameState: GameState) : Table(defaultSkin), KTable {
             .readString()
             .split("\n")
             .filter { it.isNotBlank() }
+        playDialogueLines()
+    }
 
-        currentDialogueLength = dialogueLines.size
+    fun generatePositionIntroduction(char: com.titaniumPolitics.game.core.Character): String {
+        var positionIntroduction = ""
+        val leadingParties = gameState.parties.values.filter { it.leader == char.name }
+        if (leadingParties.isEmpty()) {
+            val workplaceParty =
+                gameState.parties.values.firstOrNull { char.name in it.members && it.type == "workplace" }
+            if (workplaceParty != null) {
+                positionIntroduction = ReadOnly.script("NewTalk-Unknown-workplaceInfo2").format(
+                    ReadOnly.prop(workplaceParty.home!!)
+                )
+            }
+        } else {
+            //Check if char leads cabinet, division, or workplace party
+            if (leadingParties.any { it.type == "cabinet" }) {
+                positionIntroduction = ReadOnly.script("NewTalk-Unknown-workplaceInfo").format(
+
+                    ReadOnly.prop("TheMechanic")
+                )
+            } else if (leadingParties.any { it.type == "division" }) {
+                val divisionParty = leadingParties.first { it.type == "division" }
+                positionIntroduction = ReadOnly.script("NewTalk-Unknown-workplaceInfo").format(
+                    ReadOnly.prop("divisionLeader-dialogue").format(ReadOnly.prop(divisionParty.name))
+                )
+            } else if (leadingParties.any { it.type == "workplace" }) {
+                val workplaceParty = leadingParties.first { it.type == "workplace" }
+                positionIntroduction = ReadOnly.script("NewTalk-Unknown-workplaceInfo").format(
+                    ReadOnly.prop("director-dialogue").format(ReadOnly.prop(workplaceParty.home!!))
+                )
+            }
+        }
+        return positionIntroduction
+    }
+
+    fun playMeetingDialogue(meeting: com.titaniumPolitics.game.core.Meeting) {
+        isVisible = true
+        dialogueLines = emptyList()
+        dialogueLines = listOf(
+            meeting.currentSpeaker!! + ": " + ReadOnly.script("MeetingDialogue")
+                .format(gameState.meetingName(meeting))
+        )
+        addPortrait(meeting.currentSpeaker!!)
+        playDialogueLines()
+    }
+
+    fun playTalkDialogue(
+        char1: com.titaniumPolitics.game.core.Character,
+        char2: com.titaniumPolitics.game.core.Character,
+        hasAgenda: Boolean = false
+    ) {
+        isVisible = true
+        dialogueLines = emptyList()
+        addPortrait(char1.name)
+        addPortrait(char2.name)
+        val known = if (gameState.player == char1) char2.name in gameState.knownCharactersToPlayer
+        else char1.name in gameState.knownCharactersToPlayer
+        if (known) {
+            when (gameState.getMutNorm(char1.name, char2.name)) {
+                in 0.25..1.0 -> {
+                    dialogueLines +=
+                        char1.name + ": " + ReadOnly.script("NewTalk-KnownPositive")
+                            .format(ReadOnly.charProp(char2.name))
+                }
+
+                in -1.0..-0.25 -> {
+                    dialogueLines +=
+                        char1.name + ": " + ReadOnly.script("NewTalk-KnownNegative")
+                            .format(ReadOnly.charProp(char2.name))
+                }
+
+                else -> {
+                    dialogueLines +=
+                        char1.name + ": " + ReadOnly.script("NewTalk-KnownNeutral")
+                            .format(ReadOnly.charProp(char2.name))
+                }
+            }
+            when (gameState.getMutNorm(char2.name, char1.name)) {
+                in 0.25..1.0 -> {
+                    dialogueLines +=
+                        char2.name + ": " + ReadOnly.script("NewTalk-KnownPositiveResponse")
+                            .format(ReadOnly.charProp(char1.name))
+                }
+
+                in -1.0..-0.25 -> {
+                    dialogueLines +=
+                        char2.name + ": " + ReadOnly.script("NewTalk-KnownNegativeResponse")
+                            .format(ReadOnly.charProp(char1.name))
+                }
+
+                else -> {
+                    dialogueLines +=
+                        char2.name + ": " + ReadOnly.script("NewTalk-KnownNeutralResponse")
+                            .format(ReadOnly.charProp(char1.name))
+                }
+            }
+        } else {
+            val char1PositionIntroduction = generatePositionIntroduction(char1)
+            val char2PositionIntroduction = generatePositionIntroduction(char2)
+            dialogueLines = listOf(
+                char1.name + ": " + ReadOnly.script("NewTalk-Unknown")
+                    .format(char1.name) + " " + char1PositionIntroduction + if (hasAgenda) " " + ReadOnly.script("NewTalk-Unknown-agenda") else "",
+                char2.name + ": " + ReadOnly.script("NewTalk-Unknown-response") + " " + char2PositionIntroduction + if (hasAgenda) " " + ReadOnly.script(
+                    "NewTalk-Unknown-agendaResponse"
+                ) else ""
+            )
+        }
+        playDialogueLines()
+    }
+
+    fun playDialogueLines() {
         currentLineNumber = -1 // So first call to nextLine() gets line 0
         activePortraits.clear()
         portraitsTable.clear()
-
         nextLine()
     }
 

@@ -44,6 +44,8 @@ data class Talk(
                         listOf(sbjCharacter, who)
                     )
                     it.currentSpeaker = sbjCharacter
+                    it.currentAttention = (sbjCharObj.will * sbjCharObj.stats.pScale).toInt()
+                    it.startTime = parent.time
                 })
 
 

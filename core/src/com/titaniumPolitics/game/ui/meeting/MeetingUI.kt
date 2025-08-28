@@ -17,14 +17,12 @@ import com.titaniumPolitics.game.core.Meeting
 import com.titaniumPolitics.game.core.gameActions.Wait
 import com.titaniumPolitics.game.debugTools.Logger
 import com.titaniumPolitics.game.ui.CapsuleStage
+import com.titaniumPolitics.game.ui.DialogueUI
 import com.titaniumPolitics.game.ui.HeadPortraitUI
 import com.titaniumPolitics.game.ui.PortraitUI
-import com.titaniumPolitics.game.ui.widget.SimpleHeadPortraitUI
-import kotlinx.coroutines.isActive
 import kotlinx.coroutines.runBlocking
 import ktx.scene2d.*
 import ktx.scene2d.Scene2DSkin.defaultSkin
-import java.lang.Thread.sleep
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
@@ -229,7 +227,7 @@ class MeetingUI(var gameState: GameState) : Table(defaultSkin), KTable {
         }
     }
 
-    fun newMeeting(meeting: Meeting) {
+    fun displayMeeting(meeting: Meeting) {
         //If the meeting is a division leader election, add vote results to the stage if the meeting is over.
         if (meeting.type == Meeting.MeetingType.DIVISION_LEADER_ELECTION) {
             meeting.onVoteResults += {
@@ -250,6 +248,16 @@ class MeetingUI(var gameState: GameState) : Table(defaultSkin), KTable {
                 } else null
             }
         }.toMap().toMutableMap()
+
+        if (gameState.time == meeting.startTime + 1) //Only display the meeting if it's right after the starting time. This works because updateUI is called after every timestep advance.
+            if (meeting.type == Meeting.MeetingType.TALK && meeting.currentCharacters.size == 2) {
+                val characters = meeting.currentCharacters.toList() - meeting.currentSpeaker!!
+                val char1 = gameState.characters[meeting.currentSpeaker]!!
+                val char2 = gameState.characters[characters.first()]!!
+                DialogueUI.instance.playTalkDialogue(char1, char2)
+            } else {
+                DialogueUI.instance.playMeetingDialogue(meeting)
+            }
     }
 
     private fun addCharacterPortrait(characterName: String) {

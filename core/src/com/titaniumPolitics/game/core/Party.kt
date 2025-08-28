@@ -14,6 +14,16 @@ class Party : GameStateElement() {
     var administrator: String? = null //The person who manages the party.
     var treasurer: String? = null //The person who manages the party's finances.
     var overseer: String? = null //The person who oversees worker's activities.
+    fun getRole(char: String): String? {
+        return when (char) {
+            leader -> "leader"
+            administrator -> "administrator"
+            treasurer -> "treasurer"
+            overseer -> "overseer"
+            else -> null
+        }
+    }
+
     var type: String? = null
     var home: String? = null //The place where the party is based.
     var members = hashSetOf<String>()
