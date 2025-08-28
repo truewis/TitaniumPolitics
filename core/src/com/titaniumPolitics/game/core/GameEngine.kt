@@ -1090,6 +1090,9 @@ class GameEngine(val gameState: GameState) {
                 if (character in gameState.parties["education"]!!.members) {
                     actions.add("IssueDiploma")
                 }
+                if (place == "tavern") {
+                    actions.add("BuyDrink")
+                }
 
             }
             return actions

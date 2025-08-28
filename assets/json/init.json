@@ -2375,7 +2375,8 @@
       "connectedPlaces": [
         "rescueStationNorth",
         "securityCheckCenter",
-        "constructionYardNorth"
+        "constructionYardNorth",
+        "tavern"
       ],
       "apparatuses": [
         {
@@ -2399,6 +2400,10 @@
           "durability": 95
         },
         {
+          "name": "waterStorage",
+          "durability": 95
+        },
+        {
           "name": "energyStorage",
           "durability": 95
         }
@@ -2409,6 +2414,41 @@
       "manager": "Agros",
       "workHoursStart": 9,
       "workHoursEnd": 17
+    },
+    "tavern": {
+      "coordinates": {
+        "x": 4,
+        "y": 0,
+        "z": 7
+      },
+      "resources": {
+        "_resources": {
+          "water": 1500,
+          "ration": 1000,
+          "phosphorus": 0.5
+        }
+      },
+      "connectedPlaces": [
+        "market"
+      ],
+      "apparatuses": [
+        {
+          "name": "rationStorage",
+          "durability": 95
+        },
+        {
+          "name": "waterStorage",
+          "durability": 95
+        },
+        {
+          "name": "energyStorage",
+          "durability": 95
+        }
+      ],
+      "characters": [
+      ],
+      "workHoursStart": 16,
+      "workHoursEnd": 24
     },
     "squareNorth": {
       "coordinates": {
