@@ -16,7 +16,6 @@ import com.titaniumPolitics.game.core.gameActions.PrepareInfo
 import com.titaniumPolitics.game.core.gameActions.Wait
 import kotlinx.serialization.Serializable
 import kotlin.math.max
-import kotlin.times
 
 @Serializable
 class WorkRoutine(var workplace: String) : Routine() {
@@ -32,7 +31,7 @@ class WorkRoutine(var workplace: String) : Routine() {
     override fun newRoutineCondition(name: String, place: String, subroutines: List<Routine>): Routine? {
 
         //If work hours are over, rest. Also, if the character is too hungry, thirsty, or sick, rest. (Which is checked earlier.)
-        if (!isWorkHourWithETA(gState, place, workplace, IDTH)
+        if (!isWorkHourWithETA(gState, name, place, workplace, IDTH)
             || gState.characters[name]!!.health <= ReadOnly.const("CriticalHealth")
             || gState.characters[name]!!.hunger >= ReadOnly.const("hungerThreshold")
             || gState.characters[name]!!.thirst >= ReadOnly.const("thirstThreshold")
@@ -85,7 +84,7 @@ class WorkRoutine(var workplace: String) : Routine() {
         //3. If a conference is scheduled
         gState.scheduledMeetings.values.firstOrNull {
             if (!it.scheduledCharacters.contains(name)) return@firstOrNull false //If I am not scheduled to attend this meeting, skip it.
-            val eta = gState.places[it.place]!!.shortestPathAndTimeTo(place)?.second ?: return@firstOrNull false
+            val eta = gState.places[it.place]!!.shortestPathAndTimeTo(place, name)?.second ?: return@firstOrNull false
             return@firstOrNull it.isValidTimeToStart(gState.time + eta) || it.isValidTimeToStart(gState.time + eta + 30)
         }?.also { conf ->
             //----------------------------------------------------------------------------------Move to the Meeting
@@ -128,7 +127,8 @@ class WorkRoutine(var workplace: String) : Routine() {
             if (name !in it.issuedTo) return@firstOrNull false
             if (it.name in failedRequests) return@firstOrNull false //If I have already failed to execute this request, do not try again.
             val eta =
-                gState.places[it.action.tgtPlace]!!.shortestPathAndTimeTo(place)?.second ?: return@firstOrNull false
+                gState.places[it.action.tgtPlace]!!.shortestPathAndTimeTo(place, name)?.second
+                    ?: return@firstOrNull false
             return@firstOrNull (it.executeTime in gState.time - ReadOnly.constInt("CommandExecuteTolerance") + eta..gState.time + ReadOnly.constInt(
                 "CommandExecuteTolerance"
             ) + eta || it.executeTime == 0) && (it.issuedBy.isEmpty() /*System request must be executed regardless of mutualities.*/ || it.issuedBy.sumOf {
@@ -162,7 +162,7 @@ class WorkRoutine(var workplace: String) : Routine() {
                     {
                         val resplace =
                             gState.places.values.filter {
-                                it.manager != null && it.shortestPathAndTimeTo(place) != null
+                                it.manager != null && it.shortestPathAndTimeTo(place, name) != null
                             }
                                 .maxByOrNull { it.resources[res] }
                         if (resplace != null && place1.name != resplace.name && resplace.manager != name)
@@ -198,7 +198,7 @@ class WorkRoutine(var workplace: String) : Routine() {
         if (subroutines.none { it is PrepareInfoRoutine }) {
             if (gState.scheduledMeetings.none {
                     val eta =
-                        gState.places[it.value.place]!!.shortestPathAndTimeTo(place)?.second ?: return@none false
+                        gState.places[it.value.place]!!.shortestPathAndTimeTo(place, name)?.second ?: return@none false
                     it.value.scheduledCharacters.contains(name) &&
                             it.value.isValidTimeToStart(gState.time + eta)
                 })//If a Meeting is not soon

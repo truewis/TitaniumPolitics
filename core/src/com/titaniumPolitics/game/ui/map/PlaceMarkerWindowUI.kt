@@ -4,10 +4,8 @@ import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.Color.BLACK
 import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.ui.Label
-import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.utils.Align
-import com.rafaskoberg.gdx.typinglabel.TypingLabel
 import com.titaniumPolitics.game.core.*
 import com.titaniumPolitics.game.core.GameEngine.Companion.AcquireParams
 import com.titaniumPolitics.game.core.gameActions.Move
@@ -18,7 +16,6 @@ import com.titaniumPolitics.game.ui.ProgressBackgroundUI
 import com.titaniumPolitics.game.ui.widget.DescriptionLabel
 import com.titaniumPolitics.game.ui.widget.ResourceDisplayUI
 import com.titaniumPolitics.game.ui.widget.TitleLabel
-import ktx.scene2d.Scene2DSkin
 import ktx.scene2d.button
 import ktx.scene2d.label
 import ktx.scene2d.scene2d
@@ -27,7 +24,9 @@ import ktx.scene2d.table
 
 class PlaceMarkerWindowUI(var gameState: GameState, var owner: MapUI) : Table() {
     var placeDisplayed = ""
-    val distance get() = (gameState.player.place.shortestPathAndTimeTo(placeDisplayed)?.second ?: 0) * ReadOnly.DT / 60
+    val distance
+        get() = (gameState.player.place.shortestPathAndTimeTo(placeDisplayed, gameState.playerName)?.second
+            ?: 0) * ReadOnly.DT / 60
     var mode = ""
     var interrupted = false//Only used in move mode.
     var tgtDestination = ""//Only used in move mode.
@@ -216,7 +215,7 @@ class PlaceMarkerWindowUI(var gameState: GameState, var owner: MapUI) : Table() 
             ProgressBackgroundUI.instance.setVisibleWithFade(false, "Move")
             return
         }
-        val nextStop = gameState.player.place.shortestPathAndTimeTo(tgtDestination)?.first?.get(1)
+        val nextStop = gameState.player.place.shortestPathAndTimeTo(tgtDestination, gameState.playerName)?.first?.get(1)
         if (nextStop == null) {
             AlertUI.instance.addAlert("interruptedMove-noPath", tgtDestination)
             interrupted = true

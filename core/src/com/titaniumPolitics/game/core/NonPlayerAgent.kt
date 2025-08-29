@@ -212,7 +212,7 @@ class NonPlayerAgent : Agent() {
     private fun whenIdle() {
         //When work hours, work
         parent.getWorkplace(name)?.let { wkplace ->
-            if (Routine.isWorkHourWithETA(parent, place, wkplace.name, IDTH)) {
+            if (Routine.isWorkHourWithETA(parent, name, place, wkplace.name, IDTH)) {
                 if (name.contains("Anon")) {
                     routines.add(WorkAnonRoutine(wkplace.name).also {
                         it.routineStartTime = parent.time

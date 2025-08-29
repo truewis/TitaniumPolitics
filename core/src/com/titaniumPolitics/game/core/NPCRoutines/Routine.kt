@@ -1,6 +1,5 @@
 package com.titaniumPolitics.game.core.NPCRoutines
 
-import com.titaniumPolitics.game.core.GameEngine
 import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.core.ReadOnly.IDTH
 import com.titaniumPolitics.game.core.gameActions.GameAction
@@ -86,9 +85,15 @@ sealed class Routine() {
     }
 
     companion object {
-        fun isWorkHourWithETA(gState: GameState, place: String, workplace: String, padding: Int = 0): Boolean {
+        fun isWorkHourWithETA(
+            gState: GameState,
+            name: String,
+            place: String,
+            workplace: String,
+            padding: Int = 0
+        ): Boolean {
             //Consider the estimated time to workplace, if the character is not at home.
-            val eta = gState.places[place]!!.shortestPathAndTimeTo(workplace)?.second ?: 0
+            val eta = gState.places[place]!!.shortestPathAndTimeTo(workplace, name)?.second ?: 0
             val extendedWorkHours =
                 gState.places[workplace]!!.workHours.first * IDTH - eta - padding..gState.places[workplace]!!.workHours.last * IDTH + eta + padding
             return (gState.timeInDay in extendedWorkHours)

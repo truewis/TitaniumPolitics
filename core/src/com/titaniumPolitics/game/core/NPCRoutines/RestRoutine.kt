@@ -49,6 +49,7 @@ class RestRoutine(var workplace: String? = null) : Routine() {
         else {
             return isWorkHourWithETA(
                 gState,
+                name,
                 place,
                 workplace!!,
                 IDTH

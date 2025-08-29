@@ -263,7 +263,8 @@ sealed class MeetingRoutine : Routine() {
         gState.requests.values.firstOrNull {
             if (name !in it.issuedTo) return@firstOrNull false
             val eta =
-                gState.places[it.action.tgtPlace]!!.shortestPathAndTimeTo(place)?.second ?: return@firstOrNull false
+                gState.places[it.action.tgtPlace]!!.shortestPathAndTimeTo(place, name)?.second
+                    ?: return@firstOrNull false
             return@firstOrNull (it.executeTime in gState.time - ReadOnly.constInt("CommandExecuteTolerance") + eta..gState.time + ReadOnly.constInt(
                 "CommandExecuteTolerance"
             ) + eta || it.executeTime == 0) && (it.issuedBy.isEmpty() /*System request must be executed regardless of mutualities.*/ || it.issuedBy.sumOf {

@@ -67,26 +67,11 @@ open class MapUI(val gameState: GameState) : Table(defaultSkin) {
             HEIGHT + PADDING * 2 //Add some padding
         )
         dataTable.pack()
-        currentConnections.forEach { dataTable.removeActor(it) }
-        currentConnections.clear()
-        //Draw connections between places
-        gameState.places.forEach { (placeName, place) ->
-            if (!placeName.contains("home")) {
-                place.connectedPlaces.forEach { connection ->
-                    if (!connection.contains("home")) {
-                        Connection(gameState, this, placeName, connection).also {
-                            it.color = Color.RED
-                            currentConnections.add(it)
-                        }
-                    }
-                }
-            }
-        }
         currentMarkers.forEach { dataTable.removeActor(it) }
         currentMarkers.clear()
         //Draw markers for places
-        gameState.places.forEach { (placeName, _) ->
-            if (!placeName.contains("home")) {
+        gameState.places.forEach { (placeName, plObj) ->
+            if (!placeName.contains("home") && plObj.isAuthorized(gameState.playerName)) {
                 PlaceMarker(gameState, this, placeName).also {
                     currentMarkers.add(it)
                 }
@@ -97,6 +82,23 @@ open class MapUI(val gameState: GameState) : Table(defaultSkin) {
             }
         }
 
+        currentConnections.forEach { dataTable.removeActor(it) }
+        currentConnections.clear()
+        //Draw connections between places
+        currentMarkers.forEach {
+            val placeName = it.place
+            val place = gameState.places[placeName]!!
+            if (!placeName.contains("home")) {
+                place.movableConnectedPlaces(gameState.playerName).forEach { connection ->
+                    if (!connection.contains("home")) {
+                        Connection(gameState, this, placeName, connection).also {
+                            it.color = Color.RED
+                            currentConnections.add(it)
+                        }
+                    }
+                }
+            }
+        }
         //Add quest markers.
         gameState.eventSystem.quests.forEach { quest ->
             if (quest.tgtPlace != null) {

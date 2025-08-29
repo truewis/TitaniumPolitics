@@ -69,6 +69,6 @@ class DowntimeRoutine() : Routine() {
         if (variables["workplace"] == null)
             return false //Jobless = downtime forever.
         else
-            return isWorkHourWithETA(gState, place, variables["workplace"]!!)
+            return isWorkHourWithETA(gState, name, place, variables["workplace"]!!)
     }
 }

@@ -544,6 +544,9 @@
         }
       ],
       "responsibleDivision": "interior",
+      "authorizedDivisions": [
+        "interior"
+      ],
       "manager": "Charles",
       "workHoursStart": 9,
       "workHoursEnd": 17
@@ -765,6 +768,9 @@
         }
       ],
       "responsibleDivision": "mining",
+      "authorizedDivisions": [
+        "mining"
+      ],
       "manager": "Maisarah",
       "workHoursStart": 9,
       "workHoursEnd": 17
@@ -1013,6 +1019,9 @@
         }
       ],
       "responsibleDivision": "infrastructure",
+      "authorizedDivisions": [
+        "infrastructure"
+      ],
       "manager": "Alina",
       "workHoursStart": 9,
       "workHoursEnd": 17
@@ -1169,6 +1178,9 @@
         }
       ],
       "responsibleDivision": "industry",
+      "authorizedDivisions": [
+        "industry"
+      ],
       "manager": "Hiroshi",
       "workHoursStart": 9,
       "workHoursEnd": 17
@@ -1896,15 +1908,18 @@
         }
       ],
       "responsibleDivision": "education",
+      "authorizedDivisions": [
+        "education"
+      ],
       "manager": "Eugene",
       "workHoursStart": 9,
       "workHoursEnd": 17
     },
     "farm": {
       "coordinates": {
-        "x": 0,
-        "y": 10,
-        "z": 0
+        "x": -2,
+        "y": 0,
+        "z": -6
       },
       "resources": {
         "_resources": {
@@ -1989,9 +2004,9 @@
     },
     "bioengineeringHeadquarters": {
       "coordinates": {
-        "x": 1,
-        "y": 10,
-        "z": 0
+        "x": -3,
+        "y": 0,
+        "z": -6
       },
       "resources": {
         "_resources": {
@@ -2023,6 +2038,9 @@
         }
       ],
       "responsibleDivision": "bioengineering",
+      "authorizedDivisions": [
+        "bioengineering"
+      ],
       "manager": "Evan",
       "workHoursStart": 9,
       "workHoursEnd": 17
@@ -2114,6 +2132,9 @@
         }
       ],
       "responsibleDivision": "safety",
+      "authorizedDivisions": [
+        "safety"
+      ],
       "manager": "Astinomis",
       "workHoursStart": 9,
       "workHoursEnd": 17

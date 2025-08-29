@@ -56,7 +56,7 @@ class AttendCabinetMeetingRoutine(override val meetingName: String) : MeetingRou
                         val resplace =
                             gState.places.values.filter {
                                 it.responsibleDivision != null && name in gState.parties[it.responsibleDivision]!!.members && it.shortestPathAndTimeTo(
-                                    place1.name
+                                    place1.name, name
                                 ) != null //Check connectivity so that the resource can be delivered.
                             }
                                 .filter { it.resources[res] > apparatus.currentConsumption[res]!! * place1.workHoursLength * 3 } //Check if the place has enough resource to supply for 3 work days.
@@ -65,7 +65,7 @@ class AttendCabinetMeetingRoutine(override val meetingName: String) : MeetingRou
                             val findResourceOutsideDivision =
                                 gState.places.values.filter {
                                     it.responsibleDivision != null && gState.parties[it.responsibleDivision]!!.leader in meeting.currentCharacters && it.shortestPathAndTimeTo(
-                                        place1.name
+                                        place1.name, name
                                     ) != null //Check connectivity so that the resource can be delivered.
                                 }
                                     .filter { it.resources[res] > apparatus.currentConsumption[res]!! * place1.workHoursLength * 3 } //Check if the place has enough resource to supply for 3 work days.

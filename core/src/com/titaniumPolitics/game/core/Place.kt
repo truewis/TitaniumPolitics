@@ -3,7 +3,6 @@ package com.titaniumPolitics.game.core
 import com.titaniumPolitics.game.core.GameEngine.Companion.onAccident
 import com.titaniumPolitics.game.core.ReadOnly.const
 import com.titaniumPolitics.game.core.ReadOnly.DT
-import com.titaniumPolitics.game.core.ReadOnly.DTH
 import com.titaniumPolitics.game.core.ReadOnly.S_PER_HR
 import com.titaniumPolitics.game.debugTools.Logger
 import kotlinx.serialization.Serializable
@@ -26,6 +25,17 @@ class Place : GameStateElement() {
                 return listOf<String>()
             return connectedPlaces.filter { !it.contains("home") }
         }
+
+    /**Determines which division authorized to enter the place.
+     * If empty, all characters are authorized, unless authorizedCharacters is not empty.
+     * */
+    val authorizedDivisions = hashSetOf<String>()
+
+    /**Determines which characters are authorized to enter the place.
+     * If empty, all characters are authorized.
+     * Checked after authorizedDivision.
+     * */
+    val authorizedCharacters = hashSetOf<String>()
     val whoseHome: String?
         get() {
             if (name.contains("home_"))
@@ -77,6 +87,18 @@ class Place : GameStateElement() {
 
 
     var connectedPlaces = arrayListOf<String>()
+
+    /**
+     * Check if the character is authorized to enter the place.
+     */
+    fun isAuthorized(sbjCharacter: String): Boolean =
+        (authorizedDivisions.isEmpty() || parent.characters[sbjCharacter]!!.division?.name in authorizedDivisions)
+                && (authorizedCharacters.isEmpty() || sbjCharacter in authorizedCharacters)
+
+    fun movableConnectedPlaces(sbjCharacter: String): List<String> = connectedPlaces.filter { placeTo ->
+        parent.places[placeTo]!!.isAuthorized(sbjCharacter)
+    }
+
     val plannedWorker: Int
         get() =
             apparatuses.sumOf { it.plannedWorker }
@@ -418,7 +440,7 @@ class Place : GameStateElement() {
         shortestPathCache.clear()
     }
 
-    fun shortestPathAndTimeTo(targetName: String): Pair<List<String>, Int>? {
+    fun shortestPathAndTimeTo(targetName: String, sbjChar: String): Pair<List<String>, Int>? {
         shortestPathCache[targetName]?.let { return it }
         val distances = mutableMapOf<String, Int>().withDefault { Int.MAX_VALUE }
         val previous = mutableMapOf<String, String?>()
@@ -440,7 +462,7 @@ class Place : GameStateElement() {
 
             val currentPlace = parent.places[currentName] ?: continue
 
-            for (neighborName in currentPlace.connectedPlaces) {
+            for (neighborName in currentPlace.movableConnectedPlaces(sbjChar)) {
                 if (neighborName in visited) continue
 
                 val weight = currentPlace.distanceTo(neighborName) ?: continue
