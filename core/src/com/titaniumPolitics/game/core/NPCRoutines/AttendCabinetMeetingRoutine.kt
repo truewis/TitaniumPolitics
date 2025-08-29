@@ -2,6 +2,7 @@ package com.titaniumPolitics.game.core.NPCRoutines
 
 import com.titaniumPolitics.game.core.AgendaType
 import com.titaniumPolitics.game.core.MeetingAgenda
+import com.titaniumPolitics.game.core.ReadOnly
 import com.titaniumPolitics.game.core.Request
 import com.titaniumPolitics.game.core.Resources
 import com.titaniumPolitics.game.core.gameActions.*
@@ -25,6 +26,8 @@ class AttendCabinetMeetingRoutine(override val meetingName: String) : MeetingRou
     override fun executeInMeeting(name: String, place: String): GameAction {
         //If not speaker, wait if the mutuality to the speaker is high. Otherwise, if possible, interrupt the speaker.
         if (meeting.currentSpeaker != name) {
+            if (routineStartTime + 7200 / ReadOnly.DT <= gState.time || meeting.currentAttention < 10)
+                return LeaveMeeting(name, place)
             return interceptCondition(name, place)
         } else {
             gState.parties[meeting.involvedParty]!!

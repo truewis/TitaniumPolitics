@@ -48,25 +48,12 @@ class AttendDivisionMeetingRoutine(override val meetingName: String) : MeetingRo
     override fun executeInMeeting(name: String, place: String): GameAction {
         val character = gState.characters[name]!!
         val conf =
-            character.currentMeeting
-        if (conf == null) {
-            JoinMeeting(name, place).apply {
-                injectParent(gState)
-                if (isValid())
-                    return this
-            }
-            StartMeeting(name, place).apply {
-                injectParent(gState)
-                if (isValid())
-                    return this
-            }
-            return Wait(name, place).also {
-            } //If no meeting found, wait. Note that this action is only executed once because the routine will end after this action.
-            //This happens if the number of people condition of the meeting is not met.
-        }
+            character.currentMeeting!!
         //If not speaker, wait if the mutuality to the speaker is high. Otherwise, if possible, interrupt the speaker.
         if (conf.currentSpeaker != name) {
             //If the meeting is not boring, but the mutuality to the speaker is low, intercept the speaker.
+            if (routineStartTime + 7200 / ReadOnly.DT <= gState.time || meeting.currentAttention < 10)
+                return LeaveMeeting(name, place)
             return interceptCondition(name, place)
         } else {
             val party = gState.parties[conf.involvedParty]!!

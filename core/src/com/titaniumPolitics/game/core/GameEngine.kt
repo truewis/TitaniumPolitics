@@ -961,7 +961,7 @@ class GameEngine(val gameState: GameState) {
                     )
                 }.values.first()
                 if (character == gameState.playerName) {
-                    Logger.write("You are in a meeting.", Logger.LogLevel.INFO)
+                    Logger.write("You are in the meeting ${gameState.meetingName(conf)}", Logger.LogLevel.INFO)
                     Logger.write(
                         "Attendees: ${
                             conf.currentCharacters

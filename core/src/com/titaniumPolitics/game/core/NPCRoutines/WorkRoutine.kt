@@ -1,12 +1,17 @@
 package com.titaniumPolitics.game.core.NPCRoutines
 
+import com.titaniumPolitics.game.core.AgendaType
+import com.titaniumPolitics.game.core.Character
 import com.titaniumPolitics.game.core.GameEngine
 import com.titaniumPolitics.game.core.InformationType
 import com.titaniumPolitics.game.core.Meeting
+import com.titaniumPolitics.game.core.MeetingAgenda
 import com.titaniumPolitics.game.core.ReadOnly
 import com.titaniumPolitics.game.core.ReadOnly.IDTH
+import com.titaniumPolitics.game.core.Request
 import com.titaniumPolitics.game.core.Resources
 import com.titaniumPolitics.game.core.gameActions.GameAction
+import com.titaniumPolitics.game.core.gameActions.OfficialResourceTransfer
 import com.titaniumPolitics.game.core.gameActions.PrepareInfo
 import com.titaniumPolitics.game.core.gameActions.Wait
 import kotlinx.serialization.Serializable
@@ -44,7 +49,8 @@ class WorkRoutine(var workplace: String) : Routine() {
             if (subroutines.none {
                     it is MeetingRoutine && it.meetingName == gState.meetingName(character.currentMeeting!!)
                 }
-                && gState.meetingName(character.currentMeeting!!) !in meetingsAttended
+            //&& gState.meetingName(character.currentMeeting!!) !in meetingsAttended
+            //I am already in the meeting, so no need to check if I have attended it already. In fact, I am obliged to create meeting routine again.
             )
                 return pickMeetingRoutine(name, character.currentMeeting!!).apply {
                     priority = PRIORITY_MEETING //Higher priority than work.
@@ -146,34 +152,40 @@ class WorkRoutine(var workplace: String) : Routine() {
                 }
         }
         //6. Supply resource
-        if (subroutines.none { it is TransferResourceRoutine }) {
-            gState.places.values.forEach { place1 ->
+        //only if I am director
+        if (character.type == Character.Type.DIRECTOR) {
+            character.division?.divisionPlaces?.forEach { place1 ->
                 place1.apparatuses.forEach { apparatus ->
                     val res = place1.resourceShortOfHourly(apparatus) //Type of resource that is short of.
                     if (res != null)
-                    //if there is a place within my division with the resource
+                    //if there is a place with the resource
                     {
                         val resplace =
                             gState.places.values.filter {
-                                it.responsibleDivision != null && gState.parties[it.responsibleDivision]!!.members.contains(
-                                    name
-                                ) && it.shortestPathAndTimeTo(place) != null
+                                it.manager != null && it.shortestPathAndTimeTo(place) != null
                             }
                                 .maxByOrNull { it.resources[res] }
-                        if (resplace != null && place1.name != resplace.name)
+                        if (resplace != null && place1.name != resplace.name && resplace.manager != name)
                         //start new routine if there is a place with all the conditions met.
                         //If the place with the resource has enough resource to supply apparatus for ten hours, and there is no existing transfer routine
                             if (resplace.resources[res] > apparatus.hourlyOperationResource[res] * 10) {
-                                return TransferResourceRoutine(
+                                return AttendPrivateMeetingRoutine(
+                                    resplace.manager!!,
                                     //To reduce the overhead, it is rational to transfer more resource than immediately needed if possible.
-                                    Resources(
-                                        res to max(
-                                            apparatus.hourlyOperationResource[res] * 10,
-                                            resplace.resources[res] * 0.3
+                                    MeetingAgenda(
+                                        AgendaType.REQUEST, name, attachedRequest = Request(
+                                            OfficialResourceTransfer(
+                                                resplace.manager!!, resplace.name, place1.name, Resources(
+                                                    res to max(
+                                                        apparatus.hourlyOperationResource[res] * 10,
+                                                        resplace.resources[res] * 0.3
+                                                    )
+                                                ), gState
+                                            ),
+                                            issuedTo = hashSetOf(resplace.manager!!),
+                                            issuedBy = hashSetOf(name)
                                         )
-                                    ),
-                                    resplace.name,
-                                    place1.name
+                                    )
                                 )
                             }
 
