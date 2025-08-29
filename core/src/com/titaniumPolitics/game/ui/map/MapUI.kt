@@ -71,13 +71,15 @@ open class MapUI(val gameState: GameState) : Table(defaultSkin) {
         currentMarkers.clear()
         //Draw markers for places
         gameState.places.forEach { (placeName, plObj) ->
-            if (!placeName.contains("home") && plObj.isAuthorized(gameState.playerName)) {
-                PlaceMarker(gameState, this, placeName).also {
-                    currentMarkers.add(it)
-                }
-            } else if (placeName == "home_" + gameState.playerName) {
-                HomePlaceMarker(gameState, this, placeName).also {
-                    currentMarkers.add(it)
+            if (plObj.isAuthorized(gameState.playerName)) {
+                if (plObj.isBuildingIn == null)
+                    PlaceMarker(gameState, this, placeName).also {
+                        currentMarkers.add(it)
+                    }
+                else {
+                    HomePlaceMarker(gameState, this, placeName).also {
+                        currentMarkers.add(it)
+                    }
                 }
             }
         }

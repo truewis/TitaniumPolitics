@@ -512,7 +512,7 @@
       "coordinates": {
         "x": 0,
         "y": 0,
-        "z": 1
+        "z": 0
       },
       "resources": {
         "_resources": {
@@ -547,6 +547,7 @@
       "authorizedDivisions": [
         "interior"
       ],
+      "isBuildingIn": "mainControlRoom",
       "manager": "Charles",
       "workHoursStart": 9,
       "workHoursEnd": 17
@@ -734,7 +735,7 @@
     },
     "miningHeadquarters": {
       "coordinates": {
-        "x": -11,
+        "x": -10,
         "y": 0,
         "z": -10
       },
@@ -771,6 +772,7 @@
       "authorizedDivisions": [
         "mining"
       ],
+      "isBuildingIn": "excavationShaftA",
       "manager": "Maisarah",
       "workHoursStart": 9,
       "workHoursEnd": 17
@@ -985,7 +987,7 @@
     },
     "infrastructureHeadquarters": {
       "coordinates": {
-        "x": -11,
+        "x": -12,
         "y": 0,
         "z": 15
       },
@@ -1022,6 +1024,7 @@
       "authorizedDivisions": [
         "infrastructure"
       ],
+      "isBuildingIn": "outerBarrierWest",
       "manager": "Alina",
       "workHoursStart": 9,
       "workHoursEnd": 17
@@ -1144,7 +1147,7 @@
     },
     "industryHeadquarters": {
       "coordinates": {
-        "x": 11,
+        "x": 12,
         "y": 0,
         "z": -8
       },
@@ -1181,6 +1184,7 @@
       "authorizedDivisions": [
         "industry"
       ],
+      "isBuildingIn": "constructionYardSouth",
       "manager": "Hiroshi",
       "workHoursStart": 9,
       "workHoursEnd": 17
@@ -1874,7 +1878,7 @@
     },
     "educationHeadquarters": {
       "coordinates": {
-        "x": 11,
+        "x": 12,
         "y": 0,
         "z": -2
       },
@@ -1911,6 +1915,7 @@
       "authorizedDivisions": [
         "education"
       ],
+      "isBuildingIn": "techSchool",
       "manager": "Eugene",
       "workHoursStart": 9,
       "workHoursEnd": 17
@@ -2004,7 +2009,7 @@
     },
     "bioengineeringHeadquarters": {
       "coordinates": {
-        "x": -3,
+        "x": -2,
         "y": 0,
         "z": -6
       },
@@ -2041,6 +2046,7 @@
       "authorizedDivisions": [
         "bioengineering"
       ],
+      "isBuildingIn": "farm",
       "manager": "Evan",
       "workHoursStart": 9,
       "workHoursEnd": 17
@@ -2098,7 +2104,7 @@
     },
     "safetyHeadquarters": {
       "coordinates": {
-        "x": 8,
+        "x": 7,
         "y": 0,
         "z": 7
       },
@@ -2135,6 +2141,7 @@
       "authorizedDivisions": [
         "safety"
       ],
+      "isBuildingIn": "rescueStationNorth",
       "manager": "Astinomis",
       "workHoursStart": 9,
       "workHoursEnd": 17
@@ -2440,7 +2447,7 @@
       "coordinates": {
         "x": 4,
         "y": 0,
-        "z": 7
+        "z": 8
       },
       "resources": {
         "_resources": {
@@ -2468,6 +2475,7 @@
       ],
       "characters": [
       ],
+      "isBuildingIn": "market",
       "workHoursStart": 16,
       "workHoursEnd": 24
     },

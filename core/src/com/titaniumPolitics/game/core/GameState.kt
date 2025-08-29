@@ -347,6 +347,7 @@ class GameState {
                 authorizedCharacters += (char.key) //Only the character can enter their home.
                 //Connect the new home to the place specified in the character.
                 val liveBy = this@GameState.characters[char.key]!!.livingBy
+                isBuildingIn = liveBy
                 connectedPlaces.add(liveBy)
                 coordinates = this@GameState.places[liveBy]!!.coordinates
                 volume =

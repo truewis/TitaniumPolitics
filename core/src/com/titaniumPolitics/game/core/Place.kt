@@ -42,6 +42,26 @@ class Place : GameStateElement() {
                 return name.substringAfter("home_")
             return null
         }
+
+    /**
+     * If this place is a building in a place, this is the name of the place it is in.
+     */
+    var isBuildingIn: String? = null
+
+    /**
+     * Index of the building in the place it is in. Null if not a building.
+     */
+    val buildingIndex
+        get() = isBuildingIn?.let {
+            parent.places[it]!!.connectedPlaces.filter { conn -> parent.places[conn]!!.isBuildingIn != null }
+                .indexOf(name)
+        } //
+
+    /**
+     * Number of buildings in this place.
+     */
+    val numberOfBuildings
+        get() = connectedPlaces.count { conn -> parent.places[conn]!!.isBuildingIn == this.name }
     var manager: String? = null
 
 
