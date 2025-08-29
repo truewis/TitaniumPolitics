@@ -23,7 +23,4 @@ class WorkAnonRoutine(var workplace: String? = null) : Routine() {
     override fun execute(name: String, place: String): GameAction {
         return Wait(name, place)
     }
-
-    @Transient
-    override val availableActions = listOf("Move", "Wait")
 }

@@ -2,6 +2,7 @@ package com.titaniumPolitics.game.core.NPCRoutines
 
 import com.titaniumPolitics.game.core.Place
 import com.titaniumPolitics.game.core.gameActions.GameAction
+import com.titaniumPolitics.game.core.gameActions.Wait
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 
@@ -17,9 +18,6 @@ class WanderRoutine() : Routine() {
     }
 
     override fun execute(name: String, place: String): GameAction {
-        return pickAction(name, place)
+        return Wait(name, place)
     }
-
-    @Transient
-    override val availableActions = listOf("Move", "Wait")
 }

@@ -29,6 +29,8 @@ class WorkRoutine(var workplace: String) : Routine() {
         //If work hours are over, rest. Also, if the character is too hungry, thirsty, or sick, rest. (Which is checked earlier.)
         if (!isWorkHourWithETA(gState, place, workplace, IDTH)
             || gState.characters[name]!!.health <= ReadOnly.const("CriticalHealth")
+            || gState.characters[name]!!.hunger >= ReadOnly.const("hungerThreshold")
+            || gState.characters[name]!!.thirst >= ReadOnly.const("thirstThreshold")
         )
             return success()
         val character = gState.characters[name]!!
@@ -309,7 +311,4 @@ class WorkRoutine(var workplace: String) : Routine() {
         }
         //Never fail the work routine itself.
     }
-
-    @Transient
-    override val availableActions = listOf("Eat", "Sleep", "Wait")
 }

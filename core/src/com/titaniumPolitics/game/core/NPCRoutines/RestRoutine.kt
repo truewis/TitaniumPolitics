@@ -3,7 +3,9 @@ package com.titaniumPolitics.game.core.NPCRoutines
 import com.titaniumPolitics.game.core.ReadOnly
 import com.titaniumPolitics.game.core.ReadOnly.DTH
 import com.titaniumPolitics.game.core.ReadOnly.IDTH
+import com.titaniumPolitics.game.core.gameActions.Eat
 import com.titaniumPolitics.game.core.gameActions.GameAction
+import com.titaniumPolitics.game.core.gameActions.Sleep
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 
@@ -22,7 +24,18 @@ class RestRoutine(var workplace: String? = null) : Routine() {
     }
 
     override fun execute(name: String, place: String): GameAction {
-        return pickAction(name, place)
+        //If hungry or thirsty, eat.
+        if (gState.characters[name]!!.hunger > ReadOnly.const("hungerThreshold")
+            ||
+            gState.characters[name]!!.thirst > ReadOnly.const("thirstThreshold")
+        ) {
+            Eat(name, place, gState).also {
+                if (it.isValid())
+                    return it
+            }
+        }
+        //Otherwise, sleep or wait.
+        return Sleep(name, place, gState)
     }
 
     private fun condition(name: String, place: String): Boolean {
@@ -43,6 +56,4 @@ class RestRoutine(var workplace: String? = null) : Routine() {
         }
     }
 
-    @Transient
-    override val availableActions = listOf("Eat", "Sleep", "Wait")
 }
