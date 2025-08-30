@@ -33,7 +33,18 @@ sealed class MeetingRoutine : Routine() {
         subroutines: List<Routine>
     ): Routine? {
         meetingControl(name, place)?.let { return it }
+        if (gState.characters[name]!!.currentMeeting == null) return null //Wait until the meeting starts.
         if (gState.ongoingMeetings[meetingName] == null) return null //Wait until the meeting starts.
+        if (failed || success) return null
+        if (gState.characters[name]!!.currentMeeting != meeting) throw Exception(
+            "Character $name is not in the meeting $meetingName, but instead in ${
+                gState.characters[name]!!.currentMeeting?.let {
+                    gState.meetingName(
+                        it
+                    )
+                }
+            }"
+        )
         newIMeetingRoutineCondition(name, place, subroutines)?.let { return it as Routine }
         return null
     }
@@ -67,6 +78,7 @@ sealed class MeetingRoutine : Routine() {
             return failed()
             return null
         }
+        //If mt is scheduled but not happening yet, move to the place of the meeting.
         if (mt !in gState.ongoingMeetings.values) {
             if (place != mt.place)
                 return MoveRoutine(mt.place)
@@ -137,8 +149,10 @@ sealed class MeetingRoutine : Routine() {
                 name in it.issuedBy && it.issuedTo.intersect(meeting.currentCharacters)
                     .isNotEmpty() && !it.completed && meeting.agendas.none { agenda -> agenda.type == AgendaType.REQUEST && agenda.attachedRequest == it } /*Do not demand the request submitted in this meeting to be proved right away.*/
             }?.let { req ->
-                return NewAgenda(name, place).also {
+                NewAgenda(name, place, gState).also {
                     it.agenda = MeetingAgenda(AgendaType.PROOF_OF_WORK, name, attachedRequest = req)
+                    if (it.isValid())
+                        return it
                 }
             }
 
@@ -204,7 +218,7 @@ sealed class MeetingRoutine : Routine() {
                 }
 
 
-                return NewAgenda(name, place).also {
+                NewAgenda(name, place, gState).also {
                     it.agenda = MeetingAgenda(
                         AgendaType.REQUEST,
                         author = name,
@@ -218,6 +232,8 @@ sealed class MeetingRoutine : Routine() {
                             issuedBy = hashSetOf(name)
                         )
                     )
+                    if (it.isValid())
+                        return it
                 }
             }
         } else {
@@ -247,7 +263,8 @@ sealed class MeetingRoutine : Routine() {
         gState.requests.values.firstOrNull {
             if (name !in it.issuedTo) return@firstOrNull false
             val eta =
-                gState.places[it.action.tgtPlace]!!.shortestPathAndTimeTo(place)?.second ?: return@firstOrNull false
+                gState.places[it.action.tgtPlace]!!.shortestPathAndTimeTo(place, name)?.second
+                    ?: return@firstOrNull false
             return@firstOrNull (it.executeTime in gState.time - ReadOnly.constInt("CommandExecuteTolerance") + eta..gState.time + ReadOnly.constInt(
                 "CommandExecuteTolerance"
             ) + eta || it.executeTime == 0) && (it.issuedBy.isEmpty() /*System request must be executed regardless of mutualities.*/ || it.issuedBy.sumOf {
@@ -280,18 +297,17 @@ sealed class MeetingRoutine : Routine() {
         if (meetingName in gState.scheduledMeetings) {
             return false //The meeting has not started yet.
         }
-        val mt = gState.characters[name]!!.currentMeeting
-        if (mt == null) {
+        if (gState.ongoingMeetings[meetingName] == null) {
             return true //The meeting has ended, so the routine should end.
         }
-
+        val mt = gState.characters[name]!!.currentMeeting
         if (mt != meeting) {
             return true //The character has been transferred to another meeting.
         }
         //Now, given that we are in the correct meeting, check if the meeting is over.
         if (meeting.type == Meeting.MeetingType.DIVISION_LEADER_ELECTION && meeting.voteResults.isEmpty()) return false //If the meeting is a division leader election and there are no vote results, the meeting is not over yet.
         if (meeting.time + 1800 / ReadOnly.DT >= gState.time) return false //At least, wait until the meeting has happened for 30 minutes.
-        return routineStartTime + 7200 / ReadOnly.DT <= gState.time || meeting.currentAttention < 10 //Leave the meeting if it is boring or it is getting too long.
+        return false
 
     }
 
@@ -322,5 +338,11 @@ sealed class MeetingRoutine : Routine() {
             return EndMeeting(name, place)
         }
         return null
+    }
+
+    override fun onSubroutineFail(subroutine: Routine) {
+        //Only fail if failed to attend the meeting. Do not fail if a subroutine inside the meeting fails.
+        if (subroutine !is IMeetingRoutine)
+            super.onSubroutineFail(subroutine)
     }
 }

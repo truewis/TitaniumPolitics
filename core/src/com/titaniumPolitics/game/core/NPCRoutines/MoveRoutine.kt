@@ -5,7 +5,6 @@ import com.titaniumPolitics.game.core.gameActions.Move
 import com.titaniumPolitics.game.core.gameActions.Wait
 import com.titaniumPolitics.game.debugTools.Logger
 import kotlinx.serialization.Serializable
-import org.junit.jupiter.api.fail
 
 /**
  * A routine that moves a character to a destination.
@@ -20,7 +19,7 @@ class MoveRoutine(var destination: String) : Routine() {
         if (place == destination) {
             return success()
         } else {
-            if (gState.places[place]!!.shortestPathAndTimeTo(destination)?.also {
+            if (gState.places[place]!!.shortestPathAndTimeTo(destination, name)?.also {
                     nextStop = it.first[1]
                 } == null) {
 

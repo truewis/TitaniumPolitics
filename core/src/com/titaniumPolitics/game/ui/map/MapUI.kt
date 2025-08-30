@@ -67,12 +67,31 @@ open class MapUI(val gameState: GameState) : Table(defaultSkin) {
             HEIGHT + PADDING * 2 //Add some padding
         )
         dataTable.pack()
+        currentMarkers.forEach { dataTable.removeActor(it) }
+        currentMarkers.clear()
+        //Draw markers for places
+        gameState.places.forEach { (placeName, plObj) ->
+            if (plObj.isAuthorized(gameState.playerName)) {
+                if (plObj.isBuildingIn == null)
+                    PlaceMarker(gameState, this, placeName).also {
+                        currentMarkers.add(it)
+                    }
+                else {
+                    HomePlaceMarker(gameState, this, placeName).also {
+                        currentMarkers.add(it)
+                    }
+                }
+            }
+        }
+
         currentConnections.forEach { dataTable.removeActor(it) }
         currentConnections.clear()
         //Draw connections between places
-        gameState.places.forEach { (placeName, place) ->
+        currentMarkers.forEach {
+            val placeName = it.place
+            val place = gameState.places[placeName]!!
             if (!placeName.contains("home")) {
-                place.connectedPlaces.forEach { connection ->
+                place.movableConnectedPlaces(gameState.playerName).forEach { connection ->
                     if (!connection.contains("home")) {
                         Connection(gameState, this, placeName, connection).also {
                             it.color = Color.RED
@@ -82,21 +101,6 @@ open class MapUI(val gameState: GameState) : Table(defaultSkin) {
                 }
             }
         }
-        currentMarkers.forEach { dataTable.removeActor(it) }
-        currentMarkers.clear()
-        //Draw markers for places
-        gameState.places.forEach { (placeName, _) ->
-            if (!placeName.contains("home")) {
-                PlaceMarker(gameState, this, placeName).also {
-                    currentMarkers.add(it)
-                }
-            } else if (placeName == "home_" + gameState.playerName) {
-                HomePlaceMarker(gameState, this, placeName).also {
-                    currentMarkers.add(it)
-                }
-            }
-        }
-
         //Add quest markers.
         gameState.eventSystem.quests.forEach { quest ->
             if (quest.tgtPlace != null) {

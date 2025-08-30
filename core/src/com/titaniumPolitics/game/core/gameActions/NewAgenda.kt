@@ -37,7 +37,7 @@ data class NewAgenda(override val sbjCharacter: String, override val tgtPlace: S
         //People will be more interested in agendas related to their interest. However, this is handled in NPC class.
         val mt = parent.characters[sbjCharacter]!!.currentMeeting!!
         when (agenda.type) {
-            AgendaType.PROOF_OF_WORK -> return mt.type == Meeting.MeetingType.DIVISION_DAILY_CONFERENCE || mt.type == Meeting.MeetingType.CABINET_DAILY_CONFERENCE //TODO: how do we handle command issued?
+            AgendaType.PROOF_OF_WORK -> return true
             //You have to choose which command you are responding to. The character who issued the command must be present in the meeting.
             //Other people may add supporting or disapproving information.
             AgendaType.BUDGET_PROPOSAL -> return mt.type == Meeting.MeetingType.BUDGET_PROPOSAL && with(parent) {

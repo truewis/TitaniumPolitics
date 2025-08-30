@@ -2,6 +2,7 @@ package com.titaniumPolitics.game.core.NPCRoutines
 
 import com.titaniumPolitics.game.core.AgendaType
 import com.titaniumPolitics.game.core.MeetingAgenda
+import com.titaniumPolitics.game.core.ReadOnly
 import com.titaniumPolitics.game.core.Request
 import com.titaniumPolitics.game.core.Resources
 import com.titaniumPolitics.game.core.gameActions.*
@@ -25,6 +26,8 @@ class AttendCabinetMeetingRoutine(override val meetingName: String) : MeetingRou
     override fun executeInMeeting(name: String, place: String): GameAction {
         //If not speaker, wait if the mutuality to the speaker is high. Otherwise, if possible, interrupt the speaker.
         if (meeting.currentSpeaker != name) {
+            if (routineStartTime + 7200 / ReadOnly.DT <= gState.time || meeting.currentAttention < 10)
+                return LeaveMeeting(name, place)
             return interceptCondition(name, place)
         } else {
             gState.parties[meeting.involvedParty]!!
@@ -53,7 +56,7 @@ class AttendCabinetMeetingRoutine(override val meetingName: String) : MeetingRou
                         val resplace =
                             gState.places.values.filter {
                                 it.responsibleDivision != null && name in gState.parties[it.responsibleDivision]!!.members && it.shortestPathAndTimeTo(
-                                    place1.name
+                                    place1.name, name
                                 ) != null //Check connectivity so that the resource can be delivered.
                             }
                                 .filter { it.resources[res] > apparatus.currentConsumption[res]!! * place1.workHoursLength * 3 } //Check if the place has enough resource to supply for 3 work days.
@@ -62,7 +65,7 @@ class AttendCabinetMeetingRoutine(override val meetingName: String) : MeetingRou
                             val findResourceOutsideDivision =
                                 gState.places.values.filter {
                                     it.responsibleDivision != null && gState.parties[it.responsibleDivision]!!.leader in meeting.currentCharacters && it.shortestPathAndTimeTo(
-                                        place1.name
+                                        place1.name, name
                                     ) != null //Check connectivity so that the resource can be delivered.
                                 }
                                     .filter { it.resources[res] > apparatus.currentConsumption[res]!! * place1.workHoursLength * 3 } //Check if the place has enough resource to supply for 3 work days.

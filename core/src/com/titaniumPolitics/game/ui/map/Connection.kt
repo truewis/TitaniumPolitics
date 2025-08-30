@@ -9,6 +9,7 @@ import kotlin.math.sqrt
 
 class Connection(var gameState: GameState, val owner: MapUI, startPlace: String, endPlace: String) : Image() {
     init {
+        touchable = com.badlogic.gdx.scenes.scene2d.Touchable.disabled
         owner.dataTable.addActor(this)
         //Fetch default drawable from skin.
         drawable = defaultSkin.getDrawable("BlackPx")

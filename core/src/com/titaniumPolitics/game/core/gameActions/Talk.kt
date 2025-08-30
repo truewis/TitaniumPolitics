@@ -55,12 +55,18 @@ data class Talk(
             super.execute()
         }
         //The person's mutuality toward the subject character decreases.
-        parent.setMutuality(
-            who,
-            sbjCharacter,
-            -ReadOnly.const("talkMutualityDecrease") * parent.characters[who]!!.stats.pScale,
-            "TalkWithoutNotice"
+        //But only if who doesn't like the subject character and the subject character is not the boss of who.
+        if (parent.getMutNorm(
+                who,
+                sbjCharacter
+            ) < 0 && parent.parties.none { who in it.value.members && it.value.leader == sbjCharacter }
         )
+            parent.setMutuality(
+                who,
+                sbjCharacter,
+                -ReadOnly.const("talkMutualityDecrease") * parent.characters[who]!!.stats.pScale,
+                "TalkWithoutNotice"
+            )
     }
 
     override fun isValid(): Boolean {

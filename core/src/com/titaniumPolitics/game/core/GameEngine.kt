@@ -185,8 +185,7 @@ class GameEngine(val gameState: GameState) {
 
         }
         char.history.add(
-            "Action" +
-                    action.javaClass.simpleName + ":" +
+            action.javaClass.simpleName + ";" +
                     gameState.formatTime() + " at " + gameState.places.values.find { it.characters.contains(char.name) }!!.name
         )
         val place = gameState.places.values.find {
@@ -642,7 +641,7 @@ class GameEngine(val gameState: GameState) {
                 Logger.write("What people are doing:", Logger.LogLevel.INFO)
                 it.value.scheduledCharacters.forEach { ch ->
                     Logger.write(
-                        "\t$ch:${characters[ch]!!.history.last { it.startsWith("Action") }}",
+                        "\t$ch:${characters[ch]!!.history.last()}",
                         Logger.LogLevel.INFO
                     )
                     if (nonPlayerAgents[ch] is NonPlayerAgent) {
@@ -961,7 +960,7 @@ class GameEngine(val gameState: GameState) {
                     )
                 }.values.first()
                 if (character == gameState.playerName) {
-                    Logger.write("You are in a meeting.", Logger.LogLevel.INFO)
+                    Logger.write("You are in the meeting ${gameState.meetingName(conf)}", Logger.LogLevel.INFO)
                     Logger.write(
                         "Attendees: ${
                             conf.currentCharacters

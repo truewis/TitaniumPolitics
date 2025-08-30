@@ -326,6 +326,24 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable 
                                 })
                             }
 
+                            "BuyDrink" -> {
+                                val action = BuyDrink(
+                                    gameState.playerName,
+                                    gameState.player.place.name
+                                )
+                                action.injectParent(gameState); if (!action.isValid()) {
+                                    this@button.isDisabled = true
+                                    tooltip.displayInvalidReason(action.invalidReason)
+                                }
+
+                                this@button.addListener(object : ChangeListener() {
+                                    override fun changed(event: ChangeEvent, actor: Actor) {
+                                        if (!this@button.isChecked) return
+                                        actionCallback(action)
+                                    }
+                                })
+                            }
+
                             "Sleep" -> {
                                 val action = Sleep(
                                     gameState.playerName,

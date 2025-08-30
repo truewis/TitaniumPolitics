@@ -32,6 +32,8 @@ class AttendTriumvirateRoutine(override val meetingName: String) : MeetingRoutin
         val party = gState.parties[meeting.involvedParty]!!
         //If not speaker, wait if the mutuality to the speaker is high. Otherwise, if possible, interrupt the speaker.
         if (meeting.currentSpeaker != name) {
+            if (routineStartTime + 7200 / ReadOnly.DT <= gState.time || meeting.currentAttention < 10)
+                return LeaveMeeting(name, place)
             return interceptCondition(name, place)
         } else //If it is my turn to speak
         {

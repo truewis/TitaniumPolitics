@@ -41,7 +41,7 @@ class HeadPortraitUI(character: String, var gameState: GameState) : Table(defaul
     val refresh = { state: GameState ->
         speechUI.clearSpeech()
         //Display emoji based on event conditions.
-        speechUI.displayEmojiOnPortrait(state.eventSystem.displayEmoji(tgtCharacter))
+        speechUI.displayEmoji(state.eventSystem.displayEmoji(tgtCharacter))
     }
 
 

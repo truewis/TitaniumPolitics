@@ -42,18 +42,20 @@ class AttendPrivateMeetingRoutine(
             if (toWho?.let { it !in currentMeeting.currentCharacters } == true) {
                 return true //The character has been transferred to another meeting.
             }
-            if (scheduledMeetingName != gState.meetingName(currentMeeting))
+            if (scheduledMeetingName?.let { it != gState.meetingName(currentMeeting) }
+                    ?: false)//The character has been transferred to another meeting, if there was a scheduled meeting name provided.
                 return true
             //if (meeting.time + 1800 / ReadOnly.DT >= gState.time) false //For talks, we don't wait until the meeting has happened for 30 minutes.
-            return routineStartTime + 7200 / ReadOnly.DT <= gState.time || meeting.currentAttention < 10 //Leave the meeting if it is boring or it is getting too long.
+            return false
 
         }
     }
 
     override fun meetingControl(name: String, place: String): Routine? {
         //////////////////////Routine End Condition Check/////////////////////////
-        if (condition(name))
-            return if (hasAttended && !hasUnresolvedAgenda) success() else failed()
+        if (condition(name)) {
+            if (hasAttended && !hasUnresolvedAgenda) return success() else return failed()
+        }
         //////////////////////////////////////////////////////////////////////////
         //If there is no ongoing meeting, check if there is a scheduled meeting with the specified name or the character to meet.
         //If neither is specified, this routine fails.
@@ -80,14 +82,20 @@ class AttendPrivateMeetingRoutine(
 
     override fun executeInMeeting(name: String, place: String): GameAction {
         if (meeting.currentSpeaker != name) {
+            if (routineStartTime + 7200 / ReadOnly.DT <= gState.time || meeting.currentAttention < 10) //Leave the meeting if it is boring or it is getting too long.
+                return LeaveMeeting(name, place)
             return interceptCondition(name, place)
         } else {
             //If it is my turn to speak
             //Check if I had an intention
             if (agenda != null) {
-                return NewAgenda(name, place).also {
+                NewAgenda(name, place, gState).also {
                     it.agenda = agenda
-
+                    if (it.isValid()) {
+                        hasUnresolvedAgenda = false
+                        println("$name proposed an agenda: ${it.agenda}")
+                        return it
+                    }
                 }
             } else {
                 //No particular intention
@@ -119,6 +127,17 @@ class AttendPrivateMeetingRoutine(
     }
 
     override fun joinMeetingActions(name: String, place: String): GameAction? {
+        toWho?.run {
+            //Note: This character can interfere with the meeting if it is already ongoing.
+            Talk(name, place, this).apply {
+                injectParent(gState)
+                if (isValid()) {
+                    hasAttended = true
+                    return this
+                }
+            }
+        }
+
         JoinMeeting(name, place).apply {
             injectParent(gState)
             if (isValid()) {
@@ -133,17 +152,6 @@ class AttendPrivateMeetingRoutine(
                 return this
             }
         }
-        toWho?.run {
-            //Note: This character can interfere with the meeting if it is already ongoing.
-            Talk(name, place, this).apply {
-                injectParent(gState)
-                if (isValid()) {
-                    hasAttended = true
-                    return this
-                }
-            }
-        }
-
 
         //This happens if the number of people condition of the meeting is not met.
         return Wait(name, place)
@@ -163,9 +171,12 @@ class AttendPrivateMeetingRoutine(
                     enemy.key
                 ) < ReadOnly.const("EnemyMutualityThreshold")
             )
-                return NewAgenda(name, place).also { action ->
+                NewAgenda(name, place, gState).also { action ->
                     action.agenda = MeetingAgenda(AgendaType.DENOUNCE, name).also {
                         it.subjectParams["character"] = enemy.key
+                    }
+                    if (action.isValid()) {
+                        return action
                     }
                 }
 
@@ -182,9 +193,12 @@ class AttendPrivateMeetingRoutine(
                     friend.key
                 ) > ReadOnly.const("FriendMutualityThreshold")
             )
-                return NewAgenda(name, place).also { action ->
+                return NewAgenda(name, place, gState).also { action ->
                     action.agenda = MeetingAgenda(AgendaType.PRAISE, name).also {
                         it.subjectParams["character"] = friend.key
+                    }
+                    if (action.isValid()) {
+                        return action
                     }
                 }
             return null

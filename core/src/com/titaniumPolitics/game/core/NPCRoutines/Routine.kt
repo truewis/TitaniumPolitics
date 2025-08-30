@@ -1,6 +1,5 @@
 package com.titaniumPolitics.game.core.NPCRoutines
 
-import com.titaniumPolitics.game.core.GameEngine
 import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.core.ReadOnly.IDTH
 import com.titaniumPolitics.game.core.gameActions.GameAction
@@ -81,51 +80,20 @@ sealed class Routine() {
         failed()
     }
 
-    /**The actions in this list are compared with GameEngine.availableActions() to see if the command is available.
-     *Then, instances of the actions are created, their parameters are optimized for deltaWill, and their validity is checked.
-     *If the action is valid, one with the highest deltaWill is executed.
-     *Routines can switch to other routines in the meanwhile.
-     * */
-    @Transient
-    open val availableActions: List<String> = listOf("Wait")
-
-    //        get()
-//        {
-//            return when (name)
-//            {
-//                "work" -> listOf("Wait")
-//                "rest" -> listOf("Eat", "Sleep", "Wait")
-//                "attendMeeting" -> listOf("attendMeeting")
-//                "supportAgenda" -> listOf("supportAgenda")
-//                "attackAgenda" -> listOf("attackAgenda")
-//                "attendConference" -> listOf("attendConference")
-//                "findCharacter" -> listOf("Move")
-//                "buy" -> listOf("buy")
-//                else -> listOf()
-//            }
-//        }
-    //TODO: it isn't clear at this moment how we pick between actions and routines. Shall we only pick between routines?
-    //Just like the player pick actions at his will, NPC doesn't have to follow the gradient of will always. We just have to implement the penalty when the will is low in the game system.
-    //Will based behaviour can be implemented in a different agent.
-    fun pickAction(name: String, place: String): GameAction {
-
-        return availableActions.intersect(GameEngine.availableActions(gState, place, name).toSet()).map {
-            (Class.forName("com.titaniumPolitics.game.core.gameActions.$it")
-                .getConstructor(String::class.java, String::class.java)
-                .newInstance(name, place) as GameAction).apply { injectParent(gState); chooseParams() }
-
-        }.filter { it.isValid() }.maxBy { it.optimizeWill() }
-    }
-
-
     override fun toString(): String {
         return "${this::class.simpleName}(routineStartTime=$routineStartTime, variables=$variables)"
     }
 
     companion object {
-        fun isWorkHourWithETA(gState: GameState, place: String, workplace: String, padding: Int = 0): Boolean {
+        fun isWorkHourWithETA(
+            gState: GameState,
+            name: String,
+            place: String,
+            workplace: String,
+            padding: Int = 0
+        ): Boolean {
             //Consider the estimated time to workplace, if the character is not at home.
-            val eta = gState.places[place]!!.shortestPathAndTimeTo(workplace)?.second ?: 0
+            val eta = gState.places[place]!!.shortestPathAndTimeTo(workplace, name)?.second ?: 0
             val extendedWorkHours =
                 gState.places[workplace]!!.workHours.first * IDTH - eta - padding..gState.places[workplace]!!.workHours.last * IDTH + eta + padding
             return (gState.timeInDay in extendedWorkHours)

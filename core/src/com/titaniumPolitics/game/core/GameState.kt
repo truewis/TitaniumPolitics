@@ -344,8 +344,10 @@ class GameState {
             places["home_" + char.key] = Place().apply {
                 this.injectParent(this@GameState)
                 responsibleDivision = null //Homes are not responsible for any division.
+                authorizedCharacters += (char.key) //Only the character can enter their home.
                 //Connect the new home to the place specified in the character.
                 val liveBy = this@GameState.characters[char.key]!!.livingBy
+                isBuildingIn = liveBy
                 connectedPlaces.add(liveBy)
                 coordinates = this@GameState.places[liveBy]!!.coordinates
                 volume =

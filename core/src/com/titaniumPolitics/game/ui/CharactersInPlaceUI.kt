@@ -102,6 +102,9 @@ class CharactersInPlaceUI(var gameState: GameState) : Table(defaultSkin) {
                 addCharacterPortrait(it)
         }
         placeCharacterPortrait()
+        portraits.forEach {
+            it.speechUI.displayActionEmoji(gameState.characters[it.tgtCharacter]!!.history.last().split(';').first())
+        }
     }
 
     private fun addCharacterPortrait(characterName: String) {
