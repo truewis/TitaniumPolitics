@@ -70,8 +70,8 @@ class AlertUI(var gameState: GameState) : Table(defaultSkin) {
                         addAlert(
                             "moved",
                             params = arrayOf(
-                                ReadOnly.prop(info.tgtCharacter ?: "Someone"),
-                                ReadOnly.prop((info.action as Move).placeTo)
+                                ReadOnly.charProp(info.tgtCharacter ?: "Someone"),
+                                ReadOnly.placeProp((info.action as Move).placeTo)
                             )
                         ) {
                             AssistantUI.instance.informationButton.changeOpenState(true)

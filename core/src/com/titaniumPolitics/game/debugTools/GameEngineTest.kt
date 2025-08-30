@@ -96,10 +96,10 @@ class GameEngineTest {
 
         if (time % 60 == 0 && hour == 12)
             if (!characters.filter {
-                    it.value.history.last { it.startsWith("Action") }.split(":")[0] == "sleep"
+                    it.value.history.last().split(";")[0] == "sleep"
                 }.keys.isEmpty()) {
                 Logger.write("////////////////////////////////////////////////", Logger.LogLevel.INFO)
-                characters.filter { it.value.history.last { it.startsWith("Action") }.split(":")[0] == "sleep" }
+                characters.filter { it.value.history.last().split(";")[0] == "sleep" }
                     .forEach {
                         Logger.write(
                             "${it.key} is still asleep at noon: health:${it.value.health}, will:${it.value.will}, hunger:${it.value.hunger}, thirst:${it.value.thirst}",

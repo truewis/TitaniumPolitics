@@ -9,6 +9,8 @@ import com.titaniumPolitics.game.core.AgendaType
 import com.titaniumPolitics.game.core.ReadOnly
 import com.titaniumPolitics.game.core.gameActions.GameAction
 import com.titaniumPolitics.game.core.gameActions.NewAgenda
+import kotlinx.serialization.json.jsonObject
+import kotlinx.serialization.json.jsonPrimitive
 import ktx.scene2d.KTable
 import ktx.scene2d.Scene2DSkin.defaultSkin
 import ktx.scene2d.container
@@ -108,7 +110,7 @@ class SpeechUI : Table(defaultSkin), KTable {
     }
     val theEmoji = scene2d.image("HelpGrunge")
 
-    fun displayEmojiOnPortrait(emojiType: EmojiType) {
+    fun displayEmoji(emojiType: EmojiType) {
         theEmoji.isVisible = emojiType != EmojiType.NONE
         val emojiTexture = when (emojiType) {
             EmojiType.HELP -> "HelpGrunge"
@@ -120,6 +122,22 @@ class SpeechUI : Table(defaultSkin), KTable {
         if (emojiType == EmojiType.NONE) return
         theEmoji.setDrawable(defaultSkin, emojiTexture)
         theEmoji.addListener(SimpleTextTooltipUI(ReadOnly.prop("EmojiTooltip-" + emojiType.name)))
+    }
+
+    fun displayActionEmoji(actionName: String) {
+        //TODO: if the action is dangerous, make the emoji red.
+//            if (dangerous) {
+//                color = Color.RED
+//            }
+        theEmoji.isVisible = true
+        try {
+            theEmoji.setDrawable(
+                defaultSkin,
+                ReadOnly.actionJson[actionName]!!.jsonObject["image"]!!.jsonPrimitive.content
+            )
+        } catch (e: Exception) {
+            theEmoji.setDrawable(defaultSkin, "Help")
+        }
     }
 
     fun clearSpeech() {
