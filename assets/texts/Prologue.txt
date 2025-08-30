@@ -1,0 +1,24 @@
+ENTER Alina
+ENTER Rui
+Rui, smile: Boss, when do you think we'll be done?
+Alina: Well, this one is a complete junk. We'll have to take down the entire vertical H-beam and replace it with the new one.
+Rui, confused: New one? Do we even have one? I think the one we put in yesterday was the last H-beam we have this quarter.
+Alina: Well, better ask the workshop people to make one soon.
+Rui, confused: You can't be serious. You know what happened last time when we asked them for two cathodes. This beam will give up way before those bastards even show us a budget proposal.
+Alina: Rui, mind your language and don't be so mean. You know how everyone is busy these days. If I've learned one thing throughout my life, that lesson is that patience is the key to a lot of problems.
+Rui: I'd like to be patient too! But you know, asteroids don't wait for us. Now a single impact is enough to completely destroy this sector.
+Rui: And it isn't our fault either! Arif could have done much better than this.
+Alina: Rui, past is past. Not that we can do anything about it, can we? Not everyone is a good fit for this job.
+Alina: Our job is to try our best, not to worry and be concerned all day. We have enough of grave forecasts.
+Alina: And the former director... paid his deeds already. Man, that was not great. Try not to bring this up again.
+Rui: I mean, he was clearly not trying his ...... WATCH OUT!!
+EXIT Alina
+SLAM
+Narrator: Alina fell, and you cannot see her. You cannot enter the caving because of the active coolant pump. We should stop the coolant pump engine immediately.
+Rui, surprised: Boss, can you hear me?!
+Alina: (groan)
+Narrator: No, the caving is too deep, and you can't see anything. You can still hear your boss. Call the rescue team.
+Rui, surprised: Dear controller, I beg you a pardon. This is an emergency.
+ctrler: You indeed seem desperate, Rui. What is it?
+Rui, surprised: My boss, Alina, has fallen into a caving in the impact barrier. She is still there, I can hear her!
+ctrler: Oh, dear. Where is the rescue team?! Alina, can you hear me? I'm going to get you!

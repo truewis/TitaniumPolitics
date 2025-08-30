@@ -1,5 +1,5 @@
 ENTER Alina
-Alina: Good morning everyone. I am sure you're already aware, but I am Alina, the infrastructure division leader.
+Alina: Good morning everyone.
 Alina: Although if you got to this point without knowing that already, it won't make much difference. And you... {EVENT=CHANGEPOSE}are our newest batch of engineers.
 Alina: Now, you might think that you're going to be working directly on solutions to the engine problems here on The Station.
 Alina: You each think you're the special one who's going to figure out what's wrong with it and save us all. Maybe you will be. But probably not.
