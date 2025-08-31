@@ -256,7 +256,7 @@ class GameState {
                 place.value.responsibleDivision?.run {
                     addMember(parties[this]!!.directorMembers.random(), Role.NONE)
                 }
-                type = "workplace"
+                type = Party.Type.WORKPLACE
                 home = place.key
             }
 
@@ -264,7 +264,7 @@ class GameState {
 
 
         //Generate lower level managers for each workplace.
-        parties.filter { it.value.type == "workplace" }.forEach { party ->
+        parties.filter { it.value.type == Party.Type.WORKPLACE }.forEach { party ->
             listOf(Role.ADMINISTRATOR, Role.TREASURER, Role.OVERSEER).forEach { role ->
                 val name = "${role}_${party.key}"
                 characters[name] = Character().apply {
@@ -292,7 +292,7 @@ class GameState {
 
         //Gain division anonymous member size from work place requirements.
         parties.forEach {
-            if (it.value.type != "division") return@forEach //
+            if (it.value.type != Party.Type.DIVISION) return@forEach //
             val division = it.value
 
             //Create anonymous characters if the party is big enough.

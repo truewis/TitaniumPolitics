@@ -6,6 +6,7 @@ import com.titaniumPolitics.game.core.GameEngine
 import com.titaniumPolitics.game.core.InformationType
 import com.titaniumPolitics.game.core.Meeting
 import com.titaniumPolitics.game.core.MeetingAgenda
+import com.titaniumPolitics.game.core.Party
 import com.titaniumPolitics.game.core.ReadOnly
 import com.titaniumPolitics.game.core.ReadOnly.IDTH
 import com.titaniumPolitics.game.core.Request
@@ -256,7 +257,7 @@ class WorkRoutine(var workplace: String) : Routine() {
             party.leader == name
         }.forEach { party ->
             when (party.type) {
-                "workplace" -> {
+                Party.Type.WORKPLACE -> {
                     party.vacancyRole()?.let { role ->
                         if (subroutines.none { it is HireRoutine }) {
                             return HireRoutine(party = party.name, role = role, null)
@@ -264,7 +265,7 @@ class WorkRoutine(var workplace: String) : Routine() {
                     }
                 }
 
-                "division" -> {
+                Party.Type.DIVISION -> {
                     party.divisionPlaces.firstOrNull {
                         it.manager == null
                     }?.let { place ->
@@ -273,6 +274,8 @@ class WorkRoutine(var workplace: String) : Routine() {
                         }
                     }
                 }
+                //Cabinet members are not hired, they are elected within their division.
+                else -> {}
             }
 
         }

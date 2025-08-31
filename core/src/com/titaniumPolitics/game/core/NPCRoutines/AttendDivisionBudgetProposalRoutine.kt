@@ -24,7 +24,7 @@ class AttendDivisionBudgetProposalRoutine(override val meetingName: String) : Me
 
             //If there is no budget proposed yet, propose the budget.
             if (!party.isBudgetProposed) {
-                val availableBudget = if (party.type == "cabinet") Resources(
+                val availableBudget = if (party.type == Party.Type.CABINET) Resources(
                     "water" to gState.places["reservoirEast"]!!.resources["water"],
                     "ration" to gState.places["farm"]!!.resources["ration"],
                     "phosphorus" to gState.places["mainControlRoom"]!!.resources["phosphorus"], positive = true

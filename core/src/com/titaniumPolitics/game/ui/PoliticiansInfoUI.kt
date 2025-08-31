@@ -132,7 +132,7 @@ class PoliticiansInfoUI(val gameState: GameState) : Table(defaultSkin), KTable {
             add(TitleLabel(ReadOnly.prop("PoliticiansInfoUI-DivisionInfo"))).colspan(2).pad(10f)
             row()
             val division =
-                this@PoliticiansInfoUI.gameState.parties.filter { it.value.type == "division" && this@PoliticiansInfoUI.gameState.playerName in it.value.members }
+                this@PoliticiansInfoUI.gameState.parties.filter { it.value.type == Party.Type.DIVISION && this@PoliticiansInfoUI.gameState.playerName in it.value.members }
                     .values.first()
             table {
                 it.grow()
@@ -276,7 +276,7 @@ class PoliticiansInfoUI(val gameState: GameState) : Table(defaultSkin), KTable {
             add(TitleLabel(ReadOnly.prop("PoliticiansInfoUI-WorkplaceInfo"))).colspan(2).pad(10f)
             row()
             val workplace =
-                this@PoliticiansInfoUI.gameState.parties.filter { it.value.type == "workplace" && this@PoliticiansInfoUI.gameState.playerName == it.value.leader }
+                this@PoliticiansInfoUI.gameState.parties.filter { it.value.type == Party.Type.WORKPLACE && this@PoliticiansInfoUI.gameState.playerName == it.value.leader }
                     .values.first()
             table {
                 it.grow()

@@ -347,7 +347,11 @@ class GameEngine(val gameState: GameState) {
 //            }
 //        }
         gameState.parties.filter {
-            it.value.type in listOf("cabinet", "division", "workplace") && !it.value.isSalaryPaid
+            it.value.type in listOf(
+                Party.Type.DIVISION,
+                Party.Type.CABINET,
+                Party.Type.WORKPLACE
+            ) && !it.value.isSalaryPaid
         }.forEach {
             //Party integrity decreases if salary is not paid.
             gameState.setPartyMutuality(
@@ -370,7 +374,7 @@ class GameEngine(val gameState: GameState) {
             //Schedule meetings for the next 5 days.
             val tgtMidnight = gameState.time + 24 * 3600 / DT * daysAhead
             //Each division has a conference every day. The conference is attended by the head of the division and the directors of the division.
-            gameState.parties.values.filter { it.type == "division" }.forEach { party ->
+            gameState.parties.values.filter { it.type == Party.Type.DIVISION }.forEach { party ->
                 if (party.leader != null && party.isBudgetProposed && party.isBudgetResolved) {
                     //If there is no conference scheduled that day at the same location,
                     if (gameState.scheduledMeetings.values.none {
@@ -453,7 +457,7 @@ class GameEngine(val gameState: GameState) {
                 }
             }
             //Each workplace has a conference every day. The conference is attended by the director of the workplace.
-            gameState.parties.values.filter { it.type == "workplace" }.forEach { party ->
+            gameState.parties.values.filter { it.type == Party.Type.WORKPLACE }.forEach { party ->
                 if (party.leader != null) {
                     if (gameState.scheduledMeetings.values.none {
                             it.time == tgtMidnight + 12 * 3600 / DT /*9 in the morning*/ && it.place == party.home &&
@@ -817,7 +821,13 @@ class GameEngine(val gameState: GameState) {
                 it.budget = Budget(hashMapOf())
             }
             //Since the party is division, it pays out the salary of the members.
-            gameState.parties.values.filter { it.type in listOf("division", "cabinet", "workplace") }.forEach { party ->
+            gameState.parties.values.filter {
+                it.type in listOf(
+                    Party.Type.DIVISION,
+                    Party.Type.CABINET,
+                    Party.Type.WORKPLACE
+                )
+            }.forEach { party ->
                 party.isSalaryPaid = false
             }
         }

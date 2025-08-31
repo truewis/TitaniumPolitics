@@ -316,7 +316,7 @@ data class NewAgenda(override val sbjCharacter: String, override val tgtPlace: S
                     //If the manager is in the division, fire them.
                     meeting.involvedParty.run {
                         val party = parent.parties[this]!!
-                        if (party.type == "division" && manager in party.members) {
+                        if (party.type == Party.Type.DIVISION && manager in party.members) {
                             Logger.write(
                                 "The manager $manager of the division ${party.name} is fired.",
                                 Logger.LogLevel.INFO
@@ -325,7 +325,7 @@ data class NewAgenda(override val sbjCharacter: String, override val tgtPlace: S
                         }
                     }
                     //Fire manager from the workplace parties in the division, too.
-                    parent.parties.filter { (key, value) -> value.type == "workplace" && manager in value.members && value.workplace.responsibleDivision == meeting.involvedParty }
+                    parent.parties.filter { (key, value) -> value.type == Party.Type.WORKPLACE && manager in value.members && value.workplace.responsibleDivision == meeting.involvedParty }
                         .forEach { (key, value) ->
                             Logger.write(
                                 "The manager $manager of the workplace party ${value.name} is fired.",

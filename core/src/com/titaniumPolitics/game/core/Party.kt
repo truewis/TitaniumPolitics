@@ -96,7 +96,12 @@ class Party : GameStateElement() {
         if (secretary == char) secretary = null
     }
 
-    var type: String? = null
+    var type: Type = Type.OTHER
+
+    enum class Type {
+        CABINET, DIVISION, WORKPLACE, TRIUMVIRATE, OTHER
+    }
+
     var home: String? = null //The place where the party is based.
     private val _members = hashSetOf<String>()
     val members: Set<String> = Collections.unmodifiableSet<String>(_members)
@@ -129,18 +134,18 @@ class Party : GameStateElement() {
     val standardBudget: Budget
         get() {
             when (type) {
-                "cabinet" -> {
-                    val divisions = parent.parties.filter { it.value.type == "division" }.values
+                Type.CABINET -> {
+                    val divisions = parent.parties.filter { it.value.type == Type.DIVISION }.values
                     val resMap = hashMapOf<String, Resources>()
                     divisions.forEach { division ->
                         val directorWage =
-                            Salary.standardQuarterlyRate("division") * (division.directorMembers - division.leader).size
+                            Salary.standardQuarterlyRate(Type.DIVISION) * (division.directorMembers - division.leader).size
                         resMap[division.name] = division.standardBudget.sum() + directorWage
                     }
                     return Budget(resMap)
                 }
 
-                "division" -> {
+                Type.DIVISION -> {
                     val workplaces = parent.places.filter { it.value.responsibleDivision == name }.values
                     val resMap = hashMapOf<String, Resources>()
                     workplaces.forEach { place ->
@@ -152,9 +157,9 @@ class Party : GameStateElement() {
                     return Budget(resMap)
                 }
 
-                "workplace" -> {
+                Type.WORKPLACE -> {
                     val employeeWage =
-                        Salary.standardQuarterlyRate("workplace") * (realMembers - directorMembers).size
+                        Salary.standardQuarterlyRate(Type.WORKPLACE) * (realMembers - directorMembers).size
                     //Workplace directors are paid from the division budget, not workplace budget.
                     //Laborer salary is included in apparatus operation cost.
 
@@ -178,7 +183,7 @@ class Party : GameStateElement() {
 
     val divisionPlaces: Collection<Place>
         get() = parent.places.filter { it.value.responsibleDivision == name }.values.also {
-            assert(it.isNotEmpty() && type == "division")
+            assert(it.isNotEmpty() && type == Type.DIVISION)
         }
 
     val workplace

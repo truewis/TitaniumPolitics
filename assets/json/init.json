@@ -2689,7 +2689,8 @@
         "ctrler",
         "observer"
       ],
-      "home": "mainControlRoom"
+      "home": "mainControlRoom",
+      "type": "TRIUMVIRATE"
     },
     "cabinet": {
       "leader": "Megaros",
@@ -2703,10 +2704,11 @@
         "Hiroshi",
         "Evan"
       ],
-      "home": "mainControlRoom"
+      "home": "mainControlRoom",
+      "type": "CABINET"
     },
     "interior": {
-      "type": "division",
+      "type": "DIVISION",
       "leader": "Charles",
       "_members": [
         "Charles",
@@ -2716,7 +2718,7 @@
       "home": "interiorHeadquarters"
     },
     "mining": {
-      "type": "division",
+      "type": "DIVISION",
       "leader": "Maisarah",
       "_members": [
         "Maisarah",
@@ -2726,7 +2728,7 @@
       "home": "miningHeadquarters"
     },
     "education": {
-      "type": "division",
+      "type": "DIVISION",
       "leader": "Eugene",
       "_members": [
         "Eugene",
@@ -2736,7 +2738,7 @@
       "home": "educationHeadquarters"
     },
     "industry": {
-      "type": "division",
+      "type": "DIVISION",
       "leader": "Hiroshi",
       "_members": [
         "Hiroshi",
@@ -2745,7 +2747,7 @@
       "home": "industryHeadquarters"
     },
     "safety": {
-      "type": "division",
+      "type": "DIVISION",
       "leader": "Astinomis",
       "_members": [
         "Astinomis",
@@ -2758,7 +2760,7 @@
       "home": "safetyHeadquarters"
     },
     "bioengineering": {
-      "type": "division",
+      "type": "DIVISION",
       "leader": "Evan",
       "_members": [
         "Evan",
@@ -2768,7 +2770,7 @@
       "home": "bioengineeringHeadquarters"
     },
     "infrastructure": {
-      "type": "division",
+      "type": "DIVISION",
       "leader": "Alina",
       "_members": [
         "Alina",

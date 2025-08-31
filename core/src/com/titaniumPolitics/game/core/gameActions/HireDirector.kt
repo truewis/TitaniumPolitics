@@ -12,7 +12,7 @@ data class HireDirector(override val sbjCharacter: String, override val tgtPlace
         injectParent(gameState)
     }
 
-    val div get() = parent.parties.filter { (_, value) -> value.leader == sbjCharacter && value.type == "division" }.values.first()
+    val division get() = parent.parties.filter { (_, value) -> value.leader == sbjCharacter && value.type == Party.Type.DIVISION }.values.first()
     var employee: String? = null
     var workplace = ""
 
@@ -30,7 +30,7 @@ data class HireDirector(override val sbjCharacter: String, override val tgtPlace
         if (employee !in availableEmployees())
             return false
         //Workplace must be a place that is managed by the party.
-        if (parent.places[workplace]!!.responsibleDivision != div.name)
+        if (parent.places[workplace]!!.responsibleDivision != division.name)
             return false
 
         //Workplace manager must be null.
@@ -57,7 +57,7 @@ data class HireDirector(override val sbjCharacter: String, override val tgtPlace
                 return@filter false
             }
             //Employee cannot be in triumvirate, be a division leader or the director.
-            if (employee in parent.parties["triumvirate"]!!.members || employee in parent.parties.filter { it.value.type == "division" }.values.map { it.leader } || parent.places.any {
+            if (employee in parent.parties["triumvirate"]!!.members || employee in parent.parties.filter { it.value.type == Party.Type.DIVISION }.values.map { it.leader } || parent.places.any {
                     it.value.manager == employee
                 }) {
                 return@filter false
@@ -67,7 +67,7 @@ data class HireDirector(override val sbjCharacter: String, override val tgtPlace
             if (parent.places.any { (_, value) ->
                     value.workplaceParty?.members?.contains(employee) == true
                 }) {
-                if (employee !in div.members) {
+                if (employee !in division.members) {
                     return@filter false
                 }
             }

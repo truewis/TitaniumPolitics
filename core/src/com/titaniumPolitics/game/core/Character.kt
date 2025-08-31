@@ -81,7 +81,7 @@ class Character : GameStateElement() {
     val currentMeeting
         get() = parent.ongoingMeetings.values.firstOrNull { it.currentCharacters.contains(name) }
     val division
-        get() = parent.parties.values.find { it.members.contains(name) && it.type == "division" }
+        get() = parent.parties.values.find { it.members.contains(name) && it.type == Party.Type.DIVISION }
     var assistants =
         hashSetOf<String>()//TODO: Think about utilizing assistants. How do we pay them? How is it different from requests between free individuals?
 
@@ -378,20 +378,20 @@ class Character : GameStateElement() {
         val leadingParties = parent.parties.values.filter { it.leader == this.name }
         if (leadingParties.isEmpty()) {
             val workplaceParty =
-                parent.parties.values.firstOrNull { this.name in it.members && it.type == "workplace" }
+                parent.parties.values.firstOrNull { this.name in it.members && it.type == Party.Type.WORKPLACE }
             if (workplaceParty != null) {
                 position = ReadOnly.prop(workplaceParty.getRole(this.name).toString() + "-dialogue")
                     .format(ReadOnly.prop(workplaceParty.home!!))
             }
         } else {
             //Check if char leads cabinet, division, or workplace party
-            if (leadingParties.any { it.type == "cabinet" }) {
+            if (leadingParties.any { it.type == Party.Type.CABINET }) {
                 position = ReadOnly.prop("mechanic")
-            } else if (leadingParties.any { it.type == "division" }) {
-                val divisionParty = leadingParties.first { it.type == "division" }
+            } else if (leadingParties.any { it.type == Party.Type.DIVISION }) {
+                val divisionParty = leadingParties.first { it.type == Party.Type.DIVISION }
                 position = ReadOnly.prop("divisionLeader-dialogue").format(ReadOnly.prop(divisionParty.name))
-            } else if (leadingParties.any { it.type == "workplace" }) {
-                val workplaceParty = leadingParties.first { it.type == "workplace" }
+            } else if (leadingParties.any { it.type == Party.Type.WORKPLACE }) {
+                val workplaceParty = leadingParties.first { it.type == Party.Type.WORKPLACE }
                 position = ReadOnly.prop("director-dialogue").format(ReadOnly.prop(workplaceParty.home!!))
             }
         }

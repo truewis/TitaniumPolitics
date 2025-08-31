@@ -2,6 +2,7 @@ package com.titaniumPolitics.game.core.gameActions
 
 import com.titaniumPolitics.game.core.Character
 import com.titaniumPolitics.game.core.GameState
+import com.titaniumPolitics.game.core.Party
 import com.titaniumPolitics.game.core.Party.Role
 import kotlinx.serialization.Serializable
 import kotlin.collections.contains
@@ -35,7 +36,7 @@ data class HireManager(override val sbjCharacter: String, override val tgtPlace:
                 return@filter false
             }
             //Employee cannot be in triumvirate, be a division leader or the director.
-            if (employee in parent.parties["triumvirate"]!!.members || employee in parent.parties.filter { it.value.type == "division" }.values.map { it.leader } || parent.places.any {
+            if (employee in parent.parties["triumvirate"]!!.members || employee in parent.parties.filter { it.value.type == Party.Type.DIVISION }.values.map { it.leader } || parent.places.any {
                     it.value.manager == employee
                 }) {
                 return@filter false

@@ -1,6 +1,7 @@
 package com.titaniumPolitics.game.core.gameActions
 
 import com.titaniumPolitics.game.core.GameState
+import com.titaniumPolitics.game.core.Party
 import com.titaniumPolitics.game.core.ReadOnly
 import com.titaniumPolitics.game.core.Resources
 import kotlinx.serialization.Serializable
@@ -62,11 +63,11 @@ data class Salary(override val sbjCharacter: String, override val tgtPlace: Stri
     }
 
     companion object {
-        fun standardQuarterlyRate(partyType: String): Resources {
+        fun standardQuarterlyRate(partyType: Party.Type): Resources {
             return when (partyType) {
-                "cabinet" -> Resources("ration" to 50.0, "water" to 50.0, "phosphorus" to 0.1)
-                "division" -> Resources("ration" to 30.0, "water" to 30.0, "phosphorus" to 0.03)
-                "workplace" -> Resources("ration" to 15.0, "water" to 15.0, "phosphorus" to 0.01)
+                Party.Type.CABINET -> Resources("ration" to 50.0, "water" to 50.0, "phosphorus" to 0.1)
+                Party.Type.DIVISION -> Resources("ration" to 30.0, "water" to 30.0, "phosphorus" to 0.03)
+                Party.Type.WORKPLACE -> Resources("ration" to 15.0, "water" to 15.0, "phosphorus" to 0.01)
                 else -> throw IllegalArgumentException("Salary can only be performed in cabinet or division daily conferences.")
             }
         }
