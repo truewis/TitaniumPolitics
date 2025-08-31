@@ -22,7 +22,7 @@ class RepairApparatusRoutine(
     }
 
     override fun execute(name: String, place: String): GameAction {
-        if (place == source)//TODO: do not transfer if the amount of resource is not enough for the destination place. Either here or in workRoutine.
+        if (place == source)//TODO: Must get resources to repair first.
             Repair(name, place, targetApparatusID, gState).also {
                 if (it.isValid()) {
                     success()
