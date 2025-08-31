@@ -13,6 +13,7 @@ import com.titaniumPolitics.game.core.Resources
 import com.titaniumPolitics.game.core.gameActions.GameAction
 import com.titaniumPolitics.game.core.gameActions.OfficialResourceTransfer
 import com.titaniumPolitics.game.core.gameActions.PrepareInfo
+import com.titaniumPolitics.game.core.gameActions.Repair
 import com.titaniumPolitics.game.core.gameActions.Wait
 import kotlinx.serialization.Serializable
 import kotlin.math.max
@@ -190,6 +191,38 @@ class WorkRoutine(var workplace: String) : Routine() {
                             }
 
                     }
+                }
+            }
+        }
+
+        //6. Repair Apparatus
+        //only if I am director
+        if (character.type == Character.Type.DIRECTOR) {
+            character.division?.divisionPlaces?.forEach { place1 ->
+                place1.apparatuses.forEach { apparatus ->
+                    if (apparatus.durability < 70f)
+                    //If I am engineer myself, repair directly.
+                        if ("engineer" in character.trait) {
+                            return RepairApparatusRoutine(apparatus.ID)
+                        } else
+                        //Pick an engineer with the highest mutuality
+                        {
+                            val engineer = gState.characters.values.filter {
+                                "engineer" in it.trait && it.name != name
+                            }.maxByOrNull { gState.getMutuality(name, it.name) }?.run {
+                                return AttendPrivateMeetingRoutine(
+                                    this.name,
+                                    MeetingAgenda(
+                                        AgendaType.REQUEST, name, attachedRequest = Request(
+                                            Repair(this.name, place1.name, apparatus.ID, gState),
+                                            issuedTo = hashSetOf(this.name),
+                                            issuedBy = hashSetOf(name)
+                                        )
+                                    )
+                                )
+                            }
+
+                        }
                 }
             }
         }
