@@ -484,7 +484,7 @@ class GameEngine(val gameState: GameState) {
                         tgtMidnight + 15 * 3600 / DT /*12 in the afternoon*/,
                         Meeting.MeetingType.CABINET_DAILY_CONFERENCE,
                         place = cabinet.home!!,
-                        scheduledCharacters = cabinet.members
+                        scheduledCharacters = cabinet.members.toHashSet()
                     ).also { it.involvedParty = cabinet.name }
 
                     gameState.addScheduledMeeting(conference)
@@ -535,7 +535,7 @@ class GameEngine(val gameState: GameState) {
                             tgtMidnight + 15 * 3600 / DT /*9 in the morning*/,
                             Meeting.MeetingType.BUDGET_RESOLUTION,
                             place = triumvirate.home!!,
-                            scheduledCharacters = triumvirate.members
+                            scheduledCharacters = triumvirate.members.toHashSet()
                         ).also { it.involvedParty = triumvirate.name }
                         gameState.addScheduledMeeting(conference)
                     }
@@ -550,7 +550,7 @@ class GameEngine(val gameState: GameState) {
                         tgtMidnight + 15 * 3600 / DT /*3 in the afternoon*/,
                         Meeting.MeetingType.TRIUMVIRATE_DAILY_CONFERENCE,
                         place = triumvirate.home!!,
-                        scheduledCharacters = triumvirate.members
+                        scheduledCharacters = triumvirate.members.toHashSet()
                     ).also { it.involvedParty = triumvirate.name }
 
                     gameState.addScheduledMeeting(conference2)
@@ -872,10 +872,7 @@ class GameEngine(val gameState: GameState) {
         char.place.resources.plusAssign(Resources("corpse" to 100.0 * char.reliant)) //Add corpses to the place.
         char.place.characters -= char.name //Remove from the place.
         gameState.parties.values.forEach {
-            it.members -= char.name
-            if (it.leader == char.name) {
-                it.leader = null
-            }
+            it.removeMember(char.name)
         } //Remove from all parties.
         char.alive = false
     }

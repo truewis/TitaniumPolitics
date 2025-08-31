@@ -255,14 +255,26 @@ class WorkRoutine(var workplace: String) : Routine() {
         gState.parties.values.filter { party ->
             party.leader == name
         }.forEach { party ->
-            party.vacancyRole()?.let {
-                if (subroutines.none { it is HireRoutine }) {
-                    return HireRoutine().apply {
-                        variables["party"] = party.name; variables["role"] = it
-                        priority = PRIORITY_WORK + 60 //Higher priority than work.
+            when (party.type) {
+                "workplace" -> {
+                    party.vacancyRole()?.let { role ->
+                        if (subroutines.none { it is HireRoutine }) {
+                            return HireRoutine(party = party.name, role = role, null)
+                        }
+                    }
+                }
+
+                "division" -> {
+                    party.divisionPlaces.firstOrNull {
+                        it.manager == null
+                    }?.let { place ->
+                        if (subroutines.none { it is HireRoutine }) {
+                            return HireRoutine(party = party.name, role = null, place.name)
+                        }
                     }
                 }
             }
+
         }
 
 //

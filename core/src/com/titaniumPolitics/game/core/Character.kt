@@ -380,7 +380,7 @@ class Character : GameStateElement() {
             val workplaceParty =
                 parent.parties.values.firstOrNull { this.name in it.members && it.type == "workplace" }
             if (workplaceParty != null) {
-                position = ReadOnly.prop(workplaceParty.getRole(this.name)!! + "-dialogue")
+                position = ReadOnly.prop(workplaceParty.getRole(this.name).toString() + "-dialogue")
                     .format(ReadOnly.prop(workplaceParty.home!!))
             }
         } else {

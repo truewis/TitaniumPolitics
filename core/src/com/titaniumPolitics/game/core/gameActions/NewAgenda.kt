@@ -158,6 +158,11 @@ data class NewAgenda(override val sbjCharacter: String, override val tgtPlace: S
                 agenda.subjectParams["party"]!!
             ) * -5.0 * sbjCharObj.stats.pScale
 
+            AgendaType.FIRE_MANAGER -> return parent.getMutNorm(
+                sbjCharacter,
+                agenda.subjectParams["character"]!!
+            ) * 10.0 * (sbjCharObj.stats.pScale) - 20.0 * sbjCharObj.stats.eScale //With high ethos, you feel compassion for the fired manager. With high pathos, you feel good about firing the manager you dislike.
+
             else -> return .0
         }
     }
@@ -308,24 +313,25 @@ data class NewAgenda(override val sbjCharacter: String, override val tgtPlace: S
                     )
                     val manager = agenda.subjectParams["character"] as String
 
-                    //If the manager is a Director of a place, fire them.
-                    parent.places.filter { it.value.manager == manager }.forEach { place ->
-                        Logger.write(
-                            "The manager $manager of the place ${place.value.name} is fired.",
-                            Logger.LogLevel.INFO
-                        )
-                        place.value.manager = null //Remove the manager from the place.
+                    //If the manager is in the division, fire them.
+                    meeting.involvedParty.run {
+                        val party = parent.parties[this]!!
+                        if (party.type == "division" && manager in party.members) {
+                            Logger.write(
+                                "The manager $manager of the division ${party.name} is fired.",
+                                Logger.LogLevel.INFO
+                            )
+                            party.removeMember(manager)
+                        }
                     }
-                    //Fire manager from the workplace party.
-                    parent.parties.filter { (key, value) -> value.type == "workplace" && manager in value.members }
+                    //Fire manager from the workplace parties in the division, too.
+                    parent.parties.filter { (key, value) -> value.type == "workplace" && manager in value.members && value.workplace.responsibleDivision == meeting.involvedParty }
                         .forEach { (key, value) ->
                             Logger.write(
                                 "The manager $manager of the workplace party ${value.name} is fired.",
                                 Logger.LogLevel.INFO
                             )
-                            value.members.remove(manager)
-                            if (value.leader == manager)
-                                value.leader = null //If the manager was the leader, set the leader to null.
+                            value.removeMember(manager)
                         }
 
                 }

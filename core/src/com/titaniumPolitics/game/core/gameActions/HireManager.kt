@@ -2,6 +2,7 @@ package com.titaniumPolitics.game.core.gameActions
 
 import com.titaniumPolitics.game.core.Character
 import com.titaniumPolitics.game.core.GameState
+import com.titaniumPolitics.game.core.Party.Role
 import kotlinx.serialization.Serializable
 import kotlin.collections.contains
 
@@ -13,35 +14,18 @@ data class HireManager(override val sbjCharacter: String, override val tgtPlace:
 
     val party get() = parent.parties.filter { (_, value) -> value.leader == sbjCharacter }.values.first()
     var employee: String? = null
-    var role = "administrator" //The position to be hired, e.g. "administrator", "treasurer", "overseer", etc.
+    var role = Role.ADMINISTRATOR //The position to be hired, e.g. "administrator", "treasurer", "overseer", etc.
 
 
     override fun execute() {
-        when (role) {
-            "administrator" -> {
-                party.administrator = employee
-            }
-
-            "treasurer" -> {
-                party.treasurer = employee
-            }
-
-            "overseer" -> {
-                party.overseer = employee
-            }
-        }
+        party.addMember(employee!!, role)
         if (sbjCharObj.division == parent.player.division)
             parent.knownCharactersToPlayer += employee!! //If hired into the player's division, add the employee to known characters.
         super.execute()
     }
 
     override fun isValid(): Boolean {
-        return employee in availableEmployees() && when (role) {
-            "administrator" -> party.administrator == null
-            "treasurer" -> party.treasurer == null
-            "overseer" -> party.overseer == null
-            else -> false
-        }
+        return employee in availableEmployees() && party.getCharByRole(role) == null
     }
 
     fun availableEmployees(): List<String> {
@@ -71,10 +55,10 @@ data class HireManager(override val sbjCharacter: String, override val tgtPlace:
     fun pickBestEmployee() {
         employee = availableEmployees().maxByOrNull {
             when (role) {
-                "administrator" -> parent.characters[it]!!.stats.ethos
-                "treasurer" -> parent.characters[it]!!.stats.logos
-                "overseer" -> parent.characters[it]!!.stats.pathos
-                else -> 0
+                Role.ADMINISTRATOR -> parent.characters[it]!!.stats.ethos
+                Role.TREASURER -> parent.characters[it]!!.stats.logos
+                Role.OVERSEER -> parent.characters[it]!!.stats.pathos
+                else -> parent.characters[it]!!.stats.ethos + parent.characters[it]!!.stats.logos + parent.characters[it]!!.stats.pathos //Default case, sum of all stats.
             }
         }
     }

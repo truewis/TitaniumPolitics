@@ -2,6 +2,7 @@ package com.titaniumPolitics.game.core.gameActions
 
 import com.titaniumPolitics.game.core.Character
 import com.titaniumPolitics.game.core.GameState
+import com.titaniumPolitics.game.core.Party
 import com.titaniumPolitics.game.debugTools.Logger
 import kotlinx.serialization.Serializable
 
@@ -17,8 +18,9 @@ data class HireDirector(override val sbjCharacter: String, override val tgtPlace
 
 
     override fun execute() {
-        parent.parties["workplace_$workplace"]!!.leader = employee
-        parent.places[workplace]?.manager = employee
+        parent.places[workplace]?.workplaceParty!!
+            .addMember(employee!!, Party.Role.NONE)
+        parent.places[workplace]?.workplaceParty!!.changeLeader(employee!!)
     }
 
     override fun isValid(): Boolean {
@@ -28,16 +30,16 @@ data class HireDirector(override val sbjCharacter: String, override val tgtPlace
         if (employee !in availableEmployees())
             return false
         //Workplace must be a place that is managed by the party.
-        if (parent.places[workplace]?.responsibleDivision != div.name)
+        if (parent.places[workplace]!!.responsibleDivision != div.name)
             return false
 
         //Workplace manager must be null.
-        if (parent.places[workplace]?.manager != null) {
+        if (parent.places[workplace]!!.manager != null) {
             return false
         }
 
         //Workplace party leader must be null.
-        if (parent.parties["workplace_$workplace"]?.leader != null) {
+        if (parent.places[workplace]!!.workplaceParty!!.leader != null) {
             Logger.write(
                 "parent.places[workplace]?.manager is null but Workplace party leader is not null.",
                 Logger.LogLevel.ERROR

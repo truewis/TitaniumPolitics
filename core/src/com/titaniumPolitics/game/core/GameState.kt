@@ -1,6 +1,7 @@
 package com.titaniumPolitics.game.core
 
 import com.badlogic.gdx.math.MathUtils.clamp
+import com.titaniumPolitics.game.core.Party.Role
 import com.titaniumPolitics.game.core.ReadOnly.IDTH
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.Serializable
@@ -82,10 +83,14 @@ class GameState {
             //random party picker
             return parties.values.random()
         }
-    val pickRandomCharacter: Character
+
+    /**
+     * Randomly pick a real character that is alive.
+     */
+    val pickRandomRealCharacter: Character
         get() {
             //random party picker
-            return characters.values.filter { it.alive }.random()
+            return aliveCharacters.values.filter { it.type != Character.Type.ANON }.random()
         }
 
     @Transient
@@ -248,8 +253,9 @@ class GameState {
         places.forEach { place ->
             parties["workplace_${place.key}"] = Party().apply {
                 injectParent(this@GameState)
-                leader = place.value.manager
-                leader?.let { members.add(it) }
+                place.value.responsibleDivision?.run {
+                    addMember(parties[this]!!.directorMembers.random(), Role.NONE)
+                }
                 type = "workplace"
                 home = place.key
             }
@@ -259,8 +265,8 @@ class GameState {
 
         //Generate lower level managers for each workplace.
         parties.filter { it.value.type == "workplace" }.forEach { party ->
-            listOf("administrator", "overseer", "logistician").forEach {
-                val name = "${it}_${party.key}"
+            listOf(Role.ADMINISTRATOR, Role.TREASURER, Role.OVERSEER).forEach { role ->
+                val name = "${role}_${party.key}"
                 characters[name] = Character().apply {
                     this.injectParent(this@GameState)
                     type = Character.Type.EMPLOYEE
@@ -272,31 +278,14 @@ class GameState {
                     it.injectParent(this)
                 }
                 places[party.value.home]?.responsibleDivision?.let { div ->
-                    parties[div]!!.members += name//Add the lower level manager to the division party. These people have two parties at least.
+                    parties[div]!!.addMember(
+                        name,
+                        Role.NONE
+                    )//Add the lower level manager to the division party. These people have two parties at least.
                 }
-                when (it) {
-                    "administrator" -> {
-                        party.value.administrator = name
-                    }
-
-                    "overseer" -> {
-                        party.value.overseer = name
-                    }
-
-                    "logistician" -> {
-                        party.value.treasurer = name
-                    }
-                }
+                party.value.addMember(name, role)
             }
 
-
-        }
-        places.forEach { place ->
-            parties["workplace_${place.key}"]?.apply {
-                members.addAll(characters.keys.filter { it.contains("workplace_${place.key}") }
-                    .toHashSet() //Add all characters that are lower level managers of this workplace.
-                )
-            }
 
         }
 
@@ -331,8 +320,8 @@ class GameState {
                 nonPlayerAgents[name] = NonPlayerAgent().also {
                     it.injectParent(this@GameState)
                 }
-                place.workplaceParty?.members?.add(name)
-                division.members.add(name)
+                place.workplaceParty?.addMember(name, Role.NONE)
+                division.addMember(name, Role.NONE)
 
             }
 
@@ -341,12 +330,12 @@ class GameState {
 
         characters.forEach { char ->
             //Create home for each character.
+            val liveBy = this@GameState.characters[char.key]!!.livingBy
             places["home_" + char.key] = Place().apply {
                 this.injectParent(this@GameState)
                 responsibleDivision = null //Homes are not responsible for any division.
                 authorizedCharacters += (char.key) //Only the character can enter their home.
                 //Connect the new home to the place specified in the character.
-                val liveBy = this@GameState.characters[char.key]!!.livingBy
                 isBuildingIn = liveBy
                 connectedPlaces.add(liveBy)
                 coordinates = this@GameState.places[liveBy]!!.coordinates
@@ -358,7 +347,7 @@ class GameState {
                     "nitrogen" to 900.0
                 ) * (char.value.reliant).toDouble()
             }
-            places[this@GameState.characters[char.key]!!.livingBy]!!.connectedPlaces.add("home_" + char.key)
+            places[liveBy]!!.connectedPlaces.add("home_" + char.key)
             if (places.none { it.value.characters.contains(char.key) })
                 places["home_" + char.key]!!.characters.add(char.key)
 

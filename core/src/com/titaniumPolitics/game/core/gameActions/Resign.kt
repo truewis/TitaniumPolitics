@@ -21,12 +21,11 @@ data class Resign(override val sbjCharacter: String, override val tgtPlace: Stri
             Logger.write("Warning: $sbjCharacter is not the leader of $party.", Logger.LogLevel.INFO)
             return
         }
-        parent.parties[party]!!.members.remove(sbjCharacter)
-        parent.parties[party]!!.leader = null
+        parent.parties[party]!!.removeMember(sbjCharacter)
         Logger.write("$sbjCharacter resigns from $party.", Logger.LogLevel.INFO)
         //If member of cabinet, also leave the cabinet
         if (parent.parties["cabinet"]!!.members.contains(sbjCharacter)) {
-            parent.parties["cabinet"]!!.members.remove(sbjCharacter)
+            parent.parties["cabinet"]!!.removeMember(sbjCharacter)
             Logger.write("$sbjCharacter resigns from cabinet.", Logger.LogLevel.INFO)
         }
         super.execute()

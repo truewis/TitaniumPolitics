@@ -3,6 +3,7 @@ package com.titaniumPolitics.game.core
 import com.badlogic.gdx.math.MathUtils.clamp
 import com.titaniumPolitics.game.core.gameActions.Salary
 import kotlinx.serialization.Serializable
+import java.util.Collections
 import kotlin.collections.set
 
 @Serializable
@@ -10,23 +11,95 @@ class Party : GameStateElement() {
     private var _name: String? = null
     override val name: String
         get() = _name ?: parent.parties.filter { it.value == this }.keys.first().also { _name = it }
+
+    /**
+     * Roles for employees in the party. Does not include leader or directors.
+     */
+    enum class Role {
+        SECRETARY, ADMINISTRATOR, TREASURER, OVERSEER, GUARD, NONE
+    }
+
     var leader: String? = null
+        private set
     var administrator: String? = null //The person who manages the party.
+        private set
     var treasurer: String? = null //The person who manages the party's finances.
+        private set
     var overseer: String? = null //The person who oversees worker's activities.
-    fun getRole(char: String): String? {
+        private set
+    var guard: String? = null //The person who is responsible for the party's security.
+        private set
+    var secretary: String? = null //The person who helps the leader with paperwork and communication.
+        private set
+
+    fun getRole(char: String): Role {
         return when (char) {
-            leader -> "leader"
-            administrator -> "administrator"
-            treasurer -> "treasurer"
-            overseer -> "overseer"
-            else -> null
+            administrator -> Role.ADMINISTRATOR
+            treasurer -> Role.TREASURER
+            overseer -> Role.OVERSEER
+            guard -> Role.GUARD
+            secretary -> Role.SECRETARY
+            else -> Role.NONE
         }
+    }
+
+    fun getCharByRole(role: Role): String? {
+        return when (role) {
+            Role.ADMINISTRATOR -> administrator
+            Role.TREASURER -> treasurer
+            Role.OVERSEER -> overseer
+            Role.GUARD -> guard
+            Role.SECRETARY -> secretary
+            Role.NONE -> null
+        }
+    }
+
+    fun changeLeader(char: String) {
+        if (char !in parent.characters.keys)
+            throw Exception("Character $char does not exist.")
+        if (char !in members)
+            throw Exception("Character $char is not a member of the party.")
+        leader = char
+        getRole(char).let { role ->
+            when (role) {
+                Role.ADMINISTRATOR -> administrator = null
+                Role.TREASURER -> treasurer = null
+                Role.OVERSEER -> overseer = null
+                Role.GUARD -> guard = null
+                Role.SECRETARY -> secretary = null
+                Role.NONE -> {}
+            }
+        }
+    }
+
+    fun addMember(char: String, role: Role) {
+        if (char !in parent.characters.keys)
+            throw Exception("Character $char does not exist.")
+        _members.add(char)
+        when (role) {
+            Role.ADMINISTRATOR -> administrator = char
+            Role.TREASURER -> treasurer = char
+            Role.OVERSEER -> overseer = char
+            Role.GUARD -> guard = char
+            Role.SECRETARY -> secretary = char
+            Role.NONE -> {}
+        }
+    }
+
+    fun removeMember(char: String) {
+        _members.remove(char)
+        if (leader == char) leader = null
+        if (administrator == char) administrator = null
+        if (treasurer == char) treasurer = null
+        if (overseer == char) overseer = null
+        if (guard == char) guard = null
+        if (secretary == char) secretary = null
     }
 
     var type: String? = null
     var home: String? = null //The place where the party is based.
-    var members = hashSetOf<String>()
+    private val _members = hashSetOf<String>()
+    val members: Set<String> = Collections.unmodifiableSet<String>(_members)
     var isSalaryPaid = false //This variable is reset every quarter.
     val anonMembers: HashSet<String>
         get() = members.filter { parent.characters[it]!!.type == Character.Type.ANON }
@@ -36,11 +109,8 @@ class Party : GameStateElement() {
     val realMembers: HashSet<String>
         get() = (members - anonMembers).toHashSet()
     val directorMembers: HashSet<String>
-        get() = members.filter { char -> parent.places.any { it.value.manager == char } }
+        get() = members.filter { char -> parent.characters[char]!!.type == Character.Type.DIRECTOR }
             .toHashSet() //Directors are the ones who can make decisions in the party.
-    val nonDirectorMembers: HashSet<String>
-        get() = members.filter { char -> parent.places.none { it.value.manager == char } }
-            .toHashSet() //Non-directors are the ones who cannot make decisions in the party.
     val size: Int
         get() = members.sumOf { getMultiplier(it) }
 
@@ -139,14 +209,9 @@ class Party : GameStateElement() {
 
     }
 
-    fun vacancyRole(): String? {
-        return when {
-            leader == null -> "leader"
-            type == "division" && parent.places.values.any { it.responsibleDivision == name && it.manager == null } -> "director_" + parent.places.values.first { it.responsibleDivision == name && it.manager == null }.name//Director role is not filled.
-            administrator == null || administrator == leader -> "administrator"
-            treasurer == null || treasurer == leader -> "treasurer"
-            overseer == null || overseer == leader -> "overseer"
-            else -> null
+    fun vacancyRole(): Role? {
+        return Role.entries.firstOrNull {
+            getCharByRole(it) == null
         }
     }
 

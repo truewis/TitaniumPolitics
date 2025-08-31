@@ -155,7 +155,7 @@ data class Information(
             creationTime = tgtState.time
         ).also { /*spread rumor*/
             tgtState.addInformation(it) //cpy.publicity = 5
-            it.knownTo += tgtState.pickRandomCharacter.name
+            it.knownTo += tgtState.pickRandomRealCharacter.name
         }
     }
 }

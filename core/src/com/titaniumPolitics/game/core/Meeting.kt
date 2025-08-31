@@ -72,10 +72,11 @@ class Meeting(
         voteResults = party.getVotes(candidates.toSet())
         onVoteResults.forEach { it() }
 
-        val leader = voteResults.maxByOrNull { it.value }?.key ?: ""
+        val winner =
+            voteResults.maxByOrNull { it.value }?.key ?: throw IllegalStateException("No winner found in the election.")
 
-        gameState.parties[involvedParty]!!.leader = leader
-        Logger.write("The leader of the party $involvedParty is elected as $leader.", Logger.LogLevel.INFO)
+        gameState.parties[involvedParty]!!.changeLeader(winner)
+        Logger.write("The leader of the party $involvedParty is elected as $winner.", Logger.LogLevel.INFO)
     }
 
     fun endMeeting(gameState: GameState) {

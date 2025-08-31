@@ -548,7 +548,6 @@
         "interior"
       ],
       "isBuildingIn": "mainControlRoom",
-      "manager": "Charles",
       "workHoursStart": 9,
       "workHoursEnd": 17
     },
@@ -601,7 +600,6 @@
       "characters": [
       ],
       "responsibleDivision": "bioengineering",
-      "manager": "DrPaik",
       "workHoursStart": 0,
       "workHoursEnd": 24
     },
@@ -659,7 +657,6 @@
       "characters": [
       ],
       "responsibleDivision": "bioengineering",
-      "manager": "DrHess",
       "workHoursStart": 0,
       "workHoursEnd": 24
     },
@@ -773,7 +770,6 @@
         "mining"
       ],
       "isBuildingIn": "excavationShaftA",
-      "manager": "Maisarah",
       "workHoursStart": 9,
       "workHoursEnd": 17
     },
@@ -842,7 +838,6 @@
       "characters": [
       ],
       "responsibleDivision": "mining",
-      "manager": "Metros",
       "workHoursStart": 9,
       "workHoursEnd": 17
     },
@@ -909,7 +904,6 @@
       "characters": [
       ],
       "responsibleDivision": "mining",
-      "manager": "Dion",
       "workHoursStart": 9,
       "workHoursEnd": 17
     },
@@ -1025,7 +1019,6 @@
         "infrastructure"
       ],
       "isBuildingIn": "outerBarrierWest",
-      "manager": "Alina",
       "workHoursStart": 9,
       "workHoursEnd": 17
     },
@@ -1060,7 +1053,6 @@
         }
       ],
       "responsibleDivision": "infrastructure",
-      "manager": "Rui",
       "workHoursStart": 0,
       "workHoursEnd": 24
     },
@@ -1185,7 +1177,6 @@
         "industry"
       ],
       "isBuildingIn": "constructionYardSouth",
-      "manager": "Hiroshi",
       "workHoursStart": 9,
       "workHoursEnd": 17
     },
@@ -1444,7 +1435,6 @@
       "characters": [
       ],
       "responsibleDivision": "infrastructure",
-      "manager": "Krailin",
       "workHoursStart": 0,
       "workHoursEnd": 24
     },
@@ -1535,7 +1525,6 @@
       "characters": [
       ],
       "responsibleDivision": "infrastructure",
-      "manager": "Vaeme",
       "workHoursStart": 0,
       "workHoursEnd": 24
     },
@@ -1598,7 +1587,6 @@
       "characters": [
       ],
       "responsibleDivision": "infrastructure",
-      "manager": "Yuhoa",
       "workHoursStart": 0,
       "workHoursEnd": 24
     },
@@ -1660,7 +1648,6 @@
       "characters": [
       ],
       "responsibleDivision": "infrastructure",
-      "manager": "Salvor",
       "workHoursStart": 0,
       "workHoursEnd": 24
     },
@@ -1825,7 +1812,6 @@
       "characters": [
       ],
       "responsibleDivision": "education",
-      "manager": "teacher1",
       "workHoursStart": 9,
       "workHoursEnd": 17
     },
@@ -1872,7 +1858,6 @@
       "characters": [
       ],
       "responsibleDivision": "education",
-      "manager": "teacher2",
       "workHoursStart": 9,
       "workHoursEnd": 17
     },
@@ -1916,7 +1901,6 @@
         "education"
       ],
       "isBuildingIn": "techSchool",
-      "manager": "Eugene",
       "workHoursStart": 9,
       "workHoursEnd": 17
     },
@@ -2047,7 +2031,6 @@
         "bioengineering"
       ],
       "isBuildingIn": "farm",
-      "manager": "Evan",
       "workHoursStart": 9,
       "workHoursEnd": 17
     },
@@ -2142,7 +2125,6 @@
         "safety"
       ],
       "isBuildingIn": "rescueStationNorth",
-      "manager": "Astinomis",
       "workHoursStart": 9,
       "workHoursEnd": 17
     },
@@ -2194,7 +2176,6 @@
       "characters": [
       ],
       "responsibleDivision": "safety",
-      "manager": "Muos",
       "workHoursStart": 0,
       "workHoursEnd": 24
     },
@@ -2244,7 +2225,6 @@
       "characters": [
       ],
       "responsibleDivision": "safety",
-      "manager": "Kae",
       "workHoursStart": 0,
       "workHoursEnd": 24
     },
@@ -2290,7 +2270,6 @@
       "characters": [
       ],
       "responsibleDivision": "safety",
-      "manager": "Peiyu",
       "workHoursStart": 0,
       "workHoursEnd": 24
     },
@@ -2337,7 +2316,6 @@
       "characters": [
       ],
       "responsibleDivision": "safety",
-      "manager": "Kasem",
       "workHoursStart": 0,
       "workHoursEnd": 24
     },
@@ -2384,7 +2362,6 @@
       "characters": [
       ],
       "responsibleDivision": "safety",
-      "manager": "Bahriye",
       "workHoursStart": 0,
       "workHoursEnd": 24
     },
@@ -2439,7 +2416,6 @@
       "characters": [
       ],
       "responsibleDivision": "interior",
-      "manager": "Agros",
       "workHoursStart": 9,
       "workHoursEnd": 17
     },
@@ -2522,7 +2498,6 @@
       "characters": [
       ],
       "responsibleDivision": "interior",
-      "manager": "Boulos",
       "workHoursStart": 9,
       "workHoursEnd": 17
     },
@@ -2616,7 +2591,6 @@
       "characters": [
       ],
       "responsibleDivision": "industry",
-      "manager": "Indu",
       "workHoursStart": 9,
       "workHoursEnd": 17
     },
@@ -2710,7 +2684,7 @@
   "parties": {
     "triumvirate": {
       "leader": "ctrler",
-      "members": [
+      "_members": [
         "Megaros",
         "ctrler",
         "observer"
@@ -2719,7 +2693,7 @@
     },
     "cabinet": {
       "leader": "Megaros",
-      "members": [
+      "_members": [
         "Megaros",
         "Charles",
         "Astinomis",
@@ -2734,7 +2708,7 @@
     "interior": {
       "type": "division",
       "leader": "Charles",
-      "members": [
+      "_members": [
         "Charles",
         "Boulos",
         "Agros"
@@ -2744,7 +2718,7 @@
     "mining": {
       "type": "division",
       "leader": "Maisarah",
-      "members": [
+      "_members": [
         "Maisarah",
         "Metros",
         "Dion"
@@ -2754,7 +2728,7 @@
     "education": {
       "type": "division",
       "leader": "Eugene",
-      "members": [
+      "_members": [
         "Eugene",
         "teacher1",
         "teacher2"
@@ -2764,7 +2738,7 @@
     "industry": {
       "type": "division",
       "leader": "Hiroshi",
-      "members": [
+      "_members": [
         "Hiroshi",
         "Indu"
       ],
@@ -2773,7 +2747,7 @@
     "safety": {
       "type": "division",
       "leader": "Astinomis",
-      "members": [
+      "_members": [
         "Astinomis",
         "Muos",
         "Kae",
@@ -2786,7 +2760,7 @@
     "bioengineering": {
       "type": "division",
       "leader": "Evan",
-      "members": [
+      "_members": [
         "Evan",
         "DrPaik",
         "DrHess"
@@ -2796,7 +2770,7 @@
     "infrastructure": {
       "type": "division",
       "leader": "Alina",
-      "members": [
+      "_members": [
         "Alina",
         "Rui",
         "Krailin",

@@ -314,20 +314,15 @@ class PoliticiansInfoUI(val gameState: GameState) : Table(defaultSkin), KTable {
                     setAlignment(Align.left)
                 }
                 row()
-                listOf("administrator", "treasurer", "overseer").forEach { role ->
-                    label(ReadOnly.prop(role), "docTitle") {
+                Party.Role.entries.forEach { role ->
+                    label(ReadOnly.prop(role.toString()), "docTitle") {
                         it.left()
                         it.padRight(10f)
                         setFontScale(0.5f)
                         setAlignment(Align.left)
                     }
 
-                    val char = when (role) {
-                        "administrator" -> workplace.administrator
-                        "treasurer" -> workplace.treasurer
-                        "overseer" -> workplace.overseer
-                        else -> null
-                    }
+                    val char = workplace.getCharByRole(role)
 
                     label(ReadOnly.charProp(char ?: "NotAssigned"), "docTitle") {
                         it.left()

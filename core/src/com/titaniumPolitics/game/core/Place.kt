@@ -62,8 +62,8 @@ class Place : GameStateElement() {
      */
     val numberOfBuildings
         get() = connectedPlaces.count { conn -> parent.places[conn]!!.isBuildingIn == this.name }
-    var manager: String? = null
-
+    val manager: String?
+        get() = workplaceParty?.leader
 
     val resources = Resources(positive = true)
     val maxResources: Resources

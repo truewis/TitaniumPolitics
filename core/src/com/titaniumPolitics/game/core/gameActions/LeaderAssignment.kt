@@ -2,6 +2,7 @@ package com.titaniumPolitics.game.core.gameActions
 
 import com.titaniumPolitics.game.core.GameEngine
 import com.titaniumPolitics.game.core.GameState
+import com.titaniumPolitics.game.core.Party
 
 @Deprecated("This class is deprecated. Division leaders are elected by the party members.")
 data class LeaderAssignment(override val sbjCharacter: String, override val tgtPlace: String) : GameAction() {
@@ -22,7 +23,7 @@ data class LeaderAssignment(override val sbjCharacter: String, override val tgtP
 
     //TODO: Leader is voted by the party members.
     override fun execute() {
-        parent.parties[targetParty]!!.leader = who
+        parent.parties[targetParty]!!.changeLeader(who)
         parent.characters[sbjCharacter]!!.frozen++
 
     }
