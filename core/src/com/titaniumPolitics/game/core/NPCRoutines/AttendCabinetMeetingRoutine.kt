@@ -39,12 +39,7 @@ class AttendCabinetMeetingRoutine(override val meetingName: String) : MeetingRou
 
 
             //Proof of work should have corresponding request. If there is no request or no relevant information, do not propose proof of work.
-            //Some information are more relevant than others.
-            if (meeting.agendas.none { it.type == AgendaType.PROOF_OF_WORK }) {
-                return NewAgenda(name, place).also {
-                    it.agenda = MeetingAgenda(AgendaType.PROOF_OF_WORK, name)
-                }
-            }
+            proposeProofOfWork(name, place)?.let { return it }
 
             //If there is a place in my division with a resource that is short of, and if there is other division with the resource, request the resource from that division.
             gState.places.values.forEach { place1 -> //TODO: right now, supply resource to any place regardless of the division. In the future, agents will not supply resources to hostile divisions.
@@ -59,7 +54,7 @@ class AttendCabinetMeetingRoutine(override val meetingName: String) : MeetingRou
                                     place1.name, name
                                 ) != null //Check connectivity so that the resource can be delivered.
                             }
-                                .filter { it.resources[res] > apparatus.currentConsumption[res]!! * place1.workHoursLength * 3 } //Check if the place has enough resource to supply for 3 work days.
+                                .filter { it.resources[res] > apparatus.currentConsumption[res] * place1.workHoursLength * 3 } //Check if the place has enough resource to supply for 3 work days.
                         if (resplace.isEmpty()) //Only if there is no place in my division with the resource, request the resource from other divisions.
                         {
                             val findResourceOutsideDivision =
@@ -68,7 +63,7 @@ class AttendCabinetMeetingRoutine(override val meetingName: String) : MeetingRou
                                         place1.name, name
                                     ) != null //Check connectivity so that the resource can be delivered.
                                 }
-                                    .filter { it.resources[res] > apparatus.currentConsumption[res]!! * place1.workHoursLength * 3 } //Check if the place has enough resource to supply for 3 work days.
+                                    .filter { it.resources[res] > apparatus.currentConsumption[res] * place1.workHoursLength * 3 } //Check if the place has enough resource to supply for 3 work days.
                             //Check if there is already a request for the resource.
                             if (findResourceOutsideDivision.isEmpty()) return@forEach //If there is no place with the resource, skip.
                             val tgtPlace = findResourceOutsideDivision.first()
@@ -88,7 +83,12 @@ class AttendCabinetMeetingRoutine(override val meetingName: String) : MeetingRou
                                             issuedBy = hashSetOf(name)
                                         ) //Created a command to transfer the resource.
                                     }
-                                    return NewAgenda(name, place).also { it.agenda = agenda }
+                                    NewAgenda(name, place, gState).also {
+                                        it.agenda = agenda
+                                        if (it.isValid()) {
+                                            return it
+                                        }
+                                    }
                                 }
                             }
 

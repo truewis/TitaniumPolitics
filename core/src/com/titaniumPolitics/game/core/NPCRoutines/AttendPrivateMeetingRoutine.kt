@@ -193,7 +193,7 @@ class AttendPrivateMeetingRoutine(
                     friend.key
                 ) > ReadOnly.const("FriendMutualityThreshold")
             )
-                return NewAgenda(name, place, gState).also { action ->
+                NewAgenda(name, place, gState).also { action ->
                     action.agenda = MeetingAgenda(AgendaType.PRAISE, name).also {
                         it.subjectParams["character"] = friend.key
                     }

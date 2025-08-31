@@ -86,8 +86,11 @@ class AttendDivisionMeetingRoutine(override val meetingName: String) : MeetingRo
                                 executeTime = gState.time
                             )
                         }
-                        return NewAgenda(name, place).also {
+                        return NewAgenda(name, place, gState).also {
                             it.agenda = agenda
+                            if (it.isValid()) {
+                                return it
+                            }
                         }
                     }
                 }

@@ -32,12 +32,13 @@ class AttendDivisionBudgetProposalRoutine(override val meetingName: String) : Me
                 else gState.places[party.home]!!.resources
                 //Propose a budget.
                 val standardBudget = scaleBudget(name, party.standardBudget, availableBudget)
-                return NewAgenda(name, place).also {
+                NewAgenda(name, place, gState).also {
                     it.agenda = MeetingAgenda(
                         type = AgendaType.BUDGET_PROPOSAL,
                         author = name,
                         attachedBudget = standardBudget
                     )
+                    if (it.isValid()) return it
                 }
             }
 

@@ -33,10 +33,9 @@ data class MeetingAgenda(
 
 
                 //If there are any interesting (to this character) news about the division, share it.
-
-                if (info.tgtTime in parent.day * ReadOnly.constInt("lengthOfDay")..(parent.day * ReadOnly.constInt(
+                if (info.tgtTime in parent.day * ReadOnly.constInt("lengthOfDay")..<parent.day * ReadOnly.constInt(
                         "lengthOfDay"
-                    ) + ReadOnly.constInt("lengthOfDay") - 1)
+                    ) + ReadOnly.constInt("lengthOfDay")
                 )
                     return newsPeople.sumOf { parent.characters[it]!!.infoPreference(info) } / newsPeople.size * sbjCharObj.stats.eScale//Share the most interesting news.
 
@@ -46,11 +45,7 @@ data class MeetingAgenda(
                 return parent.characters[subjectParams["character"]]!!.infoPreference(info) * sbjCharObj.stats.eScale
             }
 
-            AgendaType.REQUEST -> return meeting.currentCharacters.sumOf {
-                parent.characters[it]!!.actionValue(
-                    attachedRequest!!.action
-                )
-            } / meeting.currentCharacters.size * sbjCharObj.stats.lScale
+            AgendaType.REQUEST -> return if (info.tgtPlace == attachedRequest!!.action.tgtPlace) 10.0 else 0.0
 
             AgendaType.DENOUNCE -> {
                 return -parent.characters[subjectParams["character"]]!!.infoPreference(info) * sbjCharObj.stats.pScale

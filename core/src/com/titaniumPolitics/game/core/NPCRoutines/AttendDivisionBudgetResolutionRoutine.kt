@@ -24,14 +24,13 @@ class AttendDivisionBudgetResolutionRoutine(override val meetingName: String) : 
             if (party.leader == name && !party.isBudgetResolved) {
                 //Filter proposed budgets that can be resolved.
                 val validProposedBudgets = party.proposedBudgets.filter { entry ->
-                    NewAgenda(name, place).also {
+                    NewAgenda(name, place, gState).also {
                         it.agenda = MeetingAgenda(
                             type = AgendaType.BUDGET_RESOLUTION,
                             author = name
                         ).also {
                             it.subjectParams["whoseProposal"] = entry.key
                         }
-                        it.injectParent(gState)
                     }.isValid()
                 }
                 if (!validProposedBudgets.isEmpty()) {
@@ -40,13 +39,15 @@ class AttendDivisionBudgetResolutionRoutine(override val meetingName: String) : 
                         //Pick the budget from the person I have the highest mutuality with.
                         gState.getMutuality(name, it.key)
                     }
-                    return NewAgenda(name, place).also {
+                    NewAgenda(name, place, gState).also {
                         it.agenda = MeetingAgenda(
                             type = AgendaType.BUDGET_RESOLUTION,
                             author = name
                         ).also {
                             it.subjectParams["whoseProposal"] = whoseBudgetToResolve.key
                         }
+                        if (it.isValid())
+                            return it
                     }
                 }
 

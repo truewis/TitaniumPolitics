@@ -36,8 +36,10 @@ data class NewAgenda(override val sbjCharacter: String, override val tgtPlace: S
     override fun isValid(): Boolean {
         //People will be more interested in agendas related to their interest. However, this is handled in NPC class.
         val mt = parent.characters[sbjCharacter]!!.currentMeeting!!
+        if (reason(mt.agendas.size >= 4, "newAgenda-AgendaLimit"))
+            return false //Idea Draft: A meeting can have at most 4 agendas.
         when (agenda.type) {
-            AgendaType.PROOF_OF_WORK -> return true
+            AgendaType.PROOF_OF_WORK -> return agenda.attachedRequest != null
             //You have to choose which command you are responding to. The character who issued the command must be present in the meeting.
             //Other people may add supporting or disapproving information.
             AgendaType.BUDGET_PROPOSAL -> return mt.type == Meeting.MeetingType.BUDGET_PROPOSAL && with(parent) {
@@ -99,12 +101,21 @@ data class NewAgenda(override val sbjCharacter: String, override val tgtPlace: S
                 }
             }
 
-            AgendaType.PRAISE -> return true
+            //Can't praise or denounce the same character or party more than once in a meeting.
+            AgendaType.PRAISE, AgendaType.DENOUNCE -> return reason(mt.agendas.none { oldAgenda ->
+                oldAgenda.type in listOf(
+                    AgendaType.PRAISE,
+                    AgendaType.DENOUNCE
+                ) && oldAgenda.subjectParams["character"] == agenda.subjectParams["character"]
+            }, "newAgenda-RepeatPraiseDenounce")
 
-            AgendaType.DENOUNCE -> return true
-            AgendaType.PRAISE_PARTY -> return true
+            AgendaType.PRAISE_PARTY, AgendaType.DENOUNCE_PARTY -> return reason(mt.agendas.none { oldAgenda ->
+                oldAgenda.type in listOf(
+                    AgendaType.PRAISE_PARTY,
+                    AgendaType.DENOUNCE_PARTY
+                ) && oldAgenda.subjectParams["party"] == agenda.subjectParams["party"]
+            }, "newAgenda-RepeatPraiseDenounce")
 
-            AgendaType.DENOUNCE_PARTY -> return true
             AgendaType.REQUEST -> return agenda.attachedRequest != null && mt.currentCharacters.containsAll(agenda.attachedRequest!!.issuedTo) &&
                     agenda.attachedRequest!!.let {
                         it.issuedTo.intersect(

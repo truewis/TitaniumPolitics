@@ -1,8 +1,12 @@
 package com.titaniumPolitics.game.core.NPCRoutines
 
 import com.titaniumPolitics.game.core.AgendaType
+import com.titaniumPolitics.game.core.InformationType
 import com.titaniumPolitics.game.core.MeetingAgenda
+import com.titaniumPolitics.game.core.Party
+import com.titaniumPolitics.game.core.Place
 import com.titaniumPolitics.game.core.ReadOnly
+import com.titaniumPolitics.game.core.Request
 import com.titaniumPolitics.game.core.gameActions.*
 import kotlinx.serialization.Serializable
 
@@ -23,14 +27,53 @@ class LeadCabinetMeetingRoutine(override val meetingName: String) : MeetingRouti
             //If there is a command that is within the set time window, issued party is trusted enough, and seems to be executable at some place(AvailableActions), start execution routine.
             //Note that the command may not be valid even if it in AvailableActions list. For example, if the character is already at the place, move command is not valid.
             executeRequestInMeeting(name, place)?.let { return it }
-
-
-            //1. No salary in cabinet meeting, so no need to support salary agenda.
-
-
+            //1. Pay the salary if not paid yet.
+            Salary(name, place).also {
+                it.injectParent(gState)
+                if (it.isValid()) return it
+            }
             //2. request information about the commands issued today, by putting ProofOfWork agenda forward.
             proposeProofOfWork(name, place)?.let { return it }
-            //3. Praise or criticize the cabinet members, if there is any relevant information.
+
+            //Warning: Some apparatus info may be missing because this only checks if there is at least one apparatus information about the place.
+            fun queryInfo(queryPl: Place, type: InformationType): GameAction? {
+                if (gState.informations.values.none { info ->
+                        info.tgtPlace == queryPl.name && info.type == type && name in info.knownTo
+                    }) {
+                    val agenda = MeetingAgenda(AgendaType.REQUEST, name).apply {
+                        attachedRequest = Request(
+                            Examine(
+                                sbjCharacter = meeting.involvedParty!!,
+                                tgtPlace = queryPl.name,
+                                what = type
+                            ),
+                            issuedTo = (party.members.toList() - name).toHashSet(),
+                            issuedBy = hashSetOf(name),
+                            executeTime = gState.time
+                        )
+                    }
+                    NewAgenda(name, place, gState).also {
+                        it.agenda = agenda
+                        if (it.isValid())
+                            return it
+                    }
+                }
+                return null
+            }
+            //2.1. If there is a place within my division that I don't have resource information about, request the examination of that place.
+            if (party.type == Party.Type.DIVISION)
+                party.divisionPlaces.forEach { divPlace ->
+                    queryInfo(divPlace, InformationType.RESOURCES)?.let { return it }
+                    queryInfo(divPlace, InformationType.HUMAN_RESOURCES)?.let { return it }
+                    queryInfo(divPlace, InformationType.APPARATUS)?.let { return it }
+                }
+            if (party.type == Party.Type.WORKPLACE)
+                party.workplace.let { divPlace ->
+                    queryInfo(divPlace, InformationType.RESOURCES)?.let { return it }
+                    queryInfo(divPlace, InformationType.HUMAN_RESOURCES)?.let { return it }
+                    queryInfo(divPlace, InformationType.APPARATUS)?.let { return it }
+                }
+            //3. Praise or criticize the division members, if there is any relevant information.
             //It should be noted that the content of the information is not checked here. Think about this later.
             party.members.forEach { member ->
                 if (member != name && gState.informations.values.any {
@@ -41,21 +84,25 @@ class LeadCabinetMeetingRoutine(override val meetingName: String) : MeetingRouti
                     //praise if the mutuality is high, criticize if the mutuality is low.
                     val mutuality = gState.getMutuality(name, member)
                     if (mutuality > 80) {
-                        return NewAgenda(name, place).also {
+                        NewAgenda(name, place, gState).also {
                             it.agenda =
                                 MeetingAgenda(
                                     AgendaType.PRAISE,
                                     name,
                                     subjectParams = hashMapOf("character" to member)
                                 )
+                            if (it.isValid())
+                                return it
                         }
                     } else if (mutuality < 20) {
-                        return NewAgenda(name, place).also {
+                        NewAgenda(name, place, gState).also {
                             it.agenda =
                                 MeetingAgenda(
                                     AgendaType.DENOUNCE, name,
                                     subjectParams = hashMapOf("character" to member)
                                 )
+                            if (it.isValid())
+                                return it
                         }
                     }
                 }//TODO: there must be a cooldown, stored in party class.
@@ -71,10 +118,11 @@ class LeadCabinetMeetingRoutine(override val meetingName: String) : MeetingRouti
                     enemyParty
                 ) < ReadOnly.const("EnemyPartyMutualityThreshold")
             )
-                return NewAgenda(name, place).also { action ->
+                NewAgenda(name, place, gState).also { action ->
                     action.agenda = MeetingAgenda(AgendaType.DENOUNCE_PARTY, name).also {
                         it.subjectParams["party"] = enemyParty
                     }
+                    if (action.isValid()) return action
                 }
             //6. Cabinet does not manage resources, so no need to adjust resource production.
 

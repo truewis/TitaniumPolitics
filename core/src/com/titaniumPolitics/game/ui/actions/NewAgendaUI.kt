@@ -30,7 +30,7 @@ class NewAgendaUI(val gameState: GameState, actionCallback: (GameAction) -> Unit
             field = value
             if (value != null)
                 submitButton.refresh(
-                    NewAgenda(this.subject, this.tgtPlace).apply { agenda = value; injectParent(gameState) })
+                    NewAgenda(this.subject, this.tgtPlace, gameState).apply { agenda = value })
 
 
         }

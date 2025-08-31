@@ -13,11 +13,9 @@ class LeadDivisionMeetingRoutine(override val meetingName: String) : MeetingRout
 
     override fun executeInMeeting(name: String, place: String): GameAction {
         val character = gState.characters[name]!!
-        val conf =
-            character.currentMeeting!!
-        val party = gState.parties[conf.involvedParty]!!
+        val party = gState.parties[meeting.involvedParty]!!
         //If not speaker, wait if the mutuality to the speaker is high. Otherwise, if possible, interrupt the speaker.
-        if (conf.currentSpeaker != name) {
+        if (meeting.currentSpeaker != name) {
             return interceptCondition(name, place)
         } else //If it is my turn to speak
         {
@@ -41,7 +39,7 @@ class LeadDivisionMeetingRoutine(override val meetingName: String) : MeetingRout
                     val agenda = MeetingAgenda(AgendaType.REQUEST, name).apply {
                         attachedRequest = Request(
                             Examine(
-                                sbjCharacter = conf.involvedParty!!,
+                                sbjCharacter = meeting.involvedParty!!,
                                 tgtPlace = queryPl.name,
                                 what = type
                             ),
@@ -106,13 +104,13 @@ class LeadDivisionMeetingRoutine(override val meetingName: String) : MeetingRout
                 }//TODO: there must be a cooldown, stored in party class.
             }
             //3. If sufficiently discontent with a current meeting attendant, and have an information to fire him, fire the person.
-            conf.currentCharacters.forEach { char ->
+            meeting.currentCharacters.forEach { char ->
                 if (char != name && gState.getMutNorm(name, char) < -0.5) {
                     val agenda = MeetingAgenda(AgendaType.FIRE_MANAGER, name).also {
                         it.subjectParams["character"] = char
                     }
                     if (character.preparedInfoKeys.any {
-                            agenda.effectivity(gState, conf, gState.informations[it]!!, character) > 0
+                            agenda.effectivity(gState, meeting, gState.informations[it]!!, character) > 0
                         }) {
                         NewAgenda(name, place, gState).also {
                             it.agenda = agenda
@@ -127,10 +125,10 @@ class LeadDivisionMeetingRoutine(override val meetingName: String) : MeetingRout
             //However, right now, the resource information is available to everyone immediately, no need to share.
 
             //5. Criticize the common enemies of the division. It is determined by the party with the low mutuality with the division.
-            val enemyParty = gState.parties.values.filter { it.name != conf.involvedParty }
-                .minBy { gState.getPartyMutuality(it.name, conf.involvedParty!!) }.name
+            val enemyParty = gState.parties.values.filter { it.name != meeting.involvedParty }
+                .minBy { gState.getPartyMutuality(it.name, meeting.involvedParty!!) }.name
             if (gState.getPartyMutuality(
-                    conf.involvedParty!!,
+                    meeting.involvedParty!!,
                     enemyParty
                 ) < ReadOnly.const("EnemyPartyMutualityThreshold")
             )
@@ -142,7 +140,7 @@ class LeadDivisionMeetingRoutine(override val meetingName: String) : MeetingRout
                         return action
                 }
             //6. If the world is short of resources and we have an apparatus producing that, increase the production. //TODO: this decision must depend on a personal parameter
-            if (conf.involvedParty!!.contains("workplace"))
+            if (meeting.involvedParty!!.contains("workplace"))
                 adjustResourceProd(name, place)?.also { return it }
             //Adjust resource production request is only issued in workplace meetings.
             //In director meetings, the resource production request is not issued, as the director does not manage resources.s
@@ -153,7 +151,7 @@ class LeadDivisionMeetingRoutine(override val meetingName: String) : MeetingRout
             //8. End meeting if attention is low.
             endMeetingIfLowAttention(name, place)?.let { return it }
             //If nothing else to talk about, end the speech. The next speaker is the character with the highest mutuality.
-            val nextSpeaker = conf.currentCharacters.minus(name)
+            val nextSpeaker = meeting.currentCharacters.minus(name)
                 .maxByOrNull { gState.getMutuality(name, it) }
                 ?: return EndMeeting(name, place)
             return EndSpeech(name, place, nextSpeaker, gState)

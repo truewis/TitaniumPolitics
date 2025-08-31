@@ -122,9 +122,9 @@ sealed class MeetingRoutine : Routine() {
         //If speaker, try supporting proof of work if I am involved.
         //Proof of work should have corresponding request. If there is no request or no relevant information, do not propose proof of work.
         if (meeting.agendas.any {
-                it.type == AgendaType.PROOF_OF_WORK && (it.attachedRequest == null /*If request is null, proof of work is about the general attire, so support it anyways.*/ || (name in it.attachedRequest!!.issuedBy && it.attachedRequest!!.issuedTo.intersect(
+                it.type == AgendaType.PROOF_OF_WORK && (name in it.attachedRequest!!.issuedBy && it.attachedRequest!!.issuedTo.intersect(
                     meeting.currentCharacters
-                ).isNotEmpty()))
+                ).isNotEmpty())
             }) {
 
             //If we haven't tried this branch in the current routine
@@ -242,7 +242,7 @@ sealed class MeetingRoutine : Routine() {
             val action = askForValuableAction(bestActionIssuer, name) ?: return null
 
             if (gState.characters[bestActionIssuer]!!.actionValue(action) >= totalValue) {
-                return NewAgenda(name, place).also {
+                NewAgenda(name, place, gState).also {
                     it.agenda = MeetingAgenda(
                         AgendaType.REQUEST,
                         author = name,
@@ -252,6 +252,8 @@ sealed class MeetingRoutine : Routine() {
                             issuedBy = hashSetOf(name)
                         )
                     )
+                    if (it.isValid())
+                        return it
                 }
             }
         }

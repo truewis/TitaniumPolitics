@@ -59,21 +59,23 @@ class AttendTriumvirateRoutine(override val meetingName: String) : MeetingRoutin
                     //praise if the mutuality is high, criticize if the mutuality is low.
                     val mutuality = gState.getMutuality(name, member)
                     if (mutuality > 80) {
-                        return NewAgenda(name, place).also {
+                        NewAgenda(name, place, gState).also {
                             it.agenda =
                                 MeetingAgenda(
                                     AgendaType.PRAISE,
                                     name,
                                     subjectParams = hashMapOf("character" to member)
                                 )
+                            if (it.isValid()) return it
                         }
                     } else if (mutuality < 20) {
-                        return NewAgenda(name, place).also {
+                        NewAgenda(name, place, gState).also {
                             it.agenda =
                                 MeetingAgenda(
                                     AgendaType.DENOUNCE, name,
                                     subjectParams = hashMapOf("character" to member)
                                 )
+                            if (it.isValid()) return it
                         }
                     }
                 }//TODO: there must be a cooldown, stored in party class.
@@ -89,10 +91,11 @@ class AttendTriumvirateRoutine(override val meetingName: String) : MeetingRoutin
                     enemyParty
                 ) < ReadOnly.const("EnemyPartyMutualityThreshold")
             )
-                return NewAgenda(name, place).also { action ->
+                return NewAgenda(name, place, gState).also { action ->
                     action.agenda = MeetingAgenda(AgendaType.DENOUNCE_PARTY, name).also {
                         it.subjectParams["party"] = enemyParty
                     }
+                    if (action.isValid()) return action
                 }
             //6. Triumvirate does not manage resources, so no need to adjust resource production.
 

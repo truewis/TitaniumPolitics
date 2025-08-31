@@ -46,13 +46,15 @@ class LeadDivisionElectionRoutine(override val meetingName: String) : MeetingRou
             val nominee = gState.characters.keys.filter { it != name && party.members.contains(it) }
                 .maxByOrNull { gState.getMutuality(name, it) }!!
             if (meeting.agendas.none { it.type == AgendaType.NOMINATE && it.subjectParams["character"] == nominee } && meeting.time == gState.time) {
-                return NewAgenda(name, place).also {
+                NewAgenda(name, place, gState).also {
                     it.agenda =
                         MeetingAgenda(
                             AgendaType.NOMINATE,
                             author = name,
                             subjectParams = hashMapOf("character" to nominee)
                         )
+                    if (it.isValid())
+                        return it
                 }
             }
             //otherwise, support the nominee.
