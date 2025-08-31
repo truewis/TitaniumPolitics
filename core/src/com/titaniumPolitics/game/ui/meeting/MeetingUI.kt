@@ -121,14 +121,14 @@ class MeetingUI(var gameState: GameState) : Table(defaultSkin), KTable {
             }
         }
         discussionTable = stack {
-            it.grow()
+            it.grow().size(1920f, 1080f)
             add(this@MeetingUI.meetingInfoUI)
             add(this@MeetingUI.electionUIContainer)
             container(this@MeetingUI.speakerPortrait) {
-                size(450f, 600f)
+                this.size(450f, 600f)
             }
             container(this@MeetingUI.currentAttention) {
-                padTop(300f)
+                this.padTop(300f)
             }
         }
 
@@ -138,23 +138,22 @@ class MeetingUI(var gameState: GameState) : Table(defaultSkin), KTable {
     //This function can be used for both meetings and conferences
     fun refresh(meeting: Meeting) {
         meetingInfoUI.clear()
-        meetingInfoUI.apply {
-            top()
-            pad(10f)
+        meetingInfoUI.also {
+            it.top()
+            it.pad(10f)
             meeting.involvedParty?.run {
-                label(
+                it.label(
                     this@MeetingUI.gameState.meetingName(this@MeetingUI.gameState.player.currentMeeting!!),
                     "docTitle"
                 )
                 val party = this@MeetingUI.gameState.parties[this]!!
                 if (party.type == Party.Type.DIVISION) {
-                    row()
-                    add(DivisionUI(party, 600f))
+                    it.row()
+                    it.add(DivisionUI(party, 600f))
                 }
             }
-            row()
-            add().grow()
-            debug()
+            it.row()
+            it.add().size(1920f, 600f)
         }
         //If the meeting is a division leader election, set the election UI after the candidates are set.
         if (meeting.type == Meeting.MeetingType.DIVISION_LEADER_ELECTION)
