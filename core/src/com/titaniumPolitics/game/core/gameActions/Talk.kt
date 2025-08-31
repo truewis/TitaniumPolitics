@@ -1,5 +1,6 @@
 package com.titaniumPolitics.game.core.gameActions
 
+import com.titaniumPolitics.game.core.Character
 import com.titaniumPolitics.game.core.GameEngine
 import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.core.Meeting
@@ -70,6 +71,8 @@ data class Talk(
     }
 
     override fun isValid(): Boolean {
+        if (sbjCharObj.type == Character.Type.ANON)
+            return false
         //The subject character must not be in any meeting, otherwise they are too busy to talk.
         if (sbjCharObj.currentMeeting != null)
             return false

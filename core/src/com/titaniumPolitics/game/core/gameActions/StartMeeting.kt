@@ -1,5 +1,6 @@
 package com.titaniumPolitics.game.core.gameActions
 
+import com.titaniumPolitics.game.core.Character
 import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.core.Meeting
 import com.titaniumPolitics.game.debugTools.Logger
@@ -54,6 +55,8 @@ data class StartMeeting(override val sbjCharacter: String, override val tgtPlace
     }
 
     override fun isValid(): Boolean {
+        if (sbjCharObj.type == Character.Type.ANON)
+            return false
         if (sbjCharObj.currentMeeting != null) {
             Logger.write(
                 "Cannot start a meeting $targetMeeting while already in one: ${sbjCharObj.currentMeeting}",
