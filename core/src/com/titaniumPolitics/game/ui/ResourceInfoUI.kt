@@ -7,6 +7,7 @@ import com.badlogic.gdx.utils.Align
 import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.core.Information
 import com.titaniumPolitics.game.core.ReadOnly
+import com.titaniumPolitics.game.ui.widget.InformationSourceUI
 import com.titaniumPolitics.game.ui.widget.ResourceDisplayUI
 import com.titaniumPolitics.game.ui.widget.WindowUI
 import ktx.scene2d.label
@@ -29,16 +30,11 @@ class ResourceInfoUI : WindowUI("ResourceInfoTitle") {
     fun refresh(information: Information) {
         dataTable.clear()
         dataTable.apply {
-
-            add(label("Author: ${information.author}") { setAlignment(Align.center) })
-            row()
-            add(label("Type: ${information.type}") { setAlignment(Align.center) })
-            row()
-            add(label("Target Time: ${GameState.formatTime(information.tgtTime)}") { setAlignment(Align.center) })
-            row()
             add(label("Target Place: ${ReadOnly.placeProp(information.tgtPlace)}") { setAlignment(Align.center) })
             row()
             add(ResourceDisplayUI(information.resources)).size(500f, 300f).fill()
+            row()
+            add(InformationSourceUI(information)).fill()
         }
 
     }

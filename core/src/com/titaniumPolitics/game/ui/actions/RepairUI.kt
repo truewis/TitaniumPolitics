@@ -3,6 +3,7 @@ package com.titaniumPolitics.game.ui.actions
 
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.scenes.scene2d.Actor
+import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane
 import com.badlogic.gdx.scenes.scene2d.ui.Stack
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener
@@ -15,6 +16,7 @@ import com.titaniumPolitics.game.debugTools.Logger
 import com.titaniumPolitics.game.ui.CapsuleStage
 import com.titaniumPolitics.game.ui.widget.ActionSheetUI
 import com.titaniumPolitics.game.ui.widget.DescriptionLabel
+import com.titaniumPolitics.game.ui.widget.InformationSourceUI
 import com.titaniumPolitics.game.ui.widget.ResourceDisplayUI
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
@@ -25,19 +27,32 @@ class RepairUI(val gameState: GameState, actionCallback: (GameAction) -> Unit) :
     ActionSheetUI("RepairTitle", gameState, actionCallback) {
     val sbjChar = gameState.characters[subject]!!
     val agendaDetailStack: Stack
-    val onUpdateSelectedApp = arrayListOf<(Apparatus) -> Unit>()
-    var selectedApp: Apparatus? = null
+    val onUpdateSelectedApp = arrayListOf<(Information) -> Unit>()
+    var selectedApp: Information? = null
         set(value) {
             if (value == null) throw Exception("")
             field = value
             onUpdateSelectedApp.forEach { it(value) }
-            action = Repair(sbjChar.name, sbjChar.place.name, value.ID, gameState)
+            action = Repair(sbjChar.name, sbjChar.place.name, value.tgtApparatus!!, gameState)
             submitButton.refresh(action)
         }
     var action =
         Repair(sbjChar.name, sbjChar.place.name, gameState.places[tgtPlace]!!.apparatuses.first().ID, gameState)
 
     private var agendaSelectBox: Table
+    private val noSuitableAppLabel = table {
+        label("No suitable apparatus to repair.", "docTitle") {
+            it.fill()
+            setAlignment(Align.center)
+            setFontScale(0.5f)
+        }
+        row()
+        label("Make sure there is an apparatus that is damaged and you have the information of it.", "description") {
+            it.fill()
+            setAlignment(Align.center)
+            setFontScale(0.3f)
+        }
+    }
     val apparatusDetailTable = scene2d.table {
 
         val requiredRes = ResourceDisplayUI()
@@ -63,10 +78,11 @@ class RepairUI(val gameState: GameState, actionCallback: (GameAction) -> Unit) :
             this@RepairUI.onUpdateSelectedApp += {
                 name.setText(ReadOnly.appProp(it.name))
                 desc.label.setText(ReadOnly.appProp(it.name + "-desc"))
-                dur.setText(ReadOnly.prop("durability") + ": " + String.format("%.1f", it.durability))
-                requiredRes.current = (
-                        it.requiredResourcePerRepair[Repair.checkRepairLevel(it).first]
-                        )
+                dur.setText(ReadOnly.prop("durability") + ": " + String.format("%.1f", it.variables["durability"]!!))
+                val realApp = this@RepairUI.gameState.getApparatus(it.tgtApparatus!!)
+                requiredRes.current =
+                    realApp.requiredResourcePerRepair[Repair.checkRepairLevel(realApp).first]
+
                 requiredRes.refresh()
 
             }
@@ -75,14 +91,18 @@ class RepairUI(val gameState: GameState, actionCallback: (GameAction) -> Unit) :
 
 
     }
+    val sp: ScrollPane
     val st = scene2d.stack {
         table {
-            scrollPane {
-                it.size(1000f, 400f)
-                setScrollingDisabled(false, true)
-                this@RepairUI.agendaSelectBox =
+            stack {
+                it.size(900f, 400f)
+                this@RepairUI.sp = scrollPane {
+                    setScrollingDisabled(false, true)
+                    this@RepairUI.agendaSelectBox =
 
-                    buttonGroup(1, 1)
+                        buttonGroup(1, 1)
+                }
+                add(this@RepairUI.noSuitableAppLabel)
             }
 
             row()
@@ -127,35 +147,47 @@ class RepairUI(val gameState: GameState, actionCallback: (GameAction) -> Unit) :
     fun refreshAvailableAgendaList(gameState: GameState) {
         val tgtPlaceObj = gameState.places[tgtPlace]!!
         tgtPlaceObj.apparatuses.forEach { app ->
-            val t = scene2d.button("check") {
-                //TODO:Agenda Tooltip addListener(ActionTooltipUI(tobj))
-                container {
-                    it.size(400f)
-                    it.fill()
-                    it.align(Align.center)
-                    image("CogGrunge") {
-                        try {
-                            drawable = TextureRegionDrawable(
-                                CapsuleStage.Companion.instance.assetManager.get( //TODO: Temporary solution for portrait image loading. PortraitUI does not have a stage.
-                                    ReadOnly.appJson[app.name]!!.jsonObject["image"]!!.jsonPrimitive.content,
-                                    Texture::class.java
-                                )!!
-                            )
-                        } catch (e: Exception) {
-                            Logger.write("Portrait Image Error: ${app.name}", Logger.LogLevel.INFO)
+            gameState.informations.values.firstOrNull {
+                it.type == InformationType.APPARATUS
+                it.tgtApparatus == app.ID && gameState.playerName in it.knownTo
+            }?.also { appInfo ->
+                val t = scene2d.button("check") {
+                    //TODO:Agenda Tooltip addListener(ActionTooltipUI(tobj))
+                    container {
+                        it.size(400f)
+                        it.fill()
+                        it.align(Align.center)
+                        image("CogGrunge") {
+                            try {
+                                drawable = TextureRegionDrawable(
+                                    CapsuleStage.Companion.instance.assetManager.get( //TODO: Temporary solution for portrait image loading. PortraitUI does not have a stage.
+                                        ReadOnly.appJson[app.name]!!.jsonObject["image"]!!.jsonPrimitive.content,
+                                        Texture::class.java
+                                    )!!
+                                )
+                            } catch (e: Exception) {
+                                Logger.write("Portrait Image Error: ${app.name}", Logger.LogLevel.INFO)
+                            }
+
                         }
-
                     }
+                    row()
+                    add(InformationSourceUI(appInfo)).fill()
+                    addListener(object : ChangeListener() {
+                        override fun changed(event: ChangeEvent?, actor: Actor?) {
+                            this@RepairUI.selectedApp = appInfo
+                        }
+                    })
+
                 }
-                addListener(object : ChangeListener() {
-                    override fun changed(event: ChangeEvent?, actor: Actor?) {
-                        this@RepairUI.selectedApp = app
-                    }
-                })
-
+                agendaSelectBox.add(t).size(400f).fill()
             }
-            agendaSelectBox.add(t).size(400f).fill()
+
         }
+        if (agendaSelectBox.children.size == 0) {
+            sp.isVisible = false
+        } else
+            sp.isVisible = true
     }
 
 

@@ -14,6 +14,7 @@ import com.titaniumPolitics.game.debugTools.Logger
 import com.titaniumPolitics.game.ui.AlertUI
 import com.titaniumPolitics.game.ui.ProgressBackgroundUI
 import com.titaniumPolitics.game.ui.widget.DescriptionLabel
+import com.titaniumPolitics.game.ui.widget.InformationSourceUI
 import com.titaniumPolitics.game.ui.widget.ResourceDisplayUI
 import com.titaniumPolitics.game.ui.widget.TitleLabel
 import ktx.scene2d.button
@@ -100,16 +101,8 @@ class PlaceMarkerWindowUI(var gameState: GameState, var owner: MapUI) : Table() 
                 wrap = true
             }
             val rdUI = ResourceDisplayUI()
-            val timeLabel = scene2d.label("", "docTitle") {
-                setFontScale(0.2f)
-                setAlignment(Align.left)
-                color = Color.WHITE
-            }
 
             val tb = table {
-                add(rdUI).grow()
-                row()
-                add(timeLabel).growX()
             }
             this@PlaceMarkerWindowUI.onRefresh += {
                 //Update the resource information label with the most recent information about the place.
@@ -121,9 +114,14 @@ class PlaceMarkerWindowUI(var gameState: GameState, var owner: MapUI) : Table() 
                 }.maxByOrNull { it.tgtTime }?.let { info ->
                     rdUI.current = info.resources
                     rdUI.refresh()
-                    timeLabel.setText(GameState.formatTime(info.tgtTime))
                     shortLabel.isVisible = false
                     tb.isVisible = true
+                    tb.clear()
+                    tb.apply {
+                        this.add(rdUI).growX().fill()
+                        row()
+                        this.add(InformationSourceUI(info)).growX()
+                    }
                 }
                     ?: run {
                         //If no information is available, display a message.

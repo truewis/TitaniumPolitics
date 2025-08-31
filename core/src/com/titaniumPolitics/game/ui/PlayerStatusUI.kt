@@ -102,8 +102,8 @@ class PlayerStatusUI(gameState: GameState) : Table(defaultSkin), KTable {
                         y: Float
                     ) {
                         if (event?.button == 0) { // Left click
-                            CharacterInfoUI.instance.refresh(gameState.player)
-                            CharacterInfoUI.instance.isVisible = true
+                            CharacterDetailUI.instance.refresh(gameState.player)
+                            CharacterDetailUI.instance.isVisible = true
                         }
                     }
                 }

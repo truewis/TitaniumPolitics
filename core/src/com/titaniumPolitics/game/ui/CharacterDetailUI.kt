@@ -1,33 +1,22 @@
 package com.titaniumPolitics.game.ui
 
 
-import com.badlogic.gdx.graphics.Color.BLACK
-import com.badlogic.gdx.graphics.Color.DARK_GRAY
-import com.badlogic.gdx.graphics.Color.LIGHT_GRAY
-import com.badlogic.gdx.graphics.Color.WHITE
-import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.scenes.scene2d.ui.*
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable
 
 import com.badlogic.gdx.utils.Align
-import com.rafaskoberg.gdx.typinglabel.TypingLabel
 import com.titaniumPolitics.game.core.Character
 
-import com.titaniumPolitics.game.core.Information
 import com.titaniumPolitics.game.core.ReadOnly
-import com.titaniumPolitics.game.debugTools.Logger
 import com.titaniumPolitics.game.ui.widget.DescriptionLabel
 import com.titaniumPolitics.game.ui.widget.DivisionUI
 import com.titaniumPolitics.game.ui.widget.SimplePortraitUI
 import com.titaniumPolitics.game.ui.widget.StatRadarGraph
 import com.titaniumPolitics.game.ui.widget.WindowUI
-import kotlinx.serialization.json.jsonObject
-import kotlinx.serialization.json.jsonPrimitive
 
 import ktx.scene2d.*
 
 
-class CharacterInfoUI : WindowUI("CharacterInfoTitle") {
+class CharacterDetailUI : WindowUI("CharacterInfoTitle") {
     private val dataTable = scene2d.table()
 
     init {
@@ -84,7 +73,7 @@ class CharacterInfoUI : WindowUI("CharacterInfoTitle") {
 
     companion object {
         //Singleton
-        lateinit var instance: CharacterInfoUI
+        lateinit var instance: CharacterDetailUI
     }
 
 

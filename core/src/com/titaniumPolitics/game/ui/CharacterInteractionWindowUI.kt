@@ -77,8 +77,8 @@ class CharacterInteractionWindowUI(var gameState: GameState) :
 
         addListener(object : com.badlogic.gdx.scenes.scene2d.utils.ClickListener() {
             override fun clicked(event: com.badlogic.gdx.scenes.scene2d.InputEvent?, x: Float, y: Float) {
-                CharacterInfoUI.instance.refresh(this@CharacterInteractionWindowUI.gameState.characters[this@CharacterInteractionWindowUI.characterDisplayed]!!)
-                CharacterInfoUI.instance.isVisible = true
+                CharacterDetailUI.instance.refresh(this@CharacterInteractionWindowUI.gameState.characters[this@CharacterInteractionWindowUI.characterDisplayed]!!)
+                CharacterDetailUI.instance.isVisible = true
             }
         }
         )

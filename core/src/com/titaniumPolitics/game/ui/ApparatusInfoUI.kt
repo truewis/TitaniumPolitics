@@ -15,6 +15,7 @@ import com.titaniumPolitics.game.core.Information
 import com.titaniumPolitics.game.core.ReadOnly
 import com.titaniumPolitics.game.debugTools.Logger
 import com.titaniumPolitics.game.ui.widget.DescriptionLabel
+import com.titaniumPolitics.game.ui.widget.InformationSourceUI
 import com.titaniumPolitics.game.ui.widget.WindowUI
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
@@ -112,15 +113,7 @@ class ApparatusInfoUI : WindowUI("ApparatusInfoTitle") {
             })
 
             row()
-            label("${ReadOnly.prop("author")}: ${information.author}", "docTitle") {
-                setAlignment(Align.center)
-                setFontScale(0.3f)
-            }
-            row()
-            label("${ReadOnly.prop("reportTime")}: ${GameState.formatTime(information.creationTime)}", "docTitle") {
-                setAlignment(Align.center)
-                setFontScale(0.3f)
-            }
+            add(InformationSourceUI(information)).fill()
 
         }
 
