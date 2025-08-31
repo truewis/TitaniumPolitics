@@ -1,0 +1,15 @@
+ENTER Rui
+ENTER Alina
+ENTER Salvor
+Alina: Just heard this from the cabinet meeting. We are running out of ammonia supply fast. In fact, we only have about a week's worth of it left until the farm operation will be impacted.
+Salvor: I sincerely apologise for the delay. But all the plumbers are occupied right now.
+Alina: Huh? How so? I definitely said that it is the top priority of the division to fix the ammonia system.
+Salvor: Well, last time I checked, Rui booked them.
+Alina: Rui, is that true? I thought the impact barrier doesn't need any more plumbers.
+Rui: Sorry, I diverted them to fix the hospital plumbing system.
+Alina: Well, that is a good deed, but definitely not what I ordered. Who told you to do so?
+Rui: Well, I did it by myself. But I thought there is an ample inventory of ammonia, because a director in the interior division told me so.
+Alina: Oh you mean Agros, whose family runs a chemical retail business? Yeah, the ammonia prices are soaring, aren't they? And their business definitely has an ample amount of them, it's just not available for rest of us.
+Rui: (Shit......)
+Alina: Well, now it is your problem Rui. Get the ammonia system fixed within two days. You'll be in a big trouble otherwise, and I won't be able to cover this up.
+Rui: Understood, ma'am.

@@ -6,7 +6,7 @@ import kotlinx.serialization.Serializable
 class Event_ObserverIntroAfterMeeting2 : EventObject("Mysterious orders from the Observer.", true) {
 
     override fun exec(a: Int, b: Int) {
-        if (parent.player.place.name == "spacePort" && parent.player.currentMeeting?.currentCharacters?.contains("observer") == true) {
+        if (parent.player.place.name == "observatory" && parent.player.currentMeeting?.currentCharacters?.contains("observer") == true) {
             onPlayDialogue("ObserverIntroAfterMeeting2")
             deactivate()
         }

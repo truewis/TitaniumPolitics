@@ -1,0 +1,15 @@
+ENTER Rui
+ENTER Agros
+Agros: Hey, think we've met before. You're our messiah to fix the eastern barrier?
+Rui, smile: Well, I guess these days messiahs are hired in a contract. But yes, I work in the infrastructure division.
+Agros: Good. I am the director in the interior division. How's your new job? Will we live to see another quarter?
+Rui: I definitely hope so.
+Agros: That being said, may I ask you to do me a favor?
+Rui: Can't promise, but I can try.
+Agros: Is it true that the ammonia production system is under repair?
+Rui: Well, I can't confirm that news. I am not responsible for that system.
+Agros: Could you divert that workforce to fixing the hospital plumbing system instead? We have plenty of ammonia in inventory already. I'll show you the graph.
+Agros: Quite a few people there are suffering from the water source contamination.
+Rui: Is this an official request? If that is the case, could you file it through Alina? I can certainly try, but I am not sure if I have enough privileges to do so.
+Agros: Oh Rui, our division leader is an insufferable prick. And I'm sure you have seen enough of bureaucracy in our divisions. That will take forever!
+Rui: I mean, that's certainly true. Will think about it.
