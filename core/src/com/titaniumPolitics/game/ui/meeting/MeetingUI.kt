@@ -14,12 +14,14 @@ import com.badlogic.gdx.utils.Align
 import com.titaniumPolitics.game.core.GameEngine
 import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.core.Meeting
+import com.titaniumPolitics.game.core.Party
 import com.titaniumPolitics.game.core.gameActions.Wait
 import com.titaniumPolitics.game.debugTools.Logger
 import com.titaniumPolitics.game.ui.CapsuleStage
 import com.titaniumPolitics.game.ui.DialogueUI
 import com.titaniumPolitics.game.ui.HeadPortraitUI
 import com.titaniumPolitics.game.ui.PortraitUI
+import com.titaniumPolitics.game.ui.widget.DivisionUI
 import kotlinx.coroutines.runBlocking
 import ktx.scene2d.*
 import ktx.scene2d.Scene2DSkin.defaultSkin
@@ -57,6 +59,8 @@ class MeetingUI(var gameState: GameState) : Table(defaultSkin), KTable {
     val currentAttention = Label("0", defaultSkin, "docTitle")
     val discussionTable: Stack
     val electionUIContainer = Container<ElectionUI>()
+    val meetingInfoUI = scene2d.table {
+    }
     var previousMutualities = mutableMapOf<Pair<String, String>, Double>()
     val addAgendaButton = scene2d.button {
         stack {
@@ -118,6 +122,7 @@ class MeetingUI(var gameState: GameState) : Table(defaultSkin), KTable {
         }
         discussionTable = stack {
             it.grow()
+            add(this@MeetingUI.meetingInfoUI)
             add(this@MeetingUI.electionUIContainer)
             container(this@MeetingUI.speakerPortrait) {
                 size(450f, 600f)
@@ -132,7 +137,21 @@ class MeetingUI(var gameState: GameState) : Table(defaultSkin), KTable {
 
     //This function can be used for both meetings and conferences
     fun refresh(meeting: Meeting) {
-
+        meetingInfoUI.clear()
+        meetingInfoUI.apply {
+            top()
+            pad(10f)
+            label(this@MeetingUI.gameState.meetingName(this@MeetingUI.gameState.player.currentMeeting!!), "docTitle")
+            meeting.involvedParty?.run {
+                val party = this@MeetingUI.gameState.parties[this]!!
+                if (party.type == Party.Type.DIVISION) {
+                    row()
+                    add(DivisionUI(party, 600f))
+                }
+            }
+            row()
+            add().grow()
+        }
         //If the meeting is a division leader election, set the election UI after the candidates are set.
         if (meeting.type == Meeting.MeetingType.DIVISION_LEADER_ELECTION)
             meeting.onCandidatesSet += {

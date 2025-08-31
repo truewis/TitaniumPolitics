@@ -17,6 +17,7 @@ import com.titaniumPolitics.game.core.Information
 import com.titaniumPolitics.game.core.ReadOnly
 import com.titaniumPolitics.game.debugTools.Logger
 import com.titaniumPolitics.game.ui.widget.DescriptionLabel
+import com.titaniumPolitics.game.ui.widget.DivisionUI
 import com.titaniumPolitics.game.ui.widget.SimplePortraitUI
 import com.titaniumPolitics.game.ui.widget.StatRadarGraph
 import com.titaniumPolitics.game.ui.widget.WindowUI
@@ -73,23 +74,7 @@ class CharacterInfoUI : WindowUI("CharacterInfoTitle") {
 
                 it.size(500f, 1000f)
                 character.division?.let { div ->
-                    table {
-                        align(Align.topLeft)
-                        container {
-                            image(div.name + "Division") {
-                                color = LIGHT_GRAY
-                            }
-                            size(200f)
-                            align(Align.topLeft)
-                        }
-                        row()
-                        label(ReadOnly.prop(div.name), "docTitle") {
-                            it.padTop(-15f) /*Division name closer to the logo for aesthetics*/
-                            setAlignment(Align.top)
-                            setFontScale(0.2f)
-                            color = LIGHT_GRAY
-                        }
-                    }
+                    add(DivisionUI(div))
                 }
                 add(SimplePortraitUI(character.name, scale = 1f, interactable = false))
             }
