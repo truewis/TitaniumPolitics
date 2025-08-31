@@ -2,14 +2,11 @@ package com.titaniumPolitics.game.core.NPCRoutines
 
 import com.titaniumPolitics.game.core.Meeting
 import com.titaniumPolitics.game.core.Place
-import com.titaniumPolitics.game.core.ReadOnly
 import com.titaniumPolitics.game.core.ReadOnly.const
 import com.titaniumPolitics.game.core.gameActions.BuyDrink
 import com.titaniumPolitics.game.core.gameActions.GameAction
-import com.titaniumPolitics.game.core.gameActions.Talk
 import com.titaniumPolitics.game.core.gameActions.Wait
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.Transient
 
 @Serializable
 class DowntimeRoutine() : Routine() {
@@ -17,12 +14,16 @@ class DowntimeRoutine() : Routine() {
         priority = PRIORITY_REST
     }
 
+    val triedTalkingRecently = mutableSetOf<String>()
+
     override fun newRoutineCondition(name: String, place: String, subroutines: List<Routine>): Routine? {
         if (condition(name, place)) return success()
         //If I am in a talk meeting, engage in the talk.
         gState.characters[name]!!.currentMeeting?.let {
-            if (it.type == Meeting.MeetingType.TALK)
+            if (it.type == Meeting.MeetingType.TALK) {
+                triedTalkingRecently += it.currentCharacters
                 return AttendPrivateMeetingRoutine(scheduledMeetingName = gState.meetingName(it))
+            }
         }
         val char = gState.characters[name]!!
         if (char.trait.contains("extrovert")) {
@@ -31,10 +32,12 @@ class DowntimeRoutine() : Routine() {
             else {
                 //Engage in a random talk if possible.
                 val potentialTalkTargets = gState.places[place]!!.characters.filter {
-                    it != name && gState.getMutNorm(name, it) > 0
+                    it != name && gState.getMutNorm(name, it) > 0 &&
+                            it !in triedTalkingRecently
                 }
                 if (potentialTalkTargets.isNotEmpty()) {
                     val target = potentialTalkTargets.random()
+                    triedTalkingRecently.add(target)
                     return AttendPrivateMeetingRoutine(target)
                 }
             }
