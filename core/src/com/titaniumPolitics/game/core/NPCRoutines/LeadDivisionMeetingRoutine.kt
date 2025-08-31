@@ -14,22 +14,7 @@ class LeadDivisionMeetingRoutine(override val meetingName: String) : MeetingRout
     override fun executeInMeeting(name: String, place: String): GameAction {
         val character = gState.characters[name]!!
         val conf =
-            character.currentMeeting
-        if (conf == null) {
-            JoinMeeting(name, place).apply {
-                injectParent(gState)
-                if (isValid())
-                    return this
-            }
-            StartMeeting(name, place).apply {
-                injectParent(gState)
-                if (isValid())
-                    return this
-            }
-            return Wait(name, place).also {
-            } //If no meeting found, wait. Note that this action is only executed once because the routine will end after this action.
-            //This happens if the number of people condition of the meeting is not met.
-        }
+            character.currentMeeting!!
         val party = gState.parties[conf.involvedParty]!!
         //If not speaker, wait if the mutuality to the speaker is high. Otherwise, if possible, interrupt the speaker.
         if (conf.currentSpeaker != name) {
@@ -47,6 +32,45 @@ class LeadDivisionMeetingRoutine(override val meetingName: String) : MeetingRout
             }
             //2. request information about the commands issued today, by putting ProofOfWork agenda forward.
             proposeProofOfWork(name, place)?.let { return it }
+
+            //Warning: Some apparatus info may be missing because this only checks if there is at least one apparatus information about the place.
+            fun queryInfo(queryPl: Place, type: InformationType): GameAction? {
+                if (gState.informations.values.none { info ->
+                        info.tgtPlace == queryPl.name && info.type == type && name in info.knownTo
+                    }) {
+                    val agenda = MeetingAgenda(AgendaType.REQUEST, name).apply {
+                        attachedRequest = Request(
+                            Examine(
+                                sbjCharacter = conf.involvedParty!!,
+                                tgtPlace = queryPl.name,
+                                what = type
+                            ),
+                            issuedTo = (party.members.toList() - name).toHashSet(),
+                            issuedBy = hashSetOf(name),
+                            executeTime = gState.time
+                        )
+                    }
+                    NewAgenda(name, place, gState).also {
+                        it.agenda = agenda
+                        if (it.isValid())
+                            return it
+                    }
+                }
+                return null
+            }
+            //2.1. If there is a place within my division that I don't have resource information about, request the examination of that place.
+            if (party.type == Party.Type.DIVISION)
+                party.divisionPlaces.forEach { divPlace ->
+                    queryInfo(divPlace, InformationType.RESOURCES)?.let { return it }
+                    queryInfo(divPlace, InformationType.HUMAN_RESOURCES)?.let { return it }
+                    queryInfo(divPlace, InformationType.APPARATUS)?.let { return it }
+                }
+            if (party.type == Party.Type.WORKPLACE)
+                party.workplace.let { divPlace ->
+                    queryInfo(divPlace, InformationType.RESOURCES)?.let { return it }
+                    queryInfo(divPlace, InformationType.HUMAN_RESOURCES)?.let { return it }
+                    queryInfo(divPlace, InformationType.APPARATUS)?.let { return it }
+                }
             //3. Praise or criticize the division members, if there is any relevant information.
             //It should be noted that the content of the information is not checked here. Think about this later.
             party.members.forEach { member ->
@@ -58,21 +82,25 @@ class LeadDivisionMeetingRoutine(override val meetingName: String) : MeetingRout
                     //praise if the mutuality is high, criticize if the mutuality is low.
                     val mutuality = gState.getMutuality(name, member)
                     if (mutuality > 80) {
-                        return NewAgenda(name, place).also {
+                        NewAgenda(name, place, gState).also {
                             it.agenda =
                                 MeetingAgenda(
                                     AgendaType.PRAISE,
                                     name,
                                     subjectParams = hashMapOf("character" to member)
                                 )
+                            if (it.isValid())
+                                return it
                         }
                     } else if (mutuality < 20) {
-                        return NewAgenda(name, place).also {
+                        NewAgenda(name, place, gState).also {
                             it.agenda =
                                 MeetingAgenda(
                                     AgendaType.DENOUNCE, name,
                                     subjectParams = hashMapOf("character" to member)
                                 )
+                            if (it.isValid())
+                                return it
                         }
                     }
                 }//TODO: there must be a cooldown, stored in party class.
@@ -86,8 +114,10 @@ class LeadDivisionMeetingRoutine(override val meetingName: String) : MeetingRout
                     if (character.preparedInfoKeys.any {
                             agenda.effectivity(gState, conf, gState.informations[it]!!, character) > 0
                         }) {
-                        return NewAgenda(name, place).also {
+                        NewAgenda(name, place, gState).also {
                             it.agenda = agenda
+                            if (it.isValid())
+                                return it
                         }
                     }
                 }
@@ -104,10 +134,12 @@ class LeadDivisionMeetingRoutine(override val meetingName: String) : MeetingRout
                     enemyParty
                 ) < ReadOnly.const("EnemyPartyMutualityThreshold")
             )
-                return NewAgenda(name, place).also { action ->
+                NewAgenda(name, place, gState).also { action ->
                     action.agenda = MeetingAgenda(AgendaType.DENOUNCE_PARTY, name).also {
                         it.subjectParams["party"] = enemyParty
                     }
+                    if (action.isValid())
+                        return action
                 }
             //6. If the world is short of resources and we have an apparatus producing that, increase the production. //TODO: this decision must depend on a personal parameter
             if (conf.involvedParty!!.contains("workplace"))
@@ -164,8 +196,10 @@ class LeadDivisionMeetingRoutine(override val meetingName: String) : MeetingRout
                             executeTime = gState.time
                         )
                     }
-                    return NewAgenda(name, place).also {
+                    NewAgenda(name, place, gState).also {
                         it.agenda = agenda
+                        if (it.isValid())
+                            return it
                     }
                 }
 
@@ -195,8 +229,10 @@ class LeadDivisionMeetingRoutine(override val meetingName: String) : MeetingRout
                             executeTime = gState.time
                         )
                     }
-                    return NewAgenda(name, place).also {
+                    NewAgenda(name, place, gState).also {
                         it.agenda = agenda
+                        if (it.isValid())
+                            return it
                     }
                 }
 
