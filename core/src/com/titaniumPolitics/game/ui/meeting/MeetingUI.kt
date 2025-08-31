@@ -141,8 +141,11 @@ class MeetingUI(var gameState: GameState) : Table(defaultSkin), KTable {
         meetingInfoUI.apply {
             top()
             pad(10f)
-            label(this@MeetingUI.gameState.meetingName(this@MeetingUI.gameState.player.currentMeeting!!), "docTitle")
             meeting.involvedParty?.run {
+                label(
+                    this@MeetingUI.gameState.meetingName(this@MeetingUI.gameState.player.currentMeeting!!),
+                    "docTitle"
+                )
                 val party = this@MeetingUI.gameState.parties[this]!!
                 if (party.type == Party.Type.DIVISION) {
                     row()
@@ -151,6 +154,7 @@ class MeetingUI(var gameState: GameState) : Table(defaultSkin), KTable {
             }
             row()
             add().grow()
+            debug()
         }
         //If the meeting is a division leader election, set the election UI after the candidates are set.
         if (meeting.type == Meeting.MeetingType.DIVISION_LEADER_ELECTION)
