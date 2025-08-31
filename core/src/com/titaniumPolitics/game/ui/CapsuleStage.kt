@@ -7,6 +7,7 @@ import com.badlogic.gdx.assets.loaders.TextureLoader
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.scenes.scene2d.Stage
+import com.badlogic.gdx.scenes.scene2d.actions.Actions
 import com.badlogic.gdx.scenes.scene2d.ui.Image
 import com.badlogic.gdx.scenes.scene2d.ui.Stack
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable
@@ -91,25 +92,32 @@ class CapsuleStage(val gameState: GameState) : Stage(FitViewport(1920F, 1080F)) 
     }
 
     fun roomChanged(name: String) {
-        try {
-
-            background.drawable = TextureRegionDrawable(
-                assetManager.get(
-                    ReadOnly.mapJson[if (name.contains("home")) "home" else name]!!.jsonObject["image"]!!.jsonPrimitive.content,
-                    Texture::class.java
-                )!!
+        background.addAction(
+            Actions.sequence(
+                Actions.fadeOut(0.5f),
+                Actions.run {
+                    try {
+                        background.drawable = TextureRegionDrawable(
+                            assetManager.get(
+                                ReadOnly.mapJson[if (name.contains("home")) "home" else name]!!.jsonObject["image"]!!.jsonPrimitive.content,
+                                Texture::class.java
+                            )!!
+                        )
+                    } catch (e: Exception) {
+                        Logger.write("Background Image Error: $e", Logger.LogLevel.INFO)
+                    }
+                    try {
+                        val sound =
+                            Gdx.audio.newSound(Gdx.files.internal(ReadOnly.mapJson[if (name.contains("home")) "home" else name]!!.jsonObject["sound"]!!.jsonPrimitive.content))
+                        sound.play()//TODO: use SoundEngine.
+                    } catch (e: Exception) {
+                        Logger.write("Background Sound Error: $e", Logger.LogLevel.INFO)
+                    }
+                },
+                Actions.fadeIn(0.5f)
             )
+        )
 
-        } catch (e: Exception) {
-            Logger.write("Background Image Error: $e", Logger.LogLevel.INFO)
-        }
-        try {
-            val sound =
-                Gdx.audio.newSound(Gdx.files.internal(ReadOnly.mapJson[if (name.contains("home")) "home" else name]!!.jsonObject["sound"]!!.jsonPrimitive.content))
-            sound.play()//TODO: use SoundEngine.
-        } catch (e: Exception) {
-            Logger.write("Background Sound Error: $e", Logger.LogLevel.INFO)
-        }
     }
 
 
