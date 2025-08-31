@@ -254,7 +254,20 @@ class GameState {
             parties["workplace_${place.key}"] = Party().apply {
                 injectParent(this@GameState)
                 place.value.responsibleDivision?.run {
-                    addMember(parties[this]!!.directorMembers.random(), Role.NONE)
+                    if (place.key.contains("Headquarters")) {
+                        val division = parties[place.value.responsibleDivision]!!
+                        addMember(division.leader!!, Role.NONE)
+                        changeLeader(division.leader!!)
+                    } else
+                        if (place.key != "outerBarrierEast") {
+                            val randomDirector = parties[this]!!.directorMembers.random()
+                            addMember(randomDirector, Role.NONE)
+                            changeLeader(randomDirector)
+                        } else {
+                            //The player is the director of the outerBarrierEast division.
+                            addMember("Rui", Role.NONE)
+                            changeLeader("Rui")
+                        }
                 }
                 type = Party.Type.WORKPLACE
                 home = place.key
