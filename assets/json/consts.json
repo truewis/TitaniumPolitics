@@ -44,7 +44,7 @@
   "RequestFinishDeltaWill": 5,
   "TiredHealth": 50,
   "CriticalHealth": 20,
-  "DowntimeWill": 50,
+  "DowntimeWill": 40,
   "CriticalWill": 30,
   "AddInfoDuration": 10,
   "BuyDrinkDuration": 20,

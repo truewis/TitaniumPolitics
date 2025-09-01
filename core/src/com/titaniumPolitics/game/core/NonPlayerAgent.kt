@@ -104,7 +104,7 @@ class NonPlayerAgent : Agent() {
         //If will is low, downTime.
         if (parent.getMutuality(name) < const("DowntimeWill")) {
             if (routines.none { it is DowntimeRoutine }) {
-                routines.add(DowntimeRoutine().apply {
+                routines.add(DowntimeRoutine(parent.getWorkplace(name)?.name).apply {
 
                     priority = pri
                     routineStartTime = parent.time
@@ -237,7 +237,7 @@ class NonPlayerAgent : Agent() {
         }
 
         //When no work and no life support, play
-        routines.add(DowntimeRoutine().also {
+        routines.add(DowntimeRoutine(parent.getWorkplace(name)?.name).also {
             it.routineStartTime = parent.time
         })
 

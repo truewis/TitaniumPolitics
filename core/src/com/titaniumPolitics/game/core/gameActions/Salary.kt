@@ -56,6 +56,8 @@ data class Salary(override val sbjCharacter: String, override val tgtPlace: Stri
     }
 
     override fun isValid(): Boolean {
+        if (sbjCharObj.currentMeeting == null) return false
+        if (sbjCharObj.currentMeeting!!.involvedParty == null) return false
         return !party.isSalaryPaid && who.isNotEmpty() && sbjCharacter == party.leader && reason(
             standardRate.all { (what, amount) -> parent.places[party.home]!!.resources[what] >= amount * who.size },
             "salary-resources"

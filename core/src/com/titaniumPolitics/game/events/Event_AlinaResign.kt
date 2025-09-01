@@ -9,6 +9,7 @@ class Event_AlinaResign : EventObject("Introduction of Alina.", true) {
 
     override fun exec(a: Int, b: Int) {
         if (parent.day > 1 && parent.player.currentMeeting != null && parent.parties["infrastructure"]!!.leader == "Alina" && parent.player.currentMeeting!!.currentSpeaker == "Alina"
+            && parent.player.currentMeeting!!.type == com.titaniumPolitics.game.core.Meeting.MeetingType.DIVISION_DAILY_CONFERENCE
         ) {
             onPlayDialogue("AlinaResign")
             parent.eventSystem.add(Event_BecameDivLeader())

@@ -115,8 +115,7 @@ class AttendPrivateMeetingRoutine(
                 gossip(this.gState, name, place)?.also { return it }
             }
 
-            if (sharedMeetingEndCondition())
-                EndMeeting(name, place, gState).also { if (it.isValid()) return it }
+            endMeetingIfLowAttention(name, place)?.let { return it }
             //If nothing else to talk about, end the speech. The next speaker is the character with the highest mutuality.
             return EndSpeech(
                 name, place, meeting.currentCharacters.minus(name)

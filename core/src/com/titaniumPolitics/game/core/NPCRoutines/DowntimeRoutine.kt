@@ -57,15 +57,17 @@ class DowntimeRoutine(var workplace: String? = null) : Routine() {
                 return it
         }
         Wait(name, place, gState).also {
-            if (it.isValid())
+            if (it.isValid()) {
+                gState.setMutuality(name, delta = 10.0) //TODO: Relaxing increases mutuality.
                 return it
+            }
         }
         throw Exception("No valid action found for DowntimeRoutine")
     }
 
     private fun condition(name: String, place: String): Boolean {
         //Pay attention to the condition checking order.
-        if (gState.characters[name]!!.health < ReadOnly.const("CriticalHealth")) return true
+        if (gState.characters[name]!!.health < ReadOnly.const("TiredHealth")) return true
         if (gState.characters[name]!!.hunger > ReadOnly.const("hungerThreshold")) return true
         if (gState.characters[name]!!.thirst > ReadOnly.const("thirstThreshold")) return true
         //Need to take care of life support first.

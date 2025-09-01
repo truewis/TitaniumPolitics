@@ -93,7 +93,7 @@ class AttendDivisionMeetingRoutine(override val meetingName: String) : MeetingRo
                     }
                 }
             }
-
+            endMeetingIfLowAttention(name, place)?.let { return it }
             //If nothing else to talk about, end the speech. The next speaker is the character with the highest mutuality.
             val nextSpeaker = meeting.currentCharacters.minus(name)
                 .maxByOrNull { gState.getMutuality(name, it) }
