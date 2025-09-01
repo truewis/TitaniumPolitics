@@ -11,7 +11,7 @@ import ktx.scene2d.container
 import ktx.scene2d.image
 import ktx.scene2d.label
 
-class DivisionUI(div: Party, size: Float = 200f) : Table(Scene2DSkin.defaultSkin), KTable {
+class DivisionBannerUI(div: Party, size: Float = 200f) : Table(Scene2DSkin.defaultSkin), KTable {
     init {
         align(Align.topLeft)
         container {

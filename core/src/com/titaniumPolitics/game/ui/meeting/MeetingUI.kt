@@ -21,7 +21,7 @@ import com.titaniumPolitics.game.ui.CapsuleStage
 import com.titaniumPolitics.game.ui.DialogueUI
 import com.titaniumPolitics.game.ui.HeadPortraitUI
 import com.titaniumPolitics.game.ui.PortraitUI
-import com.titaniumPolitics.game.ui.widget.DivisionUI
+import com.titaniumPolitics.game.ui.widget.DivisionBannerUI
 import kotlinx.coroutines.runBlocking
 import ktx.scene2d.*
 import ktx.scene2d.Scene2DSkin.defaultSkin
@@ -149,7 +149,7 @@ class MeetingUI(var gameState: GameState) : Table(defaultSkin), KTable {
                 val party = this@MeetingUI.gameState.parties[this]!!
                 if (party.type == Party.Type.DIVISION) {
                     it.row()
-                    it.add(DivisionUI(party, 600f))
+                    it.add(DivisionBannerUI(party, 600f))
                 }
             }
             it.row()

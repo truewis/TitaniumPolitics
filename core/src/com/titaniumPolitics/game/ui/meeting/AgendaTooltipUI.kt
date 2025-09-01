@@ -5,6 +5,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.ui.Tooltip
 import com.badlogic.gdx.utils.Align
 import com.titaniumPolitics.game.core.MeetingAgenda
+import com.titaniumPolitics.game.ui.widget.BudgetDisplayUI
 import ktx.scene2d.*
 
 class AgendaTooltipUI(agenda: MeetingAgenda) : Tooltip<Table>(scene2d.table {
@@ -32,9 +33,9 @@ class AgendaTooltipUI(agenda: MeetingAgenda) : Tooltip<Table>(scene2d.table {
                 it.size(350f, 50f)
                 image("TooltipTitle")
                 table {
-                    label(agenda.type.toString(), "black") {
+                    label(agenda.type.toString(), "docTitle") {
                         it.growX()
-                        setFontScale(2f)
+                        setFontScale(0.2f)
                     }
                 }
             }
@@ -47,12 +48,16 @@ class AgendaTooltipUI(agenda: MeetingAgenda) : Tooltip<Table>(scene2d.table {
             }
             if (agenda.attachedRequest != null) {
                 row()
-                label(agenda.attachedRequest!!.toString()) {
+                label(agenda.attachedRequest!!.toString(), "docTitle") {
                     it.size(350f, 150f)
-                    setFontScale(2f)
+                    setFontScale(0.2f)
                     setAlignment(Align.topLeft)
                     wrap = true
                 }
+            }
+            if (agenda.attachedBudget != null) {
+                row()
+                add(BudgetDisplayUI(budget = agenda.attachedBudget)).size(300f, 150f)
             }
 
 

@@ -10,6 +10,7 @@ import com.titaniumPolitics.game.core.Character
 import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.core.Party
 import com.titaniumPolitics.game.core.ReadOnly
+import com.titaniumPolitics.game.ui.widget.BudgetDisplayUI
 import com.titaniumPolitics.game.ui.widget.ResourceDisplayUI
 import com.titaniumPolitics.game.ui.widget.TitleLabel
 import ktx.scene2d.KTable
@@ -91,8 +92,10 @@ class PoliticiansInfoUI(val gameState: GameState) : Table(defaultSkin), KTable {
         peopleDataTable.clear()
 
         // Header row
-        peopleDataTable.add(Label("Name", defaultSkin, "docTitle").apply { setFontScale(0.5f) }).width(400f).left()
+        peopleDataTable.add(Label("Name", defaultSkin, "docTitle").apply { setFontScale(0.5f) }).width(500f).left()
         peopleDataTable.add(Label("Position", defaultSkin, "docTitle").apply { setFontScale(0.5f) }).width(400f).left()
+        peopleDataTable.add(Label("Qualification", defaultSkin, "docTitle").apply { setFontScale(0.5f) }).width(400f)
+            .left()
         peopleDataTable.add(
             Label(
                 "Mutuality",
@@ -112,11 +115,15 @@ class PoliticiansInfoUI(val gameState: GameState) : Table(defaultSkin), KTable {
                     ReadOnly.charName(character.key),
                     defaultSkin,
                     "docTitle"
-                ).apply { setFontScale(0.5f) }).width(400f).left()
+                ).apply { setFontScale(0.5f) }).width(500f).left()
 
             // Position (replace with your own logic)
-            val position = getCharacterPosition(character.value) // Implement this method as needed
-            peopleDataTable.add(Label(position, defaultSkin, "docTitle").apply { setFontScale(0.5f) }).width(400f)
+            val position = character.value.generatePositionText()
+            peopleDataTable.add(Label(position, defaultSkin, "docTitle").apply { setFontScale(0.3f) }).width(400f)
+                .left()
+
+            val qual = getCharacterQualification(character.value)
+            peopleDataTable.add(Label(qual, defaultSkin, "docTitle").apply { setFontScale(0.3f) }).width(400f)
                 .left()
 
             // Mutuality Meter
@@ -202,7 +209,7 @@ class PoliticiansInfoUI(val gameState: GameState) : Table(defaultSkin), KTable {
                     setAlignment(Align.left)
                 }
                 row()
-                add(ResourceDisplayUI(division.budget.sum())).grow()
+                add(BudgetDisplayUI(division)).grow()
             }
             table {
                 it.grow()
@@ -339,8 +346,18 @@ class PoliticiansInfoUI(val gameState: GameState) : Table(defaultSkin), KTable {
                     setFontScale(0.5f)
                     setAlignment(Align.left)
                 }
-                row()
-                add(ResourceDisplayUI(workplace.budget.sum())).grow()
+                if (this@PoliticiansInfoUI.gameState.parties[workplace.workplace.responsibleDivision]?.isBudgetResolved == false) {
+
+                    row()
+                    label(ReadOnly.prop("BudgetDisplayUI-notResolved"), "docTitle").apply {
+                        setFontScale(0.4f)
+                        setAlignment(Align.left)
+                    }
+                } else {
+
+                    row()
+                    add(ResourceDisplayUI(workplace.budget.sum())).grow()
+                }
             }
             table {
                 it.grow()
@@ -401,14 +418,14 @@ class PoliticiansInfoUI(val gameState: GameState) : Table(defaultSkin), KTable {
         }
     }
 
-    private fun getCharacterPosition(character: Character): String {
+    private fun getCharacterQualification(character: Character): String {
         // Replace this with your own logic to determine the character's position
         return when {
-            character.trait.contains("ctrler") -> "The Controller"
-            character.trait.contains("observer") -> "The Observer"
-            character.trait.contains("mechanic") -> "The Mechanic"
-            character.trait.any { it.contains("DivisionLeader") } -> character.trait.first { it.contains("DivisionLeader") }
-                .replace("DivisionLeader", "") + " Division Leader"
+            //character.trait.contains("ctrler") -> "The Controller"
+            //character.trait.contains("observer") -> "The Observer"
+            //character.trait.contains("mechanic") -> "The Mechanic"
+            //character.trait.any { it.contains("DivisionLeader") } -> character.trait.first { it.contains("DivisionLeader") }
+            //    .replace("DivisionLeader", "") + " Division Leader"
 
             character.trait.contains("engineer") -> "Engineer"
             character.trait.contains("soldier") -> "Soldier"

@@ -20,6 +20,7 @@ import ktx.scene2d.table
 import kotlin.collections.component1
 import kotlin.collections.component2
 import kotlin.collections.set
+import kotlin.math.abs
 
 /**
  * A UI component that displays resources in a scrollable table format.
@@ -39,7 +40,7 @@ class ResourceDisplayUI(var current: Resources = Resources(), var callback: (Str
         docTable.clear()
         with(docTable) {
             this@ResourceDisplayUI.current.forEach { (resourceName, resourceAmount) ->
-                if (resourceAmount > .0) {
+                if (abs(resourceAmount) > 1e-6) {
                     table {
                         it.grow()
                         val tooltip = ResourceTooltipUI(resourceName)

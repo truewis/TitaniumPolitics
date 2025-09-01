@@ -265,8 +265,13 @@ class DialogueUI(val gameState: GameState) : Table(defaultSkin), KTable {
             val char2PositionIntroduction = generatePositionIntroduction(char2)
             dialogueLines = listOf(
                 char1.name + ": " + ReadOnly.script("NewTalk-Unknown")
-                    .format(char1.name) + " " + char1PositionIntroduction + if (hasAgenda) " " + ReadOnly.script("NewTalk-Unknown-agenda") else "",
-                char2.name + ": " + ReadOnly.script("NewTalk-Unknown-response") + " " + char2PositionIntroduction + if (hasAgenda) " " + ReadOnly.script(
+                    .format(ReadOnly.charProp(char1.name)) + " " + char1PositionIntroduction + if (hasAgenda) " " + ReadOnly.script(
+                    "NewTalk-Unknown-agenda"
+                ) else "",
+                char2.name + ": " + ReadOnly.script("NewTalk-Unknown-response").format(
+                    ReadOnly.charProp(char1.name),
+                    ReadOnly.charProp(char2.name)
+                ) + " " + char2PositionIntroduction + if (hasAgenda) " " + ReadOnly.script(
                     "NewTalk-Unknown-agendaResponse"
                 ) else ""
             )
@@ -310,7 +315,7 @@ class DialogueUI(val gameState: GameState) : Table(defaultSkin), KTable {
         if (speaker == "Narrator")
             speakerNameDisplay.setText("")
         else
-            speakerNameDisplay.setText(ReadOnly.prop(speaker))
+            speakerNameDisplay.setText(ReadOnly.charProp(speaker))
         currentTextDisplay.restart(text)
 
         // Bring the current speaker to the foreground

@@ -8,7 +8,7 @@ import com.titaniumPolitics.game.core.Character
 
 import com.titaniumPolitics.game.core.ReadOnly
 import com.titaniumPolitics.game.ui.widget.DescriptionLabel
-import com.titaniumPolitics.game.ui.widget.DivisionUI
+import com.titaniumPolitics.game.ui.widget.DivisionBannerUI
 import com.titaniumPolitics.game.ui.widget.SimplePortraitUI
 import com.titaniumPolitics.game.ui.widget.StatRadarGraph
 import com.titaniumPolitics.game.ui.widget.WindowUI
@@ -63,7 +63,7 @@ class CharacterDetailUI : WindowUI("CharacterInfoTitle") {
 
                 it.size(500f, 1000f)
                 character.division?.let { div ->
-                    add(DivisionUI(div))
+                    add(DivisionBannerUI(div))
                 }
                 add(SimplePortraitUI(character.name, scale = 1f, interactable = false))
             }
