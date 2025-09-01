@@ -8,11 +8,10 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 
 @Serializable
-class WorkAnonRoutine(var workplace: String? = null) : Routine() {
+class WorkAnonRoutine(var workplace: String) : Routine() {
     val workplaceObj get() = gState.places[this@WorkAnonRoutine.workplace]!!
     override fun newRoutineCondition(name: String, place: String, subroutines: List<Routine>): Routine? {
-        if (!isWorkHourWithETA(gState, name, place, workplace!!, IDTH)
-            || gState.characters[name]!!.health <= ReadOnly.const("CriticalHealth")
+        if (!isWorkCondition(name, place, workplace, gState)
         )
             return success()
         if (place != workplaceObj.name)

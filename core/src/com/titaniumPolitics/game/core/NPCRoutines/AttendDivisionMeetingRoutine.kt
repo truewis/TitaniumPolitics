@@ -47,16 +47,14 @@ class AttendDivisionMeetingRoutine(override val meetingName: String) : MeetingRo
 
     override fun executeInMeeting(name: String, place: String): GameAction {
         val character = gState.characters[name]!!
-        val conf =
-            character.currentMeeting!!
         //If not speaker, wait if the mutuality to the speaker is high. Otherwise, if possible, interrupt the speaker.
-        if (conf.currentSpeaker != name) {
+        if (meeting.currentSpeaker != name) {
             //If the meeting is not boring, but the mutuality to the speaker is low, intercept the speaker.
             if (routineStartTime + 7200 / ReadOnly.DT <= gState.time || meeting.currentAttention < 10)
                 return LeaveMeeting(name, place)
             return interceptCondition(name, place)
         } else {
-            val party = gState.parties[conf.involvedParty]!!
+            val party = gState.parties[meeting.involvedParty]!!
 
             //0. Execute a command if there is any. Here, we can move to the place actively if the command is not in the current place.
             //If there is a command that is within the set time window, issued party is trusted enough, and seems to be executable at some place(AvailableActions), start execution routine.
@@ -67,11 +65,11 @@ class AttendDivisionMeetingRoutine(override val meetingName: String) : MeetingRo
             proposeProofOfWork(name, place)?.let { return it }
 
             //If not division leader and salary is not paid, request salary.
-            if (conf.currentSpeaker == name && !party.isSalaryPaid) {
+            if (meeting.currentSpeaker == name && !party.isSalaryPaid) {
                 //Check if there is already a salary request.
-                if (conf.agendas.none { it.type == AgendaType.REQUEST && it.attachedRequest?.action is Salary }) {
+                if (meeting.agendas.none { it.type == AgendaType.REQUEST && it.attachedRequest?.action is Salary }) {
                     //Check if the division leader is present in the meeting.
-                    if (party.leader in conf.currentCharacters) {
+                    if (party.leader in meeting.currentCharacters) {
                         //Fill in the agenda based on variables in the routine, resource and character.
                         val agenda = MeetingAgenda(AgendaType.REQUEST, name).apply {
                             attachedRequest = Request(
@@ -86,7 +84,7 @@ class AttendDivisionMeetingRoutine(override val meetingName: String) : MeetingRo
                                 executeTime = gState.time
                             )
                         }
-                        return NewAgenda(name, place, gState).also {
+                        NewAgenda(name, place, gState).also {
                             it.agenda = agenda
                             if (it.isValid()) {
                                 return it
@@ -97,7 +95,7 @@ class AttendDivisionMeetingRoutine(override val meetingName: String) : MeetingRo
             }
 
             //If nothing else to talk about, end the speech. The next speaker is the character with the highest mutuality.
-            val nextSpeaker = conf.currentCharacters.minus(name)
+            val nextSpeaker = meeting.currentCharacters.minus(name)
                 .maxByOrNull { gState.getMutuality(name, it) }
                 ?: return EndMeeting(name, place)
             return EndSpeech(name, place, nextSpeaker, gState)

@@ -1,6 +1,7 @@
 package com.titaniumPolitics.game.core.NPCRoutines
 
 import com.titaniumPolitics.game.core.GameState
+import com.titaniumPolitics.game.core.ReadOnly
 import com.titaniumPolitics.game.core.ReadOnly.IDTH
 import com.titaniumPolitics.game.core.gameActions.GameAction
 import com.titaniumPolitics.game.debugTools.Logger
@@ -80,6 +81,7 @@ sealed class Routine() {
         failed()
     }
 
+
     override fun toString(): String {
         return "${this::class.simpleName}(routineStartTime=$routineStartTime, variables=$variables)"
     }
@@ -97,6 +99,14 @@ sealed class Routine() {
             val extendedWorkHours =
                 gState.places[workplace]!!.workHours.first * IDTH - eta - padding..gState.places[workplace]!!.workHours.last * IDTH + eta + padding
             return (gState.timeInDay in extendedWorkHours)
+        }
+
+        fun isWorkCondition(name: String, place: String, workplace: String, gState: GameState): Boolean {
+            return !(!isWorkHourWithETA(gState, name, place, workplace, IDTH)
+                    || gState.characters[name]!!.health <= ReadOnly.const("CriticalHealth")
+                    || gState.characters[name]!!.hunger >= ReadOnly.const("hungerThreshold")
+                    || gState.characters[name]!!.thirst >= ReadOnly.const("thirstThreshold")
+                    )
         }
     }
 }

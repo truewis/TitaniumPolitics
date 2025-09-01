@@ -33,11 +33,7 @@ class WorkRoutine(var workplace: String) : Routine() {
     override fun newRoutineCondition(name: String, place: String, subroutines: List<Routine>): Routine? {
 
         //If work hours are over, rest. Also, if the character is too hungry, thirsty, or sick, rest. (Which is checked earlier.)
-        if (!isWorkHourWithETA(gState, name, place, workplace, IDTH)
-            || gState.characters[name]!!.health <= ReadOnly.const("CriticalHealth")
-            || gState.characters[name]!!.hunger >= ReadOnly.const("hungerThreshold")
-            || gState.characters[name]!!.thirst >= ReadOnly.const("thirstThreshold")
-        )
+        if (!isWorkCondition(name, place, workplace, gState))
             return success()
         val character = gState.characters[name]!!
 

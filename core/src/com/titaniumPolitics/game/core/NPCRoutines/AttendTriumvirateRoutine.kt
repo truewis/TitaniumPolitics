@@ -91,7 +91,7 @@ class AttendTriumvirateRoutine(override val meetingName: String) : MeetingRoutin
                     enemyParty
                 ) < ReadOnly.const("EnemyPartyMutualityThreshold")
             )
-                return NewAgenda(name, place, gState).also { action ->
+                NewAgenda(name, place, gState).also { action ->
                     action.agenda = MeetingAgenda(AgendaType.DENOUNCE_PARTY, name).also {
                         it.subjectParams["party"] = enemyParty
                     }

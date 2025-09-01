@@ -54,7 +54,8 @@ class Request(
         //This function is called every turn.
         //Each time one of the issuedTo completes this request,
         //Add the key of this request to finishedRequests of the character.
-        val proofOfExecutionInfoObjs = proofOfExecutionInfos.map { gState.informations[it]!! }
+        val proofOfExecutionInfoObjs = proofOfExecutionInfos.map { gState.informations[it] }.filter { it != null }
+            .map { it!! }
         proofOfExecutionInfoObjs.forEach {
             gState.characters[it.tgtCharacter]?.executedRequests?.add(name) //Works only for Action Information
             gState.characters[it.author]?.executedRequests?.add(name) //Works for other information which proves work.
