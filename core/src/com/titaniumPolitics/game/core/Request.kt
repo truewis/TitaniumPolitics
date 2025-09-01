@@ -21,9 +21,9 @@ class Request(
     var name = ""
         private set
 
+    var completed = false
 
     @Transient
-    var completed = false
     var onComplete = arrayListOf<() -> Unit>()
 
     fun generateName(): String {
@@ -87,11 +87,14 @@ class Request(
                 }
             }
             proofOfExecutionInfosHaveBeenShared.forEach {
-                gState.setMutuality(
-                    it.tgtCharacter!!,
-                    delta = deltaWill(it.tgtCharacter!!, gState),
-                    reasonKey = "RequestFinishWill"
-                )
+                it.tgtCharacter?.run {
+                    gState.setMutuality(
+                        this,
+                        delta = deltaWill(this, gState),
+                        reasonKey = "RequestFinishWill"
+                    )
+                }
+
             }
             onComplete.forEach { it() }
             completed = true
@@ -100,8 +103,8 @@ class Request(
     }
 
     fun deltaWill(tgtChar: String, gState: GameState): Double {
-        return if ((executeTime in gState.time - 3..gState.time + 3 || executeTime == 0))
-            issuedBy.sumOf { gState.getMutuality(tgtChar, it) * ReadOnly.const("RequestFinishDeltaWill") }
+        return if ((executeTime in gState.time - 3..gState.time + 3 || executeTime == null))
+            issuedBy.sumOf { gState.getMutNorm(tgtChar, it) * ReadOnly.const("RequestFinishDeltaWill") }
         else
             0.0
     }

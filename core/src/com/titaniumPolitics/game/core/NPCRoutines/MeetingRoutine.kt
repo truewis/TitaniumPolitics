@@ -4,6 +4,7 @@ import com.titaniumPolitics.game.core.AgendaType
 import com.titaniumPolitics.game.core.Meeting
 import com.titaniumPolitics.game.core.MeetingAgenda
 import com.titaniumPolitics.game.core.ReadOnly
+import com.titaniumPolitics.game.core.ReadOnly.IDTH
 import com.titaniumPolitics.game.core.Request
 import com.titaniumPolitics.game.core.Resources
 import com.titaniumPolitics.game.core.gameActions.EndMeeting
@@ -115,6 +116,7 @@ sealed class MeetingRoutine : Routine() {
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //Shared Functions
+    fun sharedMeetingEndCondition() = routineStartTime + 2 * IDTH <= gState.time || meeting.currentAttention < 10
 
     var try_support_proofOfWork = 0
     fun supportProofOfWork(name: String): IMeetingRoutine? {
@@ -266,7 +268,7 @@ sealed class MeetingRoutine : Routine() {
                     ?: return@firstOrNull false
             return@firstOrNull (it.executeTime in gState.time - ReadOnly.constInt("CommandExecuteTolerance") + eta..gState.time + ReadOnly.constInt(
                 "CommandExecuteTolerance"
-            ) + eta || it.executeTime == 0) && (it.issuedBy.isEmpty() /*System request must be executed regardless of mutualities.*/ || it.issuedBy.sumOf {
+            ) + eta || it.executeTime == null) && (it.issuedBy.isEmpty() /*System request must be executed regardless of mutualities.*/ || it.issuedBy.sumOf {
                 gState.getMutuality(
                     name,
                     it
@@ -337,7 +339,7 @@ sealed class MeetingRoutine : Routine() {
         place: String
     ): GameAction? {
         //If the attention of the meeting is low, end the meeting.
-        if (meeting.currentCharacters.count() > 1 && meeting.currentAttention < 10) {
+        if (sharedMeetingEndCondition()) {
             return EndMeeting(name, place)
         }
         return null

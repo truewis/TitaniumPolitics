@@ -129,7 +129,7 @@ class WorkRoutine(var workplace: String) : Routine() {
                     ?: return@firstOrNull false
             return@firstOrNull (it.executeTime in gState.time - ReadOnly.constInt("CommandExecuteTolerance") + eta..gState.time + ReadOnly.constInt(
                 "CommandExecuteTolerance"
-            ) + eta || it.executeTime == 0) && (it.issuedBy.isEmpty() /*System request must be executed regardless of mutualities.*/ || it.issuedBy.sumOf {
+            ) + eta || it.executeTime == null) && (it.issuedBy.isEmpty() /*System request must be executed regardless of mutualities.*/ || it.issuedBy.sumOf {
                 gState.getMutuality(
                     name,
                     it

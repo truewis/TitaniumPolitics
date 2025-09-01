@@ -3,6 +3,7 @@ package com.titaniumPolitics.game.core.NPCRoutines
 import com.titaniumPolitics.game.core.AgendaType
 import com.titaniumPolitics.game.core.MeetingAgenda
 import com.titaniumPolitics.game.core.ReadOnly
+import com.titaniumPolitics.game.core.ReadOnly.IDTH
 import com.titaniumPolitics.game.core.gameActions.*
 import kotlinx.serialization.Serializable
 
@@ -32,7 +33,7 @@ class AttendTriumvirateRoutine(override val meetingName: String) : MeetingRoutin
         val party = gState.parties[meeting.involvedParty]!!
         //If not speaker, wait if the mutuality to the speaker is high. Otherwise, if possible, interrupt the speaker.
         if (meeting.currentSpeaker != name) {
-            if (routineStartTime + 7200 / ReadOnly.DT <= gState.time || meeting.currentAttention < 10)
+            if (sharedMeetingEndCondition())
                 return LeaveMeeting(name, place)
             return interceptCondition(name, place)
         } else //If it is my turn to speak
@@ -101,7 +102,9 @@ class AttendTriumvirateRoutine(override val meetingName: String) : MeetingRoutin
 
             //7. Gossip
             AttendPrivateMeetingRoutine.gossip(gState, name, place)?.also { return it }
+
             //If nothing else to talk about, end the speech. The next speaker is the character with the highest mutuality.
+            endMeetingIfLowAttention(name, place)?.let { return it }
             val nextSpeaker = meeting.currentCharacters.minus(name)
                 .maxByOrNull { gState.getMutuality(name, it) }
                 ?: return EndMeeting(name, place)

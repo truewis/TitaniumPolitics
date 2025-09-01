@@ -52,6 +52,7 @@ class AddInfoToAgendaRoutine(val agendaIndex: Int, val support: Boolean) : Routi
                 return AddInfo(name, place, addingInfo, this@AddInfoToAgendaRoutine.agendaIndex, gState)
             }
             //If there is no supporting information, end speech.
+            failed()
             val nextSpeaker = conf.currentCharacters.minus(name)
                 .maxByOrNull { gState.getMutuality(name, it) }
                 ?: return EndMeeting(name, place)

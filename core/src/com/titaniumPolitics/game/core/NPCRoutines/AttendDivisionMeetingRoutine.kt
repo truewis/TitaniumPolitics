@@ -50,7 +50,7 @@ class AttendDivisionMeetingRoutine(override val meetingName: String) : MeetingRo
         //If not speaker, wait if the mutuality to the speaker is high. Otherwise, if possible, interrupt the speaker.
         if (meeting.currentSpeaker != name) {
             //If the meeting is not boring, but the mutuality to the speaker is low, intercept the speaker.
-            if (routineStartTime + 7200 / ReadOnly.DT <= gState.time || meeting.currentAttention < 10)
+            if (sharedMeetingEndCondition())
                 return LeaveMeeting(name, place)
             return interceptCondition(name, place)
         } else {

@@ -82,7 +82,7 @@ class AttendPrivateMeetingRoutine(
 
     override fun executeInMeeting(name: String, place: String): GameAction {
         if (meeting.currentSpeaker != name) {
-            if (routineStartTime + 7200 / ReadOnly.DT <= gState.time || meeting.currentAttention < 10) //Leave the meeting if it is boring or it is getting too long.
+            if (sharedMeetingEndCondition()) //Leave the meeting if it is boring or it is getting too long.
                 return LeaveMeeting(name, place)
             return interceptCondition(name, place)
         } else {
@@ -115,6 +115,8 @@ class AttendPrivateMeetingRoutine(
                 gossip(this.gState, name, place)?.also { return it }
             }
 
+            if (sharedMeetingEndCondition())
+                EndMeeting(name, place, gState).also { if (it.isValid()) return it }
             //If nothing else to talk about, end the speech. The next speaker is the character with the highest mutuality.
             return EndSpeech(
                 name, place, meeting.currentCharacters.minus(name)
