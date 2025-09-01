@@ -2,6 +2,7 @@ package com.titaniumPolitics.game.core.NPCRoutines
 
 import com.titaniumPolitics.game.core.Meeting
 import com.titaniumPolitics.game.core.Place
+import com.titaniumPolitics.game.core.ReadOnly
 import com.titaniumPolitics.game.core.ReadOnly.const
 import com.titaniumPolitics.game.core.gameActions.BuyDrink
 import com.titaniumPolitics.game.core.gameActions.GameAction
@@ -9,7 +10,7 @@ import com.titaniumPolitics.game.core.gameActions.Wait
 import kotlinx.serialization.Serializable
 
 @Serializable
-class DowntimeRoutine() : Routine() {
+class DowntimeRoutine(var workplace: String? = null) : Routine() {
     init {
         priority = PRIORITY_REST
     }
@@ -64,14 +65,14 @@ class DowntimeRoutine() : Routine() {
 
     private fun condition(name: String, place: String): Boolean {
         //Pay attention to the condition checking order.
-        if (gState.characters[name]!!.health <= const("CriticalHealth")
-            || gState.characters[name]!!.hunger >= const("hungerThreshold")
-            || gState.characters[name]!!.thirst >= const("thirstThreshold")
-        ) return true //Need to take care of life support first.
+        if (gState.characters[name]!!.health < ReadOnly.const("CriticalHealth")) return true
+        if (gState.characters[name]!!.hunger > ReadOnly.const("hungerThreshold")) return true
+        if (gState.characters[name]!!.thirst > ReadOnly.const("thirstThreshold")) return true
+        //Need to take care of life support first.
         if (gState.getMutuality(name) < const("DowntimeWill")) return false
-        if (variables["workplace"] == null)
+        if (workplace == null)
             return false //Jobless = downtime forever.
         else
-            return isWorkHourWithETA(gState, name, place, variables["workplace"]!!)
+            return isWorkHourWithETA(gState, name, place, workplace!!)
     }
 }

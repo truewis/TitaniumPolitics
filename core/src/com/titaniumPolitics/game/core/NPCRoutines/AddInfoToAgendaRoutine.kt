@@ -22,7 +22,6 @@ class AddInfoToAgendaRoutine(val agendaIndex: Int, val support: Boolean) : Routi
     }
 
     override fun execute(name: String, place: String): GameAction {
-        success()
         val character = gState.characters[name]!!
         val conf =
             character.currentMeeting!!
@@ -47,6 +46,8 @@ class AddInfoToAgendaRoutine(val agendaIndex: Int, val support: Boolean) : Routi
                 )
             }
             if (addingInfo != null) {
+
+                success()
                 //If I have supporting information, add it to the agenda.
                 return AddInfo(name, place, addingInfo, this@AddInfoToAgendaRoutine.agendaIndex, gState)
             }

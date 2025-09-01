@@ -39,7 +39,7 @@ data class NewAgenda(override val sbjCharacter: String, override val tgtPlace: S
         if (reason(mt.agendas.size >= 4, "newAgenda-AgendaLimit"))
             return false //Idea Draft: A meeting can have at most 4 agendas.
         when (agenda.type) {
-            AgendaType.PROOF_OF_WORK -> return agenda.attachedRequest != null
+            AgendaType.PROOF_OF_WORK -> return agenda.attachedRequest != null && mt.agendas.none { oldAgenda -> oldAgenda.type == AgendaType.REQUEST && oldAgenda.attachedRequest == agenda.attachedRequest }
             //You have to choose which command you are responding to. The character who issued the command must be present in the meeting.
             //Other people may add supporting or disapproving information.
             AgendaType.BUDGET_PROPOSAL -> return mt.type == Meeting.MeetingType.BUDGET_PROPOSAL && with(parent) {

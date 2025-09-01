@@ -43,7 +43,7 @@ class LeadDivisionMeetingRoutine(override val meetingName: String) : MeetingRout
                                 tgtPlace = queryPl.name,
                                 what = type
                             ),
-                            issuedTo = (party.members.toList() - name).toHashSet(),
+                            issuedTo = (meeting.currentCharacters - name).toHashSet(),
                             issuedBy = hashSetOf(name),
                             executeTime = gState.time
                         )

@@ -144,18 +144,15 @@ sealed class MeetingRoutine : Routine() {
     fun proposeProofOfWork(name: String, place: String): GameAction? {
         //Proof of work should have corresponding request. If there is no request or no relevant information, do not propose proof of work.
         //Some information are more relevant than others.
-        if (meeting.agendas.none { it.type == AgendaType.PROOF_OF_WORK }) {
-            gState.requests.values.firstOrNull {
-                name in it.issuedBy && it.issuedTo.intersect(meeting.currentCharacters)
-                    .isNotEmpty() && !it.completed && meeting.agendas.none { agenda -> agenda.type == AgendaType.REQUEST && agenda.attachedRequest == it } /*Do not demand the request submitted in this meeting to be proved right away.*/
-            }?.let { req ->
-                NewAgenda(name, place, gState).also {
-                    it.agenda = MeetingAgenda(AgendaType.PROOF_OF_WORK, name, attachedRequest = req)
-                    if (it.isValid())
-                        return it
-                }
+        gState.requests.values.firstOrNull {
+            name in it.issuedBy && it.issuedTo.intersect(meeting.currentCharacters)
+                .isNotEmpty() && !it.completed /*Do not demand the request submitted in this meeting to be proved right away.*/
+        }?.let { req ->
+            NewAgenda(name, place, gState).also {
+                it.agenda = MeetingAgenda(AgendaType.PROOF_OF_WORK, name, attachedRequest = req)
+                if (it.isValid())
+                    return it
             }
-
         }
         return null
     }
