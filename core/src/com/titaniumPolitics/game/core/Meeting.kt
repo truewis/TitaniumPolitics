@@ -80,6 +80,23 @@ class Meeting(
     }
 
     fun endMeeting(gameState: GameState) {
+        //If budget is not resolved in a budget resolution meeting, remove all proposed budgets, and decrease party integrity.
+        if (type == MeetingType.BUDGET_RESOLUTION) {
+            val party = gameState.parties[involvedParty]!!
+            if (!party.isBudgetResolved) {
+                party.proposedBudgets.clear()
+                party.isBudgetProposed = false
+                gameState.setPartyMutuality(
+                    party.name,
+                    weightedDelta = const("BudgetNotResolvedDeltaPartyIntegrity"), reasonKey =
+                        "mutuality-BudgetNotResolved"
+                )
+                Logger.write(
+                    "The budget of the party ${party.name} is not resolved. Proposed budgets are cleared, and party integrity is decreased.",
+                    Logger.LogLevel.INFO
+                )
+            }
+        }
         //If there are any unsatisfied proof of work requests, affect the mutualities.
         agendas.forEach {
             if (it.type == AgendaType.PROOF_OF_WORK && it.attachedRequest != null && it.informationKeys.isEmpty()) {

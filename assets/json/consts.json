@@ -32,6 +32,7 @@
   "mutualityMin": 0,
   "mutualityDefault": 50,
   "mutualityMax": 100,
+  "BudgetNotResolvedDeltaPartyIntegrity": -10,
   "RequestRejectAverageMutuality": 60,
   "EnemyPartyMutualityThreshold": 25,
   "FriendMutualityThreshold": 75,

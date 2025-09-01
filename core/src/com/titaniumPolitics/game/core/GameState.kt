@@ -135,6 +135,14 @@ class GameState {
         meeting: Meeting
     ) {
         if (_scheduledMeetings.containsValue(meeting)) throw Exception("Scheduled meeting $meeting already exists.")
+        if (meeting.involvedParty != null)
+            if (_scheduledMeetings.any {
+                    it.value.involvedParty == meeting.involvedParty && abs(
+                        it.value.time - meeting.time
+                    ) < IDTH
+                }) {
+                throw Exception("Scheduled meeting ${meeting.type} with party ${meeting.involvedParty} at time ${meeting.time} conflicts with existing meeting.")
+            }
         _scheduledMeetings["${meeting.type}-${meeting.place}-${meeting.time}"] = meeting
         onAddScheduledMeeting.forEach { it(meeting) }
     }
