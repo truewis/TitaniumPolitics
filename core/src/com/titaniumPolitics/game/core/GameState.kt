@@ -287,7 +287,7 @@ class GameState {
         //Generate lower level managers for each workplace.
         parties.filter { it.value.type == Party.Type.WORKPLACE }.forEach { party ->
             listOf(Role.ADMINISTRATOR, Role.TREASURER, Role.OVERSEER).forEach { role ->
-                val name = "${role}_${party.key}"
+                val name = CharacterGenerator.generateName(listOf(true, false).random())
                 characters[name] = Character().apply {
                     this.injectParent(this@GameState)
                     type = Character.Type.EMPLOYEE
