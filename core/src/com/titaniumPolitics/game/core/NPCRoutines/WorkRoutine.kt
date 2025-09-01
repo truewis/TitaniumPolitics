@@ -134,7 +134,7 @@ class WorkRoutine(var workplace: String) : Routine() {
                     name,
                     it
                 )
-            } / it.issuedBy.size > it.difficulty()) && GameEngine.availableActions(
+            } / it.issuedBy.size > it.difficulty(gState)) && GameEngine.availableActions(
                 gState,
                 it.action.tgtPlace,
                 name

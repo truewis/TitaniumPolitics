@@ -30,7 +30,7 @@ class ExecuteCommandRoutine() : Routine() {
                             gState.getMutuality(
                                 name,
                                 it.key
-                            ) > executableRequest.difficulty() //Someone I trust, does not matter if they trust me or not
+                            ) > executableRequest.difficulty(gState) //Someone I trust, does not matter if they trust me or not
                             &&
                             executableRequest.action.isProofOfWork(
                                 Information(

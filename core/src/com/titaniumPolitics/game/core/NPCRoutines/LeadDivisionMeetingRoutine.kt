@@ -39,7 +39,7 @@ class LeadDivisionMeetingRoutine(override val meetingName: String) : MeetingRout
                     val agenda = MeetingAgenda(AgendaType.REQUEST, name).apply {
                         attachedRequest = Request(
                             Examine(
-                                sbjCharacter = meeting.involvedParty!!,
+                                sbjCharacter = (meeting.currentCharacters - name).first(),
                                 tgtPlace = queryPl.name,
                                 what = type
                             ),

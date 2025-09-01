@@ -88,8 +88,9 @@ class NonPlayerAgent : Agent() {
             }
         }
         //If health is low, rest
-        if (character.health < const("TiredHealth") &&
-            !RestRoutine.endRestCondition(character.name, place, parent.getWorkplace(name)?.name, parent)
+        if (character.health < const("TiredHealth") ||
+            (character.hunger > const("hungerThreshold")) ||
+            (character.thirst > const("thirstThreshold"))
         ) {
             if (routines.none { it is RestRoutine }) {
                 routines.add(RestRoutine(parent.getWorkplace(name)?.name).apply {

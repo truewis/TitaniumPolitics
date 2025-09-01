@@ -271,9 +271,13 @@ sealed class MeetingRoutine : Routine() {
                     name,
                     it
                 )
-            } / it.issuedBy.size > it.difficulty()) && it.action.let { it.injectParent(gState); return@let it.isValid() }
+            } / it.issuedBy.size > it.difficulty(gState))
         }?.also { request ->
-            return request.action.apply { injectParent(gState) }
+            request.action.copy(name).apply {
+                injectParent(gState)
+                if (isValid()) return this
+            }
+
         }
         return null
     }

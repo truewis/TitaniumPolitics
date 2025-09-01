@@ -106,7 +106,19 @@ class Request(
             0.0
     }
 
-    fun difficulty(): Double {
+    fun difficulty(gState: GameState): Double {
+        //if issuedBy includes one of my boss, it is easier.
+        if (issuedBy.isEmpty()) return ReadOnly.const("RequestRejectAverageMutuality")//System request, average difficulty.
+        //If issuedBy contains my boss, it is easier.
+        if (issuedBy.any { issuedByChar ->
+                gState.parties.any {
+                    it.value.leader == issuedByChar && it.value.members.intersect(
+                        issuedTo
+                    ).isNotEmpty()
+                }
+            }) {
+            return ReadOnly.const("RequestRejectAverageMutuality") / 2
+        }
         return ReadOnly.const("RequestRejectAverageMutuality")//TODO: difficulty must change according to action.
     }
 

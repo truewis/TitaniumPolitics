@@ -43,11 +43,11 @@ class LeadCabinetMeetingRoutine(override val meetingName: String) : MeetingRouti
                     val agenda = MeetingAgenda(AgendaType.REQUEST, name).apply {
                         attachedRequest = Request(
                             Examine(
-                                sbjCharacter = meeting.involvedParty!!,
+                                sbjCharacter = (meeting.currentCharacters - name).first(),
                                 tgtPlace = queryPl.name,
                                 what = type
                             ),
-                            issuedTo = (party.members.toList() - name).toHashSet(),
+                            issuedTo = (meeting.currentCharacters - name).toHashSet(),
                             issuedBy = hashSetOf(name),
                             executeTime = gState.time
                         )

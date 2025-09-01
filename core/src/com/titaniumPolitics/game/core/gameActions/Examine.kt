@@ -26,8 +26,6 @@ data class Examine(override val sbjCharacter: String, override val tgtPlace: Str
                     "HR: ${parent.places[tgtPlace]!!.currentWorker}/${parent.places[tgtPlace]!!.plannedWorker}, ${parent.places[tgtPlace]!!.workHoursStart}-${parent.places[tgtPlace]!!.workHoursEnd}, ${parent.places[tgtPlace]!!.responsibleDivision}",
                     Logger.LogLevel.INFO
                 )
-
-                //Acquire apparatus information.
                 with(parent.places[tgtPlace]!!) {
                     Information(
                         author = sbjCharacter,
@@ -37,7 +35,7 @@ data class Examine(override val sbjCharacter: String, override val tgtPlace: Str
                         tgtPlace = tgtPlace,
                         amount = currentWorker
                     ).also {
-                        it.knownTo.add(sbjCharacter);parent.addInformation(it)
+                        it.knownTo.add(sbjCharacter); parent.addInformation(it)
                     }
 
                 }
@@ -49,7 +47,7 @@ data class Examine(override val sbjCharacter: String, override val tgtPlace: Str
                 //Acquire apparatus information.
                 parent.places[tgtPlace]!!.apparatuses.forEach { entry ->
                     entry.getInformation(sbjCharacter, tgtPlace, parent.time).also {
-                        it.knownTo.add(sbjCharacter);parent.addInformation(it)
+                        it.knownTo.add(sbjCharacter); parent.addInformation(it)
                     }
 
                 }
@@ -69,7 +67,7 @@ data class Examine(override val sbjCharacter: String, override val tgtPlace: Str
                         tgtPlace = tgtPlace,
                         resources = parent.characters[sbjCharacter]!!.resources
                     ).also {
-                        it.knownTo.add(sbjCharacter);parent.addInformation(it)
+                        it.knownTo.add(sbjCharacter); parent.addInformation(it)
                     }
 
                 } else {
@@ -97,6 +95,7 @@ data class Examine(override val sbjCharacter: String, override val tgtPlace: Str
     }
 
     override fun isValid(): Boolean {
+        if (sbjCharObj.currentMeeting != null) return false //Cannot examine when in a meeting.
         tgtPlaceObj.responsibleDivision?.let {
             if (!reason(
                     it == (sbjCharObj.division?.name
