@@ -104,11 +104,23 @@ sealed class GameAction() {
         return deltaWill()
     }
 
-    //Stupid cloning using reflection, assumes all subclasses are data classes.
-    //Surely this can't strike me back.
-    fun copy(newSbj: String): GameAction {
+    /**Stupid cloning using reflection, assumes all subclasses are data classes.
+     * Surely this can't strike me back.
+     */
+    fun copyRef(newSbj: String): GameAction {
         val copyFun = this::class.memberFunctions.first { it.name == "copy" }
         return copyFun.callBy(mapOf(copyFun.parameters[0] to this, copyFun.parameters[1] to newSbj)) as GameAction
+    }
+
+    fun copyRef(newSbj: String, newPlace: String): GameAction {
+        val copyFun = this::class.memberFunctions.first { it.name == "copy" }
+        return copyFun.callBy(
+            mapOf(
+                copyFun.parameters[0] to this,
+                copyFun.parameters[1] to newSbj,
+                copyFun.parameters[2] to newPlace
+            )
+        ) as GameAction
     }
 
 }

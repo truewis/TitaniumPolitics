@@ -31,12 +31,17 @@ data class Repair(override val sbjCharacter: String, override val tgtPlace: Stri
     }
 
     override fun isValid(): Boolean {
-        val app = tgtPlaceObj.getApparatus(apparatusID)
-        return sbjCharObj.trait.contains("engineer")
-                && reason(
-            tgtPlaceObj.resources.contains(app.requiredResourcePerRepair[checkRepairLevel(app).first]),
-            "repair-resources"
-        )
+        try {
+            val app =
+                tgtPlaceObj.getApparatus(apparatusID) //There may not be such an apparatus in the place. Exception handling.
+            return sbjCharObj.trait.contains("engineer")
+                    && reason(
+                tgtPlaceObj.resources.contains(app.requiredResourcePerRepair[checkRepairLevel(app).first]),
+                "repair-resources"
+            )
+        } catch (e: Exception) {
+            return false
+        }
     }
 
     override fun deltaWill(): Double {

@@ -275,7 +275,7 @@ sealed class MeetingRoutine : Routine() {
                 )
             } / it.issuedBy.size > it.difficulty(gState))
         }?.also { request ->
-            request.action.copy(name).apply {
+            request.action.copyRef(name, place).apply {
                 injectParent(gState)
                 if (isValid()) return this
             }

@@ -26,11 +26,11 @@ class CharacterGenerator {
             }
             val modifier = nameModifierProps.values.random().toString()
             val fullName = modifier.format(baseName)
-            ReadOnly.charProps.setProperty(count.toString(), fullName)
+            ReadOnly.charProps.setProperty("c$count", fullName)
             count++
             return if (fullName in generatedNames) generateName(isMale) else {
                 generatedNames.add(fullName)
-                count.toString()
+                "c$count"
             }
         }
 

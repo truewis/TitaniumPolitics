@@ -179,7 +179,8 @@ class Place : GameStateElement() {
         get() = workHoursStart..workHoursEnd
     var apparatuses = hashSetOf<Apparatus>()
     fun getApparatus(ID: String): Apparatus {
-        return apparatuses.find { it.ID == ID }!!
+        return apparatuses.find { it.ID == ID }
+            ?: throw Exception("Apparatus $ID not found in place $name")
     }
 
     var characters = hashSetOf<String>()

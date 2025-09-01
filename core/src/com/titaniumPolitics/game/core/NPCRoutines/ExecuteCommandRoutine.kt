@@ -18,8 +18,6 @@ class ExecuteCommandRoutine() : Routine() {
 
 
     override fun newRoutineCondition(name: String, place: String, subroutines: List<Routine>): Routine? {
-        Logger.write("$name is executing the command ${executableRequest}.", Logger.LogLevel.INFO)
-
         //If there are subroutines, it means that the character is already doing something else, so do not create new subroutines.
         if (subroutines.isEmpty()) {
 
@@ -34,7 +32,7 @@ class ExecuteCommandRoutine() : Routine() {
                             &&
                             executableRequest.action.isProofOfWork(
                                 Information(
-                                    action = executableRequest.action.copy(it.key)
+                                    action = executableRequest.action.copyRef(it.key)
                                 )
                             )
                 }
@@ -51,7 +49,7 @@ class ExecuteCommandRoutine() : Routine() {
                             return AttendPrivateMeetingRoutine(
                                 executor, MeetingAgenda(
                                     AgendaType.REQUEST, name, attachedRequest = Request(
-                                        executableRequest.action.copy(executor),
+                                        executableRequest.action.copyRef(executor),
                                         issuedTo = hashSetOf(executor),
                                         issuedBy = hashSetOf(name),
                                         executeTime = gState.time
@@ -88,7 +86,7 @@ class ExecuteCommandRoutine() : Routine() {
 
     override fun execute(name: String, place: String): GameAction {
         if (place == executableRequest.action.tgtPlace) {
-            val copy = executableRequest.action.copy(name)
+            val copy = executableRequest.action.copyRef(name, place)
             copy.injectParent(gState)
             if (copy.isValid()) {
                 Logger.write(
