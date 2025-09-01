@@ -155,9 +155,8 @@ class Place : GameStateElement() {
             ?.map { parent.characters[it]!! }
 
     val currentTotalPop: Int
-        //This number must be conserved.
         get() {
-            return characters.sumOf { if (it.contains("Anon")) parent.characters[it]!!.reliant else 1 }
+            return characters.sumOf { if (it.contains("Anon")) parent.characters[it]!!.reliant else parent.characters[it]!!.reliant + 1 }
 //            if (name.contains("home")) return 0 //Home populations are added to the places the home is in.
 //
 //            if (name == "squareSouth") return parent.idlePop + currentWorker//All idle people gather at the square.

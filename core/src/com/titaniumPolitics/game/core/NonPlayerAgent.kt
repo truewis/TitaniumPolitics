@@ -210,6 +210,16 @@ class NonPlayerAgent : Agent() {
 
 
     private fun whenIdle() {
+        //If life support is needed, do it first.
+        if (character.health < const("TiredHealth") ||
+            (character.hunger > const("hungerThreshold")) ||
+            (character.thirst > const("thirstThreshold"))
+        ) {
+            routines.add(RestRoutine(parent.getWorkplace(name)?.name).also {
+                it.routineStartTime = parent.time
+            })
+            return
+        }
         //When work hours, work
         parent.getWorkplace(name)?.let { wkplace ->
             if (Routine.isWorkCondition(name, place, wkplace.name, parent)) {
@@ -223,17 +233,13 @@ class NonPlayerAgent : Agent() {
                     })
                 }
                 return
-            } else
-            //When not work hours, rest
-                routines.add(RestRoutine(wkplace.name).also {
-                    it.routineStartTime = parent.time
-                })
+            }
         }
-            ?:
-            //When no workplace, play
-            routines.add(DowntimeRoutine().also {
-                it.routineStartTime = parent.time
-            })
+
+        //When no work and no life support, play
+        routines.add(DowntimeRoutine().also {
+            it.routineStartTime = parent.time
+        })
 
     }
 
