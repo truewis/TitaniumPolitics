@@ -98,7 +98,8 @@ class AssistantUI(gameState: GameState) : Table(defaultSkin) {
         //Mark the information button when new information is received.
         gameState.onAddInfo += { info ->
             Gdx.app.postRunnable {
-                if (info.knownTo.contains(gameState.playerName)) {
+                if (info.knownTo.contains(gameState.playerName) && info.author != gameState.playerName) {
+                    //I know information I wrote, no need to remind me.
                     informationButton.changeMarkedState(true)
                 }
             }
