@@ -105,7 +105,7 @@ class CharacterInteractionWindowUI(var gameState: GameState) :
             setPosition(x + XOFFSET, y + YOFFSET)
             isVisible = true
             if (gameState.characters[charName]!!.type != Character.Type.ANON)
-                this.titleLabel.setText(ReadOnly.prop(charName))
+                this.titleLabel.setText(ReadOnly.charProp(charName))
             else
                 this.titleLabel.setText(ReadOnly.prop("characterInteractionWindowUI-survivor"))
             characterDisplayed = charName

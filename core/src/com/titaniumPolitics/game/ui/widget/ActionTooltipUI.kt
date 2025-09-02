@@ -82,9 +82,9 @@ class ActionTooltipUI(actionName: String, dangerous: Boolean = false) : Tooltip<
                 wrap = true
             }
             row()
-            label("This is a placeholder.", "description") {
+            label("", "description") {
                 it.size(350f - PADDING * 2, 100f)
-                name = "reasonText"
+                name = "delayText"
                 setFontScale(0.25f)
                 color = Color.YELLOW
                 setAlignment(Align.topLeft)

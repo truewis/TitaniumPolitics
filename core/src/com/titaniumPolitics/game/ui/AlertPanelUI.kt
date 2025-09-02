@@ -92,7 +92,10 @@ class AlertPanelUI(var type: String, action: () -> Unit, val docList: Group, var
                 }
                 when (this@AlertPanelUI.type) {
                     "moved" ->
-                        label(ReadOnly.prop(this@AlertPanelUI.type).format(params[0], params[1]), "description") {
+                        label(
+                            ReadOnly.prop("AlertPanelUI-" + this@AlertPanelUI.type).format(params[0], params[1]),
+                            "description"
+                        ) {
                             it.growX()
                             setFontScale(0.2f)
                             wrap = true
