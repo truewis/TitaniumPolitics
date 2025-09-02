@@ -41,7 +41,7 @@ class CharacterSelectButton(
     }
 
     fun setLabel(characterName: String) {
-        charLabel.setText(ReadOnly.prop(characterName))
+        charLabel.setText(ReadOnly.charProp(characterName))
     }
 
     fun clearSelection() {

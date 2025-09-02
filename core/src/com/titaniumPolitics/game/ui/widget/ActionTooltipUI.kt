@@ -7,6 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.ui.Tooltip
 import com.badlogic.gdx.utils.Align
 import com.titaniumPolitics.game.core.ReadOnly
+import ktx.scene2d.container
 import ktx.scene2d.image
 import ktx.scene2d.label
 import ktx.scene2d.scene2d
@@ -14,17 +15,15 @@ import ktx.scene2d.stack
 import ktx.scene2d.table
 
 class ActionTooltipUI(actionName: String, dangerous: Boolean = false) : Tooltip<Table>(scene2d.table {
-    addActor(scene2d.image("TooltipShadow10p") {
-        it.width = 450f
-        it.height = 450f
-        it.x = -50f
-        it.y = -50f
-        setColor(0f, 0f, 0f, 0.7f)
-        touchable = Touchable.disabled//This is a shadow outside the tooltip
-    })
     stack {
-
-        it.size(350f)
+        container(scene2d.image("TooltipShadow10p") {
+            setColor(0f, 0f, 0f, 0.7f)
+            touchable = Touchable.disabled//This is a shadow outside the tooltip
+        }) {
+            fill()
+            pad(-50f)
+        }
+        it.size(350f).growY()
         image("BlackPx")
 
         image("NoiseBackground") {
@@ -79,6 +78,15 @@ class ActionTooltipUI(actionName: String, dangerous: Boolean = false) : Tooltip<
                 name = "reasonText"
                 setFontScale(0.25f)
                 color = Color.RED
+                setAlignment(Align.topLeft)
+                wrap = true
+            }
+            row()
+            label("This is a placeholder.", "description") {
+                it.size(350f - PADDING * 2, 100f)
+                name = "reasonText"
+                setFontScale(0.25f)
+                color = Color.YELLOW
                 setAlignment(Align.topLeft)
                 wrap = true
             }

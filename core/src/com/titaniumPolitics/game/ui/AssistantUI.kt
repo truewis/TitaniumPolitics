@@ -94,6 +94,15 @@ class AssistantUI(gameState: GameState) : Table(defaultSkin) {
                 }
             }
         }
+
+        //Mark the information button when new information is received.
+        gameState.onAddInfo += { info ->
+            Gdx.app.postRunnable {
+                if (info.knownTo.contains(gameState.playerName)) {
+                    informationButton.changeMarkedState(true)
+                }
+            }
+        }
     }
 
     companion object {
