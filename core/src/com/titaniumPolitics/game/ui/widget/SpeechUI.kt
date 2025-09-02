@@ -22,7 +22,7 @@ class SpeechUI : Table(defaultSkin), KTable {
 
     val onSpeechEnd = arrayListOf<() -> Unit>()
     private val speech = TypingLabel("", defaultSkin, "description").apply {
-        setFontScale(0.5f)
+        setFontScale(0.4f)
         color = Color.WHITE
         wrap = true
         typingListener = object : TypingListener {
@@ -130,10 +130,14 @@ class SpeechUI : Table(defaultSkin), KTable {
 //                color = Color.RED
 //            }
         theEmoji.isVisible = true
+        theEmoji.clearListeners()
         try {
             theEmoji.setDrawable(
                 defaultSkin,
                 ReadOnly.actionJson[actionName]!!.jsonObject["image"]!!.jsonPrimitive.content
+            )
+            theEmoji.addListener(
+                ActionTooltipUI(actionName)
             )
         } catch (e: Exception) {
             theEmoji.setDrawable(defaultSkin, "Help")
