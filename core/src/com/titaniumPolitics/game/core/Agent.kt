@@ -28,18 +28,16 @@ sealed class Agent : GameStateElement() {
         //Leave meeting or conference if the routine was changed.
         //This allows the character to leave the meeting if it has a higher priority routine.
         if (routines.isEmpty()) return null
-        if (character.currentMeeting != null && routines[0].let {
-                it !is MeetingRoutine || it.meetingName != parent.meetingName(
+        if (character.currentMeeting != null && routines.none {
+                it is MeetingRoutine && it.meetingName == parent.meetingName(
                     character.currentMeeting!!
                 )
             }) {
-            LeaveMeeting(name, place).also {
-                it.injectParent(parent)
+            LeaveMeeting(name, place, parent).also {
                 if (it.isValid()) return it
             }
             //If leaving meeting is not possible, try ending speech.
-            EndSpeech(name, place, character.currentMeeting!!.currentCharacters.first { it != name }).also {
-                it.injectParent(parent)
+            EndSpeech(name, place, character.currentMeeting!!.currentCharacters.first { it != name }, parent).also {
                 if (it.isValid()) return it
             }
 

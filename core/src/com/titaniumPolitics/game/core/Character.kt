@@ -381,7 +381,7 @@ class Character : GameStateElement() {
                 parent.parties.values.firstOrNull { this.name in it.members && it.type == Party.Type.WORKPLACE }
             if (workplaceParty != null) {
                 position = ReadOnly.prop(workplaceParty.getRole(this.name).toString() + "-dialogue")
-                    .format(ReadOnly.prop(workplaceParty.home!!))
+                    .format(ReadOnly.placeProp(workplaceParty.home!!))
             }
         } else {
             //Check if char leads cabinet, division, or workplace party
@@ -392,7 +392,7 @@ class Character : GameStateElement() {
                 position = ReadOnly.prop("divisionLeader-dialogue").format(ReadOnly.prop(divisionParty.name))
             } else if (leadingParties.any { it.type == Party.Type.WORKPLACE }) {
                 val workplaceParty = leadingParties.first { it.type == Party.Type.WORKPLACE }
-                position = ReadOnly.prop("director-dialogue").format(ReadOnly.prop(workplaceParty.home!!))
+                position = ReadOnly.prop("director-dialogue").format(ReadOnly.placeProp(workplaceParty.home!!))
             }
         }
         return position
