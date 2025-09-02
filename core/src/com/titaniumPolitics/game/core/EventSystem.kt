@@ -1,5 +1,6 @@
 package com.titaniumPolitics.game.core
 
+import com.titaniumPolitics.game.core.ReadOnly.IDTH
 import com.titaniumPolitics.game.events.*
 import com.titaniumPolitics.game.ui.Quest
 import com.titaniumPolitics.game.ui.widget.SpeechUI
@@ -52,15 +53,45 @@ class EventSystem : GameStateElement() {
                         gameState.playerName in it.value.issuedTo
             }.forEach { (_, req) ->
                 {
-                    updateQuest(
-                        Quest(
-                            req.name + "Quest",
-                            req.action.toString(),
-                            req.action.tgtPlace,
-                            dueTime = req.executeTime
-                        )
-                    )
+                    add(Event_GenuineRequest(req.name))
                 }
+            }
+            gameState.scheduledMeetings.filter {
+                it.value.type == Meeting.MeetingType.DIVISION_LEADER_ELECTION && it.value.involvedParty == gameState.player.division?.name
+            }.keys.firstOrNull()?.let { add(Event_ElectionApproaching(it)) }
+            gameState.scheduledMeetings.filter {
+                it.value.type == Meeting.MeetingType.BUDGET_PROPOSAL && gameState.playerName in it.value.scheduledCharacters
+            }.keys.firstOrNull()?.let { add(Event_ProposeBudget(it)) }
+            gameState.scheduledMeetings.filter {
+                it.value.type == Meeting.MeetingType.BUDGET_RESOLUTION && gameState.playerName in it.value.scheduledCharacters
+            }.keys.firstOrNull()?.let { add(Event_ResolveBudget(it)) }
+            val relevantInfos = parent.player.preparedInfoKeys.map {
+                parent.informations[it]!!
+            }.filter { info ->
+                parent.time - info.tgtTime < 168 * IDTH //Has to be recent enough
+            }
+            parent.parties.values.filter {
+                it.leader == parent.playerName && it.type == Party.Type.WORKPLACE
+            }.forEach {
+                val place = it.workplace.name
+                if (relevantInfos.none { it.type == InformationType.HUMAN_RESOURCES && it.tgtPlace == place }
+                    || relevantInfos.none { it.type == InformationType.APPARATUS && it.tgtPlace == place }
+                    || relevantInfos.none { it.type == InformationType.RESOURCES && it.tgtPlace == place })
+                    add(Event_ExpiredWorkplaceInformation(place))
+                if (!it.isSalaryPaid)
+                    add(Event_PaySalary(it.name))
+            }
+            parent.parties.values.filter {
+                it.leader == parent.playerName
+            }.forEach {
+                val hatefulMembers = it.members.filter {
+                    parent.getMutNorm(it, parent.playerName) < -0.25
+                }
+                if (hatefulMembers.isNotEmpty())
+                    add(Event_HatefulDirectReport(hatefulMembers, it.name))
+                if (it.integrity < -0.25)
+                    add(Event_ImprovePartyIntegrity(it.name))
+
             }
         }
 

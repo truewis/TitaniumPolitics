@@ -125,7 +125,7 @@ data class Quest(
     val name: String,
     val description: String,
     val tgtPlace: String? = null,
-    val tgtCharacter: String? = null,
+    val tgtCharacters: List<String> = listOf(),
     val tgtMeeting: String? = null,
     val dueTime: Int? = null,
     val onClick: (() -> Unit)? = null

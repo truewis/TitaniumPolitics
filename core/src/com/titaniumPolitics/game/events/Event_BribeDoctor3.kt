@@ -13,7 +13,7 @@ class Event_BribeDoctor3(var searchFrom: Int) : EventObject("Talking with Dr Pai
         "Investigate the water storage",
         "Talk to Dr Paik about the water storage at the Welfare Station East.",
         tgtPlace = "WelfareStationEast",
-        tgtCharacter = "DrPaik",
+        tgtCharacters = listOf("DrPaik"),
     )
 
     override fun exec(a: Int, b: Int) {

@@ -11,7 +11,7 @@ class Event_BribeDoctor2 : EventObject("Talking with Dr Paik.", true), IQuestEve
     override val quest = Quest(
         "Talking with Dr Paik.",
         description = "Talk to Dr Paik in the Welfare Station East.",
-        tgtCharacter = "DrPaik",
+        tgtCharacters = listOf("DrPaik"),
         tgtPlace = "WelfareStationEast",
     )
 
