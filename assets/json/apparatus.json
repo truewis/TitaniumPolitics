@@ -292,7 +292,7 @@
       }
     ]
   },
-  "electricianWorkshop": {
+  "electronicsWorkshop": {
     "image": "defaultApparatus.png",
     "durabilityTau": 8.64e7,
     "baseDanger": 6e-4,
@@ -328,7 +328,7 @@
       }
     ]
   },
-  "plumberWorkshop": {
+  "plumbingWorkshop": {
     "image": "defaultApparatus.png",
     "durabilityTau": 8.64e7,
     "baseDanger": 6e-4,
@@ -400,16 +400,354 @@
       }
     ]
   },
-  "exchangePost": {
+  "ceramicWorkshop": {
+    "image": "defaultApparatus.png",
+    "durabilityTau": 8.64e7,
+    "baseDanger": 6e-4,
+    "idealWorker": 5,
+    "maxTemp": 400,
+    "minTemp": 200,
+    "idealProduction": {
+      "ceramic": 10
+    },
+    "idealConsumption": {
+      "glass": 10,
+      "energy": 1e7
+    },
+    "idealHeatProduction": 1e7,
+    "requiredResourcePerRepair": [
+      {
+        "_resources": {
+          "component": 5.0,
+          "plumbing": 5.0
+        }
+      },
+      {
+        "_resources": {
+          "component": 5.0,
+          "electronics": 5.0,
+          "plumbing": 5.0
+        }
+      },
+      {
+        "_resources": {
+          "component": 10.0,
+          "electronics": 10.0,
+          "plumbing": 5.0
+        }
+      }
+    ]
+  },
+  "glassClothesWorkshop": {
+    "image": "defaultApparatus.png",
+    "durabilityTau": 8.64e7,
+    "baseDanger": 6e-4,
+    "idealWorker": 5,
+    "maxTemp": 400,
+    "minTemp": 200,
+    "idealProduction": {
+      "glassClothes": 1e-2
+    },
+    "idealConsumption": {
+      "glass": 1e-2,
+      "energy": 1e7
+    },
+    "idealHeatProduction": 1e7,
+    "requiredResourcePerRepair": [
+      {
+        "_resources": {
+          "component": 5.0,
+          "plumbing": 5.0
+        }
+      },
+      {
+        "_resources": {
+          "component": 5.0,
+          "electronics": 5.0,
+          "plumbing": 5.0
+        }
+      },
+      {
+        "_resources": {
+          "component": 10.0,
+          "electronics": 10.0,
+          "plumbing": 5.0
+        }
+      }
+    ]
+  },
+  "cottonClothesWorkshop": {
+    "image": "defaultApparatus.png",
+    "durabilityTau": 8.64e7,
+    "baseDanger": 6e-4,
+    "idealWorker": 5,
+    "maxTemp": 400,
+    "minTemp": 200,
+    "idealProduction": {
+      "cottonClothes": 1e-3
+    },
+    "idealConsumption": {
+      "organics": 1e-3,
+      "energy": 1e5
+    },
+    "idealHeatProduction": 1e5,
+    "requiredResourcePerRepair": [
+      {
+        "_resources": {
+          "component": 5.0,
+          "plumbing": 5.0
+        }
+      },
+      {
+        "_resources": {
+          "component": 5.0,
+          "electronics": 5.0,
+          "plumbing": 5.0
+        }
+      },
+      {
+        "_resources": {
+          "component": 10.0,
+          "electronics": 10.0,
+          "plumbing": 5.0
+        }
+      }
+    ]
+  },
+  "plasticWorkshop": {
+    "image": "defaultApparatus.png",
+    "durabilityTau": 8.64e7,
+    "baseDanger": 6e-4,
+    "idealWorker": 5,
+    "maxTemp": 400,
+    "minTemp": 200,
+    "idealProduction": {
+      "plastic": 1e-2
+    },
+    "idealConsumption": {
+      "organics": 1e-2,
+      "energy": 1e6
+    },
+    "idealHeatProduction": 1e6,
+    "requiredResourcePerRepair": [
+      {
+        "_resources": {
+          "component": 5.0,
+          "plumbing": 5.0
+        }
+      },
+      {
+        "_resources": {
+          "component": 5.0,
+          "electronics": 5.0,
+          "plumbing": 5.0
+        }
+      },
+      {
+        "_resources": {
+          "component": 10.0,
+          "electronics": 10.0,
+          "plumbing": 5.0
+        }
+      }
+    ]
+  },
+  "exchangePostGlassClothes": {
     "image": "defaultApparatus.png",
     "durabilityTau": 8.64e7,
     "baseDanger": 1e-4,
     "idealWorker": 100,
     "idealDistribution": {
-      "ration": 1
+      "glassClothes": 1e-2
     },
     "idealConsumption": {
-      "ration": 1
+      "glassClothes": 1e-2
+    },
+    "requiredResourcePerRepair": [
+      {
+        "_resources": {
+          "component": 5.0
+        }
+      },
+      {
+        "_resources": {
+          "component": 5.0,
+          "electronics": 5.0
+        }
+      },
+      {
+        "_resources": {
+          "component": 10.0,
+          "electronics": 10.0
+        }
+      }
+    ]
+  },
+  "exchangePostCottonClothes": {
+    "image": "defaultApparatus.png",
+    "durabilityTau": 8.64e7,
+    "baseDanger": 1e-4,
+    "idealWorker": 100,
+    "idealDistribution": {
+      "cottonClothes": 1e-3
+    },
+    "idealConsumption": {
+      "cottonClothes": 1e-3
+    },
+    "requiredResourcePerRepair": [
+      {
+        "_resources": {
+          "component": 5.0
+        }
+      },
+      {
+        "_resources": {
+          "component": 5.0,
+          "electronics": 5.0
+        }
+      },
+      {
+        "_resources": {
+          "component": 10.0,
+          "electronics": 10.0
+        }
+      }
+    ]
+  },
+  "exchangePostCleanWater": {
+    "image": "defaultApparatus.png",
+    "durabilityTau": 8.64e7,
+    "baseDanger": 1e-4,
+    "idealWorker": 100,
+    "idealDistribution": {
+      "cleanWater": 1e-1
+    },
+    "idealConsumption": {
+      "cleanWater": 1e-1
+    },
+    "requiredResourcePerRepair": [
+      {
+        "_resources": {
+          "component": 5.0
+        }
+      },
+      {
+        "_resources": {
+          "component": 5.0,
+          "electronics": 5.0
+        }
+      },
+      {
+        "_resources": {
+          "component": 10.0,
+          "electronics": 10.0
+        }
+      }
+    ]
+  },
+  "exchangePostAmmonia": {
+    "image": "defaultApparatus.png",
+    "durabilityTau": 8.64e7,
+    "baseDanger": 1e-4,
+    "idealWorker": 100,
+    "idealDistribution": {
+      "Ammonia": 1e-6
+    },
+    "idealConsumption": {
+      "Ammonia": 1e-6
+    },
+    "requiredResourcePerRepair": [
+      {
+        "_resources": {
+          "component": 5.0
+        }
+      },
+      {
+        "_resources": {
+          "component": 5.0,
+          "electronics": 5.0
+        }
+      },
+      {
+        "_resources": {
+          "component": 10.0,
+          "electronics": 10.0
+        }
+      }
+    ]
+  },
+  "exchangePostPlastic": {
+    "image": "defaultApparatus.png",
+    "durabilityTau": 8.64e7,
+    "baseDanger": 1e-4,
+    "idealWorker": 100,
+    "idealDistribution": {
+      "plastic": 1e-3
+    },
+    "idealConsumption": {
+      "plastic": 1e-3
+    },
+    "requiredResourcePerRepair": [
+      {
+        "_resources": {
+          "component": 5.0
+        }
+      },
+      {
+        "_resources": {
+          "component": 5.0,
+          "electronics": 5.0
+        }
+      },
+      {
+        "_resources": {
+          "component": 10.0,
+          "electronics": 10.0
+        }
+      }
+    ]
+  },
+  "exchangePostCeramic": {
+    "image": "defaultApparatus.png",
+    "durabilityTau": 8.64e7,
+    "baseDanger": 1e-4,
+    "idealWorker": 100,
+    "idealDistribution": {
+      "ceramic": 2e-3
+    },
+    "idealConsumption": {
+      "ceramic": 2e-3
+    },
+    "requiredResourcePerRepair": [
+      {
+        "_resources": {
+          "component": 5.0
+        }
+      },
+      {
+        "_resources": {
+          "component": 5.0,
+          "electronics": 5.0
+        }
+      },
+      {
+        "_resources": {
+          "component": 10.0,
+          "electronics": 10.0
+        }
+      }
+    ]
+  },
+  "exchangePostDiamond": {
+    "image": "defaultApparatus.png",
+    "durabilityTau": 8.64e7,
+    "baseDanger": 1e-4,
+    "idealWorker": 100,
+    "idealDistribution": {
+      "diamond": 1e-6
+    },
+    "idealConsumption": {
+      "diamond": 1e-6
     },
     "requiredResourcePerRepair": [
       {
@@ -679,6 +1017,42 @@
       }
     ]
   },
+  "waterDistill": {
+    "image": "defaultApparatus.png",
+    "durabilityTau": 8.64e6,
+    "baseDanger": 6e-4,
+    "idealWorker": 0,
+    "tempCoef": -1,
+    "maxTemp": 373,
+    "minTemp": 273,
+    "idealConsumption": {
+      "water": 5e-2,
+      "energy": 1.13e6
+    },
+    "idealProduction": {
+      "cleanWater": 5e-2
+    },
+    "idealHeatProduction": 1.13e6,
+    "requiredResourcePerRepair": [
+      {
+        "_resources": {
+          "plumbing": 10
+        }
+      },
+      {
+        "_resources": {
+          "plumbing": 10,
+          "electronics": 5.0
+        }
+      },
+      {
+        "_resources": {
+          "plumbing": 20,
+          "electronics": 10.0
+        }
+      }
+    ]
+  },
   "co2Recycle": {
     "image": "defaultApparatus.png",
     "durabilityTau": 8.64e6,
@@ -871,7 +1245,8 @@
     "idealProduction": {
       "lightMetal": 0.1,
       "heavyMetal": 0.02,
-      "rareMetal": 1e-3
+      "rareMetal": 1e-3,
+      "diamond": 1e-6
     },
     "idealConsumption": {
       "energy": 1e7

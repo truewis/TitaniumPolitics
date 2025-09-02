@@ -24,7 +24,7 @@ data class EndSpeech(override val sbjCharacter: String, override val tgtPlace: S
         meeting.currentSpeaker = nextSpeaker
         Logger.write(
             "$sbjCharacter ended their speech and nominated $nextSpeaker as the next speaker.",
-            Logger.LogLevel.INFO
+            Logger.LogLevel.ACTION_VERBOSE
         )
         super.execute()
     }

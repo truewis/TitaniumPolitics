@@ -1115,7 +1115,15 @@
           "durability": 95
         },
         {
-          "name": "componentStorage",
+          "name": "plumbingWorkshop",
+          "durability": 95
+        },
+        {
+          "name": "electronicsWorkshop",
+          "durability": 95
+        },
+        {
+          "name": "steelPlant",
           "durability": 95
         },
         {
@@ -2385,15 +2393,15 @@
       ],
       "apparatuses": [
         {
-          "name": "exchangePost",
+          "name": "exchangePostGlassClothes",
           "durability": 95
         },
         {
-          "name": "exchangePost",
+          "name": "exchangePostCeramic",
           "durability": 95
         },
         {
-          "name": "exchangePost",
+          "name": "exchangePostPlastic",
           "durability": 95
         },
         {
@@ -2475,15 +2483,15 @@
       ],
       "apparatuses": [
         {
-          "name": "exchangePost",
+          "name": "exchangePostCeramic",
           "durability": 95
         },
         {
-          "name": "exchangePost",
+          "name": "exchangePostGlassClothes",
           "durability": 95
         },
         {
-          "name": "exchangePost",
+          "name": "exchangePostPlastic",
           "durability": 95
         },
         {
@@ -2523,15 +2531,19 @@
       ],
       "apparatuses": [
         {
-          "name": "exchangePost",
+          "name": "exchangePostAmmonia",
           "durability": 95
         },
         {
-          "name": "exchangePost",
+          "name": "exchangePostDiamond",
           "durability": 95
         },
         {
-          "name": "exchangePost",
+          "name": "exchangePostGlassClothes",
+          "durability": 95
+        },
+        {
+          "name": "exchangePostCleanWater",
           "durability": 95
         },
         {
@@ -2569,6 +2581,22 @@
       "apparatuses": [
         {
           "name": "componentWorkshop",
+          "durability": 95
+        },
+        {
+          "name": "ceramicWorkshop",
+          "durability": 95
+        },
+        {
+          "name": "glassClothesWorkshop",
+          "durability": 95
+        },
+        {
+          "name": "cottonClothesWorkshop",
+          "durability": 95
+        },
+        {
+          "name": "plasticWorkshop",
           "durability": 95
         },
         {

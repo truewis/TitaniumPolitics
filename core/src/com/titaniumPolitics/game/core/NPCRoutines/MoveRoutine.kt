@@ -25,7 +25,7 @@ class MoveRoutine(var destination: String) : Routine() {
 
                 Logger.write(
                     "There is no path from $place to ${destination}! Terminating moveRoutine...",
-                    Logger.LogLevel.INFO
+                    Logger.LogLevel.CONDITION_VERBOSE
                 )
                 return failed()
             }
