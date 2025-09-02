@@ -68,6 +68,10 @@ data class Talk(
                 -ReadOnly.const("talkMutualityDecrease") * parent.characters[who]!!.stats.pScale,
                 "TalkWithoutNotice"
             )
+        //Only add to known characters if directly talking to the player.
+        if (who == parent.playerName) {
+            parent.knownCharactersToPlayer += sbjCharacter
+        }
     }
 
     override fun isValid(): Boolean {

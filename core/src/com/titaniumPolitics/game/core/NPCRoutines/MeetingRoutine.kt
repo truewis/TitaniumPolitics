@@ -116,7 +116,7 @@ sealed class MeetingRoutine : Routine() {
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //Shared Functions
-    fun sharedMeetingEndCondition() = routineStartTime + 2 * IDTH <= gState.time || meeting.currentAttention < 10
+    fun sharedMeetingEndCondition() = meeting.startTime + 2 * IDTH <= gState.time || meeting.currentAttention < 10
 
     var try_support_proofOfWork = 0
     fun supportProofOfWork(name: String): IMeetingRoutine? {

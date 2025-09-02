@@ -21,6 +21,8 @@ data class HireDirector(override val sbjCharacter: String, override val tgtPlace
         parent.places[workplace]?.workplaceParty!!
             .addMember(employee!!, Party.Role.NONE)
         parent.places[workplace]?.workplaceParty!!.changeLeader(employee!!)
+        if (sbjCharObj.division == parent.player.division)
+            parent.knownCharactersToPlayer += employee!! //If hired into the player's division, add the employee to known characters.
     }
 
     override fun isValid(): Boolean {

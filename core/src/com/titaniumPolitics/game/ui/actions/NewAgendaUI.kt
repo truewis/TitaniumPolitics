@@ -47,19 +47,27 @@ class NewAgendaUI(val gameState: GameState, actionCallback: (GameAction) -> Unit
         add(TitleLabel(ReadOnly.prop("NewAgendaUI-proofOfWork"))).growX()
         row()
         label(ReadOnly.prop("NewAgendaUI-proofOfWork-desc"), "docTitle") {
-            color = Color.BLACK; setFontScale(0.3f);
+            color = Color.BLACK; setFontScale(0.3f); wrap = true; it.fill()
         }
         row()
-        add(CharacterSelectButton { char ->
-            this@NewAgendaUI.agenda =
-                MeetingAgenda(AgendaType.PRAISE, this@NewAgendaUI.subject, hashMapOf("character" to char))
-        }).size(180f)
+        selectBox<String> {
+            items =
+                Array(this@NewAgendaUI.gameState.requests.filter { !it.value.completed && name in it.value.issuedBy }.keys.toTypedArray())
+            addListener(object : ChangeListener() {
+                override fun changed(event: ChangeEvent?, actor: Actor?) {
+                    this@NewAgendaUI.agenda =
+                        MeetingAgenda(AgendaType.PROOF_OF_WORK, this@NewAgendaUI.subject).also {
+                            it.attachedRequest = this@NewAgendaUI.gameState.requests[selected]
+                        }
+                }
+            })
+        }.inCell.size(300f, 70f)
     }
     private val praiseTable = scene2d.table {
         add(TitleLabel(ReadOnly.prop("NewAgendaUI-praise"))).growX()
         row()
         label(ReadOnly.prop("NewAgendaUI-praise-desc"), "docTitle") {
-            color = Color.BLACK; setFontScale(0.3f);
+            color = Color.BLACK; setFontScale(0.3f); wrap = true; it.fill()
         }
         row()
         add(CharacterSelectButton { char ->
@@ -71,7 +79,7 @@ class NewAgendaUI(val gameState: GameState, actionCallback: (GameAction) -> Unit
         add(TitleLabel(ReadOnly.prop("NewAgendaUI-denounce"))).growX()
         row()
         label(ReadOnly.prop("NewAgendaUI-denounce-desc"), "docTitle") {
-            color = Color.BLACK; setFontScale(0.3f);
+            color = Color.BLACK; setFontScale(0.3f); wrap = true; it.fill()
         }
         row()
         add(CharacterSelectButton { char ->
@@ -83,7 +91,7 @@ class NewAgendaUI(val gameState: GameState, actionCallback: (GameAction) -> Unit
         add(TitleLabel(ReadOnly.prop("NewAgendaUI-praiseParty"))).growX()
         row()
         label(ReadOnly.prop("NewAgendaUI-praiseParty-desc"), "docTitle") {
-            color = Color.BLACK; setFontScale(0.3f);
+            color = Color.BLACK; setFontScale(0.3f); wrap = true; it.fill()
         }
         row()
         selectBox<String> {
@@ -94,13 +102,13 @@ class NewAgendaUI(val gameState: GameState, actionCallback: (GameAction) -> Unit
                         MeetingAgenda(AgendaType.PRAISE_PARTY, this@NewAgendaUI.subject, hashMapOf("party" to selected))
                 }
             })
-        }.inCell.size(300f, 100f)
+        }.inCell.size(300f, 70f)
     }
     private val denouncePartyTable = scene2d.table {
         add(TitleLabel(ReadOnly.prop("NewAgendaUI-denounceParty"))).growX()
         row()
         label(ReadOnly.prop("NewAgendaUI-denounceParty-desc"), "docTitle") {
-            color = Color.BLACK; setFontScale(0.3f);
+            color = Color.BLACK; setFontScale(0.3f); wrap = true; it.fill()
         }
         row()
         selectBox<String> {
@@ -115,14 +123,14 @@ class NewAgendaUI(val gameState: GameState, actionCallback: (GameAction) -> Unit
                         )
                 }
             })
-        }.inCell.size(300f, 100f)
+        }.inCell.size(300f, 70f)
     }
 
     private val requestTable = scene2d.table {
         add(TitleLabel(ReadOnly.prop("NewAgendaUI-request"))).growX()
         row()
         label(ReadOnly.prop("NewAgendaUI-request-desc"), "docTitle") {
-            color = Color.BLACK; setFontScale(0.3f);
+            color = Color.BLACK; setFontScale(0.3f); wrap = true; it.fill()
         }
         row()
         table {
@@ -145,7 +153,7 @@ class NewAgendaUI(val gameState: GameState, actionCallback: (GameAction) -> Unit
         add(TitleLabel(ReadOnly.prop("NewAgendaUI-fireManager"))).growX()
         row()
         label(ReadOnly.prop("NewAgendaUI-fireManager-desc"), "docTitle") {
-            color = Color.BLACK; setFontScale(0.3f);
+            color = Color.BLACK; setFontScale(0.3f); wrap = true; it.fill()
         }
         row()
         add(CharacterSelectButton(this@NewAgendaUI.sbjChar.currentMeeting!!.involvedParty?.let { partyName ->
@@ -161,7 +169,7 @@ class NewAgendaUI(val gameState: GameState, actionCallback: (GameAction) -> Unit
         }
         row()
         label(ReadOnly.prop("NewAgendaUI-budgetProposal-desc"), "docTitle") {
-            color = Color.BLACK; setFontScale(0.3f);
+            color = Color.BLACK; setFontScale(0.3f); wrap = true; it.fill()
         }
         row()
         add(CharacterSelectButton(this@NewAgendaUI.sbjChar.currentMeeting!!.involvedParty?.let { partyName ->
@@ -177,7 +185,7 @@ class NewAgendaUI(val gameState: GameState, actionCallback: (GameAction) -> Unit
         }
         row()
         label(ReadOnly.prop("NewAgendaUI-budgetResolution-desc"), "docTitle") {
-            color = Color.BLACK; setFontScale(0.3f)
+            color = Color.BLACK; setFontScale(0.3f); wrap = true; it.fill()
         }
         //Select character to perform the request.
         add(CharacterSelectButton(this@NewAgendaUI.sbjChar.currentMeeting!!.involvedParty?.let { partyName ->

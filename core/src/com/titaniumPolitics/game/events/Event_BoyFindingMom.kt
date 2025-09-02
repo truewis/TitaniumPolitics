@@ -12,7 +12,6 @@ class Event_BoyFindingMom : EventObject("A boy with a box.", true) {
             "Yuri" in parent.player.place.characters
         ) {
             onPlayDialogue("FindMom")
-            parent.knownCharactersToPlayer += "Yuri"
             Request(
                 action = Talk("Yuri", "market", "Rui"),
                 issuedTo = hashSetOf("Yuri"),

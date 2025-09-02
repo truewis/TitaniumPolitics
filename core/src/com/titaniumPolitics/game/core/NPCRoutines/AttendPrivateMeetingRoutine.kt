@@ -88,7 +88,7 @@ class AttendPrivateMeetingRoutine(
         } else {
             //If it is my turn to speak
             //Check if I had an intention
-            if (agenda != null) {
+            if (agenda != null && hasUnresolvedAgenda) {
                 NewAgenda(name, place, gState).also {
                     it.agenda = agenda
                     if (it.isValid()) {
