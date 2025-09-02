@@ -1,6 +1,7 @@
 package com.titaniumPolitics.game.ui
 
 import com.badlogic.gdx.graphics.Color
+import com.badlogic.gdx.scenes.scene2d.EventListener
 import com.badlogic.gdx.scenes.scene2d.actions.Actions
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane
 import com.badlogic.gdx.scenes.scene2d.ui.Table
@@ -80,6 +81,14 @@ class TasksUI(var gameState: GameState) : Table(defaultSkin) {
                         quest.onClick?.invoke()
                     }
                 })
+                quest.display?.run {
+                    row()
+                    val additionalTable = table { }
+                    invoke(additionalTable)
+                }
+                quest.tooltip?.run {
+                    addListener(this)
+                }
 
             })
         }
@@ -128,7 +137,9 @@ data class Quest(
     val tgtCharacters: List<String> = listOf(),
     val tgtMeeting: String? = null,
     val dueTime: Int? = null,
-    val onClick: (() -> Unit)? = null
+    val onClick: (() -> Unit)? = null,
+    val display: ((Table) -> Unit)? = null,
+    val tooltip: EventListener? = null
 ) {
     lateinit var parent: GameState
 

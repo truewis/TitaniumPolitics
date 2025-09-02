@@ -4,12 +4,13 @@ import com.titaniumPolitics.game.core.Meeting
 import com.titaniumPolitics.game.core.Party
 import com.titaniumPolitics.game.core.ReadOnly
 import com.titaniumPolitics.game.ui.Quest
+import com.titaniumPolitics.game.ui.widget.SimpleTextTooltipUI
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 
 @Serializable
 class Event_HatefulDirectReport(val charNames: List<String>, val partyKey: String) :
-    EventObject("A direct report hates you", true),
+    EventObject("A direct report hates you: $partyKey", true),
     IQuestEventObject {
     val party get() = parent.parties[partyKey]!!
     val partyName =
@@ -17,15 +18,16 @@ class Event_HatefulDirectReport(val charNames: List<String>, val partyKey: Strin
 
     @Transient
     override val quest = Quest(
-        "Your authority is being questioned in %s".format(partyName),
-        description = charNames.joinToString {
+        "Your authority is being questioned in %s.".format(partyName),
+        description = "Improve relations with your direct reports",
+        tgtCharacters = charNames,
+        tooltip = SimpleTextTooltipUI(charNames.joinToString {
             "You must improve the relationship with %s.\n".format(
                 ReadOnly.charProp(
                     it
                 )
             )
-        },
-        tgtCharacters = charNames
+        })
     )
 
     override fun exec(a: Int, b: Int) {

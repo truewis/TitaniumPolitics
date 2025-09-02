@@ -7,7 +7,7 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 
 @Serializable
-class Event_PaySalary(val partyKey: String) : EventObject("Pay Salary", true), IQuestEventObject {
+class Event_PaySalary(val partyKey: String) : EventObject("Pay Salary: $partyKey", true), IQuestEventObject {
     val party
         get() = parent.parties[partyKey]!!
     val partyName =

@@ -7,7 +7,8 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 
 @Serializable
-class Event_ProposeBudget(val budgetMeeting: String) : EventObject("Propose Budget", true), IQuestEventObject {
+class Event_ProposeBudget(val budgetMeeting: String) : EventObject("Propose Budget: $budgetMeeting", true),
+    IQuestEventObject {
     val party
         get() = parent.parties[parent.scheduledMeetings[budgetMeeting]!!
             .involvedParty]!!

@@ -4,6 +4,7 @@ import com.badlogic.gdx.scenes.scene2d.Touchable
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.ui.Tooltip
 import com.badlogic.gdx.utils.Align
+import ktx.scene2d.container
 import ktx.scene2d.image
 import ktx.scene2d.label
 import ktx.scene2d.scene2d
@@ -11,17 +12,15 @@ import ktx.scene2d.stack
 import ktx.scene2d.table
 
 class SimpleTextTooltipUI(text: String, width: Float = 350f, height: Float = 200f) : Tooltip<Table>(scene2d.table {
-    addActor(scene2d.image("TooltipShadow10p") {
-        it.width = width + 100f
-        it.height = height + 100f
-        it.x = -50f
-        it.y = -50f
-        setColor(0f, 0f, 0f, 0.7f)
-        touchable = Touchable.disabled//This is a shadow outside the tooltip
-    })
     stack {
-
-        it.size(width, height)
+        container(scene2d.image("TooltipShadow10p") {
+            setColor(0f, 0f, 0f, 0.7f)
+            touchable = Touchable.disabled//This is a shadow outside the tooltip
+        }) {
+            fill()
+            pad(-50f)
+        }
+        it.size(350f).growY()
         image("BlackPx")
 
         image("NoiseBackground") {
