@@ -9,6 +9,7 @@ import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.core.InformationType
 import com.titaniumPolitics.game.core.ReadOnly
 import com.titaniumPolitics.game.core.gameActions.Move
+import com.titaniumPolitics.game.core.gameActions.Wait
 import ktx.scene2d.Scene2DSkin.defaultSkin
 
 class AlertUI(var gameState: GameState) : Table(defaultSkin) {
@@ -58,14 +59,11 @@ class AlertUI(var gameState: GameState) : Table(defaultSkin) {
 
                 InformationType.ACTION -> {
                     if (info.tgtCharacter == gameState.playerName//Ignore my actions, they are not surprising.
-                        || setOf(
-
-                            "Wait"
-                        ).contains(info.action!!.javaClass.simpleName)
+                        || info.action is Wait
                     )//Ignore boring actions, even if they are not mine.
                     {
                         //Do nothing.
-                    } else if (info.action!!.javaClass.simpleName == "Move") //If the action is a move, show the dedicated alert.
+                    } else if (info.action is Move) //If the action is a move, show the dedicated alert.
                     {
                         addAlert(
                             "moved",

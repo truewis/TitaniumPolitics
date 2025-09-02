@@ -47,6 +47,21 @@ class EventSystem : GameStateElement() {
             dataBase.forEach { if (!it.completed) it.exec(a, b) }
             tmpdataBase.forEach { dataBase += it }
             tmpdataBase.clear()
+            gameState.requests.filter {
+                !it.value.completed &&
+                        gameState.playerName in it.value.issuedTo
+            }.forEach { (_, req) ->
+                {
+                    updateQuest(
+                        Quest(
+                            req.name + "Quest",
+                            req.action.toString(),
+                            req.action.tgtPlace,
+                            dueTime = req.executeTime
+                        )
+                    )
+                }
+            }
         }
 
     }
