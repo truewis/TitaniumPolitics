@@ -2,9 +2,14 @@ package com.titaniumPolitics.game.ui.actions
 
 
 import com.badlogic.gdx.graphics.Color
+import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.ui.Button
 import com.badlogic.gdx.scenes.scene2d.ui.Label
+import com.badlogic.gdx.scenes.scene2d.ui.Slider
+import com.badlogic.gdx.scenes.scene2d.ui.Table
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener
 import com.titaniumPolitics.game.core.GameState
+import com.titaniumPolitics.game.core.ReadOnly
 import com.titaniumPolitics.game.core.Resources
 import com.titaniumPolitics.game.core.gameActions.GameAction
 import com.titaniumPolitics.game.core.gameActions.OfficialResourceTransfer
@@ -19,10 +24,12 @@ class ResourceTransferUI(var gameState: GameState, actionCallback: (GameAction) 
     ActionSheetUI("ResourceTransferTitle", gameState, actionCallback) {
     private val dataTable = ResourceDisplayUI()
     private val targetTable = ResourceDisplayUI()
+    private val resourceSelectTable = ResourceSelectTable(100.0, 0.0, 1.0) {}
     override var tgtPlace: String = gameState.player.place.name
         set(value) {
             field = value
-            refresh(mode, gameState.places[value]!!.resources.toHashMap(), target)
+            refresh(mode, gameState.places[value]!!.resources.toHashMap(), hashMapOf())
+            refreshAction()
         }
     private val sbjChar = gameState.characters[subject]!!
 
@@ -31,6 +38,11 @@ class ResourceTransferUI(var gameState: GameState, actionCallback: (GameAction) 
     var current = hashMapOf<String, Double>()
     var target = hashMapOf<String, Double>()
     var toWhere = ""
+        set(value) {
+            field = value
+            refresh(mode, gameState.places[tgtPlace]!!.resources.toHashMap(), hashMapOf())
+            refreshAction()
+        }
     var modeLabel: Label
     var placeButton: Button
     var action: GameAction? = null
@@ -53,6 +65,10 @@ class ResourceTransferUI(var gameState: GameState, actionCallback: (GameAction) 
                 add(this@ResourceTransferUI.dataTable)
                 add(this@ResourceTransferUI.targetTable)
                 row()
+                add(this@ResourceTransferUI.resourceSelectTable).size(400f, 75f)
+                    .fill().colspan(2)
+                row()
+                this@ResourceTransferUI.resourceSelectTable.isVisible = false
                 add(this@ResourceTransferUI.submitButton).size(400f, 75f)
                     .fill().colspan(2)
             }
@@ -65,29 +81,48 @@ class ResourceTransferUI(var gameState: GameState, actionCallback: (GameAction) 
 
     fun refresh(
         mode: String,
-        current: HashMap<String, Double> = hashMapOf(),
-        target: HashMap<String, Double> = hashMapOf(),
+        _current: HashMap<String, Double> = this.current,
+        _target: HashMap<String, Double> = this.target,
     ) {
-        this.current = current
-        this.target = target
+        this.current = _current
+        this.target = _target
         this.mode = mode
         this.modeLabel.setText("Transaction: $mode")
         placeButton.isVisible = mode != "private"
         dataTable.current = Resources(current)
         dataTable.callback = { resourceName, amount ->
-            current[resourceName] = current[resourceName]!! - 1
-            target[resourceName] = (target[resourceName] ?: .0) + 1
-            refreshAction()
-            this@ResourceTransferUI.refresh(mode, current, target)
+            resourceSelectTable.refresh(
+                current[resourceName]!!,
+                target[resourceName] ?: 0.0,
+                gameState.places[toWhere]?.workplaceParty?.let {
+                    it.standardBudget.value[it.name]!![resourceName] / it.workplace.workHoursLength * ReadOnly.constInt(
+                        "quarterInDays"
+                    )
+                }
+                    ?: 0.0
+            ) { selectedAmount ->
+                target[resourceName] = selectedAmount
+                refreshAction()
+                this@ResourceTransferUI.refresh(mode)
+            }
         }
         dataTable.refresh()
 
         targetTable.current = Resources(target)
         targetTable.callback = { resourceName, amount ->
-            target[resourceName] = target[resourceName]!! - 1
-            current[resourceName] = (current[resourceName] ?: .0) + 1
-            refreshAction()
-            this@ResourceTransferUI.refresh(mode, current, target)
+            resourceSelectTable.refresh(
+                current[resourceName]!!,
+                amount,
+                gameState.places[toWhere]?.workplaceParty?.let {
+                    it.standardBudget.value[it.name]!![resourceName] / it.workplace.workHoursLength * ReadOnly.constInt(
+                        "quarterInDays"
+                    )
+                }
+                    ?: 0.0) { selectedAmount ->
+                target[resourceName] = selectedAmount
+                refreshAction()
+                this@ResourceTransferUI.refresh(mode)
+            }
         }
 
         targetTable.refresh()
@@ -127,6 +162,68 @@ class ResourceTransferUI(var gameState: GameState, actionCallback: (GameAction) 
         }
         action!!.injectParent(gameState)
         submitButton.refresh(action!!)
+    }
+
+    class ResourceSelectTable(
+        maxAmount: Double,
+        currentAmount: Double,
+        hourlyConsumption: Double,
+        callback: (Double) -> Unit = {}
+    ) :
+        Table(Scene2DSkin.defaultSkin), KTable {
+        val slider: Slider
+        val label = scene2d.label(
+            ReadOnly.prop("ResourceTransferUI-amountSelected")
+                .format(currentAmount, currentAmount / hourlyConsumption), "docTitle"
+        ) {
+            setFontScale(0.3f)
+        }
+
+        init {
+            slider = slider {
+                it.width(300f)
+                value = currentAmount.toFloat()
+                stepSize = maxAmount.toFloat() / 100f
+                setRange(0f, maxAmount.toFloat())
+                addListener(object : com.badlogic.gdx.scenes.scene2d.utils.ChangeListener() {
+                    override fun changed(event: ChangeEvent?, actor: Actor?) {
+                        this@ResourceSelectTable.label.setText(
+                            ReadOnly.prop("ResourceTransferUI-amountSelected")
+                                .format(value, currentAmount / hourlyConsumption)
+                        )
+                        callback(value.toDouble())
+                    }
+
+                })
+            }
+            row()
+            add(label)
+        }
+
+        fun refresh(maxAmount: Double, currentAmount: Double, hourlyConsumption: Double, callback: (Double) -> Unit) {
+            isVisible = true
+            slider.value = currentAmount.toFloat()
+            slider.stepSize = maxAmount.toFloat() / 100f
+            slider.setRange(0f, maxAmount.toFloat())
+            label.setText(
+                ReadOnly.prop("ResourceTransferUI-amountSelected")
+                    .format(currentAmount, if (hourlyConsumption == 0.0) 0.0 else currentAmount / hourlyConsumption)
+            )
+            slider.removeListener(slider.listeners.first { it is ChangeListener })
+            slider.addListener(object : ChangeListener() {
+                override fun changed(event: ChangeEvent?, actor: Actor?) {
+                    this@ResourceSelectTable.label.setText(
+                        ReadOnly.prop("ResourceTransferUI-amountSelected")
+                            .format(
+                                slider.value,
+                                if (hourlyConsumption == 0.0) 0.0 else slider.value / hourlyConsumption
+                            )
+                    )
+                    callback(slider.value.toDouble())
+                }
+
+            })
+        }
     }
 
 }

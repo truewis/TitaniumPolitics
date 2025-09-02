@@ -16,6 +16,7 @@ class SubmitButton(var action: GameAction? = null, var actionCallback: (GameActi
     private var tooltip: ActionTooltipUI = ActionTooltipUI("Wait")
 
     init {
+        isDisabled = true
         addListener(tooltip)
         label("Submit", "docTitle") {
             color = Color.WHITE

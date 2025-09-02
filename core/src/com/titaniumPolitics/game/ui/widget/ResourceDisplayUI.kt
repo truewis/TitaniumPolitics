@@ -7,6 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.badlogic.gdx.utils.Align
 import com.titaniumPolitics.game.core.GameState
+import com.titaniumPolitics.game.core.ReadOnly
 import com.titaniumPolitics.game.core.Resources
 import ktx.scene2d.KTable
 import ktx.scene2d.Scene2DSkin.defaultSkin
@@ -49,24 +50,30 @@ class ResourceDisplayUI(var current: Resources = Resources(), var callback: (Str
                             it.size(30f)
                             it.fill()
                         }
-                        this@ResourceDisplayUI.labelList.add(label("$resourceName: $resourceAmount", "docTitle") {
-                            setFontScale(0.5f)
-                            setAlignment(Align.left)
-                            addListener(object : ClickListener() {
-                                override fun clicked(
-                                    event: com.badlogic.gdx.scenes.scene2d.InputEvent?,
-                                    x: Float,
-                                    y: Float
-                                ) {
-                                    this@ResourceDisplayUI.deselectAllLabels()
-                                    this@ResourceDisplayUI.selectLabel(this@label)
-                                    this@ResourceDisplayUI.callback(
-                                        resourceName,
-                                        this@ResourceDisplayUI.current[resourceName]
-                                    )
-                                }
+                        this@ResourceDisplayUI.labelList.add(
+                            label(
+                                "%s: %.1f".format(
+                                    ReadOnly.itemProp(resourceName),
+                                    resourceAmount
+                                ), "docTitle"
+                            ) {
+                                setFontScale(0.5f)
+                                setAlignment(Align.left)
+                                addListener(object : ClickListener() {
+                                    override fun clicked(
+                                        event: com.badlogic.gdx.scenes.scene2d.InputEvent?,
+                                        x: Float,
+                                        y: Float
+                                    ) {
+                                        this@ResourceDisplayUI.deselectAllLabels()
+                                        this@ResourceDisplayUI.selectLabel(this@label)
+                                        this@ResourceDisplayUI.callback(
+                                            resourceName,
+                                            this@ResourceDisplayUI.current[resourceName]
+                                        )
+                                    }
+                                })
                             })
-                        })
                     }
                     row()
                 }

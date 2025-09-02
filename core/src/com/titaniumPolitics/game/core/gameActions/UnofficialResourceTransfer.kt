@@ -71,6 +71,7 @@ data class UnofficialResourceTransfer(
     override fun isValid(): Boolean {
         //Can't send to the same place
         if (toWhere == tgtPlace) return false
+        if (parent.places[toWhere] == null) return false
         return parent.places[tgtPlace]!!.resources.contains(
             resources
         )
