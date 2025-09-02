@@ -114,10 +114,10 @@ data class Information(
         return when (type) {
             InformationType.ACTION -> {
                 val actor = author ?: "Someone"
-                val actionStr = action!!::class.simpleName
-                val target = tgtCharacter?.let { "to $it" } ?: ""
-                val place = if (tgtPlace.isNotEmpty()) "at $tgtPlace" else ""
-                "$actor performed $actionStr $target $place."
+                val actionStr = ReadOnly.prop(action!!::class.simpleName!!)
+                val target = ReadOnly.charProp(tgtCharacter ?: "Someone")
+                val place = if (tgtPlace.isNotEmpty()) "at ${ReadOnly.placeProp(tgtPlace)}" else ""
+                "$target performed $actionStr $place."
             }
 
             InformationType.RESOURCES -> {
