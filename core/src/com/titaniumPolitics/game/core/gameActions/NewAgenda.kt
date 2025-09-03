@@ -133,6 +133,7 @@ data class NewAgenda(override val sbjCharacter: String, override val tgtPlace: S
 
             AgendaType.FIRE_MANAGER -> return mt.type == Meeting.MeetingType.DIVISION_DAILY_CONFERENCE && parent.parties[mt.involvedParty]!!.leader == sbjCharacter &&
                     agenda.subjectParams["character"] in mt.currentCharacters
+                    && sbjCharObj.division?.policies?.contains("jobSecurity") != true
             //TODO: impeach, fire division leader, etc. This is done by the cabinet meeting.
             //TODO: Also update NewAgendaUI.kt
 

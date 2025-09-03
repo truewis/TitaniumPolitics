@@ -61,6 +61,9 @@ data class Salary(override val sbjCharacter: String, override val tgtPlace: Stri
                     multiplyer -= 0.2
                 }
             }
+            if ("seniority" in parent.characters[character]!!.division!!.policies) {
+                multiplyer += 0.1 * (charObj.age - 40) / 10.0
+            }
             parent.places[guildHall]!!.resources -= standardRate * multiplyer
             charObj.resources += standardRate * multiplyer
             //Opinion of the leader of the party increases.
