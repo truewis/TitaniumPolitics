@@ -258,21 +258,78 @@ data class NewAgenda(override val sbjCharacter: String, override val tgtPlace: S
                 }
 
                 AgendaType.PRAISE -> {
-                    parent.setMutuality(
-                        agenda.subjectParams["character"]!!,
-                        sbjCharacter,
-                        5.0 * effectivity,
-                        "Praise;$sbjCharacter"
-                    )
+                    if (agenda.subjectParams["character"]!! in meeting.currentCharacters) {
+                        parent.setMutuality(
+                            agenda.subjectParams["character"]!!,
+                            sbjCharacter,
+                            5.0 * effectivity,
+                            "Praise;$sbjCharacter"
+                        )
+                        Information(
+                            author = null,
+                            creationTime = parent.time,
+                            type = InformationType.MUTUALITY,
+                            tgtTime = parent.time,
+                            auxCharacter = sbjCharacter,
+                            tgtCharacter = agenda.subjectParams["character"]!!,
+                            amount = parent.getMutuality(agenda.subjectParams["character"]!!, sbjCharacter)
+                                .toInt() + (0..5).random()
+                        ).also {
+                            it.knownTo.addAll(meeting.currentCharacters)
+                            parent.addInformation(it)
+                        }
+                    }
+                    Information(
+                        author = null,
+                        creationTime = parent.time,
+                        type = InformationType.MUTUALITY,
+                        tgtTime = parent.time,
+                        tgtCharacter = sbjCharacter,
+                        auxCharacter = agenda.subjectParams["character"]!!,
+                        amount = parent.getMutuality(sbjCharacter, agenda.subjectParams["character"]!!)
+                            .toInt() + (0..5).random()
+                    ).also {
+                        it.knownTo.addAll(meeting.currentCharacters)
+                        parent.addInformation(it)
+                    }
+                    //TODO: share trait information
                 }
 
                 AgendaType.DENOUNCE -> {
-                    parent.setMutuality(
-                        agenda.subjectParams["character"]!!,
-                        sbjCharacter,
-                        -7.0 * effectivity,
-                        "Denounce;$sbjCharacter"
-                    )
+                    if (agenda.subjectParams["character"]!! in meeting.currentCharacters) {
+                        parent.setMutuality(
+                            agenda.subjectParams["character"]!!,
+                            sbjCharacter,
+                            -7.0 * effectivity,
+                            "Denounce;$sbjCharacter"
+                        )
+                        Information(
+                            author = null,
+                            creationTime = parent.time,
+                            type = InformationType.MUTUALITY,
+                            tgtTime = parent.time,
+                            auxCharacter = sbjCharacter,
+                            tgtCharacter = agenda.subjectParams["character"]!!,
+                            amount = parent.getMutuality(agenda.subjectParams["character"]!!, sbjCharacter)
+                                .toInt() - (0..5).random()
+                        ).also {
+                            it.knownTo.addAll(meeting.currentCharacters)
+                            parent.addInformation(it)
+                        }
+                    }
+                    Information(
+                        author = null,
+                        creationTime = parent.time,
+                        type = InformationType.MUTUALITY,
+                        tgtTime = parent.time,
+                        tgtCharacter = sbjCharacter,
+                        auxCharacter = agenda.subjectParams["character"]!!,
+                        amount = parent.getMutuality(sbjCharacter, agenda.subjectParams["character"]!!)
+                            .toInt() - (0..5).random()
+                    ).also {
+                        it.knownTo.addAll(meeting.currentCharacters)
+                        parent.addInformation(it)
+                    }
                 }
 
                 AgendaType.PRAISE_PARTY -> {
@@ -307,21 +364,77 @@ data class NewAgenda(override val sbjCharacter: String, override val tgtPlace: S
                 }
 
                 AgendaType.NOMINATE -> {
-                    parent.setMutuality(
-                        agenda.subjectParams["character"]!!,
-                        sbjCharacter,
-                        20.0 * effectivity,
-                        "Nominate;$sbjCharacter"
-                    )
+                    if (agenda.subjectParams["character"]!! in meeting.currentCharacters) {
+                        parent.setMutuality(
+                            agenda.subjectParams["character"]!!,
+                            sbjCharacter,
+                            20.0 * effectivity,
+                            "Nominate;$sbjCharacter"
+                        )
+                        Information(
+                            author = null,
+                            creationTime = parent.time,
+                            type = InformationType.MUTUALITY,
+                            tgtTime = parent.time,
+                            auxCharacter = sbjCharacter,
+                            tgtCharacter = agenda.subjectParams["character"]!!,
+                            amount = parent.getMutuality(agenda.subjectParams["character"]!!, sbjCharacter)
+                                .toInt() + (0..20).random()
+                        ).also {
+                            it.knownTo.addAll(meeting.currentCharacters)
+                            parent.addInformation(it)
+                        }
+                    }
+                    Information(
+                        author = null,
+                        creationTime = parent.time,
+                        type = InformationType.MUTUALITY,
+                        tgtTime = parent.time,
+                        tgtCharacter = sbjCharacter,
+                        auxCharacter = agenda.subjectParams["character"]!!,
+                        amount = parent.getMutuality(sbjCharacter, agenda.subjectParams["character"]!!)
+                            .toInt() + (0..20).random()
+                    ).also {
+                        it.knownTo.addAll(meeting.currentCharacters)
+                        parent.addInformation(it)
+                    }
                 }
 
                 AgendaType.FIRE_MANAGER -> {
-                    parent.setMutuality(
-                        agenda.subjectParams["character"]!!,
-                        sbjCharacter,
-                        -20.0 * effectivity,
-                        "FireManager;$sbjCharacter"
-                    )
+                    if (agenda.subjectParams["character"]!! in meeting.currentCharacters) {
+                        parent.setMutuality(
+                            agenda.subjectParams["character"]!!,
+                            sbjCharacter,
+                            -20.0 * effectivity,
+                            "FireManager;$sbjCharacter"
+                        )
+                        Information(
+                            author = null,
+                            creationTime = parent.time,
+                            type = InformationType.MUTUALITY,
+                            tgtTime = parent.time,
+                            auxCharacter = sbjCharacter,
+                            tgtCharacter = agenda.subjectParams["character"]!!,
+                            amount = parent.getMutuality(agenda.subjectParams["character"]!!, sbjCharacter)
+                                .toInt() - (0..20).random()
+                        ).also {
+                            it.knownTo.addAll(meeting.currentCharacters)
+                            parent.addInformation(it)
+                        }
+                    }
+                    Information(
+                        author = null,
+                        creationTime = parent.time,
+                        type = InformationType.MUTUALITY,
+                        tgtTime = parent.time,
+                        tgtCharacter = sbjCharacter,
+                        auxCharacter = agenda.subjectParams["character"]!!,
+                        amount = parent.getMutuality(sbjCharacter, agenda.subjectParams["character"]!!)
+                            .toInt() - (0..20).random()
+                    ).also {
+                        it.knownTo.addAll(meeting.currentCharacters)
+                        parent.addInformation(it)
+                    }
                     val manager = agenda.subjectParams["character"] as String
 
                     //If the manager is in the division, fire them.
@@ -336,8 +449,8 @@ data class NewAgenda(override val sbjCharacter: String, override val tgtPlace: S
                         }
                     }
                     //Fire manager from the workplace parties in the division, too.
-                    parent.parties.filter { (key, value) -> value.type == Party.Type.WORKPLACE && manager in value.members && value.workplace.responsibleDivision == meeting.involvedParty }
-                        .forEach { (key, value) ->
+                    parent.parties.filter { (_, value) -> value.type == Party.Type.WORKPLACE && manager in value.members && value.workplace.responsibleDivision == meeting.involvedParty }
+                        .forEach { (_, value) ->
                             Logger.write(
                                 "The manager $manager of the workplace party ${value.name} is fired.",
                                 Logger.LogLevel.INFO

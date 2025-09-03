@@ -21,6 +21,7 @@ data class Information(
     var tgtPlace: String = "",
     var tgtApparatus: String? = null,
     var tgtCharacter: String? = null,
+    var auxCharacter: String? = null,
     var amount: Int = 0,
     var action: GameAction? = null,
     var tgtParty: String? = null,
@@ -38,6 +39,7 @@ data class Information(
         info.tgtPlace,
         info.tgtApparatus,
         info.tgtCharacter,
+        info.auxCharacter,
         info.amount,
         info.action,
         info.tgtParty,
@@ -113,7 +115,7 @@ data class Information(
     fun simpleDescription(): String {
         return when (type) {
             InformationType.ACTION -> {
-                val actor = author ?: "Someone"
+                author ?: "Someone"
                 val actionStr = ReadOnly.prop(action!!::class.simpleName!!)
                 val target = ReadOnly.charProp(tgtCharacter ?: "Someone")
                 val place = if (tgtPlace.isNotEmpty()) "at ${ReadOnly.placeProp(tgtPlace)}" else ""
@@ -146,6 +148,18 @@ data class Information(
             InformationType.HUMAN_RESOURCES -> {
                 "There are $amount current workers at $tgtPlace."
             }
+
+            InformationType.MUTUALITY -> {
+                "$tgtCharacter has $amount mutuality towards $auxCharacter."
+            }
+
+            InformationType.PARTY_MUTUALITY -> {
+                "$tgtParty$ with ${variables["tgtPartyTrait"]} has $amount average mutuality towards $auxParty with ${variables["auxPartyTrait"]}."
+            }
+
+            InformationType.TRAIT -> {
+                "$tgtCharacter is a ${variables["trait"]}."
+            }
         }
     }
 
@@ -162,5 +176,5 @@ data class Information(
 
 @Serializable
 enum class InformationType {
-    ACTION, RESOURCES, CASUALTY, LOST_RESOURCES, APPARATUS, HUMAN_RESOURCES
+    ACTION, RESOURCES, CASUALTY, LOST_RESOURCES, APPARATUS, HUMAN_RESOURCES, MUTUALITY, PARTY_MUTUALITY, TRAIT
 }
