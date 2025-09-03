@@ -11,12 +11,12 @@ import kotlinx.serialization.Transient
 class Event_ElectionApproaching(val tgtMeeting: String) : EventObject("The election is approaching.", true),
     IQuestEventObject {
 
-    @Transient
-    override val quest = Quest(
-        "The election is approaching.",
-        description = "",
-        tgtMeeting = tgtMeeting
-    )
+    override val quest
+        get() = Quest(
+            "The election is approaching.",
+            description = "",
+            tgtMeeting = tgtMeeting
+        )
 
     override fun exec(a: Int, b: Int) {
         if (parent.ongoingMeetings[tgtMeeting] != null)

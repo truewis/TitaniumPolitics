@@ -12,15 +12,16 @@ class Event_ResolveBudget(val budgetMeeting: String) : EventObject("Resolve Budg
     val party
         get() = parent.parties[parent.scheduledMeetings[budgetMeeting]!!
             .involvedParty]!!
-    val partyName =
-        if (party.type == Party.Type.DIVISION) ReadOnly.prop(party.name) else party.workplace.name + " Workplace"
+    val partyName
+        get() =
+            if (party.type == Party.Type.DIVISION) ReadOnly.prop(party.name) else party.workplace.name + " Workplace"
 
-    @Transient
-    override val quest = Quest(
-        "Quarterly budget of %s is not resolved yet.".format(partyName),
-        description = "Attend the budget resolution meeting.",
-        tgtMeeting = budgetMeeting
-    )
+    override val quest
+        get() = Quest(
+            "Quarterly budget of %s is not resolved yet.".format(partyName),
+            description = "Attend the budget resolution meeting.",
+            tgtMeeting = budgetMeeting
+        )
 
     override fun exec(a: Int, b: Int) {
         if (parent.scheduledMeetings[budgetMeeting] == null)

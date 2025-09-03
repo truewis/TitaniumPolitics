@@ -19,18 +19,18 @@ class Event_ExpiredWorkplaceInformation(val place: String) : EventObject("Expire
             parent.time - info.tgtTime < 168 * IDTH //Has to be recent enough
         }
 
-    @Transient
-    override val quest = Quest(
-        "You must be kept updated on situations of %s".format(ReadOnly.placeProp(place)),
-        description = "Examine it yourself or request your employees to do so.",
-        tgtPlace = place,
-        tooltip = SimpleTextTooltipUI(
-            "You have HR Information: ${relevantInfos.any { it.type == InformationType.HUMAN_RESOURCES && it.tgtPlace == place }}\n" +
-                    "You have Apparatus Information: ${relevantInfos.any { it.type == InformationType.APPARATUS && it.tgtPlace == place }}\n" +
-                    "You have Resource Information: ${relevantInfos.any { it.type == InformationType.RESOURCES && it.tgtPlace == place }}"
+    override val quest
+        get() = Quest(
+            "You must be kept updated on situations of %s".format(ReadOnly.placeProp(place)),
+            description = "Examine it yourself or request your employees to do so.",
+            tgtPlace = place,
+            tooltip = SimpleTextTooltipUI(
+                "You have HR Information: ${relevantInfos.any { it.type == InformationType.HUMAN_RESOURCES && it.tgtPlace == place }}\n" +
+                        "You have Apparatus Information: ${relevantInfos.any { it.type == InformationType.APPARATUS && it.tgtPlace == place }}\n" +
+                        "You have Resource Information: ${relevantInfos.any { it.type == InformationType.RESOURCES && it.tgtPlace == place }}"
 
+            )
         )
-    )
 
     override fun exec(a: Int, b: Int) {
 

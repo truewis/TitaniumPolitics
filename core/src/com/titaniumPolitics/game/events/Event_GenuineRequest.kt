@@ -22,18 +22,18 @@ class Event_GenuineRequest(val requestKey: String) : EventObject("A reasonable r
                     && it.key in parent.player.preparedInfoKeys
         }
 
-    @Transient
-    override val quest = Quest(
-        "Request from %s".format(ReadOnly.charProp(request.issuedBy.firstOrNull() ?: "Someone")),
-        description = "You were requested to work on %s".format(ReadOnly.prop(request.action::class.simpleName!!)),
-        tgtPlace = request.action.tgtPlace,
-        tooltip = SimpleTextTooltipUI(
-            "You have relevant information: $hasInformation\n" +
-                    "You have prepared the information: $hasPrepared\n" +
-                    "You have reported back the information: False"
+    override val quest
+        get() = Quest(
+            "Request from %s".format(ReadOnly.charProp(request.issuedBy.firstOrNull() ?: "Someone")),
+            description = "You were requested to work on %s".format(ReadOnly.prop(request.action::class.simpleName!!)),
+            tgtPlace = request.action.tgtPlace,
+            tooltip = SimpleTextTooltipUI(
+                "You have relevant information: $hasInformation\n" +
+                        "You have prepared the information: $hasPrepared\n" +
+                        "You have reported back the information: False"
 
+            )
         )
-    )
 
     override fun exec(a: Int, b: Int) {
         if (request.completed)

@@ -33,6 +33,7 @@ class EventSystem : GameStateElement() {
     }
 
     fun updateQuest(quest: Quest) {
+        quest.parent = parent
         if (quests.any { it.name == quest.name }) {
             quests.removeIf { it.name == quest.name }
         }
@@ -52,9 +53,9 @@ class EventSystem : GameStateElement() {
                 !it.value.completed &&
                         gameState.playerName in it.value.issuedTo
             }.forEach { (_, req) ->
-                {
-                    add(Event_GenuineRequest(req.name))
-                }
+
+                add(Event_GenuineRequest(req.name))
+
             }
             gameState.scheduledMeetings.filter {
                 it.value.type == Meeting.MeetingType.DIVISION_LEADER_ELECTION && it.value.involvedParty == gameState.player.division?.name

@@ -12,20 +12,21 @@ import kotlinx.serialization.Transient
 class Event_ImprovePartyIntegrity(val partyKey: String) : EventObject("Improve Party Integrity: $partyKey", true),
     IQuestEventObject {
     val party get() = parent.parties[partyKey]!!
-    val partyName =
-        if (party.type == Party.Type.DIVISION) ReadOnly.prop(party.name) else party.workplace.name + " Workplace"
+    val partyName
+        get() =
+            if (party.type == Party.Type.DIVISION) ReadOnly.prop(party.name) else party.workplace.name + " Workplace"
 
-    @Transient
-    override val quest = Quest(
-        "Members of %s are not getting along.".format(partyName),
-        description = "You must improve the integrity of %s".format(partyName),
-        tgtPlace = party.home,
-        display = {
-            with(it) {
-                add(PartyMutualityMeter(this@Event_ImprovePartyIntegrity.parent, partyKey))
+    override val quest
+        get() = Quest(
+            "Members of %s are not getting along.".format(partyName),
+            description = "You must improve the integrity of %s".format(partyName),
+            tgtPlace = party.home,
+            display = {
+                with(it) {
+                    add(PartyMutualityMeter(this@Event_ImprovePartyIntegrity.parent, partyKey))
+                }
             }
-        }
-    )
+        )
 
     override fun exec(a: Int, b: Int) {
         if (party.integrity > 0.5)
