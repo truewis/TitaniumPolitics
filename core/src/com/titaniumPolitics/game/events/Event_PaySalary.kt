@@ -15,11 +15,13 @@ class Event_PaySalary(val partyKey: String) : EventObject("Pay Salary: $partyKey
             if (party.type == Party.Type.DIVISION) ReadOnly.prop(party.name) else party.workplace.name + " Workplace"
 
     override val quest
-        get() = Quest(
-            "Salary of %s is not paid yet.".format(partyName),
-            description = "Pay the salary in the daily meeting.",
-            tgtPlace = party.home
-        )
+            by lazy {
+                Quest(
+                    "Salary of %s is not paid yet.".format(partyName),
+                    description = "Pay the salary in the daily meeting.",
+                    tgtPlace = party.home
+                )
+            }
 
     override fun exec(a: Int, b: Int) {
         if (party.isSalaryPaid)

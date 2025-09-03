@@ -44,10 +44,18 @@ class EventSystem : GameStateElement() {
         super.injectParent(gameState)
         dataBase.forEach {
             it.injectParent(gameState)
+            if (!it.completed)
+                println(
+                    "Injecting parent to event ${it.name} completed=${it.completed}" +
+                            if (it is IQuestEventObject) " quest=${it.quest.name}" else ""
+                )
         }
         gameState.timeChanged += { a, b ->
             dataBase.forEach { if (!it.completed) it.exec(a, b) }
-            tmpdataBase.forEach { dataBase += it }
+            tmpdataBase.forEach {
+                it.injectParent(gameState)
+                dataBase += it
+            }
             tmpdataBase.clear()
             gameState.requests.filter {
                 !it.value.completed &&
@@ -100,7 +108,6 @@ class EventSystem : GameStateElement() {
 
     fun add(event: EventObject) {
         tmpdataBase.add(event)
-        event.injectParent(parent)
     }
 
     fun displayEmoji(who: String): SpeechUI.EmojiType {

@@ -17,11 +17,13 @@ class Event_ResolveBudget(val budgetMeeting: String) : EventObject("Resolve Budg
             if (party.type == Party.Type.DIVISION) ReadOnly.prop(party.name) else party.workplace.name + " Workplace"
 
     override val quest
-        get() = Quest(
-            "Quarterly budget of %s is not resolved yet.".format(partyName),
-            description = "Attend the budget resolution meeting.",
-            tgtMeeting = budgetMeeting
-        )
+            by lazy {
+                Quest(
+                    "Quarterly budget of %s is not resolved yet.".format(partyName),
+                    description = "Attend the budget resolution meeting.",
+                    tgtMeeting = budgetMeeting
+                )
+            }
 
     override fun exec(a: Int, b: Int) {
         if (parent.scheduledMeetings[budgetMeeting] == null)

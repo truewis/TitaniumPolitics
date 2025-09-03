@@ -2,6 +2,7 @@ package com.titaniumPolitics.game.events
 
 import com.titaniumPolitics.game.core.EventSystem
 import com.titaniumPolitics.game.core.GameState
+import com.titaniumPolitics.game.debugTools.Logger
 import com.titaniumPolitics.game.ui.widget.SpeechUI
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
@@ -17,8 +18,13 @@ sealed class EventObject(var name: String, val oneTime: Boolean) {
     var completed = false
     open fun injectParent(gameState: GameState) {
         parent = gameState
-        if (this is IQuestEventObject) {
-            parent.eventSystem.updateQuest(quest)
+        //Only update the quest for incomplete quests.
+        if (!completed && this is IQuestEventObject) {
+            try {
+                parent.eventSystem.updateQuest(quest)
+            } catch (e: Exception) {
+                Logger.write("Error updating quest for event $name: ${e.message}")
+            }
         }
     }
 
@@ -29,7 +35,11 @@ sealed class EventObject(var name: String, val oneTime: Boolean) {
     fun deactivate() {
         completed = true
         if (this is IQuestEventObject) {
-            parent.eventSystem.updateQuest(quest)
+            try {
+                parent.eventSystem.updateQuest(quest)
+            } catch (e: Exception) {
+                Logger.write("Error updating quest for event $name: ${e.message}")
+            }
         }
     }
 

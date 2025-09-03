@@ -13,6 +13,403 @@ class Party : GameStateElement() {
         get() = _name ?: parent.parties.filter { it.value == this }.keys.first().also { _name = it }
 
     /**
+     * Policies that the party follows.
+     * Currently only used by divisions.
+     */
+    val policies = hashSetOf<String>()
+
+    fun policyEffectHourly() {
+        val artificialists = members.filter {
+            "artificialist" in parent.characters[it]!!.trait
+        }.toSet()
+        val spiritualists = members.filter {
+            "spiritualist" in parent.characters[it]!!.trait
+        }.toSet()
+        val atheists = members.filter {
+            "atheist" in parent.characters[it]!!.trait
+        }.toSet()
+        val engineers = members.filter {
+            "engineer" in parent.characters[it]!!.trait
+        }.toSet()
+        val soldiers = members.filter {
+            "soldier" in parent.characters[it]!!.trait
+        }.toSet()
+        val administrators = members.filter {
+            "administrator" in parent.characters[it]!!.trait
+        }.toSet()
+        val miners = members.filter {
+            "miner" in parent.characters[it]!!.trait
+        }.toSet()
+        val laborers = members.filter {
+            parent.characters[it]!!.type == Character.Type.ANON
+        }.toSet()
+        val hasFamily = members.filter {
+            parent.characters[it]!!.reliant > 0 && parent.characters[it]!!.type != Character.Type.ANON
+        }.toSet()
+        val young = members.filter {
+            parent.characters[it]!!.age < 30
+        }.toSet()
+        val old = members.filter {
+            parent.characters[it]!!.age > 50
+        }.toSet()
+        val progressives = members.filter {
+            parent.characters[it]!!.stats.riskTaking > 12
+        }.toSet()
+        val conservatives = members.filter {
+            parent.characters[it]!!.stats.riskTaking < 8
+        }.toSet()
+
+        //1. Religion
+        if ("banReligiousPractices" in policies) {
+            (spiritualists + artificialists).forEach { a ->
+                atheists.forEach { b ->
+                    parent.setMutuality(
+                        a,
+                        b,
+                        -0.3,
+                        "policy-banReligiousPractices"
+                    )
+                }
+                leader?.let {
+                    parent.setMutuality(
+                        a,
+                        it,
+                        -0.3,
+                        "policy-banReligiousPractices"
+                    )
+                }
+            }
+            atheists.forEach { a ->
+                parent.setMutuality(
+                    a, a,
+                    0.5,
+                    "policy-banReligiousPractices"
+                )
+                leader?.let {
+                    parent.setMutuality(
+                        a,
+                        it,
+                        0.5,
+                        "policy-banReligiousPractices"
+                    )
+                }
+            }
+
+        }
+        if ("onlyReligiousPracticesArtificialist" in policies) {
+            spiritualists.forEach { a ->
+                artificialists.forEach { b ->
+                    parent.setMutuality(
+                        a,
+                        b,
+                        -0.3,
+                        "policy-onlyReligiousPracticesArtificialist"
+                    )
+                    leader?.let {
+                        parent.setMutuality(
+                            b,
+                            it,
+                            0.3,
+                            "policy-onlyReligiousPracticesArtificialist"
+                        )
+                    }
+                }
+                leader?.let {
+                    parent.setMutuality(
+                        a,
+                        it,
+                        -0.3,
+                        "policy-onlyReligiousPracticesArtificialist"
+                    )
+                }
+            }
+        }
+        if ("onlyReligiousPracticesSpiritualist" in policies) {
+            artificialists.forEach { a ->
+                spiritualists.forEach { b ->
+                    parent.setMutuality(
+                        a,
+                        b,
+                        -0.3,
+                        "policy-onlyReligiousPracticesSpiritualist"
+                    )
+                    leader?.let {
+                        parent.setMutuality(
+                            b,
+                            it,
+                            0.3,
+                            "policy-onlyReligiousPracticesArtificialist"
+                        )
+                    }
+                }
+                leader?.let {
+                    parent.setMutuality(
+                        a,
+                        it,
+                        -0.3,
+                        "policy-onlyReligiousPracticesSpiritualist"
+                    )
+                }
+            }
+
+        }
+        //2. Union
+        if ("banUnion" in policies) {
+            laborers.forEach { a ->
+                (members - laborers).forEach { b ->
+                    parent.setMutuality(
+                        a,
+                        b,
+                        -0.3,
+                        "policy-banUnion"
+                    )
+                }
+                leader?.let {
+                    parent.setMutuality(
+                        a,
+                        it,
+                        -0.3,
+                        "policy-banUnion"
+                    )
+                }
+            }
+
+        }
+        //3. Incentive on qualification
+        if ("engineerIncentive" in policies) {
+            (members - engineers).forEach { a ->
+                engineers.forEach { b ->
+                    parent.setMutuality(
+                        a,
+                        b,
+                        -0.3,
+                        "policy-engineerIncentive"
+                    )
+                    leader?.let {
+                        parent.setMutuality(
+                            b,
+                            it,
+                            0.3,
+                            "policy-engineerIncentive"
+                        )
+                    }
+                }
+
+            }
+        }
+        if ("administratorIncentive" in policies) {
+            (members - administrators).forEach { a ->
+                administrators.forEach { b ->
+                    parent.setMutuality(
+                        a,
+                        b,
+                        -0.3,
+                        "policy-administratorIncentive"
+                    )
+                    leader?.let {
+                        parent.setMutuality(
+                            b,
+                            it,
+                            0.3,
+                            "policy-administratorIncentive"
+                        )
+                    }
+                }
+
+            }
+        }
+        if ("soldierIncentive" in policies) {
+            (members - soldiers).forEach { a ->
+                soldiers.forEach { b ->
+                    parent.setMutuality(
+                        a,
+                        b,
+                        -0.3,
+                        "policy-soldierIncentive"
+                    )
+                    leader?.let {
+                        parent.setMutuality(
+                            b,
+                            it,
+                            0.3,
+                            "policy-soldierIncentive"
+                        )
+                    }
+                }
+            }
+        }
+        if ("minerIncentive" in policies) {
+            (members - miners).forEach { a ->
+                miners.forEach { b ->
+                    parent.setMutuality(
+                        a,
+                        b,
+                        -0.3,
+                        "policy-minerIncentive"
+                    )
+                    leader?.let {
+                        parent.setMutuality(
+                            b,
+                            it,
+                            0.3,
+                            "policy-minerIncentive"
+                        )
+                    }
+                }
+            }
+        }
+        if ("laborerIncentive" in policies) {
+            (members - laborers).forEach { a ->
+                laborers.forEach { b ->
+                    parent.setMutuality(
+                        a,
+                        b,
+                        -0.3,
+                        "policy-laborerIncentive"
+                    )
+                    leader?.let {
+                        parent.setMutuality(
+                            b,
+                            it,
+                            0.3,
+                            "policy-laborerIncentive"
+                        )
+                    }
+                }
+            }
+        }
+        //4. Safety Regulations
+        if ("workhourLimit" in policies) {
+            members.forEach { a ->
+                leader?.let {
+                    if (a in progressives)
+                        parent.setMutuality(
+                            a,
+                            it,
+                            -0.3,
+                            "policy-workhourLimit"
+                        )
+                    else if (a in conservatives)
+                        parent.setMutuality(
+                            a,
+                            it,
+                            0.3,
+                            "policy-workhourLimit"
+                        )
+                }
+            }
+        }
+        if ("lockoutExperiments" in policies) {
+            members.forEach { a ->
+                leader?.let {
+                    if (a in progressives)
+                        parent.setMutuality(
+                            a,
+                            it,
+                            -0.3,
+                            "policy-lockoutExperiments-negative"
+                        )
+                    else if (a in conservatives)
+                        parent.setMutuality(
+                            a,
+                            it,
+                            0.3,
+                            "policy-lockoutExperiments-positive"
+                        )
+                }
+            }
+        }
+        if ("paternityLeave" in policies) {
+            (members - hasFamily).forEach { a ->
+                hasFamily.forEach { b ->
+                    parent.setMutuality(
+                        a,
+                        b,
+                        -0.3,
+                        "policy-paternityLeave-negative"
+                    )
+                    leader?.let {
+                        parent.setMutuality(
+                            b,
+                            it,
+                            0.3,
+                            "policy-paternityLeave-positive"
+                        )
+                    }
+                }
+            }
+        }
+        if ("seniority" in policies) {
+            young.forEach { a ->
+                old.forEach { b ->
+                    parent.setMutuality(
+                        a,
+                        b,
+                        -0.3 * parent.characters[a]!!.stats.rScale,
+                        "policy-seniority-negative"
+                    )
+                    leader?.let {
+                        parent.setMutuality(
+                            b,
+                            it,
+                            0.3 * parent.characters[a]!!.stats.rScale,
+                            "policy-seniority-positive"
+                        )
+                    }
+                }
+            }
+        }
+        if ("jobStability" in policies) {
+            members.forEach { a ->
+                leader?.let {
+                    if (parent.characters[a]!!.stats.riskTaking > 12)
+                        parent.setMutuality(
+                            a,
+                            it,
+                            -0.3,
+                            "policy-jobStability-negative"
+                        )
+                    else if (parent.characters[a]!!.stats.riskTaking < 8)
+                        parent.setMutuality(
+                            a,
+                            it,
+                            0.3,
+                            "policy-jobStability-positive"
+                        )
+                }
+            }
+        }
+        if ("noTitles" in policies) {
+            (conservatives - laborers).forEach { a ->
+                laborers.intersect(progressives).forEach { b ->
+                    parent.setMutuality(
+                        a,
+                        b,
+                        -0.3,
+                        "policy-noTitles-negative"
+                    )
+                    leader?.let {
+                        parent.setMutuality(
+                            b,
+                            it,
+                            0.3,
+                            "policy-noTitles-positive"
+                        )
+                    }
+                }
+                leader?.let {
+                    parent.setMutuality(
+                        a,
+                        it,
+                        -0.3,
+                        "policy-noTitles-negative"
+                    )
+                }
+            }
+        }
+    }
+
+    /**
      * Roles for employees in the party. Does not include leader or directors.
      */
     enum class Role {

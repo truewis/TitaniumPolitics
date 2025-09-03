@@ -16,12 +16,13 @@ class Event_ProposeBudget(val budgetMeeting: String) : EventObject("Propose Budg
         get() =
             if (party.type == Party.Type.DIVISION) ReadOnly.prop(party.name) else party.workplace.name + " Workplace"
 
-    override val quest
-        get() = Quest(
+    override val quest by lazy {
+        Quest(
             "Quarterly budget of %s is not proposed yet.".format(partyName),
             description = "Attend the budget proposal meeting.",
             tgtMeeting = budgetMeeting
         )
+    }
 
     override fun exec(a: Int, b: Int) {
         if (parent.scheduledMeetings[budgetMeeting] == null)

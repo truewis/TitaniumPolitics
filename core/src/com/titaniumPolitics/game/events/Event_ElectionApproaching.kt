@@ -12,11 +12,13 @@ class Event_ElectionApproaching(val tgtMeeting: String) : EventObject("The elect
     IQuestEventObject {
 
     override val quest
-        get() = Quest(
-            "The election is approaching.",
-            description = "",
-            tgtMeeting = tgtMeeting
-        )
+            by lazy {
+                Quest(
+                    "The election is approaching.",
+                    description = "",
+                    tgtMeeting = tgtMeeting
+                )
+            }
 
     override fun exec(a: Int, b: Int) {
         if (parent.ongoingMeetings[tgtMeeting] != null)

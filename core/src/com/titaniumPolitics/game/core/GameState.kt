@@ -3,6 +3,7 @@ package com.titaniumPolitics.game.core
 import com.badlogic.gdx.math.MathUtils.clamp
 import com.titaniumPolitics.game.core.Party.Role
 import com.titaniumPolitics.game.core.ReadOnly.IDTH
+import com.titaniumPolitics.game.core.ReadOnly.constInt
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
@@ -478,11 +479,14 @@ class GameState {
         val reason = _mutualityReasons[indexA][indexB].split('\n')
         //Pick three most significant reasons, i.e. those with the highest absolute delta. It should be weighted with time since the delta.
         return reason.map { it.split(':') }
-            .filter { it.size >= 3 && it[1].toDouble().absoluteValue > 1e-2 } //Filter out insignificant reasons.
-            .sortedByDescending { it[1].toDouble().absoluteValue / (sqrt(time - it[0].toInt() + 1.0)) } //Sort by significance.
-            .toSet()
+            //Take sum of deltas with the same reason key.
+            .groupBy { it[1]/*reason key*/ }
+            .mapValues { it.value.sumOf { (moment, delta) -> delta.toDouble() / (sqrt(time - moment.toInt() + 1.0)) /*Time weighted*/ } }
+            .filter { it.value.absoluteValue > 1e-2 } //Filter out insignificant reasons.
+            .toList()
+            .sortedByDescending { abs(it.second) } //Sort by absolute delta.
             .take(3) //Take three most significant reasons.
-            .map { Pair(it[1].toDouble(), it[2]) } //Format the reason.
+            .map { Pair(it.second, it.first) } //Format the reason.
     }
 
     fun setMutuality(a: Collection<String>, b: Collection<String> = a, delta: Double, reasonKey: String? = null) {
@@ -598,14 +602,15 @@ class GameState {
 
     fun formatDate(type: String = "full", addTime: Int = 0): String {
         val tmpDay = ReadOnly.toDays(_time + addTime)
-        val year = tmpDay / 90 + 27 // Assuming 90 days per year
-        val month = (tmpDay % 90) / 30 // Assuming 15 days per month
+        val year = tmpDay / (constInt("quarterInDays") * 4) + 27 // 60 days per year
+        val quarter =
+            (tmpDay % (constInt("quarterInDays") * 4)) / constInt("quarterInDays") // 15 days per quarter
         when (type) {
-            "full" -> return "Megaros $year. ${month + 1}. ${tmpDay % 15 + 1}"
+            "full" -> return "Megaros $year. ${quarter + 1}. ${tmpDay % constInt("quarterInDays") + 1}"
             "year" -> return "Megaros $year."
-            "month" -> return "${month + 1}"
-            "monthDate" -> return "${month + 1}. ${tmpDay % 15 + 1}"
-            else -> return "Megaros $year. ${month + 1}. ${tmpDay % 15 + 1}"
+            "month" -> return "${quarter + 1}"
+            "monthDate" -> return "${quarter + 1}. ${tmpDay % 15 + 1}"
+            else -> return "Megaros $year. ${quarter + 1}. ${tmpDay % constInt("quarterInDays") + 1}"
         }
     }
 

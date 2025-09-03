@@ -31,8 +31,38 @@ data class Salary(override val sbjCharacter: String, override val tgtPlace: Stri
         val guildHall = party.home
 
         who.forEach { character ->
-            parent.places[guildHall]!!.resources -= standardRate
-            parent.characters[character]!!.resources += standardRate
+            var multiplyer = 1.0
+            val charObj = parent.characters[character]!!
+            if ("engineerIncentive" in parent.characters[character]!!.division!!.policies) {
+                if ("engineer" in charObj.trait) {
+                    multiplyer += 0.5
+                } else {
+                    multiplyer -= 0.2
+                }
+            }
+            if ("soldierIncentive" in parent.characters[character]!!.division!!.policies) {
+                if ("soldier" in charObj.trait) {
+                    multiplyer += 0.5
+                } else {
+                    multiplyer -= 0.2
+                }
+            }
+            if ("administratorIncentive" in parent.characters[character]!!.division!!.policies) {
+                if ("administrator" in charObj.trait) {
+                    multiplyer += 0.5
+                } else {
+                    multiplyer -= 0.2
+                }
+            }
+            if ("minerIncentive" in parent.characters[character]!!.division!!.policies) {
+                if ("miner" in charObj.trait) {
+                    multiplyer += 0.5
+                } else {
+                    multiplyer -= 0.2
+                }
+            }
+            parent.places[guildHall]!!.resources -= standardRate * multiplyer
+            charObj.resources += standardRate * multiplyer
             //Opinion of the leader of the party increases.
 
             parent.setMutuality(

@@ -10,8 +10,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.badlogic.gdx.utils.Align
 import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.ui.widget.TimeAmountUI
-import kotlinx.serialization.Serializable
-import kotlinx.serialization.Transient
 import ktx.scene2d.*
 import ktx.scene2d.Scene2DSkin.defaultSkin
 
@@ -86,7 +84,7 @@ class TasksUI(var gameState: GameState) : Table(defaultSkin) {
                     val additionalTable = table { }
                     invoke(additionalTable)
                 }
-                quest.tooltip?.run {
+                quest.getTooltip()?.run {
                     addListener(this)
                 }
 
@@ -139,12 +137,17 @@ data class Quest(
     val dueTime: Int? = null,
     val onClick: (() -> Unit)? = null,
     val display: ((Table) -> Unit)? = null,
-    val tooltip: EventListener? = null
+    /**
+     * Optional tooltip to display when hovering over the quest entry.
+     * This is evaluated lazily when the tooltip is requested, which happens in the UI thread while the quest itself is created in the game logic thread.
+     */
+    val getTooltip: () -> EventListener? = { null }
 ) {
     lateinit var parent: GameState
 
     //Do not check completion here, use eventObject completion instead.
     val index: Int
         get() = parent.eventSystem.quests.indexOf(this) + 1
+
 
 }

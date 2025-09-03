@@ -14,6 +14,7 @@ import com.titaniumPolitics.game.core.gameActions.UnofficialResourceTransfer
 import com.titaniumPolitics.game.debugTools.Logger
 import kotlinx.serialization.Serializable
 import kotlin.math.max
+import kotlin.math.min
 
 @Serializable
 class Character : GameStateElement() {
@@ -45,7 +46,7 @@ class Character : GameStateElement() {
         arrayListOf<String>()
 
     var stats = Stat() //Stats of the character. Used to calculate the effectiveness of actions.
-
+    var age = 30
     var health = .0
         set(value) {
             field = if (value < const("HealthMax")) value else const("HealthMax")//Max health is 100.
@@ -111,8 +112,6 @@ class Character : GameStateElement() {
         //Randomly assign a trait to the character.
         val traits = listOf(
             "gourmand",
-            "old",
-            "young",
             "psychopath",
             "charismatic",
             "shy",
@@ -120,6 +119,9 @@ class Character : GameStateElement() {
             "extrovert",
             "lazy",
             "hardworking",
+            "atheist",
+            "artificialist",
+            "spiritualist"
         )
         trait.add(traits.random())
         //Everyone is either a thief or a bargainer.
@@ -129,10 +131,35 @@ class Character : GameStateElement() {
             trait.add("bargainer")
         //Randomly assign stats to the character.
         stats = Stat(
-            logos = (0..20).random(),
-            ethos = (0..20).random(),
-            pathos = (0..20).random(),
+            logos = (6..15).random(),
+            ethos = (6..15).random(),
+            pathos = (6..15).random(),
+            riskTaking = (6..15).random(),
         )
+        age = (20..60).random()
+        if (type == Type.EMPLOYEE) {
+            reliant = (1..5).random() //Employees have 1 to 5 reliant.
+        }
+        if (reliant == 0 && type != Type.ANON) {
+            //If the character has no reliant, they are more willing to take risks.
+            stats.riskTaking += 5
+        }
+        if ("introvert" in trait) {
+            stats.logos = min(stats.logos + 1, 20)
+            stats.ethos = max(stats.ethos - 1, 1)
+            stats.pathos = max(stats.pathos - 1, 1)
+        }
+        if ("extrovert" in trait) {
+            stats.logos = max(stats.logos - 1, 1)
+            stats.ethos = min(stats.ethos + 1, 20)
+            stats.pathos = min(stats.pathos + 1, 20)
+        }
+        if ("miner" in trait) {
+            stats.riskTaking = min(stats.riskTaking + 3, 20)
+        }
+        if ("administrator" in trait) {
+            stats.riskTaking = max(stats.riskTaking - 3, 1)
+        }
     }
 
     fun killReliant(num: Int) {
@@ -147,6 +174,29 @@ class Character : GameStateElement() {
             "Killed $num reliant of $name at ${place.name}. Now has ${reliant} reliant.",
             Logger.LogLevel.INFO
         )
+        if (type != Type.ANON) {
+            //The character is sad.
+            parent.setMutuality(
+                name,
+                name,
+                -100.0,
+                "killReliant"
+            )
+            //Risk taking decreases if reliant is still greater than 0.
+            if (reliant > 0)
+                stats.riskTaking = max(stats.riskTaking - 2, 0)
+            else
+            //Risk taking increases if no reliant is left.
+                stats.riskTaking = min(stats.riskTaking + 5, 20)
+            //If the character is atheist, they may become religious.
+            if ("atheist" in trait) {
+                trait.remove("atheist")
+                if ((0..1).random() == 0)
+                    trait.add("spiritualist")
+                else
+                    trait.add("artificialist")
+            }
+        }
         Information.createRumor(parent).apply {
             type = InformationType.CASUALTY
             tgtPlace = place.name

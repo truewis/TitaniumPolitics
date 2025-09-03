@@ -6,6 +6,7 @@ import com.titaniumPolitics.game.core.ReadOnly.const
 import com.titaniumPolitics.game.core.ReadOnly.DT
 import com.titaniumPolitics.game.core.ReadOnly.DTH
 import com.titaniumPolitics.game.core.ReadOnly.S_PER_HR
+import com.titaniumPolitics.game.core.ReadOnly.constInt
 import com.titaniumPolitics.game.core.gameActions.GameAction
 import com.titaniumPolitics.game.core.gameActions.Wait
 import com.titaniumPolitics.game.debugTools.Logger
@@ -75,14 +76,24 @@ class GameEngine(val gameState: GameState) {
         }
         progression()
 
-        if (gameState.time % (const("lengthOfDay") / 24).toInt() == 0)//Every hour
+        if (gameState.time % (constInt("lengthOfDay") / 24) == 0)//Every hour
         {
             hourlyProgression()
         }
 
-        if (gameState.time % const("lengthOfDay").toInt() == 0)//Every day
+        if (gameState.time % constInt("lengthOfDay") == 0)//Every day
         {
             dailyProgression()
+        }
+        if (gameState.time % (4 * constInt("quarterInDays") * constInt("lengthOfDay")) == 0) //Every quarter
+        {
+            yearlyProgression()
+        }
+    }
+
+    private fun yearlyProgression() {
+        gameState.characters.forEach {
+            it.value.age += 1
         }
     }
 
@@ -93,6 +104,7 @@ class GameEngine(val gameState: GameState) {
         spreadPublicInfo()
         checkMarketResourcesHourly()
         cancelMeetings()
+        adjustPartyMutualities()
     }
 
     private fun dailyProgression() {
@@ -232,6 +244,12 @@ class GameEngine(val gameState: GameState) {
                         )
                     }
             }
+        }
+    }
+
+    private fun adjustPartyMutualities() {
+        gameState.parties.forEach {
+            it.value.policyEffectHourly()
         }
     }
 

@@ -2743,7 +2743,13 @@
         "Boulos",
         "Agros"
       ],
-      "home": "interiorHeadquarters"
+      "home": "interiorHeadquarters",
+      "policies": [
+        "administratorIncentive",
+        "banReligiousPractices",
+        "seniority",
+        "jobSecurity"
+      ]
     },
     "mining": {
       "type": "DIVISION",
@@ -2753,7 +2759,12 @@
         "Metros",
         "Dion"
       ],
-      "home": "miningHeadquarters"
+      "home": "miningHeadquarters",
+      "policies": [
+        "minerIncentive",
+        "seniority",
+        "jobSecurity"
+      ]
     },
     "education": {
       "type": "DIVISION",
@@ -2763,7 +2774,14 @@
         "teacher1",
         "teacher2"
       ],
-      "home": "educationHeadquarters"
+      "home": "educationHeadquarters",
+      "policies": [
+        "administratorIncentive",
+        "banReligiousPractices",
+        "seniority",
+        "jobSecurity",
+        "noTitles"
+      ]
     },
     "industry": {
       "type": "DIVISION",
@@ -2772,7 +2790,11 @@
         "Hiroshi",
         "Indu"
       ],
-      "home": "industryHeadquarters"
+      "home": "industryHeadquarters",
+      "policies": [
+        "engineerIncentive",
+        "paternityLeave"
+      ]
     },
     "safety": {
       "type": "DIVISION",
@@ -2785,7 +2807,14 @@
         "Kasem",
         "Bahriye"
       ],
-      "home": "safetyHeadquarters"
+      "home": "safetyHeadquarters",
+      "policies": [
+        "soldierIncentive",
+        "banReligiousPractices",
+        "seniority",
+        "jobSecurity",
+        "banUnion"
+      ]
     },
     "bioengineering": {
       "type": "DIVISION",
@@ -2795,7 +2824,12 @@
         "DrPaik",
         "DrHess"
       ],
-      "home": "bioengineeringHeadquarters"
+      "home": "bioengineeringHeadquarters",
+      "policies": [
+        "engineerIncentive",
+        "lockoutExperiments",
+        "jobSecurity"
+      ]
     },
     "infrastructure": {
       "type": "DIVISION",
@@ -2808,7 +2842,12 @@
         "Yuhoa",
         "Salvor"
       ],
-      "home": "infrastructureHeadquarters"
+      "home": "infrastructureHeadquarters",
+      "policies": [
+        "engineerIncentive",
+        "lockoutExperiments",
+        "noTitles"
+      ]
     }
   },
   "eventSystem": {

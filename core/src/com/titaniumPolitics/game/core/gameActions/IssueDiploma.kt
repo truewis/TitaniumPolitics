@@ -6,6 +6,13 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class IssueDiploma(override val sbjCharacter: String, override val tgtPlace: String) : GameAction() {
+    val qualifications = listOf(
+        "engineer",
+        "soldier",
+        "miner",
+        "administrator"
+    )
+
     constructor(sbjCharacter: String, tgtPlace: String, gameState: GameState) : this(sbjCharacter, tgtPlace) {
         injectParent(gameState)
     }
