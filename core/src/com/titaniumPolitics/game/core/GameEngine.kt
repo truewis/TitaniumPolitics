@@ -282,7 +282,7 @@ class GameEngine(val gameState: GameState) {
                         -it.value.amount * gameState.publicity(
                             it.key,
                             party.key
-                        ) / party.value.size * factor * S_PER_HR / const("MutualityFromInfoTau") * ReadOnly.mutualityScale,
+                        ) / (party.value.size + 1/*Prevent divide by zero*/) * factor * S_PER_HR / const("MutualityFromInfoTau") * ReadOnly.mutualityScale,
                         "CasualtyNews"
                     )
                 //if our party is responsible, integrity drops.

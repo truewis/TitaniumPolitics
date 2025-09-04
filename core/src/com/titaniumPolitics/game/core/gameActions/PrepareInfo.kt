@@ -45,6 +45,12 @@ data class PrepareInfo(override val sbjCharacter: String, override val tgtPlace:
                         }
                 }
         }
+
+        //If you like some information, prepare it.
+        parent.informations.filter { it.value.knownTo.contains(sbjCharacter) && sbjCharObj.infoPreference(it.value) > 1e-2 }
+            .forEach {
+                newSetOfPrepInfoKeys.add(it.key)
+            }
     }
 
     override fun execute() {

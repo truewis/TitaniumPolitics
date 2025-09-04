@@ -46,10 +46,12 @@ class AddInfoToAgendaRoutine(val agendaIndex: Int, val support: Boolean) : Routi
                 )
             }
             if (addingInfo != null) {
-
-                success()
-                //If I have supporting information, add it to the agenda.
-                return AddInfo(name, place, addingInfo, this@AddInfoToAgendaRoutine.agendaIndex, gState)
+                AddInfo(name, place, addingInfo, this@AddInfoToAgendaRoutine.agendaIndex, gState).also {
+                    if (it.isValid()) {
+                        success()
+                        return it
+                    }
+                }
             }
             //If there is no supporting information, end speech.
             failed()

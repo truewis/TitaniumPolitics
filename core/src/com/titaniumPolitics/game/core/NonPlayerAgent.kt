@@ -64,6 +64,7 @@ class NonPlayerAgent : Agent() {
             if (character.trait.contains("thief")) {
                 //Find a place within my division with maximum res.
                 if (routines.none { it is StealRoutine }) {
+                    routines.clear()
                     routines.add(
                         StealRoutine(
                             wantedResource,
@@ -79,6 +80,7 @@ class NonPlayerAgent : Agent() {
 
             } else if (character.trait.contains("bargainer")) {
                 if (routines.none { it is BuyRoutine }) {
+                    routines.clear()
                     routines.add(BuyRoutine(wantedResource, character.reliant * 10.0).apply {
                         priority = PRIORITY_LIFE_SUPPORT
                         routineStartTime = parent.time
@@ -93,6 +95,7 @@ class NonPlayerAgent : Agent() {
             (character.thirst > const("thirstThreshold"))
         ) {
             if (routines.none { it is RestRoutine }) {
+                routines.clear()
                 routines.add(RestRoutine(parent.getWorkplace(name)?.name).apply {
                     priority = pri
                     routineStartTime = parent.time
@@ -104,6 +107,7 @@ class NonPlayerAgent : Agent() {
         //If will is low, downTime.
         if (parent.getMutuality(name) < const("DowntimeWill")) {
             if (routines.none { it is DowntimeRoutine }) {
+                routines.clear()
                 routines.add(DowntimeRoutine(parent.getWorkplace(name)?.name).apply {
 
                     priority = pri

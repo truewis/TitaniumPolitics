@@ -61,7 +61,7 @@ data class AddInfo(
         if (meeting.agendas.any { it.informationKeys.contains(infoKey) })
             return false
         if (!reason(
-                effectivity() > 0,
+                effectivity() == 0.0,
                 "Information is not effective enough to be presented for this agenda."
             )
         ) return false

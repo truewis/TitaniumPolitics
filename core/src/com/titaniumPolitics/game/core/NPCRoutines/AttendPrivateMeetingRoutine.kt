@@ -25,12 +25,30 @@ class AttendPrivateMeetingRoutine(
             ?: gState.ongoingMeetings.filter { toWho in it.value.currentCharacters }.keys.firstOrNull()
             ?: "NonExistentMeeting" //The meeting does not exist yet, so newRoutineCondition will return null.
 
+    /**
+     * Whether the character has tried to add information to the agenda corresponding to the index in this meeting at least once.
+     */
+    val tryAddInfoAgenda = hashMapOf<Int, Boolean>()
     override fun newIMeetingRoutineCondition(
         name: String,
         place: String,
         subroutines: List<Routine>
     ): IMeetingRoutine? {
         supportProofOfWork(name)?.let { return it }
+        //If there is an agenda from someone I like, try to support it.
+        //If there is an agenda from someone I dislike, try to oppose it.
+        meeting.agendas.filter {
+            gState.getMutNorm(name, it.author) > 0.1 || gState.getMutNorm(name, it.author) < -0.1
+        }.randomOrNull()?.apply {
+            val index = meeting.agendas.indexOf(this)
+            if (tryAddInfoAgenda[index] != true) {
+                tryAddInfoAgenda[index] = true
+                return AddInfoToAgendaRoutine(
+                    index,
+                    support = gState.getMutNorm(name, this.author) > 0.1
+                )
+            }
+        }
         return null
     }
 
