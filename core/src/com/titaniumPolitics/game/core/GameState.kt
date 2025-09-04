@@ -510,11 +510,11 @@ class GameState {
         if (!characters.containsKey(a) || !characters.containsKey(b)) throw Exception("Getting mutuality reasons $a -> $b invalid.")
         val indexA = characterIndexCache[a]!!
         val indexB = characterIndexCache[b]!!
-        val reason = _mutualityReasons[indexA][indexB].split('\n')
+        val reason = _mutualityReasons[indexA][indexB].split('\n')//Last element is always empty.
         //Pick three most significant reasons, i.e. those with the highest absolute delta. It should be weighted with time since the delta.
-        return reason.map { it.split(':') }
+        return reason.take(reason.size - 1).map { it.split(':') }
             //Take sum of deltas with the same reason key.
-            .groupBy { it[1]/*reason key*/ }
+            .groupBy { it[2]/*reason key*/ }
             .mapValues { it.value.sumOf { (moment, delta) -> delta.toDouble() / (sqrt(time - moment.toInt() + 1.0)) /*Time weighted*/ } }
             .filter { it.value.absoluteValue > 1e-2 } //Filter out insignificant reasons.
             .toList()
