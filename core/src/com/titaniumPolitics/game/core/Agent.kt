@@ -41,8 +41,8 @@ sealed class Agent : GameStateElement() {
                 if (it.isValid()) return it
             }
 
-            //If neither leaving meeting nor ending speech is possible, wait.
-            return Wait(name, place)
+            //If neither leaving meeting nor ending speech is possible, throw an error.
+            throw IllegalStateException("Character $name is in a meeting but cannot leave it or end speech.")
         }
         return null
     }

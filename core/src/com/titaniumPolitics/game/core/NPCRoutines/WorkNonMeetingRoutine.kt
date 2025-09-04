@@ -36,9 +36,9 @@ class WorkNonMeetingRoutine(var workplace: String) : Routine() {
     override fun newRoutineCondition(name: String, place: String, subroutines: List<Routine>): Routine? {
         val character = gState.characters[name]!!
 
-        //I am forced into a meeting. End this routine.
+        //I am forced into a meeting. No more work routine.
         if (character.currentMeeting != null) {
-            return success()
+            return null
         }
         //1. If an accident happened in the place of my control, investigate and clear it.
         gState.places.values.firstOrNull {

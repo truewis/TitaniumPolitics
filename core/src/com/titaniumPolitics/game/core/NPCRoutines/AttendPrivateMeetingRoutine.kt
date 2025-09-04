@@ -17,7 +17,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 class AttendPrivateMeetingRoutine(
     val toWho: String? = null, val agenda: MeetingAgenda? = null,
-    var scheduledMeetingName: String? = null
+    val scheduledMeetingName: String? = null
 ) : MeetingRoutine() {
     private var hasUnresolvedAgenda = agenda != null
     override val meetingName: String
@@ -34,6 +34,8 @@ class AttendPrivateMeetingRoutine(
         place: String,
         subroutines: List<Routine>
     ): IMeetingRoutine? {
+        if (hasUnresolvedAgenda)
+            return null //until my agenda is resolved, don't engage in other topics.
         supportProofOfWork(name)?.let { return it }
         //If there is an agenda from someone I like, try to support it.
         //If there is an agenda from someone I dislike, try to oppose it.

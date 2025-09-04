@@ -11,6 +11,7 @@ class Party : GameStateElement() {
     private var _name: String? = null
     override val name: String
         get() = _name ?: parent.parties.filter { it.value == this }.keys.first().also { _name = it }
+    val displayName get() = name
 
     /**
      * Policies that the party follows.
