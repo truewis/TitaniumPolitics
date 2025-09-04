@@ -577,6 +577,8 @@ class Party : GameStateElement() {
     fun individualMutuality(name: String): Double = members.sumOf { parent.getMutuality(it, name) } / members.size
     val integrity: Double
         get() = parent.getPartyMutuality(this.name, this.name)
+    val integrityNorm: Double
+        get() = parent.getPartyMutNorm(this.name, this.name)
 
     val divisionPlaces: Collection<Place>
         get() = parent.places.filter { it.value.responsibleDivision == name }.values.also {

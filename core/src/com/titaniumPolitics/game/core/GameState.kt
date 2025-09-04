@@ -392,6 +392,7 @@ class GameState {
         }
 
         randomize()
+        addFactions()
         eventSystem.newGame()
         println("Game state initialized successfully.")
     }
@@ -424,6 +425,33 @@ class GameState {
         }
     }
 
+    fun addFactions() {
+        //Add religious factions: atheist, spiritualist, artificialist
+        val religion = listOf("atheist", "spiritualist", "artificialist")
+        religion.forEach {
+            parties[it] = Party().apply {
+                injectParent(this@GameState)
+                type = Party.Type.OTHER
+                home = "market"
+                characters.filter { char -> it in char.value.trait }.keys.forEach {
+                    addMember(it, Role.NONE)
+                }
+            }
+        }
+        //Add qualification factions: engineer, soldier, administrator, miner
+        val qualification = listOf("engineer", "soldier", "administrator", "miner")
+        qualification.forEach {
+            parties[it] = Party().apply {
+                injectParent(this@GameState)
+                type = Party.Type.OTHER
+                home = "market"
+                characters.filter { char -> it in char.value.trait }.keys.forEach {
+                    addMember(it, Role.NONE)
+                }
+            }
+        }
+    }
+
     @Serializable
     private var _mutuality = Array(1) { DoubleArray(1) }
     private var _mutualityReasons =
@@ -445,6 +473,12 @@ class GameState {
         val indexA = characterIndexCache[a]!!
         val indexB = characterIndexCache[b]!!
         return _mutuality[indexA][indexB]
+    }
+
+    fun getCharToPartyMutuality(char: String, party: String): Double {
+        if (!characters.containsKey(char) || !parties.containsKey(party)) throw Exception("Getting mutuality $char -> $party invalid.")
+        val members = parties[party]!!.members
+        return members.map { getMutuality(char, it) }.average()
     }
 
     /**Return value [-1, 1].*/

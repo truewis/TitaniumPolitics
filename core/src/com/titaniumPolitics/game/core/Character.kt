@@ -382,12 +382,20 @@ class Character : GameStateElement() {
                 }
             }
 
-        } else {
-            //Accidents are always interesting.
-            if (info.type == InformationType.CASUALTY)
-                ret = 2e-1 * stats.lScale
-            else {
+            if (info.type == InformationType.MUTUALITY || info.type == InformationType.PARTY_MUTUALITY) {
+                //I like news that I like other people. I dislike news that I dislike other people.
+                ret = (info.amount / const("mutualityMax") - 0.5) * 1e-1
+            }
 
+        } else {
+            //Accidents are always interesting. But not if it is about my party.
+            if (info.type == InformationType.CASUALTY) {
+                val plObj = parent.places[info.tgtPlace]!!
+                if (plObj.workplaceParty?.leader == name || parent.parties[plObj.responsibleDivision]?.leader == name) {
+                    ret = -1e-1 * stats.lScale
+                } else
+                    ret = 3e-2 * stats.lScale
+            } else {
                 //Otherwise, if the information is about some other people, the character's preference depends on their relationship with the target.
                 //The target character's preference is reflected.
                 info.tgtCharacter?.run {
@@ -410,6 +418,18 @@ class Character : GameStateElement() {
                     )
                 } / (info.action as NewAgenda).agenda.attachedRequest!!.issuedBy.size) * stats.pScale
                 //If I hate the issuers, I hate this information even more. If I like the issuers, I don't hate this information as much.
+            }
+
+            if (info.type == InformationType.MUTUALITY || info.type == InformationType.PARTY_MUTUALITY) {
+                //I like news that me or my party is liked by other people. I dislike news that me or my party is disliked by other people.
+                if (info.auxCharacter == name)
+                    ret = (info.amount / const("mutualityMax") - 0.5) * 1e-1
+                if (parent.parties[info.auxParty]?.leader == name)
+                    ret =
+                        (info.amount / const("mutualityMax") - 0.5) * 1e-1 * parent.parties[info.auxParty]!!.integrityNorm
+                if (parent.parties[info.auxParty]?.members?.contains(name) == true)
+                    ret =
+                        (info.amount / const("mutualityMax") - 0.5) * 5e-2 * parent.parties[info.auxParty]!!.integrityNorm
             }
 
         }

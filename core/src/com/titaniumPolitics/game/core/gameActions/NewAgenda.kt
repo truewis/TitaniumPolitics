@@ -312,7 +312,7 @@ data class NewAgenda(override val sbjCharacter: String, override val tgtPlace: S
                             auxCharacter = sbjCharacter,
                             tgtCharacter = agenda.subjectParams["character"]!!,
                             amount = parent.getMutuality(agenda.subjectParams["character"]!!, sbjCharacter)
-                                .toInt() - (0..5).random()
+                                .toInt() - (0..7).random()
                         ).also {
                             it.knownTo.addAll(meeting.currentCharacters)
                             parent.addInformation(it)
@@ -326,7 +326,7 @@ data class NewAgenda(override val sbjCharacter: String, override val tgtPlace: S
                         tgtCharacter = sbjCharacter,
                         auxCharacter = agenda.subjectParams["character"]!!,
                         amount = parent.getMutuality(sbjCharacter, agenda.subjectParams["character"]!!)
-                            .toInt() - (0..5).random()
+                            .toInt() - (0..7).random()
                     ).also {
                         it.knownTo.addAll(meeting.currentCharacters)
                         parent.addInformation(it)
@@ -341,6 +341,19 @@ data class NewAgenda(override val sbjCharacter: String, override val tgtPlace: S
                             3.0 * effectivity,
                             "PraiseParty;$sbjCharacter"
                         )
+                    }
+                    Information(
+                        author = null,
+                        creationTime = parent.time,
+                        type = InformationType.PARTY_MUTUALITY,
+                        tgtTime = parent.time,
+                        tgtCharacter = sbjCharacter,
+                        auxParty = agenda.subjectParams["party"]!!,
+                        amount = parent.getCharToPartyMutuality(sbjCharacter, agenda.subjectParams["party"]!!)
+                            .toInt() + (0..3).random()
+                    ).also {
+                        it.knownTo.addAll(meeting.currentCharacters)
+                        parent.addInformation(it)
                     }
                 }
 
@@ -361,6 +374,19 @@ data class NewAgenda(override val sbjCharacter: String, override val tgtPlace: S
                             3.0 * effectivity,
                             "DenounceEnemyParty;$sbjCharacter"
                         )
+                    }
+                    Information(
+                        author = null,
+                        creationTime = parent.time,
+                        type = InformationType.PARTY_MUTUALITY,
+                        tgtTime = parent.time,
+                        tgtCharacter = sbjCharacter,
+                        auxParty = agenda.subjectParams["party"]!!,
+                        amount = parent.getCharToPartyMutuality(sbjCharacter, agenda.subjectParams["party"]!!)
+                            .toInt() - (0..5).random()
+                    ).also {
+                        it.knownTo.addAll(meeting.currentCharacters)
+                        parent.addInformation(it)
                     }
                 }
 
