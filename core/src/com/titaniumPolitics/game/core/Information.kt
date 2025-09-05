@@ -19,7 +19,7 @@ data class Information(
     var type: InformationType = InformationType.ACTION,
     var tgtTime: Int = 0,
     var tgtPlace: String = "",
-    var tgtApparatus: String? = null,
+    var tgtApparatusName: String? = null,
     var tgtApparatusID: String? = null,
     var tgtCharacter: String? = null,
     var auxCharacter: String? = null,
@@ -38,7 +38,7 @@ data class Information(
         info.type,
         info.tgtTime,
         info.tgtPlace,
-        info.tgtApparatus,
+        info.tgtApparatusName,
         info.tgtApparatusID,
         info.tgtCharacter,
         info.auxCharacter,
@@ -140,7 +140,7 @@ data class Information(
             }
 
             InformationType.APPARATUS -> {
-                val apparatus = tgtApparatus ?: ReadOnly.appProp("unknownApparatus")
+                val apparatus = tgtApparatusName ?: ReadOnly.appProp("unknownApparatus")
                 if (variables["durability"]!! > 0)
                     ReadOnly.appProp("status-running").format(ReadOnly.appProp(apparatus), variables["durability"]!!)
                 else

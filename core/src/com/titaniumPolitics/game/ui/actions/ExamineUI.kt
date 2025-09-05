@@ -23,17 +23,17 @@ class ExamineUI(var gameState: GameState, actionCallback: (GameAction) -> Unit) 
     val button1 = scene2d.button("document") {
         image("UserGrunge") {
             it.size(70f)
-            val action = Examine(
-                this@ExamineUI.subject,
-                this@ExamineUI.tgtPlace,
-                InformationType.HUMAN_RESOURCES
-            ).also {
-                it.injectParent(this@ExamineUI.gameState)
-            }
             this@button.addListener(object : ChangeListener() {
                 override fun changed(event: ChangeEvent?, actor: Actor?) {
                     if (this@button.isChecked)
-                        this@ExamineUI.submitButton.refresh(action)
+                        this@ExamineUI.submitButton.refresh(
+                            Examine(
+                                this@ExamineUI.subject,
+                                this@ExamineUI.tgtPlace,
+                                InformationType.HUMAN_RESOURCES,
+                                this@ExamineUI.gameState
+                            )
+                        )
                 }
             }
             )
@@ -48,20 +48,21 @@ class ExamineUI(var gameState: GameState, actionCallback: (GameAction) -> Unit) 
     val button2 = scene2d.button("document") {
         image("CogGrunge") {
             it.size(70f)
-            val action = Examine(
-                this@ExamineUI.subject,
-                this@ExamineUI.tgtPlace,
-                InformationType.APPARATUS
-            ).also {
-                it.injectParent(this@ExamineUI.gameState)
-            }
-            this@button.addListener(object : ChangeListener() {
-                override fun changed(event: ChangeEvent?, actor: Actor?) {
-                    if (this@button.isChecked)
-                        this@ExamineUI.submitButton.refresh(action)
+            val action =
+                this@button.addListener(object : ChangeListener() {
+                    override fun changed(event: ChangeEvent?, actor: Actor?) {
+                        if (this@button.isChecked)
+                            this@ExamineUI.submitButton.refresh(
+                                Examine(
+                                    this@ExamineUI.subject,
+                                    this@ExamineUI.tgtPlace,
+                                    InformationType.APPARATUS,
+                                    this@ExamineUI.gameState
+                                )
+                            )
+                    }
                 }
-            }
-            )
+                )
 
         }
         row()
@@ -74,17 +75,17 @@ class ExamineUI(var gameState: GameState, actionCallback: (GameAction) -> Unit) 
     val button3 = scene2d.button("document") {
         image("TilesGrunge") {
             it.size(70f)
-            val action = Examine(
-                this@ExamineUI.subject,
-                this@ExamineUI.tgtPlace,
-                InformationType.RESOURCES
-            ).also {
-                it.injectParent(this@ExamineUI.gameState)
-            }
             this@button.addListener(object : ChangeListener() {
                 override fun changed(event: ChangeEvent?, actor: Actor?) {
                     if (this@button.isChecked)
-                        this@ExamineUI.submitButton.refresh(action)
+                        this@ExamineUI.submitButton.refresh(
+                            Examine(
+                                this@ExamineUI.subject,
+                                this@ExamineUI.tgtPlace,
+                                InformationType.RESOURCES,
+                                this@ExamineUI.gameState
+                            )
+                        )
                 }
             }
             )

@@ -36,7 +36,7 @@ data class NewAgenda(override val sbjCharacter: String, override val tgtPlace: S
     override fun isValid(): Boolean {
         //People will be more interested in agendas related to their interest. However, this is handled in NPC class.
         val mt = parent.characters[sbjCharacter]!!.currentMeeting!!
-        if (reason(mt.agendas.size >= 4, "newAgenda-AgendaLimit"))
+        if (!reason(mt.agendas.size < 4, "newAgenda-AgendaLimit"))
             return false //Idea Draft: A meeting can have at most 4 agendas.
         when (agenda.type) {
             AgendaType.PROOF_OF_WORK -> return agenda.attachedRequest != null && mt.agendas.none { oldAgenda -> oldAgenda.type == AgendaType.REQUEST && oldAgenda.attachedRequest == agenda.attachedRequest }

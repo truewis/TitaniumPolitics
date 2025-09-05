@@ -19,7 +19,7 @@ class Event_BribeDoctor3(var searchFrom: Int) : EventObject("Talking with Dr Pai
     override fun exec(a: Int, b: Int) {
         if (parent.player.currentMeeting != null && parent.player.currentMeeting!!.currentCharacters.contains("DrPaik") &&
             parent.informations.any { (_, info) ->
-                info.creationTime > searchFrom && info.type == InformationType.APPARATUS && info.tgtApparatus == "WaterStorage" && info.tgtPlace == "WelfareStationEast" && info.amount <= 30
+                info.creationTime > searchFrom && info.type == InformationType.APPARATUS && info.tgtApparatusName == "WaterStorage" && info.tgtPlace == "WelfareStationEast" && info.amount <= 30
             }
         ) {
             onPlayDialogue("BribeDoctor3")

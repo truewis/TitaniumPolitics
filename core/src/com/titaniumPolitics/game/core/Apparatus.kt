@@ -222,7 +222,7 @@ class Apparatus {
         type = InformationType.APPARATUS,
         tgtTime = time,
         tgtPlace = tgtPlace,
-        tgtApparatus = name,
+        tgtApparatusName = name,
         tgtApparatusID = ID,
         amount = durability.toInt(),
         variables = hashMapOf(

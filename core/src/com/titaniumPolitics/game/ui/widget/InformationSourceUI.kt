@@ -24,7 +24,7 @@ class InformationSourceUI(info: Information) : Table(Scene2DSkin.defaultSkin), K
             it.fill()
             color = LIGHT_GRAY
             setAlignment(Align.left)
-            setFontScale(0.15f)
+            setFontScale(0.2f)
         }
     }
 }

@@ -39,8 +39,9 @@ class NewAgendaUI(val gameState: GameState, actionCallback: (GameAction) -> Unit
     val agendaDetailStack: Stack
     private val actionSelButton = ActionSelectButton(this::setRequestAction)
     fun setRequestAction(action: GameAction) {
-        agenda = MeetingAgenda(AgendaType.REQUEST, subject)
-        agenda?.attachedRequest = Request(action, hashSetOf(action.sbjCharacter), hashSetOf(sbjChar.name))
+        agenda = MeetingAgenda(AgendaType.REQUEST, subject).apply {
+            attachedRequest = Request(action, hashSetOf(action.sbjCharacter), hashSetOf(subject))
+        }
     }
 
     private var agendaSelectBox: Table
@@ -53,7 +54,7 @@ class NewAgendaUI(val gameState: GameState, actionCallback: (GameAction) -> Unit
         row()
         selectBox<String> {
             items =
-                Array(this@NewAgendaUI.gameState.requests.filter { !it.value.completed && name in it.value.issuedBy }.keys.toTypedArray())
+                Array(this@NewAgendaUI.gameState.requests.filter { !it.value.completed && this@NewAgendaUI.subject in it.value.issuedBy }.keys.toTypedArray())
             addListener(object : ChangeListener() {
                 override fun changed(event: ChangeEvent?, actor: Actor?) {
                     this@NewAgendaUI.agenda =

@@ -41,29 +41,29 @@ class ApparatusInfoUI : WindowUI("ApparatusInfoTitle") {
                 try {
                     drawable = TextureRegionDrawable(
                         CapsuleStage.instance.assetManager.get( //TODO: Temporary solution for portrait image loading. PortraitUI does not have a stage.
-                            ReadOnly.appJson[information.tgtApparatus]!!.jsonObject["image"]!!.jsonPrimitive.content,
+                            ReadOnly.appJson[information.tgtApparatusName]!!.jsonObject["image"]!!.jsonPrimitive.content,
                             Texture::class.java
                         )!!
                     )
                 } catch (e: Exception) {
-                    Logger.write("Portrait Image Error: ${information.tgtApparatus}", Logger.LogLevel.INFO)
+                    Logger.write("Portrait Image Error: ${information.tgtApparatusName}", Logger.LogLevel.INFO)
                 }
             }
             row()
 
 
-            label(ReadOnly.appProp(information.tgtApparatus!!), "description") {
+            label(ReadOnly.appProp(information.tgtApparatusName!!), "description") {
                 setAlignment(Align.center)
                 setFontScale(0.5f)
             }
             row()
-            add(DescriptionLabel(ReadOnly.appProp(information.tgtApparatus!! + "-desc"))).size(400f, 100f).fill()
+            add(DescriptionLabel(ReadOnly.appProp(information.tgtApparatusName!! + "-desc"))).size(400f, 100f).fill()
             row()
             add(TypingLabel("", Scene2DSkin.defaultSkin, "description").apply {
                 val text1 = if ((information.variables["durability"] ?: 1.0) > .0) {
                     ReadOnly.appProp("status-running")
                         .format(
-                            ReadOnly.appProp(information.tgtApparatus ?: ReadOnly.appProp("unknownApparatus")),
+                            ReadOnly.appProp(information.tgtApparatusName ?: ReadOnly.appProp("unknownApparatus")),
                             information.variables["durability"]
                         )
                 } else {

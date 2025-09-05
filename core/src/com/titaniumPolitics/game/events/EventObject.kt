@@ -20,10 +20,10 @@ sealed class EventObject(var name: String, val oneTime: Boolean) {
 
     open fun injectParent(gameState: GameState) {
         parent = gameState
-        //Only update the quest for incomplete quests.
-        if (!active && this is IQuestEventObject) {
+        //Only update the quest for active quests.
+        if (active && this is IQuestEventObject) {
             try {
-                parent.eventSystem.updateQuest(quest)
+                parent.eventSystem.updateQuest(this, quest)
             } catch (e: Exception) {
                 Logger.write("Error updating quest for event $name: ${e.message}")
             }
@@ -38,9 +38,9 @@ sealed class EventObject(var name: String, val oneTime: Boolean) {
         active = false
         if (this is IQuestEventObject) {
             try {
-                parent.eventSystem.finishQuest(quest, success)
+                parent.eventSystem.finishQuest(this, success)
             } catch (e: Exception) {
-                Logger.write("Error updating quest for event $name: ${e.message}")
+                Logger.write("Error finishing quest for event $name: ${e.message}")
             }
         }
     }

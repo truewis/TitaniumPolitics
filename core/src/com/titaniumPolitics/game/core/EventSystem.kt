@@ -19,8 +19,12 @@ class EventSystem : GameStateElement() {
     @Transient
     val quests =
         arrayListOf<Quest>() //Do not use haseSet, it is not meant to be used with objects that can be modified.
-    val successfulQuests = arrayListOf<Quest>()
-    val failedQuests = arrayListOf<Quest>()
+
+    @Transient
+    val successfulQuests = arrayListOf<IQuestEventObject>()
+
+    @Transient
+    val failedQuests = arrayListOf<IQuestEventObject>()
 
     //Utility function called once when a new game starts.
     fun newGame() {
@@ -34,23 +38,23 @@ class EventSystem : GameStateElement() {
         add(Event_SecureOuterBarrierEast())
     }
 
-    fun updateQuest(quest: Quest) {
+    fun updateQuest(event: IQuestEventObject, quest: Quest) {
         quest.parent = parent
+        quest.event = event
         if (quests.any { it.name == quest.name }) {
             quests.removeIf { it.name == quest.name }
         }
         quests.add(quest)
     }
 
-    fun finishQuest(quest: Quest, success: Boolean = true) {
-        quest.parent = parent
-        if (quests.any { it.name == quest.name }) {
-            quests.removeIf { it.name == quest.name }
+    fun finishQuest(event: IQuestEventObject, success: Boolean = true) {
+        if (quests.any { it.event == event }) {
+            quests.removeIf { it.event == event }
         }
         if (success)
-            successfulQuests.add(quest)
+            successfulQuests.add(event)
         else
-            failedQuests.add(quest)
+            failedQuests.add(event)
     }
 
     override fun injectParent(gameState: GameState) {

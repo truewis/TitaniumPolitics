@@ -1,6 +1,7 @@
 package com.titaniumPolitics.game.core.gameActions
 
 import com.titaniumPolitics.game.core.GameEngine
+import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.core.Information
 import com.titaniumPolitics.game.core.InformationType
 import com.titaniumPolitics.game.debugTools.Logger
@@ -9,6 +10,15 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class Examine(override val sbjCharacter: String, override val tgtPlace: String, var what: InformationType) :
     GameAction() {
+    constructor(
+        sbjCharacter: String,
+        tgtPlace: String,
+        what: InformationType,
+        gameState: GameState
+    ) : this(sbjCharacter, tgtPlace, what) {
+        injectParent(gameState)
+    }
+
     override fun chooseParams() {
         what = when (GameEngine.acquire(arrayListOf("HR", "apparatus", "resources"))) {
             "HR" -> InformationType.HUMAN_RESOURCES

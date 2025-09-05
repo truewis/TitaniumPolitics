@@ -9,6 +9,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.VerticalGroup
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.badlogic.gdx.utils.Align
 import com.titaniumPolitics.game.core.GameState
+import com.titaniumPolitics.game.events.EventObject
+import com.titaniumPolitics.game.events.IQuestEventObject
 import com.titaniumPolitics.game.ui.widget.TimeAmountUI
 import ktx.scene2d.*
 import ktx.scene2d.Scene2DSkin.defaultSkin
@@ -144,6 +146,7 @@ data class Quest(
     val getTooltip: () -> EventListener? = { null }
 ) {
     lateinit var parent: GameState
+    lateinit var event: IQuestEventObject
 
     //Do not check completion here, use eventObject completion instead.
     val index: Int

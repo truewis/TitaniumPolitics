@@ -33,7 +33,7 @@ class RepairUI(val gameState: GameState, actionCallback: (GameAction) -> Unit) :
             if (value == null) throw Exception("")
             field = value
             onUpdateSelectedApp.forEach { it(value) }
-            action = Repair(sbjChar.name, sbjChar.place.name, value.tgtApparatus!!, gameState)
+            action = Repair(sbjChar.name, sbjChar.place.name, value.tgtApparatusID!!, gameState)
             submitButton.refresh(action)
         }
     var action =
@@ -76,10 +76,10 @@ class RepairUI(val gameState: GameState, actionCallback: (GameAction) -> Unit) :
                 setFontScale(0.5f)
             }
             this@RepairUI.onUpdateSelectedApp += {
-                name.setText(ReadOnly.appProp(it.name))
-                desc.label.setText(ReadOnly.appProp(it.name + "-desc"))
+                name.setText(ReadOnly.appProp(it.tgtApparatusName!!))
+                desc.label.setText(ReadOnly.appProp(it.tgtApparatusName!! + "-desc"))
                 dur.setText(ReadOnly.prop("durability") + ": " + String.format("%.1f", it.variables["durability"]!!))
-                val realApp = this@RepairUI.gameState.getApparatus(it.tgtApparatus!!)
+                val realApp = this@RepairUI.gameState.getApparatus(it.tgtApparatusID!!)
                 requiredRes.current =
                     realApp.requiredResourcePerRepair[Repair.checkRepairLevel(realApp).first]
 
@@ -186,8 +186,11 @@ class RepairUI(val gameState: GameState, actionCallback: (GameAction) -> Unit) :
         }
         if (agendaSelectBox.children.size == 0) {
             sp.isVisible = false
-        } else
+            noSuitableAppLabel.isVisible = true
+        } else {
             sp.isVisible = true
+            noSuitableAppLabel.isVisible = false
+        }
     }
 
 

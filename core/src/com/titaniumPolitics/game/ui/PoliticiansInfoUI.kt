@@ -307,132 +307,184 @@ class PoliticiansInfoUI(val gameState: GameState) : Table(defaultSkin), KTable {
                     (this as Table).row()
                     table {
                         it.grow()
-                        label(ReadOnly.placeProp(workplaceParty.home!!), "docTitle").apply {
-                            setFontScale(0.5f)
-                            setAlignment(Align.left)
-                        }
-                        row()
-                        label(
-                            ReadOnly.prop("PoliticiansInfoUI-Director") + ": " + ReadOnly.charProp(
-                                workplaceParty.leader ?: "NotAssigned"
-                            ), "docTitle"
-                        ).apply {
-                            setFontScale(0.5f)
-                            setAlignment(Align.left)
-                        }
-                        row()
-                        label(
-                            ReadOnly.prop("PoliticiansInfoUI-Size").format(workplaceParty.size), "docTitle"
-                        ).apply {
-                            setFontScale(0.3f)
-                            setAlignment(Align.left)
-                        }
-                    }
-                    table {
-                        it.grow()
-                        label(ReadOnly.prop("PoliticiansInfoUI-Role"), "docTitle") {
-                            it.left()
-                            setFontScale(0.3f)
-                            setAlignment(Align.left)
-                        }
-                        label(ReadOnly.prop("PoliticiansInfoUI-Employee"), "docTitle") {
-                            it.left()
-                            setFontScale(0.3f)
-                            setAlignment(Align.left)
-                        }
-                        row()
-                        Party.Role.entries.forEach { role ->
-                            label(ReadOnly.prop(role.toString()), "docTitle") {
-                                it.left()
-                                it.padRight(10f)
-                                setFontScale(0.5f)
-                                setAlignment(Align.left)
-                            }
-
-                            val char = workplaceParty.getCharByRole(role)
-
-                            label(ReadOnly.charProp(char ?: "NotAssigned"), "docTitle") {
-                                it.left()
+                        table {
+                            it.grow()
+                            label(ReadOnly.placeProp(workplaceParty.home!!), "docTitle").apply {
                                 setFontScale(0.5f)
                                 setAlignment(Align.left)
                             }
                             row()
-                        }
-                    }
-                    row()
-                    table {
-                        it.grow()
-                        label(ReadOnly.prop("PoliticiansInfoUI-CurrentQuarterBudget"), "docTitle").apply {
-                            setFontScale(0.5f)
-                            setAlignment(Align.left)
-                        }
-                        if (this@PoliticiansInfoUI.gameState.parties[workplaceParty.workplace.responsibleDivision]?.isBudgetResolved == false) {
-
-                            row()
-                            label(ReadOnly.prop("BudgetDisplayUI-notResolved"), "docTitle").apply {
-                                setFontScale(0.4f)
+                            label(
+                                ReadOnly.prop("PoliticiansInfoUI-Director") + ": " + ReadOnly.charProp(
+                                    workplaceParty.leader ?: "NotAssigned"
+                                ), "docTitle"
+                            ).apply {
+                                setFontScale(0.5f)
                                 setAlignment(Align.left)
                             }
-                        } else {
-
                             row()
-                            add(ResourceDisplayUI(workplaceParty.budget.sum())).grow()
+                            label(
+                                ReadOnly.prop("PoliticiansInfoUI-Size").format(workplaceParty.size), "docTitle"
+                            ).apply {
+                                setFontScale(0.3f)
+                                setAlignment(Align.left)
+                            }
+                        }
+                        table {
+                            it.grow()
+                            label(ReadOnly.prop("PoliticiansInfoUI-Role"), "docTitle") {
+                                it.left()
+                                setFontScale(0.3f)
+                                setAlignment(Align.left)
+                            }
+                            label(ReadOnly.prop("PoliticiansInfoUI-Employee"), "docTitle") {
+                                it.left()
+                                setFontScale(0.3f)
+                                setAlignment(Align.left)
+                            }
+                            row()
+                            Party.Role.entries.forEach { role ->
+                                label(ReadOnly.prop(role.toString()), "docTitle") {
+                                    it.left()
+                                    it.padRight(10f)
+                                    setFontScale(0.5f)
+                                    setAlignment(Align.left)
+                                }
+
+                                val char = workplaceParty.getCharByRole(role)
+
+                                label(ReadOnly.charProp(char ?: "NotAssigned"), "docTitle") {
+                                    it.left()
+                                    setFontScale(0.5f)
+                                    setAlignment(Align.left)
+                                }
+                                row()
+                            }
+                        }
+                        row()
+                        table {
+                            it.grow()
+                            label(ReadOnly.prop("PoliticiansInfoUI-CurrentQuarterBudget"), "docTitle").apply {
+                                setFontScale(0.5f)
+                                setAlignment(Align.left)
+                            }
+                            if (this@PoliticiansInfoUI.gameState.parties[workplaceParty.workplace.responsibleDivision]?.isBudgetResolved == false) {
+
+                                row()
+                                label(ReadOnly.prop("BudgetDisplayUI-notResolved"), "docTitle").apply {
+                                    setFontScale(0.4f)
+                                    setAlignment(Align.left)
+                                }
+                            } else {
+
+                                row()
+                                add(ResourceDisplayUI(workplaceParty.budget.sum())).grow()
+                            }
+                        }
+                        table {
+                            it.grow()
+                            label(ReadOnly.prop("PoliticiansInfoUI-CurrentQuarterSalary"), "docTitle").apply {
+                                setFontScale(0.5f)
+                                setAlignment(Align.left)
+                            }
+                            label(ReadOnly.prop(workplaceParty.isSalaryPaid.toString()), "docTitle").apply {
+                                setFontScale(0.5f)
+                                setAlignment(Align.left)
+                            }
+                            row()
+                            label(ReadOnly.prop("PoliticiansInfoUI-SalaryPaidDate"), "docTitle").apply {
+                                setFontScale(0.5f)
+                                setAlignment(Align.left)
+                            }
+                            label("N/A", "docTitle").apply {
+                                setFontScale(0.5f)
+                                setAlignment(Align.left)
+                            }
+                            row()
+                            label(ReadOnly.prop("PoliticiansInfoUI-Integrity"), "docTitle").apply {
+                                setFontScale(0.5f)
+                                setAlignment(Align.left)
+                            }
+                            label("%.1f%%".format(workplaceParty.integrity), "docTitle").apply {
+                                setFontScale(0.5f)
+                                setAlignment(Align.left)
+                            }
+                            row()
+                            label(ReadOnly.prop("PoliticiansInfoUI-WorkHours"), "docTitle").apply {
+                                setFontScale(0.5f)
+                                setAlignment(Align.left)
+                            }
+                            label(
+                                "%02d00 - %02d00".format(
+                                    workplaceParty.workplace.workHoursStart,
+                                    workplaceParty.workplace.workHoursEnd
+                                ), "docTitle"
+                            ).apply {
+                                setFontScale(0.5f)
+                                setAlignment(Align.left)
+                            }
+                            row()
+                            label(ReadOnly.prop("PoliticiansInfoUI-CurrentEfficiency"), "docTitle").apply {
+                                setFontScale(0.5f)
+                                setAlignment(Align.left)
+                            }
+                            val averageCurrentEfficiency =
+                                if (workplaceParty.workplace.apparatuses.isEmpty()) 0.0 else workplaceParty.workplace.apparatuses.sumOf {
+                                    it.netEfficiency
+                                } / workplaceParty.workplace.apparatuses.size
+                            label("%.1f %%".format(averageCurrentEfficiency * 100.0), "docTitle").apply {
+                                setFontScale(0.5f)
+                                setAlignment(Align.left)
+                            }
                         }
                     }
                     table {
-                        it.grow()
-                        label(ReadOnly.prop("PoliticiansInfoUI-CurrentQuarterSalary"), "docTitle").apply {
+                        it.top()
+                        it.fill()
+                        label(ReadOnly.prop("PoliticiansInfoUI-Apparatus"), "docTitle") {
                             setFontScale(0.5f)
                             setAlignment(Align.left)
-                        }
-                        label(ReadOnly.prop(workplaceParty.isSalaryPaid.toString()), "docTitle").apply {
-                            setFontScale(0.5f)
-                            setAlignment(Align.left)
+                            it.fill().left()
                         }
                         row()
-                        label(ReadOnly.prop("PoliticiansInfoUI-SalaryPaidDate"), "docTitle").apply {
-                            setFontScale(0.5f)
-                            setAlignment(Align.left)
-                        }
-                        label("N/A", "docTitle").apply {
-                            setFontScale(0.5f)
-                            setAlignment(Align.left)
-                        }
-                        row()
-                        label(ReadOnly.prop("PoliticiansInfoUI-Integrity"), "docTitle").apply {
-                            setFontScale(0.5f)
-                            setAlignment(Align.left)
-                        }
-                        label("%.1f%%".format(workplaceParty.integrity), "docTitle").apply {
-                            setFontScale(0.5f)
-                            setAlignment(Align.left)
-                        }
-                        row()
-                        label(ReadOnly.prop("PoliticiansInfoUI-WorkHours"), "docTitle").apply {
-                            setFontScale(0.5f)
-                            setAlignment(Align.left)
-                        }
-                        label(
-                            "%02d00 - %02d00".format(
-                                workplaceParty.workplace.workHoursStart,
-                                workplaceParty.workplace.workHoursEnd
-                            ), "docTitle"
-                        ).apply {
-                            setFontScale(0.5f)
-                            setAlignment(Align.left)
-                        }
-                        row()
-                        label(ReadOnly.prop("PoliticiansInfoUI-CurrentEfficiency"), "docTitle").apply {
-                            setFontScale(0.5f)
-                            setAlignment(Align.left)
-                        }
-                        val averageCurrentEfficiency =
-                            if (workplaceParty.workplace.apparatuses.isEmpty()) 0.0 else workplaceParty.workplace.apparatuses.sumOf {
-                                it.netEfficiency
-                            } / workplaceParty.workplace.apparatuses.size
-                        label("%.1f %%".format(averageCurrentEfficiency * 100.0), "docTitle").apply {
-                            setFontScale(0.5f)
-                            setAlignment(Align.left)
+                        table {
+                            defaults().pad(5f)
+                            label(ReadOnly.prop("PoliticiansInfoUI-Apparatus"), "docTitle") {
+                                setFontScale(0.3f)
+                                setAlignment(Align.left)
+                                it.fill().left()
+                            }
+                            label(
+                                ReadOnly.prop("PoliticiansInfoUI-CurrentEfficiency"),
+                                "docTitle"
+                            ) {
+                                setFontScale(0.3f)
+                                setAlignment(Align.left)
+                                it.fill().left()
+                            }
+                            label(ReadOnly.prop("durability"), "docTitle") {
+                                setFontScale(0.3f)
+                                setAlignment(Align.left)
+                                it.fill().left()
+                            }
+                            workplaceParty.workplace.apparatuses.forEach { app ->
+                                row()
+                                label(ReadOnly.appProp(app.name), "docTitle") {
+                                    setFontScale(0.4f)
+                                    setAlignment(Align.left)
+                                    it.fill().left()
+                                }
+                                label("%.1f %%".format(app.netEfficiency * 100.0), "docTitle") {
+                                    setFontScale(0.4f)
+                                    setAlignment(Align.left)
+                                    it.fill().left()
+                                }
+                                label("%.1f %%".format(app.durability), "docTitle") {
+                                    setFontScale(0.4f)
+                                    setAlignment(Align.left)
+                                    it.fill().left()
+                                }
+                            }
                         }
                     }
                 }
