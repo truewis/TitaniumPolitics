@@ -19,6 +19,8 @@ class EventSystem : GameStateElement() {
     @Transient
     val quests =
         arrayListOf<Quest>() //Do not use haseSet, it is not meant to be used with objects that can be modified.
+    val successfulQuests = arrayListOf<Quest>()
+    val failedQuests = arrayListOf<Quest>()
 
     //Utility function called once when a new game starts.
     fun newGame() {
@@ -40,18 +42,29 @@ class EventSystem : GameStateElement() {
         quests.add(quest)
     }
 
+    fun finishQuest(quest: Quest, success: Boolean = true) {
+        quest.parent = parent
+        if (quests.any { it.name == quest.name }) {
+            quests.removeIf { it.name == quest.name }
+        }
+        if (success)
+            successfulQuests.add(quest)
+        else
+            failedQuests.add(quest)
+    }
+
     override fun injectParent(gameState: GameState) {
         super.injectParent(gameState)
         dataBase.forEach {
             it.injectParent(gameState)
-            if (!it.completed)
+            if (it.active)
                 println(
-                    "Injecting parent to event ${it.name} completed=${it.completed}" +
+                    "Injecting parent to event ${it.name} active=${it.active}" +
                             if (it is IQuestEventObject) " quest=${it.quest.name}" else ""
                 )
         }
         gameState.timeChanged += { a, b ->
-            dataBase.forEach { if (!it.completed) it.exec(a, b) }
+            dataBase.forEach { if (it.active) it.exec(a, b) }
             tmpdataBase.forEach {
                 it.injectParent(gameState)
                 dataBase += it
@@ -111,7 +124,7 @@ class EventSystem : GameStateElement() {
     }
 
     fun displayEmoji(who: String): SpeechUI.EmojiType {
-        return dataBase.firstOrNull { !it.completed && it.displayEmoji(who) != SpeechUI.EmojiType.NONE }
+        return dataBase.firstOrNull { it.active && it.displayEmoji(who) != SpeechUI.EmojiType.NONE }
             ?.displayEmoji(who) ?: SpeechUI.EmojiType.NONE
     }
 

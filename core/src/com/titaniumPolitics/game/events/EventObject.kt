@@ -15,11 +15,13 @@ sealed class EventObject(var name: String, val oneTime: Boolean) {
     @Transient
     lateinit var parent: GameState
 
-    var completed = false
+    var active = true
+        private set
+
     open fun injectParent(gameState: GameState) {
         parent = gameState
         //Only update the quest for incomplete quests.
-        if (!completed && this is IQuestEventObject) {
+        if (!active && this is IQuestEventObject) {
             try {
                 parent.eventSystem.updateQuest(quest)
             } catch (e: Exception) {
@@ -32,11 +34,11 @@ sealed class EventObject(var name: String, val oneTime: Boolean) {
 
 
     //This event will not be triggered by the game. Unsubscribe from events here.
-    fun deactivate() {
-        completed = true
+    fun deactivate(success: Boolean = true) {
+        active = false
         if (this is IQuestEventObject) {
             try {
-                parent.eventSystem.updateQuest(quest)
+                parent.eventSystem.finishQuest(quest, success)
             } catch (e: Exception) {
                 Logger.write("Error updating quest for event $name: ${e.message}")
             }
