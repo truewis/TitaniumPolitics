@@ -51,6 +51,7 @@ class ActionSelectUI(var gameState: GameState, override val actionCallback: (Gam
                 actionDialogue.actor = it
                 (it as IActionUI).subject = subject
                 (it as IActionUI).tgtPlace = tgtPlace
+                it.setCheckValidity(false)
             }, actionCallback)
             docList.add(t).size(150f).fill()
         }

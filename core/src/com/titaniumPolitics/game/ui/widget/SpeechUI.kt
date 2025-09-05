@@ -7,6 +7,7 @@ import com.rafaskoberg.gdx.typinglabel.TypingLabel
 import com.rafaskoberg.gdx.typinglabel.TypingListener
 import com.titaniumPolitics.game.core.AgendaType
 import com.titaniumPolitics.game.core.ReadOnly
+import com.titaniumPolitics.game.core.gameActions.EndSpeech
 import com.titaniumPolitics.game.core.gameActions.GameAction
 import com.titaniumPolitics.game.core.gameActions.NewAgenda
 import kotlinx.serialization.json.jsonObject
@@ -58,41 +59,49 @@ class SpeechUI : Table(defaultSkin), KTable {
 
         bubble.isVisible = true
         var text: String
-        if (action is NewAgenda) {
-            when (action.agenda.type) {
-                AgendaType.PROOF_OF_WORK -> text = ReadOnly.script("NewAgenda-ProofOfWork")
-                AgendaType.NOMINATE -> text =
-                    ReadOnly.script("NewAgenda-Nominate").format(action.agenda.subjectParams["character"])
+        when (action) {
+            is NewAgenda -> {
+                when (action.agenda.type) {
+                    AgendaType.PROOF_OF_WORK -> text = ReadOnly.script("NewAgenda-ProofOfWork")
+                    AgendaType.NOMINATE -> text =
+                        ReadOnly.script("NewAgenda-Nominate").format(action.agenda.subjectParams["character"])
 
-                AgendaType.REQUEST -> text = ReadOnly.script("NewAgenda-Request").format(
-                    ReadOnly.prop(
-                        action.agenda.attachedRequest!!
-                            .action::class.simpleName!!
-                    ), action.agenda.attachedRequest!!.issuedTo.first()
-                )
+                    AgendaType.REQUEST -> text = ReadOnly.script("NewAgenda-Request").format(
+                        ReadOnly.prop(
+                            action.agenda.attachedRequest!!
+                                .action::class.simpleName!!
+                        ), action.agenda.attachedRequest!!.issuedTo.first()
+                    )
 
-                AgendaType.PRAISE -> text =
-                    ReadOnly.script("NewAgenda-Praise").format(action.agenda.subjectParams["character"])
+                    AgendaType.PRAISE -> text =
+                        ReadOnly.script("NewAgenda-Praise").format(action.agenda.subjectParams["character"])
 
-                AgendaType.DENOUNCE -> text =
-                    ReadOnly.script("NewAgenda-Denounce").format(action.agenda.subjectParams["character"])
+                    AgendaType.DENOUNCE -> text =
+                        ReadOnly.script("NewAgenda-Denounce").format(action.agenda.subjectParams["character"])
 
-                AgendaType.PRAISE_PARTY -> text =
-                    ReadOnly.script("NewAgenda-PraiseParty").format(action.agenda.subjectParams["party"])
+                    AgendaType.PRAISE_PARTY -> text =
+                        ReadOnly.script("NewAgenda-PraiseParty").format(action.agenda.subjectParams["party"])
 
-                AgendaType.DENOUNCE_PARTY -> text =
-                    ReadOnly.script("NewAgenda-DenounceParty").format(action.agenda.subjectParams["party"])
+                    AgendaType.DENOUNCE_PARTY -> text =
+                        ReadOnly.script("NewAgenda-DenounceParty").format(action.agenda.subjectParams["party"])
 
-                AgendaType.BUDGET_PROPOSAL -> text = ReadOnly.script("NewAgenda-BudgetProposal")
-                AgendaType.BUDGET_RESOLUTION -> text = ReadOnly.script("NewAgenda-BudgetResolution")
-                AgendaType.APPOINT_MEETING -> text =
-                    ReadOnly.script("NewAgenda-AppointMeeting")
+                    AgendaType.BUDGET_PROPOSAL -> text = ReadOnly.script("NewAgenda-BudgetProposal")
+                    AgendaType.BUDGET_RESOLUTION -> text = ReadOnly.script("NewAgenda-BudgetResolution")
+                    AgendaType.APPOINT_MEETING -> text =
+                        ReadOnly.script("NewAgenda-AppointMeeting")
 
-                AgendaType.FIRE_MANAGER -> text =
-                    ReadOnly.script("NewAgenda-FireManager").format(action.agenda.subjectParams["character"])
+                    AgendaType.FIRE_MANAGER -> text =
+                        ReadOnly.script("NewAgenda-FireManager").format(action.agenda.subjectParams["character"])
+                }
             }
-        } else {
-            text = ReadOnly.script(action.javaClass.simpleName, action)
+
+            is EndSpeech -> {
+                text = ReadOnly.script("EndSpeech2").format(ReadOnly.charProp(action.nextSpeaker))
+            }
+
+            else -> {
+                text = ReadOnly.script(action.javaClass.simpleName, action)
+            }
         }
         println("Displaying speech: $text")
         speech.restart(text)

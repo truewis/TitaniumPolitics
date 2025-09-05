@@ -16,17 +16,17 @@ open class ActionSheetUI(
     titleKey: String, gameState: GameState,
     override val actionCallback: (GameAction) -> Unit
 ) : Table(Scene2DSkin.defaultSkin), KTable, IActionUI {
-    val titleLabel = scene2d.label(ReadOnly.prop(titleKey), "docTitle") {
+    protected val titleLabel = scene2d.label(ReadOnly.prop(titleKey), "docTitle") {
         setFontScale(1f)
         setAlignment(Align.center)
         color = Color.BLACK
     }
-    val submitButton = SubmitButton {
+    protected val submitButton = SubmitButton {
         actionCallback(it)
         onClose.forEach { it() }
     }
     val onClose = ArrayList<() -> Unit>()
-    val content = Table()
+    protected val content = Table()
     override var subject = gameState.playerName
     override var tgtPlace = gameState.player.place.name
     override fun setCheckValidity(checkValidity: Boolean) {

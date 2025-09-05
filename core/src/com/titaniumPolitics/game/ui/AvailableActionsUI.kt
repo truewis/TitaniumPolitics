@@ -172,7 +172,7 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable 
             }
             val t = createActionButton(index, tobj, true, gameState, this::setActionSheet, {
                 when (it::class.simpleName) {
-                    "UnofficialResourceTransfer", "OfficialResourceTransfer", "InvestigateAccidentScene", "ClearAccidentScene", "Eat", "Repair", "PrepareInfo" -> {
+                    "UnofficialResourceTransfer", "OfficialResourceTransfer", "InvestigateAccidentScene", "ClearAccidentScene", "Eat", "Repair", "PrepareInfo", "Examine" -> {
                         ProgressBackgroundUI.instance.setVisibleWithFade(
                             true,
                             it::class.simpleName!!

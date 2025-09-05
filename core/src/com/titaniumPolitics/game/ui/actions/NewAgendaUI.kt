@@ -39,6 +39,7 @@ class NewAgendaUI(val gameState: GameState, actionCallback: (GameAction) -> Unit
     val agendaDetailStack: Stack
     private val actionSelButton = ActionSelectButton(this::setRequestAction)
     fun setRequestAction(action: GameAction) {
+        agenda = MeetingAgenda(AgendaType.REQUEST, subject)
         agenda?.attachedRequest = Request(action, hashSetOf(action.sbjCharacter), hashSetOf(sbjChar.name))
     }
 
