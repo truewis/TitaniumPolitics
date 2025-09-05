@@ -14,6 +14,11 @@ class SubmitButton(var action: GameAction? = null, var actionCallback: (GameActi
     Button(Scene2DSkin.defaultSkin),
     KTable {
     private var tooltip: ActionTooltipUI = ActionTooltipUI("Wait")
+    var checkValidity = true
+        set(value) {
+            field = value
+            action?.let { refresh(it) }
+        }
 
     init {
         isDisabled = true
@@ -36,9 +41,13 @@ class SubmitButton(var action: GameAction? = null, var actionCallback: (GameActi
         removeListener(tooltip)
         tooltip = ActionTooltipUI(action::class.simpleName!!)
         addListener(tooltip)
-        this.isDisabled = !action.isValid()
-        if (this.isDisabled) {
-            this.tooltip.displayInvalidReason(action.invalidReason)
+        if (checkValidity) {
+            this.isDisabled = !action.isValid()
+            if (this.isDisabled) {
+                this.tooltip.displayInvalidReason(action.invalidReason)
+            }
+        } else {
+            this.isDisabled = false
         }
         this.action = action
 

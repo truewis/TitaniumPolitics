@@ -141,15 +141,15 @@ class RepairUI(val gameState: GameState, actionCallback: (GameAction) -> Unit) :
 
     fun refresh(gameState: GameState) {
         agendaSelectBox.clear()
-        refreshAvailableAgendaList(gameState)
+        refreshAvailableApparatusList(gameState)
     }
 
-    fun refreshAvailableAgendaList(gameState: GameState) {
+    fun refreshAvailableApparatusList(gameState: GameState) {
         val tgtPlaceObj = gameState.places[tgtPlace]!!
         tgtPlaceObj.apparatuses.forEach { app ->
             gameState.informations.values.firstOrNull {
                 it.type == InformationType.APPARATUS
-                it.tgtApparatus == app.ID && gameState.playerName in it.knownTo
+                it.tgtApparatusID == app.ID && gameState.playerName in it.knownTo
             }?.also { appInfo ->
                 val t = scene2d.button("check") {
                     //TODO:Agenda Tooltip addListener(ActionTooltipUI(tobj))

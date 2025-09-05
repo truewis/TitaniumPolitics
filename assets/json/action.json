@@ -63,6 +63,14 @@
     "image": "icon_store_165",
     "sound": "data/repair.mp3"
   },
+  "SetWorkHours": {
+    "image": "icon_app_166",
+    "sound": "data/repair.mp3"
+  },
+  "SetWorkers": {
+    "image": "icon_app_25",
+    "sound": "data/repair.mp3"
+  },
   "Resign": {
     "image": "icon_app_7",
     "sound": "data/repair.mp3"

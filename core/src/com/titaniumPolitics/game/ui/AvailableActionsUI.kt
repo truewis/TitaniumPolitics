@@ -170,7 +170,7 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable 
             if (listOf("Move", "Talk").contains(tobj)) {
                 return@forEachIndexed
             }
-            val t = createActionButton(index, tobj, gameState, this::setActionSheet, {
+            val t = createActionButton(index, tobj, true, gameState, this::setActionSheet, {
                 when (it::class.simpleName) {
                     "UnofficialResourceTransfer", "OfficialResourceTransfer", "InvestigateAccidentScene", "ClearAccidentScene", "Eat", "Repair", "PrepareInfo" -> {
                         ProgressBackgroundUI.instance.setVisibleWithFade(
@@ -232,6 +232,7 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable 
         fun createActionButton(
             index: Int,
             actionName: String,
+            checkValidity: Boolean,
             gameState: GameState,
             setActionSheet: (ActionSheetUI) -> Unit,
             actionCallback: (GameAction) -> Unit
@@ -280,7 +281,7 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable 
                                     gameState.playerName,
                                     gameState.player.place.name
                                 )
-                                action.injectParent(gameState); if (!action.isValid()) {
+                                action.injectParent(gameState); if (checkValidity && !action.isValid()) {
                                     this@button.isDisabled = true
                                     tooltip.displayInvalidReason(action.invalidReason)
                                 }
@@ -310,7 +311,7 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable 
                                     gameState.playerName,
                                     gameState.player.place.name
                                 )
-                                action.injectParent(gameState); if (!action.isValid()) {
+                                action.injectParent(gameState); if (checkValidity && !action.isValid()) {
                                     this@button.isDisabled = true
                                     tooltip.displayInvalidReason(action.invalidReason)
                                 }
@@ -331,7 +332,7 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable 
                                     gameState.playerName,
                                     gameState.player.place.name
                                 )
-                                action.injectParent(gameState); if (!action.isValid()) {
+                                action.injectParent(gameState); if (checkValidity && !action.isValid()) {
                                     this@button.isDisabled = true
                                     tooltip.displayInvalidReason(action.invalidReason)
                                 }
@@ -349,7 +350,7 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable 
                                     gameState.playerName,
                                     gameState.player.place.name
                                 )
-                                action.injectParent(gameState); if (!action.isValid()) {
+                                action.injectParent(gameState); if (checkValidity && !action.isValid()) {
                                     this@button.isDisabled = true
                                     tooltip.displayInvalidReason(action.invalidReason)
                                 }
@@ -454,7 +455,7 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable 
                                     gameState.playerName,
                                     gameState.player.place.name
                                 )
-                                action.injectParent(gameState); if (!action.isValid()) {
+                                action.injectParent(gameState); if (checkValidity && !action.isValid()) {
                                     this@button.isDisabled = true
                                     tooltip.displayInvalidReason(action.invalidReason)
                                 }
@@ -472,7 +473,7 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable 
                                     gameState.playerName,
                                     gameState.player.place.name
                                 )
-                                action.injectParent(gameState); if (!action.isValid()) {
+                                action.injectParent(gameState); if (checkValidity && !action.isValid()) {
                                     this@button.isDisabled = true
                                     tooltip.displayInvalidReason(action.invalidReason)
                                 }
@@ -490,7 +491,7 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable 
                                     gameState.playerName,
                                     gameState.player.place.name
                                 )
-                                action.injectParent(gameState); if (!action.isValid()) {
+                                action.injectParent(gameState); if (checkValidity && !action.isValid()) {
                                     this@button.isDisabled = true
                                     tooltip.displayInvalidReason(action.invalidReason)
                                 }
@@ -508,7 +509,7 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable 
                                     gameState.playerName,
                                     gameState.player.place.name
                                 )
-                                action.injectParent(gameState); if (!action.isValid()) {
+                                action.injectParent(gameState); if (checkValidity && !action.isValid()) {
                                     this@button.isDisabled = true
                                     tooltip.displayInvalidReason(action.invalidReason)
                                 }
@@ -526,7 +527,7 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable 
                                     gameState.playerName,
                                     gameState.player.place.name
                                 )
-                                action.injectParent(gameState); if (!action.isValid()) {
+                                action.injectParent(gameState); if (checkValidity && !action.isValid()) {
                                     this@button.isDisabled = true
                                     tooltip.displayInvalidReason(action.invalidReason)
                                 }
@@ -607,7 +608,7 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable 
                                     gameState.playerName,
                                     gameState.player.place.name
                                 )
-                                action.injectParent(gameState); if (!action.isValid()) {
+                                action.injectParent(gameState); if (checkValidity && !action.isValid()) {
                                     this@button.isDisabled = true
                                     tooltip.displayInvalidReason(action.invalidReason)
                                 }
@@ -625,7 +626,47 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable 
                                     gameState.playerName,
                                     gameState.player.place.name
                                 )
-                                action.injectParent(gameState); if (!action.isValid()) {
+                                action.injectParent(gameState); if (checkValidity && !action.isValid()) {
+                                    this@button.isDisabled = true
+                                    tooltip.displayInvalidReason(action.invalidReason)
+                                }
+
+                                this@button.addListener(object : ChangeListener() {
+                                    override fun changed(event: ChangeEvent, actor: Actor) {
+                                        if (!this@button.isChecked) return
+                                        actionCallback(action)
+                                    }
+                                })
+                            }
+
+                            "SetWorkers" -> {
+                                val action = SetWorkers(
+                                    gameState.playerName,
+                                    gameState.player.place.name,
+                                    0,
+                                    gameState.player.place.apparatuses.first().ID
+                                )
+                                action.injectParent(gameState); if (checkValidity && !action.isValid()) {
+                                    this@button.isDisabled = true
+                                    tooltip.displayInvalidReason(action.invalidReason)
+                                }
+
+                                this@button.addListener(object : ChangeListener() {
+                                    override fun changed(event: ChangeEvent, actor: Actor) {
+                                        if (!this@button.isChecked) return
+                                        actionCallback(action)
+                                    }
+                                })
+                            }
+
+                            "SetWorkHours" -> {
+                                val action = SetWorkHours(
+                                    gameState.playerName,
+                                    gameState.player.place.name,
+                                    0,
+                                    24
+                                )
+                                action.injectParent(gameState); if (checkValidity && !action.isValid()) {
                                     this@button.isDisabled = true
                                     tooltip.displayInvalidReason(action.invalidReason)
                                 }

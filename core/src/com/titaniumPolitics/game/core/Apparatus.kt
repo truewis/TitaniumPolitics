@@ -223,6 +223,7 @@ class Apparatus {
         tgtTime = time,
         tgtPlace = tgtPlace,
         tgtApparatus = name,
+        tgtApparatusID = ID,
         amount = durability.toInt(),
         variables = hashMapOf(
             "durability" to durability,

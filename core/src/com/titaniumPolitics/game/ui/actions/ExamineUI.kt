@@ -12,6 +12,7 @@ import com.titaniumPolitics.game.core.gameActions.Examine
 import com.titaniumPolitics.game.core.gameActions.GameAction
 import com.titaniumPolitics.game.ui.ProgressBackgroundUI
 import com.titaniumPolitics.game.ui.widget.ActionSheetUI
+import com.titaniumPolitics.game.ui.widget.SimpleTextTooltipUI
 import ktx.scene2d.*
 
 class ExamineUI(var gameState: GameState, actionCallback: (GameAction) -> Unit) :
@@ -30,15 +31,15 @@ class ExamineUI(var gameState: GameState, actionCallback: (GameAction) -> Unit) 
                 image("UserGrunge") {
                     it.size(70f)
                     val action = Examine(
-                        this@ExamineUI.gameState.playerName,
-                        this@ExamineUI.gameState.player.place.name,
+                        this@ExamineUI.subject,
+                        this@ExamineUI.tgtPlace,
                         InformationType.HUMAN_RESOURCES
                     ).also {
                         it.injectParent(this@ExamineUI.gameState)
                     }
                     if (!action.isValid()) {
                         this@button.isDisabled = true
-                        this@ExamineUI.displayInvalidReason(action.invalidReason)
+                        this@button.addListener(SimpleTextTooltipUI(action.invalidReason))
                     }
                     this@button.addListener(object : ChangeListener() {
                         override fun changed(event: ChangeEvent?, actor: Actor?) {
@@ -65,15 +66,15 @@ class ExamineUI(var gameState: GameState, actionCallback: (GameAction) -> Unit) 
                 image("CogGrunge") {
                     it.size(70f)
                     val action = Examine(
-                        this@ExamineUI.gameState.playerName,
-                        this@ExamineUI.gameState.player.place.name,
+                        this@ExamineUI.subject,
+                        this@ExamineUI.tgtPlace,
                         InformationType.APPARATUS
                     ).also {
                         it.injectParent(this@ExamineUI.gameState)
                     }
                     if (!action.isValid()) {
                         this@button.isDisabled = true
-                        this@ExamineUI.displayInvalidReason(action.invalidReason)
+                        this@button.addListener(SimpleTextTooltipUI(action.invalidReason))
                     }
                     this@button.addListener(object : ChangeListener() {
                         override fun changed(event: ChangeEvent?, actor: Actor?) {
@@ -101,15 +102,15 @@ class ExamineUI(var gameState: GameState, actionCallback: (GameAction) -> Unit) 
                 image("TilesGrunge") {
                     it.size(70f)
                     val action = Examine(
-                        this@ExamineUI.gameState.playerName,
-                        this@ExamineUI.gameState.player.place.name,
+                        this@ExamineUI.subject,
+                        this@ExamineUI.tgtPlace,
                         InformationType.RESOURCES
                     ).also {
                         it.injectParent(this@ExamineUI.gameState)
                     }
                     if (!action.isValid()) {
                         this@button.isDisabled = true
-                        this@ExamineUI.displayInvalidReason(action.invalidReason)
+                        this@button.addListener(SimpleTextTooltipUI(action.invalidReason))
                     }
                     this@button.addListener(object : ChangeListener() {
                         override fun changed(event: ChangeEvent?, actor: Actor?) {
@@ -132,12 +133,6 @@ class ExamineUI(var gameState: GameState, actionCallback: (GameAction) -> Unit) 
             size(100f, 100f)
         })
         content.add(docList).size(300f, 100f)
-        content.row()
-        content.add(invalidReasonLabel).growX().fillX()
-    }
-
-    private fun displayInvalidReason(invalidReason: String) {
-        invalidReasonLabel.setText(invalidReasonLabel.text.toString() + '\n' + invalidReason)
     }
 
 

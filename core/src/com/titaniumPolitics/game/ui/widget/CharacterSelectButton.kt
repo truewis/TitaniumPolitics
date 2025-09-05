@@ -16,10 +16,12 @@ class CharacterSelectButton(
     val charLabel: Label
 
     init {
-        charPortrait = SimpleHeadPortraitUI("", false)
+        val defaultChar = availableCharacters?.firstOrNull() ?: "Someone"
+        charPortrait = SimpleHeadPortraitUI(defaultChar, false)
         add(charPortrait).size(100f)
         row()
-        charLabel = label(availableCharacters?.firstOrNull() ?: "", "docTitle") { setFontScale(0.2f) }
+        charLabel =
+            label(ReadOnly.charProp(defaultChar), "docTitle") { setFontScale(0.2f) }
         addListener(object : ClickListener() {
             override fun clicked(event: com.badlogic.gdx.scenes.scene2d.InputEvent?, x: Float, y: Float) {
                 CharacterSelectUI.instance.isVisible = true

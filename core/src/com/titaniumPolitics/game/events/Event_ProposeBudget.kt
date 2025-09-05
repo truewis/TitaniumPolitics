@@ -25,7 +25,7 @@ class Event_ProposeBudget(val budgetMeeting: String) : EventObject("Propose Budg
     }
 
     override fun exec(a: Int, b: Int) {
-        if (parent.scheduledMeetings[budgetMeeting] == null)
+        if (parent.scheduledMeetings[budgetMeeting] == null || party.isBudgetProposed)
             deactivate()
     }
 

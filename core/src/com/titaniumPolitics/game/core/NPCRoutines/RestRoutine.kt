@@ -41,7 +41,7 @@ class RestRoutine(var workplace: String? = null) : Routine() {
 
         fun endRestCondition(name: String, place: String, workplace: String?, gState: GameState): Boolean {
             // Wake up based on eta to workplace and workplace work hours.
-            if (gState.characters[name]!!.health < ReadOnly.const("CriticalHealth")) return false
+            if (gState.characters[name]!!.health < ReadOnly.const("TiredHealth")) return false
             if (gState.characters[name]!!.hunger > ReadOnly.const("hungerThreshold")) return false
             if (gState.characters[name]!!.thirst > ReadOnly.const("thirstThreshold")) return false
 

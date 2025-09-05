@@ -29,6 +29,9 @@ open class ActionSheetUI(
     val content = Table()
     override var subject = gameState.playerName
     override var tgtPlace = gameState.player.place.name
+    override fun setCheckValidity(checkValidity: Boolean) {
+        submitButton.checkValidity = checkValidity
+    }
 
     init {
         image("Stroke5pxHorizontal") {

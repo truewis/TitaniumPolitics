@@ -11,7 +11,7 @@ import ktx.scene2d.scene2d
 import ktx.scene2d.stack
 import ktx.scene2d.table
 
-class SimpleTextTooltipUI(text: String, width: Float = 350f, height: Float = 200f) : Tooltip<Table>(scene2d.table {
+class SimpleTextTooltipUI(text: String, width: Float = 350f) : Tooltip<Table>(scene2d.table {
     stack {
         container(scene2d.image("TooltipShadow10p") {
             setColor(0f, 0f, 0f, 0.7f)
@@ -33,7 +33,7 @@ class SimpleTextTooltipUI(text: String, width: Float = 350f, height: Float = 200
             val PADDING = 3f
             pad(PADDING)
             label(text, "description") {
-                it.size(width - 2 * PADDING, height - 2 * PADDING)
+                it.size(width - 2 * PADDING, 0f).growY()
                 setFontScale(0.3f)
                 setAlignment(Align.topLeft)
                 wrap = true

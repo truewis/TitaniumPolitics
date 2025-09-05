@@ -19,6 +19,11 @@ class ActionSelectUI(var gameState: GameState, override val actionCallback: (Gam
     private val docList = scene2d.buttonGroup(0, 1)
     override var subject: String = gameState.playerName
     override var tgtPlace: String = gameState.player.place.name
+    private var _checkValidity: Boolean = false
+    override fun setCheckValidity(checkValidity: Boolean) {
+        _checkValidity = checkValidity
+    }
+
     private val tgtPlaceObj get() = gameState.places[tgtPlace]!!
     private val sbjObject = gameState.characters[subject]!!
 
@@ -42,7 +47,7 @@ class ActionSelectUI(var gameState: GameState, override val actionCallback: (Gam
     fun refreshList(actionUIList: List<String>) {
         docList.clear()
         actionUIList.forEachIndexed { index, tobj ->
-            val t = AvailableActionsUI.createActionButton(index, tobj, gameState, {
+            val t = AvailableActionsUI.createActionButton(index, tobj, _checkValidity, gameState, {
                 actionDialogue.actor = it
                 (it as IActionUI).subject = subject
                 (it as IActionUI).tgtPlace = tgtPlace
