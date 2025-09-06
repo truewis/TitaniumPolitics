@@ -95,7 +95,8 @@ class WaitUI(val gameState: GameState, actionCallback: (GameAction) -> Unit) :
             this.actionCallback(
                 Sleep(
                     this.subject,
-                    this.sbjChar.place.name
+                    this.sbjChar.place.name,
+                    gameState
                 )
             )
         } else {
@@ -103,7 +104,8 @@ class WaitUI(val gameState: GameState, actionCallback: (GameAction) -> Unit) :
             this.actionCallback(
                 Wait(
                     this.subject,
-                    this.sbjChar.place.name
+                    this.sbjChar.place.name,
+                    gameState
                 )
             )
         }

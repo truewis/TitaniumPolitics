@@ -17,9 +17,11 @@ import com.titaniumPolitics.game.core.Meeting
 import com.titaniumPolitics.game.core.Party
 import com.titaniumPolitics.game.core.gameActions.Wait
 import com.titaniumPolitics.game.debugTools.Logger
+import com.titaniumPolitics.game.ui.BlockingWarningUI
 import com.titaniumPolitics.game.ui.CapsuleStage
 import com.titaniumPolitics.game.ui.DialogueUI
 import com.titaniumPolitics.game.ui.HeadPortraitUI
+import com.titaniumPolitics.game.ui.InformationViewUI
 import com.titaniumPolitics.game.ui.PortraitUI
 import com.titaniumPolitics.game.ui.widget.DivisionBannerUI
 import kotlinx.coroutines.runBlocking
@@ -195,7 +197,12 @@ class MeetingUI(var gameState: GameState) : Table(defaultSkin), KTable {
             addActor(agendaUI)
             it.informationKeys.forEach { key ->
                 val info = gameState.informations[key]!!
-                val infoUI = InfoBubbleUI(info)
+                val infoUI = InfoBubbleUI(info) {
+                    if (gameState.playerName in info.knownTo)
+                        InformationViewUI.displayInformation(info)
+                    else
+                        BlockingWarningUI.instance.display("unknownInfo", null)
+                }
                 deployedInfos += infoUI
                 addActor(infoUI)
             }

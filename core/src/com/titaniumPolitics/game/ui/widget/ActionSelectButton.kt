@@ -17,7 +17,7 @@ class ActionSelectButton(val callback: (GameAction) -> Unit) : Button(defaultSki
         it.size(100f)
     }
     val actionNameLabel: Label
-    var availableActions: Set<String>? = null
+    private var availableActions: Set<String>? = null
 
     init {
         row()
@@ -25,6 +25,7 @@ class ActionSelectButton(val callback: (GameAction) -> Unit) : Button(defaultSki
         addListener(object : ClickListener() {
             override fun clicked(event: InputEvent?, x: Float, y: Float) {
                 ActionSelectUI.instance.isVisible = true
+                ActionSelectUI.instance.refreshList(availableActions!!.toList())
                 availableActions?.also {
                     ActionSelectUI.instance.refreshList(it.toList())
                 }

@@ -10,7 +10,7 @@ import com.titaniumPolitics.game.ui.InformationViewUI
 import com.titaniumPolitics.game.ui.ResourceInfoUI
 import ktx.scene2d.*
 
-class InfoBubbleUI(val info: Information) : Table(), KTable {
+class InfoBubbleUI(val info: Information, val onClick: (() -> Unit)) : Table(), KTable {
     init {
         with(info) {
             stack {
@@ -58,7 +58,7 @@ class InfoBubbleUI(val info: Information) : Table(), KTable {
                     object : ClickListener() {
                         override fun clicked(event: com.badlogic.gdx.scenes.scene2d.InputEvent?, x: Float, y: Float) {
                             super.clicked(event, x, y)
-                            InformationViewUI.displayInformation(this@InfoBubbleUI.info)
+                            this@InfoBubbleUI.onClick()
                         }
                     }
                 )

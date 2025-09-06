@@ -19,10 +19,14 @@ import ktx.scene2d.table
 class EndSpeechUI(val gameState: GameState, actionCallback: (GameAction) -> Unit) :
     ActionSheetUI("EndSpeechTitle", gameState, actionCallback) {
     private val sbjChar get() = gameState.characters[subject]!!
-    private val charSelector = CharacterSelectButton { nextSpeaker = it }
-    var nextSpeaker = ""
+    private val charSelector =
+        CharacterSelectButton(gameState.player.currentMeeting!!.currentCharacters.filter { it != subject }
+            .toSet()) { nextSpeaker = it }
+    var nextSpeaker = gameState.player.currentMeeting!!.currentCharacters.first { it != subject }
 
     init {
+
+        charSelector.setLabel(nextSpeaker)
         val st = stack {
             it.grow()
             table {
@@ -53,13 +57,6 @@ class EndSpeechUI(val gameState: GameState, actionCallback: (GameAction) -> Unit
         content.add(st).grow()
 
 
-    }
-
-    fun refresh() {
-        nextSpeaker = gameState.player.currentMeeting!!.currentCharacters.first { it != subject }
-        charSelector.availableCharacters =
-            gameState.player.currentMeeting!!.currentCharacters.filter { it != subject }.toSet()
-        charSelector.setLabel(nextSpeaker)
     }
 
 

@@ -170,23 +170,7 @@ class InformationViewUI(var gameState: GameState) : Table(defaultSkin) {
                         x: Float,
                         y: Float
                     ) {
-                        when (information.type) {
-                            InformationType.RESOURCES -> {
-                                //Open resource window
-                                ResourceInfoUI.instance.isVisible = true
-                                ResourceInfoUI.instance.refresh(information)
-                            }
-
-                            InformationType.APPARATUS -> {
-                                //Open apparatus window
-                                ApparatusInfoUI.instance.isVisible = true
-                                ApparatusInfoUI.instance.refresh(information)
-                            }
-
-                            else -> {
-                                //Do nothing
-                            }
-                        }
+                        displayInformation(information)
                     }
                 })
             }

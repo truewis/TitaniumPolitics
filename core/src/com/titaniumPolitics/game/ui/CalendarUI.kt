@@ -139,7 +139,8 @@ class CalendarUI(val gameState: GameState) : Table(Scene2DSkin.defaultSkin) {
                         if (entry.associatedQuestName != null) {
                             cellTable.add(
                                 TasksUI.QuestMarker(
-                                    gameState.eventSystem.quests.first { it.name == entry.associatedQuestName }
+                                    gameState.eventSystem.quests.firstOrNull { it.name == entry.associatedQuestName }
+                                        ?: return@forEach /*The quest is finished. No need to display marker anymore.*/
                                 )
                             ).size(50f)
                         }
@@ -169,6 +170,15 @@ class CalendarUI(val gameState: GameState) : Table(Scene2DSkin.defaultSkin) {
             setColor(0f, 1f, 0f, 0.5f)
         else
             setColor(0.5f, 0.5f, 0.5f, 0.5f)
+    }
+
+    fun timeToNextScheduledMeeting(): Int? {
+        val upcomingMeetings = entries.filter { it.time > gameState.time }
+        return if (upcomingMeetings.isNotEmpty()) {
+            upcomingMeetings.minByOrNull { it.time }!!.time - gameState.time
+        } else {
+            null
+        }
     }
 
     data class CalendarEntry(

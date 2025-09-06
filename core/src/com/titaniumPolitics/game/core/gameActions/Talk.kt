@@ -77,6 +77,8 @@ data class Talk(
     override fun isValid(): Boolean {
         if (sbjCharObj.type == Character.Type.ANON)
             return false
+        if (parent.characters[who]!!.type == Character.Type.ANON)
+            return false
         //The subject character must not be in any meeting, otherwise they are too busy to talk.
         if (sbjCharObj.currentMeeting != null)
             return false

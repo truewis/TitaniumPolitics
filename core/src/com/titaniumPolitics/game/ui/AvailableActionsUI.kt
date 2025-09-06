@@ -170,17 +170,40 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable 
             if (listOf("Move", "Talk").contains(tobj)) {
                 return@forEachIndexed
             }
-            val t = createActionButton(index, tobj, true, gameState, this::setActionSheet, {
-                when (it::class.simpleName) {
-                    "UnofficialResourceTransfer", "OfficialResourceTransfer", "InvestigateAccidentScene", "ClearAccidentScene", "Eat", "Repair", "PrepareInfo", "Examine" -> {
-                        ProgressBackgroundUI.instance.setVisibleWithFade(
-                            true,
-                            it::class.simpleName!!
-                        )
+            val t = createActionButton(
+                index,
+                tobj,
+                true, //Dangerous actions are those that can be persecuted by the law, such as UnofficialResourceTransfer from workplaces,  i.e. stealing resources from the workplace.
+                dangerous =
+                    tobj == "UnofficialResourceTransfer" && gameState.player.place.whoseHome != gameState.playerName,
+                gameState,
+                this::setActionSheet,
+                {
+                    //If time to the next schedule is less than the action duration,
+                    val func = {
+                        when (it::class.simpleName) {
+                            "UnofficialResourceTransfer", "OfficialResourceTransfer", "InvestigateAccidentScene", "ClearAccidentScene", "Eat", "Repair", "PrepareInfo", "Examine" -> {
+                                ProgressBackgroundUI.instance.setVisibleWithFade(
+                                    true,
+                                    it::class.simpleName!!
+                                )
+                            }
+                        }
+                        GameEngine.acquireCallback(it)
                     }
-                }
-                GameEngine.acquireCallback(it)
-            })
+
+                    if (AssistantUI.instance.calendarUI.timeToNextScheduledMeeting()
+                            ?.let { i -> i < it.expectedDuration }
+                            ?: false
+                    ) {
+                        BlockingWarningUI.instance.display(
+                            "notEnoughTimeUntilNextSchedule",
+                            func
+                        )
+                    } else {
+                        func()
+                    }
+                })
             t.addListener(object : ChangeListener() {
                 override fun changed(event: ChangeEvent, actor: Actor) {
                     if (docList.buttonGroup.checked == null) {
@@ -233,14 +256,12 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable 
             index: Int,
             actionName: String,
             checkValidity: Boolean,
+            dangerous: Boolean,
             gameState: GameState,
             setActionSheet: (ActionSheetUI) -> Unit,
             actionCallback: (GameAction) -> Unit
         ): Button {
             return scene2d.button("document") {
-                //Dangerous actions are those that can be persecuted by the law, such as UnofficialResourceTransfer from workplaces,  i.e. stealing resources from the workplace.
-                val dangerous =
-                    actionName == "UnofficialResourceTransfer" && gameState.player.place.whoseHome != gameState.playerName
                 val tooltip = ActionTooltipUI(actionName, dangerous)
                 addListener(tooltip)
                 stack {
@@ -444,7 +465,6 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable 
                                         val endSpeechUI =
                                             EndSpeechUI(gameState, actionCallback)
                                         setActionSheet(endSpeechUI)
-                                        endSpeechUI.refresh()
                                     }
                                 })
                             }

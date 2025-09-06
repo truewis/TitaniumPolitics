@@ -111,7 +111,7 @@ class InterfaceRoot(val gameState: GameState) : Table(defaultSkin), KTable {
             //We draw the following UIs above any other UIs, as they have to appear on top of everything else.
             add(PlaceSelectionUI(this@InterfaceRoot.gameState))
             add(CharacterSelectUI(this@InterfaceRoot.gameState))
-
+            add(BlockingWarningUI(this@InterfaceRoot.gameState))
             //We draw the following UIs above any other UIs.
             add(DialogueUI(this@InterfaceRoot.gameState))
 
