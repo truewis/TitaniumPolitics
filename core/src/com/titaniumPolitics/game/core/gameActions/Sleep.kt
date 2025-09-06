@@ -15,10 +15,10 @@ data class Sleep(override val sbjCharacter: String, override val tgtPlace: Strin
 
     override fun execute() {
         Logger.write("$sbjCharacter slept.", Logger.LogLevel.ACTION_VERBOSE)
-        if (parent.characters[sbjCharacter]!!.trait.contains("old"))
-            parent.characters[sbjCharacter]!!.health += 6
+        if (parent.characters[sbjCharacter]!!.age > 50)
+            parent.characters[sbjCharacter]!!.health += 3
         else
-            parent.characters[sbjCharacter]!!.health += 8
+            parent.characters[sbjCharacter]!!.health += 4
         //Not affected by the will of the character, so no need to call super.execute()
         sbjCharObj.frozen += ReadOnly.constInt("SleepDuration")
         growPartyMutualityHeuristic()
