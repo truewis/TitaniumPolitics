@@ -26,7 +26,9 @@ class AlertUI(var gameState: GameState) : Table(defaultSkin) {
         gameState.updateUI += { _ -> displayAlerts(); }
         gameState.onPlayerAction += {
             //Remove all alerts.
-            docList.clear()
+            Gdx.app.postRunnable {
+                docList.clear()
+            }
         }
     }
 

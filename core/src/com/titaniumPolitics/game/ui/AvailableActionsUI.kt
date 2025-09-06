@@ -170,12 +170,13 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable 
             if (listOf("Move", "Talk").contains(tobj)) {
                 return@forEachIndexed
             }
+            val illagal =
+                tobj == "UnofficialResourceTransfer" && gameState.player.place.whoseHome != gameState.playerName || tobj == "Resign" || tobj == "Intercept"
             val t = createActionButton(
                 index,
                 tobj,
                 true, //Dangerous actions are those that can be persecuted by the law, such as UnofficialResourceTransfer from workplaces,  i.e. stealing resources from the workplace.
-                dangerous =
-                    tobj == "UnofficialResourceTransfer" && gameState.player.place.whoseHome != gameState.playerName,
+                dangerous = illagal,
                 gameState,
                 this::setActionSheet,
                 {
@@ -198,6 +199,11 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable 
                     ) {
                         BlockingWarningUI.instance.display(
                             "notEnoughTimeUntilNextSchedule",
+                            func
+                        )
+                    } else if (illagal) {
+                        BlockingWarningUI.instance.display(
+                            "illegal",
                             func
                         )
                     } else {

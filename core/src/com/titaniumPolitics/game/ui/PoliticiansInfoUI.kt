@@ -447,42 +447,45 @@ class PoliticiansInfoUI(val gameState: GameState) : Table(defaultSkin), KTable {
                             it.fill().left()
                         }
                         row()
-                        table {
-                            defaults().pad(5f)
-                            label(ReadOnly.prop("PoliticiansInfoUI-Apparatus"), "docTitle") {
-                                setFontScale(0.3f)
-                                setAlignment(Align.left)
-                                it.fill().left()
-                            }
-                            label(
-                                ReadOnly.prop("PoliticiansInfoUI-CurrentEfficiency"),
-                                "docTitle"
-                            ) {
-                                setFontScale(0.3f)
-                                setAlignment(Align.left)
-                                it.fill().left()
-                            }
-                            label(ReadOnly.prop("durability"), "docTitle") {
-                                setFontScale(0.3f)
-                                setAlignment(Align.left)
-                                it.fill().left()
-                            }
-                            workplaceParty.workplace.apparatuses.forEach { app ->
-                                row()
-                                label(ReadOnly.appProp(app.name), "docTitle") {
-                                    setFontScale(0.4f)
+                        scrollPane {
+                            it.fill()
+                            table {
+                                defaults().pad(5f)
+                                label(ReadOnly.prop("PoliticiansInfoUI-Apparatus"), "docTitle") {
+                                    setFontScale(0.3f)
                                     setAlignment(Align.left)
                                     it.fill().left()
                                 }
-                                label("%.1f %%".format(app.netEfficiency * 100.0), "docTitle") {
-                                    setFontScale(0.4f)
+                                label(
+                                    ReadOnly.prop("PoliticiansInfoUI-CurrentEfficiency"),
+                                    "docTitle"
+                                ) {
+                                    setFontScale(0.3f)
                                     setAlignment(Align.left)
                                     it.fill().left()
                                 }
-                                label("%.1f %%".format(app.durability), "docTitle") {
-                                    setFontScale(0.4f)
+                                label(ReadOnly.prop("durability"), "docTitle") {
+                                    setFontScale(0.3f)
                                     setAlignment(Align.left)
                                     it.fill().left()
+                                }
+                                workplaceParty.workplace.apparatuses.forEach { app ->
+                                    row()
+                                    label(ReadOnly.appProp(app.name), "docTitle") {
+                                        setFontScale(0.4f)
+                                        setAlignment(Align.left)
+                                        it.fill().left()
+                                    }
+                                    label("%.1f %%".format(app.netEfficiency * 100.0), "docTitle") {
+                                        setFontScale(0.4f)
+                                        setAlignment(Align.left)
+                                        it.fill().left()
+                                    }
+                                    label("%.1f %%".format(app.durability), "docTitle") {
+                                        setFontScale(0.4f)
+                                        setAlignment(Align.left)
+                                        it.fill().left()
+                                    }
                                 }
                             }
                         }

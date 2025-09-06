@@ -67,7 +67,7 @@ class BlockingWarningUI(var gameState: GameState) : Table(Scene2DSkin.defaultSki
                             add(this@BlockingWarningUI.titleLabel)
                         }
                         row()
-                        add(this@BlockingWarningUI.descLabel).size(800f, 400f).growY()
+                        add(this@BlockingWarningUI.descLabel).size(800f, 200f).growY()
                         row()
                         add(this@BlockingWarningUI.optionTable)
                     }

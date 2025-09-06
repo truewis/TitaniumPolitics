@@ -161,8 +161,7 @@ class CalendarUI(val gameState: GameState) : Table(Scene2DSkin.defaultSkin) {
         dataTable.invalidate()
         scrollPane.layout()
         val rowHeight = dataTable.getRowHeight(1)
-        println("Calendar height:$rowHeight")
-        scrollPane.scrollTo(0f, dataTable.height - rowHeight * (currentHour), 10f, rowHeight)
+        scrollPane.scrollTo(0f, dataTable.height - rowHeight * (currentHour + 3), 10f, rowHeight)
     }
 
     fun createCellBackground(highlight: Boolean) = scene2d.image("icon_simpleshape_4").apply {
