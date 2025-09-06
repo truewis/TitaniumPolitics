@@ -1,6 +1,7 @@
 package com.titaniumPolitics.game.core
 
 import com.badlogic.gdx.Gdx
+import com.titaniumPolitics.game.core.CharacterGenerator.Companion.generatedCharJson
 import com.titaniumPolitics.game.debugTools.Logger
 import kotlinx.serialization.json.*
 import java.io.File
@@ -19,9 +20,7 @@ object ReadOnly {
     val mapJson = Json.parseToJsonElement(
         Gdx.files?.internal("json/map.json")?.readString() ?: File("../assets/json/map.json").readText()
     ).jsonObject
-    val charJson = Json.parseToJsonElement(
-        Gdx.files?.internal("json/characters.json")?.readString() ?: File("../assets/json/characters.json").readText()
-    ).jsonObject
+    val charJson get() = generatedCharJson
     val actionJson = Json.parseToJsonElement(
         Gdx.files?.internal("json/action.json")?.readString() ?: File("../assets/json/action.json").readText()
     ).jsonObject
