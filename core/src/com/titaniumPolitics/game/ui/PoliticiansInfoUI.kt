@@ -10,6 +10,7 @@ import com.titaniumPolitics.game.core.Character
 import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.core.Party
 import com.titaniumPolitics.game.core.ReadOnly
+import com.titaniumPolitics.game.ui.actions.ApparatusSelectUI
 import com.titaniumPolitics.game.ui.widget.BudgetDisplayUI
 import com.titaniumPolitics.game.ui.widget.ResourceDisplayUI
 import com.titaniumPolitics.game.ui.widget.TitleLabel
@@ -447,48 +448,11 @@ class PoliticiansInfoUI(val gameState: GameState) : Table(defaultSkin), KTable {
                             it.fill().left()
                         }
                         row()
-                        scrollPane {
-                            it.fill()
-                            table {
-                                defaults().pad(5f)
-                                label(ReadOnly.prop("PoliticiansInfoUI-Apparatus"), "docTitle") {
-                                    setFontScale(0.3f)
-                                    setAlignment(Align.left)
-                                    it.fill().left()
-                                }
-                                label(
-                                    ReadOnly.prop("PoliticiansInfoUI-CurrentEfficiency"),
-                                    "docTitle"
-                                ) {
-                                    setFontScale(0.3f)
-                                    setAlignment(Align.left)
-                                    it.fill().left()
-                                }
-                                label(ReadOnly.prop("durability"), "docTitle") {
-                                    setFontScale(0.3f)
-                                    setAlignment(Align.left)
-                                    it.fill().left()
-                                }
-                                workplaceParty.workplace.apparatuses.forEach { app ->
-                                    row()
-                                    label(ReadOnly.appProp(app.name), "docTitle") {
-                                        setFontScale(0.4f)
-                                        setAlignment(Align.left)
-                                        it.fill().left()
-                                    }
-                                    label("%.1f %%".format(app.netEfficiency * 100.0), "docTitle") {
-                                        setFontScale(0.4f)
-                                        setAlignment(Align.left)
-                                        it.fill().left()
-                                    }
-                                    label("%.1f %%".format(app.durability), "docTitle") {
-                                        setFontScale(0.4f)
-                                        setAlignment(Align.left)
-                                        it.fill().left()
-                                    }
-                                }
-                            }
-                        }
+                        add(ApparatusSelectUI(this@PoliticiansInfoUI.gameState) {
+                            ApparatusInfoUI.instance.refresh(it)
+                        }.also {
+                            it.refresh(workplaceParty.workplace.name)
+                        }).fill()
                     }
                 }
             }

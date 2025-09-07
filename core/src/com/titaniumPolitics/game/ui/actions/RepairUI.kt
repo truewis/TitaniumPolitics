@@ -39,19 +39,8 @@ class RepairUI(val gameState: GameState, actionCallback: (GameAction) -> Unit) :
     var action =
         Repair(sbjChar.name, sbjChar.place.name, gameState.places[tgtPlace]!!.apparatuses.first().ID, gameState)
 
-    private var agendaSelectBox: Table
-    private val noSuitableAppLabel = table {
-        label("No suitable apparatus to repair.", "docTitle") {
-            it.fill()
-            setAlignment(Align.center)
-            setFontScale(0.5f)
-        }
-        row()
-        label("Make sure there is an apparatus that is damaged and you have the information of it.", "description") {
-            it.fill()
-            setAlignment(Align.center)
-            setFontScale(0.3f)
-        }
+    private val agendaSelectBox = ApparatusSelectUI(gameState) {
+        selectedApp = it
     }
     val apparatusDetailTable = scene2d.table {
 
@@ -91,19 +80,9 @@ class RepairUI(val gameState: GameState, actionCallback: (GameAction) -> Unit) :
 
 
     }
-    val sp: ScrollPane
     val st = scene2d.stack {
         table {
-            stack {
-                it.size(900f, 400f)
-                this@RepairUI.sp = scrollPane {
-                    setScrollingDisabled(false, true)
-                    this@RepairUI.agendaSelectBox =
-
-                        buttonGroup(1, 1)
-                }
-                add(this@RepairUI.noSuitableAppLabel)
-            }
+            add(this@RepairUI.agendaSelectBox)
 
             row()
             //Fill in agenda details.
@@ -140,57 +119,7 @@ class RepairUI(val gameState: GameState, actionCallback: (GameAction) -> Unit) :
 
 
     fun refresh(gameState: GameState) {
-        agendaSelectBox.clear()
-        refreshAvailableApparatusList(gameState)
-    }
-
-    fun refreshAvailableApparatusList(gameState: GameState) {
-        val tgtPlaceObj = gameState.places[tgtPlace]!!
-        tgtPlaceObj.apparatuses.forEach { app ->
-            gameState.informations.values.firstOrNull {
-                it.type == InformationType.APPARATUS
-                it.tgtApparatusID == app.ID && gameState.playerName in it.knownTo
-            }?.also { appInfo ->
-                val t = scene2d.button("check") {
-                    //TODO:Agenda Tooltip addListener(ActionTooltipUI(tobj))
-                    container {
-                        it.size(400f)
-                        it.fill()
-                        it.align(Align.center)
-                        image("CogGrunge") {
-                            try {
-                                drawable = TextureRegionDrawable(
-                                    CapsuleStage.Companion.instance.assetManager.get( //TODO: Temporary solution for portrait image loading. PortraitUI does not have a stage.
-                                        ReadOnly.appJson[app.name]!!.jsonObject["image"]!!.jsonPrimitive.content,
-                                        Texture::class.java
-                                    )!!
-                                )
-                            } catch (e: Exception) {
-                                Logger.write("Portrait Image Error: ${app.name}", Logger.LogLevel.INFO)
-                            }
-
-                        }
-                    }
-                    row()
-                    add(InformationSourceUI(appInfo)).fill()
-                    addListener(object : ChangeListener() {
-                        override fun changed(event: ChangeEvent?, actor: Actor?) {
-                            this@RepairUI.selectedApp = appInfo
-                        }
-                    })
-
-                }
-                agendaSelectBox.add(t).size(400f).fill()
-            }
-
-        }
-        if (agendaSelectBox.children.size == 0) {
-            sp.isVisible = false
-            noSuitableAppLabel.isVisible = true
-        } else {
-            sp.isVisible = true
-            noSuitableAppLabel.isVisible = false
-        }
+        agendaSelectBox.refresh(gameState.player.place.name)
     }
 
 

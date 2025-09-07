@@ -177,6 +177,10 @@ class Apparatus {
         get() = idealDistribution * netEfficiency + Resources("ration" to currentWages, "water" to currentWages)
     val currentHeatProduction: Double
         get() = idealHeatProduction * netEfficiency + currentWorker * const("WorkingHumanHeatProduction")
+
+    /**
+     * Current accident danger of this apparatus. Unit: 1/second.
+     */
     val currentDanger: Double
         get() {
             return if (currentWorker == 0 || idealWorker == 0) 0.0 else if (durability == .0) 0.0 else {
@@ -186,6 +190,10 @@ class Apparatus {
                     baseDanger * (2 * currentWorker / idealWorker - 1) * 100 / durability / const("GlobalAccidentTau") * damageTempScale//Danger increases when overcrewed or undercrewed.
             }
         }
+
+    /**
+     * Current catastrophic accident danger of this apparatus. Unit: 1/second.
+     */
     val currentGraveDanger: Double
         get() {
             return if (currentWorker == 0 || idealWorker == 0) 0.0
