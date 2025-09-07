@@ -67,6 +67,7 @@
   "maxNominationDuration": 60,
   "OfficialResourceTransferDuration": 30,
   "UnofficialResourceTransferDuration": 30,
+  "SuicideDuration": 10,
   "WaitDuration": 5,
   "LongWaitTime": 29,
   "PrepareInfoDuration": 30,

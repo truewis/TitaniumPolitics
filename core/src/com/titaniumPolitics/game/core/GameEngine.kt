@@ -813,7 +813,7 @@ class GameEngine(val gameState: GameState) {
                             //If the number of reliant becomes 0, the anon does not die but does not provide any labor.
                             health = const("HealthMax") //Reset health to max.
                         } else
-                            killCharacter(char)
+                            (char).kill()
                     }
                 }
             }
@@ -886,23 +886,6 @@ class GameEngine(val gameState: GameState) {
 //            }
         }
 
-    }
-
-    private fun killCharacter(char: Character) {
-        if (!char.alive)
-            Logger.write("${char.name} is already dead.", Logger.LogLevel.ERROR)
-        if (char.type == Type.ANON)
-            Logger.write(
-                "${char.name} is an anon, killing them is not allowed.",
-                Logger.LogLevel.ERROR
-            )
-        Logger.write("${char.name} died.", Logger.LogLevel.INFO)
-        char.place.resources.plusAssign(Resources("corpse" to 100.0 * char.reliant)) //Add corpses to the place.
-        char.place.characters -= char.name //Remove from the place.
-        gameState.parties.values.forEach {
-            it.removeMember(char.name)
-        } //Remove from all parties.
-        char.alive = false
     }
 
     fun destroy() {
@@ -1051,6 +1034,8 @@ class GameEngine(val gameState: GameState) {
                 actions.add("Sleep")
                 actions.add("Eat")
                 actions.add("PrepareInfo")
+                if (gameState.characters[character]!!.will < ReadOnly.const("CriticalWill"))
+                    actions.add("Suicide")
             }
 
             if (place == "mainControlRoom" || place == "market" || place == "squareNorth" || place == "squareSouth") {

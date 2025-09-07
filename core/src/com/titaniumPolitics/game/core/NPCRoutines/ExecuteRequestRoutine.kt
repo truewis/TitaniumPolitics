@@ -11,7 +11,7 @@ import com.titaniumPolitics.game.debugTools.Logger
 import kotlinx.serialization.Serializable
 
 @Serializable
-class ExecuteCommandRoutine() : Routine() {
+class ExecuteRequestRoutine() : Routine() {
     val executableRequest get() = gState.requests[variables["request"]!!]!!
     var timeout = ReadOnly.constInt("ExecuteCommandRoutineInvalidActionTimeout")
     var delegationAttemptCount = 0
@@ -22,6 +22,7 @@ class ExecuteCommandRoutine() : Routine() {
         if (subroutines.isEmpty()) {
 
             //Try to delegate the command to someone else if possible.
+
             if (delegationAttemptCount < ReadOnly.constInt("ExecuteCommandRoutineDelegationAttemptCount")) {
                 val charactersDelegatableTo = gState.aliveCharacters.filter {
                     it.key != name && it.key !in executableRequest.issuedBy && it.key !in executableRequest.issuedTo &&
@@ -29,6 +30,11 @@ class ExecuteCommandRoutine() : Routine() {
                                 name,
                                 it.key
                             ) > executableRequest.difficulty(gState) //Someone I trust, does not matter if they trust me or not
+                            &&
+                            //But if I am an Employee, do not delegate the command, who would do the actual work then? Everyone else is just my boss.
+                            gState.parties.any {
+                                name == it.value.leader && it.value.members.contains(it.key)
+                            }
                             &&
                             executableRequest.action.isProofOfWork(
                                 Information(

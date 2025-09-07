@@ -601,12 +601,12 @@ class Party : GameStateElement() {
             killAnonMembers(num) //If there are anon members left, kill them first.
         } else if (num >= size) {
             killAnonMembers(numAnonMembers)
-            members.forEach { parent.characters[it]!!.alive = false }
+            members.forEach { parent.characters[it]!!.kill() }
         } else {
             //kill members
             for (i in 0..<num - numAnonMembers)
                 members.filter { parent.characters[it]!!.alive }.random()
-                    .let { parent.characters[it]!!.alive = false }//kill num - anonymousMembers members
+                    .let { parent.characters[it]!!.kill() }//kill num - anonymousMembers members
 
             killAnonMembers(numAnonMembers)
         }

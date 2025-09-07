@@ -75,6 +75,10 @@
     "image": "icon_app_7",
     "sound": "data/repair.mp3"
   },
+  "Suicide": {
+    "image": "icon_app_7",
+    "sound": "data/repair.mp3"
+  },
   "PrepareInfo": {
     "image": "icon_app_112",
     "sound": "data/repair.mp3"

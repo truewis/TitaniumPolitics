@@ -8,7 +8,6 @@ import com.titaniumPolitics.game.core.Meeting
 import com.titaniumPolitics.game.core.MeetingAgenda
 import com.titaniumPolitics.game.core.Party
 import com.titaniumPolitics.game.core.ReadOnly
-import com.titaniumPolitics.game.core.ReadOnly.IDTH
 import com.titaniumPolitics.game.core.Request
 import com.titaniumPolitics.game.core.Resources
 import com.titaniumPolitics.game.core.gameActions.GameAction
@@ -142,8 +141,8 @@ class WorkRoutine(var workplace: String) : Routine() {
                 .contains(it.action.javaClass.simpleName) //If the character is not in a meeting, we can move to other places to execute the command, so we do not check if the place is here.
 
         }?.also { request ->
-            if (subroutines.none { it is ExecuteCommandRoutine && it.variables["request"] == request.name })
-                return ExecuteCommandRoutine().also {
+            if (subroutines.none { it is ExecuteRequestRoutine && it.variables["request"] == request.name })
+                return ExecuteRequestRoutine().also {
                     it.variables["request"] = request.name
                     it.priority =
                         PRIORITY_WORK + 400
@@ -361,7 +360,7 @@ class WorkRoutine(var workplace: String) : Routine() {
     }
 
     override fun onSubroutineFail(subroutine: Routine) {
-        if (subroutine is ExecuteCommandRoutine) {
+        if (subroutine is ExecuteRequestRoutine) {
             val requestName = subroutine.variables["request"]!!
             failedRequests += requestName
         }

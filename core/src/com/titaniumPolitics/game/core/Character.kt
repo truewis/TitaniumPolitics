@@ -34,6 +34,7 @@ class Character : GameStateElement() {
     override val name: String
         get() = _name ?: parent.characters.filter { it.value == this }.keys.first().also { _name = it }
     var alive = true
+        private set
     var trait = hashSetOf<String>()
     var type = Type.DIRECTOR
 
@@ -160,6 +161,23 @@ class Character : GameStateElement() {
         if ("administrator" in trait) {
             stats.riskTaking = max(stats.riskTaking - 3, 1)
         }
+    }
+
+    fun kill() {
+        if (!alive)
+            Logger.write("${name} is already dead.", Logger.LogLevel.ERROR)
+        if (type == Type.ANON)
+            Logger.write(
+                "${name} is an anon, killing them is not allowed.",
+                Logger.LogLevel.ERROR
+            )
+        Logger.write("${name} died.", Logger.LogLevel.INFO)
+        place.resources.plusAssign(Resources("corpse" to 100.0 * reliant)) //Add corpses to the place.
+        place.characters -= name //Remove from the place.
+        parent.parties.values.forEach {
+            it.removeMember(name)
+        } //Remove from all parties.
+        alive = false
     }
 
     fun killReliant(num: Int) {
