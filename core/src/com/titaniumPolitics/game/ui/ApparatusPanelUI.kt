@@ -22,7 +22,6 @@ class ApparatusPanelUI(var info: Information) : Button(Scene2DSkin.defaultSkin),
 
     init {
         stack {
-            debug()
             it.grow()
             image("GradientBottom") {
                 color = Color.BLACK
@@ -53,7 +52,7 @@ class ApparatusPanelUI(var info: Information) : Button(Scene2DSkin.defaultSkin),
                         setFontScale(0.4f)
                     }
                     row()
-                    container(MeterUI().apply {
+                    container(MeterUI("MeterUI-durability").apply {
                         setValue((this@ApparatusPanelUI.info.variables["durability"]!! / 100.0).toFloat())
                         color = Color.GREEN
                     }) {
@@ -63,7 +62,7 @@ class ApparatusPanelUI(var info: Information) : Button(Scene2DSkin.defaultSkin),
                         fill()
                     }
                     row()
-                    container(MeterUI().apply {
+                    container(MeterUI("MeterUI-efficiency").apply {
                         setValue((this@ApparatusPanelUI.info.variables["efficiency"]!! / 100.0).toFloat())
                         color = Color.BLUE
                     }) {

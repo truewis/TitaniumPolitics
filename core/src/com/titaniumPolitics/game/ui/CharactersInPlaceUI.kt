@@ -3,6 +3,7 @@ package com.titaniumPolitics.game.ui
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.scenes.scene2d.Action
 import com.badlogic.gdx.scenes.scene2d.actions.Actions
+import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.titaniumPolitics.game.core.GameEngine
 import com.titaniumPolitics.game.core.GameState
@@ -18,6 +19,12 @@ import kotlin.coroutines.suspendCoroutine
 //This UI is used to display the portraits of the characters in the current place.
 class CharactersInPlaceUI(var gameState: GameState) : Table(defaultSkin) {
     private val portraits = arrayListOf<PortraitUI>()
+    private val portraitContainer = Table().apply {
+        add().size(1920f * 2, 300f).padLeft(-1920f / 2).fill()  //Make the container wide enough to hold many portraits.
+    }
+    private val scrollPane = ScrollPane(portraitContainer).apply {
+        setScrollingDisabled(false, true)
+    }
 
     //Also check MeetingUI for similar code.
     private val animationQueue = ArrayDeque<Action>()
@@ -34,6 +41,7 @@ class CharactersInPlaceUI(var gameState: GameState) : Table(defaultSkin) {
 
     init {
         instance = this
+        add(scrollPane).grow()
         gameState.updateUI.add {
             refresh(it.player.place.name)
         }
@@ -116,7 +124,7 @@ class CharactersInPlaceUI(var gameState: GameState) : Table(defaultSkin) {
                 this@CharactersInPlaceUI.addAction(animationQueue.removeFirst())
         }
         portraits.add(portrait)
-        addActor(portrait)
+        portraitContainer.addActor(portrait)
 
 
     }

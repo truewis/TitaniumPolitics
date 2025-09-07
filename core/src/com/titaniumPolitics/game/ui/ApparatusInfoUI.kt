@@ -108,7 +108,7 @@ class ApparatusInfoUI : WindowUI("ApparatusInfoTitle") {
                 setAlignment(Align.left)
                 setFontScale(0.2f)
                 skipToTheEnd() //Skip the typing effect for this label.
-            })
+            }).padTop(100f)
 
             row()
             add(InformationSourceUI(information)).fill()

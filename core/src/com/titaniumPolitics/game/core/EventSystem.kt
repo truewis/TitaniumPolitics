@@ -16,15 +16,18 @@ class EventSystem : GameStateElement() {
     private val dataBase = arrayListOf<EventObject>()
     private val tmpdataBase = arrayListOf<EventObject>()
 
+    /**
+     * Currently active quests.
+     * Do not serialize, as they will be reconstructed from the events when loading a game.
+     */
     @Transient
-    val quests =
-        arrayListOf<Quest>() //Do not use haseSet, it is not meant to be used with objects that can be modified.
+    val activeQuests =
+        arrayListOf<Quest>() //Do not use hashSet, it is not meant to be used with objects that can be modified.
+
+    val successfulQuests = arrayListOf<Quest>()
 
     @Transient
-    val successfulQuests = arrayListOf<IQuestEventObject>()
-
-    @Transient
-    val failedQuests = arrayListOf<IQuestEventObject>()
+    val failedQuests = arrayListOf<Quest>()
 
     //Utility function called once when a new game starts.
     fun newGame() {
@@ -41,20 +44,24 @@ class EventSystem : GameStateElement() {
     fun updateQuest(event: IQuestEventObject, quest: Quest) {
         quest.parent = parent
         quest.event = event
-        if (quests.any { it.name == quest.name }) {
-            quests.removeIf { it.name == quest.name }
+        if (activeQuests.any { it.name == quest.name }) {
+            activeQuests.removeIf { it.name == quest.name }
         }
-        quests.add(quest)
+        activeQuests.add(quest)
     }
 
     fun finishQuest(event: IQuestEventObject, success: Boolean = true) {
-        if (quests.any { it.event == event }) {
-            quests.removeIf { it.event == event }
+        val toRemove = arrayListOf<Quest>()
+        activeQuests.filter { it.event == event }.forEach { quest ->
+            quest.completionTime = parent.time
+            if (success)
+                successfulQuests.add(quest)
+            else
+                failedQuests.add(quest)
+            toRemove.add(quest)
         }
-        if (success)
-            successfulQuests.add(event)
-        else
-            failedQuests.add(event)
+        activeQuests.removeAll(toRemove)//I am afraid of set equality check, so I used list here.
+
     }
 
     override fun injectParent(gameState: GameState) {

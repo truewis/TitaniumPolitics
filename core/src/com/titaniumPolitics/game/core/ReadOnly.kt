@@ -94,9 +94,29 @@ object ReadOnly {
     val IDTH = (const("lengthOfDay") / 24.0).toInt()
 
     const val S_PER_HR = 3600 //How many seconds in an hour.
+
+
+    /**
+     * Show total minutes corresponding to the given time. (not modulo 60).
+     */
+    fun toTotalMinutes(time: Int): Int =
+        (time / (const("lengthOfDay") / 1440.0)).toInt()
+
+    /**
+     * Show minute in clock format (0-59).
+     */
     fun toMinutes(time: Int): Int =
         (time % constInt("lengthOfDay") / (const("lengthOfDay") / 1440.0)).toInt()
 
+    /**
+     * Show total hours corresponding to the given time. (not modulo 24).
+     */
+    fun toTotalHours(time: Int): Int =
+        (time / (const("lengthOfDay") / 24.0)).toInt()
+
+    /**
+     * Show hour in clock format (0-23).
+     */
     fun toHours(time: Int): Int =
         (time % constInt("lengthOfDay") / (const("lengthOfDay") / 24.0)).toInt()
 

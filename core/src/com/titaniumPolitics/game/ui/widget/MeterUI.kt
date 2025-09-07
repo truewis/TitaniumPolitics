@@ -8,9 +8,10 @@ import com.badlogic.gdx.utils.Align
 import ktx.scene2d.KTable
 import ktx.scene2d.container
 import ktx.scene2d.image
+import ktx.scene2d.label
 import ktx.scene2d.stack
 
-class MeterUI : Table(), KTable {
+class MeterUI(val labelKey: String? = null) : Table(), KTable {
 
     // Size is chosen to be used with BarSimpleFillVitals and BarSimpleBgTiledNormal.
     var cont: Container<Actor>
@@ -33,6 +34,13 @@ class MeterUI : Table(), KTable {
                 image("BarSimpleFillVitals") {
                 }
                 align(Align.bottomLeft)
+            }
+            this@MeterUI.labelKey?.let {
+                label(com.titaniumPolitics.game.core.ReadOnly.prop(it), "docTitle") {
+                    setFontScale(0.2f)
+                    setAlignment(Align.center)
+                    color = Color.WHITE
+                }
             }
         }
     }

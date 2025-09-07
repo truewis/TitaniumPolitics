@@ -9,9 +9,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.VerticalGroup
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.badlogic.gdx.utils.Align
 import com.titaniumPolitics.game.core.GameState
-import com.titaniumPolitics.game.events.EventObject
 import com.titaniumPolitics.game.events.IQuestEventObject
 import com.titaniumPolitics.game.ui.widget.TimeAmountUI
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.Transient
 import ktx.scene2d.*
 import ktx.scene2d.Scene2DSkin.defaultSkin
 
@@ -22,7 +23,7 @@ class TasksUI(var gameState: GameState) : Table(defaultSkin) {
         instance = this
         isVisible = false
         val docScr = ScrollPane(docList)
-        docList.grow()
+        docList.grow().left()
         add(scene2d.label("Tasks", "description") {
             setAlignment(Align.left)
             setFontScale(0.5f)
@@ -32,7 +33,7 @@ class TasksUI(var gameState: GameState) : Table(defaultSkin) {
         add(docScr).grow()
 
         gameState.updateUI += { it ->
-            refreshDocList(it.eventSystem.quests.toList())
+            refreshDocList(it.eventSystem.activeQuests.toList())
         }
     }
 
@@ -41,24 +42,16 @@ class TasksUI(var gameState: GameState) : Table(defaultSkin) {
 
         quests.forEach { quest ->
             docList.addActor(scene2d.table {
+                left()
                 //Number label with icon
                 add(QuestMarker(quest)).size(50f)
                 table {
-                    it.size(500f, 50f)
                     it.fill()
                     it.left()
                     label(quest.name, "description") {
                         it.left()
-                        it.fill()
                         setAlignment(Align.left)
-                        setFontScale(0.25f)
-                    }
-                    row()
-                    label(quest.description, "description") {
-                        it.left()
-                        it.grow()
-                        setAlignment(Align.left)
-                        setFontScale(0.3f)
+                        setFontScale(0.2f)
                     }
                     addAction(
                         //Blinking effect for all quests, as an eyecatcher.
@@ -128,8 +121,12 @@ class TasksUI(var gameState: GameState) : Table(defaultSkin) {
 /**
  * A quest assigned to the player.
  * This class is solely for UI representation of quests and should not contain any game state variable.
- * This class is not serializable, as quests are recreated on game load from the event system injectParent function.
+ * This class is serializable, but active quests are recreated on game load from the event system injectParent function.
+ * Only finished quests are saved in the event log.
+ * @param name The name key of the quest.
+ * @param description The description key of the quest.
  */
+@Serializable
 data class Quest(
     val name: String,
     val description: String,
@@ -137,20 +134,27 @@ data class Quest(
     val tgtCharacters: List<String> = listOf(),
     val tgtMeeting: String? = null,
     val dueTime: Int? = null,
+    @Transient
     val onClick: (() -> Unit)? = null,
+    @Transient
     val display: ((Table) -> Unit)? = null,
     /**
      * Optional tooltip to display when hovering over the quest entry.
      * This is evaluated lazily when the tooltip is requested, which happens in the UI thread while the quest itself is created in the game logic thread.
      */
+    @Transient
     val getTooltip: () -> EventListener? = { null }
 ) {
+    @Transient
     lateinit var parent: GameState
+
+    @Transient
     lateinit var event: IQuestEventObject
 
     //Do not check completion here, use eventObject completion instead.
     val index: Int
-        get() = parent.eventSystem.quests.indexOf(this) + 1
+        get() = parent.eventSystem.activeQuests.indexOf(this) + 1
 
+    var completionTime: Int? = null
 
 }

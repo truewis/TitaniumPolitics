@@ -59,7 +59,7 @@ class CalendarUI(val gameState: GameState) : Table(Scene2DSkin.defaultSkin) {
     fun refreshEntries() {
         entries.addAll(newEntries)
         newEntries.clear()
-        gameState.eventSystem.quests.forEach { quest ->
+        gameState.eventSystem.activeQuests.forEach { quest ->
             entries.firstOrNull { it.associatedMeeting?.equals(quest.tgtMeeting) ?: false }?.associatedQuestName =
                 quest.name
         }
@@ -139,7 +139,7 @@ class CalendarUI(val gameState: GameState) : Table(Scene2DSkin.defaultSkin) {
                         if (entry.associatedQuestName != null) {
                             cellTable.add(
                                 TasksUI.QuestMarker(
-                                    gameState.eventSystem.quests.firstOrNull { it.name == entry.associatedQuestName }
+                                    gameState.eventSystem.activeQuests.firstOrNull { it.name == entry.associatedQuestName }
                                         ?: return@forEach /*The quest is finished. No need to display marker anymore.*/
                                 )
                             ).size(50f)

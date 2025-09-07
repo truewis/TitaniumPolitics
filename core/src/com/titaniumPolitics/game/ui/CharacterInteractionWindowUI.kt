@@ -1,5 +1,8 @@
 package com.titaniumPolitics.game.ui
 
+import com.badlogic.gdx.math.Vector2
+import com.badlogic.gdx.scenes.scene2d.Actor
+import com.badlogic.gdx.scenes.scene2d.Group
 import com.titaniumPolitics.game.core.Character
 import com.titaniumPolitics.game.core.GameEngine
 import com.titaniumPolitics.game.core.GameState
@@ -93,55 +96,52 @@ class CharacterInteractionWindowUI(var gameState: GameState) :
 
     }
 
-    fun refresh(x: Float, y: Float, charName: String) {
-        //If the window is already visible, hide it.
-        if (characterDisplayed == charName) {
-            isVisible = false
-            characterDisplayed = ""
+    var followingActor: Actor? = null
+    var followingOffsetX = 0f
+    var followingOffsetY = 0f
 
-        } else {
-            val XOFFSET = 0
-            val YOFFSET = 0
-            setPosition(x + XOFFSET, y + YOFFSET)
-            isVisible = true
-            if (gameState.characters[charName]!!.type != Character.Type.ANON)
-                this.titleLabel.setText(ReadOnly.charProp(charName))
-            else
-                this.titleLabel.setText(ReadOnly.prop("characterInteractionWindowUI-survivor"))
-            characterDisplayed = charName
+    fun display(x: Float, y: Float, charName: String) {
+        val XOFFSET = 0
+        val YOFFSET = 0
+        setPosition(x + XOFFSET, y + YOFFSET)
+        isVisible = true
+        if (gameState.characters[charName]!!.type != Character.Type.ANON)
+            this.titleLabel.setText(ReadOnly.charProp(charName))
+        else
+            this.titleLabel.setText(ReadOnly.prop("characterInteractionWindowUI-survivor"))
+        characterDisplayed = charName
 
-            //Clear the list of any previous buttons.
-            content.apply {
-                clear()
+        //Clear the list of any previous buttons.
+        content.apply {
+            clear()
 
-                add(MutualityMeter(gameState, tgtCharacter = characterDisplayed, who = gameState.playerName).also {
-                    it.remove() //Do not refresh the meter, since this window is not persistent.
-                })
+            add(MutualityMeter(gameState, tgtCharacter = characterDisplayed, who = gameState.playerName).also {
+                it.remove() //Do not refresh the meter, since this window is not persistent.
+            })
+            row()
+            //If place selection mode is active, add the selection button and nothing else.
+            if (mode == "CharSelection") {
+                add(selectButton).fill().size(200f, 50f)
                 row()
-                //If place selection mode is active, add the selection button and nothing else.
-                if (mode == "CharSelection") {
-                    add(selectButton).fill().size(200f, 50f)
+            } else {
+                //Disable the button if the player is already in the place. Calling place property will throw an exception when the game is first loaded.
+                //Also, disable the button if the character is already in the meeting ("talking" to them already).
+                if (gameState.player.currentMeeting?.currentCharacters?.contains(
+                        characterDisplayed
+                    ) != true
+                ) {
+                    add(talkButton).fill().size(200f, 50f)
                     row()
-                } else {
-                    //Disable the button if the player is already in the place. Calling place property will throw an exception when the game is first loaded.
-                    //Also, disable the button if the character is already in the meeting ("talking" to them already).
-                    if (gameState.player.currentMeeting?.currentCharacters?.contains(
-                            characterDisplayed
-                        ) != true
-                    ) {
-                        add(talkButton).fill().size(200f, 50f)
-                        row()
-                        add(giveResourceButton).fill().size(200f, 50f)
-                        row()
-                    }
+                    add(giveResourceButton).fill().size(200f, 50f)
+                    row()
                 }
-                add(descButton).fill().size(200f, 50f)
-                row()
-                add(closeButton).fill().size(200f, 50f)
-
             }
-            setSize(350f, 50f + content.prefHeight)
+            add(descButton).fill().size(200f, 50f)
+            row()
+            add(closeButton).fill().size(200f, 50f)
+
         }
+        setSize(350f, 50f + content.prefHeight)
     }
 
     companion object {

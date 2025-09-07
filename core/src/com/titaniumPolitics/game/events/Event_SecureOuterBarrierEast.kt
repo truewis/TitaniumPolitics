@@ -18,6 +18,7 @@ class Event_SecureOuterBarrierEast : EventObject("Introduction of Alina.", true)
         "Secure the Outer Barrier East Barrier",
         "Keep the barrier durability above 50.",
         tgtPlace = "outerBarrierEast",
+        dueTime = 14400,
         onClick = {
             GraphInfoUI.instance.refreshGraph(
                 parent.gdh.resourceMap["apparatusDurability"]!!.column(targetApparatus.ID),

@@ -102,7 +102,7 @@ open class MapUI(val gameState: GameState) : Table(defaultSkin) {
             }
         }
         //Add quest markers.
-        gameState.eventSystem.quests.forEach { quest ->
+        gameState.eventSystem.activeQuests.forEach { quest ->
             if (quest.tgtPlace != null) {
                 TasksUI.QuestMarker(quest).also { marker ->
                     setSize(50f, 50f)

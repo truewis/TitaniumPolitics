@@ -30,9 +30,8 @@ class SimpleHeadPortraitUI(character: String, interactable: Boolean) : Table(Sce
             addListener(object : ClickListener() {
                 override fun clicked(event: InputEvent?, x: Float, y: Float) {
                     //Open Character Marker UI
-                    CharacterInteractionWindowUI.Companion.instance.isVisible = true
                     val coord = localToStageCoordinates(Vector2(x, y))
-                    CharacterInteractionWindowUI.Companion.instance.refresh(
+                    CharacterInteractionWindowUI.instance.display(
                         coord.x,
                         coord.y,
                         this@SimpleHeadPortraitUI.tgtCharacter
