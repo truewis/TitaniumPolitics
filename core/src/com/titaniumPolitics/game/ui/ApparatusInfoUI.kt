@@ -33,7 +33,8 @@ class ApparatusInfoUI : WindowUI("ApparatusInfoTitle") {
 
     }
 
-    fun refresh(information: Information) {
+    fun display(information: Information) {
+        isVisible = true
         dataTable.clear()
         dataTable.apply {
             image("CogGrunge") {

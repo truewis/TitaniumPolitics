@@ -48,7 +48,7 @@ class ApparatusSelectUI(val gameState: GameState, val callback: (Information) ->
             stack {
                 it.size(900f, 400f)
                 this@ApparatusSelectUI.sp = scrollPane {
-                    setScrollingDisabled(false, true)
+                    setScrollingDisabled(true, false)
                     this@ApparatusSelectUI.appSelectBox =
 
                         buttonGroup(1, 1)

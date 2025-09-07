@@ -14,7 +14,6 @@ import com.titaniumPolitics.game.ui.widget.PlaceSelectButton
 import ktx.scene2d.Scene2DSkin
 import ktx.scene2d.Scene2DSkin.defaultSkin
 import ktx.scene2d.button
-import ktx.scene2d.checkBox
 import ktx.scene2d.label
 import ktx.scene2d.scene2d
 import ktx.scene2d.table
@@ -204,14 +203,12 @@ class InformationViewUI(var gameState: GameState) : Table(defaultSkin) {
             when (information.type) {
                 InformationType.RESOURCES -> {
                     //Open resource window
-                    ResourceInfoUI.instance.isVisible = true
-                    ResourceInfoUI.instance.refresh(information)
+                    ResourceInfoUI.instance.display(information)
                 }
 
                 InformationType.APPARATUS -> {
                     //Open apparatus window
-                    ApparatusInfoUI.instance.isVisible = true
-                    ApparatusInfoUI.instance.refresh(information)
+                    ApparatusInfoUI.instance.display(information)
                 }
 
                 else -> {

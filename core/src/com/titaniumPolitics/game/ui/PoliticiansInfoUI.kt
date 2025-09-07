@@ -15,7 +15,6 @@ import com.titaniumPolitics.game.ui.widget.BudgetDisplayUI
 import com.titaniumPolitics.game.ui.widget.ResourceDisplayUI
 import com.titaniumPolitics.game.ui.widget.TitleLabel
 import ktx.scene2d.KTable
-import ktx.scene2d.Scene2DSkin
 import ktx.scene2d.Scene2DSkin.defaultSkin
 import ktx.scene2d.button
 import ktx.scene2d.buttonGroup
@@ -449,7 +448,7 @@ class PoliticiansInfoUI(val gameState: GameState) : Table(defaultSkin), KTable {
                         }
                         row()
                         add(ApparatusSelectUI(this@PoliticiansInfoUI.gameState) {
-                            ApparatusInfoUI.instance.refresh(it)
+                            ApparatusInfoUI.instance.display(it)
                         }.also {
                             it.refresh(workplaceParty.workplace.name)
                         }).fill()

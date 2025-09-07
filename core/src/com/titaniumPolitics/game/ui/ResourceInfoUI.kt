@@ -4,14 +4,12 @@ package com.titaniumPolitics.game.ui
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.utils.Align
-import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.core.Information
 import com.titaniumPolitics.game.core.ReadOnly
 import com.titaniumPolitics.game.ui.widget.InformationSourceUI
 import com.titaniumPolitics.game.ui.widget.ResourceDisplayUI
 import com.titaniumPolitics.game.ui.widget.WindowUI
 import ktx.scene2d.label
-import ktx.scene2d.table
 
 
 class ResourceInfoUI : WindowUI("ResourceInfoTitle") {
@@ -27,7 +25,7 @@ class ResourceInfoUI : WindowUI("ResourceInfoTitle") {
 
     }
 
-    fun refresh(information: Information) {
+    fun display(information: Information) {
         dataTable.clear()
         dataTable.apply {
             add(label("Target Place: ${ReadOnly.placeProp(information.tgtPlace)}") { setAlignment(Align.center) })

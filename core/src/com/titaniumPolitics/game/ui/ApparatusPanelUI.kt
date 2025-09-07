@@ -22,6 +22,7 @@ class ApparatusPanelUI(var info: Information) : Button(Scene2DSkin.defaultSkin),
 
     init {
         stack {
+            debug()
             it.grow()
             image("GradientBottom") {
                 color = Color.BLACK
@@ -31,7 +32,7 @@ class ApparatusPanelUI(var info: Information) : Button(Scene2DSkin.defaultSkin),
 
             table {
                 image("CogGrunge") {
-                    it.size(150f).fill()
+                    it.size(120f).fill()
                     try {
                         drawable = TextureRegionDrawable(
                             CapsuleStage.Companion.instance.assetManager.get( //TODO: Temporary solution for portrait image loading. PortraitUI does not have a stage.
