@@ -40,7 +40,7 @@ class CharacterGenerator {
             val fullName = modifier.format(baseName)
             ReadOnly.charProps.setProperty("c$count", fullName)
             if (isMale) {
-                val random = (1..3).random()
+                val random = (1..5).random()
                 generatedCharJson.apply {
                     put(
                         "c$count",
@@ -53,7 +53,7 @@ class CharacterGenerator {
                     )
                 }
             } else {
-                val random = (1..3).random()
+                val random = (1..5).random()
                 generatedCharJson.apply {
                     put(
                         "c$count",

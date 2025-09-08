@@ -6,6 +6,7 @@ import com.badlogic.gdx.scenes.scene2d.Touchable
 import com.badlogic.gdx.scenes.scene2d.actions.Actions
 import com.badlogic.gdx.scenes.scene2d.actions.AlphaAction
 import com.badlogic.gdx.scenes.scene2d.ui.Button
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.badlogic.gdx.utils.Align
 import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.ui.TasksUI
@@ -34,10 +35,15 @@ open class PlaceMarker(val gameState: GameState, val owner: MapUI, val place: St
         val RADIUS = SIZE * 3f
         container(
             image("BadgeRound") {
-                setColor(1f, 1f, 1f, 0.5f) // Semi-transparent white
+                setColor(1f, 1f, 1f, 0.3f) // Semi-transparent white
             }) {
             size(RADIUS * 2)
             fill()
+            addListener(object : ClickListener() {
+                override fun clicked(event: com.badlogic.gdx.scenes.scene2d.InputEvent?, x: Float, y: Float) {
+                    isBuildingVisible = false
+                }
+            })
         }
         table {
             add().fill()
@@ -175,7 +181,7 @@ open class PlaceMarker(val gameState: GameState, val owner: MapUI, val place: St
                     marker.touchable = Touchable.enabled
                 }
             }
-            
+
         }
     }
 
