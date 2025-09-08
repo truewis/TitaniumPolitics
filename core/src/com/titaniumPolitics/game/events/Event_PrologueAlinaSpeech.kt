@@ -14,7 +14,7 @@ class Event_PrologueAlinaSpeech : EventObject("Introduction of Alina.", true), I
         "Alina's speech",
         "Alina is giving a speech to the Infrastructure Division.",
         tgtMeeting = "conference-outerBarrierWest-1980",
-        tgtPlace = "outerBarrierWest"
+        tgtPlace = "infrastructureHeadquarters"
     )
 
     override fun exec(a: Int, b: Int) {

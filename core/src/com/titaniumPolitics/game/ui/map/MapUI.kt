@@ -1,12 +1,19 @@
 package com.titaniumPolitics.game.ui.map
 
 import com.badlogic.gdx.graphics.Color
+import com.badlogic.gdx.graphics.Color.LIGHT_GRAY
+import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable
 import com.titaniumPolitics.game.core.GameState
+import com.titaniumPolitics.game.core.ReadOnly
 import com.titaniumPolitics.game.debugTools.Logger
+import com.titaniumPolitics.game.ui.CapsuleStage
 import com.titaniumPolitics.game.ui.TasksUI
+import kotlinx.serialization.json.jsonObject
+import kotlinx.serialization.json.jsonPrimitive
 import ktx.scene2d.*
 import ktx.scene2d.Scene2DSkin.defaultSkin
 
@@ -17,7 +24,7 @@ open class MapUI(val gameState: GameState) : Table(defaultSkin) {
     private lateinit var scrollPane: ScrollPane
     val dataTable = Table(skin)
     val PADDING = 100f
-    val WIDTH = 1920f
+    val WIDTH = 1080f * 5
     val HEIGHT = 1080f * 5
     var minX = 0
     var minY = 0
@@ -35,13 +42,28 @@ open class MapUI(val gameState: GameState) : Table(defaultSkin) {
         val st = scene2d.stack {
             setSize(this@MapUI.WIDTH, this@MapUI.HEIGHT)
             name = "background"
-            image("MapGrid") {
-                addListener(object : ClickListener() {
-                    override fun clicked(event: com.badlogic.gdx.scenes.scene2d.InputEvent?, x: Float, y: Float) {
-                        //Close Place Marker UI?
+
+            container(
+                image("MapGrid") {
+                    addListener(object : ClickListener() {
+                        override fun clicked(event: com.badlogic.gdx.scenes.scene2d.InputEvent?, x: Float, y: Float) {
+                            //Close Place Marker UI?
+                        }
                     }
-                }
-                )
+                    )
+                    drawable = TextureRegionDrawable(
+                        CapsuleStage.instance.assetManager.get(
+                            "MapGrid.png", Texture::class.java
+                        )!!
+                    )
+                    setColor(1f, 1f, 1f, 0.5f)
+                }) {
+                fill()
+                padRight(-this@MapUI.WIDTH / 4)
+                padLeft(-this@MapUI.WIDTH / 4)
+                padTop(-this@MapUI.WIDTH / 8)
+                padBottom(-this@MapUI.WIDTH / 8 * 3)
+
             }
         }
         dataTable.addActor(st)
@@ -75,12 +97,14 @@ open class MapUI(val gameState: GameState) : Table(defaultSkin) {
                 if (plObj.isBuildingIn == null)
                     PlaceMarker(gameState, this, placeName).also {
                         currentMarkers.add(it)
+                        it.onClick += {
+                            currentMarkers.forEach {
+                                if (it != currentMarkers.first { it.place == placeName } && it.isBuildingVisible) {
+                                    it.isBuildingVisible = false
+                                }
+                            }
+                        }
                     }
-                else {
-                    HomePlaceMarker(gameState, this, placeName).also {
-                        currentMarkers.add(it)
-                    }
-                }
             }
         }
 
@@ -99,32 +123,37 @@ open class MapUI(val gameState: GameState) : Table(defaultSkin) {
                         }
                     }
                 }
+
             }
         }
         //Add quest markers.
         gameState.eventSystem.activeQuests.forEach { quest ->
-            if (quest.tgtPlace != null) {
-                TasksUI.QuestMarker(quest).also { marker ->
-                    setSize(50f, 50f)
-                    dataTable.addActor(marker)
-                    val coords = currentMarkers.first { it.place == quest.tgtPlace }
-                    marker.setPosition(
-                        coords.x + 50f,//Offset the marker so it does not overlap with the place marker.
-                        coords.y
-                    )
-                }
+            if (quest.relatedPlace != null) {
+                currentMarkers.firstOrNull { it.place == quest.relatedPlace || gameState.places[quest.relatedPlace]!!.isBuildingIn == it.place }
+                    ?.addQuestMarker(TasksUI.QuestMarker(quest))
             }
         }
 
         //Scroll to the player's place.
-        val playerPlaceMarker = currentMarkers.first { it.place == gameState.player.place.name }
-
-        scrollPane.scrollTo(
-            playerPlaceMarker.x - scrollPane.width / 2,
-            playerPlaceMarker.y + scrollPane.height / 2,
-            scrollPane.width,
-            scrollPane.height
-        )
+        val playerPlaceMarker = currentMarkers.firstOrNull { it.place == gameState.player.place.name }
+        if (playerPlaceMarker == null) {
+            //Player is in a building. Scroll to the place they are living by. And set isBuildingVisible to true.
+            val livingByPlaceMarker = currentMarkers.first { it.place == gameState.player.place.isBuildingIn }
+            livingByPlaceMarker.isBuildingVisible = true
+            scrollPane.scrollTo(
+                livingByPlaceMarker.x - scrollPane.width / 2,
+                livingByPlaceMarker.y + scrollPane.height / 2,
+                scrollPane.width,
+                scrollPane.height
+            )
+        } else {
+            scrollPane.scrollTo(
+                playerPlaceMarker.x - scrollPane.width / 2,
+                playerPlaceMarker.y + scrollPane.height / 2,
+                scrollPane.width,
+                scrollPane.height
+            )
+        }
 
         currentPlaceMarkerWindow.refresh(gameState.player.place.name)
         //Refresh the place marker window.

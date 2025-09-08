@@ -88,21 +88,21 @@ class TasksUI(var gameState: GameState) : Table(defaultSkin) {
         isVisible = quests.isNotEmpty()
     }
 
-    class QuestMarker(quest: Quest) : Table(defaultSkin), KTable {
+    class QuestMarker(val quest: Quest) : Table(defaultSkin), KTable {
         init {
             stack {
                 it.size(50f, 50f)
                 image("icon_app_133") {
                     setColor(0.6f, 0.3f, 0.3f, 0.5f) // Semi-transparent red
                 }
-                label((quest.index).toString(), "docTitle") {
+                label((this@QuestMarker.quest.index).toString(), "docTitle") {
                     setColor(Color.WHITE)
                     setAlignment(Align.center)
                     setFontScale(0.5f)
                 }
                 addListener(object : ClickListener() {
                     override fun clicked(event: com.badlogic.gdx.scenes.scene2d.InputEvent?, x: Float, y: Float) {
-                        quest.onClick?.invoke()
+                        this@QuestMarker.quest.onClick?.invoke()
                     }
                 })
             }
@@ -154,6 +154,9 @@ data class Quest(
     //Do not check completion here, use eventObject completion instead.
     val index: Int
         get() = parent.eventSystem.activeQuests.indexOf(this) + 1
+
+    val relatedPlace: String?
+        get() = tgtPlace ?: tgtMeeting?.let { parent.scheduledMeetings[it]?.place }
 
     var completionTime: Int? = null
 
