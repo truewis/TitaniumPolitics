@@ -12,7 +12,7 @@ import java.util.Properties
 
 class CharacterGenerator {
     companion object {
-        var count = 0
+        private var count = 0
         val maleNameProps = javaClass.classLoader.getResourceAsStream("texts/maleNames.properties")?.use {
             Properties().apply { load(it) }
         } ?: Properties().apply { load(FileInputStream(File("../assets/texts/maleNames.properties"))) }
@@ -40,7 +40,7 @@ class CharacterGenerator {
             val fullName = modifier.format(baseName)
             ReadOnly.charProps.setProperty("c$count", fullName)
             if (isMale) {
-                val random = (1..5).random()
+                val random = count % 5 + 1
                 generatedCharJson.apply {
                     put(
                         "c$count",
@@ -53,7 +53,7 @@ class CharacterGenerator {
                     )
                 }
             } else {
-                val random = (1..5).random()
+                val random = count % 5 + 1
                 generatedCharJson.apply {
                     put(
                         "c$count",

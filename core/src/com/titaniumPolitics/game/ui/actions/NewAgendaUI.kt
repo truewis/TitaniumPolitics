@@ -65,6 +65,11 @@ class NewAgendaUI(val gameState: GameState, actionCallback: (GameAction) -> Unit
             })
         }.inCell.size(300f, 70f)
     }
+    private val praisableCharacters = gameState.characters.filter {
+        it.value.type == Character.Type.DIRECTOR || gameState.parties[sbjChar.currentMeeting?.involvedParty]?.members?.contains(
+            it.value.name
+        ) == true
+    }.map { it.value.name }.toSet()
     private val praiseTable = scene2d.table {
         add(TitleLabel(ReadOnly.prop("NewAgendaUI-praise"))).growX()
         row()
@@ -72,7 +77,7 @@ class NewAgendaUI(val gameState: GameState, actionCallback: (GameAction) -> Unit
             color = Color.BLACK; setFontScale(0.3f); wrap = true; it.fill()
         }
         row()
-        add(CharacterSelectButton { char ->
+        add(CharacterSelectButton(this@NewAgendaUI.praisableCharacters) { char ->
             this@NewAgendaUI.agenda =
                 MeetingAgenda(AgendaType.PRAISE, this@NewAgendaUI.subject, hashMapOf("character" to char))
         }).size(180f)
@@ -84,11 +89,16 @@ class NewAgendaUI(val gameState: GameState, actionCallback: (GameAction) -> Unit
             color = Color.BLACK; setFontScale(0.3f); wrap = true; it.fill()
         }
         row()
-        add(CharacterSelectButton { char ->
+        add(CharacterSelectButton(this@NewAgendaUI.praisableCharacters) { char ->
             this@NewAgendaUI.agenda =
                 MeetingAgenda(AgendaType.DENOUNCE, this@NewAgendaUI.subject, hashMapOf("character" to char))
         }).size(180f)
     }
+    private val praisableParty = gameState.parties.filter {
+        it.value.type == Party.Type.DIVISION ||
+                (it.value.type == Party.Type.WORKPLACE && it.value.workplace.responsibleDivision?.let { it == sbjChar.division?.name } ?: false) ||
+                (it.value.type == Party.Type.QUALIFICATION)
+    }.keys.toSet()
     private val praisePartyTable = scene2d.table {
         add(TitleLabel(ReadOnly.prop("NewAgendaUI-praiseParty"))).growX()
         row()
@@ -97,7 +107,7 @@ class NewAgendaUI(val gameState: GameState, actionCallback: (GameAction) -> Unit
         }
         row()
         selectBox<String> {
-            items = Array(this@NewAgendaUI.gameState.parties.keys.toTypedArray())
+            items = Array(this@NewAgendaUI.praisableParty.toTypedArray())
             addListener(object : ChangeListener() {
                 override fun changed(event: ChangeEvent?, actor: Actor?) {
                     this@NewAgendaUI.agenda =
@@ -114,7 +124,7 @@ class NewAgendaUI(val gameState: GameState, actionCallback: (GameAction) -> Unit
         }
         row()
         selectBox<String> {
-            items = Array(this@NewAgendaUI.gameState.parties.keys.toTypedArray())
+            items = Array(this@NewAgendaUI.praisableParty.toTypedArray())
             addListener(object : ChangeListener() {
                 override fun changed(event: ChangeEvent?, actor: Actor?) {
                     this@NewAgendaUI.agenda =

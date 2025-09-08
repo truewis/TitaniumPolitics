@@ -22,6 +22,7 @@ class SubmitButton(var action: GameAction? = null, var actionCallback: (GameActi
 
     init {
         isDisabled = true
+        isVisible = false
         addListener(tooltip)
         label("Submit", "docTitle") {
             color = Color.WHITE
@@ -41,6 +42,7 @@ class SubmitButton(var action: GameAction? = null, var actionCallback: (GameActi
         removeListener(tooltip)
         tooltip = ActionTooltipUI(action::class.simpleName!!)
         addListener(tooltip)
+        isVisible = true
         if (checkValidity) {
             this.isDisabled = !action.isValid()
             if (this.isDisabled) {

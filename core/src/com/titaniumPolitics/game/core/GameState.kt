@@ -267,16 +267,12 @@ class GameState {
                         val division = parties[place.value.responsibleDivision]!!
                         addMember(division.leader!!, Role.NONE)
                         changeLeader(division.leader!!)
-                    } else
-                        if (place.key != "outerBarrierEast") {
-                            val randomDirector = parties[this]!!.directorMembers.random()
-                            addMember(randomDirector, Role.NONE)
-                            changeLeader(randomDirector)
-                        } else {
-                            //The player is the director of the outerBarrierEast division.
-                            addMember("Rui", Role.NONE)
-                            changeLeader("Rui")
-                        }
+                    } else {
+                        val randomDirector =
+                            (parties[this]!!.directorMembers - playerName).random()//Player is not a director of any workplace when starting a new game. Usually they must be assigned by events.
+                        addMember(randomDirector, Role.NONE)
+                        changeLeader(randomDirector)
+                    }
                 }
                 type = Party.Type.WORKPLACE
                 home = place.key
@@ -443,7 +439,7 @@ class GameState {
         qualification.forEach {
             parties[it] = Party().apply {
                 injectParent(this@GameState)
-                type = Party.Type.OTHER
+                type = Party.Type.QUALIFICATION
                 home = "market"
                 characters.filter { char -> it in char.value.trait }.keys.forEach {
                     addMember(it, Role.NONE)

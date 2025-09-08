@@ -116,7 +116,7 @@ class ExamineUI(var gameState: GameState, actionCallback: (GameAction) -> Unit) 
 
         ).size(300f, 100f)
         content.row()
-        content.add(submitButton)
+        content.add(submitButton).size(200f, 75f)
     }
 
 

@@ -41,7 +41,9 @@ open class PlaceMarker(val gameState: GameState, val owner: MapUI, val place: St
             fill()
             addListener(object : ClickListener() {
                 override fun clicked(event: com.badlogic.gdx.scenes.scene2d.InputEvent?, x: Float, y: Float) {
-                    isBuildingVisible = false
+                    onClick.forEach { it(place) }
+                    //Open Place UI
+                    owner.currentPlaceMarkerWindow.refresh(place)
                 }
             })
         }

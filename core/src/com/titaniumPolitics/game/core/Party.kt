@@ -497,7 +497,7 @@ class Party : GameStateElement() {
     var type: Type = Type.OTHER
 
     enum class Type {
-        CABINET, DIVISION, WORKPLACE, TRIUMVIRATE, OTHER
+        CABINET, DIVISION, WORKPLACE, TRIUMVIRATE, OTHER, QUALIFICATION
     }
 
     var home: String? = null //The place where the party is based.
