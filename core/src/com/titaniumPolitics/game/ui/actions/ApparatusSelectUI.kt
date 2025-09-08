@@ -68,9 +68,11 @@ class ApparatusSelectUI(val gameState: GameState, val callback: (Information) ->
     fun refreshAvailableApparatusList(tgtPlace: String) {
         val tgtPlaceObj = gameState.places[tgtPlace]!!
         tgtPlaceObj.apparatuses.forEach { app ->
-            gameState.informations.values.firstOrNull {
+            gameState.informations.values.filter {
                 it.type == InformationType.APPARATUS
                 it.tgtApparatusID == app.ID && gameState.playerName in it.knownTo
+            }.maxByOrNull {
+                it.tgtTime // Get the most recent information
             }?.also { appInfo ->
                 val t = ApparatusPanelUI(appInfo)
                 if (appSelectBox.hasChildren())
