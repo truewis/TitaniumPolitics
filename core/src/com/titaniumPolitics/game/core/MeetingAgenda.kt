@@ -62,8 +62,8 @@ data class MeetingAgenda(
                 return pt.members.sumOf { -parent.characters[it]!!.infoPreference(info) } / pt.members.size * sbjCharObj.stats.pScale
             }
 
-            AgendaType.BUDGET_PROPOSAL -> TODO()
-            AgendaType.BUDGET_RESOLUTION -> TODO()
+            AgendaType.BUDGET_PROPOSAL -> return 0.0
+            AgendaType.BUDGET_RESOLUTION -> return 0.0
             AgendaType.APPOINT_MEETING -> return 0.0
             AgendaType.FIRE_MANAGER -> return -parent.characters[subjectParams["character"]]!!.infoPreference(
                 info

@@ -31,17 +31,12 @@ class AddInfoUI(val gameState: GameState, actionCallback: (GameAction) -> Unit) 
         val infoSelectPane = ScrollPane(dataTable)
         infoSelectPane.setScrollingDisabled(true, false)
 
-        val infoDescPane = ScrollPane(targetTable)
-        infoDescPane.setScrollingDisabled(false, true)
-
         val st = stack {
             it.grow()
             table {
                 add(agendaSelectPane)
                 row()
                 add(infoSelectPane)
-                row()
-                add(infoDescPane)
                 row()
                 add(this@AddInfoUI.submitButton)
             }
@@ -95,8 +90,27 @@ class AddInfoUI(val gameState: GameState, actionCallback: (GameAction) -> Unit) 
             add(buttonGroup(1, 1) {
                 availableInfoKeys.forEach { key ->
                     button("check") {
-                        it.size(200f, 100f)
-                        image("TilesGrunge")
+                        it.size(300f, 100f)
+                        label(this@AddInfoUI.gameState.informations[key]!!.simpleDescription(), "docTitle") {
+                            it.size(300f, 50f)
+                            setAlignment(Align.center)
+                            color = Color.WHITE
+                            setFontScale(0.2f)
+                            wrap = true
+                        }
+                        row()
+                        val eff = this@AddInfoUI.agenda.effectivity(
+                            this@AddInfoUI.gameState,
+                            meeting = this@AddInfoUI.sbjChar.currentMeeting!!,
+                            info = this@AddInfoUI.gameState.informations[key]!!,
+                            sbjCharObj = this@AddInfoUI.sbjChar
+                        )
+                        label("%.1f %%".format(eff), "docTitle") {
+                            it.size(300f, 50f)
+                            setAlignment(Align.center)
+                            color = Color.WHITE
+                            setFontScale(0.2f)
+                        }
                         this@button.addListener(object : ClickListener() {
                             override fun clicked(
                                 event: InputEvent?,
