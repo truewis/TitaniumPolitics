@@ -442,11 +442,15 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable 
 
 
                             "AddInfo" -> {
-                                if (gameState.player.preparedInfoKeys.isEmpty()) {
+                                if (gameState.informations.none { (key, info) ->
+                                        gameState.playerName in info.knownTo
+                                    }) {
                                     this@button.isDisabled = true
                                     tooltip.displayInvalidReason(ReadOnly.prop("addInfo-noPreparedInfo"))
                                 } else
-                                    if ((gameState.player.preparedInfoKeys - gameState.player.currentMeeting!!.agendas.flatMap { it.informationKeys }).isEmpty()) {
+                                    if ((gameState.informations.filter {
+                                            it.value.knownTo.contains(gameState.playerName)
+                                        }.keys - gameState.player.currentMeeting!!.agendas.flatMap { it.informationKeys }).isEmpty()) {
                                         this@button.isDisabled = true
                                         tooltip.displayInvalidReason(ReadOnly.prop("addInfo-noAdditionalInfo"))
                                     } else if ((gameState.player.currentMeeting!!.agendas.isEmpty())) {

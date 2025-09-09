@@ -22,11 +22,9 @@ class AddInfoUI(val gameState: GameState, actionCallback: (GameAction) -> Unit) 
     private var targetTable = Table()
     private var agendaTable = scene2d.buttonGroup(1, 1)
     private val sbjChar get() = gameState.characters[subject]!!
-    var infoKey = ""
     lateinit var agenda: MeetingAgenda
 
     init {
-        isVisible = false
         val agendaSelectPane = ScrollPane(agendaTable)
         agendaSelectPane.setScrollingDisabled(false, true)
 
@@ -45,29 +43,7 @@ class AddInfoUI(val gameState: GameState, actionCallback: (GameAction) -> Unit) 
                 row()
                 add(infoDescPane)
                 row()
-                button {
-                    it.fill()
-                    label("Submit", "docTitle") {
-                        setAlignment(Align.center)
-                        color = Color.BLACK
-                    }
-                    addListener(object : ClickListener() {
-                        override fun clicked(event: InputEvent?, x: Float, y: Float) {
-
-                            this@AddInfoUI.actionCallback(
-                                AddInfo(
-                                    this@AddInfoUI.subject,
-                                    this@AddInfoUI.sbjChar.place.name,
-                                    infoKey = this@AddInfoUI.infoKey,
-                                    agendaIndex =
-                                        this@AddInfoUI.gameState.player.currentMeeting!!.agendas.indexOf(this@AddInfoUI.agenda),
-                                    this@AddInfoUI.gameState
-                                )
-                            )
-                            this@AddInfoUI.onClose.forEach { it() }
-                        }
-                    })
-                }
+                add(this@AddInfoUI.submitButton)
             }
         }
         content.add(st).grow()
@@ -90,24 +66,37 @@ class AddInfoUI(val gameState: GameState, actionCallback: (GameAction) -> Unit) 
                             y: Float
                         ) {
                             this@AddInfoUI.agenda = agenda
+                            this@AddInfoUI.refreshInfoOptions()
                         }
                     })
                 }
             }
         }
+        dataTable.clear()
+    }
 
-        val availableInfoKeys = sbjChar.preparedInfoKeys.filter { key ->
-            !sbjChar.currentMeeting!!.agendas.flatMap { it.informationKeys }
-                .contains(key) // Not presented in the current meeting
-        }
-        infoKey = availableInfoKeys.first()
+    fun refreshInfoOptions() {
+        val availableInfoKeys = gameState.informations.filter { (key, info) ->
+            gameState.playerName in info.knownTo &&
+                    !sbjChar.currentMeeting!!.agendas.flatMap { it.informationKeys }
+                        .contains(key) // Not presented in the current meeting
+                    &&
+                    //has nonzero effectivity with the selected agenda
+                    agenda.effectivity(
+                        gameState,
+                        meeting = sbjChar.currentMeeting!!,
+                        info = info,
+                        sbjCharObj = sbjChar
+                    ) != 0.0
+
+        }.keys
         dataTable.clear()
         dataTable.apply {
             add(buttonGroup(1, 1) {
                 availableInfoKeys.forEach { key ->
                     button("check") {
+                        it.size(200f, 100f)
                         image("TilesGrunge")
-                        isChecked = key == this@AddInfoUI.infoKey
                         this@button.addListener(object : ClickListener() {
                             override fun clicked(
                                 event: InputEvent?,
@@ -124,9 +113,21 @@ class AddInfoUI(val gameState: GameState, actionCallback: (GameAction) -> Unit) 
                                         setAlignment(Align.center)
                                         wrap = true
                                     }).grow()
+
+                                this@AddInfoUI.submitButton.refresh(
+                                    AddInfo(
+                                        this@AddInfoUI.subject,
+                                        this@AddInfoUI.tgtPlace,
+                                        infoKey = key,
+                                        agendaIndex =
+                                            this@AddInfoUI.gameState.player.currentMeeting!!.agendas.indexOf(this@AddInfoUI.agenda),
+                                        this@AddInfoUI.gameState
+                                    )
+                                )
                             }
                         })
                     }
+                    row()
                 }
             })
         }

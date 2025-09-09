@@ -62,7 +62,7 @@ data class AddInfo(
             return false
         if (!reason(
                 effectivity() == 0.0,
-                "Information is not effective enough to be presented for this agenda."
+                "AddInfo-NotEffective",
             )
         ) return false
         return true //We are assuming that the information is always valid. Whether the information is effective or not is a different matter.

@@ -10,7 +10,7 @@ import ktx.scene2d.KTable
 import ktx.scene2d.Scene2DSkin
 import ktx.scene2d.label
 
-class SubmitButton(var action: GameAction? = null, var actionCallback: (GameAction) -> Unit) :
+class SubmitButton(private var action: GameAction? = null, var actionCallback: (GameAction) -> Unit) :
     Button(Scene2DSkin.defaultSkin),
     KTable {
     private var tooltip: ActionTooltipUI = ActionTooltipUI("Wait")
