@@ -82,7 +82,7 @@ class AddInfoUI(val gameState: GameState, actionCallback: (GameAction) -> Unit) 
                         meeting = sbjChar.currentMeeting!!,
                         info = info,
                         sbjCharObj = sbjChar
-                    ) != 0.0
+                    ).first != 0.0
 
         }.keys
         dataTable.clear()
@@ -104,7 +104,7 @@ class AddInfoUI(val gameState: GameState, actionCallback: (GameAction) -> Unit) 
                             meeting = this@AddInfoUI.sbjChar.currentMeeting!!,
                             info = this@AddInfoUI.gameState.informations[key]!!,
                             sbjCharObj = this@AddInfoUI.sbjChar
-                        )
+                        ).first
                         label("%.1f %%".format(eff), "docTitle") {
                             it.size(300f, 50f)
                             setAlignment(Align.center)

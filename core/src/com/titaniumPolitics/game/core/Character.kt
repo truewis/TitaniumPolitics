@@ -306,8 +306,8 @@ class Character : GameStateElement() {
                         else if (action.agenda.subjectParams["party"] == division?.name)
                             return -10.0
                         return 0.0
-
                     }
+
 
                     AgendaType.REQUEST -> return 0.0 // Prevent nested request!
                     AgendaType.PRAISE -> {
@@ -372,10 +372,6 @@ class Character : GameStateElement() {
                 ret = -1e-1 * stats.pScale
             //Stayed in home during work hours?
             //Did their job well
-            if (info.type == InformationType.ACTION && info.action is NewAgenda)
-                ret = 5e-2
-            if (info.type == InformationType.ACTION && info.action is AddInfo)
-                ret = 5e-2
             if (info.type == InformationType.ACTION && info.action is OfficialResourceTransfer)
                 ret = 5e-2
             if (info.type == InformationType.ACTION && info.action is InvestigateAccidentScene)
@@ -417,7 +413,7 @@ class Character : GameStateElement() {
                 //Otherwise, if the information is about some other people, the character's preference depends on their relationship with the target.
                 //The target character's preference is reflected.
                 info.tgtCharacter?.run {
-                    ret = parent.characters[this]!!.infoPreference(info) * parent.getMutNorm(
+                    ret = parent.characters[this]!!.infoPreference(info) / const("mutualityMax") * parent.getMutNorm(
                         name,
                         this
                     ) * stats.eScale
@@ -438,17 +434,8 @@ class Character : GameStateElement() {
                 //If I hate the issuers, I hate this information even more. If I like the issuers, I don't hate this information as much.
             }
 
-            if (info.type == InformationType.MUTUALITY || info.type == InformationType.PARTY_MUTUALITY) {
-                //I like news that me or my party is liked by other people. I dislike news that me or my party is disliked by other people.
-                if (info.auxCharacter == name)
-                    ret = (info.amount / const("mutualityMax") - 0.5) * 1e-1
-                if (parent.parties[info.auxParty]?.leader == name)
-                    ret =
-                        (info.amount / const("mutualityMax") - 0.5) * 1e-1 * parent.parties[info.auxParty]!!.integrityNorm
-                if (parent.parties[info.auxParty]?.members?.contains(name) == true)
-                    ret =
-                        (info.amount / const("mutualityMax") - 0.5) * 5e-2 * parent.parties[info.auxParty]!!.integrityNorm
-            }
+            //Mutuality and Party Mutuality information are only used as decisions, not gossips.
+            //For gossips, characters can share actual actions and casualties.
 
         }
 

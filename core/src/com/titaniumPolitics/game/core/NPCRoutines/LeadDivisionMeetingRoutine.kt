@@ -110,7 +110,7 @@ class LeadDivisionMeetingRoutine(override val meetingName: String) : MeetingRout
                         it.subjectParams["character"] = char
                     }
                     if (character.preparedInfoKeys.any {
-                            agenda.effectivity(gState, meeting, gState.informations[it]!!, character) > 0
+                            agenda.effectivity(gState, meeting, gState.informations[it]!!, character).first > 0
                         }) {
                         NewAgenda(name, place, gState).also {
                             it.agenda = agenda

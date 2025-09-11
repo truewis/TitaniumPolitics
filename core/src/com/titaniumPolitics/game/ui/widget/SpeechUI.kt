@@ -7,6 +7,7 @@ import com.rafaskoberg.gdx.typinglabel.TypingLabel
 import com.rafaskoberg.gdx.typinglabel.TypingListener
 import com.titaniumPolitics.game.core.AgendaType
 import com.titaniumPolitics.game.core.ReadOnly
+import com.titaniumPolitics.game.core.gameActions.AddInfo
 import com.titaniumPolitics.game.core.gameActions.EndSpeech
 import com.titaniumPolitics.game.core.gameActions.GameAction
 import com.titaniumPolitics.game.core.gameActions.NewAgenda
@@ -93,6 +94,10 @@ class SpeechUI : Table(defaultSkin), KTable {
                     AgendaType.FIRE_MANAGER -> text =
                         ReadOnly.script("NewAgenda-FireManager").format(action.agenda.subjectParams["character"])
                 }
+            }
+
+            is AddInfo -> {
+                text = ReadOnly.script(action.effectivityReason).format(action.agenda.subjectParams["character"])
             }
 
             is EndSpeech -> {

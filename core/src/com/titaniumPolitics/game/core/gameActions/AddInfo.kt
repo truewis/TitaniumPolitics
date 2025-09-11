@@ -1,9 +1,7 @@
 package com.titaniumPolitics.game.core.gameActions
 
 import com.badlogic.gdx.math.MathUtils.clamp
-import com.titaniumPolitics.game.core.AgendaType
 import com.titaniumPolitics.game.core.GameState
-import com.titaniumPolitics.game.core.InformationType
 import com.titaniumPolitics.game.core.ReadOnly
 import kotlinx.serialization.Serializable
 
@@ -25,11 +23,15 @@ data class AddInfo(
         get() = parent.informations[infoKey]!!
     val meeting
         get() = sbjCharObj.currentMeeting!!
+    var effectivityReason = ""
 
 
     //Unit: Mutuality
     fun effectivity(): Double {
-        return agenda.effectivity(parent, meeting, info, sbjCharObj)
+        val ret = agenda.effectivity(parent, meeting, info, sbjCharObj)
+        effectivityReason =
+            "AddInfo-" + ret.second + if (ret.first > 0) "-positive" else if (ret.first < 0) "-negative" else ""
+        return ret.first
     }
 
     override fun execute() {

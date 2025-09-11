@@ -30,20 +30,20 @@ class AddInfoToAgendaRoutine(val agendaIndex: Int, val support: Boolean) : Routi
         } else //If it is my turn to speak
         {
             //Check if I have any information to support the agenda.
-            val addingInfo = character.preparedInfoKeys.filter {
+            val addingInfo = gState.informations.filter { (key, value) -> name in value.knownTo }.keys.filter {
                 conf.agendas[agendaIndex].effectivity(
                     gState,
                     conf,
                     gState.informations[it]!!,
                     character
-                ) * (if (support) 1 else -1) > 0.0
+                ).first * (if (support) 1 else -1) > 0.0
             }.minByOrNull {
                 conf.agendas[agendaIndex].effectivity(
                     gState,
                     conf,
                     gState.informations[it]!!,
                     character
-                )
+                ).first
             }
             if (addingInfo != null) {
                 AddInfo(name, place, addingInfo, this@AddInfoToAgendaRoutine.agendaIndex, gState).also {

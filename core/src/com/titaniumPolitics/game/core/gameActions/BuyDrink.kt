@@ -19,6 +19,7 @@ data class BuyDrink(override val sbjCharacter: String, override val tgtPlace: St
     }
 
     override fun isValid(): Boolean {
+        if (tgtPlace != "tavern") return false
         return reason(
             sbjCharObj.resources["phosphorus"] > 1e-3,
             "buyDrink-resources"

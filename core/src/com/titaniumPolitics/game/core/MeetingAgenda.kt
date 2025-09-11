@@ -15,7 +15,12 @@ data class MeetingAgenda(
 
 ) {
     //Compute the effectivity of an information for this agenda for a character in the meeting.
-    fun effectivity(parent: GameState, meeting: Meeting, info: Information, sbjCharObj: Character): Double {
+    fun effectivity(
+        parent: GameState,
+        meeting: Meeting,
+        info: Information,
+        sbjCharObj: Character
+    ): Pair<Double, String> {
         val newsPeople = meeting.currentCharacters.intersect(info.knownTo)
         when (type) {
             AgendaType.PROOF_OF_WORK -> {
@@ -29,49 +34,54 @@ data class MeetingAgenda(
                                     )
                                 }
                     }
-                ) return 5.0 * sbjCharObj.stats.lScale
-
-
-                //If there are any interesting (to this character) news about the division, share it.
-                if (info.tgtTime in parent.day * ReadOnly.constInt("lengthOfDay")..<parent.day * ReadOnly.constInt(
-                        "lengthOfDay"
-                    ) + ReadOnly.constInt("lengthOfDay")
                 )
-                    return newsPeople.sumOf { parent.characters[it]!!.infoPreference(info) } / newsPeople.size * sbjCharObj.stats.eScale//Share the most interesting news.
-
+                    return Pair(5.0 * sbjCharObj.stats.lScale, "ProofOfWork")
             }
 
             AgendaType.NOMINATE, AgendaType.PRAISE -> {
-                return parent.characters[subjectParams["character"]]!!.infoPreference(info) * sbjCharObj.stats.eScale
+                return Pair(
+                    parent.characters[subjectParams["character"]]!!.infoPreference(info) * sbjCharObj.stats.eScale,
+                    "Praise"
+                )
             }
 
-            AgendaType.REQUEST -> return if (info.tgtPlace == attachedRequest!!.action.tgtPlace) 10.0 else 0.0
+            AgendaType.REQUEST -> return if (info.tgtPlace == attachedRequest!!.action.tgtPlace) Pair(
+                10.0,
+                "Request"
+            ) else Pair(0.0, "")
 
             AgendaType.DENOUNCE -> {
-                return -parent.characters[subjectParams["character"]]!!.infoPreference(info) * sbjCharObj.stats.pScale
+                return Pair(
+                    -parent.characters[subjectParams["character"]]!!.infoPreference(info) * sbjCharObj.stats.pScale,
+                    "Denounce"
+                )
             }
 
             AgendaType.PRAISE_PARTY -> {
                 val pt = parent.parties[subjectParams["party"]]!!
-                return pt.members.sumOf { parent.characters[it]!!.infoPreference(info) } / pt.members.size * sbjCharObj.stats.eScale
+                return Pair(pt.members.sumOf { parent.characters[it]!!.infoPreference(info) } / pt.members.size * sbjCharObj.stats.eScale,
+                    "PraiseParty")
 
             }
 
             AgendaType.DENOUNCE_PARTY -> {
                 val pt = parent.parties[subjectParams["party"]]!!
-                return pt.members.sumOf { -parent.characters[it]!!.infoPreference(info) } / pt.members.size * sbjCharObj.stats.pScale
+                return Pair(pt.members.sumOf { -parent.characters[it]!!.infoPreference(info) } / pt.members.size * sbjCharObj.stats.pScale,
+                    "DenounceParty")
             }
 
-            AgendaType.BUDGET_PROPOSAL -> return 0.0
-            AgendaType.BUDGET_RESOLUTION -> return 0.0
-            AgendaType.APPOINT_MEETING -> return 0.0
-            AgendaType.FIRE_MANAGER -> return -parent.characters[subjectParams["character"]]!!.infoPreference(
-                info
-            ) * sbjCharObj.stats.pScale
+            AgendaType.BUDGET_PROPOSAL -> return Pair(0.0, "")
+            AgendaType.BUDGET_RESOLUTION -> return Pair(0.0, "")
+            AgendaType.APPOINT_MEETING -> return Pair(0.0, "")
+            AgendaType.FIRE_MANAGER -> return Pair(
+                -parent.characters[subjectParams["character"]]!!.infoPreference(
+                    info
+                ) * sbjCharObj.stats.pScale, "FireManager"
+            )
 
-            else -> return 0.0
+            else -> return Pair(0.0, "")
         }
-        return 0.0
+        return Pair(0.0, "")
     }
 }
 

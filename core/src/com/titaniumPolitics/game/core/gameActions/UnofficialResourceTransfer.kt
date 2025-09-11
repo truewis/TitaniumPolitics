@@ -69,6 +69,11 @@ data class UnofficialResourceTransfer(
     }
 
     override fun isValid(): Boolean {
+        if (!reason(
+                sbjCharacter == tgtPlaceObj.workplaceParty?.treasurer || null == tgtPlaceObj.workplaceParty?.treasurer,
+                "officialResourceTransfer-notTreasurer"
+            )
+        ) return false
         //Can't send to the same place
         if (toWhere == tgtPlace) return false
         if (parent.places[toWhere] == null) return false
