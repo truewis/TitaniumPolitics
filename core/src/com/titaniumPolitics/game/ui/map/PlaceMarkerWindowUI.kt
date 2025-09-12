@@ -9,6 +9,7 @@ import com.badlogic.gdx.utils.Align
 import com.titaniumPolitics.game.core.*
 import com.titaniumPolitics.game.core.GameEngine.Companion.AcquireParams
 import com.titaniumPolitics.game.core.gameActions.Move
+import com.titaniumPolitics.game.core.gameActions.Talk
 import com.titaniumPolitics.game.core.gameActions.Wait
 import com.titaniumPolitics.game.debugTools.Logger
 import com.titaniumPolitics.game.ui.AlertUI
@@ -29,7 +30,8 @@ class PlaceMarkerWindowUI(var gameState: GameState, var owner: MapUI) : Table() 
         get() = (gameState.player.place.shortestPathAndTimeTo(placeDisplayed, gameState.playerName)?.second
             ?: 0) * ReadOnly.DT / 60
     var mode = ""
-    var interrupted = false//Only used in move mode.
+    var interrupted =
+        true//Only used in move mode. Initially true to prevent any interruption handling before move starts.
     var tgtDestination = ""//Only used in move mode.
     private val onRefresh = mutableListOf<() -> Unit>()
     val onClose = mutableListOf<() -> Unit>()
@@ -187,7 +189,7 @@ class PlaceMarkerWindowUI(var gameState: GameState, var owner: MapUI) : Table() 
         if (interrupted)
             return // If already interrupted, do not process further.
         if (info.tgtPlace == gameState.player.place.name && info.tgtCharacter != gameState.playerName &&
-            info.action !is Wait && info.action !is Move && info.knownTo.contains(gameState.playerName) && info.tgtCharacter in gameState.knownCharactersToPlayer
+            info.action is Talk && info.knownTo.contains(gameState.playerName) && info.tgtCharacter in gameState.knownCharactersToPlayer
         ) {
 
             AlertUI.instance.addAlert("interruptedMove", ReadOnly.charProp(info.tgtCharacter ?: "Someone"))
