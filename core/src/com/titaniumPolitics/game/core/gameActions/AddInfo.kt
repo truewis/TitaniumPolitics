@@ -1,7 +1,9 @@
 package com.titaniumPolitics.game.core.gameActions
 
 import com.badlogic.gdx.math.MathUtils.clamp
+import com.titaniumPolitics.game.core.AgendaType
 import com.titaniumPolitics.game.core.GameState
+import com.titaniumPolitics.game.core.InformationType
 import com.titaniumPolitics.game.core.ReadOnly
 import kotlinx.serialization.Serializable
 
@@ -26,12 +28,56 @@ data class AddInfo(
     var effectivityReason = ""
 
 
-    //Unit: Mutuality
+    /**
+     *
+     * Unit: Mutuality
+     */
     fun effectivity(): Double {
         val ret = agenda.effectivity(parent, meeting, info, sbjCharObj)
         effectivityReason =
             "AddInfo-" + ret.second + if (ret.first > 0) "-positive" else if (ret.first < 0) "-negative" else ""
         return ret.first
+    }
+
+    /**
+     * If the information has a direct mutuality effect, apply it here.
+     * For example, hearing the information of praising or denouncing someone directly affects mutuality with both the subject and the object of the praise/denouncement.
+     */
+    fun directMutualityChange(listener: String) {
+        if (info.type == InformationType.ACTION && info.action is NewAgenda) {
+            val na = info.action as NewAgenda
+            if (na.agenda.type == AgendaType.PRAISE) {
+                val praised = na.agenda.subjectParams["character"]!!
+                parent.setMutuality(
+                    listener,
+                    na.sbjCharacter,
+                    parent.getMutNorm(listener, praised) * 5,
+                    "AddInfo-Praise"
+                )
+                parent.setMutuality(
+                    listener,
+                    praised,
+                    parent.getMutNorm(listener, na.sbjCharacter) * 5,
+                    "AddInfo-Praise"
+                )
+
+            }
+            if (na.agenda.type == AgendaType.DENOUNCE) {
+                val denounced = na.agenda.subjectParams["character"]!!
+                parent.setMutuality(
+                    listener,
+                    na.sbjCharacter,
+                    -parent.getMutNorm(listener, denounced) * 5,
+                    "AddInfo-Denounce"
+                )
+                parent.setMutuality(
+                    listener,
+                    denounced,
+                    -parent.getMutNorm(listener, na.sbjCharacter) * 5,
+                    "AddInfo-Denounce"
+                )
+            }
+        }
     }
 
     override fun execute() {
@@ -42,16 +88,25 @@ data class AddInfo(
         //Attention is consumed.
         val newsDegree =
             1.0 - meeting.currentCharacters.intersect(info.knownTo).size / (.0 + meeting.currentCharacters.size)
+        val effectivity = effectivity()
         meeting.currentAttention = clamp(
-            meeting.currentAttention + (10 * effectivity() * newsDegree * sbjCharObj.will / ReadOnly.const("mutualityMax")).toInt() - 20,
+            meeting.currentAttention + (10 * effectivity * newsDegree * sbjCharObj.will / ReadOnly.const("mutualityMax")).toInt() - 20,
             0, 100
         )
         //The information is known to the characters in the meeting.
+        val newsCharacters = meeting.currentCharacters - info.knownTo
         parent.informations[infoKey]!!.knownTo.addAll(meeting.currentCharacters)
-        //Call the mutuality modifier function of the agenda. If the added information is effective, the mutuality effect of the agenda is reinforced, and vice versa.
-        NewAgenda.extracted(effectivity(), meeting, agenda, agenda.author, parent)
         //affect relation with the agenda author
-        parent.setMutuality(agenda.author, sbjCharacter, effectivity(), "AddInfo")
+        parent.setMutuality(agenda.author, sbjCharacter, effectivity, "AddInfo")
+
+        //Direct mutuality change caused by the information, if any.
+        newsCharacters.forEach { listener ->
+            directMutualityChange(listener)
+            NewAgenda.affectListenerMutuality(
+                effectivity, meeting, agenda, sbjCharacter, listener, parent
+            )
+        }
+
         super.execute()
     }
 

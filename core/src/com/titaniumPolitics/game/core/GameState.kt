@@ -500,6 +500,29 @@ class GameState {
         if (getMutuality(a, b) < ReadOnly.const("mutualityMin")) _mutuality[indexA][indexB] =
             ReadOnly.const("mutualityMin")
         _mutualityReasons[indexA][indexB] += "$time:$delta:$reasonKey\n"
+
+        //Generate information if the mutuality change was in the meeting.
+        //The impression is felt by all characters in the meeting.
+        ongoingMeetings.values.find { a in it.currentCharacters }?.let { meeting ->
+            Information(
+                author = null,
+                creationTime = time,
+                type = InformationType.MUTUALITY,
+                tgtTime = time,
+                tgtCharacter = a,
+                auxCharacter = b,
+                amount = getMutuality(a, b)
+                    .toInt() - (0..7).random(),
+                variables = hashMapOf(
+                    "delta" to delta
+                    //TODO: reason
+                )
+            ).also {
+                it.knownTo.addAll(meeting.currentCharacters)
+                addInformation(it)
+            }
+        }
+
     }
 
     fun getSignificantMutualityReasons(a: String, b: String): List<Pair<Double, String>> {

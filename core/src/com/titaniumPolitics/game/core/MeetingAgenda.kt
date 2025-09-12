@@ -14,7 +14,10 @@ data class MeetingAgenda(
 
 
 ) {
-    //Compute the effectivity of an information for this agenda for a character in the meeting.
+    /**
+     * Compute the effectivity of an information for this agenda for a character in the meeting.
+     * Unit: Mutuality
+     */
     fun effectivity(
         parent: GameState,
         meeting: Meeting,

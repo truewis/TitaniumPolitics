@@ -360,7 +360,7 @@ class Character : GameStateElement() {
         return .0
     }
 
-    /**The character's preference of this information spreading. -1 is hate, 0 is neutral, 1 is like.*/
+    /**The character's preference of this information spreading. -100 is hate, 0 is neutral, 100 is like.*/
     //TODO: preference depend on the trait of the character. When other characters use this function, the trait must be not reflected since they don't know the trait.
     fun infoPreference(info: Information): Double {
         var ret = .0
@@ -394,11 +394,6 @@ class Character : GameStateElement() {
                             ret = 1e-1
                     }
                 }
-            }
-
-            if (info.type == InformationType.MUTUALITY || info.type == InformationType.PARTY_MUTUALITY) {
-                //I like news that I like other people. I dislike news that I dislike other people.
-                ret = (info.amount / const("mutualityMax") - 0.5) * 1e-1
             }
 
         } else {
