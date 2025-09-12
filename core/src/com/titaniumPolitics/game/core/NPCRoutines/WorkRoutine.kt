@@ -163,28 +163,37 @@ class WorkRoutine(var workplace: String) : Routine() {
                             }
                                 .maxByOrNull { it.resources[res] }
                         if (resplace != null && place1.name != resplace.name && resplace.manager != name)
-                        //start new routine if there is a place with all the conditions met.
-                        //If the place with the resource has enough resource to supply apparatus for ten hours, and there is no existing transfer routine
-                            if (resplace.resources[res] > apparatus.hourlyOperationResource[res] * 10) {
-                                return AttendPrivateMeetingRoutine(
-                                    resplace.manager!!,
-                                    //To reduce the overhead, it is rational to transfer more resource than immediately needed if possible.
-                                    MeetingAgenda(
-                                        AgendaType.REQUEST, name, attachedRequest = Request(
-                                            OfficialResourceTransfer(
-                                                resplace.manager!!, resplace.name, place1.name, Resources(
-                                                    res to max(
-                                                        apparatus.hourlyOperationResource[res] * 10,
-                                                        resplace.resources[res] * 0.3
-                                                    )
-                                                ), gState
-                                            ),
-                                            issuedTo = hashSetOf(resplace.manager!!),
-                                            issuedBy = hashSetOf(name)
+                        //Check if there is a request already
+                            if (gState.requests.values.none {
+                                    !it.completed &&
+                                            name in it.issuedBy
+                                            && it.action.let {
+                                        it is OfficialResourceTransfer &&
+                                                it.toWhere == place1.name
+                                    }
+                                })
+                            //start new routine if there is a place with all the conditions met.
+                            //If the place with the resource has enough resource to supply apparatus for ten hours, and there is no existing transfer routine
+                                if (resplace.resources[res] > apparatus.hourlyOperationResource[res] * 10) {
+                                    return AttendPrivateMeetingRoutine(
+                                        resplace.manager!!,
+                                        //To reduce the overhead, it is rational to transfer more resource than immediately needed if possible.
+                                        MeetingAgenda(
+                                            AgendaType.REQUEST, name, attachedRequest = Request(
+                                                OfficialResourceTransfer(
+                                                    resplace.manager!!, resplace.name, place1.name, Resources(
+                                                        res to max(
+                                                            apparatus.hourlyOperationResource[res] * 10,
+                                                            resplace.resources[res] * 0.3
+                                                        )
+                                                    ), gState
+                                                ),
+                                                issuedTo = hashSetOf(resplace.manager!!),
+                                                issuedBy = hashSetOf(name)
+                                            )
                                         )
                                     )
-                                )
-                            }
+                                }
 
                     }
                 }
@@ -203,19 +212,28 @@ class WorkRoutine(var workplace: String) : Routine() {
                         } else
                         //Pick an engineer with the highest mutuality
                         {
-                            val engineer = gState.characters.values.filter {
+                            gState.characters.values.filter {
                                 "engineer" in it.trait && it.name != name
                             }.maxByOrNull { gState.getMutuality(name, it.name) }?.run {
-                                return AttendPrivateMeetingRoutine(
-                                    this.name,
-                                    MeetingAgenda(
-                                        AgendaType.REQUEST, name, attachedRequest = Request(
-                                            Repair(this.name, place1.name, apparatus.ID, gState),
-                                            issuedTo = hashSetOf(this.name),
-                                            issuedBy = hashSetOf(name)
+                                //Check if there is a request already
+                                if (gState.requests.values.none {
+                                        !it.completed &&
+                                                name in it.issuedBy
+                                                && it.action.let {
+                                            it is Repair &&
+                                                    it.apparatusID == apparatus.ID
+                                        }
+                                    })
+                                    return AttendPrivateMeetingRoutine(
+                                        this.name,
+                                        MeetingAgenda(
+                                            AgendaType.REQUEST, name, attachedRequest = Request(
+                                                Repair(this.name, place1.name, apparatus.ID, gState),
+                                                issuedTo = hashSetOf(this.name),
+                                                issuedBy = hashSetOf(name)
+                                            )
                                         )
                                     )
-                                )
                             }
 
                         }

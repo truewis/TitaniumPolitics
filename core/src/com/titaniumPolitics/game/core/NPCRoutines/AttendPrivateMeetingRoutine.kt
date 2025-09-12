@@ -203,25 +203,22 @@ class AttendPrivateMeetingRoutine(
 
             //Praise the friend.
             //Criticize the enemy. It is determined by individual mutuality.
-            val friend = gState.characters.maxBy { ch ->
+            gState.characters.filter { ch ->
                 gState.getMutuality(
                     name,
                     ch.key
-                )
-            }
-            if (gState.getMutuality(
-                    name,
-                    friend.key
                 ) > ReadOnly.const("FriendMutualityThreshold")
-            )
+            }.keys.randomOrNull()?.let { friend ->
                 NewAgenda(name, place, gState).also { action ->
                     action.agenda = MeetingAgenda(AgendaType.PRAISE, name).also {
-                        it.subjectParams["character"] = friend.key
+                        it.subjectParams["character"] = friend
                     }
                     if (action.isValid()) {
                         return action
                     }
                 }
+            }
+
             return null
         }
     }
