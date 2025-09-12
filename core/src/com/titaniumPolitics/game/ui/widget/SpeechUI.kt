@@ -1,5 +1,6 @@
 package com.titaniumPolitics.game.ui.widget
 
+import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.scenes.scene2d.actions.Actions
 import com.badlogic.gdx.scenes.scene2d.ui.Table
@@ -11,6 +12,7 @@ import com.titaniumPolitics.game.core.gameActions.AddInfo
 import com.titaniumPolitics.game.core.gameActions.EndSpeech
 import com.titaniumPolitics.game.core.gameActions.GameAction
 import com.titaniumPolitics.game.core.gameActions.NewAgenda
+import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
 import ktx.scene2d.KTable
@@ -19,10 +21,12 @@ import ktx.scene2d.container
 import ktx.scene2d.image
 import ktx.scene2d.scene2d
 import ktx.scene2d.stack
+import kotlin.coroutines.resume
+import kotlin.coroutines.suspendCoroutine
 
 class SpeechUI : Table(defaultSkin), KTable {
 
-    val onSpeechEnd = arrayListOf<() -> Unit>()
+    private val onSpeechEnd = arrayListOf<() -> Unit>()
     private val speech = TypingLabel("", defaultSkin, "description").apply {
         setFontScale(0.4f)
         color = Color.WHITE
@@ -56,61 +60,76 @@ class SpeechUI : Table(defaultSkin), KTable {
 
     }
 
+    /**
+     * Display speech from the engine thread.
+     */
     fun displaySpeech(action: GameAction) {
+        runBlocking {
+            bubble.isVisible = true
+            var text: String
+            when (action) {
+                is NewAgenda -> {
+                    when (action.agenda.type) {
+                        AgendaType.PROOF_OF_WORK -> text = ReadOnly.script("NewAgenda-ProofOfWork")
+                        AgendaType.NOMINATE -> text =
+                            ReadOnly.script("NewAgenda-Nominate").format(action.agenda.subjectParams["character"])
 
-        bubble.isVisible = true
-        var text: String
-        when (action) {
-            is NewAgenda -> {
-                when (action.agenda.type) {
-                    AgendaType.PROOF_OF_WORK -> text = ReadOnly.script("NewAgenda-ProofOfWork")
-                    AgendaType.NOMINATE -> text =
-                        ReadOnly.script("NewAgenda-Nominate").format(action.agenda.subjectParams["character"])
+                        AgendaType.REQUEST -> text = ReadOnly.script("NewAgenda-Request").format(
+                            ReadOnly.prop(
+                                action.agenda.attachedRequest!!
+                                    .action::class.simpleName!!
+                            ), action.agenda.attachedRequest!!.issuedTo.first()
+                        )
 
-                    AgendaType.REQUEST -> text = ReadOnly.script("NewAgenda-Request").format(
-                        ReadOnly.prop(
-                            action.agenda.attachedRequest!!
-                                .action::class.simpleName!!
-                        ), action.agenda.attachedRequest!!.issuedTo.first()
-                    )
+                        AgendaType.PRAISE -> text =
+                            ReadOnly.script("NewAgenda-Praise").format(action.agenda.subjectParams["character"])
 
-                    AgendaType.PRAISE -> text =
-                        ReadOnly.script("NewAgenda-Praise").format(action.agenda.subjectParams["character"])
+                        AgendaType.DENOUNCE -> text =
+                            ReadOnly.script("NewAgenda-Denounce").format(action.agenda.subjectParams["character"])
 
-                    AgendaType.DENOUNCE -> text =
-                        ReadOnly.script("NewAgenda-Denounce").format(action.agenda.subjectParams["character"])
+                        AgendaType.PRAISE_PARTY -> text =
+                            ReadOnly.script("NewAgenda-PraiseParty").format(action.agenda.subjectParams["party"])
 
-                    AgendaType.PRAISE_PARTY -> text =
-                        ReadOnly.script("NewAgenda-PraiseParty").format(action.agenda.subjectParams["party"])
+                        AgendaType.DENOUNCE_PARTY -> text =
+                            ReadOnly.script("NewAgenda-DenounceParty").format(action.agenda.subjectParams["party"])
 
-                    AgendaType.DENOUNCE_PARTY -> text =
-                        ReadOnly.script("NewAgenda-DenounceParty").format(action.agenda.subjectParams["party"])
+                        AgendaType.BUDGET_PROPOSAL -> text = ReadOnly.script("NewAgenda-BudgetProposal")
+                        AgendaType.BUDGET_RESOLUTION -> text = ReadOnly.script("NewAgenda-BudgetResolution")
+                        AgendaType.APPOINT_MEETING -> text =
+                            ReadOnly.script("NewAgenda-AppointMeeting")
 
-                    AgendaType.BUDGET_PROPOSAL -> text = ReadOnly.script("NewAgenda-BudgetProposal")
-                    AgendaType.BUDGET_RESOLUTION -> text = ReadOnly.script("NewAgenda-BudgetResolution")
-                    AgendaType.APPOINT_MEETING -> text =
-                        ReadOnly.script("NewAgenda-AppointMeeting")
+                        AgendaType.FIRE_MANAGER -> text =
+                            ReadOnly.script("NewAgenda-FireManager").format(action.agenda.subjectParams["character"])
+                    }
+                }
 
-                    AgendaType.FIRE_MANAGER -> text =
-                        ReadOnly.script("NewAgenda-FireManager").format(action.agenda.subjectParams["character"])
+                is AddInfo -> {
+                    text = ReadOnly.script(action.effectivityReason).format(action.agenda.subjectParams["character"])
+                }
+
+                is EndSpeech -> {
+                    text = ReadOnly.script("EndSpeech2").format(ReadOnly.charProp(action.nextSpeaker))
+                }
+
+                else -> {
+                    text = ReadOnly.script(action.javaClass.simpleName, action)
                 }
             }
+            println("Displaying speech: $text")
+            speech.restart(text)
+            suspendCoroutine { continuation ->
+                onSpeechEnd +=
+                    {
+                        try {
+                            continuation.resume(Unit)
+                        } catch (e: IllegalStateException) {
+                            // This can happen if the coroutine was already resumed.
+                            println("Continuation was already resumed!")
+                        }
+                    }
 
-            is AddInfo -> {
-                text = ReadOnly.script(action.effectivityReason).format(action.agenda.subjectParams["character"])
-            }
-
-            is EndSpeech -> {
-                text = ReadOnly.script("EndSpeech2").format(ReadOnly.charProp(action.nextSpeaker))
-            }
-
-            else -> {
-                text = ReadOnly.script(action.javaClass.simpleName, action)
             }
         }
-        println("Displaying speech: $text")
-        speech.restart(text)
-
     }
 
     val bubble = scene2d.stack {
