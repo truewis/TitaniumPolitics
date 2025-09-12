@@ -106,6 +106,7 @@ class MeetingUI(var gameState: GameState) : Table(defaultSkin), KTable {
                     )
                     suspendCoroutine { continuation ->
                         Gdx.app.postRunnable {
+                            refresh(gameState.player.currentMeeting!!)
                             startAnimation()
                             onAnimationEnd =
                                 {
