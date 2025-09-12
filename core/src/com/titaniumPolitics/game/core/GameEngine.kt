@@ -654,7 +654,7 @@ class GameEngine(val gameState: GameState) {
 
         with(gameState) {
             scheduledMeetings.filter {
-                it.value.time + ReadOnly.constInt("MeetingStartTolerance") < time && !missedMeetings.contains(
+                it.value.time + constInt("MeetingStartTolerance") < time && !missedMeetings.contains(
                     it.key
                 )
             }.forEach {
@@ -833,7 +833,7 @@ class GameEngine(val gameState: GameState) {
             exitProcess(0)
         }
 
-        if (gameState.time % (ReadOnly.constInt("lengthOfDay") * ReadOnly.constInt("quarterInDays")) == 0) { //Every 15 days, reset the budget.
+        if (gameState.time % (constInt("lengthOfDay") * constInt("quarterInDays")) == 0) { //Every 15 days, reset the budget.
             gameState.parties.values.forEach {
                 it.isBudgetProposed = false
                 it.isBudgetResolved = false
@@ -851,7 +851,7 @@ class GameEngine(val gameState: GameState) {
                 party.isSalaryPaid = false
             }
         }
-        if (gameState.time % ReadOnly.constInt("lengthOfDay") == 0) { //Every day, we used to inform the infrastructure minister about total resource.
+        if (gameState.time % constInt("lengthOfDay") == 0) { //Every day, we used to inform the infrastructure minister about total resource.
 //            val infraName = gameState.parties.values.find { it.name == "infrastructure" }!!.leader
 //            if (infraName != "")
 //            {
@@ -979,7 +979,19 @@ class GameEngine(val gameState: GameState) {
                 }
                 val subject = conf.type
                 when (subject) {
-                    Meeting.MeetingType.TALK -> {}
+                    Meeting.MeetingType.TALK -> {
+                        if (gameState.places.values.any {
+                                it.workplaceParty?.leader == character
+                            })
+                            actions.add("HireManager")
+                        if (gameState.parties.values.any {
+                                it.type == Party.Type.DIVISION
+                                        && it.leader == character
+
+                            })
+                            actions.add("HireDirector")
+                    }
+
                     Meeting.MeetingType.DIVISION_LEADER_ELECTION -> {
                         if (character == "ctrler")
                             actions.add("FinishNomination") //Only the controller can finish the nomination.
@@ -1036,7 +1048,7 @@ class GameEngine(val gameState: GameState) {
                 actions.add("Sleep")
                 actions.add("Eat")
                 actions.add("PrepareInfo")
-                if (gameState.characters[character]!!.will < ReadOnly.const("CriticalWill"))
+                if (gameState.characters[character]!!.will < const("CriticalWill"))
                     actions.add("Suicide")
             }
 

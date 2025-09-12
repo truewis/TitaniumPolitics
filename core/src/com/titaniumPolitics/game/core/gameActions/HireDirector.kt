@@ -23,6 +23,14 @@ data class HireDirector(override val sbjCharacter: String, override val tgtPlace
         parent.places[workplace]?.workplaceParty!!.changeLeader(newHire!!)
         if (sbjCharObj.division == parent.player.division)
             parent.knownCharactersToPlayer += newHire!! //If hired into the player's division, add the employee to known characters.
+        if (parent.characters[newHire]!!.type == Character.Type.EMPLOYEE) {
+            //Remove from their former jobs
+            parent.places.filter { (_, value) ->
+                value.workplaceParty?.members?.contains(newHire) == true
+            }.forEach { (_, value) ->
+                value.workplaceParty?.changeLeader(newHire!!)
+            }
+        }
         parent.characters[newHire]!!.type = Character.Type.DIRECTOR //Switch type. Will this prevent bug?
     }
 
@@ -54,7 +62,7 @@ data class HireDirector(override val sbjCharacter: String, override val tgtPlace
     }
 
     fun availableEmployees(): List<String> {
-        return tgtPlaceObj.characters.filter {
+        return sbjCharObj.currentMeeting!!.currentCharacters.filter {
             //Cannot be anonymous.
             if (parent.characters[it]!!.type == Character.Type.ANON) {
                 return@filter false
