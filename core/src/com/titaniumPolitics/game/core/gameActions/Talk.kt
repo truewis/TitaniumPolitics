@@ -4,6 +4,7 @@ import com.titaniumPolitics.game.core.Character
 import com.titaniumPolitics.game.core.GameEngine
 import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.core.Meeting
+import com.titaniumPolitics.game.core.MutualityMatrix
 import com.titaniumPolitics.game.core.ReadOnly
 import com.titaniumPolitics.game.debugTools.Logger
 import kotlinx.serialization.Serializable
@@ -55,6 +56,15 @@ data class Talk(
             parent.characters[who]!!.currentMeeting!!.currentCharacters.add(sbjCharacter)
             super.execute()
         }
+        //Only add to known characters if directly talking to the player.
+        if (who == parent.playerName) {
+            parent.knownCharactersToPlayer += sbjCharacter
+        }
+    }
+
+    override fun deltaWill(): MutualityMatrix {
+        val w = MutualityMatrix()
+
         //The person's mutuality toward the subject character decreases.
         //But only if who doesn't like the subject character and the subject character is not the boss of who.
         if (parent.getMutNorm(
@@ -62,16 +72,13 @@ data class Talk(
                 sbjCharacter
             ) < 0 && parent.parties.none { who in it.value.members && it.value.leader == sbjCharacter }
         )
-            parent.setMutuality(
+            w.addMutuality(
                 who,
                 sbjCharacter,
                 -ReadOnly.const("talkMutualityDecrease") * parent.characters[who]!!.stats.pScale,
                 "TalkWithoutNotice"
             )
-        //Only add to known characters if directly talking to the player.
-        if (who == parent.playerName) {
-            parent.knownCharactersToPlayer += sbjCharacter
-        }
+        return w
     }
 
     override fun isValid(): Boolean {

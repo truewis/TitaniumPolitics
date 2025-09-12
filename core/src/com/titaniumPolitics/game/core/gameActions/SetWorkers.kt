@@ -48,10 +48,6 @@ data class SetWorkers(
         return parent.getApparatusPlace(apparatusID).manager == sbjCharacter
     }
 
-    override fun deltaWill(): Double {
-        return super.deltaWill() * sbjCharObj.stats.pScale
-    }
-
 
     override fun isProofOfWork(info: Information): Boolean {
         return super.isProofOfWork(info) || (info.action is SetWorkers && (info.action as SetWorkers).let {

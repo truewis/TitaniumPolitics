@@ -1,6 +1,7 @@
 package com.titaniumPolitics.game.core.gameActions
 
 import com.titaniumPolitics.game.core.GameState
+import com.titaniumPolitics.game.core.MutualityMatrix
 import com.titaniumPolitics.game.core.ReadOnly
 import kotlinx.serialization.Serializable
 
@@ -21,23 +22,23 @@ data class Wait(override val sbjCharacter: String, override val tgtPlace: String
 
     }
 
-    override fun deltaWill(): Double {
-        val ret = super.deltaWill()
+    override fun deltaWill(): MutualityMatrix {
+        val ret = MutualityMatrix()
         // If in one of the public places, the will is increased.
         if (tgtPlace in listOf("market", "squareSouth", "squareNorth")) {
             // Unless the character has trait "agoraphobia", in which case the will is decreased.
             if ("agoraphobia" in sbjCharObj.trait) {
-                parent.setMutuality(sbjCharacter, delta = -expectedDuration * 0.5, reasonKey = "PublicPlaceAgoraphobia")
+                ret.addWill(sbjCharacter, -expectedDuration * 0.5, "PublicPlaceAgoraphobia")
             } else {
-                parent.setMutuality(sbjCharacter, delta = +expectedDuration * 1.0, reasonKey = "PublicPlace")
+                ret.addWill(sbjCharacter, delta = +expectedDuration * 1.0, reasonKey = "PublicPlace")
             }
         }
         // If in one of the remote places, the will is increased.
         else if (tgtPlace in listOf("reservoirEast", "reservoirWest", "observatory", "cemetery", "spaceport")) {
             if ("introvert" in sbjCharObj.trait) {
-                parent.setMutuality(sbjCharacter, delta = expectedDuration * 1.5, reasonKey = "RemotePlaceIntrovert")
+                ret.addWill(sbjCharacter, delta = expectedDuration * 1.5, reasonKey = "RemotePlaceIntrovert")
             } else {
-                parent.setMutuality(sbjCharacter, delta = expectedDuration * 1.0, reasonKey = "RemotePlace")
+                ret.addWill(sbjCharacter, delta = expectedDuration * 1.0, reasonKey = "RemotePlace")
             }
 
         }

@@ -47,10 +47,6 @@ data class SetWorkHours(
         return tgtPlaceObj.manager == sbjCharacter
     }
 
-    override fun deltaWill(): Double {
-        return super.deltaWill() * sbjCharObj.stats.pScale
-    }
-
     override fun isProofOfWork(info: Information): Boolean {
         return super.isProofOfWork(info) || (info.action is SetWorkHours && (info.action as SetWorkHours).let {
             it.start == this.start && it.end == this.end && it.tgtPlace == this.tgtPlace

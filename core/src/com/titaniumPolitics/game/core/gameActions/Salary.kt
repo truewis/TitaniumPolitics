@@ -1,6 +1,7 @@
 package com.titaniumPolitics.game.core.gameActions
 
 import com.titaniumPolitics.game.core.GameState
+import com.titaniumPolitics.game.core.MutualityMatrix
 import com.titaniumPolitics.game.core.Party
 import com.titaniumPolitics.game.core.ReadOnly
 import com.titaniumPolitics.game.core.Resources
@@ -68,12 +69,7 @@ data class Salary(override val sbjCharacter: String, override val tgtPlace: Stri
             charObj.resources += standardRate * multiplyer
             //Opinion of the leader of the party increases.
 
-            parent.setMutuality(
-                character,
-                party.leader!!,
-                ReadOnly.const("salaryMutualityIncrease"),
-                "SalaryLeaderTrustIncrease"
-            )
+
         }
         //Party integrity increases
         parent.setPartyMutuality(
@@ -86,6 +82,20 @@ data class Salary(override val sbjCharacter: String, override val tgtPlace: Stri
             true//Even if some members are not paid, the salary is considered paid, and cannot be paid again this quarter.
         super.execute()
 
+    }
+
+    override fun deltaWill(): MutualityMatrix {
+        val ret = super.deltaWill()
+
+        who.forEach { character ->
+            ret.addMutuality(
+                character,
+                party.leader!!,
+                ReadOnly.const("salaryMutualityIncrease"),
+                "SalaryLeaderTrustIncrease"
+            )
+        }
+        return ret
     }
 
     override fun isValid(): Boolean {

@@ -1,6 +1,7 @@
 package com.titaniumPolitics.game.core.gameActions
 
 import com.titaniumPolitics.game.core.GameState
+import com.titaniumPolitics.game.core.MutualityMatrix
 import com.titaniumPolitics.game.debugTools.Logger
 import kotlinx.serialization.Serializable
 
@@ -26,11 +27,10 @@ data class BuyDrink(override val sbjCharacter: String, override val tgtPlace: St
         )
     }
 
-    override fun deltaWill(): Double {
-        var w = super.deltaWill()
-        w += 10
-        if (sbjCharObj.trait.contains("gourmand"))
-            w += 5
+    override fun deltaWill(): MutualityMatrix {
+        val w = MutualityMatrix()
+        val amount = if (sbjCharObj.trait.contains("gourmand")) 15.0 else 10.0
+        w.addWill(sbjCharacter, amount, "BuyDrink")
         return w
     }
 

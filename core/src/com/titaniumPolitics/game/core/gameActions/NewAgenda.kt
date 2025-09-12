@@ -20,7 +20,6 @@ data class NewAgenda(override val sbjCharacter: String, override val tgtPlace: S
     override fun execute() {
         val meeting = parent.characters[sbjCharacter]!!.currentMeeting!!
         meeting.agendas.add(agenda)
-        val effectivity = meeting.currentAttention / 100.0 * sbjCharObj.will / ReadOnly.const("mutualityMax")
 
         //Attention is consumed.
         meeting.currentAttention = max(
@@ -28,12 +27,7 @@ data class NewAgenda(override val sbjCharacter: String, override val tgtPlace: S
             0
         )
         super.execute()
-        //affect mutuality based on the agenda.
-        parent.setMutuality(sbjCharacter, sbjCharacter, deltaWill(), "newAgenda")
         agendaOneShotEffect(meeting, agenda, sbjCharacter, parent)
-        meeting.currentCharacters.filter { it != sbjCharacter }.forEach { listener ->
-            affectListenerMutuality(effectivity, meeting, agenda, sbjCharacter, listener, parent)
-        }
     }
 
 
@@ -146,48 +140,68 @@ data class NewAgenda(override val sbjCharacter: String, override val tgtPlace: S
         return false
     }
 
-    override fun deltaWill(): Double {
-        val mt = parent.characters[sbjCharacter]!!.currentMeeting!!
+    override fun deltaWill(): MutualityMatrix {
+        val meeting = parent.characters[sbjCharacter]!!.currentMeeting!!
+        val w = MutualityMatrix()
         when (agenda.type) {
-            AgendaType.PRAISE -> return parent.getMutNorm(
-                sbjCharacter,
-                agenda.subjectParams["character"]!!
-            ) * 5.0 * sbjCharObj.stats.eScale
+            AgendaType.PRAISE -> w.addWill(
+                sbjCharacter, parent.getMutNorm(
+                    sbjCharacter,
+                    agenda.subjectParams["character"]!!
+                ) * 5.0 * sbjCharObj.stats.eScale, ""
+            )
 
-            AgendaType.DENOUNCE -> return parent.getMutNorm(
-                sbjCharacter,
-                agenda.subjectParams["character"]!!
-            ) * -7.0 * sbjCharObj.stats.pScale
+            AgendaType.DENOUNCE -> w.addWill(
+                sbjCharacter, parent.getMutNorm(
+                    sbjCharacter,
+                    agenda.subjectParams["character"]!!
+                ) * -7.0 * sbjCharObj.stats.pScale, ""
+            )
 
-            AgendaType.NOMINATE -> return parent.getMutNorm(
-                sbjCharacter,
-                agenda.subjectParams["character"]!!
-            ) * 20.0 * sbjCharObj.stats.pScale
+            AgendaType.NOMINATE -> w.addWill(
+                sbjCharacter, parent.getMutNorm(
+                    sbjCharacter,
+                    agenda.subjectParams["character"]!!
+                ) * 20.0 * sbjCharObj.stats.pScale, ""
+            )
 
-            AgendaType.PRAISE_PARTY -> return parent.getPartyMutNorm(
-                mt.involvedParty,
-                agenda.subjectParams["party"]!!
-            ) * 3.0 * sbjCharObj.stats.eScale
+            AgendaType.PRAISE_PARTY -> w.addWill(
+                sbjCharacter, parent.getPartyMutNorm(
+                    meeting.involvedParty,
+                    agenda.subjectParams["party"]!!
+                ) * 3.0 * sbjCharObj.stats.eScale, ""
+            )
 
-            AgendaType.DENOUNCE_PARTY -> return parent.getPartyMutNorm(
-                mt.involvedParty,
-                agenda.subjectParams["party"]!!
-            ) * -5.0 * sbjCharObj.stats.pScale
+            AgendaType.DENOUNCE_PARTY -> w.addWill(
+                sbjCharacter, parent.getPartyMutNorm(
+                    meeting.involvedParty,
+                    agenda.subjectParams["party"]!!
+                ) * -5.0 * sbjCharObj.stats.pScale, ""
+            )
 
-            AgendaType.FIRE_MANAGER -> return parent.getMutNorm(
-                sbjCharacter,
-                agenda.subjectParams["character"]!!
-            ) * 10.0 * (sbjCharObj.stats.pScale) - 20.0 * sbjCharObj.stats.eScale //With high ethos, you feel compassion for the fired manager. With high pathos, you feel good about firing the manager you dislike.
+            AgendaType.FIRE_MANAGER -> w.addWill(
+                sbjCharacter, parent.getMutNorm(
+                    sbjCharacter,
+                    agenda.subjectParams["character"]!!
+                ) * 10.0 * (sbjCharObj.stats.pScale) - 20.0 * sbjCharObj.stats.eScale //With high ethos, you feel compassion for the fired manager. With high pathos, you feel good about firing the manager you dislike.
+                , ""
+            )
 
-            else -> return .0
+            else -> {}
         }
+
+        val effectivity = meeting.currentAttention / 100.0 * sbjCharObj.will / ReadOnly.const("mutualityMax")
+        meeting.currentCharacters.filter { it != sbjCharacter }.forEach { listener ->
+            affectListenerMutuality(effectivity, w, agenda, sbjCharacter, listener, parent)
+        }
+        return w
     }
 
     companion object {
 
         fun affectListenerMutuality(
             effectivity: Double,
-            meeting: Meeting,
+            w: MutualityMatrix,
             agenda: MeetingAgenda,
             sbjCharacter: String,
             listener: String,
@@ -197,7 +211,7 @@ data class NewAgenda(override val sbjCharacter: String, override val tgtPlace: S
                 PROOF_OF_WORK -> TODO()
                 NOMINATE -> {
                     if (agenda.subjectParams["character"]!! == listener) {
-                        parent.setMutuality(
+                        w.addMutuality(
                             agenda.subjectParams["character"]!!,
                             sbjCharacter,
                             20.0 * effectivity,
@@ -209,21 +223,21 @@ data class NewAgenda(override val sbjCharacter: String, override val tgtPlace: S
                 REQUEST -> TODO()
                 PRAISE -> {
                     if (agenda.subjectParams["character"]!! == listener) {
-                        parent.setMutuality(
+                        w.addMutuality(
                             agenda.subjectParams["character"]!!,
                             sbjCharacter,
                             5.0 * effectivity,
                             "Praise;$sbjCharacter"
                         )
                     }
-                    parent.setMutuality(
+                    w.addMutuality(
                         listener,
                         agenda.subjectParams["character"]!!,
                         1.0 * effectivity,
                         "PraiseByWitness;$sbjCharacter"
                     )
                     //Affect mutuality with the praiser based on how much the listener likes the praised.
-                    parent.setMutuality(
+                    w.addMutuality(
                         listener,
                         sbjCharacter,
                         1.0 * effectivity * parent.getMutNorm(listener, agenda.subjectParams["character"]!!),
@@ -233,21 +247,21 @@ data class NewAgenda(override val sbjCharacter: String, override val tgtPlace: S
 
                 DENOUNCE -> {
                     if (agenda.subjectParams["character"]!! == listener) {
-                        parent.setMutuality(
+                        w.addMutuality(
                             agenda.subjectParams["character"]!!,
                             sbjCharacter,
                             -7.0 * effectivity,
                             "Denounce;$sbjCharacter"
                         )
                     }
-                    parent.setMutuality(
+                    w.addMutuality(
                         listener,
                         agenda.subjectParams["character"]!!,
                         -2.0 * effectivity,
                         "DenounceByWitness;$sbjCharacter"
                     )
                     //Affect mutuality with the denouncer based on how much the listener likes the denounced.
-                    parent.setMutuality(
+                    w.addMutuality(
                         listener,
                         sbjCharacter,
                         -2.0 * effectivity * parent.getMutNorm(listener, agenda.subjectParams["character"]!!),
@@ -262,7 +276,7 @@ data class NewAgenda(override val sbjCharacter: String, override val tgtPlace: S
                 APPOINT_MEETING -> TODO()
                 FIRE_MANAGER -> {
                     if (agenda.subjectParams["character"] == listener) {
-                        parent.setMutuality(
+                        w.addMutuality(
                             agenda.subjectParams["character"]!!,
                             sbjCharacter,
                             -20.0 * effectivity,

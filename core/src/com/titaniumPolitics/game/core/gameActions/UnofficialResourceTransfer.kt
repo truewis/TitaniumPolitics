@@ -2,6 +2,7 @@ package com.titaniumPolitics.game.core.gameActions
 
 import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.core.Information
+import com.titaniumPolitics.game.core.MutualityMatrix
 import com.titaniumPolitics.game.core.Place
 import com.titaniumPolitics.game.core.Resources
 import kotlinx.serialization.Serializable
@@ -52,20 +53,25 @@ data class UnofficialResourceTransfer(
                 throw Exception("Not enough resources: $tgtPlace, ${parent.places[tgtPlace]!!.resources["water"]}")
             }
         }
+        super.execute()
+
+    }
+
+    override fun deltaWill(): MutualityMatrix {
+        val w = MutualityMatrix()
         //If you have sent someone resources
         if (toWhere.contains("home"))
         //The mutuality from the recipient increases.
             Place.whoseHome(toWhere)
                 ?.also {
-                    parent.setMutuality(
+                    w.addMutuality(
                         it,
                         sbjCharacter,
                         parent.characters[it]!!.itemValue(resources),
                         "UnofficialResourceTransfer"
                     )
                 }
-        super.execute()
-
+        return w
     }
 
     override fun isValid(): Boolean {

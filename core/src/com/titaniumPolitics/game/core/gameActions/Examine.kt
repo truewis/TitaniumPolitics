@@ -141,12 +141,6 @@ data class Examine(override val sbjCharacter: String, override val tgtPlace: Str
         return true
     }
 
-    override fun deltaWill(): Double {
-        var w = super.deltaWill()
-        if (parent.characters[sbjCharacter]!!.trait.contains("investigator"))
-            w += 10
-        return w * sbjCharObj.stats.lScale
-    }
 
     override fun isProofOfWork(info: Information): Boolean {
         return super.isProofOfWork(info) || (info.action is Examine && (info.action as Examine).let {

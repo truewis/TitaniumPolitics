@@ -1,6 +1,7 @@
 package com.titaniumPolitics.game.core.gameActions
 
 import com.titaniumPolitics.game.core.GameState
+import com.titaniumPolitics.game.core.MutualityMatrix
 import com.titaniumPolitics.game.core.ReadOnly
 import kotlinx.serialization.Serializable
 
@@ -16,14 +17,6 @@ data class Intercept(override val sbjCharacter: String, override val tgtPlace: S
 
         //The amount of attention gained can be modified here.
         meeting.currentAttention += 20
-
-        //Mutuality decreases before changing speaker.
-        parent.setMutuality(
-            meeting.currentSpeaker!!,
-            sbjCharacter,
-            -ReadOnly.const("InterceptSpeakerMutualityDecrease") * parent.characters[meeting.currentSpeaker!!]!!.stats.pScale,
-            reasonKey = "Intercept"
-        )
         meeting.currentSpeaker = sbjCharacter
 
 
@@ -39,13 +32,30 @@ data class Intercept(override val sbjCharacter: String, override val tgtPlace: S
         )
     }
 
-    override fun deltaWill(): Double {
+    override fun deltaWill(): MutualityMatrix {
         val meeting = parent.characters[sbjCharacter]!!.currentMeeting!!
         val factor = if (parent.characters[sbjCharacter]!!.trait.contains("provoker")) -15 else -10
-        return super.deltaWill() + parent.getMutNorm(
-            sbjCharacter,
-            meeting.currentSpeaker
-        ) * factor * sbjCharObj.stats.pScale
+        return MutualityMatrix().apply {
+            this.addWill(
+                sbjCharacter,
+                parent.getMutuality(
+                    sbjCharacter,
+                    meeting.currentSpeaker!!
+                ) * factor * sbjCharObj.stats.pScale, "InterceptWill"
+            )
+
+            //Mutuality decreases before changing speaker.
+            this.addMutuality(
+                meeting.currentSpeaker!!,
+                sbjCharacter,
+                parent.getMutuality(
+                    meeting.currentSpeaker!!,
+                    sbjCharacter
+                ) * factor * parent.characters[meeting.currentSpeaker!!]!!.stats.pScale, "Intercept"
+            )
+
+        }
+
     }
 
 

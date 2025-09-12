@@ -19,8 +19,4 @@ data class ClearAccidentScene(override val sbjCharacter: String, override val tg
         return parent.places[tgtPlace]!!.isAccidentScene
     }
 
-    override fun deltaWill(): Double {
-        return super.deltaWill() * sbjCharObj.stats.eScale
-    }
-
 }

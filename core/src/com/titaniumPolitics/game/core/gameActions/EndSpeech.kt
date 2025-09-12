@@ -1,6 +1,7 @@
 package com.titaniumPolitics.game.core.gameActions
 
 import com.titaniumPolitics.game.core.GameState
+import com.titaniumPolitics.game.core.MutualityMatrix
 import com.titaniumPolitics.game.debugTools.Logger
 import kotlinx.serialization.Serializable
 
@@ -34,8 +35,10 @@ data class EndSpeech(override val sbjCharacter: String, override val tgtPlace: S
         return meeting.currentSpeaker == sbjCharacter && nextSpeaker != sbjCharacter
     }
 
-    override fun deltaWill(): Double {
-        return parent.getMutuality(sbjCharacter, nextSpeaker) * 0.1 * sbjCharObj.stats.pScale
+    override fun deltaWill(): MutualityMatrix {
+        val w = MutualityMatrix()
+        w.addWill(sbjCharacter, parent.getMutuality(sbjCharacter, nextSpeaker) * 0.1 * sbjCharObj.stats.pScale, "")
+        return w
     }
 
 

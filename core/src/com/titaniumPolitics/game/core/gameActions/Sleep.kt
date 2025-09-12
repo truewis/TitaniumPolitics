@@ -3,6 +3,7 @@ package com.titaniumPolitics.game.core.gameActions
 import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.core.Information
 import com.titaniumPolitics.game.core.InformationType
+import com.titaniumPolitics.game.core.MutualityMatrix
 import com.titaniumPolitics.game.core.ReadOnly
 import com.titaniumPolitics.game.debugTools.Logger
 import kotlinx.serialization.Serializable
@@ -28,16 +29,18 @@ data class Sleep(override val sbjCharacter: String, override val tgtPlace: Strin
         return tgtPlace == "home_$sbjCharacter"
     }
 
-    override fun deltaWill(): Double {
-        var w = super.deltaWill()
+    override fun deltaWill(): MutualityMatrix {
+        var amount = 0.0
         if (parent.characters[sbjCharacter]!!.health < ReadOnly.const("CriticalHealth"))
-            w += 10
+            amount += 10
         if (parent.characters[sbjCharacter]!!.trait.contains("old"))
-            w += 5
+            amount += 5
         if (sbjCharObj.hunger > 50)
-            w -= 5
+            amount -= 5
         if (sbjCharObj.thirst > 50)
-            w -= 5
+            amount -= 5
+        val w = MutualityMatrix()
+        w.addWill(sbjCharacter, amount, "Sleep")
         return w
     }
 

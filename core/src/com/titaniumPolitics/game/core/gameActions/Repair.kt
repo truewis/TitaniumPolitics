@@ -3,7 +3,6 @@ package com.titaniumPolitics.game.core.gameActions
 import com.titaniumPolitics.game.core.Apparatus
 import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.core.Information
-import com.titaniumPolitics.game.debugTools.Logger
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -42,10 +41,6 @@ data class Repair(override val sbjCharacter: String, override val tgtPlace: Stri
         } catch (e: Exception) {
             return false
         }
-    }
-
-    override fun deltaWill(): Double {
-        return super.deltaWill() * sbjCharObj.stats.lScale
     }
 
     override fun isProofOfWork(info: Information): Boolean {

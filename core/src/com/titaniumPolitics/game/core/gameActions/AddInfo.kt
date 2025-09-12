@@ -4,6 +4,7 @@ import com.badlogic.gdx.math.MathUtils.clamp
 import com.titaniumPolitics.game.core.AgendaType
 import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.core.InformationType
+import com.titaniumPolitics.game.core.MutualityMatrix
 import com.titaniumPolitics.game.core.ReadOnly
 import kotlinx.serialization.Serializable
 
@@ -43,18 +44,18 @@ data class AddInfo(
      * If the information has a direct mutuality effect, apply it here.
      * For example, hearing the information of praising or denouncing someone directly affects mutuality with both the subject and the object of the praise/denouncement.
      */
-    fun directMutualityChange(listener: String) {
+    fun directMutualityChange(w: MutualityMatrix, listener: String) {
         if (info.type == InformationType.ACTION && info.action is NewAgenda) {
             val na = info.action as NewAgenda
             if (na.agenda.type == AgendaType.PRAISE) {
                 val praised = na.agenda.subjectParams["character"]!!
-                parent.setMutuality(
+                w.addMutuality(
                     listener,
                     na.sbjCharacter,
                     parent.getMutNorm(listener, praised) * 5,
                     "AddInfo-Praise"
                 )
-                parent.setMutuality(
+                w.addMutuality(
                     listener,
                     praised,
                     parent.getMutNorm(listener, na.sbjCharacter) * 5,
@@ -64,13 +65,13 @@ data class AddInfo(
             }
             if (na.agenda.type == AgendaType.DENOUNCE) {
                 val denounced = na.agenda.subjectParams["character"]!!
-                parent.setMutuality(
+                w.addMutuality(
                     listener,
                     na.sbjCharacter,
                     -parent.getMutNorm(listener, denounced) * 5,
                     "AddInfo-Denounce"
                 )
-                parent.setMutuality(
+                w.addMutuality(
                     listener,
                     denounced,
                     -parent.getMutNorm(listener, na.sbjCharacter) * 5,
@@ -93,21 +94,25 @@ data class AddInfo(
             meeting.currentAttention + (10 * effectivity * newsDegree * sbjCharObj.will / ReadOnly.const("mutualityMax")).toInt() - 20,
             0, 100
         )
+        parent.informations[infoKey]!!.knownTo.addAll(meeting.currentCharacters)
+        super.execute()
+    }
+
+    override fun deltaWill(): MutualityMatrix {
+        val w = MutualityMatrix()
+        val effectivity = effectivity()
+        //affect relation with the agenda author
+        w.addMutuality(agenda.author, sbjCharacter, effectivity, "AddInfo")
         //The information is known to the characters in the meeting.
         val newsCharacters = meeting.currentCharacters - info.knownTo
-        parent.informations[infoKey]!!.knownTo.addAll(meeting.currentCharacters)
-        //affect relation with the agenda author
-        parent.setMutuality(agenda.author, sbjCharacter, effectivity, "AddInfo")
-
         //Direct mutuality change caused by the information, if any.
         newsCharacters.forEach { listener ->
-            directMutualityChange(listener)
+            directMutualityChange(w, listener)
             NewAgenda.affectListenerMutuality(
-                effectivity, meeting, agenda, sbjCharacter, listener, parent
+                effectivity, w, agenda, sbjCharacter, listener, parent
             )
         }
-
-        super.execute()
+        return w
     }
 
     override fun isValid(): Boolean {
