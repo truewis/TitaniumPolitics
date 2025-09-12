@@ -224,10 +224,8 @@ class GameEngine(val gameState: GameState) {
         }
         if (action.sbjCharacter != gameState.playerName)
             onBeforeNonPlayerCharacterAction.forEach { it(action) }
-        action.deltaWill().forEach { (A, it) ->
-            it.forEach { (B, delta) ->
-                gameState.setMutuality(A, B, delta = delta.first, delta.second)
-            }
+        action.deltaWill().forEach {
+            gameState.setMutuality(it.a, it.b, delta = it.value, reasonKey = it.reasonKey)
         }
         action.execute()
 

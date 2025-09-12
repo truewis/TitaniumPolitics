@@ -187,6 +187,16 @@ data class NewAgenda(override val sbjCharacter: String, override val tgtPlace: S
                 , ""
             )
 
+            //With high pathos, you don't want to show weakness by requesting things.
+            //With high ethos, you feel better about requesting things from people you like.
+            AgendaType.REQUEST -> w.addWill(
+                sbjCharacter, -10.0 * sbjCharObj.stats.pScale
+                        + 10 * sbjCharObj.stats.eScale * parent.getMutNorm(
+                    sbjCharacter,
+                    (agenda.attachedRequest!!.issuedTo).first()
+                ), ""
+            )
+
             else -> {}
         }
 
@@ -208,7 +218,10 @@ data class NewAgenda(override val sbjCharacter: String, override val tgtPlace: S
             parent: GameState
         ) {
             when (agenda.type) {
-                PROOF_OF_WORK -> TODO()
+                PROOF_OF_WORK -> {
+
+                }
+
                 NOMINATE -> {
                     if (agenda.subjectParams["character"]!! == listener) {
                         w.addMutuality(
@@ -220,7 +233,10 @@ data class NewAgenda(override val sbjCharacter: String, override val tgtPlace: S
                     }
                 }
 
-                REQUEST -> TODO()
+                REQUEST -> {
+
+                }
+
                 PRAISE -> {
                     if (agenda.subjectParams["character"]!! == listener) {
                         w.addMutuality(
@@ -269,11 +285,25 @@ data class NewAgenda(override val sbjCharacter: String, override val tgtPlace: S
                     )
                 }
 
-                PRAISE_PARTY -> TODO()
-                DENOUNCE_PARTY -> TODO()
-                BUDGET_PROPOSAL -> TODO()
-                BUDGET_RESOLUTION -> TODO()
-                APPOINT_MEETING -> TODO()
+                PRAISE_PARTY -> {
+                }
+
+                DENOUNCE_PARTY -> {
+
+                }
+
+                BUDGET_PROPOSAL -> {
+
+                }
+
+                BUDGET_RESOLUTION -> {
+
+                }
+
+                APPOINT_MEETING -> {
+
+                }
+
                 FIRE_MANAGER -> {
                     if (agenda.subjectParams["character"] == listener) {
                         w.addMutuality(
