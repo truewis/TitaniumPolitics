@@ -115,13 +115,16 @@ class SpeechUI : Table(defaultSkin), KTable {
                     text = ReadOnly.script(action.javaClass.simpleName, action)
                 }
             }
-            println("Displaying speech: $text")
-            speech.restart(text)
+            Gdx.app.postRunnable {
+                println("Displaying speech: $text")
+                speech.restart(text)
+            }
             suspendCoroutine { continuation ->
                 onSpeechEnd +=
                     {
                         try {
                             continuation.resume(Unit)
+                            println("Continuation resumed.")
                         } catch (e: IllegalStateException) {
                             // This can happen if the coroutine was already resumed.
                             println("Continuation was already resumed!")

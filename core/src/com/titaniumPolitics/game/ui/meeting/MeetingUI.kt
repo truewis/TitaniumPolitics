@@ -43,21 +43,18 @@ class MeetingUI(var gameState: GameState) : Table(defaultSkin), KTable {
     fun flushAnimation() {
         runBlocking {
             suspendCoroutine { continuation ->
-                Gdx.app.postRunnable {
-                    if (animationQueue.isNotEmpty()) {
-                        refresh(gameState.player.currentMeeting!!)
-                        addAction(animationQueue.removeFirst())
-                    }
-                    onAnimationEnd =
-                        {
-                            try {
-                                continuation.resume(Unit)
-                            } catch (e: IllegalStateException) {
-                                // This can happen if the coroutine was already resumed.
-                                println("Continuation was already resumed!")
-                            }
-                        }
+                if (animationQueue.isNotEmpty()) {
+                    addAction(animationQueue.removeFirst())
                 }
+                onAnimationEnd =
+                    {
+                        try {
+                            continuation.resume(Unit)
+                        } catch (e: IllegalStateException) {
+                            // This can happen if the coroutine was already resumed.
+                            println("Continuation was already resumed!")
+                        }
+                    }
             }
         }
 
@@ -112,19 +109,15 @@ class MeetingUI(var gameState: GameState) : Table(defaultSkin), KTable {
                     "MeetingUI: Non-player character action detected: ${action.sbjCharacter} performed ${action::class.simpleName}",
                     Logger.LogLevel.INFO
                 )
-                addAnimation(
-                    Actions.run {
-                        if (speakerPortrait.tgtCharacter == action.sbjCharacter) {
-                            speakerPortrait.speechUI.displaySpeech(action)
-                        }
-                        portraits.forEach { portrait ->
-                            if (portrait.tgtCharacter == action.sbjCharacter) {
-                                portrait.speechUI.displaySpeech(action)
-                            }
-                        }
+                refresh(gameState.player.currentMeeting!!)
+                if (speakerPortrait.tgtCharacter == action.sbjCharacter) {
+                    speakerPortrait.speechUI.displaySpeech(action)
+                }
+                portraits.forEach { portrait ->
+                    if (portrait.tgtCharacter == action.sbjCharacter) {
+                        portrait.speechUI.displaySpeech(action)
                     }
-                )
-                flushAnimation()
+                }
             }
         }
         discussionTable = stack {
@@ -236,24 +229,24 @@ class MeetingUI(var gameState: GameState) : Table(defaultSkin), KTable {
             val arrow = MutualityArrowUI(fromPortrait, toPortrait, delta.toFloat())
             mutualityArrows.add(arrow)
             addActor(arrow)
-            addAnimation(
-                Actions.run {
-                    arrow.addAction(
-                        SequenceAction(
-                            Actions.fadeIn(0.2f),
-                            Actions.delay(0.4f),
-                            Actions.fadeOut(0.2f),
-                            Actions.run {
-                                arrow.visibleForReplay = false
-                            }
-                        )
-                    )
-                }
-            )
+//            addAnimation(
+//                Actions.run {
+//                    arrow.addAction(
+//                        SequenceAction(
+//                            Actions.fadeIn(0.2f),
+//                            Actions.delay(0.4f),
+//                            Actions.fadeOut(0.2f),
+//                            Actions.run {
+//                                arrow.visibleForReplay = false
+//                            }
+//                        )
+//                    )
+//                }
+//            )
 
         }
-        if (mutualityChanges.isNotEmpty())
-            flushAnimation()
+//        if (mutualityChanges.isNotEmpty())
+//            flushAnimation()
     }
 
     fun replayMutualityArrows() {

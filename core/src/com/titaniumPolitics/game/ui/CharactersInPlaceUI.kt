@@ -86,16 +86,11 @@ class CharactersInPlaceUI(var gameState: GameState) : Table(defaultSkin) {
                     "CharactersInPlaceUI: Non-player character action detected: ${action.sbjCharacter} performed ${action::class.simpleName}",
                     Logger.LogLevel.INFO
                 )
-                addAnimation(
-                    Actions.run {
-                        portraits.forEach { portrait ->
-                            if (portrait.tgtCharacter == action.sbjCharacter) {
-                                portrait.speechUI.displaySpeech(action)
-                            }
-                        }
+                portraits.forEach { portrait ->
+                    if (portrait.tgtCharacter == action.sbjCharacter) {
+                        portrait.speechUI.displaySpeech(action)
                     }
-                )
-                flushAnimation()
+                }
             }
         }
     }

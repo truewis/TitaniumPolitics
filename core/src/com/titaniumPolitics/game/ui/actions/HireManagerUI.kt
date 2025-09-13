@@ -58,19 +58,19 @@ class HireManagerUI(val gameState: GameState, actionCallback: (GameAction) -> Un
             table {
                 add(this@HireManagerUI.charSelector).size(180f)
                 row()
-                selectBox<String> {
-                    items = Array(this@NewAgendaUI.praisableParty.toTypedArray())
-                    addListener(object : ChangeListener() {
-                        override fun changed(event: ChangeEvent?, actor: Actor?) {
-                            this@NewAgendaUI.agenda =
-                                MeetingAgenda(
-                                    AgendaType.PRAISE_PARTY,
-                                    this@NewAgendaUI.subject,
-                                    hashMapOf("party" to selected)
-                                )
-                        }
-                    })
-                }.inCell.size(300f, 70f)
+//                selectBox<String> {
+//                    items = Array(this@NewAgendaUI.praisableParty.toTypedArray())
+//                    addListener(object : ChangeListener() {
+//                        override fun changed(event: ChangeEvent?, actor: Actor?) {
+//                            this@NewAgendaUI.agenda =
+//                                MeetingAgenda(
+//                                    AgendaType.PRAISE_PARTY,
+//                                    this@NewAgendaUI.subject,
+//                                    hashMapOf("party" to selected)
+//                                )
+//                        }
+//                    })
+//                }.inCell.size(300f, 70f)
                 row()
                 add(this@HireManagerUI.submitButton)
             }

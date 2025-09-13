@@ -487,7 +487,7 @@ class GameState {
 
     fun setMutuality(a: String, b: String = a, delta: Double, reasonKey: String? = null) {
         if (abs(delta) < 1e-2) return //No change in mutuality, do nothing.
-        if (delta.absoluteValue > 100f) throw Exception("Setting mutuality $a -> $b with delta $delta is too high. Use smaller values.")
+        if (delta.absoluteValue > 100f) throw Exception("Setting mutuality $a -> $b with delta $delta, $reasonKey is too high. Use smaller values.")
         if (!delta.isFinite()) throw Exception("Setting mutuality $a -> $b with delta $delta is not finite.")
         if (!characters.containsKey(a) || !characters.containsKey(b)) throw Exception("Setting mutuality $a -> $b invalid.")
         if (a == b && "robot" in characters[a]!!.trait)
