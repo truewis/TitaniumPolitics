@@ -22,25 +22,23 @@ class AttendDivisionBudgetProposalRoutine(override val meetingName: String) : Me
         } else {
             val party = gState.parties[meeting.involvedParty]!!
 
-            //If there is no budget proposed yet, propose the budget.
-            if (!party.isBudgetProposed) {
-                val availableBudget = if (party.type == Party.Type.CABINET) Resources(
-                    "water" to gState.places["reservoirEast"]!!.resources["water"],
-                    "ration" to gState.places["farm"]!!.resources["ration"],
-                    "phosphorus" to gState.places["mainControlRoom"]!!.resources["phosphorus"], positive = true
+            val availableBudget = if (party.type == Party.Type.CABINET) Resources(
+                "water" to gState.places["reservoirEast"]!!.resources["water"],
+                "ration" to gState.places["farm"]!!.resources["ration"],
+                "phosphorus" to gState.places["mainControlRoom"]!!.resources["phosphorus"], positive = true
+            )
+            else gState.places[party.home]!!.resources
+            //Propose a budget.
+            val standardBudget = scaleBudget(name, party.standardBudget, availableBudget)
+            NewAgenda(name, place, gState).also {
+                it.agenda = MeetingAgenda(
+                    type = AgendaType.BUDGET_PROPOSAL,
+                    author = name,
+                    attachedBudget = standardBudget
                 )
-                else gState.places[party.home]!!.resources
-                //Propose a budget.
-                val standardBudget = scaleBudget(name, party.standardBudget, availableBudget)
-                NewAgenda(name, place, gState).also {
-                    it.agenda = MeetingAgenda(
-                        type = AgendaType.BUDGET_PROPOSAL,
-                        author = name,
-                        attachedBudget = standardBudget
-                    )
-                    if (it.isValid()) return it
-                }
+                if (it.isValid()) return it
             }
+
 
 
             endMeetingIfLowAttention(name, place)?.let { return it }

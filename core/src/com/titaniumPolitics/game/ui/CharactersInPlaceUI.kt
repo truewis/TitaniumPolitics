@@ -29,14 +29,44 @@ class CharactersInPlaceUI(var gameState: GameState) : Table(defaultSkin) {
     //Also check MeetingUI for similar code.
     private val animationQueue = ArrayDeque<Action>()
     var onAnimationEnd: () -> Unit = {}
-    fun startAnimation() {
-        if (animationQueue.isNotEmpty()) {
-            addAction(animationQueue.removeFirst())
+
+    /**
+     * Block the game engine until the animation is done.
+     */
+    fun flushAnimation() {
+        runBlocking {
+            suspendCoroutine { continuation ->
+                Gdx.app.postRunnable {
+                    if (animationQueue.isNotEmpty()) {
+                        addAction(animationQueue.removeFirst())
+                    }
+                    onAnimationEnd =
+                        {
+                            try {
+                                continuation.resume(Unit)
+                            } catch (e: IllegalStateException) {
+                                // This can happen if the coroutine was already resumed.
+                                println("Continuation was already resumed!")
+                            }
+                        }
+                }
+            }
         }
+
     }
 
     fun addAnimation(action: Action) {
-        animationQueue.add(action)
+        animationQueue.add(
+            Actions.sequence(
+                action,
+                Actions.run {
+                    if (animationQueue.isNotEmpty())
+                        addAction(animationQueue.removeFirst())
+                    else
+                        onAnimationEnd()
+                }
+            )
+        )
     }
 
     init {
@@ -56,33 +86,16 @@ class CharactersInPlaceUI(var gameState: GameState) : Table(defaultSkin) {
                     "CharactersInPlaceUI: Non-player character action detected: ${action.sbjCharacter} performed ${action::class.simpleName}",
                     Logger.LogLevel.INFO
                 )
-                //Block the game engine until the animation is done.
-                runBlocking {
-                    addAnimation(
-                        Actions.run {
-                            portraits.forEach { portrait ->
-                                if (portrait.tgtCharacter == action.sbjCharacter) {
-                                    portrait.speechUI.displaySpeech(action)
-                                }
+                addAnimation(
+                    Actions.run {
+                        portraits.forEach { portrait ->
+                            if (portrait.tgtCharacter == action.sbjCharacter) {
+                                portrait.speechUI.displaySpeech(action)
                             }
                         }
-                    )
-                    suspendCoroutine { continuation ->
-                        Gdx.app.postRunnable {
-                            startAnimation()
-                            onAnimationEnd =
-                                {
-                                    try {
-                                        continuation.resume(Unit)
-                                        println("Resuming game engine after character ${action.sbjCharacter} action animation.")
-                                    } catch (e: IllegalStateException) {
-                                        // This can happen if the coroutine was already resumed.
-                                        println("Continuation was already resumed: ${action.sbjCharacter}")
-                                    }
-                                }
-                        }
                     }
-                }
+                )
+                flushAnimation()
             }
         }
     }
@@ -117,12 +130,6 @@ class CharactersInPlaceUI(var gameState: GameState) : Table(defaultSkin) {
 
     private fun addCharacterPortrait(characterName: String) {
         val portrait = PortraitUI(characterName, gameState)
-        portrait.speechUI.onSpeechEnd += {
-            if (animationQueue.isEmpty())
-                onAnimationEnd()
-            else
-                this@CharactersInPlaceUI.addAction(animationQueue.removeFirst())
-        }
         portraits.add(portrait)
         portraitContainer.addActor(portrait)
 
