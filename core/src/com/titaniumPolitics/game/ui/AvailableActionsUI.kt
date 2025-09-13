@@ -306,9 +306,10 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable 
                             "Wait" -> {
                                 val action = Wait(
                                     gameState.playerName,
-                                    gameState.player.place.name
+                                    gameState.player.place.name,
+                                    gameState
                                 )
-                                action.injectParent(gameState); if (checkValidity && !action.isValid()) {
+                                if (checkValidity && !action.isValid()) {
                                     this@button.isDisabled = true
                                     tooltip.displayInvalidReason(action.invalidReason)
                                 }
@@ -318,10 +319,7 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable 
                                         if (!this@button.isChecked) return
                                         if (gameState.player.currentMeeting != null) {
                                             actionCallback(
-                                                Wait(
-                                                    gameState.playerName,
-                                                    gameState.player.place.name
-                                                )
+                                                action
                                             )
                                         } else {
                                             val waitUI =

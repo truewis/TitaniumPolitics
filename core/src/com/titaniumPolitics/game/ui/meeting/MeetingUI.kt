@@ -137,77 +137,80 @@ class MeetingUI(var gameState: GameState) : Table(defaultSkin), KTable {
 
     //This function can be used for both meetings and conferences
     fun refresh(meeting: Meeting) {
-        meetingInfoUI.clear()
-        meetingInfoUI.also {
-            it.top()
-            it.pad(10f)
-            meeting.involvedParty?.run {
-                it.label(
-                    this@MeetingUI.gameState.meetingName(this@MeetingUI.gameState.player.currentMeeting!!),
-                    "docTitle"
-                )
-                val party = this@MeetingUI.gameState.parties[this]!!
-                if (party.type == Party.Type.DIVISION) {
-                    it.row()
-                    it.add(DivisionBannerUI(party, 600f))
-                }
-            }
-            it.row()
-            it.add().size(1920f, 600f)
-        }
-        //If the meeting is a division leader election, set the election UI after the candidates are set.
-        if (meeting.type == Meeting.MeetingType.DIVISION_LEADER_ELECTION)
-            meeting.onCandidatesSet += {
-                electionUIContainer.setActor(
-                    ElectionUI(
-                        gameState,
-                        gameState.parties[meeting.involvedParty]!!,
-                        it
+        Gdx.app.postRunnable {
+            meetingInfoUI.clear()
+            meetingInfoUI.also {
+                it.top()
+                it.pad(10f)
+                meeting.involvedParty?.run {
+                    it.label(
+                        this@MeetingUI.gameState.meetingName(this@MeetingUI.gameState.player.currentMeeting!!),
+                        "docTitle"
                     )
-                )
-            }
-
-
-        //show mutuality arrows if there are any changes.
-        val newMutualities = meeting.currentCharacters.flatMap { char1 ->
-            meeting.currentCharacters.map { char2 ->
-                Pair(char1, char2) to gameState.getMutuality(char1, char2)
-            }
-        }.toMap().toMutableMap()
-        val mutualityChanges = newMutualities.filter { (pair, value) ->
-            previousMutualities[pair]?.let { it != value } ?: false
-        }.mapValues {
-            it.value - (previousMutualities[it.key] ?: 0.0)
-        }
-        if (mutualityChanges.isNotEmpty()) {
-            showMutualityArrows(mutualityChanges)
-        }
-        previousMutualities = newMutualities
-
-
-
-        placeCharacterPortrait()
-        //Remove all bubbles before placing them again.
-        removeBubbles()
-        meeting.agendas.forEach {
-            val agendaUI = AgendaBubbleUI(it)
-            currentAgendas += agendaUI
-            addActor(agendaUI)
-            it.informationKeys.forEach { key ->
-                val info = gameState.informations[key]!!
-                val infoUI = InfoBubbleUI(info) {
-                    if (gameState.playerName in info.knownTo)
-                        InformationViewUI.displayInformation(info)
-                    else
-                        BlockingWarningUI.instance.display("unknownInfo", null)
+                    val party = this@MeetingUI.gameState.parties[this]!!
+                    if (party.type == Party.Type.DIVISION) {
+                        it.row()
+                        it.add(DivisionBannerUI(party, 600f))
+                    }
                 }
-                deployedInfos += infoUI
-                addActor(infoUI)
+                it.row()
+                it.add().size(1920f, 600f)
             }
-        }
-        placeBubbles()
 
-        currentAttention.setText(meeting.currentAttention.toString())
+            //If the meeting is a division leader election, set the election UI after the candidates are set.
+            if (meeting.type == Meeting.MeetingType.DIVISION_LEADER_ELECTION)
+                meeting.onCandidatesSet += {
+                    electionUIContainer.setActor(
+                        ElectionUI(
+                            gameState,
+                            gameState.parties[meeting.involvedParty]!!,
+                            it
+                        )
+                    )
+                }
+
+
+            //show mutuality arrows if there are any changes.
+            val newMutualities = meeting.currentCharacters.flatMap { char1 ->
+                meeting.currentCharacters.map { char2 ->
+                    Pair(char1, char2) to gameState.getMutuality(char1, char2)
+                }
+            }.toMap().toMutableMap()
+            val mutualityChanges = newMutualities.filter { (pair, value) ->
+                previousMutualities[pair]?.let { it != value } ?: false
+            }.mapValues {
+                it.value - (previousMutualities[it.key] ?: 0.0)
+            }
+            if (mutualityChanges.isNotEmpty()) {
+                showMutualityArrows(mutualityChanges)
+            }
+            previousMutualities = newMutualities
+
+
+
+            placeCharacterPortrait()
+            //Remove all bubbles before placing them again.
+            removeBubbles()
+            meeting.agendas.forEach {
+                val agendaUI = AgendaBubbleUI(it)
+                currentAgendas += agendaUI
+                addActor(agendaUI)
+                it.informationKeys.forEach { key ->
+                    val info = gameState.informations[key]!!
+                    val infoUI = InfoBubbleUI(info) {
+                        if (gameState.playerName in info.knownTo)
+                            InformationViewUI.displayInformation(info)
+                        else
+                            BlockingWarningUI.instance.display("unknownInfo", null)
+                    }
+                    deployedInfos += infoUI
+                    addActor(infoUI)
+                }
+            }
+            placeBubbles()
+
+            currentAttention.setText(meeting.currentAttention.toString())
+        }
 
     }
 
