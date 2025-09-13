@@ -20,27 +20,24 @@ import com.titaniumPolitics.game.ui.widget.ResourceDisplayUI
 import ktx.scene2d.*
 
 
-class ResourceTransferUI(var gameState: GameState, actionCallback: (GameAction) -> Unit) :
+class ResourceTransferUI(
+    var gameState: GameState, actionCallback: (GameAction) -> Unit,
+) :
     ActionSheetUI("ResourceTransferTitle", gameState, actionCallback) {
     private val dataTable = ResourceDisplayUI()
     private val targetTable = ResourceDisplayUI()
     private val resourceSelectTable = ResourceSelectTable(100.0, 0.0, 1.0) {}
-    override var tgtPlace: String = gameState.player.place.name
-        set(value) {
-            field = value
-            refresh(mode, gameState.places[value]!!.resources.toHashMap(), hashMapOf())
-            refreshAction()
-        }
-    private val sbjChar = gameState.characters[subject]!!
+    private val sbjCharObj = gameState.characters[subject]!!
 
     //Determines if the transfer is official or not.
     var mode: String = "official"
-    var current = hashMapOf<String, Double>()
-    var target = hashMapOf<String, Double>()
+
+    val current get() = if (mode == "private") sbjCharObj.resources else gameState.places[tgtPlace]!!.resources
+    val target = Resources()
     var toWhere = ""
         set(value) {
             field = value
-            refresh(mode, gameState.places[tgtPlace]!!.resources.toHashMap(), hashMapOf())
+            refresh(mode)
             refreshAction()
         }
     var modeLabel: Label
@@ -80,49 +77,39 @@ class ResourceTransferUI(var gameState: GameState, actionCallback: (GameAction) 
 
 
     fun refresh(
-        mode: String,
-        _current: HashMap<String, Double> = this.current,
-        _target: HashMap<String, Double> = this.target,
+        mode: String = this.mode
     ) {
-        this.current = _current
-        this.target = _target
         this.mode = mode
         this.modeLabel.setText("Transaction: $mode")
         placeButton.isVisible = mode != "private"
-        dataTable.current = Resources(current)
+        dataTable.current = current
         dataTable.callback = { resourceName, amount ->
             resourceSelectTable.refresh(
-                current[resourceName]!!,
-                target[resourceName] ?: 0.0,
+                current[resourceName],
+                target[resourceName],
                 gameState.places[toWhere]?.workplaceParty?.let {
                     it.standardBudget.value[it.name]!![resourceName] / it.workplace.workHoursLength * ReadOnly.constInt(
                         "quarterInDays"
                     )
                 }
-                    ?: 0.0
-            ) { selectedAmount ->
-                target[resourceName] = selectedAmount
-                refreshAction()
-                this@ResourceTransferUI.refresh(mode)
-            }
+                    ?: 0.0,
+                resourceName,
+                this
+            )
         }
         dataTable.refresh()
 
-        targetTable.current = Resources(target)
+        targetTable.current = target
         targetTable.callback = { resourceName, amount ->
             resourceSelectTable.refresh(
-                current[resourceName]!!,
+                current[resourceName],
                 amount,
                 gameState.places[toWhere]?.workplaceParty?.let {
                     it.standardBudget.value[it.name]!![resourceName] / it.workplace.workHoursLength * ReadOnly.constInt(
                         "quarterInDays"
                     )
                 }
-                    ?: 0.0) { selectedAmount ->
-                target[resourceName] = selectedAmount
-                refreshAction()
-                this@ResourceTransferUI.refresh(mode)
-            }
+                    ?: 0.0, resourceName, this)
         }
 
         targetTable.refresh()
@@ -134,27 +121,27 @@ class ResourceTransferUI(var gameState: GameState, actionCallback: (GameAction) 
         action = if (this@ResourceTransferUI.mode == "official") {
             OfficialResourceTransfer(
                 this@ResourceTransferUI.subject,
-                this@ResourceTransferUI.sbjChar.place.name,
+                this@ResourceTransferUI.sbjCharObj.place.name,
                 this@ResourceTransferUI.toWhere,
-                Resources(this@ResourceTransferUI.target),
+                this@ResourceTransferUI.target,
                 gameState
             )
         } else if (this@ResourceTransferUI.mode == "unofficial") {
             UnofficialResourceTransfer(
                 this@ResourceTransferUI.subject,
-                this@ResourceTransferUI.sbjChar.place.name,
+                this@ResourceTransferUI.sbjCharObj.place.name,
                 toWhere = this@ResourceTransferUI.toWhere,
                 false,
-                Resources(this@ResourceTransferUI.target),
+                this@ResourceTransferUI.target,
                 gameState
             )
         } else if (this@ResourceTransferUI.mode == "private") {
             UnofficialResourceTransfer(
                 this@ResourceTransferUI.subject,
-                this@ResourceTransferUI.sbjChar.place.name,
+                this@ResourceTransferUI.sbjCharObj.place.name,
                 this@ResourceTransferUI.toWhere,
                 true,
-                Resources(this@ResourceTransferUI.target),
+                this@ResourceTransferUI.target,
                 gameState
             )
         } else {
@@ -185,7 +172,7 @@ class ResourceTransferUI(var gameState: GameState, actionCallback: (GameAction) 
                 value = currentAmount.toFloat()
                 stepSize = maxAmount.toFloat() / 100f
                 setRange(0f, maxAmount.toFloat())
-                addListener(object : com.badlogic.gdx.scenes.scene2d.utils.ChangeListener() {
+                addListener(object : ChangeListener() {
                     override fun changed(event: ChangeEvent?, actor: Actor?) {
                         this@ResourceSelectTable.label.setText(
                             ReadOnly.prop("ResourceTransferUI-amountSelected")
@@ -200,16 +187,15 @@ class ResourceTransferUI(var gameState: GameState, actionCallback: (GameAction) 
             add(label)
         }
 
-        fun refresh(maxAmount: Double, currentAmount: Double, hourlyConsumption: Double, callback: (Double) -> Unit) {
+        fun refresh(
+            maxAmount: Double,
+            currentAmount: Double,
+            hourlyConsumption: Double,
+            resName: String,
+            owner: ResourceTransferUI
+        ) {
             isVisible = true
-            slider.value = currentAmount.toFloat()
-            slider.stepSize = maxAmount.toFloat() / 100f
-            slider.setRange(0f, maxAmount.toFloat())
-            label.setText(
-                ReadOnly.prop("ResourceTransferUI-amountSelected")
-                    .format(currentAmount, if (hourlyConsumption == 0.0) 0.0 else currentAmount / hourlyConsumption)
-            )
-            slider.removeListener(slider.listeners.first { it is ChangeListener })
+            slider.removeListener(slider.listeners.firstOrNull { it is ChangeListener })
             slider.addListener(object : ChangeListener() {
                 override fun changed(event: ChangeEvent?, actor: Actor?) {
                     this@ResourceSelectTable.label.setText(
@@ -219,10 +205,20 @@ class ResourceTransferUI(var gameState: GameState, actionCallback: (GameAction) 
                                 if (hourlyConsumption == 0.0) 0.0 else slider.value / hourlyConsumption
                             )
                     )
-                    callback(slider.value.toDouble())
+                    owner.target[resName] = slider.value.toDouble()
+                    owner.refreshAction()
+                    owner.refresh()
                 }
 
             })
+            slider.value = currentAmount.toFloat()
+            slider.stepSize = maxAmount.toFloat() / 100f
+            slider.setRange(0f, maxAmount.toFloat())
+            label.setText(
+                ReadOnly.prop("ResourceTransferUI-amountSelected")
+                    .format(currentAmount, if (hourlyConsumption == 0.0) 0.0 else currentAmount / hourlyConsumption)
+            )
+
         }
     }
 

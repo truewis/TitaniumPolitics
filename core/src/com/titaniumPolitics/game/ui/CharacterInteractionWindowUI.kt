@@ -50,8 +50,7 @@ class CharacterInteractionWindowUI(var gameState: GameState) :
                 val resUI = ResourceTransferUI(this@CharacterInteractionWindowUI.gameState, GameEngine.acquireCallback)
                 resUI.toWhere = "home_${this@CharacterInteractionWindowUI.characterDisplayed}"
                 resUI.refresh(
-                    "private",
-                    this@CharacterInteractionWindowUI.gameState.player.resources.toHashMap()
+                    "private"
                 )
                 InterfaceRoot.instance.avAUI.setActionSheet(resUI)
 

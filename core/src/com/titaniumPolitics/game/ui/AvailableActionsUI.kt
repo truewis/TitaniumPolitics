@@ -413,8 +413,7 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable 
                                         )
                                         setActionSheet(resUI)
                                         resUI.refresh(
-                                            "unofficial",
-                                            gameState.player.place.resources.toHashMap()
+                                            "unofficial"
                                         )
                                     }
                                 })
@@ -430,8 +429,7 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable 
                                         )
                                         setActionSheet(resUI)
                                         resUI.refresh(
-                                            "official",
-                                            gameState.player.place.resources.toHashMap()
+                                            "official"
                                         )
                                     }
                                 })

@@ -76,7 +76,7 @@ data class UnofficialResourceTransfer(
 
     override fun isValid(): Boolean {
         if (!reason(
-                sbjCharacter == tgtPlaceObj.workplaceParty?.treasurer || null == tgtPlaceObj.workplaceParty?.treasurer,
+                sbjCharacter == tgtPlaceObj.workplaceParty?.treasurer || null == tgtPlaceObj.workplaceParty?.treasurer || fromHome,
                 "officialResourceTransfer-notTreasurer"
             )
         ) return false
