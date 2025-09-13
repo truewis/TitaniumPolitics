@@ -38,7 +38,7 @@ data class Intercept(override val sbjCharacter: String, override val tgtPlace: S
         return MutualityMatrix().apply {
             this.addWill(
                 sbjCharacter,
-                parent.getMutuality(
+                parent.getMutNorm(
                     sbjCharacter,
                     meeting.currentSpeaker!!
                 ) * factor * sbjCharObj.stats.pScale, "InterceptWill"
@@ -48,7 +48,7 @@ data class Intercept(override val sbjCharacter: String, override val tgtPlace: S
             this.addMutuality(
                 meeting.currentSpeaker!!,
                 sbjCharacter,
-                parent.getMutuality(
+                parent.getMutNorm(
                     meeting.currentSpeaker!!,
                     sbjCharacter
                 ) * factor * parent.characters[meeting.currentSpeaker!!]!!.stats.pScale, "Intercept"
