@@ -120,14 +120,15 @@ class SpeechUI : Table(defaultSkin), KTable {
                 speech.restart(text)
             }
             suspendCoroutine { continuation ->
+                onSpeechEnd.clear()
                 onSpeechEnd +=
                     {
                         try {
                             continuation.resume(Unit)
-                            println("Continuation resumed.")
+                            println("Speech Continuation resumed.")
                         } catch (e: IllegalStateException) {
                             // This can happen if the coroutine was already resumed.
-                            println("Continuation was already resumed!")
+                            println("Speech Continuation was already resumed!")
                         }
                     }
 

@@ -41,6 +41,8 @@ data class NewAgenda(override val sbjCharacter: String, override val tgtPlace: S
             //You have to choose which command you are responding to. The character who issued the command must be present in the meeting.
             //Other people may add supporting or disapproving information.
             AgendaType.BUDGET_PROPOSAL -> return mt.type == Meeting.MeetingType.BUDGET_PROPOSAL && with(parent) {
+                //If there is already my budget proposal in the meeting, I can't propose another one.
+                if (mt.agendas.any { it.type == AgendaType.BUDGET_PROPOSAL && it.author == agenda.author }) return false
                 ////////////////////Stationwide budget proposal//////////////////
                 if (mt.involvedParty == "cabinet") {
                     val resourceTypes = setOf("water", "ration", "phosphorus")
