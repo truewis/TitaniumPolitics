@@ -216,24 +216,24 @@ sealed class MeetingRoutine : Routine() {
                     }
                 }
 
-
-                NewAgenda(name, place, gState).also {
-                    it.agenda = MeetingAgenda(
-                        AgendaType.REQUEST,
-                        author = name,
-                        attachedRequest = Request(
-                            action = UnofficialResourceTransfer(
-                                bestIssuer, "home_$bestIssuer", fromHome = true,
-                                toWhere = "home_$name",
-                                resources = Resources(resourcesToTransferMap)
-                            ),
-                            issuedTo = hashSetOf(bestIssuer),
-                            issuedBy = hashSetOf(name)
+                if (resourcesToTransferMap.isNotEmpty())
+                    NewAgenda(name, place, gState).also {
+                        it.agenda = MeetingAgenda(
+                            AgendaType.REQUEST,
+                            author = name,
+                            attachedRequest = Request(
+                                action = UnofficialResourceTransfer(
+                                    bestIssuer, "home_$bestIssuer", fromHome = true,
+                                    toWhere = "home_$name",
+                                    resources = Resources(resourcesToTransferMap)
+                                ),
+                                issuedTo = hashSetOf(bestIssuer),
+                                issuedBy = hashSetOf(name)
+                            )
                         )
-                    )
-                    if (it.isValid())
-                        return it
-                }
+                        if (it.isValid())
+                            return it
+                    }
             }
         } else {
             //If the maximum action value is higher than the total value of the requests, propose a new agenda to match the requests.
