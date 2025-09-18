@@ -10,7 +10,9 @@ import com.titaniumPolitics.game.core.ReadOnly.constInt
 import com.titaniumPolitics.game.core.gameActions.GameAction
 import com.titaniumPolitics.game.core.gameActions.Wait
 import com.titaniumPolitics.game.debugTools.Logger
+import com.titaniumPolitics.game.ui.GameOverUI
 import com.titaniumPolitics.game.ui.LogUI
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.json.Json
 import kotlin.coroutines.resume
@@ -825,12 +827,13 @@ class GameEngine(val gameState: GameState) {
 
             Logger.write("You died. Game over.", Logger.LogLevel.INFO)
             gameState.dump()
-            exitProcess(0)
+            gameOver("GameOver-YouDied")
+
 
         } else if (l.size == 1) {
             Logger.write("You are the last survivor.", Logger.LogLevel.INFO)
             gameState.dump()
-            exitProcess(0)
+            gameOver("GameOver-LastSurvivor")
         }
 
         if (gameState.time % (constInt("lengthOfDay") * constInt("quarterInDays")) == 0) { //Every 15 days, reset the budget.
@@ -916,6 +919,21 @@ class GameEngine(val gameState: GameState) {
                 }
             }
             return@runBlocking choices[wanted]
+        }
+
+        fun gameOver(reasonKey: String) {
+            runBlocking {
+                suspendCoroutine { continuation ->
+                    Gdx.app.postRunnable {
+                        Logger.write("Game Over: $reasonKey", Logger.LogLevel.ERROR)
+                        GameOverUI.instance.displayGameOver(reasonKey)
+
+                    }
+                    while (true) {
+                    }
+                    continuation.resume(Unit)
+                }
+            }
         }
 
         inline fun <reified T> acquire(dataType: String, params: HashMap<String, Any>): T = runBlocking {

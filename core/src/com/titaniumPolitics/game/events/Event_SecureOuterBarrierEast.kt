@@ -3,6 +3,7 @@ package com.titaniumPolitics.game.events
 import com.badlogic.gdx.graphics.Color.RED
 import com.titaniumPolitics.game.core.Apparatus
 import com.titaniumPolitics.game.core.GameDataHandler
+import com.titaniumPolitics.game.core.GameEngine
 import com.titaniumPolitics.game.ui.GraphInfoUI
 import com.titaniumPolitics.game.ui.Quest
 import kotlinx.serialization.Serializable
@@ -36,6 +37,7 @@ class Event_SecureOuterBarrierEast : EventObject("Introduction of Alina.", true)
         }
         if (targetApparatus.durability < 40) {
             deactivate(false)
+            GameEngine.gameOver("GameOver-BarrierDestroyed")
             return
         }
 

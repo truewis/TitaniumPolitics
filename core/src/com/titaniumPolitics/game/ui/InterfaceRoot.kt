@@ -116,6 +116,7 @@ class InterfaceRoot(val gameState: GameState) : Table(defaultSkin), KTable {
             add(DialogueUI(this@InterfaceRoot.gameState))
 
             add(SystemUI(this@InterfaceRoot.gameState))
+            add(GameOverUI(this@InterfaceRoot.gameState))
 
         }
 

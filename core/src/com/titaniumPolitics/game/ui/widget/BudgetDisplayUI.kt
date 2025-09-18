@@ -62,7 +62,9 @@ class BudgetDisplayUI(party: Party? = null, budget: Budget? = null) :
                         setAlignment(Align.topLeft)
                         setFontScale(0.3f)
                     }
-                    this@BudgetDisplayUI.labelList.add(ResourceDisplayUI(resourceAmount))
+                    val resUI = ResourceDisplayUI(resourceAmount)
+                    this@BudgetDisplayUI.labelList.add(resUI)
+                    add(resUI).fill()
                 }
                 row()
 

@@ -196,6 +196,18 @@ class PlaceMarkerWindowUI(var gameState: GameState, var owner: MapUI) : Table() 
             interrupted = true
             Logger.write("MoveUI: Move interrupted by ${info.author} at ${info.tgtPlace}", Logger.LogLevel.INFO)
         }
+        //If I am in a meeting, interrupt the move.
+        if (gameState.player.currentMeeting != null) {
+            AlertUI.instance.addAlert(
+                "interruptedMove",
+                ReadOnly.charProp(
+                    (gameState.player.currentMeeting!!.currentCharacters - gameState.playerName).firstOrNull()
+                        ?: "Someone"
+                )
+            )
+            interrupted = true
+            Logger.write("MoveUI: Move interrupted by ${info.author} at ${info.tgtPlace}", Logger.LogLevel.INFO)
+        }
 
     }
 
