@@ -15,6 +15,7 @@ import com.titaniumPolitics.game.core.gameActions.*
 import com.titaniumPolitics.game.ui.actions.AddInfoUI
 import com.titaniumPolitics.game.ui.actions.EndSpeechUI
 import com.titaniumPolitics.game.ui.actions.ExamineUI
+import com.titaniumPolitics.game.ui.actions.HireManagerUI
 import com.titaniumPolitics.game.ui.actions.NewAgendaUI
 import com.titaniumPolitics.game.ui.actions.PrepareInfoUI
 import com.titaniumPolitics.game.ui.actions.RepairUI
@@ -471,6 +472,19 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable 
                                         val endSpeechUI =
                                             EndSpeechUI(gameState, actionCallback)
                                         setActionSheet(endSpeechUI)
+                                    }
+                                })
+                            }
+
+                            "HireManager" -> {
+                                this@button.addListener(object : ChangeListener() {
+                                    override fun changed(event: ChangeEvent, actor: Actor) {
+                                        if (!this@button.isChecked) return
+                                        val hireManagerUI = HireManagerUI(
+                                            gameState,
+                                            actionCallback
+                                        )
+                                        setActionSheet(hireManagerUI)
                                     }
                                 })
                             }

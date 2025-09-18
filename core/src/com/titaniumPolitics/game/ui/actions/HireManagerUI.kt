@@ -13,12 +13,14 @@ import com.titaniumPolitics.game.core.AgendaType
 import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.core.MeetingAgenda
 import com.titaniumPolitics.game.core.Party
+import com.titaniumPolitics.game.core.Party.Role
 import com.titaniumPolitics.game.core.gameActions.GameAction
 import com.titaniumPolitics.game.core.gameActions.HireManager
 import com.titaniumPolitics.game.ui.widget.ActionSheetUI
 import com.titaniumPolitics.game.ui.widget.CharacterSelectButton
 import com.titaniumPolitics.game.ui.widget.PlaceSelectButton
 import ktx.scene2d.button
+import ktx.scene2d.buttonGroup
 import ktx.scene2d.label
 import ktx.scene2d.selectBox
 import ktx.scene2d.stack
@@ -34,8 +36,7 @@ class HireManagerUI(val gameState: GameState, actionCallback: (GameAction) -> Un
         this@HireManagerUI.gameState
     )
     private val charSelector =
-        CharacterSelectButton(gameState.player.currentMeeting!!.currentCharacters.filter { it != subject }
-            .toSet()) {
+        CharacterSelectButton(action.availableEmployees().toSet()) {
             newHire = it
             submitButton.refresh(
                 action.apply {
@@ -48,7 +49,7 @@ class HireManagerUI(val gameState: GameState, actionCallback: (GameAction) -> Un
                 newHire = this@HireManagerUI.newHire
             })
     })
-    var newHire = gameState.player.currentMeeting!!.currentCharacters.first { it != subject }
+    var newHire = action.availableEmployees().first()
 
     init {
 
@@ -58,19 +59,24 @@ class HireManagerUI(val gameState: GameState, actionCallback: (GameAction) -> Un
             table {
                 add(this@HireManagerUI.charSelector).size(180f)
                 row()
-//                selectBox<String> {
-//                    items = Array(this@NewAgendaUI.praisableParty.toTypedArray())
-//                    addListener(object : ChangeListener() {
-//                        override fun changed(event: ChangeEvent?, actor: Actor?) {
-//                            this@NewAgendaUI.agenda =
-//                                MeetingAgenda(
-//                                    AgendaType.PRAISE_PARTY,
-//                                    this@NewAgendaUI.subject,
-//                                    hashMapOf("party" to selected)
-//                                )
-//                        }
-//                    })
-//                }.inCell.size(300f, 70f)
+                add(this@HireManagerUI.workplaceSelector)
+                row()
+                buttonGroup(1, 1) {
+                    Role.entries.forEach {
+                        val r = it
+                        button("toggle") {
+                            isChecked = this@HireManagerUI.action.role == r
+                            addListener(object : ChangeListener() {
+                                override fun changed(event: ChangeEvent?, actor: Actor?) {
+                                    if (isChecked) {
+                                        this@HireManagerUI.action.role = r
+                                        this@HireManagerUI.submitButton.refresh(this@HireManagerUI.action)
+                                    }
+                                }
+                            })
+                        }.inCell.size(150f, 60f).pad(5f)
+                    }
+                }
                 row()
                 add(this@HireManagerUI.submitButton)
             }

@@ -48,6 +48,7 @@
   "DowntimeWill": 40,
   "CriticalWill": 30,
   "AddInfoDuration": 10,
+  "HireManagerDuration": 30,
   "BuyDrinkDuration": 20,
   "ClearAccidentSceneDuration": 90,
   "SetWorkersDuration": 30,
