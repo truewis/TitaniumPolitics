@@ -32,7 +32,7 @@ data class HireManager(override val sbjCharacter: String, override val tgtPlace:
     }
 
     fun availableEmployees(): List<String> {
-        return sbjCharObj.currentMeeting!!.currentCharacters.filter {
+        return tgtPlaceObj.characters.filter {
             //Cannot be anonymous.
             if (parent.characters[it]!!.type == Character.Type.ANON) {
                 return@filter false

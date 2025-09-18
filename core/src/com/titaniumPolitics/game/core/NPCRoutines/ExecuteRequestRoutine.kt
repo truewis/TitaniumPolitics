@@ -1,6 +1,7 @@
 package com.titaniumPolitics.game.core.NPCRoutines
 
 import com.titaniumPolitics.game.core.AgendaType
+import com.titaniumPolitics.game.core.GameEngine
 import com.titaniumPolitics.game.core.Information
 import com.titaniumPolitics.game.core.MeetingAgenda
 import com.titaniumPolitics.game.core.ReadOnly
@@ -91,7 +92,9 @@ class ExecuteRequestRoutine() : Routine() {
     }
 
     override fun execute(name: String, place: String): GameAction {
-        if (place == executableRequest.action.tgtPlace) {
+        if (place == executableRequest.action.tgtPlace
+            && executableRequest.action.javaClass.simpleName in GameEngine.availableActions(gState, place, name)
+        ) {
             val copy = executableRequest.action.copyRef(name, place)
             copy.injectParent(gState)
             if (copy.isValid()) {

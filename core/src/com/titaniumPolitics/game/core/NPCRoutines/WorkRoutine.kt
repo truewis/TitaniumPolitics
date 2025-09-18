@@ -21,6 +21,12 @@ import kotlin.math.max
 @Serializable
 class WorkRoutine(var workplace: String) : Routine() {
     var corruptionTimer = 0
+
+    /**
+     * Timer to limit how often the character will transfer resource to places that are short of it.
+     */
+    var transferResourceTimer = 0
+    var repairApparatusTimer = 0
     var try_prepare_info = 0
     val meetingsAttended = hashSetOf<String>()
     val failedRequests = hashSetOf<String>()
@@ -150,7 +156,10 @@ class WorkRoutine(var workplace: String) : Routine() {
         }
         //6. Supply resource
         //only if I am director
-        if (character.type == Character.Type.DIRECTOR) {
+        if (character.type == Character.Type.DIRECTOR
+            &&
+            gState.time - transferResourceTimer > 60
+        ) {
             character.division?.divisionPlaces?.forEach { place1 ->
                 place1.apparatuses.forEach { apparatus ->
                     val res = place1.resourceShortOfHourly(apparatus) //Type of resource that is short of.
@@ -175,6 +184,7 @@ class WorkRoutine(var workplace: String) : Routine() {
                             //start new routine if there is a place with all the conditions met.
                             //If the place with the resource has enough resource to supply apparatus for ten hours, and there is no existing transfer routine
                                 if (resplace.resources[res] > apparatus.hourlyOperationResource[res] * 10) {
+                                    transferResourceTimer = gState.time
                                     return AttendPrivateMeetingRoutine(
                                         resplace.manager!!,
                                         //To reduce the overhead, it is rational to transfer more resource than immediately needed if possible.
@@ -202,7 +212,10 @@ class WorkRoutine(var workplace: String) : Routine() {
 
         //6. Repair Apparatus
         //only if I am director
-        if (character.type == Character.Type.DIRECTOR) {
+        if (character.type == Character.Type.DIRECTOR
+            &&
+            gState.time - repairApparatusTimer > 60
+        ) {
             character.division?.divisionPlaces?.forEach { place1 ->
                 place1.apparatuses.forEach { apparatus ->
                     if (apparatus.durability < 70f)
@@ -223,7 +236,8 @@ class WorkRoutine(var workplace: String) : Routine() {
                                             it is Repair &&
                                                     it.apparatusID == apparatus.ID
                                         }
-                                    })
+                                    }) {
+                                    repairApparatusTimer = gState.time
                                     return AttendPrivateMeetingRoutine(
                                         this.name,
                                         MeetingAgenda(
@@ -234,6 +248,7 @@ class WorkRoutine(var workplace: String) : Routine() {
                                             )
                                         )
                                     )
+                                }
                             }
 
                         }

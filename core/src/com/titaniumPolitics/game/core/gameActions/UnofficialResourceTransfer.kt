@@ -25,33 +25,13 @@ data class UnofficialResourceTransfer(
 
     override fun execute() {
         if (fromHome) {
-            if (
-                resources.all { parent.characters[sbjCharacter]!!.resources[it.key] >= it.value }
-            ) {
-                //Transfer resources.
-                resources.forEach { (key, value) ->
-                    parent.characters[sbjCharacter]!!.resources[key] -= value
-                    parent.places[toWhere]!!.resources[key] += value
-                }
+            //Transfer resources.
+            parent.characters[sbjCharacter]!!.resources -= resources
+            parent.places[toWhere]!!.resources += resources
 
-                //Do not spread rumor
-            } else {
-                throw Exception("Not enough resources: $tgtPlace, ${parent.places[tgtPlace]!!.resources["water"]}")
-            }
         } else {
-
-            if (
-                resources.all { parent.places[tgtPlace]!!.resources[it.key] >= it.value }
-            ) {
-                //Transfer resources.
-                resources.forEach { (key, value) ->
-                    parent.places[tgtPlace]!!.resources[key] -= value
-                    parent.places[toWhere]!!.resources[key] += value
-                }
-                //Spread rumor only when there is a character in the place. i.e. don't have to do anything here.
-            } else {
-                throw Exception("Not enough resources: $tgtPlace, ${parent.places[tgtPlace]!!.resources["water"]}")
-            }
+            parent.places[tgtPlace]!!.resources -= resources
+            parent.places[toWhere]!!.resources += resources
         }
         super.execute()
 
@@ -83,9 +63,19 @@ data class UnofficialResourceTransfer(
         //Can't send to the same place
         if (toWhere == tgtPlace) return false
         if (parent.places[toWhere] == null) return false
-        return parent.places[tgtPlace]!!.resources.contains(
-            resources
-        )
+        /*
+         * If transferring from home, must have the resources at home.
+         * If transferring from workplace, must have the resources at the workplace.
+         */
+        return if (fromHome)
+            parent.characters[sbjCharacter]!!.resources.contains(
+                resources
+            )
+        else
+            parent.places[tgtPlace]!!.resources.contains(
+                resources
+            )
+
     }
 
     override fun isProofOfWork(info: Information): Boolean {

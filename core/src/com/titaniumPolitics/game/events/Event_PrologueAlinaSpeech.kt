@@ -1,5 +1,6 @@
 package com.titaniumPolitics.game.events
 
+import com.titaniumPolitics.game.core.Party
 import com.titaniumPolitics.game.ui.Quest
 import com.titaniumPolitics.game.ui.widget.SpeechUI
 import kotlinx.serialization.Serializable
@@ -23,6 +24,8 @@ class Event_PrologueAlinaSpeech : EventObject("Introduction of Alina.", true), I
             )
             ?: false
         ) {
+            parent.places["outerBarrierEast"]!!.workplaceParty?.addMember("Rui", Party.Role.NONE)
+            parent.places["outerBarrierEast"]!!.workplaceParty?.changeLeader("Rui")
             onPlayDialogue("PrologueInfDivLeaderSpeech")
             parent.eventSystem.add(Event_AlinaResign())
             parent.eventSystem.add(Event_ObserverIntroAfterMeeting1())

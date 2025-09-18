@@ -30,6 +30,14 @@ class Event_SecureOuterBarrierEast : EventObject("Introduction of Alina.", true)
     )
 
     override fun exec(a: Int, b: Int) {
+        if (parent.time > quest.dueTime!!) {
+            deactivate(true)
+            return
+        }
+        if (targetApparatus.durability < 40) {
+            deactivate(false)
+            return
+        }
 
     }
 }
