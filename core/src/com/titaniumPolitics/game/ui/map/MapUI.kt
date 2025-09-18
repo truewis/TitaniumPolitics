@@ -44,17 +44,18 @@ open class MapUI(val gameState: GameState) : Table(defaultSkin) {
             name = "background"
 
             container(
-                image("MapGrid") {
+                image(
+                    TextureRegionDrawable(
+                        CapsuleStage.instance.assetManager.get(
+                            "MapGrid.png", Texture::class.java
+                        )!!
+                    )
+                ) {
                     addListener(object : ClickListener() {
                         override fun clicked(event: com.badlogic.gdx.scenes.scene2d.InputEvent?, x: Float, y: Float) {
                             //Close Place Marker UI?
                         }
                     }
-                    )
-                    drawable = TextureRegionDrawable(
-                        CapsuleStage.instance.assetManager.get(
-                            "MapGrid.png", Texture::class.java
-                        )!!
                     )
                     setColor(1f, 1f, 1f, 0.5f)
                 }) {

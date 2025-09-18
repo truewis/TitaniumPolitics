@@ -611,6 +611,8 @@ class GameState {
 
     //Injects the parent gameState to all elements in the gameState. This function should be called exactly once after the gameState is created.
     fun injectDependency() {
+        workingDirectory =
+            workingDirectory //This will initialize the gdh. Sometimes gdh is initialized twice, but it does not matter.
         log.injectParent(this)
         places.forEach { it.value.injectParent(this) }
         characters.forEach { it.value.injectParent(this) }
