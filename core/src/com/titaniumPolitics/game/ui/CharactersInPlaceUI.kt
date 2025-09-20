@@ -9,7 +9,6 @@ import com.titaniumPolitics.game.core.GameEngine
 import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.core.gameActions.Wait
 import com.titaniumPolitics.game.debugTools.Logger
-import kotlinx.coroutines.isActive
 import kotlinx.coroutines.runBlocking
 import ktx.scene2d.Scene2DSkin.defaultSkin
 import kotlin.coroutines.resume
@@ -88,7 +87,7 @@ class CharactersInPlaceUI(var gameState: GameState) : Table(defaultSkin) {
                 )
                 portraits.forEach { portrait ->
                     if (portrait.tgtCharacter == action.sbjCharacter) {
-                        portrait.speechUI.displaySpeech(action)
+                        portrait.speechUI.displaySpeech(action.generateSpeech())
                     }
                 }
             }

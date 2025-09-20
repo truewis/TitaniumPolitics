@@ -1,5 +1,6 @@
 package com.titaniumPolitics.game.core.gameActions
 
+import com.titaniumPolitics.game.core.AgendaType
 import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.core.Information
 import com.titaniumPolitics.game.core.InformationType
@@ -7,7 +8,6 @@ import com.titaniumPolitics.game.core.MutualityMatrix
 import com.titaniumPolitics.game.core.ReadOnly
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
-import kotlin.collections.hashMapOf
 import kotlin.reflect.full.memberFunctions
 
 /**
@@ -122,6 +122,59 @@ sealed class GameAction() {
                 copyFun.parameters[2] to newPlace
             )
         ) as GameAction
+    }
+
+    fun generateSpeech(): String {
+        var text: String
+        when (this) {
+            is NewAgenda -> {
+                when (this.agenda.type) {
+                    AgendaType.PROOF_OF_WORK -> text = ReadOnly.script("NewAgenda-ProofOfWork")
+                    AgendaType.NOMINATE -> text =
+                        ReadOnly.script("NewAgenda-Nominate").format(this.agenda.subjectParams["character"])
+
+                    AgendaType.REQUEST -> text = ReadOnly.script("NewAgenda-Request").format(
+                        ReadOnly.prop(
+                            this.agenda.attachedRequest!!
+                                .action::class.simpleName!!
+                        ), this.agenda.attachedRequest!!.issuedTo.first()
+                    )
+
+                    AgendaType.PRAISE -> text =
+                        ReadOnly.script("NewAgenda-Praise").format(this.agenda.subjectParams["character"])
+
+                    AgendaType.DENOUNCE -> text =
+                        ReadOnly.script("NewAgenda-Denounce").format(this.agenda.subjectParams["character"])
+
+                    AgendaType.PRAISE_PARTY -> text =
+                        ReadOnly.script("NewAgenda-PraiseParty").format(this.agenda.subjectParams["party"])
+
+                    AgendaType.DENOUNCE_PARTY -> text =
+                        ReadOnly.script("NewAgenda-DenounceParty").format(this.agenda.subjectParams["party"])
+
+                    AgendaType.BUDGET_PROPOSAL -> text = ReadOnly.script("NewAgenda-BudgetProposal")
+                    AgendaType.BUDGET_RESOLUTION -> text = ReadOnly.script("NewAgenda-BudgetResolution")
+                    AgendaType.APPOINT_MEETING -> text =
+                        ReadOnly.script("NewAgenda-AppointMeeting")
+
+                    AgendaType.FIRE_MANAGER -> text =
+                        ReadOnly.script("NewAgenda-FireManager").format(this.agenda.subjectParams["character"])
+                }
+            }
+
+            is AddInfo -> {
+                text = ReadOnly.script(this.effectivityReason).format(this.agenda.subjectParams["character"])
+            }
+
+            is EndSpeech -> {
+                text = ReadOnly.script("EndSpeech2").format(ReadOnly.charProp(this.nextSpeaker))
+            }
+
+            else -> {
+                text = ReadOnly.script(this.javaClass.simpleName, this)
+            }
+        }
+        return text
     }
 
 }

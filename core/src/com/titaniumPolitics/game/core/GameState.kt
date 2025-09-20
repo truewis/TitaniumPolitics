@@ -457,6 +457,21 @@ class GameState {
 
     @Serializable
     private var _mutuality = Array(1) { DoubleArray(1) }
+
+    @Transient
+    val onNewMutualityReason = arrayListOf<(String, String, Double, String?) -> Unit>()
+    fun addMutualityReason(indexA: Int, indexB: Int, newDelta: Double, newReasonKey: String) {
+        _mutualityReasons[indexA][indexB] += "$time:$newDelta:$newReasonKey\n"
+        onNewMutualityReason.forEach {
+            it(
+                characters.keys.elementAt(indexA),
+                characters.keys.elementAt(indexB),
+                newDelta,
+                newReasonKey
+            )
+        }
+    }
+
     private var _mutualityReasons =
         Array(1) { ArrayList<String>() } //Reasons for mutuality changes, indexed by character index.
 
@@ -506,7 +521,7 @@ class GameState {
             ReadOnly.const("mutualityMax")
         if (getMutuality(a, b) < ReadOnly.const("mutualityMin")) _mutuality[indexA][indexB] =
             ReadOnly.const("mutualityMin")
-        _mutualityReasons[indexA][indexB] += "$time:$delta:$reasonKey\n"
+        addMutualityReason(indexA, indexB, delta, reasonKey ?: "Unknown")
 
         //Generate information if the mutuality change was in the meeting.
         //The impression is felt by all characters in the meeting.

@@ -92,6 +92,7 @@ class Character : GameStateElement() {
     var mercenaries = hashSetOf<String>()
 
     val history = arrayListOf<String>()
+    val onSpeech = arrayListOf<(String, Double) -> Unit>()
 
     /**Requests that this character thinks are finished. The recipient of the request may not be aware of this yet. This is handled in Request.refresh().*/
     val executedRequests =
@@ -251,10 +252,20 @@ class Character : GameStateElement() {
         when (action) {
             is UnofficialResourceTransfer -> {
                 //Action value of unofficial resource transfer from me is equal to the value of the resources transferred.
-                if (action.sbjCharacter == name && action.fromHome)
-                    return -itemValue(action.resources)
-                if (action.toWhere == "home_$name")
-                    return itemValue(action.resources)
+                if (action.sbjCharacter == name && action.fromHome) {
+                    val ret = -itemValue(action.resources)
+                    onSpeech.forEach {
+                        it("ActionValue-UnofficialResourceTransfer", ret)
+                    }
+                    return ret
+                }
+                if (action.toWhere == "home_$name") {
+                    val ret = itemValue(action.resources)
+                    onSpeech.forEach {
+                        it("ActionValue-UnofficialResourceTransfer", ret)
+                    }
+                    return ret
+                }
             }
 
             is OfficialResourceTransfer -> {
@@ -271,7 +282,11 @@ class Character : GameStateElement() {
                 val urgency =
                     1.0 - parent.places[action.tgtPlace]!!.apparatuses.sumOf { it.durability } / parent.places[action.tgtPlace]!!.apparatuses.size / 100.0
                 if (parent.places[action.tgtPlace]!!.responsibleDivision == party) {
-                    return urgency * parent.getPartyMutuality(party) * factor
+                    val ret = urgency * parent.getPartyMutuality(party) * factor
+                    onSpeech.forEach {
+                        it("ActionValue-Repair", ret)
+                    }
+                    return ret
                 }
                 //Otherwise, the action value is 0.
                 return 0.0
@@ -281,7 +296,11 @@ class Character : GameStateElement() {
                 //Clearing the accident scene is more valuable if I am the manager of the place.
                 if (parent.places[action.tgtPlace]!!.responsibleDivision == division?.name) {
                     val factor = if (place.manager == name) 2.0 else 1.0
-                    return factor * parent.getPartyMutuality(division!!.name)
+                    val ret = factor * parent.getPartyMutuality(division!!.name)
+                    onSpeech.forEach {
+                        it("ActionValue-ClearAccidentScene", ret)
+                    }
+                    return ret
                 }
                 return 0.0
             }
@@ -290,7 +309,11 @@ class Character : GameStateElement() {
                 //I hate someone investigating the accident scene where I am the manager.
                 if (parent.places[action.tgtPlace]!!.responsibleDivision == division?.name) {
                     if (place.manager == name && action.sbjCharacter != name) {
-                        return (const("mutualityMax") - parent.getPartyMutuality(division!!.name)) * 0.5
+                        val ret = (const("mutualityMax") - parent.getPartyMutuality(division!!.name)) * 0.5
+                        onSpeech.forEach {
+                            it("ActionValue-InvestigateAccidentScene", ret)
+                        }
+                        return ret
                     }
                 }
                 return 0.0
@@ -312,12 +335,20 @@ class Character : GameStateElement() {
                     AgendaType.REQUEST -> return 0.0 // Prevent nested request!
                     AgendaType.PRAISE -> {
                         //Based on the mutuality.
-                        return parent.getMutNorm(name, action.agenda.subjectParams["character"]!!) * 5.0
+                        val ret = parent.getMutNorm(name, action.agenda.subjectParams["character"]!!) * 5.0
+                        onSpeech.forEach {
+                            it("ActionValue-Praise", ret)
+                        }
+                        return ret
                     }
 
                     AgendaType.DENOUNCE -> {
                         //Based on the mutuality.
-                        return parent.getMutNorm(name, action.agenda.subjectParams["character"]!!) * -7.0
+                        val ret = parent.getMutNorm(name, action.agenda.subjectParams["character"]!!) * -7.0
+                        onSpeech.forEach {
+                            it("ActionValue-Denounce", ret)
+                        }
+                        return ret
                     }
 
                     AgendaType.PRAISE_PARTY -> {
@@ -397,37 +428,52 @@ class Character : GameStateElement() {
             }
 
         } else {
-            //Accidents are always interesting. But not if it is about my party.
-            if (info.type == InformationType.CASUALTY) {
-                val plObj = parent.places[info.tgtPlace]!!
-                if (plObj.workplaceParty?.leader == name || parent.parties[plObj.responsibleDivision]?.leader == name) {
-                    ret = -1e-1 * stats.lScale
-                } else
-                    ret = 3e-2 * stats.lScale
-            } else {
-                //Otherwise, if the information is about some other people, the character's preference depends on their relationship with the target.
-                //The target character's preference is reflected.
-                info.tgtCharacter?.run {
-                    ret = parent.characters[this]!!.infoPreference(info) / const("mutualityMax") * parent.getMutNorm(
-                        name,
-                        this
-                    ) * stats.eScale
+            when (info.type) {
+                InformationType.CASUALTY -> {
+                    val plObj = parent.places[info.tgtPlace]!!
+                    if (plObj.workplaceParty?.leader == name || parent.parties[plObj.responsibleDivision]?.leader == name) {
+                        ret = -1e-1 * stats.lScale
+                    } else
+                        ret = 3e-2 * stats.lScale
                 }
 
+                InformationType.ACTION -> {
+                    //I don't like unresolved requests that are given to me.
+                    if ((info.action is NewAgenda) && (info.action as NewAgenda).agenda.type == AgendaType.REQUEST
+                        && (info.action as NewAgenda).agenda.attachedRequest!!.issuedTo.contains(name) && !(info.action as NewAgenda).agenda.attachedRequest!!.completed
+                    ) {
+                        ret = -1e-1 * (1 - (info.action as NewAgenda).agenda.attachedRequest!!.issuedBy.sumOf {
+                            parent.getMutNorm(
+                                name,
+                                it
+                            )
+                        } / (info.action as NewAgenda).agenda.attachedRequest!!.issuedBy.size) * stats.pScale
+                        //If I hate the issuers, I hate this information even more. If I like the issuers, I don't hate this information as much.
+                    }
+                }
+
+                InformationType.APPARATUS -> {
+                    //If the information is about the apparatus of a place I manage or my division manages, I like it depends on the condition of the apparatus.
+                    val plObj = parent.places[info.tgtPlace]!!
+                    if (plObj.manager == name || parent.parties[plObj.responsibleDivision]?.leader == name) {
+                        ret =
+                            5e-2 * stats.eScale * (0.7 - parent.getApparatus(info.tgtApparatusID!!).durability / 100.0)
+                    }
+                }
+
+                else -> {
+                    //Otherwise, if the information is about some other people, the character's preference depends on their relationship with the target.
+                    //The target character's preference is reflected.
+                    info.tgtCharacter?.run {
+                        ret =
+                            parent.characters[this]!!.infoPreference(info) / const("mutualityMax") * parent.getMutNorm(
+                                name,
+                                this
+                            ) * stats.eScale
+                    }
+                }
             }
 
-            //I don't like unresolved requests that are given to me.
-            if (info.type == InformationType.ACTION && (info.action is NewAgenda) && (info.action as NewAgenda).agenda.type == AgendaType.REQUEST
-                && (info.action as NewAgenda).agenda.attachedRequest!!.issuedTo.contains(name) && !(info.action as NewAgenda).agenda.attachedRequest!!.completed
-            ) {
-                ret = -1e-1 * (1 - (info.action as NewAgenda).agenda.attachedRequest!!.issuedBy.sumOf {
-                    parent.getMutNorm(
-                        name,
-                        it
-                    )
-                } / (info.action as NewAgenda).agenda.attachedRequest!!.issuedBy.size) * stats.pScale
-                //If I hate the issuers, I hate this information even more. If I like the issuers, I don't hate this information as much.
-            }
 
             //Mutuality and Party Mutuality information are only used as decisions, not gossips.
             //For gossips, characters can share actual actions and casualties.

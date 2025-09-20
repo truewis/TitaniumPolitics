@@ -82,7 +82,6 @@ class MeetingUI(var gameState: GameState) : Table(defaultSkin), KTable {
     val electionUIContainer = Container<ElectionUI>()
     val meetingInfoUI = scene2d.table {
     }
-    var previousMutualities = mutableMapOf<Pair<String, String>, Double>()
     val addAgendaButton = scene2d.button {
         stack {
             it.grow()
@@ -103,6 +102,18 @@ class MeetingUI(var gameState: GameState) : Table(defaultSkin), KTable {
                 refresh(it.player.currentMeeting!!)
             }
         }
+        gameState.onNewMutualityReason += { char1, char2, delta, reason ->
+            if (isVisible && gameState.player.currentMeeting?.currentCharacters?.contains(char1) == true && gameState.player.currentMeeting?.currentCharacters?.contains(
+                    char2
+                ) == true
+            ) {
+                Logger.write(
+                    "MeetingUI: New mutuality reason detected between $char1 and $char2: $reason ($delta)",
+                    Logger.LogLevel.INFO
+                )
+                showMutualityArrows(char1, char2, delta, reason)
+            }
+        }
         GameEngine.onBeforeNonPlayerCharacterAction += { action ->
             if (isVisible && gameState.player.currentMeeting?.currentCharacters?.contains(action.sbjCharacter) ?: false && action !is Wait) {
                 Logger.write(
@@ -111,10 +122,10 @@ class MeetingUI(var gameState: GameState) : Table(defaultSkin), KTable {
                 )
                 refresh(gameState.player.currentMeeting!!)
                 if (speakerPortrait.tgtCharacter == action.sbjCharacter) {
-                    speakerPortrait.speechUI.displaySpeech(action)
+                    speakerPortrait.speechUI.displaySpeech(action.generateSpeech())
                 }
                 portraits.firstOrNull { portrait -> portrait.tgtCharacter == action.sbjCharacter }?.also { portrait ->
-                    portrait.speechUI.displaySpeech(action)
+                    portrait.speechUI.displaySpeech(action.generateSpeech())
                 }
 
             }
@@ -169,24 +180,6 @@ class MeetingUI(var gameState: GameState) : Table(defaultSkin), KTable {
                 }
 
 
-            //show mutuality arrows if there are any changes.
-            val newMutualities = meeting.currentCharacters.flatMap { char1 ->
-                meeting.currentCharacters.map { char2 ->
-                    Pair(char1, char2) to gameState.getMutuality(char1, char2)
-                }
-            }.toMap().toMutableMap()
-            val mutualityChanges = newMutualities.filter { (pair, value) ->
-                previousMutualities[pair]?.let { it != value } ?: false
-            }.mapValues {
-                it.value - (previousMutualities[it.key] ?: 0.0)
-            }
-            if (mutualityChanges.isNotEmpty()) {
-                showMutualityArrows(mutualityChanges)
-            }
-            previousMutualities = newMutualities
-
-
-
             placeCharacterPortrait()
             //Remove all bubbles before placing them again.
             removeBubbles()
@@ -220,17 +213,26 @@ class MeetingUI(var gameState: GameState) : Table(defaultSkin), KTable {
             ?: speakerPortrait.takeIf { it.tgtCharacter == characterName }
     }
 
-    fun showMutualityArrows(mutualityChanges: Map<Pair<String, String>, Double>) {
+    fun showMutualityArrows(char1: String, char2: String, delta: Double, reason: String?) {
         // 기존 화살표 제거(화면에서만)
         mutualityArrows.forEach { it.remove() }
 
         // 새 화살표 생성 및 애니메이션
-        mutualityChanges.forEach { (pair, delta) ->
-            val fromPortrait = findPortrait(pair.first) ?: return@forEach
-            val toPortrait = findPortrait(pair.second) ?: return@forEach
-            val arrow = MutualityArrowUI(fromPortrait, toPortrait, delta.toFloat())
-            mutualityArrows.add(arrow)
-            addActor(arrow)
+        val fromPortrait = findPortrait(char1) ?: return
+        val toPortrait = findPortrait(char2) ?: return
+        val arrow = MutualityArrowUI(fromPortrait, toPortrait, delta.toFloat())
+        mutualityArrows.add(arrow)
+        addActor(arrow)
+        if (speakerPortrait.tgtCharacter == char1) {
+            reason?.let {
+                speakerPortrait.speechUI.displaySpeech(it)
+            }
+        }
+        portraits.firstOrNull { portrait -> portrait.tgtCharacter == char1 }?.also { portrait ->
+            reason?.let {
+                portrait.speechUI.displaySpeech(it)
+            }
+        }
 //            addAnimation(
 //                Actions.run {
 //                    arrow.addAction(
@@ -246,7 +248,7 @@ class MeetingUI(var gameState: GameState) : Table(defaultSkin), KTable {
 //                }
 //            )
 
-        }
+
 //        if (mutualityChanges.isNotEmpty())
 //            flushAnimation()
     }
@@ -277,15 +279,6 @@ class MeetingUI(var gameState: GameState) : Table(defaultSkin), KTable {
                 )
             }
         }
-
-        previousMutualities = meeting.scheduledCharacters.flatMap { char1 ->
-            meeting.currentCharacters.mapNotNull { char2 ->
-                if (char1 != char2) {
-                    val mutuality = gameState.getMutuality(char1, char2)
-                    Pair(char1, char2) to mutuality
-                } else null
-            }
-        }.toMap().toMutableMap()
 
         if (gameState.time == meeting.startTime + 1) //Only display the meeting if it's right after the starting time. This works because updateUI is called after every timestep advance.
             if (meeting.type == Meeting.MeetingType.TALK && meeting.currentCharacters.size == 2) {

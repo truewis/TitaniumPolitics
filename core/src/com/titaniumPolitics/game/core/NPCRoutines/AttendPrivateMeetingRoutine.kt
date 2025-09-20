@@ -139,7 +139,8 @@ class AttendPrivateMeetingRoutine(
             //If nothing else to talk about, end the speech. The next speaker is the character with the highest mutuality.
             return EndSpeech(
                 name, place, meeting.currentCharacters.minus(name)
-                    .maxByOrNull { gState.getMutuality(name, it) }!!
+                    .maxByOrNull { gState.getMutuality(name, it) }!!,
+                gState
             )
 
         }

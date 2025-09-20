@@ -143,6 +143,7 @@ sealed class MeetingRoutine : Routine() {
         return null
     }
 
+    val tried_proposeProofOfWork = mutableSetOf<String>()
     fun proposeProofOfWork(name: String, place: String): GameAction? {
         //Proof of work should have corresponding request. If there is no request or no relevant information, do not propose proof of work.
         //Some information are more relevant than others.
@@ -151,10 +152,12 @@ sealed class MeetingRoutine : Routine() {
                 .isNotEmpty() && !it.completed &&
                     (it.executeTime == null ||
                             it.executeTime!! <= gState.time + 24 * IDTH)
+                    && it.name !in tried_proposeProofOfWork
             /*Do not demand the request submitted in this meeting to be proved right away.
             * Wait at least one day to execute the request, so that the issuer has time to execute it.
             * */
         }?.let { req ->
+            tried_proposeProofOfWork += req.name
             NewAgenda(name, place, gState).also {
                 it.agenda = MeetingAgenda(AgendaType.PROOF_OF_WORK, name, attachedRequest = req)
                 if (it.isValid())

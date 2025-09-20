@@ -138,23 +138,23 @@ class Meeting(
     //This is to prevent the meeting going nowhere when there isn't enough supporting information.
     fun onTimeChange(gameState: GameState) {
 
-        if (type == MeetingType.TALK) {
-            //Chill meeting
-            currentCharacters.forEach {
-                gameState.setMutuality(
-                    it, it, delta = DT / const("ChillMeetingWillTau") * const("mutualityMax"),
-                    "ChillMeetingWill"
-                )
-            }
-        } else {
-            //Work meeting
-            currentCharacters.forEach {
-                gameState.setMutuality(
-                    it, it, delta = DT / const("WorkMeetingWillTau") * const("mutualityMax"),
-                    "WorkMeetingWill"
-                )
-            }
-        }
+//        if (type == MeetingType.TALK) {
+//            //Chill meeting
+//            currentCharacters.forEach {
+//                gameState.setMutuality(
+//                    it, it, delta = DT / const("ChillMeetingWillTau") * const("mutualityMax"),
+//                    "ChillMeetingWill"
+//                )
+//            }
+//        } else {
+//            //Work meeting
+//            currentCharacters.forEach {
+//                gameState.setMutuality(
+//                    it, it, delta = DT / const("WorkMeetingWillTau") * const("mutualityMax"),
+//                    "WorkMeetingWill"
+//                )
+//            }
+//        }
         agendas.forEach { agenda ->
 
 

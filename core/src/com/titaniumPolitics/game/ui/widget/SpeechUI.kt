@@ -63,61 +63,12 @@ class SpeechUI : Table(defaultSkin), KTable {
     /**
      * Display speech from the engine thread.
      */
-    fun displaySpeech(action: GameAction) {
+    fun displaySpeech(text: String) {
         runBlocking {
             bubble.isVisible = true
-            var text: String
-            when (action) {
-                is NewAgenda -> {
-                    when (action.agenda.type) {
-                        AgendaType.PROOF_OF_WORK -> text = ReadOnly.script("NewAgenda-ProofOfWork")
-                        AgendaType.NOMINATE -> text =
-                            ReadOnly.script("NewAgenda-Nominate").format(action.agenda.subjectParams["character"])
-
-                        AgendaType.REQUEST -> text = ReadOnly.script("NewAgenda-Request").format(
-                            ReadOnly.prop(
-                                action.agenda.attachedRequest!!
-                                    .action::class.simpleName!!
-                            ), action.agenda.attachedRequest!!.issuedTo.first()
-                        )
-
-                        AgendaType.PRAISE -> text =
-                            ReadOnly.script("NewAgenda-Praise").format(action.agenda.subjectParams["character"])
-
-                        AgendaType.DENOUNCE -> text =
-                            ReadOnly.script("NewAgenda-Denounce").format(action.agenda.subjectParams["character"])
-
-                        AgendaType.PRAISE_PARTY -> text =
-                            ReadOnly.script("NewAgenda-PraiseParty").format(action.agenda.subjectParams["party"])
-
-                        AgendaType.DENOUNCE_PARTY -> text =
-                            ReadOnly.script("NewAgenda-DenounceParty").format(action.agenda.subjectParams["party"])
-
-                        AgendaType.BUDGET_PROPOSAL -> text = ReadOnly.script("NewAgenda-BudgetProposal")
-                        AgendaType.BUDGET_RESOLUTION -> text = ReadOnly.script("NewAgenda-BudgetResolution")
-                        AgendaType.APPOINT_MEETING -> text =
-                            ReadOnly.script("NewAgenda-AppointMeeting")
-
-                        AgendaType.FIRE_MANAGER -> text =
-                            ReadOnly.script("NewAgenda-FireManager").format(action.agenda.subjectParams["character"])
-                    }
-                }
-
-                is AddInfo -> {
-                    text = ReadOnly.script(action.effectivityReason).format(action.agenda.subjectParams["character"])
-                }
-
-                is EndSpeech -> {
-                    text = ReadOnly.script("EndSpeech2").format(ReadOnly.charProp(action.nextSpeaker))
-                }
-
-                else -> {
-                    text = ReadOnly.script(action.javaClass.simpleName, action)
-                }
-            }
             Gdx.app.postRunnable {
                 println("Displaying speech: $text")
-                speech.restart(text)
+                speech.restart("$text ")// Add a space to ensure the last word is rendered.
             }
             suspendCoroutine { continuation ->
                 onSpeechEnd.clear()
