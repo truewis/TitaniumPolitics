@@ -148,7 +148,12 @@ sealed class MeetingRoutine : Routine() {
         //Some information are more relevant than others.
         gState.requests.values.firstOrNull {
             name in it.issuedBy && it.issuedTo.intersect(meeting.currentCharacters)
-                .isNotEmpty() && !it.completed /*Do not demand the request submitted in this meeting to be proved right away.*/
+                .isNotEmpty() && !it.completed &&
+                    (it.executeTime == null ||
+                            it.executeTime!! <= gState.time + 24 * IDTH)
+            /*Do not demand the request submitted in this meeting to be proved right away.
+            * Wait at least one day to execute the request, so that the issuer has time to execute it.
+            * */
         }?.let { req ->
             NewAgenda(name, place, gState).also {
                 it.agenda = MeetingAgenda(AgendaType.PROOF_OF_WORK, name, attachedRequest = req)
@@ -228,7 +233,8 @@ sealed class MeetingRoutine : Routine() {
                                     resources = Resources(resourcesToTransferMap)
                                 ),
                                 issuedTo = hashSetOf(bestIssuer),
-                                issuedBy = hashSetOf(name)
+                                issuedBy = hashSetOf(name),
+                                executeTime = gState.time
                             )
                         )
                         if (it.isValid())
@@ -248,7 +254,8 @@ sealed class MeetingRoutine : Routine() {
                         attachedRequest = Request(
                             action = action,
                             issuedTo = hashSetOf(bestActionIssuer),
-                            issuedBy = hashSetOf(name)
+                            issuedBy = hashSetOf(name),
+                            executeTime = gState.time
                         )
                     )
                     if (it.isValid())

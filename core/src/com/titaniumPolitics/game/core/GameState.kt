@@ -120,12 +120,19 @@ class GameState {
      * This is used to filter information on UI.
      * Never intended to be used in core logic.
      */
-    var knownCharactersToPlayer = hashSetOf<String>() //
+    val knownCharactersToPlayer = hashSetOf<String>() //
 
     val player get() = characters[playerName]!!
     var log = Log()
-    var parties = hashMapOf<String, Party>()
-    var requests = hashMapOf<String, Request>()
+    val parties = hashMapOf<String, Party>()
+    val requests = hashMapOf<String, Request>()
+    fun removeRequest(key: String) {
+        if (!requests.containsKey(key)) throw Exception("Request with key $key does not exist.")
+        requests.remove(key)
+        characters.forEach {
+            it.value.executedRequests.remove(key)
+        }
+    }
 
     private var _scheduledMeetings = hashMapOf<String, Meeting>()
     val scheduledMeetings: Map<String, Meeting> = Collections.unmodifiableMap(_scheduledMeetings)

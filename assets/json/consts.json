@@ -18,7 +18,7 @@
   "IdleHumanHeatProduction": 100,
   "DurabilityMax": 100,
   "DurabilityTau": 800000,
-  "CorruptionTau": 864000,
+  "CorruptionTau": 200000,
   "StealAmountMultiplier": 15,
   "WorkerWaterConsumptionRate": 1e-4,
   "MarketWaterConsumptionRate": 1e-4,

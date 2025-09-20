@@ -23,8 +23,9 @@ class Request(
 
     var completed = false
 
-    @Transient
-    var onComplete = arrayListOf<() -> Unit>()
+    //This is not serialized, which means that if the game is saved and loaded, onComplete will be lost.
+//    @Transient
+//    var onComplete = arrayListOf<() -> Unit>()
 
     fun generateName(): String {
         if (this.name != "") {
@@ -96,10 +97,8 @@ class Request(
                 }
 
             }
-            onComplete.forEach { it() }
             completed = true
         }
-
     }
 
     fun deltaWill(tgtChar: String, gState: GameState): Double {

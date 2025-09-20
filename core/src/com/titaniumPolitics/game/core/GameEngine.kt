@@ -5,6 +5,7 @@ import com.titaniumPolitics.game.core.Character.Type
 import com.titaniumPolitics.game.core.ReadOnly.const
 import com.titaniumPolitics.game.core.ReadOnly.DT
 import com.titaniumPolitics.game.core.ReadOnly.DTH
+import com.titaniumPolitics.game.core.ReadOnly.IDTH
 import com.titaniumPolitics.game.core.ReadOnly.S_PER_HR
 import com.titaniumPolitics.game.core.ReadOnly.constInt
 import com.titaniumPolitics.game.core.gameActions.GameAction
@@ -132,6 +133,13 @@ class GameEngine(val gameState: GameState) {
         gameState.requests.forEach {
             it.value.refresh(gameState)
         }
+        //If three days have passed since executeTime, the request fails.
+        gameState.requests.filter {
+            it.value.executeTime?.let { gameState.time - it >= 3 * 24 * IDTH } ?: false
+        }
+            .forEach {
+                gameState.removeRequest(it.key)
+            }
         onObserverCall.forEach { it(gameState) }
 
     }

@@ -80,7 +80,8 @@ class AttendCabinetMeetingRoutine(override val meetingName: String) : MeetingRou
                                                 Resources(res to apparatus.currentConsumption[res]!! * place1.workHoursLength * 3)
                                             ),
                                             issuedTo = hashSetOf(leader),
-                                            issuedBy = hashSetOf(name)
+                                            issuedBy = hashSetOf(name),
+                                            executeTime = gState.time
                                         ) //Created a command to transfer the resource.
                                     }
                                     NewAgenda(name, place, gState).also {
