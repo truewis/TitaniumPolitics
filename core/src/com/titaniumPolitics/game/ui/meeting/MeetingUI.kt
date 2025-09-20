@@ -113,11 +113,10 @@ class MeetingUI(var gameState: GameState) : Table(defaultSkin), KTable {
                 if (speakerPortrait.tgtCharacter == action.sbjCharacter) {
                     speakerPortrait.speechUI.displaySpeech(action)
                 }
-                portraits.forEach { portrait ->
-                    if (portrait.tgtCharacter == action.sbjCharacter) {
-                        portrait.speechUI.displaySpeech(action)
-                    }
+                portraits.firstOrNull { portrait -> portrait.tgtCharacter == action.sbjCharacter }?.also { portrait ->
+                    portrait.speechUI.displaySpeech(action)
                 }
+
             }
         }
         discussionTable = stack {

@@ -11,13 +11,6 @@ import kotlinx.serialization.Serializable
 class AddInfoToAgendaRoutine(val agendaIndex: Int, val support: Boolean) : Routine(),
     IMeetingRoutine {
     override fun newRoutineCondition(name: String, place: String, subroutines: List<Routine>): Routine? {
-        // If I have no prepared information not presented in the meeting, end the routine.
-        val character = gState.characters[name]!!
-        val conf = character.currentMeeting ?: return failed()
-        if (character.preparedInfoKeys.none { key ->
-                (conf.currentCharacters - gState.informations[key]!!.knownTo).isNotEmpty()
-            })
-            return failed()
         return null
     }
 

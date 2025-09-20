@@ -924,10 +924,11 @@ class GameEngine(val gameState: GameState) {
         fun gameOver(reasonKey: String) {
             runBlocking {
                 suspendCoroutine { continuation ->
-                    Gdx.app.postRunnable {
-                        Logger.write("Game Over: $reasonKey", Logger.LogLevel.ERROR)
-                        GameOverUI.instance.displayGameOver(reasonKey)
 
+                    Logger.write("Game Over: $reasonKey", Logger.LogLevel.ERROR)
+                    //Pause the game and display game over screen, only if not headless.
+                    Gdx.app?.postRunnable {
+                        GameOverUI.instance.displayGameOver(reasonKey)
                     }
                     while (true) {
                     }
