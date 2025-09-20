@@ -10,6 +10,7 @@ import com.titaniumPolitics.game.core.Party
 import com.titaniumPolitics.game.core.ReadOnly
 import com.titaniumPolitics.game.core.Request
 import com.titaniumPolitics.game.core.Resources
+import com.titaniumPolitics.game.core.gameActions.Examine
 import com.titaniumPolitics.game.core.gameActions.GameAction
 import com.titaniumPolitics.game.core.gameActions.OfficialResourceTransfer
 import com.titaniumPolitics.game.core.gameActions.PrepareInfo
@@ -387,6 +388,26 @@ class WorkRoutine(var workplace: String) : Routine() {
     }
 
     override fun execute(name: String, place: String): GameAction {
+        val character = gState.characters[name]!!
+        //7.0 If I am an employee, examine stuff in the workplace.
+        if (character.type == Character.Type.EMPLOYEE) {
+            if (place == workplace) {
+                when (gState.places[place]!!.workplaceParty?.getRole(name)) {
+
+                    Party.Role.TREASURER -> {
+                        //Examine the resource
+                        return Examine(name, place, InformationType.RESOURCES, gState)
+                    }
+
+                    Party.Role.OVERSEER -> {
+                        //Examine the human resources
+                        return Examine(name, place, InformationType.HUMAN_RESOURCES, gState)
+                    }
+
+                    else -> {}
+                }
+            }
+        }
 
         //Wait until there is some routine available above.
         return Wait(name, place) //If no subroutine is found, wait at the current place.

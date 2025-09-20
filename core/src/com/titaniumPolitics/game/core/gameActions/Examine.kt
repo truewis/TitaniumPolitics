@@ -4,6 +4,7 @@ import com.titaniumPolitics.game.core.GameEngine
 import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.core.Information
 import com.titaniumPolitics.game.core.InformationType
+import com.titaniumPolitics.game.core.MutualityMatrix
 import com.titaniumPolitics.game.debugTools.Logger
 import kotlinx.serialization.Serializable
 
@@ -146,6 +147,13 @@ data class Examine(override val sbjCharacter: String, override val tgtPlace: Str
         return super.isProofOfWork(info) || (info.action is Examine && (info.action as Examine).let {
             it.what == this.what && it.tgtPlace == this.tgtPlace
         }) || (info.type == what && info.tgtPlace == this.tgtPlace) /*Do not check time for now, it is quite tricky.*/
+    }
+
+    override fun deltaWill(): MutualityMatrix {
+        val w = MutualityMatrix()
+        val amount = -10.0
+        w.addWill(sbjCharacter, amount, "Examine")
+        return w
     }
 
 }
