@@ -190,7 +190,7 @@
       "reliant": 3,
       "livingBy": "techSchool"
     },
-    "teacher1": {
+    "Jan": {
       "trait": [
         "workaholic",
         "emotionless",
@@ -2771,7 +2771,7 @@
       "leader": "Eugene",
       "_members": [
         "Eugene",
-        "teacher1",
+        "Jan",
         "teacher2"
       ],
       "home": "educationHeadquarters",
