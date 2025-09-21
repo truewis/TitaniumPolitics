@@ -109,7 +109,7 @@ data class AddInfo(
         newsCharacters.forEach { listener ->
             directMutualityChange(w, listener)
             NewAgenda.affectListenerMutuality(
-                effectivity, w, agenda, sbjCharacter, listener, parent
+                effectivity / ReadOnly.const("mutualityMax"), w, agenda, sbjCharacter, listener, parent
             )
         }
         return w

@@ -236,6 +236,19 @@ data class NewAgenda(override val sbjCharacter: String, override val tgtPlace: S
                 }
 
                 REQUEST -> {
+                    //If the request is directed to the listener, decide if this is a reasonable request.
+                    if (agenda.attachedRequest!!.issuedTo.contains(listener)) {
+                        //If the listener likes the requester, they are more willing to comply with the request.
+                        w.addMutuality(
+                            listener,
+                            sbjCharacter,
+                            10.0 * effectivity * (parent.getMutNorm(
+                                listener,
+                                sbjCharacter
+                            ) - agenda.attachedRequest!!.difficulty(parent) / 100.0),
+                            "Request;$sbjCharacter"
+                        )
+                    }
 
                 }
 

@@ -2,6 +2,7 @@ package com.titaniumPolitics.game.core
 
 import com.titaniumPolitics.game.core.ReadOnly.IDTH
 import com.titaniumPolitics.game.core.gameActions.GameAction
+import com.titaniumPolitics.game.core.gameActions.UnofficialResourceTransfer
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 
@@ -109,8 +110,15 @@ class Request(
     }
 
     fun difficulty(gState: GameState): Double {
-        //if issuedBy includes one of my boss, it is easier.
-        if (issuedBy.isEmpty()) return ReadOnly.const("RequestRejectAverageMutuality")//System request, average difficulty.
+        var base = ReadOnly.const("RequestRejectAverageMutuality")
+        if (issuedBy.isEmpty()) return base//System request, average difficulty.
+
+        //If action is unofficialTransfer, difficulty is proportional to the value of the resources.
+        if (action is UnofficialResourceTransfer && issuedTo.isNotEmpty()) {
+            val urt = action as UnofficialResourceTransfer
+            val value = gState.characters[issuedTo.first()]!!.itemValue(urt.resources)
+            base += value
+        }
         //If issuedBy contains my boss, it is easier.
         if (issuedBy.any { issuedByChar ->
                 gState.parties.any {
@@ -119,9 +127,9 @@ class Request(
                     ).isNotEmpty()
                 }
             }) {
-            return ReadOnly.const("RequestRejectAverageMutuality") / 2
+            return base / 2
         }
-        return ReadOnly.const("RequestRejectAverageMutuality")//TODO: difficulty must change according to action.
+        return base
     }
 
     override fun toString(): String {
