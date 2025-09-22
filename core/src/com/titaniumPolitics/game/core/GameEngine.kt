@@ -154,6 +154,8 @@ class GameEngine(val gameState: GameState) {
         //This is for automatic progression and test purposes.
         {
             do {
+                //Wait for player input. Create a temporary save file so that if the action results in an error, the player can reload the game.
+                gameState.dumpTemp()
                 action = acquire("Action", hashMapOf("actionList" to actionList))
                 action.injectParent(gameState)
                 if (action.isValid()) {
@@ -947,7 +949,6 @@ class GameEngine(val gameState: GameState) {
 
         inline fun <reified T> acquire(dataType: String, params: HashMap<String, Any>): T = runBlocking {
             var wanted: T? = null
-
             // Use coroutine to suspend until the acquisition is complete
             suspendCoroutine { continuation ->
                 acquireCallback = { x ->

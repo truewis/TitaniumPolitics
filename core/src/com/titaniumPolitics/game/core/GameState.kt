@@ -654,6 +654,16 @@ class GameState {
         return fName
     }
 
+    fun dumpTemp(): String {
+        if (workingDirectory != "") {
+            val fName =
+                (workingDirectory + "/lastSave.json")
+            dump(fName)
+            return fName
+        } else
+            throw Exception("Cannot dump temp save without working directory.")
+    }
+
     @OptIn(ExperimentalSerializationApi::class)
     fun dump(fileName: String) {
         val prettyJson = Json { // this returns the JsonBuilder
