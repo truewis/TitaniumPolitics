@@ -457,7 +457,7 @@ class Character : GameStateElement() {
                     val plObj = parent.places[info.tgtPlace]!!
                     if (plObj.manager == name || parent.parties[plObj.responsibleDivision]?.leader == name) {
                         ret =
-                            5e-2 * stats.eScale * (0.7 - parent.getApparatus(info.tgtApparatusID!!).durability / 100.0)
+                            1e-1 * stats.eScale * (parent.getApparatus(info.tgtApparatusID!!).durability / 100.0 - 0.7)
                     }
                 }
 
