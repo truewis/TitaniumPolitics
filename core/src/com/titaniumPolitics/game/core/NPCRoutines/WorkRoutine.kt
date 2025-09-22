@@ -408,6 +408,13 @@ class WorkRoutine(var workplace: String) : Routine() {
                 }
             }
         }
+        //7.1 If I am an engineer, examine apparatus in the workplace.
+        if ("engineer" in character.trait) {
+            if (place == workplace) {
+                //Examine apparatus
+                return Examine(name, place, InformationType.APPARATUS, gState)
+            }
+        }
 
         //Wait until there is some routine available above.
         return Wait(name, place) //If no subroutine is found, wait at the current place.

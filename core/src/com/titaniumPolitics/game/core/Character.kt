@@ -461,6 +461,14 @@ class Character : GameStateElement() {
                     }
                 }
 
+                InformationType.HUMAN_RESOURCES, InformationType.RESOURCES -> {
+                    //I generally don't like information about resources and human resources of places I manage or my division manages.
+                    val plObj = parent.places[info.tgtPlace]!!
+                    if (plObj.manager == name || parent.parties[plObj.responsibleDivision]?.leader == name) {
+                        ret = -5e-2 * stats.pScale
+                    }
+                }
+
                 else -> {
                     //Otherwise, if the information is about some other people, the character's preference depends on their relationship with the target.
                     //The target character's preference is reflected.
