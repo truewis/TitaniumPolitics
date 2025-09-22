@@ -102,10 +102,12 @@ class MeetingUI(var gameState: GameState) : Table(defaultSkin), KTable {
                 refresh(it.player.currentMeeting!!)
             }
         }
+        //Listen for mutuality changes between characters in the current meeting.
+        //When a new mutuality reason is added, show the mutuality arrows if both characters are in the current meeting and they are not the same character.
         gameState.onNewMutualityReason += { char1, char2, delta, reason ->
             if (isVisible && gameState.player.currentMeeting?.currentCharacters?.contains(char1) == true && gameState.player.currentMeeting?.currentCharacters?.contains(
                     char2
-                ) == true
+                ) == true && char1 != char2
             ) {
                 Logger.write(
                     "MeetingUI: New mutuality reason detected between $char1 and $char2: $reason ($delta)",

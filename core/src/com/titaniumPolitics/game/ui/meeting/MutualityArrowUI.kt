@@ -25,14 +25,12 @@ class MutualityArrowUI(
         val endY = to.y + to.height / 2
         val angle = atan2(endY - startY, endX - startX)
         setPosition(startX, startY)
-        setPosition((startX + endX) / 2, (startY + endY) / 2, Align.center)
+        setPosition(startX, startY, Align.center)
         rotation = Math.toDegrees(angle.toDouble()).toFloat()
         height = log(abs(delta) + 1, 2f) * 10f // 로그 스케일로 높이 조정
         width = sqrt((endX - startX) * (endX - startX) + (endY - startY) * (endY - startY))
         addAction(
             Actions.sequence(
-                Actions.delay(0.1f),
-                Actions.moveTo(startX, startY),
                 Actions.delay(1f),
                 Actions.run { isVisible = false }
             )
