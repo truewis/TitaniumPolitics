@@ -63,6 +63,8 @@ class Apparatus {
         get() = ReadOnly.appJson[name] ?: throw Exception("$name not found in apparatus file.")
     private val baseDanger
         get() = jsonData.jsonObject["baseDanger"]!!.jsonPrimitive.double
+    private val accidentTypes
+        get() = jsonData.jsonObject["accidentType"]!!.jsonArray.map { AccidentType.valueOf(it.jsonPrimitive.content) }
 
     /**
      * Efficiency is multiplied by (T/300)^tempCoef.
@@ -178,33 +180,54 @@ class Apparatus {
     val currentHeatProduction: Double
         get() = idealHeatProduction * netEfficiency + currentWorker * const("WorkingHumanHeatProduction")
 
+    var currentDangerRecord = 0.0
+    var currentGraveDangerRecord = 0.0
+
     /**
      * Current accident danger of this apparatus. Unit: 1/second.
      */
-    val currentDanger: Double
-        get() {
-            return if (currentWorker == 0 || idealWorker == 0) 0.0 else if (durability == .0) 0.0 else {
-                if (currentWorker <= idealWorker)
-                    baseDanger * (2 - currentWorker / idealWorker) * 100 / durability / const("GlobalAccidentTau") * damageTempScale
-                else
-                    baseDanger * (2 * currentWorker / idealWorker - 1) * 100 / durability / const("GlobalAccidentTau") * damageTempScale//Danger increases when overcrewed or undercrewed.
-            }
+    fun currentDanger(type: AccidentType, place: Place): Double {
+        if (type !in accidentTypes) return 0.0
+        var typeFactor = 1.0
+        when (type) {
+            AccidentType.FIRE -> typeFactor *= place.gasPressure("oxygen") / 101325 * 4
+            AccidentType.COLLAPSE -> {}
+            AccidentType.EXPLOSION -> {}
+            AccidentType.FLOODING -> {}
+            AccidentType.FRAGMENTS -> {}
         }
+        return if (currentWorker == 0 || idealWorker == 0) 0.0 else if (durability == .0) 0.0 else {
+            if (currentWorker <= idealWorker)
+                baseDanger * (2 - currentWorker / idealWorker) * 100 / durability / const("GlobalAccidentTau") * damageTempScale * typeFactor
+            else
+            //Danger increases when overcrewed or undercrewed.
+                baseDanger * (2 * currentWorker / idealWorker - 1) * 100 / durability / const("GlobalAccidentTau") * damageTempScale * typeFactor
+        }
+    }
 
     /**
      * Current catastrophic accident danger of this apparatus. Unit: 1/second.
      */
-    val currentGraveDanger: Double
-        get() {
-            return if (currentWorker == 0 || idealWorker == 0) 0.0
-            else if (durability == .0) 0.0
-            else if (currentWorker <= idealWorker * 4 / 5)
-                baseDanger * (0.2 - currentWorker / 4 / idealWorker) * 100 / durability / const("GlobalAccidentTau") * damageTempScale
-            else if (currentWorker >= idealWorker * 6 / 5)
-                baseDanger * (2 * currentWorker / 3 / idealWorker - 0.8) * 100 / durability / const("GlobalAccidentTau") * damageTempScale //Nonzero only when very overcrewed or undercrewed.
-            else
-                0.0
+    fun currentGraveDanger(type: AccidentType, place: Place): Double {
+        if (type !in accidentTypes) return 0.0
+        var typeFactor = 1.0
+        when (type) {
+            AccidentType.FIRE -> typeFactor *= place.gasPressure("oxygen") / 101325 * 4
+            AccidentType.COLLAPSE -> {}
+            AccidentType.EXPLOSION -> {}
+            AccidentType.FLOODING -> {}
+            AccidentType.FRAGMENTS -> {}
         }
+        return if (currentWorker == 0 || idealWorker == 0) 0.0
+        else if (durability == .0) 0.0
+        //Nonzero only when very overcrewed or undercrewed.
+        else if (currentWorker <= idealWorker * 4 / 5)
+            baseDanger * (0.2 - currentWorker / 4 / idealWorker) * 100 / durability / const("GlobalAccidentTau") * damageTempScale * typeFactor
+        else if (currentWorker >= idealWorker * 6 / 5)
+            baseDanger * (2 * currentWorker / 3 / idealWorker - 0.8) * 100 / durability / const("GlobalAccidentTau") * damageTempScale * typeFactor
+        else
+            0.0
+    }
 
     /**
      * Current time constant of durability decrease.
@@ -274,19 +297,23 @@ class Apparatus {
         }
         place.addHeat(currentHeatProduction * S_PER_HR)
 
-        if (currentGraveDanger * S_PER_HR > GameEngine.random.nextDouble()) {
-            //Catastrophic accident occurred.
-            Logger.write("!Catastrophic accident occurred at: ${name}", Logger.LogLevel.INFO)
-            place.isAccidentScene = true
-            generateCatastrophicAccident(place)
+        AccidentType.entries.forEach { accidentType ->
+            if (currentGraveDanger(accidentType, place) * S_PER_HR > GameEngine.random.nextDouble()) {
+                //Catastrophic accident occurred.
+                Logger.write("!Catastrophic accident occurred at: ${name}", Logger.LogLevel.INFO)
+                place.isAccidentScene = true
+                generateCatastrophicAccident(place)
 
-        } else if (currentDanger * S_PER_HR > GameEngine.random.nextDouble()) {
-            //Accident occurred.
-            Logger.write("!Accident occurred at: ${name}", Logger.LogLevel.INFO)
-            place.isAccidentScene = true
-            generateAccident(place)
+            } else if (currentDanger(accidentType, place) * S_PER_HR > GameEngine.random.nextDouble()) {
+                //Accident occurred.
+                Logger.write("!Accident occurred at: ${name}", Logger.LogLevel.INFO)
+                place.isAccidentScene = true
+                generateAccident(place)
 
+            }
         }
+        currentDangerRecord = AccidentType.entries.sumOf { type -> currentDanger(type, place) }
+        currentGraveDangerRecord = AccidentType.entries.sumOf { type -> currentGraveDanger(type, place) }
 
 
     }
@@ -351,14 +378,17 @@ class Apparatus {
             "currentWorker" to currentWorker.toDouble(),
             "idealWorker" to idealWorker.toDouble(),
             "efficiency" to netEfficiency,
-            "danger" to currentDanger,
-            "graveDanger" to currentGraveDanger
+            "danger" to currentDangerRecord,
+            "graveDanger" to currentGraveDangerRecord
 
         )
     )
 
     override fun toString(): String {
-        return "Apparatus(name='$name', durability=$durability, baseDanger=$baseDanger, idealProduction=$idealProduction, idealWorker=$idealWorker, currentWorker=$currentWorker, currentProduction=$currentProduction, currentDanger=$currentDanger, currentGraveDanger=$currentGraveDanger)"
+        return "Apparatus(name='$name', durability=$durability, baseDanger=$baseDanger, idealProduction=$idealProduction, idealWorker=$idealWorker, currentWorker=$currentWorker, currentProduction=$currentProduction, currentDanger=$currentDangerRecord, currentGraveDanger=$currentGraveDangerRecord)"
     }
 
+    enum class AccidentType {
+        FIRE, COLLAPSE, EXPLOSION, FLOODING, FRAGMENTS
+    }
 }

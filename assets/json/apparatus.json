@@ -27,8 +27,8 @@
     "durabilityTau": 8.64e7,
     "baseDanger": 2.0E-4,
     "accidentType": [
-      "explosion",
-      "fire"
+      "EXPLOSION",
+      "FIRE"
     ],
     "maxTemp": 400,
     "minTemp": 200,
@@ -62,7 +62,7 @@
     "durabilityTau": 8.64e7,
     "baseDanger": 3.0E-4,
     "accidentType": [
-      "flooding"
+      "FLOODING"
     ],
     "maxTemp": 373,
     "minTemp": 273,
@@ -96,7 +96,7 @@
     "durabilityTau": 8.64e5,
     "baseDanger": 3.0E-4,
     "accidentType": [
-      "collapse"
+      "COLLAPSE"
     ],
     "requiredResourcePerRepair": [
       {
@@ -128,7 +128,7 @@
     "durabilityTau": 8.64e6,
     "baseDanger": 3.0E-4,
     "accidentType": [
-      "explosion"
+      "EXPLOSION"
     ],
     "maxTemp": 340,
     "minTemp": 70,
@@ -163,7 +163,7 @@
     "durabilityTau": 8.64e8,
     "baseDanger": 1.0E-4,
     "accidentType": [
-      "collapse"
+      "COLLAPSE"
     ],
     "maxTemp": 373,
     "requiredResourcePerRepair": [
@@ -194,7 +194,7 @@
     "durabilityTau": 8.64e7,
     "baseDanger": 1.0E-4,
     "accidentType": [
-      "collapse"
+      "COLLAPSE"
     ],
     "maxTemp": 800,
     "requiredResourcePerRepair": [
@@ -225,7 +225,7 @@
     "durabilityTau": 8.64e7,
     "baseDanger": 1.0E-4,
     "accidentType": [
-      "collapse"
+      "COLLAPSE"
     ],
     "maxTemp": 800,
     "requiredResourcePerRepair": [
@@ -256,8 +256,8 @@
     "durabilityTau": 8.64e8,
     "baseDanger": 6e-4,
     "accidentType": [
-      "fire",
-      "explosion"
+      "FIRE",
+      "EXPLOSION"
     ],
     "idealWorker": 0,
     "tempCoef": -1.0,
@@ -288,8 +288,8 @@
     "durabilityTau": 8.64e7,
     "baseDanger": 6e-4,
     "accidentType": [
-      "fire",
-      "fragments"
+      "FIRE",
+      "FRAGMENTS"
     ],
     "idealWorker": 5,
     "maxTemp": 400,
@@ -327,7 +327,7 @@
     "durabilityTau": 8.64e7,
     "baseDanger": 6e-4,
     "accidentType": [
-      "fire"
+      "FIRE"
     ],
     "idealWorker": 5,
     "maxTemp": 330,
@@ -366,8 +366,8 @@
     "durabilityTau": 8.64e7,
     "baseDanger": 6e-4,
     "accidentType": [
-      "fire",
-      "fragments"
+      "FIRE",
+      "FRAGMENTS"
     ],
     "idealWorker": 5,
     "maxTemp": 400,
@@ -406,9 +406,9 @@
     "durabilityTau": 8.64e6,
     "baseDanger": 10e-4,
     "accidentType": [
-      "fire",
-      "collapse",
-      "explosion"
+      "FIRE",
+      "COLLAPSE",
+      "EXPLOSION"
     ],
     "idealWorker": 500,
     "minTemp": 200,
@@ -447,7 +447,7 @@
     "durabilityTau": 8.64e7,
     "baseDanger": 6e-4,
     "accidentType": [
-      "fire"
+      "FIRE"
     ],
     "idealWorker": 5,
     "maxTemp": 400,
@@ -488,8 +488,8 @@
     "durabilityTau": 8.64e7,
     "baseDanger": 4e-4,
     "accidentType": [
-      "fire",
-      "fragments"
+      "FIRE",
+      "FRAGMENTS"
     ],
     "idealWorker": 5,
     "maxTemp": 400,
@@ -568,8 +568,8 @@
     "durabilityTau": 8.64e7,
     "baseDanger": 6e-4,
     "accidentType": [
-      "fire",
-      "explosion"
+      "FIRE",
+      "EXPLOSION"
     ],
     "idealWorker": 5,
     "maxTemp": 400,
@@ -610,7 +610,7 @@
     "durabilityTau": 8.64e7,
     "baseDanger": 1e-4,
     "accidentType": [
-      "fire"
+      "FIRE"
     ],
     "idealWorker": 100,
     "idealDistribution": {
@@ -644,7 +644,7 @@
     "durabilityTau": 8.64e7,
     "baseDanger": 1e-4,
     "accidentType": [
-      "fire"
+      "FIRE"
     ],
     "idealWorker": 100,
     "idealDistribution": {
@@ -678,7 +678,7 @@
     "durabilityTau": 8.64e7,
     "baseDanger": 1e-4,
     "accidentType": [
-      "fire"
+      "FIRE"
     ],
     "idealWorker": 100,
     "idealDistribution": {
@@ -712,7 +712,7 @@
     "durabilityTau": 8.64e7,
     "baseDanger": 1e-4,
     "accidentType": [
-      "fire"
+      "FIRE"
     ],
     "idealWorker": 100,
     "idealDistribution": {
@@ -746,7 +746,7 @@
     "durabilityTau": 8.64e7,
     "baseDanger": 1e-4,
     "accidentType": [
-      "fire"
+      "FIRE"
     ],
     "idealWorker": 100,
     "idealDistribution": {
@@ -780,7 +780,7 @@
     "durabilityTau": 8.64e7,
     "baseDanger": 1e-4,
     "accidentType": [
-      "fire"
+      "FIRE"
     ],
     "idealWorker": 100,
     "idealDistribution": {
@@ -814,7 +814,7 @@
     "durabilityTau": 8.64e7,
     "baseDanger": 1e-4,
     "accidentType": [
-      "fire"
+      "FIRE"
     ],
     "idealWorker": 100,
     "idealDistribution": {
@@ -875,8 +875,8 @@
     "durabilityTau": 8.64e6,
     "baseDanger": 4e-4,
     "accidentType": [
-      "fire",
-      "flooding"
+      "FIRE",
+      "FLOODING"
     ],
     "idealWorker": 100,
     "maxTemp": 320,
@@ -921,7 +921,7 @@
     "durabilityTau": 8.64e7,
     "baseDanger": 2e-4,
     "accidentType": [
-      "fire"
+      "FIRE"
     ],
     "idealWorker": 50,
     "requiredResourcePerRepair": [
@@ -949,9 +949,9 @@
     "durabilityTau": 8.64e6,
     "baseDanger": 8e-4,
     "accidentType": [
-      "fire",
-      "explosion",
-      "flooding"
+      "FIRE",
+      "EXPLOSION",
+      "FLOODING"
     ],
     "idealWorker": 5,
     "maxTemp": 373,
@@ -995,7 +995,7 @@
     "durabilityTau": 8.64e7,
     "baseDanger": 8e-4,
     "accidentType": [
-      "explosion"
+      "EXPLOSION"
     ],
     "idealWorker": 5,
     "tempCoef": 1,
@@ -1037,7 +1037,7 @@
     "durabilityTau": 8.64e5,
     "baseDanger": 6e-4,
     "accidentType": [
-      "fire"
+      "FIRE"
     ],
     "idealWorker": 5,
     "idealAbsorption": {
@@ -1079,7 +1079,7 @@
     "durabilityTau": 8.64e6,
     "baseDanger": 6e-4,
     "accidentType": [
-      "flooding"
+      "FLOODING"
     ],
     "idealWorker": 0,
     "tempCoef": -1,
@@ -1117,7 +1117,7 @@
     "durabilityTau": 8.64e6,
     "baseDanger": 6e-4,
     "accidentType": [
-      "flooding"
+      "FLOODING"
     ],
     "idealWorker": 0,
     "tempCoef": -1,
@@ -1197,8 +1197,8 @@
     "durabilityTau": 8.64e6,
     "baseDanger": 6e-4,
     "accidentType": [
-      "fire",
-      "explosion"
+      "FIRE",
+      "EXPLOSION"
     ],
     "idealWorker": 0,
     "maxTemp": 400,
@@ -1312,7 +1312,7 @@
     "durabilityTau": 8.64e6,
     "baseDanger": 6e-4,
     "accidentType": [
-      "explosion"
+      "EXPLOSION"
     ],
     "idealWorker": 0,
     "currentWorker": 0,
@@ -1347,8 +1347,8 @@
     "durabilityTau": 8.64e6,
     "baseDanger": 8e-4,
     "accidentType": [
-      "fire",
-      "collapse"
+      "FIRE",
+      "COLLAPSE"
     ],
     "idealWorker": 160,
     "idealProduction": {
@@ -1388,8 +1388,8 @@
     "durabilityTau": 8.64e6,
     "baseDanger": 10e-4,
     "accidentType": [
-      "collapse",
-      "flooding"
+      "COLLAPSE",
+      "FLOODING"
     ],
     "idealWorker": 160,
     "idealProduction": {
@@ -1426,8 +1426,8 @@
     "durabilityTau": 8.64e6,
     "baseDanger": 10e-4,
     "accidentType": [
-      "collapse",
-      "fragments"
+      "COLLAPSE",
+      "FRAGMENTS"
     ],
     "idealWorker": 160,
     "idealProduction": {
@@ -1464,7 +1464,7 @@
     "durabilityTau": 8.64e7,
     "baseDanger": 1e-4,
     "accidentType": [
-      "fire"
+      "FIRE"
     ],
     "idealWorker": 20,
     "idealConsumption": {
@@ -1494,7 +1494,7 @@
     "durabilityTau": 8.64e7,
     "baseDanger": 2e-4,
     "accidentType": [
-      "fire"
+      "FIRE"
     ],
     "idealWorker": 32,
     "maxTemp": 400,

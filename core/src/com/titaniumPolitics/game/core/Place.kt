@@ -93,6 +93,9 @@ class Place : GameStateElement() {
     var gasResources =
         Resources("oxygen" to 3000.0, "carbonDioxide" to 15.0, "nitrogen" to 9000.0).apply { positive = true }
 
+    /**
+     * Gas Pressure in units of Pa
+     */
     fun gasPressure(gasName: String): Double =
         try {
             gasResources[gasName] / ((ReadOnly.gasJson[gasName]!!.jsonObject["density"]!!.jsonPrimitive.float)) * (temperature / 273.15) / volume * 101325
