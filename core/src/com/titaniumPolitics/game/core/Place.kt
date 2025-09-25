@@ -1,6 +1,5 @@
 package com.titaniumPolitics.game.core
 
-import com.titaniumPolitics.game.core.GameEngine.Companion.onAccident
 import com.titaniumPolitics.game.core.ReadOnly.const
 import com.titaniumPolitics.game.core.ReadOnly.DT
 import com.titaniumPolitics.game.core.ReadOnly.S_PER_HR
@@ -10,8 +9,11 @@ import kotlinx.serialization.json.float
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
 import java.util.*
+import kotlin.collections.forEach
+import kotlin.compareTo
 import kotlin.math.exp
 import kotlin.math.min
+import kotlin.text.get
 
 @Serializable
 class Place : GameStateElement() {
@@ -268,83 +270,9 @@ class Place : GameStateElement() {
     fun workApparatusHourly() {
         if (responsibleDivision == null) return //TODO: Is this true?
         if (isAccidentScene) return //If there is an accident, no one works until it is resolved.
-        apparatuses.forEach app@{ apparatus ->
-            apparatus.temperature = temperature //Update the temperature of the apparatus to the ambient temperature.
-            apparatus.laborValuePerHour = parent.laborValuePerHour
-
-            apparatus.depreciateHourly()
-            //Check if it is workable------------------------------------------------------------------------------
-            if (apparatus.durability <= .0) {
-                apparatus.durability = .0
-                Logger.write(
-                    "${apparatus.name} in $name is broken and cannot function.",
-                    Logger.LogLevel.APPARATUS_VERBOSE
-                )
-                return@app //Cannot work broken apparatus
-            }
-
-
-            var err = false
-            apparatus.currentProduction.forEach {
-                if (maxResources[it.key] != 0.0 && resources[it.key] + it.value > maxResources[it.key])//If maxResources is zero, there are no limit on how much resource you can store.
-                {
-                    Logger.write(
-                        "${apparatus.name} in $name is cannot produce ${it.key} because it is full and cannot function.",
-                        Logger.LogLevel.APPARATUS_VERBOSE
-                    )
-                    err = true //If the resource is full, no one works.
-                }
-            }
-            if (err) {
-                return@app //If there is an error, no one works.
-            }
-            resourceShortOfHourly(apparatus)?.also {
-                Logger.write(
-                    "${apparatus.name} in $name is short of $it and cannot function.",
-                    Logger.LogLevel.APPARATUS_VERBOSE
-                )
-                return@app //If there is not enough resources, no one works.
-            }
-            gasResourceShortOfHourly(apparatus)?.also {
-                Logger.write(
-                    "${apparatus.name} in $name is short of $it gas and cannot function.",
-                    Logger.LogLevel.APPARATUS_VERBOSE
-                )
-                return@app //If there is not enough resources, no one works.
-            }
-            //-----------------------------------------------------------------------------------------------------
-            apparatus.currentProduction.forEach {
-                resources[it.key] += it.value * S_PER_HR
-            }
-            apparatus.currentConsumption.forEach {
-                resources[it.key] = (resources[it.key]) - it.value * S_PER_HR
-            }
-            apparatus.currentDistribution.forEach {
-                workers!!.first().resources[it.key] += it.value * S_PER_HR
-                marketSupplyEstimateWeekly[it.key] += it.value * S_PER_HR //Market supply estimate is updated.
-
-            }
-            marketSupplyEstimateWeekly *= marketSupplyEstimateR
-            apparatus.currentAbsorption.forEach {
-                gasResources[it.key] -= it.value * S_PER_HR
-            }
-            addHeat(apparatus.currentHeatProduction * S_PER_HR)
-
-            if (apparatus.currentGraveDanger * S_PER_HR > GameEngine.random.nextDouble()) {
-                //Catastrophic accident occurred.
-                Logger.write("!Catastrophic accident occurred at: ${name}", Logger.LogLevel.INFO)
-                isAccidentScene = true
-                generateCatastrophicAccident()
-
-            } else if (apparatus.currentDanger * S_PER_HR > GameEngine.random.nextDouble()) {
-                //Accident occurred.
-                Logger.write("!Accident occurred at: ${name}", Logger.LogLevel.INFO)
-                isAccidentScene = true
-                generateAccident()
-
-            }
+        apparatuses.forEach {
+            it.workHourly(this)
         }
-
         maxResources.forEach { //TODO: Note that if maxResources is undefined, the resource type is not checked. This prevents having to define storage for all sorts of resources.
             if (it.value < resources[it.key]) {
                 //Overflow Accident occurred.
@@ -353,6 +281,7 @@ class Place : GameStateElement() {
                 generateOverflowAccident(it.key)
             }
         }
+        marketSupplyEstimateWeekly *= marketSupplyEstimateR
     }
 
     fun resourceShortOfHourly(app: Apparatus): String? {
@@ -389,27 +318,6 @@ class Place : GameStateElement() {
         }
     }
 
-    fun generateAccident() {
-        //Generate casualties.
-        val death = currentWorker / 100 + 1 //At least one worker dies.
-        killWorkersInPlace(death)
-
-        //Generate apparatus damage.
-        apparatuses.forEach { app ->
-            maxResources
-            app.durability -= 30
-            app.getInformation(null, name, parent.time).also {
-                parent.addInformation(it)
-                //Add all people in the place to the known list.
-                it.knownTo.addAll(characters)
-                accidentInformationKeys += it.name
-            }
-        }
-        onAccident.forEach { it(name, death) }
-
-
-    }
-
     fun generateOverflowAccident(resourceType: String) {
         //Generate casualties.
         val death = currentWorker / 100 + 1 //At least one worker dies.
@@ -429,26 +337,7 @@ class Place : GameStateElement() {
             it.knownTo.addAll(characters)
             accidentInformationKeys += it.name
         }
-        onAccident.forEach { it(name, death) }
         //Do not Generate apparatus damage.
-    }
-
-    fun generateCatastrophicAccident() {
-        //Generate casualties.
-        val death = currentWorker / 5 + 1 //At least one worker dies.
-        killWorkersInPlace(death)
-        //Generate apparatus damage.
-        apparatuses.forEach { app ->
-            app.durability -= 75
-            app.getInformation(null, name, parent.time).also {
-                parent.addInformation(it)
-                //Add all people in the place to the known list.
-                it.knownTo.addAll(characters)
-                accidentInformationKeys += it.name
-            }
-        }
-        onAccident.forEach { it(name, death) }
-
     }
 
     fun distanceTo(targetName: String): Int? {

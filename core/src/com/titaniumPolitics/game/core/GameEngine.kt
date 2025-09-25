@@ -910,7 +910,6 @@ class GameEngine(val gameState: GameState) {
     companion object {
         var acquireCallback: (Any) -> Unit = {}
         var acquireEvent = arrayListOf<(AcquireParams) -> Unit>()
-        val onAccident = ArrayList<(String, Int) -> Unit>()//Place and Casualty
         val onBeforeNonPlayerCharacterAction =
             ArrayList<(GameAction) -> Unit>()//Character and Action, used for UI animation between player turns.
 

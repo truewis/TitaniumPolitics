@@ -16,8 +16,8 @@ import kotlin.math.pow
 * It can also be used to distribute resources to the market.
 * It belongs to a place.
 * It has a durability. When durability is 0, it is broken. When durability is 100, it is brand new.
-* It has a danger. When danger is 0, it is safe. When danger is 100, it is very dangerous.
-* Accidents may happen when danger is high.
+* It has a danger. When danger is 0, it is safe. When danger is 100, it creates accident every turn.
+*
 *
 * */
 @Serializable
@@ -159,7 +159,7 @@ class Apparatus {
      * Other resources are assumed to be intermediary goods and are not included in budget.
      */
     val hourlyOperationBudget: Resources
-        get() = hourlyOperationResource.filter { (string, d) ->
+        get() = hourlyOperationResource.filter { (string, _) ->
             string in listOf(
                 "ration",
                 "water",
@@ -213,6 +213,84 @@ class Apparatus {
         get() =
             (jsonData.jsonObject["durabilityTau"]?.jsonPrimitive?.double ?: const("DurabilityTau")) / damageTempScale
 
+    fun workHourly(place: Place) {
+        temperature = place.temperature //Update the temperature of the apparatus to the ambient temperature.
+        laborValuePerHour = place.parent.laborValuePerHour
+
+        depreciateHourly()
+        //Check if it is workable------------------------------------------------------------------------------
+        if (durability <= .0) {
+            durability = .0
+            Logger.write(
+                "${name} in $name is broken and cannot function.",
+                Logger.LogLevel.APPARATUS_VERBOSE
+            )
+            return //Cannot work broken apparatus
+        }
+
+
+        var err = false
+        currentProduction.forEach {
+            if (place.maxResources[it.key] != 0.0 && place.resources[it.key] + it.value > place.maxResources[it.key])//If maxResources is zero, there are no limit on how much resource you can store.
+            {
+                Logger.write(
+                    "${name} in $name is cannot produce ${it.key} because it is full and cannot function.",
+                    Logger.LogLevel.APPARATUS_VERBOSE
+                )
+                err = true //If the resource is full, no one works.
+            }
+        }
+        if (err) {
+            return //If there is an error, no one works.
+        }
+        place.resourceShortOfHourly(this)?.also {
+            Logger.write(
+                "${name} in $name is short of $it and cannot function.",
+                Logger.LogLevel.APPARATUS_VERBOSE
+            )
+            return //If there is not enough resources, no one works.
+        }
+        place.gasResourceShortOfHourly(this)?.also {
+            Logger.write(
+                "${name} in $name is short of $it gas and cannot function.",
+                Logger.LogLevel.APPARATUS_VERBOSE
+            )
+            return //If there is not enough resources, no one works.
+        }
+        //-----------------------------------------------------------------------------------------------------
+        currentProduction.forEach {
+            place.resources[it.key] += it.value * S_PER_HR
+        }
+        currentConsumption.forEach {
+            place.resources[it.key] = (place.resources[it.key]) - it.value * S_PER_HR
+        }
+        currentDistribution.forEach {
+            place.workers!!.first().resources[it.key] += it.value * S_PER_HR
+            place.marketSupplyEstimateWeekly[it.key] += it.value * S_PER_HR //Market supply estimate is updated.
+
+        }
+        currentAbsorption.forEach {
+            place.gasResources[it.key] -= it.value * S_PER_HR
+        }
+        place.addHeat(currentHeatProduction * S_PER_HR)
+
+        if (currentGraveDanger * S_PER_HR > GameEngine.random.nextDouble()) {
+            //Catastrophic accident occurred.
+            Logger.write("!Catastrophic accident occurred at: ${name}", Logger.LogLevel.INFO)
+            place.isAccidentScene = true
+            generateCatastrophicAccident(place)
+
+        } else if (currentDanger * S_PER_HR > GameEngine.random.nextDouble()) {
+            //Accident occurred.
+            Logger.write("!Accident occurred at: ${name}", Logger.LogLevel.INFO)
+            place.isAccidentScene = true
+            generateAccident(place)
+
+        }
+
+
+    }
+
     fun depreciateHourly() {
         //Consume durability, no matter it is currently being worked or not. For storages, keep the durability if they are fully staffed.
         if (!isStorage || currentWorker >= idealWorker)
@@ -221,6 +299,38 @@ class Apparatus {
             Logger.write("$name is overheated: $temperature K > $maxTemp K", Logger.LogLevel.APPARATUS_VERBOSE)
         if (temperature < minTemp)
             Logger.write("$name is freezing: $temperature K < $minTemp K", Logger.LogLevel.APPARATUS_VERBOSE)
+
+    }
+
+    fun generateAccident(place: Place) {
+        //Generate casualties.
+        val death = currentWorker / 100 + 1 //At least one worker dies.
+        place.killWorkersInPlace(death)
+
+        //Generate apparatus damage.
+        durability -= 30
+        getInformation(null, name, place.parent.time).also {
+            place.parent.addInformation(it)
+            //Add all people in the place to the known list.
+            it.knownTo.addAll(place.characters)
+            place.accidentInformationKeys += it.name
+        }
+
+    }
+
+
+    fun generateCatastrophicAccident(place: Place) {
+        //Generate casualties.
+        val death = currentWorker / 5 + 1 //At least one worker dies.
+        place.killWorkersInPlace(death)
+        //Generate apparatus damage.
+        durability -= 75
+        getInformation(null, name, place.parent.time).also {
+            place.parent.addInformation(it)
+            //Add all people in the place to the known list.
+            it.knownTo.addAll(place.characters)
+            place.accidentInformationKeys += it.name
+        }
 
     }
 
