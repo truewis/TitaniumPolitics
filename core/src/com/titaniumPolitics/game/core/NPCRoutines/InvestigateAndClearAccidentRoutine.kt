@@ -16,11 +16,11 @@ class InvestigateAndClearAccidentRoutine(var investigatePlace: String) : Routine
     }
 
     override fun execute(name: String, place: String): GameAction {
-        success()
         if (!investigated) {
             investigated = true
             return InvestigateAccidentScene(name, place)
         }
+        success()
         return ClearAccidentScene(name, place)
     }
 }
