@@ -162,6 +162,15 @@ data class Information(
             InformationType.TRAIT -> {
                 "$tgtCharacter is a ${variables["trait"]}."
             }
+
+            InformationType.SOUND -> {
+                "A loud sound was heard at $tgtPlace."
+            }
+
+            InformationType.ACCIDENT -> {
+                "An ${variables["accidentType"]} happened at $tgtPlace."
+            }
+
         }
     }
 
@@ -178,5 +187,5 @@ data class Information(
 
 @Serializable
 enum class InformationType {
-    ACTION, RESOURCES, CASUALTY, LOST_RESOURCES, APPARATUS, HUMAN_RESOURCES, MUTUALITY, PARTY_MUTUALITY, TRAIT
+    ACTION, RESOURCES, CASUALTY, LOST_RESOURCES, APPARATUS, HUMAN_RESOURCES, MUTUALITY, PARTY_MUTUALITY, TRAIT, SOUND, ACCIDENT
 }

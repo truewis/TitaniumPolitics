@@ -136,6 +136,14 @@ class Resources(var positive: Boolean = true) {
         return true
     }
 
+    fun isEmpty(): Boolean {
+        return _resources.isEmpty()
+    }
+
+    fun isNotEmpty(): Boolean {
+        return _resources.isNotEmpty()
+    }
+
     val keys: Set<String>
         get() {
             return _resources.keys

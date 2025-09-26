@@ -347,6 +347,30 @@ class Place : GameStateElement() {
         return if (connectedPlaces.contains(targetName)) (parent.places[targetName]!!.coordinates - coordinates).amplitude.toInt() + 1 else null
     }
 
+    fun generateSound(intensity: Int) {
+        //Generate sound information around a certain radius.
+        parent.places.values.forEach { otherPlace ->
+            distanceTo(otherPlace.name)?.let { distance ->
+                if (distance <= intensity) {
+                    if (otherPlace.characters.isNotEmpty()) {
+                        otherPlace.parent.addInformation(
+                            Information(
+                                author = null,
+                                creationTime = parent.time,
+                                type = InformationType.SOUND,
+                                tgtTime = parent.time,
+                                tgtPlace = otherPlace.name,
+                                amount = intensity - distance
+                            ).also {
+                                it.knownTo.addAll(otherPlace.characters)
+                            }
+                        )
+                    }
+                }
+            }
+        }
+    }
+
     private val shortestPathCache = mutableMapOf<String, Pair<List<String>, Int>?>()
     fun clearShortestPathCache() {
         shortestPathCache.clear()

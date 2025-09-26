@@ -191,17 +191,31 @@ class Apparatus {
         var typeFactor = 1.0
         when (type) {
             AccidentType.FIRE -> typeFactor *= place.gasPressure("oxygen") / 101325 * 4
-            AccidentType.COLLAPSE -> {}
-            AccidentType.EXPLOSION -> {}
-            AccidentType.FLOODING -> {}
-            AccidentType.FRAGMENTS -> {}
+            AccidentType.COLLAPSE -> {
+                //Scales with durability of the apparatus.
+                typeFactor *= (const("DurabilityMax") - durability) / const("DurabilityMax")
+            }
+
+            AccidentType.EXPLOSION -> {
+                //Scales with durability of the apparatus.
+                typeFactor *= (const("DurabilityMax") - durability) / const("DurabilityMax")
+            }
+
+            AccidentType.FLOODING -> {
+                typeFactor *= place.resources["water"] / (place.maxResources["water"] + 1)
+            }
+
+            AccidentType.FRAGMENTS -> {
+                //Scales with durability of the apparatus.
+                typeFactor *= (const("DurabilityMax") - durability) / const("DurabilityMax")
+            }
         }
         return if (currentWorker == 0 || idealWorker == 0) 0.0 else if (durability == .0) 0.0 else {
             if (currentWorker <= idealWorker)
-                baseDanger * (2 - currentWorker / idealWorker) * 100 / durability / const("GlobalAccidentTau") * damageTempScale * typeFactor
+                baseDanger * (2 - currentWorker / idealWorker) / const("GlobalAccidentTau") * damageTempScale * typeFactor
             else
             //Danger increases when overcrewed or undercrewed.
-                baseDanger * (2 * currentWorker / idealWorker - 1) * 100 / durability / const("GlobalAccidentTau") * damageTempScale * typeFactor
+                baseDanger * (2 * currentWorker / idealWorker - 1) / const("GlobalAccidentTau") * damageTempScale * typeFactor
         }
     }
 
@@ -213,18 +227,32 @@ class Apparatus {
         var typeFactor = 1.0
         when (type) {
             AccidentType.FIRE -> typeFactor *= place.gasPressure("oxygen") / 101325 * 4
-            AccidentType.COLLAPSE -> {}
-            AccidentType.EXPLOSION -> {}
-            AccidentType.FLOODING -> {}
-            AccidentType.FRAGMENTS -> {}
+            AccidentType.COLLAPSE -> {
+                //Scales with durability of the apparatus.
+                typeFactor *= (const("DurabilityMax") - durability) / const("DurabilityMax")
+            }
+
+            AccidentType.EXPLOSION -> {
+                //Scales with durability of the apparatus.
+                typeFactor *= (const("DurabilityMax") - durability) / const("DurabilityMax")
+            }
+
+            AccidentType.FLOODING -> {
+                typeFactor *= place.resources["water"] / (place.maxResources["water"] + 1)
+            }
+
+            AccidentType.FRAGMENTS -> {
+                //Scales with durability of the apparatus.
+                typeFactor *= (const("DurabilityMax") - durability) / const("DurabilityMax")
+            }
         }
         return if (currentWorker == 0 || idealWorker == 0) 0.0
         else if (durability == .0) 0.0
         //Nonzero only when very overcrewed or undercrewed.
         else if (currentWorker <= idealWorker * 4 / 5)
-            baseDanger * (0.2 - currentWorker / 4 / idealWorker) * 100 / durability / const("GlobalAccidentTau") * damageTempScale * typeFactor
+            baseDanger * (0.2 - currentWorker / 4 / idealWorker) / const("GlobalAccidentTau") * damageTempScale * typeFactor
         else if (currentWorker >= idealWorker * 6 / 5)
-            baseDanger * (2 * currentWorker / 3 / idealWorker - 0.8) * 100 / durability / const("GlobalAccidentTau") * damageTempScale * typeFactor
+            baseDanger * (2 * currentWorker / 3 / idealWorker - 0.8) / const("GlobalAccidentTau") * damageTempScale * typeFactor
         else
             0.0
     }
@@ -302,13 +330,13 @@ class Apparatus {
                 //Catastrophic accident occurred.
                 Logger.write("!Catastrophic accident occurred at: ${name}", Logger.LogLevel.INFO)
                 place.isAccidentScene = true
-                generateCatastrophicAccident(place)
+                generateCatastrophicAccident(accidentType, place)
 
             } else if (currentDanger(accidentType, place) * S_PER_HR > GameEngine.random.nextDouble()) {
                 //Accident occurred.
                 Logger.write("!Accident occurred at: ${name}", Logger.LogLevel.INFO)
                 place.isAccidentScene = true
-                generateAccident(place)
+                generateAccident(accidentType, place)
 
             }
         }
@@ -329,10 +357,43 @@ class Apparatus {
 
     }
 
-    fun generateAccident(place: Place) {
+    fun generateAccident(accidentType: AccidentType, place: Place) {
         //Generate casualties.
         val death = currentWorker / 100 + 1 //At least one worker dies.
         place.killWorkersInPlace(death)
+
+        when (accidentType) {
+            AccidentType.FIRE -> {
+                //Consume oxygen, produce CO2 and heat.
+                val oxygenConsumed = place.gasResources["oxygen"]  //kg
+                val co2Produced = 44 / 32 * oxygenConsumed //kg
+                place.gasResources["oxygen"] = 0.0
+                place.gasResources["carbonDioxide"] += co2Produced
+                place.addHeat(393500 /*Formation Enthalpy*/ * co2Produced / 0.044 /*moles of co2*/)
+            }
+
+            AccidentType.COLLAPSE -> {
+                place.generateSound(5)
+            }
+
+            AccidentType.EXPLOSION -> {
+                place.generateSound(5)
+                //Damages nearby apparatuses which absorbs gas
+                place.apparatuses.filter { it.idealAbsorption.isNotEmpty() }.forEach {
+                    it.durability -= 20
+                }
+            }
+
+            AccidentType.FLOODING -> {
+                //Damage nearby apparatuses which uses energy.
+                place.apparatuses.filter { it.idealConsumption["energy"] > 0 }.forEach {
+                    it.durability -= 20
+                }
+            }
+
+            AccidentType.FRAGMENTS -> {
+            }
+        }
 
         //Generate apparatus damage.
         durability -= 30
@@ -346,10 +407,42 @@ class Apparatus {
     }
 
 
-    fun generateCatastrophicAccident(place: Place) {
+    fun generateCatastrophicAccident(accidentType: AccidentType, place: Place) {
         //Generate casualties.
         val death = currentWorker / 5 + 1 //At least one worker dies.
         place.killWorkersInPlace(death)
+        when (accidentType) {
+            AccidentType.FIRE -> {
+                //Consume oxygen, produce CO2 and heat.
+                val oxygenConsumed = place.gasResources["oxygen"]  //kg
+                val co2Produced = 44 / 32 * oxygenConsumed //kg
+                place.gasResources["oxygen"] = 0.0
+                place.gasResources["carbonDioxide"] += co2Produced
+                place.addHeat(393500 /*Formation Enthalpy*/ * co2Produced / 0.044 /*moles of co2*/)
+            }
+
+            AccidentType.COLLAPSE -> {
+                place.generateSound(10)
+            }
+
+            AccidentType.EXPLOSION -> {
+                place.generateSound(10)
+                //Damages nearby apparatuses which absorbs gas
+                place.apparatuses.filter { it.idealAbsorption.isNotEmpty() }.forEach {
+                    it.durability -= 50
+                }
+            }
+
+            AccidentType.FLOODING -> {
+                //Damage nearby apparatuses which uses energy.
+                place.apparatuses.filter { it.idealConsumption["energy"] > 0 }.forEach {
+                    it.durability -= 50
+                }
+            }
+
+            AccidentType.FRAGMENTS -> {
+            }
+        }
         //Generate apparatus damage.
         durability -= 75
         getInformation(null, name, place.parent.time).also {
