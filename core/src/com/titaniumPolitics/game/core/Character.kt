@@ -1,7 +1,6 @@
 package com.titaniumPolitics.game.core
 
 import com.titaniumPolitics.game.core.ReadOnly.const
-import com.titaniumPolitics.game.core.gameActions.AddInfo
 import com.titaniumPolitics.game.core.gameActions.Arrest
 import com.titaniumPolitics.game.core.gameActions.BlockAccess
 import com.titaniumPolitics.game.core.gameActions.ClearAccidentScene
@@ -277,12 +276,14 @@ class Character : GameStateElement() {
             is Repair -> {
                 //Fixing the apparatus where I am the manager is more valuable.
                 //This scales with division integrity.
-                val party = parent.parties.filter { name in it.value.members }.keys.firstOrNull() ?: return 0.0
+                val div =
+                    parent.parties.filter { name in it.value.members && it.value.type == Party.Type.DIVISION }.keys.firstOrNull()
+                        ?: return 0.0
                 val factor = if (place.manager == name) 2.0 else 1.0
                 val urgency =
                     1.0 - parent.places[action.tgtPlace]!!.apparatuses.sumOf { it.durability } / parent.places[action.tgtPlace]!!.apparatuses.size / 100.0
-                if (parent.places[action.tgtPlace]!!.responsibleDivision == party) {
-                    val ret = urgency * parent.getPartyMutuality(party) * factor
+                if (parent.places[action.tgtPlace]!!.responsibleDivision == div) {
+                    val ret = urgency * parent.getPartyMutuality(div) * factor
                     onSpeech.forEach {
                         it("ActionValue-Repair", ret)
                     }
