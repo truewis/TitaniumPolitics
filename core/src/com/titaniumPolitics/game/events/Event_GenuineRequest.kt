@@ -38,6 +38,12 @@ class Event_GenuineRequest(val requestKey: String) : EventObject("A reasonable r
             }
 
     override fun exec(a: Int, b: Int) {
+        //Check if the request is still valid.
+        //If the request is completed, or the request is removed, deactivate this event.
+        if (parent.requests[requestKey] == null) {
+            deactivate(false)
+            return
+        }
         if (request.completed)
             deactivate()
     }
