@@ -27,6 +27,7 @@ data class Information(
     var action: GameAction? = null,
     var tgtParty: String? = null,
     var auxParty: String? = null,
+    var description: String? = null,
     var resources: Resources = Resources(),
     var variables: HashMap<String, Double> = hashMapOf(),
     var graphInformationKeys: HashSet<String> = hashSetOf() //If this is not empty, this information is a graph: it contains time series data of multiple information.
@@ -46,6 +47,7 @@ data class Information(
         info.action,
         info.tgtParty,
         info.auxParty,
+        info.description,
         info.resources,
         info.variables
     )
@@ -134,11 +136,6 @@ data class Information(
                 "$who suffered $amount casualties at $tgtPlace."
             }
 
-            InformationType.LOST_RESOURCES -> {
-                val who = tgtCharacter ?: "Someone"
-                "$who lost $amount resources at $tgtPlace."
-            }
-
             InformationType.APPARATUS -> {
                 val apparatus = tgtApparatusName ?: ReadOnly.appProp("unknownApparatus")
                 if (variables["durability"]!! > 0)
@@ -187,5 +184,5 @@ data class Information(
 
 @Serializable
 enum class InformationType {
-    ACTION, RESOURCES, CASUALTY, LOST_RESOURCES, APPARATUS, HUMAN_RESOURCES, MUTUALITY, PARTY_MUTUALITY, TRAIT, SOUND, ACCIDENT
+    ACTION, RESOURCES, CASUALTY, APPARATUS, HUMAN_RESOURCES, MUTUALITY, PARTY_MUTUALITY, TRAIT, SOUND, ACCIDENT
 }

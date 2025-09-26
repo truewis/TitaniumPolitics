@@ -212,6 +212,14 @@ class GameState {
     ) {
         if (!_informations.containsKey(key)) throw Exception("Information with key $key does not exist.")
         _informations.remove(key)
+        //Remove information from requests' proofOfExecutionInfos
+        requests.values.forEach {
+            it.proofOfExecutionInfos.remove(key)
+        }
+        //Remove information from places' accidentInformationKeys
+        places.values.forEach {
+            it.accidentInformationKeys.remove(key)
+        }
     }
 
     var eventSystem = EventSystem()

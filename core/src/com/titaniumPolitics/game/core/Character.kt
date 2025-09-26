@@ -429,7 +429,9 @@ class Character : GameStateElement() {
 
         } else {
             when (info.type) {
-                InformationType.CASUALTY -> {
+                //If the information is about casualties in a place I manage or my division manages, I don't like it.
+                //Otherwise, I like it.
+                InformationType.CASUALTY, InformationType.ACCIDENT, InformationType.SOUND -> {
                     val plObj = parent.places[info.tgtPlace]!!
                     if (plObj.workplaceParty?.leader == name || parent.parties[plObj.responsibleDivision]?.leader == name) {
                         ret = -1e-1 * stats.lScale

@@ -282,12 +282,16 @@ class GameEngine(val gameState: GameState) {
     private fun spreadPublicInfo() {
         gameState.parties.forEach { party ->
             //bad news affect the approval. casualty, stolen resource, TODO: low water ration oxygen, high wealth, crimes
-            gameState.informations.filter { it.value.type == InformationType.CASUALTY }.forEach {
+            gameState.informations.filter {
+                it.value.type in listOf(
+                    InformationType.CASUALTY, InformationType.ACCIDENT, InformationType.SOUND
+                )
+            }.forEach {
                 var factor = 1.0
                 if (it.value.author == null) factor *= 2.0//rumors affect the approval negatively.
                 if (it.value.auxParty == party.key) factor *= 2.0//If the casualty is in our party, approval of the responsible party drops even more.
                 //If casualty is not localized, does not affect mutualities.
-                if (it.value.tgtPlace == "everywhere" || gameState.places[it.value.tgtPlace]!!.responsibleDivision == null) {
+                if (gameState.places[it.value.tgtPlace]!!.responsibleDivision == null) {
                     //Do nothing
                 } else
                     gameState.setPartyMutuality(

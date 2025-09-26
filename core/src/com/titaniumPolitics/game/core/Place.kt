@@ -276,14 +276,6 @@ class Place : GameStateElement() {
         apparatuses.forEach {
             it.workHourly(this)
         }
-        maxResources.forEach { //TODO: Note that if maxResources is undefined, the resource type is not checked. This prevents having to define storage for all sorts of resources.
-            if (it.value < resources[it.key]) {
-                //Overflow Accident occurred.
-                Logger.write("Overflow Accident of ${it.key} occurred at: ${name}", Logger.LogLevel.INFO)
-                isAccidentScene = true
-                generateOverflowAccident(it.key)
-            }
-        }
         marketSupplyEstimateWeekly *= marketSupplyEstimateR
     }
 
@@ -319,28 +311,6 @@ class Place : GameStateElement() {
         if (sum > 0) {
             Logger.write("Warning: $sum workers were not killed in $name", Logger.LogLevel.WARNING)
         }
-    }
-
-    fun generateOverflowAccident(resourceType: String) {
-        //Generate casualties.
-        val death = currentWorker / 100 + 1 //At least one worker dies.
-        killWorkersInPlace(death)
-        //Generate resource loss.
-        val loss = resources[resourceType] / 2
-        resources[resourceType] -= loss
-        Information(
-            author = null,
-            creationTime = parent.time,
-            type = InformationType.LOST_RESOURCES,
-            tgtPlace = name,
-            resources = Resources(resourceType to loss)
-        )/*store info*/.also {
-            parent.addInformation(it)
-            //Add all people in the place to the known list.
-            it.knownTo.addAll(characters)
-            accidentInformationKeys += it.name
-        }
-        //Do not Generate apparatus damage.
     }
 
     fun distanceTo(targetName: String): Int? {

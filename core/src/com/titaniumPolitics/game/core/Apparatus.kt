@@ -8,6 +8,7 @@ import kotlinx.serialization.builtins.MapSerializer
 import kotlinx.serialization.builtins.serializer
 import kotlinx.serialization.json.*
 import java.util.*
+import kotlin.collections.emptyMap
 import kotlin.math.exp
 import kotlin.math.pow
 
@@ -64,7 +65,8 @@ class Apparatus {
     private val baseDanger
         get() = jsonData.jsonObject["baseDanger"]!!.jsonPrimitive.double
     private val accidentTypes
-        get() = jsonData.jsonObject["accidentType"]!!.jsonArray.map { AccidentType.valueOf(it.jsonPrimitive.content) }
+        get() = jsonData.jsonObject["accidentType"]?.jsonArray?.map { AccidentType.valueOf(it.jsonPrimitive.content) }
+            ?: emptyList<AccidentType>()
 
     /**
      * Efficiency is multiplied by (T/300)^tempCoef.
@@ -289,6 +291,11 @@ class Apparatus {
                     Logger.LogLevel.APPARATUS_VERBOSE
                 )
                 err = true //If the resource is full, no one works.
+                //Generate overflow accident.
+                if (it.key in listOf("water", "cleanWater"))
+                    generateAccident(AccidentType.FLOODING, place, false, it.key)
+                else if (it.key in listOf("oxygen", "carbonDioxide", "energy", "ammonia", "hydrogen"))
+                    generateAccident(AccidentType.EXPLOSION, place, false, it.key)
             }
         }
         if (err) {
@@ -330,7 +337,7 @@ class Apparatus {
                 //Catastrophic accident occurred.
                 Logger.write("!Catastrophic accident occurred at: ${name}", Logger.LogLevel.INFO)
                 place.isAccidentScene = true
-                generateCatastrophicAccident(accidentType, place)
+                generateAccident(accidentType, place, true)
 
             } else if (currentDanger(accidentType, place) * S_PER_HR > GameEngine.random.nextDouble()) {
                 //Accident occurred.
@@ -357,9 +364,14 @@ class Apparatus {
 
     }
 
-    fun generateAccident(accidentType: AccidentType, place: Place) {
+    fun generateAccident(
+        accidentType: AccidentType,
+        place: Place,
+        catastrophic: Boolean = false,
+        resourceType: String? = null
+    ) {
         //Generate casualties.
-        val death = currentWorker / 100 + 1 //At least one worker dies.
+        val death = if (catastrophic) currentWorker / 5 + 1 else currentWorker / 100 + 1 //At least one worker dies.
         place.killWorkersInPlace(death)
 
         when (accidentType) {
@@ -373,21 +385,29 @@ class Apparatus {
             }
 
             AccidentType.COLLAPSE -> {
-                place.generateSound(5)
+                place.generateSound(if (catastrophic) 10 else 5)
             }
 
             AccidentType.EXPLOSION -> {
-                place.generateSound(5)
+                place.generateSound(if (catastrophic) 10 else 5)
                 //Damages nearby apparatuses which absorbs gas
                 place.apparatuses.filter { it.idealAbsorption.isNotEmpty() }.forEach {
-                    it.durability -= 20
+                    it.durability -= if (catastrophic) 50 else 20
+                }
+                //Lose some of the resource which caused the explosion.
+                if (resourceType != null && resourceType in place.gasResources.keys) {
+                    place.gasResources[resourceType] *= if (catastrophic) 0.0 else 0.8
                 }
             }
 
             AccidentType.FLOODING -> {
                 //Damage nearby apparatuses which uses energy.
                 place.apparatuses.filter { it.idealConsumption["energy"] > 0 }.forEach {
-                    it.durability -= 20
+                    it.durability -= if (catastrophic) 50 else 20
+                }
+                //Lose some of the resource which caused the flooding.
+                if (resourceType != null && resourceType in place.resources.keys) {
+                    place.resources[resourceType] *= if (catastrophic) 0.0 else 0.8
                 }
             }
 
@@ -396,62 +416,29 @@ class Apparatus {
         }
 
         //Generate apparatus damage.
-        durability -= 30
-        getInformation(null, name, place.parent.time).also {
+        durability -= if (catastrophic) 75 else 30
+        getInformation(null, place.name, place.parent.time).also {
             place.parent.addInformation(it)
             //Add all people in the place to the known list.
             it.knownTo.addAll(place.characters)
             place.accidentInformationKeys += it.name
         }
-
-    }
-
-
-    fun generateCatastrophicAccident(accidentType: AccidentType, place: Place) {
-        //Generate casualties.
-        val death = currentWorker / 5 + 1 //At least one worker dies.
-        place.killWorkersInPlace(death)
-        when (accidentType) {
-            AccidentType.FIRE -> {
-                //Consume oxygen, produce CO2 and heat.
-                val oxygenConsumed = place.gasResources["oxygen"]  //kg
-                val co2Produced = 44 / 32 * oxygenConsumed //kg
-                place.gasResources["oxygen"] = 0.0
-                place.gasResources["carbonDioxide"] += co2Produced
-                place.addHeat(393500 /*Formation Enthalpy*/ * co2Produced / 0.044 /*moles of co2*/)
-            }
-
-            AccidentType.COLLAPSE -> {
-                place.generateSound(10)
-            }
-
-            AccidentType.EXPLOSION -> {
-                place.generateSound(10)
-                //Damages nearby apparatuses which absorbs gas
-                place.apparatuses.filter { it.idealAbsorption.isNotEmpty() }.forEach {
-                    it.durability -= 50
-                }
-            }
-
-            AccidentType.FLOODING -> {
-                //Damage nearby apparatuses which uses energy.
-                place.apparatuses.filter { it.idealConsumption["energy"] > 0 }.forEach {
-                    it.durability -= 50
-                }
-            }
-
-            AccidentType.FRAGMENTS -> {
-            }
-        }
-        //Generate apparatus damage.
-        durability -= 75
-        getInformation(null, name, place.parent.time).also {
+        //Generate accident information.
+        Information(
+            author = null,
+            creationTime = place.parent.time,
+            type = InformationType.ACCIDENT,
+            tgtPlace = place.name,
+            tgtApparatusID = ID,
+            tgtApparatusName = name,
+            description = accidentType.toString(),
+            amount = if (catastrophic) 2 else 1 //2 for catastrophic accident
+        )/*store info*/.also {
             place.parent.addInformation(it)
             //Add all people in the place to the known list.
             it.knownTo.addAll(place.characters)
             place.accidentInformationKeys += it.name
         }
-
     }
 
     fun getInformation(sbjCharacter: String?, tgtPlace: String, time: Int) = Information(
