@@ -1522,5 +1522,39 @@
         }
       }
     ]
+  },
+  "wiredBroadcastDevice": {
+    "image": "defaultApparatus.png",
+    "durabilityTau": 8.64e7,
+    "baseDanger": 2e-4,
+    "accidentType": [
+      "FIRE"
+    ],
+    "idealWorker": 32,
+    "maxTemp": 400,
+    "minTemp": 200,
+    "idealConsumption": {
+      "energy": 1e4
+    },
+    "idealHeatProduction": 5e3,
+    "requiredResourcePerRepair": [
+      {
+        "_resources": {
+          "electronics": 5.0
+        }
+      },
+      {
+        "_resources": {
+          "component": 5.0,
+          "electronics": 5.0
+        }
+      },
+      {
+        "_resources": {
+          "component": 10.0,
+          "electronics": 10.0
+        }
+      }
+    ]
   }
 }

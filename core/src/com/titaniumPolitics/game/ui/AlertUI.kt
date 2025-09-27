@@ -52,8 +52,20 @@ class AlertUI(var gameState: GameState) : Table(defaultSkin) {
             if (info.tgtCharacter == null || info.tgtCharacter !in gameState.knownCharactersToPlayer
             ) return@forEach //Never show information about unknown characters to the player.
             when (info.type) {
+                InformationType.ACCIDENT -> {
+                    addAlert("accident", ReadOnly.placeProp(info.tgtPlace), gameState.formatTime()) {
+                        AssistantUI.instance.informationButton.changeOpenState(true)
+                    }
+                }
+
                 InformationType.CASUALTY -> {
-                    addAlert("accident") {
+                    addAlert(
+                        "casualty",
+                        params = arrayOf(
+                            info.amount.toString(),
+                            ReadOnly.placeProp(info.tgtPlace)
+                        )
+                    ) {
                         AssistantUI.instance.informationButton.changeOpenState(true)
                     }
                 }

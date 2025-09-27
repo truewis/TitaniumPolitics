@@ -481,6 +481,10 @@
           "durability": 95
         },
         {
+          "name": "wiredBroadcastDevice",
+          "durability": 95
+        },
+        {
           "name": "oxygenStorage",
           "durability": 95
         },

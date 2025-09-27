@@ -465,6 +465,33 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable 
                                 })
                             }
 
+                            "AnnounceInfo" -> {
+                                if (gameState.informations.none { (key, info) ->
+                                        gameState.playerName in info.knownTo
+                                    }) {
+                                    this@button.isDisabled = true
+                                    tooltip.displayInvalidReason(ReadOnly.prop("addInfo-noPreparedInfo"))
+                                } else
+                                    if ((gameState.informations.filter {
+                                            it.value.knownTo.contains(gameState.playerName)
+                                        }.keys - gameState.player.currentMeeting!!.agendas.flatMap { it.informationKeys }).isEmpty()) {
+                                        this@button.isDisabled = true
+                                        tooltip.displayInvalidReason(ReadOnly.prop("addInfo-noAdditionalInfo"))
+                                    } else if ((gameState.player.currentMeeting!!.agendas.isEmpty())) {
+                                        this@button.isDisabled = true
+                                        tooltip.displayInvalidReason(ReadOnly.prop("addInfo-noAgendas"))
+                                    }
+                                this@button.addListener(object : ChangeListener() {
+                                    override fun changed(event: ChangeEvent, actor: Actor) {
+                                        if (!this@button.isChecked) return
+                                        val addInfoUI =
+                                            AddInfoUI(gameState, actionCallback)
+                                        setActionSheet(addInfoUI)
+                                        addInfoUI.refresh()
+                                    }
+                                })
+                            }
+
                             "EndSpeech" -> {
                                 this@button.addListener(object : ChangeListener() {
                                     override fun changed(event: ChangeEvent, actor: Actor) {

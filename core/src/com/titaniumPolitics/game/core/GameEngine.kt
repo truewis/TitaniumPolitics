@@ -1074,6 +1074,10 @@ class GameEngine(val gameState: GameState) {
             actions.add("Move")
             actions.add("Examine")
             //actions.add("radio")
+            if (placeObj.apparatuses.any { it.name == "wiredBroadcastDevice" } && gameState.parties["interior"]!!.directorMembers.contains(
+                    character
+                ))
+                actions.add("AnnounceInfo")
             actions.add("Wait")
             if (place.contains("home")) {
                 actions.add("Sleep")

@@ -10,6 +10,7 @@ import com.titaniumPolitics.game.core.Party
 import com.titaniumPolitics.game.core.ReadOnly
 import com.titaniumPolitics.game.core.Request
 import com.titaniumPolitics.game.core.Resources
+import com.titaniumPolitics.game.core.gameActions.AnnounceInfo
 import com.titaniumPolitics.game.core.gameActions.Examine
 import com.titaniumPolitics.game.core.gameActions.GameAction
 import com.titaniumPolitics.game.core.gameActions.OfficialResourceTransfer
@@ -28,6 +29,7 @@ class WorkRoutine(var workplace: String) : Routine() {
      */
     var transferResourceTimer = 0
     var repairApparatusTimer = 0
+    var announceInfoTimer = 0
     var try_prepare_info = 0
     val meetingsAttended = hashSetOf<String>()
     val failedRequests = hashSetOf<String>()
@@ -222,6 +224,7 @@ class WorkRoutine(var workplace: String) : Routine() {
                     if (apparatus.durability < 70f)
                     //If I am engineer myself, repair directly.
                         if ("engineer" in character.trait) {
+                            repairApparatusTimer = gState.time
                             return RepairApparatusRoutine(apparatus.ID)
                         } else
                         //Pick an engineer with the highest mutuality
@@ -255,6 +258,58 @@ class WorkRoutine(var workplace: String) : Routine() {
                         }
                 }
             }
+        }
+
+        //7.0 Announce Information
+        //Only if I am cabinet member.
+        if (character.name in gState.parties["cabinet"]!!.members
+            &&
+            gState.time - announceInfoTimer > 60
+        ) {
+            gState.informations.values.firstOrNull {
+                character.name in it.knownTo &&
+                        AnnounceInfo.isAnnounceable(it)
+            }?.let { info ->
+                //If I am able to announce it myself, announce it directly.
+                if (character.name in gState.parties["interior"]!!.directorMembers) {
+                    announceInfoTimer = gState.time
+                    return AnnounceInfoRoutine(info.name)
+                } else
+                //Pick an announcer with the highest mutuality
+                {
+                    gState.characters.values.filter {
+                        it.name in gState.parties["interior"]!!.directorMembers
+                    }.maxByOrNull { gState.getMutuality(name, it.name) }?.run {
+                        //Check if there is a request already
+                        if (gState.requests.values.none {
+                                !it.completed &&
+                                        name in it.issuedBy
+                                        && it.action.let {
+                                    it is AnnounceInfo &&
+                                            it.infoKey == info.name
+                                }
+                            }) {
+                            announceInfoTimer = gState.time
+                            AnnounceInfoRoutine.nearestPlaceWithApparatus(place, gState)?.let { announcePl ->
+                                return AttendPrivateMeetingRoutine(
+                                    this.name,
+                                    MeetingAgenda(
+                                        AgendaType.REQUEST, name, attachedRequest = Request(
+                                            AnnounceInfo(this.name, announcePl, info.name, gState),
+                                            issuedTo = hashSetOf(this.name),
+                                            issuedBy = hashSetOf(name)
+                                        )
+                                    )
+                                )
+                            }
+
+                        }
+                    }
+
+                }
+            }
+
+
         }
 
         //7. If there is some time, prepare information
