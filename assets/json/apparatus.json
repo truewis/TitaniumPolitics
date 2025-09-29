@@ -1,0 +1,1560 @@
+{
+  "rescueEquipment": {
+    "image": "defaultApparatus.png",
+    "durabilityTau": 8.64e7,
+    "baseDanger": 1.0E-4,
+    "requiredResourcePerRepair": [
+      {
+        "_resources": {
+          "lightMetal": 1.0
+        }
+      },
+      {
+        "_resources": {
+          "lightMetal": 2.0
+        }
+      },
+      {
+        "_resources": {
+          "titaniumTank": 1.0
+        }
+      }
+    ],
+    "idealWorker": 25
+  },
+  "energyStorage": {
+    "image": "defaultApparatus.png",
+    "durabilityTau": 8.64e7,
+    "baseDanger": 2.0E-4,
+    "accidentType": [
+      "EXPLOSION",
+      "FIRE"
+    ],
+    "maxTemp": 400,
+    "minTemp": 200,
+    "requiredResourcePerRepair": [
+      {
+        "_resources": {
+          "electronics": 1.0
+        }
+      },
+      {
+        "_resources": {
+          "component": 1.0,
+          "electronics": 3.0
+        }
+      },
+      {
+        "_resources": {
+          "component": 1.0,
+          "electronics": 5.0
+        }
+      }
+    ],
+    "idealWorker": 10,
+    "variables": {
+      "storageType": "energy",
+      "storageAmount": 2.0e11
+    }
+  },
+  "waterStorage": {
+    "image": "defaultApparatus.png",
+    "durabilityTau": 8.64e7,
+    "baseDanger": 3.0E-4,
+    "accidentType": [
+      "FLOODING"
+    ],
+    "maxTemp": 373,
+    "minTemp": 273,
+    "requiredResourcePerRepair": [
+      {
+        "_resources": {
+          "component": 100
+        }
+      },
+      {
+        "_resources": {
+          "component": 100,
+          "structure": 100
+        }
+      },
+      {
+        "_resources": {
+          "structure": 200,
+          "plumbing": 200
+        }
+      }
+    ],
+    "idealWorker": 5,
+    "variables": {
+      "storageType": "water",
+      "storageAmount": 3e4
+    }
+  },
+  "barrier": {
+    "image": "defaultApparatus.png",
+    "durabilityTau": 8.64e5,
+    "baseDanger": 3.0E-4,
+    "accidentType": [
+      "COLLAPSE"
+    ],
+    "requiredResourcePerRepair": [
+      {
+        "_resources": {
+          "structure": 2500
+        }
+      },
+      {
+        "_resources": {
+          "component": 500,
+          "structure": 5000
+        }
+      },
+      {
+        "_resources": {
+          "structure": 10000,
+          "plumbing": 200
+        }
+      }
+    ],
+    "idealWorker": 50,
+    "variables": {
+      "storageType": "water",
+      "storageAmount": 3e5
+    }
+  },
+  "oxygenStorage": {
+    "image": "defaultApparatus.png",
+    "durabilityTau": 8.64e6,
+    "baseDanger": 3.0E-4,
+    "accidentType": [
+      "EXPLOSION"
+    ],
+    "maxTemp": 340,
+    "minTemp": 70,
+    "requiredResourcePerRepair": [
+      {
+        "_resources": {
+          "component": 10
+        }
+      },
+      {
+        "_resources": {
+          "component": 20,
+          "plumbing": 10
+        }
+      },
+      {
+        "_resources": {
+          "component": 20,
+          "plumbing": 10,
+          "structure": 50
+        }
+      }
+    ],
+    "idealWorker": 5,
+    "variables": {
+      "storageType": "oxygen",
+      "storageAmount": 3e3
+    }
+  },
+  "rationStorage": {
+    "image": "defaultApparatus.png",
+    "durabilityTau": 8.64e8,
+    "baseDanger": 1.0E-4,
+    "accidentType": [
+      "COLLAPSE"
+    ],
+    "maxTemp": 373,
+    "requiredResourcePerRepair": [
+      {
+        "_resources": {
+          "structure": 100
+        }
+      },
+      {
+        "_resources": {
+          "structure": 150
+        }
+      },
+      {
+        "_resources": {
+          "structure": 200
+        }
+      }
+    ],
+    "idealWorker": 5,
+    "variables": {
+      "storageType": "ration",
+      "storageAmount": 3e4
+    }
+  },
+  "metalStorage": {
+    "image": "defaultApparatus.png",
+    "durabilityTau": 8.64e7,
+    "baseDanger": 1.0E-4,
+    "accidentType": [
+      "COLLAPSE"
+    ],
+    "maxTemp": 800,
+    "requiredResourcePerRepair": [
+      {
+        "_resources": {
+          "lightMetal": 1.0
+        }
+      },
+      {
+        "_resources": {
+          "lightMetal": 2.0
+        }
+      },
+      {
+        "_resources": {
+          "titaniumTank": 1.0
+        }
+      }
+    ],
+    "idealWorker": 5,
+    "variables": {
+      "storageType": "lightMetal",
+      "storageAmount": 3e4
+    }
+  },
+  "componentStorage": {
+    "image": "defaultApparatus.png",
+    "durabilityTau": 8.64e7,
+    "baseDanger": 1.0E-4,
+    "accidentType": [
+      "COLLAPSE"
+    ],
+    "maxTemp": 800,
+    "requiredResourcePerRepair": [
+      {
+        "_resources": {
+          "lightMetal": 1.0
+        }
+      },
+      {
+        "_resources": {
+          "lightMetal": 2.0
+        }
+      },
+      {
+        "_resources": {
+          "titaniumTank": 1.0
+        }
+      }
+    ],
+    "idealWorker": 5,
+    "variables": {
+      "storageType": "component",
+      "storageAmount": 3e4
+    }
+  },
+  "reactor": {
+    "image": "defaultApparatus.png",
+    "durabilityTau": 8.64e8,
+    "baseDanger": 6e-4,
+    "accidentType": [
+      "FIRE",
+      "EXPLOSION"
+    ],
+    "idealWorker": 0,
+    "tempCoef": -1.0,
+    "idealProduction": {
+      "energy": 2e8
+    },
+    "idealHeatProduction": 1e8,
+    "requiredResourcePerRepair": [
+      {
+        "_resources": {
+          "legendary": 1.0
+        }
+      },
+      {
+        "_resources": {
+          "legendary": 1.0
+        }
+      },
+      {
+        "_resources": {
+          "legendary": 1.0
+        }
+      }
+    ]
+  },
+  "componentWorkshop": {
+    "image": "defaultApparatus.png",
+    "durabilityTau": 8.64e7,
+    "baseDanger": 6e-4,
+    "accidentType": [
+      "FIRE",
+      "FRAGMENTS"
+    ],
+    "idealWorker": 5,
+    "maxTemp": 400,
+    "minTemp": 200,
+    "idealProduction": {
+      "component": 0.01
+    },
+    "idealConsumption": {
+      "lightMetal": 0.01,
+      "energy": 1e5
+    },
+    "idealHeatProduction": 1e5,
+    "requiredResourcePerRepair": [
+      {
+        "_resources": {
+          "component": 5.0
+        }
+      },
+      {
+        "_resources": {
+          "component": 5.0,
+          "electronics": 5.0
+        }
+      },
+      {
+        "_resources": {
+          "component": 10.0,
+          "electronics": 10.0
+        }
+      }
+    ]
+  },
+  "electronicsWorkshop": {
+    "image": "defaultApparatus.png",
+    "durabilityTau": 8.64e7,
+    "baseDanger": 6e-4,
+    "accidentType": [
+      "FIRE"
+    ],
+    "idealWorker": 5,
+    "maxTemp": 330,
+    "minTemp": 260,
+    "idealProduction": {
+      "electronics": 1e-4
+    },
+    "idealConsumption": {
+      "rareMetal": 1e-6,
+      "lightMetal": 1e-4,
+      "energy": 1e5
+    },
+    "idealHeatProduction": 1e5,
+    "requiredResourcePerRepair": [
+      {
+        "_resources": {
+          "component": 5.0
+        }
+      },
+      {
+        "_resources": {
+          "component": 5.0,
+          "electronics": 5.0
+        }
+      },
+      {
+        "_resources": {
+          "component": 10.0,
+          "electronics": 10.0
+        }
+      }
+    ]
+  },
+  "plumbingWorkshop": {
+    "image": "defaultApparatus.png",
+    "durabilityTau": 8.64e7,
+    "baseDanger": 6e-4,
+    "accidentType": [
+      "FIRE",
+      "FRAGMENTS"
+    ],
+    "idealWorker": 5,
+    "maxTemp": 400,
+    "minTemp": 200,
+    "idealProduction": {
+      "plumbing": 0.01
+    },
+    "idealConsumption": {
+      "lightMetal": 0.005,
+      "heavyMetal": 0.005,
+      "energy": 1e5
+    },
+    "idealHeatProduction": 1e5,
+    "requiredResourcePerRepair": [
+      {
+        "_resources": {
+          "component": 5.0
+        }
+      },
+      {
+        "_resources": {
+          "component": 5.0,
+          "electronics": 5.0
+        }
+      },
+      {
+        "_resources": {
+          "component": 10.0,
+          "electronics": 10.0
+        }
+      }
+    ]
+  },
+  "steelPlant": {
+    "image": "defaultApparatus.png",
+    "durabilityTau": 8.64e6,
+    "baseDanger": 10e-4,
+    "accidentType": [
+      "FIRE",
+      "COLLAPSE",
+      "EXPLOSION"
+    ],
+    "idealWorker": 500,
+    "minTemp": 200,
+    "idealProduction": {
+      "structure": 0.1
+    },
+    "idealConsumption": {
+      "heavyMetal": 0.1,
+      "energy": 1e7
+    },
+    "idealHeatProduction": 1e7,
+    "requiredResourcePerRepair": [
+      {
+        "_resources": {
+          "component": 50
+        }
+      },
+      {
+        "_resources": {
+          "component": 50,
+          "electronics": 5.0,
+          "structure": 100
+        }
+      },
+      {
+        "_resources": {
+          "component": 100,
+          "electronics": 10.0,
+          "structure": 200
+        }
+      }
+    ]
+  },
+  "ceramicWorkshop": {
+    "image": "defaultApparatus.png",
+    "durabilityTau": 8.64e7,
+    "baseDanger": 6e-4,
+    "accidentType": [
+      "FIRE"
+    ],
+    "idealWorker": 5,
+    "maxTemp": 400,
+    "minTemp": 200,
+    "idealProduction": {
+      "ceramic": 10
+    },
+    "idealConsumption": {
+      "glass": 10,
+      "energy": 1e7
+    },
+    "idealHeatProduction": 1e7,
+    "requiredResourcePerRepair": [
+      {
+        "_resources": {
+          "component": 5.0,
+          "plumbing": 5.0
+        }
+      },
+      {
+        "_resources": {
+          "component": 5.0,
+          "electronics": 5.0,
+          "plumbing": 5.0
+        }
+      },
+      {
+        "_resources": {
+          "component": 10.0,
+          "electronics": 10.0,
+          "plumbing": 5.0
+        }
+      }
+    ]
+  },
+  "glassClothesWorkshop": {
+    "image": "defaultApparatus.png",
+    "durabilityTau": 8.64e7,
+    "baseDanger": 4e-4,
+    "accidentType": [
+      "FIRE",
+      "FRAGMENTS"
+    ],
+    "idealWorker": 5,
+    "maxTemp": 400,
+    "minTemp": 200,
+    "idealProduction": {
+      "glassClothes": 1e-2
+    },
+    "idealConsumption": {
+      "glass": 1e-2,
+      "energy": 1e7
+    },
+    "idealHeatProduction": 1e7,
+    "requiredResourcePerRepair": [
+      {
+        "_resources": {
+          "component": 5.0,
+          "plumbing": 5.0
+        }
+      },
+      {
+        "_resources": {
+          "component": 5.0,
+          "electronics": 5.0,
+          "plumbing": 5.0
+        }
+      },
+      {
+        "_resources": {
+          "component": 10.0,
+          "electronics": 10.0,
+          "plumbing": 5.0
+        }
+      }
+    ]
+  },
+  "cottonClothesWorkshop": {
+    "image": "defaultApparatus.png",
+    "durabilityTau": 8.64e7,
+    "baseDanger": 0e-4,
+    "idealWorker": 5,
+    "maxTemp": 400,
+    "minTemp": 200,
+    "idealProduction": {
+      "cottonClothes": 1e-3
+    },
+    "idealConsumption": {
+      "organics": 1e-3,
+      "energy": 1e5
+    },
+    "idealHeatProduction": 1e5,
+    "requiredResourcePerRepair": [
+      {
+        "_resources": {
+          "component": 5.0,
+          "plumbing": 5.0
+        }
+      },
+      {
+        "_resources": {
+          "component": 5.0,
+          "electronics": 5.0,
+          "plumbing": 5.0
+        }
+      },
+      {
+        "_resources": {
+          "component": 10.0,
+          "electronics": 10.0,
+          "plumbing": 5.0
+        }
+      }
+    ]
+  },
+  "plasticWorkshop": {
+    "image": "defaultApparatus.png",
+    "durabilityTau": 8.64e7,
+    "baseDanger": 6e-4,
+    "accidentType": [
+      "FIRE",
+      "EXPLOSION"
+    ],
+    "idealWorker": 5,
+    "maxTemp": 400,
+    "minTemp": 200,
+    "idealProduction": {
+      "plastic": 1e-2
+    },
+    "idealConsumption": {
+      "organics": 1e-2,
+      "energy": 1e6
+    },
+    "idealHeatProduction": 1e6,
+    "requiredResourcePerRepair": [
+      {
+        "_resources": {
+          "component": 5.0,
+          "plumbing": 5.0
+        }
+      },
+      {
+        "_resources": {
+          "component": 5.0,
+          "electronics": 5.0,
+          "plumbing": 5.0
+        }
+      },
+      {
+        "_resources": {
+          "component": 10.0,
+          "electronics": 10.0,
+          "plumbing": 5.0
+        }
+      }
+    ]
+  },
+  "exchangePostGlassClothes": {
+    "image": "defaultApparatus.png",
+    "durabilityTau": 8.64e7,
+    "baseDanger": 1e-4,
+    "accidentType": [
+      "FIRE"
+    ],
+    "idealWorker": 100,
+    "idealDistribution": {
+      "glassClothes": 1e-2
+    },
+    "idealConsumption": {
+      "glassClothes": 1e-2
+    },
+    "requiredResourcePerRepair": [
+      {
+        "_resources": {
+          "component": 5.0
+        }
+      },
+      {
+        "_resources": {
+          "component": 5.0,
+          "electronics": 5.0
+        }
+      },
+      {
+        "_resources": {
+          "component": 10.0,
+          "electronics": 10.0
+        }
+      }
+    ]
+  },
+  "exchangePostCottonClothes": {
+    "image": "defaultApparatus.png",
+    "durabilityTau": 8.64e7,
+    "baseDanger": 1e-4,
+    "accidentType": [
+      "FIRE"
+    ],
+    "idealWorker": 100,
+    "idealDistribution": {
+      "cottonClothes": 1e-3
+    },
+    "idealConsumption": {
+      "cottonClothes": 1e-3
+    },
+    "requiredResourcePerRepair": [
+      {
+        "_resources": {
+          "component": 5.0
+        }
+      },
+      {
+        "_resources": {
+          "component": 5.0,
+          "electronics": 5.0
+        }
+      },
+      {
+        "_resources": {
+          "component": 10.0,
+          "electronics": 10.0
+        }
+      }
+    ]
+  },
+  "exchangePostCleanWater": {
+    "image": "defaultApparatus.png",
+    "durabilityTau": 8.64e7,
+    "baseDanger": 1e-4,
+    "accidentType": [
+      "FIRE"
+    ],
+    "idealWorker": 100,
+    "idealDistribution": {
+      "cleanWater": 1e-1
+    },
+    "idealConsumption": {
+      "cleanWater": 1e-1
+    },
+    "requiredResourcePerRepair": [
+      {
+        "_resources": {
+          "component": 5.0
+        }
+      },
+      {
+        "_resources": {
+          "component": 5.0,
+          "electronics": 5.0
+        }
+      },
+      {
+        "_resources": {
+          "component": 10.0,
+          "electronics": 10.0
+        }
+      }
+    ]
+  },
+  "exchangePostAmmonia": {
+    "image": "defaultApparatus.png",
+    "durabilityTau": 8.64e7,
+    "baseDanger": 1e-4,
+    "accidentType": [
+      "FIRE"
+    ],
+    "idealWorker": 100,
+    "idealDistribution": {
+      "Ammonia": 1e-6
+    },
+    "idealConsumption": {
+      "Ammonia": 1e-6
+    },
+    "requiredResourcePerRepair": [
+      {
+        "_resources": {
+          "component": 5.0
+        }
+      },
+      {
+        "_resources": {
+          "component": 5.0,
+          "electronics": 5.0
+        }
+      },
+      {
+        "_resources": {
+          "component": 10.0,
+          "electronics": 10.0
+        }
+      }
+    ]
+  },
+  "exchangePostPlastic": {
+    "image": "defaultApparatus.png",
+    "durabilityTau": 8.64e7,
+    "baseDanger": 1e-4,
+    "accidentType": [
+      "FIRE"
+    ],
+    "idealWorker": 100,
+    "idealDistribution": {
+      "plastic": 1e-3
+    },
+    "idealConsumption": {
+      "plastic": 1e-3
+    },
+    "requiredResourcePerRepair": [
+      {
+        "_resources": {
+          "component": 5.0
+        }
+      },
+      {
+        "_resources": {
+          "component": 5.0,
+          "electronics": 5.0
+        }
+      },
+      {
+        "_resources": {
+          "component": 10.0,
+          "electronics": 10.0
+        }
+      }
+    ]
+  },
+  "exchangePostCeramic": {
+    "image": "defaultApparatus.png",
+    "durabilityTau": 8.64e7,
+    "baseDanger": 1e-4,
+    "accidentType": [
+      "FIRE"
+    ],
+    "idealWorker": 100,
+    "idealDistribution": {
+      "ceramic": 2e-3
+    },
+    "idealConsumption": {
+      "ceramic": 2e-3
+    },
+    "requiredResourcePerRepair": [
+      {
+        "_resources": {
+          "component": 5.0
+        }
+      },
+      {
+        "_resources": {
+          "component": 5.0,
+          "electronics": 5.0
+        }
+      },
+      {
+        "_resources": {
+          "component": 10.0,
+          "electronics": 10.0
+        }
+      }
+    ]
+  },
+  "exchangePostDiamond": {
+    "image": "defaultApparatus.png",
+    "durabilityTau": 8.64e7,
+    "baseDanger": 1e-4,
+    "accidentType": [
+      "FIRE"
+    ],
+    "idealWorker": 100,
+    "idealDistribution": {
+      "diamond": 1e-6
+    },
+    "idealConsumption": {
+      "diamond": 1e-6
+    },
+    "requiredResourcePerRepair": [
+      {
+        "_resources": {
+          "component": 5.0
+        }
+      },
+      {
+        "_resources": {
+          "component": 5.0,
+          "electronics": 5.0
+        }
+      },
+      {
+        "_resources": {
+          "component": 10.0,
+          "electronics": 10.0
+        }
+      }
+    ]
+  },
+  "pressureDoor": {
+    "image": "defaultApparatus.png",
+    "durabilityTau": 8.64e7,
+    "baseDanger": 1e-4,
+    "idealWorker": 8,
+    "requiredResourcePerRepair": [
+      {
+        "_resources": {
+          "component": 5.0
+        }
+      },
+      {
+        "_resources": {
+          "component": 5.0,
+          "electronics": 5.0,
+          "structure": 50
+        }
+      },
+      {
+        "_resources": {
+          "component": 10.0,
+          "electronics": 10.0,
+          "structure": 100
+        }
+      }
+    ]
+  },
+  "farmArray": {
+    "image": "defaultApparatus.png",
+    "durabilityTau": 8.64e6,
+    "baseDanger": 4e-4,
+    "accidentType": [
+      "FIRE",
+      "FLOODING"
+    ],
+    "idealWorker": 100,
+    "maxTemp": 320,
+    "minTemp": 280,
+    "idealProduction": {
+      "ration": 6e-2
+    },
+    "idealAbsorption": {
+      "carbonDioxide": 2.2e-2,
+      "oxygen": -3.8e-2
+    },
+    "idealConsumption": {
+      "energy": 1e7,
+      "phosphorus": 1e-5,
+      "ammonia": 5e-5
+    },
+    "idealHeatProduction": 8e6,
+    "requiredResourcePerRepair": [
+      {
+        "_resources": {
+          "component": 5.0
+        }
+      },
+      {
+        "_resources": {
+          "component": 5.0,
+          "electronics": 5.0,
+          "structure": 50
+        }
+      },
+      {
+        "_resources": {
+          "component": 10.0,
+          "electronics": 10.0,
+          "structure": 100
+        }
+      }
+    ]
+  },
+  "classroom": {
+    "image": "defaultApparatus.png",
+    "durabilityTau": 8.64e7,
+    "baseDanger": 2e-4,
+    "accidentType": [
+      "FIRE"
+    ],
+    "idealWorker": 50,
+    "requiredResourcePerRepair": [
+      {
+        "_resources": {
+          "component": 5.0
+        }
+      },
+      {
+        "_resources": {
+          "component": 5.0,
+          "electronics": 5.0
+        }
+      },
+      {
+        "_resources": {
+          "component": 10.0,
+          "electronics": 10.0
+        }
+      }
+    ]
+  },
+  "electrolysisArray": {
+    "image": "defaultApparatus.png",
+    "durabilityTau": 8.64e6,
+    "baseDanger": 8e-4,
+    "accidentType": [
+      "FIRE",
+      "EXPLOSION",
+      "FLOODING"
+    ],
+    "idealWorker": 5,
+    "maxTemp": 373,
+    "minTemp": 273,
+    "idealAbsorption": {
+      "oxygen": -8e-5
+    },
+    "idealDistribution": {
+    },
+    "idealConsumption": {
+      "water": 9e-5,
+      "energy": 1.91e3
+    },
+    "idealProduction": {
+      "hydrogen": 1e-5
+    },
+    "idealHeatProduction": 5e2,
+    "requiredResourcePerRepair": [
+      {
+        "_resources": {
+          "plumbing": 10,
+          "electronics": 10
+        }
+      },
+      {
+        "_resources": {
+          "plumbing": 10,
+          "electronics": 30
+        }
+      },
+      {
+        "_resources": {
+          "plumbing": 20,
+          "electronics": 50.0
+        }
+      }
+    ]
+  },
+  "oxygenDistributor": {
+    "image": "defaultApparatus.png",
+    "durabilityTau": 8.64e7,
+    "baseDanger": 8e-4,
+    "accidentType": [
+      "EXPLOSION"
+    ],
+    "idealWorker": 5,
+    "tempCoef": 1,
+    "maxTemp": 340,
+    "minTemp": 70,
+    "idealAbsorption": {
+      "oxygen": -2e-5
+    },
+    "idealDistribution": {
+    },
+    "idealConsumption": {
+      "oxygen": 2e-5,
+      "energy": 1.91e1
+    },
+    "idealHeatProduction": 5e0,
+    "requiredResourcePerRepair": [
+      {
+        "_resources": {
+          "plumbing": 10,
+          "electronics": 10
+        }
+      },
+      {
+        "_resources": {
+          "plumbing": 10,
+          "electronics": 30
+        }
+      },
+      {
+        "_resources": {
+          "plumbing": 20,
+          "electronics": 50.0
+        }
+      }
+    ]
+  },
+  "corpseRecycle": {
+    "image": "defaultApparatus.png",
+    "durabilityTau": 8.64e5,
+    "baseDanger": 6e-4,
+    "accidentType": [
+      "FIRE"
+    ],
+    "idealWorker": 5,
+    "idealAbsorption": {
+      "nitrogen": -2.6e-4,
+      "carbonDioxide": -6.78e-3,
+      "water": -8.55e-3,
+      "oxygen": 5.65e-3
+    },
+    "idealConsumption": {
+      "energy": 2e4,
+      "corpse": 1e-4
+    },
+    "idealProduction": {
+      "phosphorus": 6e-5
+    },
+    "idealHeatProduction": 2e4,
+    "requiredResourcePerRepair": [
+      {
+        "_resources": {
+          "plumbing": 10
+        }
+      },
+      {
+        "_resources": {
+          "plumbing": 10,
+          "electronics": 5.0
+        }
+      },
+      {
+        "_resources": {
+          "plumbing": 20,
+          "electronics": 10.0
+        }
+      }
+    ]
+  },
+  "waterRecycle": {
+    "image": "defaultApparatus.png",
+    "durabilityTau": 8.64e6,
+    "baseDanger": 6e-4,
+    "accidentType": [
+      "FLOODING"
+    ],
+    "idealWorker": 0,
+    "tempCoef": -1,
+    "maxTemp": 373,
+    "minTemp": 273,
+    "idealAbsorption": {
+      "water": 5e-3
+    },
+    "idealProduction": {
+      "water": 5e-3
+    },
+    "idealHeatProduction": 1.13e5,
+    "requiredResourcePerRepair": [
+      {
+        "_resources": {
+          "plumbing": 10
+        }
+      },
+      {
+        "_resources": {
+          "plumbing": 10,
+          "electronics": 5.0
+        }
+      },
+      {
+        "_resources": {
+          "plumbing": 20,
+          "electronics": 10.0
+        }
+      }
+    ]
+  },
+  "waterDistill": {
+    "image": "defaultApparatus.png",
+    "durabilityTau": 8.64e6,
+    "baseDanger": 6e-4,
+    "accidentType": [
+      "FLOODING"
+    ],
+    "idealWorker": 0,
+    "tempCoef": -1,
+    "maxTemp": 373,
+    "minTemp": 273,
+    "idealConsumption": {
+      "water": 5e-2,
+      "energy": 1.13e6
+    },
+    "idealProduction": {
+      "cleanWater": 5e-2
+    },
+    "idealHeatProduction": 1.13e6,
+    "requiredResourcePerRepair": [
+      {
+        "_resources": {
+          "plumbing": 10
+        }
+      },
+      {
+        "_resources": {
+          "plumbing": 10,
+          "electronics": 5.0
+        }
+      },
+      {
+        "_resources": {
+          "plumbing": 20,
+          "electronics": 10.0
+        }
+      }
+    ]
+  },
+  "co2Recycle": {
+    "image": "defaultApparatus.png",
+    "durabilityTau": 8.64e6,
+    "baseDanger": 6e-4,
+    "idealWorker": 0,
+    "maxTemp": 400,
+    "minTemp": 200,
+    "idealAbsorption": {
+      "carbonDioxide": 1e-3,
+      "oxygen": -7e-4
+    },
+    "idealConsumption": {
+      "energy": 2e4,
+      "hydrogen": 8e-5
+    },
+    "idealDistribution": {
+    },
+    "idealProduction": {
+      "organics": 3.8e-4
+    },
+    "idealHeatProduction": 1e4,
+    "requiredResourcePerRepair": [
+      {
+        "_resources": {
+          "plumbing": 10
+        }
+      },
+      {
+        "_resources": {
+          "plumbing": 10,
+          "electronics": 5.0
+        }
+      },
+      {
+        "_resources": {
+          "plumbing": 20,
+          "electronics": 10.0
+        }
+      }
+    ]
+  },
+  "ammoniaProduction": {
+    "image": "defaultApparatus.png",
+    "durabilityTau": 8.64e6,
+    "baseDanger": 6e-4,
+    "accidentType": [
+      "FIRE",
+      "EXPLOSION"
+    ],
+    "idealWorker": 0,
+    "maxTemp": 400,
+    "minTemp": 200,
+    "idealAbsorption": {
+      "nitrogen": 1.3e-4
+    },
+    "idealConsumption": {
+      "hydrogen": 2.8e-5,
+      "energy": 4.28e2
+    },
+    "idealProduction": {
+      "ammonia": 1.58e-4
+    },
+    "idealHeatProduction": 0,
+    "requiredResourcePerRepair": [
+      {
+        "_resources": {
+          "plumbing": 10
+        }
+      },
+      {
+        "_resources": {
+          "plumbing": 10,
+          "electronics": 5.0
+        }
+      },
+      {
+        "_resources": {
+          "plumbing": 20,
+          "electronics": 10.0
+        }
+      }
+    ]
+  },
+  "launchPad": {
+    "image": "defaultApparatus.png",
+    "durabilityTau": 8.64e7,
+    "baseDanger": 6e-4,
+    "idealWorker": 0,
+    "requiredResourcePerRepair": [
+      {
+        "_resources": {
+          "lightMetal": 1.0
+        }
+      },
+      {
+        "_resources": {
+          "lightMetal": 2.0
+        }
+      },
+      {
+        "_resources": {
+          "titaniumTank": 1.0
+        }
+      }
+    ]
+  },
+  "graves": {
+    "image": "defaultApparatus.png",
+    "durabilityTau": 8.64e7,
+    "baseDanger": 6e-4,
+    "idealWorker": 0,
+    "requiredResourcePerRepair": [
+      {
+        "_resources": {
+          "lightMetal": 1.0
+        }
+      },
+      {
+        "_resources": {
+          "lightMetal": 2.0
+        }
+      },
+      {
+        "_resources": {
+          "titaniumTank": 1.0
+        }
+      }
+    ]
+  },
+  "telescope": {
+    "image": "defaultApparatus.png",
+    "durabilityTau": 8.64e7,
+    "baseDanger": 0,
+    "idealWorker": 0,
+    "idealConsumption": {
+      "energy": 1e7
+    },
+    "idealHeatProduction": 1e7,
+    "requiredResourcePerRepair": [
+      {
+        "_resources": {
+          "lightMetal": 1.0
+        }
+      },
+      {
+        "_resources": {
+          "lightMetal": 2.0
+        }
+      },
+      {
+        "_resources": {
+          "titaniumTank": 1.0
+        }
+      }
+    ]
+  },
+  "cooler": {
+    "image": "defaultApparatus.png",
+    "durabilityTau": 8.64e6,
+    "baseDanger": 6e-4,
+    "accidentType": [
+      "EXPLOSION"
+    ],
+    "idealWorker": 0,
+    "currentWorker": 0,
+    "tempCoef": 1,
+    "minTemp": 280,
+    "idealConsumption": {
+      "energy": 8e6
+    },
+    "idealHeatProduction": -3e7,
+    "requiredResourcePerRepair": [
+      {
+        "_resources": {
+          "plumbing": 10
+        }
+      },
+      {
+        "_resources": {
+          "plumbing": 10,
+          "electronics": 5.0
+        }
+      },
+      {
+        "_resources": {
+          "plumbing": 20,
+          "electronics": 10.0
+        }
+      }
+    ]
+  },
+  "metalShaft": {
+    "image": "defaultApparatus.png",
+    "durabilityTau": 8.64e6,
+    "baseDanger": 8e-4,
+    "accidentType": [
+      "FIRE",
+      "COLLAPSE"
+    ],
+    "idealWorker": 160,
+    "idealProduction": {
+      "lightMetal": 0.1,
+      "heavyMetal": 0.02,
+      "rareMetal": 1e-3,
+      "diamond": 1e-6
+    },
+    "idealConsumption": {
+      "energy": 1e7
+    },
+    "idealHeatProduction": 1e7,
+    "requiredResourcePerRepair": [
+      {
+        "_resources": {
+          "component": 50
+        }
+      },
+      {
+        "_resources": {
+          "component": 50,
+          "electronics": 5.0,
+          "structure": 100
+        }
+      },
+      {
+        "_resources": {
+          "component": 100,
+          "electronics": 10.0,
+          "structure": 200
+        }
+      }
+    ]
+  },
+  "liquidShaft": {
+    "image": "defaultApparatus.png",
+    "durabilityTau": 8.64e6,
+    "baseDanger": 10e-4,
+    "accidentType": [
+      "COLLAPSE",
+      "FLOODING"
+    ],
+    "idealWorker": 160,
+    "idealProduction": {
+      "organics": 0.1
+    },
+    "idealConsumption": {
+      "energy": 1e7
+    },
+    "idealHeatProduction": 1e7,
+    "requiredResourcePerRepair": [
+      {
+        "_resources": {
+          "component": 50
+        }
+      },
+      {
+        "_resources": {
+          "component": 50,
+          "electronics": 5.0,
+          "structure": 100
+        }
+      },
+      {
+        "_resources": {
+          "component": 100,
+          "electronics": 10.0,
+          "structure": 200
+        }
+      }
+    ]
+  },
+  "glassShaft": {
+    "image": "defaultApparatus.png",
+    "durabilityTau": 8.64e6,
+    "baseDanger": 10e-4,
+    "accidentType": [
+      "COLLAPSE",
+      "FRAGMENTS"
+    ],
+    "idealWorker": 160,
+    "idealProduction": {
+      "glass": 0.08
+    },
+    "idealConsumption": {
+      "energy": 1e7
+    },
+    "idealHeatProduction": 1e7,
+    "requiredResourcePerRepair": [
+      {
+        "_resources": {
+          "component": 50
+        }
+      },
+      {
+        "_resources": {
+          "component": 50,
+          "electronics": 5.0,
+          "structure": 100
+        }
+      },
+      {
+        "_resources": {
+          "component": 100,
+          "electronics": 10.0,
+          "structure": 200
+        }
+      }
+    ]
+  },
+  "beds": {
+    "image": "defaultApparatus.png",
+    "durabilityTau": 8.64e7,
+    "baseDanger": 1e-4,
+    "accidentType": [
+      "FIRE"
+    ],
+    "idealWorker": 20,
+    "idealConsumption": {
+      "energy": 1e4
+    },
+    "idealHeatProduction": 1e4,
+    "requiredResourcePerRepair": [
+      {
+        "_resources": {
+          "components": 1.0
+        }
+      },
+      {
+        "_resources": {
+          "components": 2.0
+        }
+      },
+      {
+        "_resources": {
+          "titaniumTank": 1.0
+        }
+      }
+    ]
+  },
+  "wiredCommunicationDevice": {
+    "image": "defaultApparatus.png",
+    "durabilityTau": 8.64e7,
+    "baseDanger": 2e-4,
+    "accidentType": [
+      "FIRE"
+    ],
+    "idealWorker": 32,
+    "maxTemp": 400,
+    "minTemp": 200,
+    "idealConsumption": {
+      "energy": 1e4
+    },
+    "idealHeatProduction": 5e3,
+    "requiredResourcePerRepair": [
+      {
+        "_resources": {
+          "electronics": 5.0
+        }
+      },
+      {
+        "_resources": {
+          "component": 5.0,
+          "electronics": 5.0
+        }
+      },
+      {
+        "_resources": {
+          "component": 10.0,
+          "electronics": 10.0
+        }
+      }
+    ]
+  },
+  "wiredBroadcastDevice": {
+    "image": "defaultApparatus.png",
+    "durabilityTau": 8.64e7,
+    "baseDanger": 2e-4,
+    "accidentType": [
+      "FIRE"
+    ],
+    "idealWorker": 32,
+    "maxTemp": 400,
+    "minTemp": 200,
+    "idealConsumption": {
+      "energy": 1e4
+    },
+    "idealHeatProduction": 5e3,
+    "requiredResourcePerRepair": [
+      {
+        "_resources": {
+          "electronics": 5.0
+        }
+      },
+      {
+        "_resources": {
+          "component": 5.0,
+          "electronics": 5.0
+        }
+      },
+      {
+        "_resources": {
+          "component": 10.0,
+          "electronics": 10.0
+        }
+      }
+    ]
+  }
+}

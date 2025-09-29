@@ -9,58 +9,75 @@ import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.utils.ObjectMap
 import com.badlogic.gdx.utils.ScreenUtils
-import com.titaniumPolitics.game.core.GameEngine
-import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.ui.CapsuleStage
 import com.titaniumPolitics.game.ui.MainMenu
-import kotlinx.serialization.json.Json
 import ktx.scene2d.Scene2DSkin
-import kotlin.concurrent.thread
 
-class EntryClass : ApplicationAdapter()
-{
+class EntryClass : ApplicationAdapter() {
     lateinit var stage: Stage
     lateinit var skin: Skin
-    override fun create()
-    {
+    override fun create() {
 
-        val gen = FreeTypeFontGenerator(Gdx.files.internal("Fonts/LondrinaSolid-Regular.ttf"))
-        val parameter = FreeTypeFontGenerator.FreeTypeFontParameter()
-        parameter.size = 14
-        //Include the below line for Unicode support
-        //parameter.characters = Gdx.files.internal("korean2350.txt").readString("UTF-8")
-        val nanum = gen.generateFont(parameter)
-        fontMap.put("fixedsys", nanum)
-        gen.dispose()
+        run {
+            val gen = FreeTypeFontGenerator(Gdx.files.internal("Fonts/LondrinaSolid-Regular.ttf"))
+            val parameter = FreeTypeFontGenerator.FreeTypeFontParameter()
+            parameter.size = 20
+            //Include the below line for Unicode support
+            //parameter.characters = Gdx.files.internal("korean2350.txt").readString("UTF-8")
+            val nanum = gen.generateFont(parameter)
+            fontMap.put("fixedsys", nanum)
+            gen.dispose()
+        }
+        run {
+            val gen = FreeTypeFontGenerator(Gdx.files.internal("Fonts/GrotleyRegular-mLEWv.otf"))
+            val parameter = FreeTypeFontGenerator.FreeTypeFontParameter()
+            parameter.size = 75
+            //Include the below line for Unicode support
+            //parameter.characters = Gdx.files.internal("korean2350.txt").readString("UTF-8")
+            val nanum = gen.generateFont(parameter)
+            fontMap.put("GrotleyRegular", nanum)
+            gen.dispose()
+        }
+        run {
+            val gen = FreeTypeFontGenerator(Gdx.files.internal("Fonts/Martius-LV9L4.ttf"))
+            val parameter = FreeTypeFontGenerator.FreeTypeFontParameter()
+            parameter.size = 75
+            //Include the below line for Unicode support
+            //parameter.characters = Gdx.files.internal("korean2350.txt").readString("UTF-8")
+            val nanum = gen.generateFont(parameter)
+            fontMap.put("Martius", nanum)
+            gen.dispose()
+        }
+
         val param = SkinLoader.SkinParameter(fontMap)
         val assetManager = AssetManager()
-        assetManager.load("skin/titaniumSkin.json", Skin::class.java, param)
+        assetManager.load("skin/titaniumSkin.skin", Skin::class.java, param)
         assetManager.finishLoading()
-        skin = assetManager.get("skin/titaniumSkin.json")
+        skin = assetManager.get("skin/titaniumSkin.skin")
         Scene2DSkin.defaultSkin = skin
         stage = MainMenu(this)
         Gdx.input.inputProcessor = stage
+        instance = this
     }
 
-    override fun render()
-    {
+    override fun render() {
         ScreenUtils.clear(0f, 0f, 0f, 1f)
         stage.act(Gdx.graphics.deltaTime)
         stage.draw()
     }
 
-    override fun dispose()
-    {
+    override fun dispose() {
         stage.dispose()
+        GameEngineThreadHandler.stopEngine()
     }
 
-    override fun resize(width: Int, height: Int)
-    {
+    override fun resize(width: Int, height: Int) {
         stage.viewport.update(width, height, true)
     }
 
-    companion object
-    {
+    companion object {
+
+        lateinit var instance: EntryClass
 
         //--------------------------------------------------------------
         var fontMap = ObjectMap<String, Any>()

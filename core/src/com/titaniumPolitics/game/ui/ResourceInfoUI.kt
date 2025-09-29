@@ -1,23 +1,21 @@
 package com.titaniumPolitics.game.ui
 
 
-import com.badlogic.gdx.scenes.scene2d.ui.*
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
-
+import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane
+import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.utils.Align
-
 import com.titaniumPolitics.game.core.Information
+import com.titaniumPolitics.game.core.ReadOnly
+import com.titaniumPolitics.game.ui.widget.InformationSourceUI
+import com.titaniumPolitics.game.ui.widget.ResourceDisplayUI
+import com.titaniumPolitics.game.ui.widget.WindowUI
+import ktx.scene2d.label
 
-import ktx.scene2d.*
-import ktx.scene2d.Scene2DSkin.defaultSkin
 
-
-class ResourceInfoUI : WindowUI("ResourceInfoTitle")
-{
+class ResourceInfoUI : WindowUI("ResourceInfoTitle") {
     private val dataTable = Table()
 
-    init
-    {
+    init {
         isVisible = false
         instance = this
         val informationPane = ScrollPane(dataTable)
@@ -27,34 +25,19 @@ class ResourceInfoUI : WindowUI("ResourceInfoTitle")
 
     }
 
-    fun refresh(information: Information)
-    {
+    fun display(information: Information) {
         dataTable.clear()
         dataTable.apply {
-
-            add(label("Author: ${information.author}") { setAlignment(Align.center) })
+            add(label("Target Place: ${ReadOnly.placeProp(information.tgtPlace)}") { setAlignment(Align.center) })
             row()
-            add(label("Creation Time: ${information.creationTime}") { setAlignment(Align.center) })
-
+            add(ResourceDisplayUI(information.resources)).size(500f, 300f).fill()
             row()
-            add(label("Type: ${information.type}") { setAlignment(Align.center) })
-            row()
-            add(label("Target Time: ${information.tgtTime}") { setAlignment(Align.center) })
-            row()
-            add(label("Target Place: ${information.tgtPlace}") { setAlignment(Align.center) })
-            row()
-            add(table {
-                information.resources.forEach { (resourceName, resourceAmount) ->
-                    label("$resourceName: $resourceAmount") { setAlignment(Align.center) }
-                    row()
-                }
-            })
+            add(InformationSourceUI(information)).fill()
         }
 
     }
 
-    companion object
-    {
+    companion object {
         //Singleton
         lateinit var instance: ResourceInfoUI
     }

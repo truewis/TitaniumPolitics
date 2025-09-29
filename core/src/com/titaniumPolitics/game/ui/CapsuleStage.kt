@@ -1,38 +1,39 @@
 package com.titaniumPolitics.game.ui
 
 import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.Input
 import com.badlogic.gdx.assets.AssetManager
 import com.badlogic.gdx.assets.loaders.TextureLoader
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.scenes.scene2d.Stage
+import com.badlogic.gdx.scenes.scene2d.actions.Actions
 import com.badlogic.gdx.scenes.scene2d.ui.Image
 import com.badlogic.gdx.scenes.scene2d.ui.Stack
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable
 import com.badlogic.gdx.utils.viewport.FitViewport
 import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.core.ReadOnly
-import com.titaniumPolitics.game.ui.meeting.MeetingUI
+import com.titaniumPolitics.game.debugTools.Logger
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
 
-class CapsuleStage(val gameState: GameState) : Stage(FitViewport(1920F, 1080F))
-{
+class CapsuleStage(val gameState: GameState) : Stage(FitViewport(1920F, 1080F)) {
     var background = Image()
 
     //val inputEnabled = ArrayList<(Boolean)->Unit>() Unused
     val logBox = LogUI(gameState)
-    var hud: HeadUpInterface
+    var hud: InterfaceRoot
     val rootStack = Stack()
-    val charactersView = CharacterPortraitsUI(gameState)
-    val meeting = MeetingUI(gameState)
     val assetManager = AssetManager()
     val onMouseClick = ArrayList<(Float, Float) -> Unit>()
     val onMouseDown = ArrayList<(Float, Float) -> Unit>()
+    val onKeyDown = ArrayList<(Int) -> Unit>()
 
-    init
-    {
-        println("Initializing CapsuleStage...")
+    init {
+        Logger.gState = gameState
+        Logger.init()
+        Logger.write("Initializing CapsuleStage...", Logger.LogLevel.INFO)
         instance = this
         val resolver = InternalFileHandleResolver()
         assetManager.setLoader(
@@ -44,97 +45,101 @@ class CapsuleStage(val gameState: GameState) : Stage(FitViewport(1920F, 1080F))
         }
         assetManager.load("data/dev/capsuleDevBoxCheck.png", Texture::class.java)
         assetManager.load("data/dev/capsuleDevBox.png", Texture::class.java)
+        assetManager.load("document_small_contrast.png", Texture::class.java)
+        assetManager.load("idcard_contrast.png", Texture::class.java)
+        assetManager.load("MapGrid.png", Texture::class.java)
         ReadOnly.charJson.forEach {
+            assetManager.load(
+                it.value.jsonObject["image"]?.jsonPrimitive?.content ?: "portraits/${it.key}.png",
+                Texture::class.java
+            )
+            assetManager.load(
+                it.value.jsonObject["headImage"]?.jsonPrimitive?.content ?: "portraits/${it.key}Head.png",
+                Texture::class.java
+            )
+        }
+        ReadOnly.appJson.forEach {
             assetManager.load(it.value.jsonObject["image"]!!.jsonPrimitive.content, Texture::class.java)
         }
-        println("Explicit asset imports successful.")
+        Logger.write("Explicit asset imports successful.", Logger.LogLevel.INFO)
         assetManager.finishLoading()
 
         rootStack.setFillParent(true)
         rootStack.add(background)
-        rootStack.add(charactersView)
-        rootStack.add(meeting)
         background.setFillParent(true)
 
         addActor(rootStack)
         addActor(logBox)
         logBox.setFillParent(true)
         logBox.isVisible = false
-        hud = HeadUpInterface(gameState)
+        hud = InterfaceRoot(gameState)
         addActor(hud)
         hud.setFillParent(true)
 
         var prevPlace = ""
         gameState.updateUI.add {
-            if (prevPlace != it.player.place.name)
-            {
+            if (prevPlace != it.player.place.name) {
                 prevPlace = it.player.place.name
                 roomChanged(it.player.place.name)
             }
-            if (it.player.currentMeeting != null)
-            {
-                meeting.isVisible = true
-                charactersView.isVisible = false
-            } else
-            {
-                meeting.isVisible = false
-                charactersView.isVisible = true
-            }
         }
-        println("Starting Audio...")
+        Logger.write("Starting Audio...", Logger.LogLevel.INFO)
         playMusic()
-        println("CapsuleStage initialized successfully.")
+        Logger.write("CapsuleStage initialized successfully.", Logger.LogLevel.INFO)
     }
 
-    fun playMusic()
-    {
-        val music = Gdx.audio.newMusic(Gdx.files.internal("data/Capsule_old_lighthouse_loop.mp3"))
-        music.isLooping = true
-        music.play()
+    fun playMusic() {
+        SoundEngine.playMusic("Capsule_old_lighthouse_loop.mp3")
     }
 
-    fun roomChanged(name: String)
-    {
-        try
-        {
-
-            background.drawable = TextureRegionDrawable(
-                assetManager.get(
-                    ReadOnly.mapJson[if (name.contains("home")) "home" else name]!!.jsonObject["image"]!!.jsonPrimitive.content,
-                    Texture::class.java
-                )!!
+    fun roomChanged(name: String) {
+        background.addAction(
+            Actions.sequence(
+                Actions.fadeOut(0.5f),
+                Actions.run {
+                    try {
+                        background.drawable = TextureRegionDrawable(
+                            assetManager.get(
+                                ReadOnly.mapJson[if (name.contains("home")) "home" else name]!!.jsonObject["image"]!!.jsonPrimitive.content,
+                                Texture::class.java
+                            )!!
+                        )
+                    } catch (e: Exception) {
+                        Logger.write("Background Image Error: $e", Logger.LogLevel.INFO)
+                    }
+                    try {
+                        val sound =
+                            Gdx.audio.newSound(Gdx.files.internal(ReadOnly.mapJson[if (name.contains("home")) "home" else name]!!.jsonObject["sound"]!!.jsonPrimitive.content))
+                        sound.play()//TODO: use SoundEngine.
+                    } catch (e: Exception) {
+                        Logger.write("Background Sound Error: $e", Logger.LogLevel.INFO)
+                    }
+                },
+                Actions.fadeIn(0.5f)
             )
+        )
 
-        } catch (e: Exception)
-        {
-            println("Background Image Error: $e")
-        }
-        try
-        {
-            val sound =
-                Gdx.audio.newSound(Gdx.files.internal(ReadOnly.mapJson[if (name.contains("home")) "home" else name]!!.jsonObject["sound"]!!.jsonPrimitive.content))
-            sound.play()
-        } catch (e: Exception)
-        {
-            println("Background Sound Error: $e")
-        }
     }
 
 
-    override fun touchUp(screenX: Int, screenY: Int, pointer: Int, button: Int): Boolean
-    {
+    override fun touchUp(screenX: Int, screenY: Int, pointer: Int, button: Int): Boolean {
         onMouseClick.forEach { it(screenX.toFloat(), screenY.toFloat()) }
         return super.touchUp(screenX, screenY, pointer, button)
     }
 
-    override fun touchDown(screenX: Int, screenY: Int, pointer: Int, button: Int): Boolean
-    {
+    override fun touchDown(screenX: Int, screenY: Int, pointer: Int, button: Int): Boolean {
         onMouseDown.forEach { it(screenX.toFloat(), screenY.toFloat()) }
         return super.touchDown(screenX, screenY, pointer, button)
     }
 
-    companion object
-    {
+    override fun keyDown(keyCode: Int): Boolean {
+        onKeyDown.forEach { it(keyCode) }
+        if (keyCode == Input.Keys.ESCAPE)
+            SystemUI.instance.isVisible = !SystemUI.instance.isVisible
+        return super.keyDown(keyCode)
+    }
+
+    companion object {
         lateinit var instance: CapsuleStage
     }
 

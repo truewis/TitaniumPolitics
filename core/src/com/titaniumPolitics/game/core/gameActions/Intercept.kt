@@ -1,34 +1,61 @@
 package com.titaniumPolitics.game.core.gameActions
 
+import com.titaniumPolitics.game.core.GameState
+import com.titaniumPolitics.game.core.MutualityMatrix
 import com.titaniumPolitics.game.core.ReadOnly
 import kotlinx.serialization.Serializable
 
 @Serializable
 //This class is used to end a speech and nominate a new speaker. This action is used by the current speaker.
-class Intercept(override val sbjCharacter: String, override val tgtPlace: String) : GameAction()
-{
+data class Intercept(override val sbjCharacter: String, override val tgtPlace: String) : GameAction() {
+    constructor(sbjCharacter: String, tgtPlace: String, gameState: GameState) : this(sbjCharacter, tgtPlace) {
+        injectParent(gameState)
+    }
 
-    override fun execute()
-    {
+    override fun execute() {
         val meeting = parent.characters[sbjCharacter]!!.currentMeeting!!
 
         //The amount of attention gained can be modified here.
         meeting.currentAttention += 20
         meeting.currentSpeaker = sbjCharacter
+
+
+
         super.execute()
     }
 
-    override fun isValid(): Boolean
-    {
+    override fun isValid(): Boolean {
         val meeting = parent.characters[sbjCharacter]!!.currentMeeting!!
-        return meeting.currentSpeaker != sbjCharacter && meeting.currentAttention <= ReadOnly.const("maxAttentionIntercept")
+        return meeting.currentSpeaker != sbjCharacter && reason(
+            meeting.currentAttention <= ReadOnly.const("maxAttentionIntercept"),
+            "intercept-attention"
+        )
     }
 
-    override fun deltaWill(): Double
-    {
+    override fun deltaWill(): MutualityMatrix {
         val meeting = parent.characters[sbjCharacter]!!.currentMeeting!!
-        val factor = if (parent.characters[sbjCharacter]!!.trait.contains("provoker")) -0.05 else -0.1
-        return super.deltaWill() + parent.getMutuality(sbjCharacter, meeting.currentSpeaker) * factor
+        val factor = if (parent.characters[sbjCharacter]!!.trait.contains("provoker")) -15 else -10
+        return MutualityMatrix().apply {
+            this.addWill(
+                sbjCharacter,
+                parent.getMutNorm(
+                    sbjCharacter,
+                    meeting.currentSpeaker!!
+                ) * factor * sbjCharObj.stats.pScale, "InterceptWill"
+            )
+
+            //Mutuality decreases before changing speaker.
+            this.addMutuality(
+                meeting.currentSpeaker!!,
+                sbjCharacter,
+                parent.getMutNorm(
+                    meeting.currentSpeaker!!,
+                    sbjCharacter
+                ) * factor * parent.characters[meeting.currentSpeaker!!]!!.stats.pScale, "Intercept"
+            )
+
+        }
+
     }
 
 

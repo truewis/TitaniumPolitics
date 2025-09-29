@@ -1,26 +1,24 @@
 package com.titaniumPolitics.game.ui.map
 
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.titaniumPolitics.game.core.GameState
-import ktx.scene2d.button
-import ktx.scene2d.label
+import com.titaniumPolitics.game.ui.widget.WindowUI
 
-class PlaceSelectionUI(gameState: GameState) : MapUI(gameState)
-{
-    init
-    {
+class PlaceSelectionUI(gameState: GameState) : WindowUI("PlaceSelectionTitle") {
+    val map = MapUI(gameState)
+
+    init {
         instance = this
+        isVisible = false
+        content.add(map).grow()
     }
 
     var selectedPlaceCallback: (String) -> Unit = {}
-    override fun refresh()
-    {
-        super.refresh()
-        currentPlaceMarkerWindow.mode = "PlaceSelection"
+    fun refresh() {
+        map.refresh()
+        map.currentPlaceMarkerWindow.mode = "PlaceSelection"
     }
 
-    companion object
-    {
+    companion object {
         lateinit var instance: PlaceSelectionUI
 
     }

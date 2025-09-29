@@ -1,32 +1,44 @@
 package com.titaniumPolitics.game.core.gameActions
 
+import com.titaniumPolitics.game.core.GameState
+import com.titaniumPolitics.game.core.MutualityMatrix
+import com.titaniumPolitics.game.debugTools.Logger
 import kotlinx.serialization.Serializable
 
 @Serializable
 //This class is used to end a speech and nominate a new speaker. This action is used by the current speaker.
-class EndSpeech(override val sbjCharacter: String, override val tgtPlace: String) : GameAction()
-{
-    lateinit var nextSpeaker: String
+data class EndSpeech(override val sbjCharacter: String, override val tgtPlace: String, var nextSpeaker: String) :
+    GameAction() {
+    constructor(sbjCharacter: String, tgtPlace: String, nextSpeaker: String, gameState: GameState) : this(
+        sbjCharacter,
+        tgtPlace,
+        nextSpeaker
+    ) {
+        injectParent(gameState)
+    }
 
-    override fun execute()
-    {
+    override fun execute() {
         val meeting = parent.characters[sbjCharacter]!!.currentMeeting!!
 
         //The amount of attention gained can be modified here.
-        meeting.currentAttention += 10
+        meeting.currentAttention -= 30
         meeting.currentSpeaker = nextSpeaker
+        Logger.write(
+            "$sbjCharacter ended their speech and nominated $nextSpeaker as the next speaker.",
+            Logger.LogLevel.ACTION_VERBOSE
+        )
         super.execute()
     }
 
-    override fun isValid(): Boolean
-    {
+    override fun isValid(): Boolean {
         val meeting = parent.characters[sbjCharacter]!!.currentMeeting!!
-        return meeting.currentSpeaker == sbjCharacter
+        return meeting.currentSpeaker == sbjCharacter && nextSpeaker != sbjCharacter
     }
 
-    override fun deltaWill(): Double
-    {
-        return parent.getMutuality(sbjCharacter, nextSpeaker) * 0.1
+    override fun deltaWill(): MutualityMatrix {
+        val w = MutualityMatrix()
+        w.addWill(sbjCharacter, parent.getMutuality(sbjCharacter, nextSpeaker) * 0.1 * sbjCharObj.stats.pScale, "")
+        return w
     }
 
 

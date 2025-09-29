@@ -1,114 +1,143 @@
 {
-  "_time": 12,
+  "_time": 1380,
   "_alertLevel": 0,
-  "idlePop": 1000,
+  "_idlePop": 1000,
   "playerName": "Rui",
-  "nonPlayerAgents": {
-    "charlie": {
-      "type": "com.titaniumPolitics.game.core.NonPlayerAgent"
-    },
-    "seefy": {
-      "type": "com.titaniumPolitics.game.core.NonPlayerAgent"
-    },
-    "Alina": {
-      "type": "com.titaniumPolitics.game.core.NonPlayerAgent"
-    },
-    "mini": {
-      "type": "com.titaniumPolitics.game.core.NonPlayerAgent"
-    },
-    "Eugene": {
-      "type": "com.titaniumPolitics.game.core.NonPlayerAgent"
-    },
-    "inddy": {
-      "type": "com.titaniumPolitics.game.core.NonPlayerAgent"
-    },
-    "inddy2": {
-      "type": "com.titaniumPolitics.game.core.NonPlayerAgent"
-    },
-    "welly": {
-      "type": "com.titaniumPolitics.game.core.NonPlayerAgent"
-    },
-    "Krailin": {
-      "type": "com.titaniumPolitics.game.core.NonPlayerAgent"
-    },
-    "Vaeme": {
-      "type": "com.titaniumPolitics.game.core.NonPlayerAgent"
-    },
-    "Mentor": {
-      "type": "com.titaniumPolitics.game.core.NonPlayerAgent"
-    },
-    "Salvor": {
-      "type": "com.titaniumPolitics.game.core.NonPlayerAgent"
-    },
-    "mini1": {
-      "type": "com.titaniumPolitics.game.core.NonPlayerAgent"
-    },
-    "mini2": {
-      "type": "com.titaniumPolitics.game.core.NonPlayerAgent"
-    },
-    "DrPaik": {
-      "type": "com.titaniumPolitics.game.core.NonPlayerAgent"
-    },
-    "doci2": {
-      "type": "com.titaniumPolitics.game.core.NonPlayerAgent"
-    },
-    "selli1": {
-      "type": "com.titaniumPolitics.game.core.NonPlayerAgent"
-    },
-    "selli2": {
-      "type": "com.titaniumPolitics.game.core.NonPlayerAgent"
-    },
-    "oldie": {
-      "type": "com.titaniumPolitics.game.core.NonPlayerAgent"
-    },
-    "ctrler": {
-      "type": "com.titaniumPolitics.game.core.NonPlayerAgent"
-    },
-    "observer": {
-      "type": "com.titaniumPolitics.game.core.NonPlayerAgent"
-    }
-  },
   "characters": {
-    "oldie": {
+    "Megaros": {
       "trait": [
         "workaholic",
         "emotionless",
         "mechanic",
-        "technician",
+        "engineer",
         "old",
         "bargainer"
       ],
-      "resources": {
-        "water": 10,
-        "ration": 10
+      "stats": {
+        "logos": 10,
+        "ethos": 10,
+        "pathos": 10
       },
       "health": 80,
       "livingBy": "constructionYardNorth"
     },
-    "charlie": {
+    "Charles": {
       "trait": [
         "workaholic",
         "emotionless",
-        "interiorMinister",
-        "bargainer"
+        "interiorDivisionLeader",
+        "bargainer",
+        "entertainer"
       ],
-      "resources": {
-        "water": 10,
-        "ration": 10
+      "stats": {
+        "logos": 10,
+        "ethos": 10,
+        "pathos": 10
+      },
+      "health": 80,
+      "reliant": 3,
+      "livingBy": "mainControlRoom"
+    },
+    "Astinomis": {
+      "trait": [
+        "workaholic",
+        "emotionless",
+        "safetyDivisionLeader",
+        "bargainer",
+        "soldier"
+      ],
+      "stats": {
+        "logos": 10,
+        "ethos": 10,
+        "pathos": 10
       },
       "health": 80,
       "livingBy": "mainControlRoom"
     },
-    "seefy": {
+    "Muos": {
       "trait": [
         "workaholic",
         "emotionless",
-        "safetyMinister",
+        "bargainer",
+        "soldier"
+      ],
+      "stats": {
+        "logos": 10,
+        "ethos": 10,
+        "pathos": 10
+      },
+      "health": 80,
+      "livingBy": "mainControlRoom"
+    },
+    "Kae": {
+      "trait": [
+        "workaholic",
+        "emotionless",
+        "bargainer",
+        "soldier"
+      ],
+      "stats": {
+        "logos": 10,
+        "ethos": 10,
+        "pathos": 10
+      },
+      "health": 80,
+      "livingBy": "mainControlRoom"
+    },
+    "Yuri": {
+      "type": "EMPLOYEE",
+      "trait": [
         "bargainer"
       ],
-      "resources": {
-        "water": 10,
-        "ration": 10
+      "stats": {
+        "logos": 10,
+        "ethos": 10,
+        "pathos": 10
+      },
+      "health": 80,
+      "livingBy": "market"
+    },
+    "Peiyu": {
+      "trait": [
+        "workaholic",
+        "emotionless",
+        "bargainer",
+        "soldier"
+      ],
+      "stats": {
+        "logos": 10,
+        "ethos": 10,
+        "pathos": 10
+      },
+      "health": 80,
+      "livingBy": "mainControlRoom"
+    },
+    "Kasem": {
+      "trait": [
+        "workaholic",
+        "emotionless",
+        "bargainer",
+        "soldier"
+      ],
+      "stats": {
+        "logos": 10,
+        "ethos": 10,
+        "pathos": 10
+      },
+      "health": 80,
+      "livingBy": "mainControlRoom"
+    },
+    "Bahriye": {
+      "trait": [
+        "workaholic",
+        "emotionless",
+        "bargainer",
+        "soldier"
+      ],
+      "stats": {
+        "logos": 10,
+        "ethos": 10,
+        "pathos": 10
       },
       "health": 80,
       "livingBy": "mainControlRoom"
@@ -117,81 +146,129 @@
       "trait": [
         "workaholic",
         "emotionless",
-        "infraMinister",
-        "thief"
+        "infrastructureDivisionLeader",
+        "thief",
+        "engineer"
       ],
-      "resources": {
-        "water": 10,
-        "ration": 10
+      "stats": {
+        "logos": 10,
+        "ethos": 10,
+        "pathos": 10
       },
       "health": 80,
       "livingBy": "mainControlRoom"
     },
-    "mini": {
+    "Maisarah": {
       "trait": [
         "workaholic",
         "emotionless",
-        "miningMinister",
+        "miningDivisionLeader",
         "thief"
       ],
-      "resources": {
-        "water": 10,
-        "ration": 10
+      "stats": {
+        "logos": 10,
+        "ethos": 10,
+        "pathos": 10
       },
       "health": 80,
-      "livingBy": "mainControlRoom"
+      "livingBy": "excavationShaftA"
     },
     "Eugene": {
       "trait": [
         "workaholic",
         "emotionless",
-        "eduMinister",
-        "bargainer"
+        "educationDivisionLeader",
+        "bargainer",
+        "teacher"
       ],
-      "resources": {
-        "water": 10,
-        "ration": 10
+      "stats": {
+        "logos": 10,
+        "ethos": 10,
+        "pathos": 10
+      },
+      "health": 80,
+      "reliant": 3,
+      "livingBy": "techSchool"
+    },
+    "Jan": {
+      "trait": [
+        "workaholic",
+        "emotionless",
+        "educationDivisionLeader",
+        "bargainer",
+        "teacher"
+      ],
+      "stats": {
+        "logos": 10,
+        "ethos": 10,
+        "pathos": 10
+      },
+      "health": 80,
+      "reliant": 3,
+      "livingBy": "techSchool"
+    },
+    "teacher2": {
+      "trait": [
+        "workaholic",
+        "emotionless",
+        "educationDivisionLeader",
+        "bargainer",
+        "teacher"
+      ],
+      "stats": {
+        "logos": 10,
+        "ethos": 10,
+        "pathos": 10
+      },
+      "health": 80,
+      "reliant": 3,
+      "livingBy": "techSchool"
+    },
+    "Hiroshi": {
+      "trait": [
+        "workaholic",
+        "emotionless",
+        "industryDivisionLeader",
+        "thief",
+        "organizer"
+      ],
+      "stats": {
+        "logos": 10,
+        "ethos": 10,
+        "pathos": 10
       },
       "health": 80,
       "livingBy": "mainControlRoom"
     },
-    "inddy": {
+    "Indu": {
       "trait": [
         "workaholic",
         "emotionless",
-        "industryMinister",
-        "thief"
+        "thief",
+        "organizer"
       ],
-      "resources": {
-        "water": 10,
-        "ration": 10
+      "stats": {
+        "logos": 10,
+        "ethos": 10,
+        "pathos": 10
       },
       "health": 80,
+      "reliant": 3,
       "livingBy": "mainControlRoom"
     },
-    "inddy2": {
+    "Evan": {
       "trait": [
         "workaholic",
         "emotionless",
-        "thief"
+        "bioengineeringDivisionLeader",
+        "bargainer",
+        "organizer"
       ],
-      "resources": {
-        "water": 10,
-        "ration": 10
-      },
-      "health": 80,
-      "livingBy": "mainControlRoom"
-    },
-    "welly": {
-      "trait": [
-        "workaholic",
-        "emotionless",
-        "bioMinister",
-        "bargainer"
-      ],
-      "resources": {
-        "water": 10,
-        "ration": 10
+      "reliant": 3,
+      "stats": {
+        "logos": 10,
+        "ethos": 10,
+        "pathos": 10
       },
       "health": 80,
       "livingBy": "mainControlRoom"
@@ -200,12 +277,13 @@
       "trait": [
         "workaholic",
         "emotionless",
-        "technician",
+        "engineer",
         "bargainer"
       ],
-      "resources": {
-        "water": 10,
-        "ration": 10
+      "stats": {
+        "logos": 10,
+        "ethos": 10,
+        "pathos": 10
       },
       "health": 80,
       "livingBy": "constructionYardNorth"
@@ -214,11 +292,12 @@
       "trait": [
         "workaholic",
         "emotionless",
-        "technician"
+        "engineer"
       ],
-      "resources": {
-        "water": 10,
-        "ration": 10
+      "stats": {
+        "logos": 10,
+        "ethos": 10,
+        "pathos": 10
       },
       "health": 80,
       "livingBy": "constructionYardNorth"
@@ -227,61 +306,67 @@
       "trait": [
         "workaholic",
         "emotionless",
-        "technician"
+        "engineer"
       ],
-      "resources": {
-        "water": 10,
-        "ration": 10
+      "stats": {
+        "logos": 10,
+        "ethos": 10,
+        "pathos": 10
       },
       "health": 80,
       "livingBy": "constructionYardNorth"
     },
-    "Mentor": {
+    "Yuhoa": {
       "trait": [
         "workaholic",
         "emotionless",
-        "technician"
+        "engineer"
       ],
-      "resources": {
-        "water": 10,
-        "ration": 10
+      "stats": {
+        "logos": 10,
+        "ethos": 10,
+        "pathos": 10
       },
       "health": 80,
+      "reliant": 2,
       "livingBy": "constructionYardNorth"
     },
     "Salvor": {
       "trait": [
         "workaholic",
         "emotionless",
-        "technician"
+        "engineer"
       ],
-      "resources": {
-        "water": 10,
-        "ration": 10
+      "stats": {
+        "logos": 10,
+        "ethos": 10,
+        "pathos": 10
       },
       "health": 80,
       "livingBy": "constructionYardNorth"
     },
-    "mini1": {
+    "Metros": {
       "trait": [
         "workaholic",
         "emotionless"
       ],
-      "resources": {
-        "water": 10,
-        "ration": 10
+      "stats": {
+        "logos": 10,
+        "ethos": 10,
+        "pathos": 10
       },
       "health": 80,
       "livingBy": "excavationShaftA"
     },
-    "mini2": {
+    "Dion": {
       "trait": [
         "workaholic",
         "emotionless"
       ],
-      "resources": {
-        "water": 10,
-        "ration": 10
+      "stats": {
+        "logos": 10,
+        "ethos": 10,
+        "pathos": 10
       },
       "health": 80,
       "livingBy": "excavationShaftB"
@@ -289,58 +374,56 @@
     "DrPaik": {
       "trait": [
         "workaholic",
-        "emotionless"
+        "emotionless",
+        "doctor"
       ],
-      "resources": {
-        "water": 10,
-        "ration": 10
+      "stats": {
+        "logos": 10,
+        "ethos": 10,
+        "pathos": 10
       },
       "health": 80,
       "livingBy": "welfareStationWest"
     },
-    "doci2": {
+    "DrHess": {
       "trait": [
         "workaholic",
-        "emotionless"
+        "emotionless",
+        "doctor"
       ],
-      "resources": {
-        "water": 10,
-        "ration": 10
+      "stats": {
+        "logos": 10,
+        "ethos": 10,
+        "pathos": 10
       },
       "health": 80,
+      "reliant": 3,
       "livingBy": "welfareStationEast"
     },
-    "selli1": {
+    "Boulos": {
       "trait": [
         "workaholic",
-        "emotionless"
+        "emotionless",
+        "organizer"
       ],
-      "resources": {
-        "water": 50,
-        "ration": 300,
-        "organics": 100
+      "stats": {
+        "logos": 10,
+        "ethos": 10,
+        "pathos": 10
       },
       "health": 80,
       "livingBy": "market"
     },
-    "selli2": {
+    "Agros": {
       "trait": [
         "workaholic",
-        "emotionless"
+        "emotionless",
+        "organizer"
       ],
-      "resources": {
-        "water": 10,
-        "ration": 10,
-        "tank": 10,
-        "beam": 10,
-        "axle": 10,
-        "transmission": 5,
-        "bearing": 5,
-        "piston": 5,
-        "wire": 10,
-        "optics": 5,
-        "lamp": 5,
-        "vacuumTube": 5
+      "stats": {
+        "logos": 10,
+        "ethos": 10,
+        "pathos": 10
       },
       "health": 80,
       "livingBy": "market"
@@ -349,8 +432,10 @@
       "trait": [
         "robot"
       ],
-      "resources": {
-        "water": 100
+      "stats": {
+        "logos": 10,
+        "ethos": 10,
+        "pathos": 10
       },
       "health": 100,
       "livingBy": "mainControlRoom"
@@ -359,8 +444,10 @@
       "trait": [
         "robot"
       ],
-      "resources": {
-        "water": 100
+      "stats": {
+        "logos": 10,
+        "ethos": 10,
+        "pathos": 10
       },
       "health": 100,
       "livingBy": "observatory"
@@ -374,70 +461,99 @@
         "z": 0
       },
       "resources": {
-        "oxygen": 100,
-        "water": 15000,
-        "ration": 100
+        "_resources": {
+          "oxygen": 100,
+          "water": 1500,
+          "ration": 1000,
+          "phosphorus": 10
+        }
       },
       "connectedPlaces": [
         "reservoirEast",
         "squareSouth",
         "securityCheckCenter",
-        "rescueStationWest"
+        "rescueStationWest",
+        "interiorHeadquarters"
       ],
-      "plannedWorker": 32,
       "apparatuses": [
         {
           "name": "wiredCommunicationDevice",
-          "durability": 95,
-          "baseDanger": 2e-4,
-          "idealWorker": 32,
-          "currentWorker": 0,
-          "idealConsumption": {
-            "energy": 1
-          }
+          "durability": 95
+        },
+        {
+          "name": "wiredBroadcastDevice",
+          "durability": 95
         },
         {
           "name": "oxygenStorage",
-          "durability": 95,
-          "baseDanger": 6e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "waterStorage",
-          "durability": 95,
-          "baseDanger": 3e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "rationStorage",
-          "durability": 95,
-          "baseDanger": 2e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "energyStorage",
-          "durability": 95,
-          "baseDanger": 2e-4,
-          "idealWorker": 10,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "energyStorage",
-          "durability": 95,
-          "baseDanger": 2e-4,
-          "idealWorker": 10,
-          "currentWorker": 0
+          "durability": 95
         }
       ],
       "characters": [
         "ctrler"
       ],
-      "responsibleParty": "interior",
+      "responsibleDivision": "interior",
       "workHoursStart": 0,
       "workHoursEnd": 24
+    },
+    "interiorHeadquarters": {
+      "coordinates": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "resources": {
+        "_resources": {
+          "oxygen": 50,
+          "water": 15000,
+          "ration": 500,
+          "phosphorus": 1
+        }
+      },
+      "connectedPlaces": [
+        "mainControlRoom"
+      ],
+      "apparatuses": [
+        {
+          "name": "energyStorage",
+          "durability": 95
+        },
+        {
+          "name": "waterStorage",
+          "durability": 95
+        },
+        {
+          "name": "oxygenStorage",
+          "durability": 95
+        },
+        {
+          "name": "rationStorage",
+          "durability": 95
+        }
+      ],
+      "responsibleDivision": "interior",
+      "authorizedDivisions": [
+        "interior"
+      ],
+      "isBuildingIn": "mainControlRoom",
+      "workHoursStart": 9,
+      "workHoursEnd": 17
     },
     "welfareStationWest": {
       "coordinates": {
@@ -446,74 +562,48 @@
         "z": 4
       },
       "resources": {
-        "oxygen": 50,
-        "water": 15000,
-        "ration": 50
+        "_resources": {
+          "oxygen": 50,
+          "water": 1500,
+          "ration": 500
+        }
       },
       "connectedPlaces": [
         "squareNorth"
       ],
-      "plannedWorker": 40,
       "apparatuses": [
         {
           "name": "beds",
-          "durability": 95,
-          "baseDanger": 1e-4,
-          "idealWorker": 20,
-          "currentWorker": 0,
-          "idealConsumption": {
-            "energy": 1
-          }
+          "durability": 95
         },
         {
           "name": "beds",
-          "durability": 95,
-          "baseDanger": 1e-4,
-          "idealWorker": 20,
-          "currentWorker": 0,
-          "idealConsumption": {
-            "energy": 1
-          }
+          "durability": 95
         },
         {
           "name": "oxygenStorage",
-          "durability": 95,
-          "baseDanger": 6e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "waterStorage",
-          "durability": 95,
-          "baseDanger": 3e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "rationStorage",
-          "durability": 95,
-          "baseDanger": 2e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "energyStorage",
-          "durability": 95,
-          "baseDanger": 2e-4,
-          "idealWorker": 10,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "energyStorage",
-          "durability": 95,
-          "baseDanger": 2e-4,
-          "idealWorker": 10,
-          "currentWorker": 0
+          "durability": 95
         }
       ],
       "characters": [
       ],
-      "responsibleParty": "bioengineering",
+      "responsibleDivision": "bioengineering",
       "workHoursStart": 0,
       "workHoursEnd": 24
     },
@@ -524,75 +614,53 @@
         "z": -3
       },
       "resources": {
-        "oxygen": 50,
-        "water": 15000,
-        "ration": 50
+        "_resources": {
+          "oxygen": 50,
+          "water": 1500,
+          "ration": 500
+        }
       },
       "connectedPlaces": [
         "squareSouth",
         "rescueStationSouth"
       ],
-      "plannedWorker": 40,
       "apparatuses": [
         {
           "name": "beds",
-          "durability": 95,
-          "baseDanger": 1e-4,
-          "idealWorker": 20,
-          "currentWorker": 0,
-          "idealConsumption": {
-            "energy": 1
-          }
+          "durability": 95
         },
         {
           "name": "beds",
-          "durability": 95,
-          "baseDanger": 1e-4,
-          "idealWorker": 20,
-          "currentWorker": 0,
-          "idealConsumption": {
-            "energy": 1
-          }
+          "durability": 95
         },
         {
           "name": "oxygenStorage",
-          "durability": 95,
-          "baseDanger": 6e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "waterStorage",
-          "durability": 95,
-          "baseDanger": 3e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
+        },
+        {
+          "name": "waterStorage",
+          "durability": 25
         },
         {
           "name": "rationStorage",
-          "durability": 95,
-          "baseDanger": 2e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "energyStorage",
-          "durability": 95,
-          "baseDanger": 2e-4,
-          "idealWorker": 10,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "energyStorage",
-          "durability": 95,
-          "baseDanger": 2e-4,
-          "idealWorker": 10,
-          "currentWorker": 0
+          "durability": 95
         }
       ],
       "characters": [
       ],
-      "responsibleParty": "bioengineering",
+      "responsibleDivision": "bioengineering",
       "workHoursStart": 0,
       "workHoursEnd": 24
     },
@@ -603,107 +671,109 @@
         "z": -10
       },
       "resources": {
-        "oxygen": 50,
-        "water": 15000,
-        "ration": 50,
-        "metal": 100,
-        "component": 50
+        "_resources": {
+          "oxygen": 50,
+          "water": 1500,
+          "ration": 500,
+          "metal": 100,
+          "component": 50
+        }
       },
       "connectedPlaces": [
         "reservoirWest",
         "securityCheckWest",
         "rescueStationWest",
-        "theEngine"
+        "theEngine",
+        "miningHeadquarters"
       ],
-      "plannedWorker": 480,
       "apparatuses": [
         {
           "name": "metalShaft",
-          "durability": 95,
-          "baseDanger": 8e-4,
-          "idealWorker": 160,
-          "currentWorker": 0,
-          "idealProduction": {
-            "lightMetal": 100,
-            "heavyMetal": 20,
-            "rareMetal": 1
-          },
-          "idealConsumption": {
-            "energy": 2
-          }
+          "durability": 95
         },
         {
           "name": "liquidShaft",
-          "durability": 95,
-          "baseDanger": 10e-4,
-          "idealWorker": 160,
-          "currentWorker": 0,
-          "idealProduction": {
-            "organics": 100
-          },
-          "idealConsumption": {
-            "energy": 2
-          }
+          "durability": 95
         },
         {
           "name": "glassShaft",
-          "durability": 95,
-          "baseDanger": 10e-4,
-          "idealWorker": 160,
-          "currentWorker": 0,
-          "idealProduction": {
-            "glass": 80
-          },
-          "idealConsumption": {
-            "energy": 2
-          }
+          "durability": 95
         },
         {
           "name": "oxygenStorage",
-          "durability": 95,
-          "baseDanger": 6e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "waterStorage",
-          "durability": 95,
-          "baseDanger": 3e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "metalStorage",
-          "durability": 95,
-          "baseDanger": 2e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "energyStorage",
-          "durability": 95,
-          "baseDanger": 2e-4,
-          "idealWorker": 10,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "energyStorage",
-          "durability": 95,
-          "baseDanger": 2e-4,
-          "idealWorker": 10,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "energyStorage",
-          "durability": 95,
-          "baseDanger": 2e-4,
-          "idealWorker": 10,
-          "currentWorker": 0
+          "durability": 95
+        },
+        {
+          "name": "cooler",
+          "durability": 95
         }
       ],
       "characters": [
       ],
-      "responsibleParty": "mining",
+      "responsibleDivision": "mining",
+      "workHoursStart": 9,
+      "workHoursEnd": 17
+    },
+    "miningHeadquarters": {
+      "coordinates": {
+        "x": -10,
+        "y": 0,
+        "z": -10
+      },
+      "resources": {
+        "_resources": {
+          "oxygen": 50,
+          "water": 15000,
+          "ration": 500,
+          "phosphorus": 1
+        }
+      },
+      "connectedPlaces": [
+        "excavationShaftA"
+      ],
+      "apparatuses": [
+        {
+          "name": "energyStorage",
+          "durability": 95
+        },
+        {
+          "name": "waterStorage",
+          "durability": 95
+        },
+        {
+          "name": "oxygenStorage",
+          "durability": 95
+        },
+        {
+          "name": "rationStorage",
+          "durability": 95
+        }
+      ],
+      "responsibleDivision": "mining",
+      "authorizedDivisions": [
+        "mining"
+      ],
+      "isBuildingIn": "excavationShaftA",
       "workHoursStart": 9,
       "workHoursEnd": 17
     },
@@ -714,108 +784,64 @@
         "z": -10
       },
       "resources": {
-        "oxygen": 50,
-        "water": 15000,
-        "ration": 50,
-        "lightMetal": 100,
-        "component": 50
+        "_resources": {
+          "oxygen": 50,
+          "water": 1500,
+          "ration": 500,
+          "lightMetal": 100,
+          "component": 50
+        }
       },
       "connectedPlaces": [
         "miningSchool",
         "constructionYardSouth",
         "rescueStationSouth"
       ],
-      "plannedWorker": 480,
       "apparatuses": [
         {
           "name": "metalShaft",
-          "durability": 95,
-          "baseDanger": 8e-4,
-          "idealWorker": 160,
-          "currentWorker": 0,
-          "idealProduction": {
-            "lightMetal": 60,
-            "heavyMetal": 40,
-            "rareMetal": 1
-          },
-          "idealConsumption": {
-            "energy": 2
-          }
+          "durability": 95
         },
         {
           "name": "liquidShaft",
-          "durability": 95,
-          "baseDanger": 10e-4,
-          "idealWorker": 160,
-          "currentWorker": 0,
-          "idealProduction": {
-            "organics": 80,
-            "hydrogen": 20,
-            "water": 20
-          },
-          "idealConsumption": {
-            "energy": 2
-          }
+          "durability": 95
         },
         {
           "name": "glassShaft",
-          "durability": 95,
-          "baseDanger": 10e-4,
-          "idealWorker": 160,
-          "currentWorker": 0,
-          "idealProduction": {
-            "glass": 80
-          },
-          "idealConsumption": {
-            "energy": 2
-          }
+          "durability": 95
         },
         {
           "name": "oxygenStorage",
-          "durability": 95,
-          "baseDanger": 6e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "waterStorage",
-          "durability": 95,
-          "baseDanger": 3e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "metalStorage",
-          "durability": 95,
-          "baseDanger": 2e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "energyStorage",
-          "durability": 95,
-          "baseDanger": 2e-4,
-          "idealWorker": 10,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "energyStorage",
-          "durability": 95,
-          "baseDanger": 2e-4,
-          "idealWorker": 10,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "energyStorage",
-          "durability": 95,
-          "baseDanger": 2e-4,
-          "idealWorker": 10,
-          "currentWorker": 0
+          "durability": 95
+        },
+        {
+          "name": "cooler",
+          "durability": 95
         }
       ],
       "characters": [
       ],
-      "responsibleParty": "mining",
+      "responsibleDivision": "mining",
       "workHoursStart": 9,
       "workHoursEnd": 17
     },
@@ -823,107 +849,65 @@
       "coordinates": {
         "x": 12,
         "y": 0,
-        "z": 10
+        "z": 17
       },
       "resources": {
-        "oxygen": 50,
-        "water": 15000,
-        "ration": 50,
-        "metal": 100,
-        "component": 50
+        "_resources": {
+          "oxygen": 50,
+          "water": 1500,
+          "ration": 500,
+          "metal": 100,
+          "component": 50
+        }
       },
       "connectedPlaces": [
-        "rescueStationNorth"
+        "outerBarrierEast"
       ],
-      "plannedWorker": 480,
       "apparatuses": [
         {
           "name": "metalShaft",
-          "durability": 95,
-          "baseDanger": 8e-4,
-          "idealWorker": 160,
-          "currentWorker": 0,
-          "idealProduction": {
-            "lightMetal": 100,
-            "heavyMetal": 20,
-            "rareMetal": 1
-          },
-          "idealConsumption": {
-            "energy": 2
-          }
+          "durability": 95
         },
         {
           "name": "liquidShaft",
-          "durability": 95,
-          "baseDanger": 10e-4,
-          "idealWorker": 160,
-          "currentWorker": 0,
-          "idealProduction": {
-            "organics": 100
-          },
-          "idealConsumption": {
-            "energy": 2
-          }
+          "durability": 95
         },
         {
           "name": "glassShaft",
-          "durability": 95,
-          "baseDanger": 10e-4,
-          "idealWorker": 160,
-          "currentWorker": 0,
-          "idealProduction": {
-            "glass": 80
-          },
-          "idealConsumption": {
-            "energy": 2
-          }
+          "durability": 95
         },
         {
           "name": "oxygenStorage",
-          "durability": 95,
-          "baseDanger": 6e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "waterStorage",
-          "durability": 95,
-          "baseDanger": 3e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "metalStorage",
-          "durability": 95,
-          "baseDanger": 2e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "energyStorage",
-          "durability": 95,
-          "baseDanger": 2e-4,
-          "idealWorker": 10,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "energyStorage",
-          "durability": 95,
-          "baseDanger": 2e-4,
-          "idealWorker": 10,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "energyStorage",
-          "durability": 95,
-          "baseDanger": 2e-4,
-          "idealWorker": 10,
-          "currentWorker": 0
+          "durability": 95
+        },
+        {
+          "name": "cooler",
+          "durability": 95
         }
       ],
       "characters": [
       ],
-      "responsibleParty": "mining",
+      "responsibleDivision": "mining",
       "workHoursStart": 9,
       "workHoursEnd": 17
     },
@@ -931,40 +915,183 @@
       "coordinates": {
         "x": -12,
         "y": 0,
-        "z": 15
+        "z": 17
       },
       "resources": {
-        "oxygen": 50,
-        "water": 15000
+        "_resources": {
+          "oxygen": 50,
+          "water": 15000
+        }
       },
       "connectedPlaces": [
-        "recycleFacilityWest",
-        "spacePort"
+        "outerBarrierWest"
       ],
-      "plannedWorker": 0,
       "apparatuses": [
         {
           "name": "telescope",
-          "durability": 100,
-          "baseDanger": 0,
-          "idealWorker": 0,
-          "currentWorker": 0,
-          "idealConsumption": {
-            "energy": 1
-          }
+          "durability": 100
         },
         {
           "name": "energyStorage",
-          "durability": 95,
-          "baseDanger": 2e-4,
-          "idealWorker": 10,
-          "currentWorker": 0
+          "durability": 95
+        },
+        {
+          "name": "cooler",
+          "durability": 95
         }
       ],
       "characters": [
         "observer"
       ],
-      "responsibleParty": "infrastructure",
+      "responsibleDivision": "infrastructure",
+      "workHoursStart": 0,
+      "workHoursEnd": 24
+    },
+    "outerBarrierWest": {
+      "coordinates": {
+        "x": -12,
+        "y": 0,
+        "z": 15
+      },
+      "resources": {
+        "_resources": {
+          "oxygen": 50,
+          "water": 15000
+        }
+      },
+      "connectedPlaces": [
+        "recycleFacilityWest",
+        "observatory",
+        "outerBarrierCenter",
+        "infrastructureHeadquarters"
+      ],
+      "apparatuses": [
+        {
+          "name": "barrier",
+          "durability": 100
+        },
+        {
+          "name": "energyStorage",
+          "durability": 95
+        },
+        {
+          "name": "cooler",
+          "durability": 95
+        }
+      ],
+      "responsibleDivision": "infrastructure",
+      "workHoursStart": 0,
+      "workHoursEnd": 24
+    },
+    "infrastructureHeadquarters": {
+      "coordinates": {
+        "x": -12,
+        "y": 0,
+        "z": 15
+      },
+      "resources": {
+        "_resources": {
+          "oxygen": 50,
+          "water": 15000,
+          "ration": 500,
+          "phosphorus": 1
+        }
+      },
+      "connectedPlaces": [
+        "outerBarrierWest"
+      ],
+      "apparatuses": [
+        {
+          "name": "energyStorage",
+          "durability": 95
+        },
+        {
+          "name": "waterStorage",
+          "durability": 95
+        },
+        {
+          "name": "oxygenStorage",
+          "durability": 95
+        },
+        {
+          "name": "rationStorage",
+          "durability": 95
+        }
+      ],
+      "responsibleDivision": "infrastructure",
+      "authorizedDivisions": [
+        "infrastructure"
+      ],
+      "isBuildingIn": "outerBarrierWest",
+      "workHoursStart": 9,
+      "workHoursEnd": 17
+    },
+    "outerBarrierEast": {
+      "coordinates": {
+        "x": 12,
+        "y": 0,
+        "z": 15
+      },
+      "resources": {
+        "_resources": {
+          "oxygen": 50,
+          "water": 15000
+        }
+      },
+      "connectedPlaces": [
+        "outerBarrierCenter",
+        "asteroidMine"
+      ],
+      "apparatuses": [
+        {
+          "name": "barrier",
+          "durability": 100
+        },
+        {
+          "name": "energyStorage",
+          "durability": 95
+        },
+        {
+          "name": "cooler",
+          "durability": 95
+        }
+      ],
+      "responsibleDivision": "infrastructure",
+      "workHoursStart": 0,
+      "workHoursEnd": 24
+    },
+    "outerBarrierCenter": {
+      "coordinates": {
+        "x": 0,
+        "y": 0,
+        "z": 16
+      },
+      "resources": {
+        "_resources": {
+          "oxygen": 50,
+          "water": 15000
+        }
+      },
+      "connectedPlaces": [
+        "outerBarrierEast",
+        "outerBarrierWest",
+        "spacePort"
+      ],
+      "apparatuses": [
+        {
+          "name": "barrier",
+          "durability": 100
+        },
+        {
+          "name": "energyStorage",
+          "durability": 95
+        },
+        {
+          "name": "cooler",
+          "durability": 95
+        }
+      ],
+      "responsibleDivision": "infrastructure",
       "workHoursStart": 0,
       "workHoursEnd": 24
     },
@@ -975,61 +1102,93 @@
         "z": -8
       },
       "resources": {
-        "lightMetal": 50,
-        "component": 100,
-        "water": 15000
+        "_resources": {
+          "lightMetal": 50,
+          "component": 100,
+          "water": 15000
+        }
       },
       "connectedPlaces": [
         "techSchool",
-        "excavationShaftB"
+        "excavationShaftB",
+        "industryHeadquarters"
       ],
-      "plannedWorker": 0,
       "apparatuses": [
         {
-          "name": "workshop",
-          "durability": 95,
-          "baseDanger": 6e-4,
-          "idealWorker": 5,
-          "currentWorker": 0,
-          "idealProduction": {
-            "component": 10
-          },
-          "idealConsumption": {
-            "energy": 1
-          }
+          "name": "componentWorkshop",
+          "durability": 95
         },
         {
-          "name": "componentStorage",
-          "durability": 95,
-          "baseDanger": 2e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "name": "plumbingWorkshop",
+          "durability": 95
+        },
+        {
+          "name": "electronicsWorkshop",
+          "durability": 95
+        },
+        {
+          "name": "steelPlant",
+          "durability": 95
         },
         {
           "name": "waterStorage",
-          "durability": 95,
-          "baseDanger": 3e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "rationStorage",
-          "durability": 95,
-          "baseDanger": 2e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "energyStorage",
-          "durability": 95,
-          "baseDanger": 2e-4,
-          "idealWorker": 10,
-          "currentWorker": 0
+          "durability": 95
         }
       ],
       "characters": [
       ],
-      "responsibleParty": "infrastructure",
+      "responsibleDivision": "industry",
+      "workHoursStart": 9,
+      "workHoursEnd": 17
+    },
+    "industryHeadquarters": {
+      "coordinates": {
+        "x": 12,
+        "y": 0,
+        "z": -8
+      },
+      "resources": {
+        "_resources": {
+          "oxygen": 50,
+          "water": 15000,
+          "ration": 500,
+          "phosphorus": 1
+        }
+      },
+      "connectedPlaces": [
+        "constructionYardSouth"
+      ],
+      "apparatuses": [
+        {
+          "name": "energyStorage",
+          "durability": 95
+        },
+        {
+          "name": "waterStorage",
+          "durability": 95
+        },
+        {
+          "name": "oxygenStorage",
+          "durability": 95
+        },
+        {
+          "name": "rationStorage",
+          "durability": 95
+        }
+      ],
+      "responsibleDivision": "industry",
+      "authorizedDivisions": [
+        "industry"
+      ],
+      "isBuildingIn": "constructionYardSouth",
       "workHoursStart": 9,
       "workHoursEnd": 17
     },
@@ -1040,90 +1199,71 @@
         "z": 4
       },
       "resources": {
-        "component": 10,
-        "water": 0
+        "_resources": {
+          "component": 10,
+          "water": 0
+        }
       },
       "connectedPlaces": [
         "securityCheckEast"
       ],
-      "plannedWorker": 0,
       "apparatuses": [
         {
           "name": "graves",
-          "durability": 95,
-          "baseDanger": 1e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         }
       ],
       "characters": [
       ],
-      "responsibleParty": "interior",
+      "responsibleDivision": "interior",
       "workHoursStart": 9,
       "workHoursEnd": 17
     },
     "spacePort": {
       "coordinates": {
-        "x": -10,
+        "x": -5,
         "y": 0,
-        "z": 15
+        "z": 18
       },
       "resources": {
-        "lightMetal": 50,
-        "component": 100,
-        "water": 15000
+        "_resources": {
+          "lightMetal": 50,
+          "component": 100,
+          "water": 15000
+        }
       },
       "connectedPlaces": [
-        "observatory"
+        "outerBarrierCenter"
       ],
-      "plannedWorker": 0,
       "apparatuses": [
         {
           "name": "launchPad",
-          "durability": 95,
-          "baseDanger": 6e-4,
-          "idealWorker": 0,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "oxygenStorage",
-          "durability": 0,
-          "baseDanger": 6e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 0
         },
         {
           "name": "waterStorage",
-          "durability": 0,
-          "baseDanger": 3e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 0
         },
         {
           "name": "componentStorage",
-          "durability": 0,
-          "baseDanger": 2e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 0
         },
         {
           "name": "metalStorage",
-          "durability": 0,
-          "baseDanger": 2e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 0
         },
         {
           "name": "energyStorage",
-          "durability": 0,
-          "baseDanger": 2e-4,
-          "idealWorker": 10,
-          "currentWorker": 0
+          "durability": 0
         }
       ],
       "characters": [
       ],
-      "responsibleParty": "infrastructure",
+      "responsibleDivision": "infrastructure",
       "workHoursStart": 9,
       "workHoursEnd": 17
     },
@@ -1134,75 +1274,52 @@
         "z": 10
       },
       "resources": {
-        "lightMetal": 50,
-        "component": 100,
-        "water": 0
+        "_resources": {
+          "lightMetal": 50,
+          "component": 100,
+          "water": 0
+        }
       },
       "connectedPlaces": [
         "recycleFacilityEast"
       ],
-      "plannedWorker": 5,
       "apparatuses": [
         {
           "name": "oxygenStorage",
-          "durability": 95,
-          "baseDanger": 6e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "oxygenStorage",
-          "durability": 95,
-          "baseDanger": 6e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "oxygenStorage",
-          "durability": 95,
-          "baseDanger": 6e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "oxygenStorage",
-          "durability": 95,
-          "baseDanger": 6e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "oxygenStorage",
-          "durability": 95,
-          "baseDanger": 6e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "oxygenStorage",
-          "durability": 95,
-          "baseDanger": 6e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "oxygenStorage",
-          "durability": 95,
-          "baseDanger": 6e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "oxygenStorage",
-          "durability": 95,
-          "baseDanger": 6e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         }
       ],
       "characters": [
       ],
-      "responsibleParty": "infrastructure",
+      "responsibleDivision": "infrastructure",
       "workHoursStart": 0,
       "workHoursEnd": 24
     },
@@ -1213,88 +1330,123 @@
         "z": 10
       },
       "resources": {
-        "lightMetal": 50,
-        "component": 100,
-        "water": 0
+        "_resources": {
+          "lightMetal": 50,
+          "component": 100,
+          "water": 100,
+          "ration": 100
+        }
       },
       "connectedPlaces": [
-        "observatory",
+        "outerBarrierWest",
         "electrolysisStationNorth",
         "squareNorth"
       ],
-      "plannedWorker": 5,
       "apparatuses": [
         {
           "name": "rationStorage",
-          "durability": 95,
-          "baseDanger": 2e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "rationStorage",
-          "durability": 95,
-          "baseDanger": 2e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "waterStorage",
-          "durability": 95,
-          "baseDanger": 6e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "waterStorage",
-          "durability": 95,
-          "baseDanger": 6e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "waterRecycle",
-          "durability": 95,
-          "baseDanger": 6e-4,
-          "idealWorker": 5,
-          "currentWorker": 0,
-          "idealConsumption": {
-            "energy": 1
-          },
-          "idealAbsorption": {
-            "water": 100
-          },
-          "idealProduction": {
-            "water": 100
-          }
+          "durability": 95
         },
         {
           "name": "waterRecycle",
-          "durability": 95,
-          "baseDanger": 6e-4,
-          "idealWorker": 5,
-          "currentWorker": 0,
-          "idealConsumption": {
-            "energy": 1
-          },
-          "idealAbsorption": {
-            "water": 100
-          },
-          "idealProduction": {
-            "water": 100
-          }
+          "durability": 95
+        },
+        {
+          "name": "waterRecycle",
+          "durability": 95
+        },
+        {
+          "name": "waterRecycle",
+          "durability": 95
+        },
+        {
+          "name": "waterRecycle",
+          "durability": 95
+        },
+        {
+          "name": "waterRecycle",
+          "durability": 95
+        },
+        {
+          "name": "waterRecycle",
+          "durability": 95
+        },
+        {
+          "name": "waterRecycle",
+          "durability": 95
+        },
+        {
+          "name": "waterRecycle",
+          "durability": 95
+        },
+        {
+          "name": "waterRecycle",
+          "durability": 95
+        },
+        {
+          "name": "waterRecycle",
+          "durability": 95
+        },
+        {
+          "name": "waterRecycle",
+          "durability": 95
+        },
+        {
+          "name": "waterRecycle",
+          "durability": 95
+        },
+        {
+          "name": "waterRecycle",
+          "durability": 95
+        },
+        {
+          "name": "waterRecycle",
+          "durability": 95
+        },
+        {
+          "name": "waterRecycle",
+          "durability": 95
+        },
+        {
+          "name": "waterRecycle",
+          "durability": 95
+        },
+        {
+          "name": "waterRecycle",
+          "durability": 95
+        },
+        {
+          "name": "waterRecycle",
+          "durability": 95
+        },
+        {
+          "name": "waterRecycle",
+          "durability": 95
         },
         {
           "name": "energyStorage",
-          "durability": 95,
-          "baseDanger": 2e-4,
-          "idealWorker": 10,
-          "currentWorker": 0
+          "durability": 95
         }
       ],
       "characters": [
       ],
-      "responsibleParty": "infrastructure",
+      "responsibleDivision": "infrastructure",
       "workHoursStart": 0,
       "workHoursEnd": 24
     },
@@ -1305,107 +1457,86 @@
         "z": 13
       },
       "resources": {
-        "lightMetal": 50,
-        "component": 100,
-        "water": 0
+        "_resources": {
+          "lightMetal": 50,
+          "component": 100,
+          "water": 100,
+          "ration": 100
+        }
       },
       "connectedPlaces": [
         "rescueStationNorth",
         "tankArray"
       ],
-      "plannedWorker": 5,
       "apparatuses": [
         {
           "name": "rationStorage",
-          "durability": 95,
-          "baseDanger": 2e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "rationStorage",
-          "durability": 95,
-          "baseDanger": 2e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "waterStorage",
-          "durability": 95,
-          "baseDanger": 6e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "waterStorage",
-          "durability": 95,
-          "baseDanger": 6e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
+        },
+        {
+          "name": "corpseRecycle",
+          "durability": 95
         },
         {
           "name": "waterRecycle",
-          "durability": 95,
-          "baseDanger": 6e-4,
-          "idealWorker": 5,
-          "currentWorker": 0,
-          "idealConsumption": {
-            "energy": 1
-          },
-          "idealAbsorption": {
-            "water": 100
-          },
-          "idealProduction": {
-            "water": 100
-          }
+          "durability": 95
         },
         {
           "name": "waterRecycle",
-          "durability": 95,
-          "baseDanger": 6e-4,
-          "idealWorker": 5,
-          "currentWorker": 0,
-          "idealConsumption": {
-            "energy": 1
-          },
-          "idealAbsorption": {
-            "water": 100
-          },
-          "idealProduction": {
-            "water": 100
-          }
+          "durability": 95
         },
         {
-          "name": "co2Recycle",
-          "durability": 95,
-          "baseDanger": 6e-4,
-          "idealWorker": 5,
-          "currentWorker": 0,
-          "idealAbsorption": {
-            "co2": 100
-          },
-          "idealConsumption": {
-            "energy": 1,
-            "hydrogen": 8
-          },
-          "idealDistribution": {
-            "oxygen": 70
-          },
-          "idealProduction": {
-            "organics": 38
-          }
+          "name": "waterRecycle",
+          "durability": 95
+        },
+        {
+          "name": "waterRecycle",
+          "durability": 95
+        },
+        {
+          "name": "waterRecycle",
+          "durability": 95
+        },
+        {
+          "name": "waterRecycle",
+          "durability": 95
+        },
+        {
+          "name": "waterRecycle",
+          "durability": 95
+        },
+        {
+          "name": "waterRecycle",
+          "durability": 95
+        },
+        {
+          "name": "waterRecycle",
+          "durability": 95
+        },
+        {
+          "name": "waterRecycle",
+          "durability": 95
         },
         {
           "name": "energyStorage",
-          "durability": 95,
-          "baseDanger": 2e-4,
-          "idealWorker": 10,
-          "currentWorker": 0
+          "durability": 95
         }
       ],
       "characters": [
       ],
-      "responsibleParty": "infrastructure",
+      "responsibleDivision": "infrastructure",
       "workHoursStart": 0,
       "workHoursEnd": 24
     },
@@ -1416,91 +1547,58 @@
         "z": -8
       },
       "resources": {
-        "lightMetal": 50,
-        "component": 100,
-        "water": 15000,
-        "oxygen": 0
+        "_resources": {
+          "lightMetal": 50,
+          "component": 100,
+          "water": 15000,
+          "oxygen": 0
+        }
       },
       "connectedPlaces": [
         "squareSouth",
         "reservoirEast"
       ],
-      "plannedWorker": 5,
       "apparatuses": [
         {
           "name": "oxygenStorage",
-          "durability": 95,
-          "baseDanger": 6e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "oxygenStorage",
-          "durability": 95,
-          "baseDanger": 6e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "waterStorage",
-          "durability": 95,
-          "baseDanger": 3e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "waterStorage",
-          "durability": 95,
-          "baseDanger": 3e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
+        },
+        {
+          "name": "ammoniaProduction",
+          "durability": 95
         },
         {
           "name": "electrolysisArray",
-          "durability": 95,
-          "baseDanger": 8e-4,
-          "idealWorker": 5,
-          "currentWorker": 0,
-          "idealDistribution": {
-            "oxygen": 70
-          },
-          "idealConsumption": {
-            "water": 70,
-            "energy": 2
-          }
+          "durability": 95
         },
         {
           "name": "electrolysisArray",
-          "durability": 95,
-          "baseDanger": 8e-4,
-          "idealWorker": 5,
-          "currentWorker": 0,
-          "idealDistribution": {
-            "oxygen": 70
-          },
-          "idealConsumption": {
-            "water": 70,
-            "energy": 2
-          }
+          "durability": 95
         },
         {
           "name": "energyStorage",
-          "durability": 95,
-          "baseDanger": 2e-4,
-          "idealWorker": 10,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "energyStorage",
-          "durability": 95,
-          "baseDanger": 2e-4,
-          "idealWorker": 10,
-          "currentWorker": 0
+          "durability": 95
         }
       ],
       "characters": [
       ],
-      "responsibleParty": "infrastructure",
+      "responsibleDivision": "infrastructure",
       "workHoursStart": 0,
       "workHoursEnd": 24
     },
@@ -1511,90 +1609,57 @@
         "z": 4
       },
       "resources": {
-        "lightMetal": 50,
-        "component": 100,
-        "water": 15000,
-        "oxygen": 0
+        "_resources": {
+          "lightMetal": 50,
+          "component": 100,
+          "water": 15000,
+          "oxygen": 0
+        }
       },
       "connectedPlaces": [
         "recycleFacilityWest"
       ],
-      "plannedWorker": 5,
       "apparatuses": [
         {
           "name": "oxygenStorage",
-          "durability": 95,
-          "baseDanger": 6e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "oxygenStorage",
-          "durability": 95,
-          "baseDanger": 6e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "waterStorage",
-          "durability": 95,
-          "baseDanger": 3e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "waterStorage",
-          "durability": 95,
-          "baseDanger": 3e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
+        },
+        {
+          "name": "ammoniaProduction",
+          "durability": 95
         },
         {
           "name": "electrolysisArray",
-          "durability": 95,
-          "baseDanger": 8e-4,
-          "idealWorker": 5,
-          "currentWorker": 0,
-          "idealDistribution": {
-            "oxygen": 70
-          },
-          "idealConsumption": {
-            "water": 70,
-            "energy": 2
-          }
+          "durability": 95
         },
         {
           "name": "electrolysisArray",
-          "durability": 95,
-          "baseDanger": 8e-4,
-          "idealWorker": 5,
-          "currentWorker": 0,
-          "idealDistribution": {
-            "oxygen": 70
-          },
-          "idealConsumption": {
-            "water": 70,
-            "energy": 2
-          }
+          "durability": 95
         },
         {
           "name": "energyStorage",
-          "durability": 95,
-          "baseDanger": 2e-4,
-          "idealWorker": 10,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "energyStorage",
-          "durability": 95,
-          "baseDanger": 2e-4,
-          "idealWorker": 10,
-          "currentWorker": 0
+          "durability": 95
         }
       ],
       "characters": [
       ],
-      "responsibleParty": "infrastructure",
+      "responsibleDivision": "infrastructure",
       "workHoursStart": 0,
       "workHoursEnd": 24
     },
@@ -1605,77 +1670,55 @@
         "z": -8
       },
       "resources": {
-        "water": 300000,
-        "lightMetal": 50,
-        "component": 100
+        "_resources": {
+          "water": 300000,
+          "lightMetal": 50,
+          "component": 100,
+          "ration": 100
+        }
       },
       "connectedPlaces": [
         "mainControlRoom",
         "farm",
         "electrolysisStationSouth"
       ],
-      "plannedWorker": 5,
       "apparatuses": [
         {
           "name": "waterStorage",
-          "durability": 95,
-          "baseDanger": 3e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "waterStorage",
-          "durability": 95,
-          "baseDanger": 3e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "waterStorage",
-          "durability": 95,
-          "baseDanger": 3e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "waterStorage",
-          "durability": 95,
-          "baseDanger": 3e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "waterStorage",
-          "durability": 95,
-          "baseDanger": 3e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "waterStorage",
-          "durability": 95,
-          "baseDanger": 3e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "waterStorage",
-          "durability": 95,
-          "baseDanger": 3e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "waterStorage",
-          "durability": 95,
-          "baseDanger": 3e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         }
       ],
       "characters": [
       ],
-      "responsibleParty": "infrastructure",
+      "responsibleDivision": "infrastructure",
       "workHoursStart": 0,
       "workHoursEnd": 24
     },
@@ -1686,75 +1729,53 @@
         "z": -2
       },
       "resources": {
-        "lightMetal": 50,
-        "component": 100,
-        "water": 15000
+        "_resources": {
+          "lightMetal": 50,
+          "component": 100,
+          "water": 15000,
+          "ration": 100
+        }
       },
       "connectedPlaces": [
         "excavationShaftA"
       ],
-      "plannedWorker": 5,
       "apparatuses": [
         {
           "name": "waterStorage",
-          "durability": 95,
-          "baseDanger": 3e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "waterStorage",
-          "durability": 95,
-          "baseDanger": 3e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "waterStorage",
-          "durability": 95,
-          "baseDanger": 3e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "waterStorage",
-          "durability": 95,
-          "baseDanger": 3e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "waterStorage",
-          "durability": 95,
-          "baseDanger": 3e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "waterStorage",
-          "durability": 95,
-          "baseDanger": 3e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "waterStorage",
-          "durability": 95,
-          "baseDanger": 3e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "waterStorage",
-          "durability": 95,
-          "baseDanger": 3e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         }
       ],
       "characters": [
       ],
-      "responsibleParty": "infrastructure",
+      "responsibleDivision": "infrastructure",
       "workHoursStart": 0,
       "workHoursEnd": 24
     },
@@ -1765,9 +1786,11 @@
         "z": 0
       },
       "resources": {
-        "oxygen": 50,
-        "water": 15000,
-        "ration": 50
+        "_resources": {
+          "oxygen": 50,
+          "water": 1500,
+          "ration": 500
+        }
       },
       "connectedPlaces": [
         "securityCheckEast",
@@ -1776,47 +1799,31 @@
         "excavationShaftB",
         "rescueStationSouth"
       ],
-      "plannedWorker": 100,
       "apparatuses": [
         {
           "name": "classroom",
-          "durability": 95,
-          "baseDanger": 2e-4,
-          "idealWorker": 50,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "classroom",
-          "durability": 95,
-          "baseDanger": 2e-4,
-          "idealWorker": 50,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "waterStorage",
-          "durability": 95,
-          "baseDanger": 3e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "rationStorage",
-          "durability": 95,
-          "baseDanger": 2e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "energyStorage",
-          "durability": 95,
-          "baseDanger": 2e-4,
-          "idealWorker": 10,
-          "currentWorker": 0
+          "durability": 95
         }
       ],
       "characters": [
       ],
-      "responsibleParty": "education",
+      "responsibleDivision": "education",
       "workHoursStart": 9,
       "workHoursEnd": 17
     },
@@ -1827,139 +1834,215 @@
         "z": -2
       },
       "resources": {
-        "oxygen": 50,
-        "water": 15000,
-        "ration": 50
+        "_resources": {
+          "oxygen": 50,
+          "water": 1500,
+          "ration": 500
+        }
       },
       "connectedPlaces": [
         "miningSchool",
-        "constructionYardSouth"
+        "constructionYardSouth",
+        "educationHeadquarters"
       ],
-      "plannedWorker": 100,
       "apparatuses": [
         {
           "name": "classroom",
-          "durability": 95,
-          "baseDanger": 2e-4,
-          "idealWorker": 50,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "classroom",
-          "durability": 95,
-          "baseDanger": 2e-4,
-          "idealWorker": 50,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "waterStorage",
-          "durability": 95,
-          "baseDanger": 3e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "rationStorage",
-          "durability": 95,
-          "baseDanger": 2e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "energyStorage",
-          "durability": 95,
-          "baseDanger": 2e-4,
-          "idealWorker": 10,
-          "currentWorker": 0
+          "durability": 95
         }
       ],
       "characters": [
       ],
-      "responsibleParty": "education",
+      "responsibleDivision": "education",
+      "workHoursStart": 9,
+      "workHoursEnd": 17
+    },
+    "educationHeadquarters": {
+      "coordinates": {
+        "x": 12,
+        "y": 0,
+        "z": -2
+      },
+      "resources": {
+        "_resources": {
+          "oxygen": 50,
+          "water": 15000,
+          "ration": 500,
+          "phosphorus": 1
+        }
+      },
+      "connectedPlaces": [
+        "techSchool"
+      ],
+      "apparatuses": [
+        {
+          "name": "energyStorage",
+          "durability": 95
+        },
+        {
+          "name": "waterStorage",
+          "durability": 95
+        },
+        {
+          "name": "oxygenStorage",
+          "durability": 95
+        },
+        {
+          "name": "rationStorage",
+          "durability": 95
+        }
+      ],
+      "responsibleDivision": "education",
+      "authorizedDivisions": [
+        "education"
+      ],
+      "isBuildingIn": "techSchool",
       "workHoursStart": 9,
       "workHoursEnd": 17
     },
     "farm": {
       "coordinates": {
-        "x": 0,
-        "y": 10,
-        "z": 0
+        "x": -2,
+        "y": 0,
+        "z": -6
       },
       "resources": {
-        "oxygen": 100,
-        "water": 15000,
-        "ration": 500
+        "_resources": {
+          "oxygen": 100,
+          "water": 1500,
+          "ration": 1000,
+          "ammonia": 20,
+          "phosphorus": 5
+        }
       },
       "connectedPlaces": [
-        "reservoirEast"
+        "reservoirEast",
+        "bioengineeringHeadquarters"
       ],
-      "plannedWorker": 200,
       "apparatuses": [
         {
           "name": "farmArray",
-          "durability": 95,
-          "baseDanger": 4e-4,
-          "idealWorker": 100,
-          "currentWorker": 0,
-          "idealProduction": {
-            "ration": 600
-          },
-          "idealConsumption": {
-            "energy": 1
-          }
+          "durability": 95
         },
         {
           "name": "farmArray",
-          "durability": 95,
-          "baseDanger": 4e-4,
-          "idealWorker": 100,
-          "currentWorker": 0,
-          "idealProduction": {
-            "ration": 600
-          },
-          "idealConsumption": {
-            "energy": 1
-          }
+          "durability": 95
+        },
+        {
+          "name": "farmArray",
+          "durability": 95
+        },
+        {
+          "name": "farmArray",
+          "durability": 95
+        },
+        {
+          "name": "farmArray",
+          "durability": 95
+        },
+        {
+          "name": "farmArray",
+          "durability": 95
         },
         {
           "name": "waterStorage",
-          "durability": 95,
-          "baseDanger": 3e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "rationStorage",
-          "durability": 95,
-          "baseDanger": 2e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "rationStorage",
-          "durability": 95,
-          "baseDanger": 2e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "energyStorage",
-          "durability": 95,
-          "baseDanger": 2e-4,
-          "idealWorker": 10,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "energyStorage",
-          "durability": 95,
-          "baseDanger": 2e-4,
-          "idealWorker": 10,
-          "currentWorker": 0
+          "durability": 95
+        },
+        {
+          "name": "energyStorage",
+          "durability": 95
+        },
+        {
+          "name": "energyStorage",
+          "durability": 95
+        },
+        {
+          "name": "energyStorage",
+          "durability": 95
+        },
+        {
+          "name": "energyStorage",
+          "durability": 95
         }
       ],
       "characters": [
       ],
-      "responsibleParty": "bioengineering",
+      "responsibleDivision": "bioengineering",
+      "workHoursStart": 9,
+      "workHoursEnd": 17
+    },
+    "bioengineeringHeadquarters": {
+      "coordinates": {
+        "x": -2,
+        "y": 0,
+        "z": -6
+      },
+      "resources": {
+        "_resources": {
+          "oxygen": 50,
+          "water": 15000,
+          "ration": 500,
+          "phosphorus": 1
+        }
+      },
+      "connectedPlaces": [
+        "farm"
+      ],
+      "apparatuses": [
+        {
+          "name": "energyStorage",
+          "durability": 95
+        },
+        {
+          "name": "waterStorage",
+          "durability": 95
+        },
+        {
+          "name": "oxygenStorage",
+          "durability": 95
+        },
+        {
+          "name": "rationStorage",
+          "durability": 95
+        }
+      ],
+      "responsibleDivision": "bioengineering",
+      "authorizedDivisions": [
+        "bioengineering"
+      ],
+      "isBuildingIn": "farm",
       "workHoursStart": 9,
       "workHoursEnd": 17
     },
@@ -1970,66 +2053,92 @@
         "z": 7
       },
       "resources": {
-        "oxygen": 100,
-        "water": 15000,
-        "ration": 100
+        "_resources": {
+          "oxygen": 100,
+          "water": 1500,
+          "ration": 1000
+        }
       },
       "connectedPlaces": [
-        "asteroidMine",
         "market",
         "recycleFacilityEast",
-        "securityCheckEast"
+        "securityCheckEast",
+        "safetyHeadquarters"
       ],
-      "plannedWorker": 50,
       "apparatuses": [
         {
           "name": "rescueEquipment",
-          "durability": 95,
-          "baseDanger": 1e-4,
-          "idealWorker": 25,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "rescueEquipment",
-          "durability": 95,
-          "baseDanger": 1e-4,
-          "idealWorker": 25,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "waterStorage",
-          "durability": 95,
-          "baseDanger": 3e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "oxygenStorage",
-          "durability": 95,
-          "baseDanger": 6e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "energyStorage",
-          "durability": 95,
-          "baseDanger": 2e-4,
-          "idealWorker": 10,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "energyStorage",
-          "durability": 95,
-          "baseDanger": 2e-4,
-          "idealWorker": 10,
-          "currentWorker": 0
+          "durability": 95
         }
       ],
       "characters": [
       ],
-      "responsibleParty": "safety",
+      "responsibleDivision": "safety",
       "workHoursStart": 0,
       "workHoursEnd": 24
+    },
+    "safetyHeadquarters": {
+      "coordinates": {
+        "x": 7,
+        "y": 0,
+        "z": 7
+      },
+      "resources": {
+        "_resources": {
+          "oxygen": 50,
+          "water": 15000,
+          "ration": 500,
+          "phosphorus": 1
+        }
+      },
+      "connectedPlaces": [
+        "rescueStationNorth"
+      ],
+      "apparatuses": [
+        {
+          "name": "energyStorage",
+          "durability": 95
+        },
+        {
+          "name": "waterStorage",
+          "durability": 95
+        },
+        {
+          "name": "oxygenStorage",
+          "durability": 95
+        },
+        {
+          "name": "rationStorage",
+          "durability": 95
+        }
+      ],
+      "responsibleDivision": "safety",
+      "authorizedDivisions": [
+        "safety"
+      ],
+      "isBuildingIn": "rescueStationNorth",
+      "workHoursStart": 9,
+      "workHoursEnd": 17
     },
     "rescueStationSouth": {
       "coordinates": {
@@ -2038,9 +2147,11 @@
         "z": -5
       },
       "resources": {
-        "oxygen": 100,
-        "water": 15000,
-        "ration": 100
+        "_resources": {
+          "oxygen": 100,
+          "water": 1500,
+          "ration": 1000
+        }
       },
       "connectedPlaces": [
         "excavationShaftB",
@@ -2048,54 +2159,35 @@
         "squareSouth",
         "welfareStationEast"
       ],
-      "plannedWorker": 50,
       "apparatuses": [
         {
           "name": "rescueEquipment",
-          "durability": 95,
-          "baseDanger": 1e-4,
-          "idealWorker": 25,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "rescueEquipment",
-          "durability": 95,
-          "baseDanger": 1e-4,
-          "idealWorker": 25,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "waterStorage",
-          "durability": 95,
-          "baseDanger": 3e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "oxygenStorage",
-          "durability": 95,
-          "baseDanger": 6e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "energyStorage",
-          "durability": 95,
-          "baseDanger": 2e-4,
-          "idealWorker": 10,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "energyStorage",
-          "durability": 95,
-          "baseDanger": 2e-4,
-          "idealWorker": 10,
-          "currentWorker": 0
+          "durability": 95
         }
       ],
       "characters": [
       ],
-      "responsibleParty": "safety",
+      "responsibleDivision": "safety",
       "workHoursStart": 0,
       "workHoursEnd": 24
     },
@@ -2106,62 +2198,45 @@
         "z": -5
       },
       "resources": {
-        "oxygen": 100,
-        "water": 15000,
-        "ration": 100
+        "_resources": {
+          "oxygen": 100,
+          "water": 1500,
+          "ration": 1000
+        }
       },
       "connectedPlaces": [
         "excavationShaftA",
         "mainControlRoom"
       ],
-      "plannedWorker": 50,
       "apparatuses": [
         {
           "name": "rescueEquipment",
-          "durability": 95,
-          "baseDanger": 1e-4,
-          "idealWorker": 25,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "rescueEquipment",
-          "durability": 95,
-          "baseDanger": 1e-4,
-          "idealWorker": 25,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "waterStorage",
-          "durability": 95,
-          "baseDanger": 3e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "oxygenStorage",
-          "durability": 95,
-          "baseDanger": 6e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "energyStorage",
-          "durability": 95,
-          "baseDanger": 2e-4,
-          "idealWorker": 10,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "energyStorage",
-          "durability": 95,
-          "baseDanger": 2e-4,
-          "idealWorker": 10,
-          "currentWorker": 0
+          "durability": 95
         }
       ],
       "characters": [
       ],
-      "responsibleParty": "safety",
+      "responsibleDivision": "safety",
       "workHoursStart": 0,
       "workHoursEnd": 24
     },
@@ -2172,55 +2247,41 @@
         "z": 0
       },
       "resources": {
-        "oxygen": 100,
-        "water": 15000,
-        "ration": 100
+        "_resources": {
+          "oxygen": 100,
+          "water": 1500,
+          "ration": 1000
+        }
       },
       "connectedPlaces": [
         "excavationShaftA",
         "squareNorth"
       ],
-      "plannedWorker": 50,
       "apparatuses": [
         {
           "name": "pressureDoor",
-          "durability": 95,
-          "baseDanger": 1e-4,
-          "idealWorker": 25,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "waterStorage",
-          "durability": 95,
-          "baseDanger": 3e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "oxygenStorage",
-          "durability": 95,
-          "baseDanger": 6e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "energyStorage",
-          "durability": 95,
-          "baseDanger": 2e-4,
-          "idealWorker": 10,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "energyStorage",
-          "durability": 95,
-          "baseDanger": 2e-4,
-          "idealWorker": 10,
-          "currentWorker": 0
+          "durability": 95
         }
       ],
       "characters": [
       ],
-      "responsibleParty": "safety",
+      "responsibleDivision": "safety",
       "workHoursStart": 0,
       "workHoursEnd": 24
     },
@@ -2231,56 +2292,42 @@
         "z": 0
       },
       "resources": {
-        "oxygen": 100,
-        "water": 15000,
-        "ration": 100
+        "_resources": {
+          "oxygen": 100,
+          "water": 1500,
+          "ration": 1000
+        }
       },
       "connectedPlaces": [
         "squareSouth",
         "mainControlRoom",
         "market"
       ],
-      "plannedWorker": 50,
       "apparatuses": [
         {
           "name": "pressureDoor",
-          "durability": 95,
-          "baseDanger": 1e-4,
-          "idealWorker": 25,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "waterStorage",
-          "durability": 95,
-          "baseDanger": 3e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "oxygenStorage",
-          "durability": 95,
-          "baseDanger": 6e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "energyStorage",
-          "durability": 95,
-          "baseDanger": 2e-4,
-          "idealWorker": 10,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "energyStorage",
-          "durability": 95,
-          "baseDanger": 2e-4,
-          "idealWorker": 10,
-          "currentWorker": 0
+          "durability": 95
         }
       ],
       "characters": [
       ],
-      "responsibleParty": "safety",
+      "responsibleDivision": "safety",
       "workHoursStart": 0,
       "workHoursEnd": 24
     },
@@ -2291,56 +2338,42 @@
         "z": 0
       },
       "resources": {
-        "oxygen": 100,
-        "water": 15000,
-        "ration": 100
+        "_resources": {
+          "oxygen": 100,
+          "water": 1500,
+          "ration": 1000
+        }
       },
       "connectedPlaces": [
         "miningSchool",
         "rescueStationNorth",
         "cemetery"
       ],
-      "plannedWorker": 50,
       "apparatuses": [
         {
           "name": "pressureDoor",
-          "durability": 95,
-          "baseDanger": 1e-4,
-          "idealWorker": 25,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "waterStorage",
-          "durability": 95,
-          "baseDanger": 3e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "oxygenStorage",
-          "durability": 95,
-          "baseDanger": 6e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "energyStorage",
-          "durability": 95,
-          "baseDanger": 2e-4,
-          "idealWorker": 10,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "energyStorage",
-          "durability": 95,
-          "baseDanger": 2e-4,
-          "idealWorker": 10,
-          "currentWorker": 0
+          "durability": 95
         }
       ],
       "characters": [
       ],
-      "responsibleParty": "safety",
+      "responsibleDivision": "safety",
       "workHoursStart": 0,
       "workHoursEnd": 24
     },
@@ -2351,82 +2384,88 @@
         "z": 8
       },
       "resources": {
-        "water": 15000,
-        "ration": 100
+        "_resources": {
+          "water": 1500,
+          "ration": 1000
+        }
       },
       "connectedPlaces": [
         "rescueStationNorth",
         "securityCheckCenter",
-        "constructionYardNorth"
+        "constructionYardNorth",
+        "tavern"
       ],
-      "plannedWorker": 300,
       "apparatuses": [
         {
-          "name": "exchangePost",
-          "durability": 95,
-          "baseDanger": 1e-4,
-          "idealWorker": 100,
-          "currentWorker": 0,
-          "idealDistribution": {
-            "ration": 100
-          },
-          "idealConsumption": {
-            "ration": 100
-          }
+          "name": "exchangePostGlassClothes",
+          "durability": 95
         },
         {
-          "name": "exchangePost",
-          "durability": 95,
-          "baseDanger": 1e-4,
-          "idealWorker": 100,
-          "currentWorker": 0,
-          "idealDistribution": {
-            "ration": 100
-          },
-          "idealConsumption": {
-            "ration": 100
-          }
+          "name": "exchangePostCeramic",
+          "durability": 95
         },
         {
-          "name": "exchangePost",
-          "durability": 95,
-          "baseDanger": 1e-4,
-          "idealWorker": 100,
-          "currentWorker": 0,
-          "idealDistribution": {
-            "ration": 100
-          },
-          "idealConsumption": {
-            "ration": 100
-          }
+          "name": "exchangePostPlastic",
+          "durability": 95
         },
         {
           "name": "waterStorage",
-          "durability": 95,
-          "baseDanger": 3e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "rationStorage",
-          "durability": 95,
-          "baseDanger": 2e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
+        },
+        {
+          "name": "waterStorage",
+          "durability": 95
         },
         {
           "name": "energyStorage",
-          "durability": 95,
-          "baseDanger": 2e-4,
-          "idealWorker": 10,
-          "currentWorker": 0
+          "durability": 95
         }
       ],
       "characters": [
       ],
-      "responsibleParty": "interior",
+      "responsibleDivision": "interior",
       "workHoursStart": 9,
       "workHoursEnd": 17
+    },
+    "tavern": {
+      "coordinates": {
+        "x": 4,
+        "y": 0,
+        "z": 8
+      },
+      "resources": {
+        "_resources": {
+          "water": 1500,
+          "ration": 1000,
+          "phosphorus": 0.5
+        }
+      },
+      "connectedPlaces": [
+        "market"
+      ],
+      "apparatuses": [
+        {
+          "name": "rationStorage",
+          "durability": 95
+        },
+        {
+          "name": "waterStorage",
+          "durability": 95
+        },
+        {
+          "name": "energyStorage",
+          "durability": 95
+        }
+      ],
+      "characters": [
+      ],
+      "isBuildingIn": "market",
+      "workHoursStart": 16,
+      "workHoursEnd": 24
     },
     "squareNorth": {
       "coordinates": {
@@ -2435,8 +2474,10 @@
         "z": 5
       },
       "resources": {
-        "water": 15000,
-        "ration": 100
+        "_resources": {
+          "water": 1500,
+          "ration": 1000
+        }
       },
       "connectedPlaces": [
         "recycleFacilityWest",
@@ -2444,65 +2485,31 @@
         "constructionYardNorth",
         "securityCheckWest"
       ],
-      "plannedWorker": 300,
       "apparatuses": [
         {
-          "name": "exchangePost",
-          "durability": 95,
-          "baseDanger": 1e-4,
-          "idealWorker": 100,
-          "currentWorker": 0,
-          "idealDistribution": {
-            "ration": 100
-          },
-          "idealConsumption": {
-            "ration": 100
-          }
+          "name": "exchangePostCeramic",
+          "durability": 95
         },
         {
-          "name": "exchangePost",
-          "durability": 95,
-          "baseDanger": 1e-4,
-          "idealWorker": 100,
-          "currentWorker": 0,
-          "idealDistribution": {
-            "ration": 100
-          },
-          "idealConsumption": {
-            "ration": 100
-          }
+          "name": "exchangePostGlassClothes",
+          "durability": 95
         },
         {
-          "name": "exchangePost",
-          "durability": 95,
-          "baseDanger": 1e-4,
-          "idealWorker": 100,
-          "currentWorker": 0,
-          "idealDistribution": {
-            "ration": 100
-          },
-          "idealConsumption": {
-            "ration": 100
-          }
+          "name": "exchangePostPlastic",
+          "durability": 95
         },
         {
           "name": "waterStorage",
-          "durability": 95,
-          "baseDanger": 3e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "rationStorage",
-          "durability": 95,
-          "baseDanger": 2e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         }
       ],
       "characters": [
       ],
-      "responsibleParty": "interior",
+      "responsibleDivision": "interior",
       "workHoursStart": 9,
       "workHoursEnd": 17
     },
@@ -2513,8 +2520,10 @@
         "z": -2
       },
       "resources": {
-        "water": 15000,
-        "ration": 100
+        "_resources": {
+          "water": 1500,
+          "ration": 1000
+        }
       },
       "connectedPlaces": [
         "mainControlRoom",
@@ -2524,65 +2533,35 @@
         "electrolysisStationSouth",
         "securityCheckCenter"
       ],
-      "plannedWorker": 300,
       "apparatuses": [
         {
-          "name": "exchangePost",
-          "durability": 95,
-          "baseDanger": 1e-4,
-          "idealWorker": 100,
-          "currentWorker": 0,
-          "idealDistribution": {
-            "ration": 100
-          },
-          "idealConsumption": {
-            "ration": 100
-          }
+          "name": "exchangePostAmmonia",
+          "durability": 95
         },
         {
-          "name": "exchangePost",
-          "durability": 95,
-          "baseDanger": 1e-4,
-          "idealWorker": 100,
-          "currentWorker": 0,
-          "idealDistribution": {
-            "ration": 100
-          },
-          "idealConsumption": {
-            "ration": 100
-          }
+          "name": "exchangePostDiamond",
+          "durability": 95
         },
         {
-          "name": "exchangePost",
-          "durability": 95,
-          "baseDanger": 1e-4,
-          "idealWorker": 100,
-          "currentWorker": 0,
-          "idealDistribution": {
-            "ration": 100
-          },
-          "idealConsumption": {
-            "ration": 100
-          }
+          "name": "exchangePostGlassClothes",
+          "durability": 95
+        },
+        {
+          "name": "exchangePostCleanWater",
+          "durability": 95
         },
         {
           "name": "waterStorage",
-          "durability": 95,
-          "baseDanger": 3e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "rationStorage",
-          "durability": 95,
-          "baseDanger": 2e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         }
       ],
       "characters": [
       ],
-      "responsibleParty": "interior",
+      "responsibleDivision": "interior",
       "workHoursStart": 9,
       "workHoursEnd": 17
     },
@@ -2593,58 +2572,57 @@
         "z": 9
       },
       "resources": {
-        "lightMetal": 100,
-        "component": 200,
-        "water": 15000
+        "_resources": {
+          "lightMetal": 100,
+          "component": 200,
+          "water": 15000
+        }
       },
       "connectedPlaces": [
         "market",
         "squareNorth"
       ],
-      "plannedWorker": 5,
       "apparatuses": [
         {
-          "name": "workshop",
-          "durability": 95,
-          "baseDanger": 6e-4,
-          "idealWorker": 5,
-          "currentWorker": 0,
-          "idealProduction": {
-            "component": 10
-          }
+          "name": "componentWorkshop",
+          "durability": 95
+        },
+        {
+          "name": "ceramicWorkshop",
+          "durability": 95
+        },
+        {
+          "name": "glassClothesWorkshop",
+          "durability": 95
+        },
+        {
+          "name": "cottonClothesWorkshop",
+          "durability": 95
+        },
+        {
+          "name": "plasticWorkshop",
+          "durability": 95
         },
         {
           "name": "waterStorage",
-          "durability": 95,
-          "baseDanger": 3e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "metalStorage",
-          "durability": 95,
-          "baseDanger": 2e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "componentStorage",
-          "durability": 95,
-          "baseDanger": 2e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "energyStorage",
-          "durability": 95,
-          "baseDanger": 2e-4,
-          "idealWorker": 10,
-          "currentWorker": 0
+          "durability": 95
         }
       ],
       "characters": [
       ],
-      "responsibleParty": "infrastructure",
+      "responsibleDivision": "industry",
       "workHoursStart": 9,
       "workHoursEnd": 17
     },
@@ -2655,78 +2633,82 @@
         "z": -25
       },
       "resources": {
-        "lightMetal": 100,
-        "component": 200,
-        "water": 15000
+        "_resources": {
+          "lightMetal": 100,
+          "component": 200,
+          "water": 15000,
+          "oxygen": 10000,
+          "energy": 1e12
+        }
       },
       "connectedPlaces": [
         "excavationShaftA"
       ],
-      "plannedWorker": 100,
       "apparatuses": [
         {
           "name": "reactor",
-          "durability": 95,
-          "baseDanger": 6e-4,
-          "idealWorker": 50,
-          "currentWorker": 0,
-          "idealProduction": {
-            "energy": 100
-          }
+          "durability": 95
+        },
+        {
+          "name": "cooler",
+          "durability": 95
+        },
+        {
+          "name": "cooler",
+          "durability": 95
+        },
+        {
+          "name": "oxygenDistributor",
+          "durability": 95
         },
         {
           "name": "waterStorage",
-          "durability": 95,
-          "baseDanger": 3e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "metalStorage",
-          "durability": 95,
-          "baseDanger": 2e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "componentStorage",
-          "durability": 95,
-          "baseDanger": 2e-4,
-          "idealWorker": 5,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "energyStorage",
-          "durability": 95,
-          "baseDanger": 2e-4,
-          "idealWorker": 10,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "energyStorage",
-          "durability": 95,
-          "baseDanger": 2e-4,
-          "idealWorker": 10,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "energyStorage",
-          "durability": 95,
-          "baseDanger": 2e-4,
-          "idealWorker": 10,
-          "currentWorker": 0
+          "durability": 95
         },
         {
           "name": "energyStorage",
-          "durability": 95,
-          "baseDanger": 2e-4,
-          "idealWorker": 10,
-          "currentWorker": 0
+          "durability": 95
+        },
+        {
+          "name": "energyStorage",
+          "durability": 95
+        },
+        {
+          "name": "energyStorage",
+          "durability": 95
+        },
+        {
+          "name": "energyStorage",
+          "durability": 95
+        },
+        {
+          "name": "energyStorage",
+          "durability": 95
         }
       ],
       "characters": [
       ],
-      "responsibleParty": "infrastructure",
+      "responsibleDivision": "infrastructure",
       "workHoursStart": 0,
       "workHoursEnd": 24
     }
@@ -2734,108 +2716,146 @@
   "parties": {
     "triumvirate": {
       "leader": "ctrler",
-      "members": [
-        "oldie",
+      "_members": [
+        "Megaros",
         "ctrler",
         "observer"
       ],
-      "home": "mainControlRoom"
+      "home": "mainControlRoom",
+      "type": "TRIUMVIRATE"
     },
     "cabinet": {
-      "leader": "oldie",
-      "members": [
-        "oldie",
-        "charlie",
-        "seefy",
+      "leader": "Megaros",
+      "_members": [
+        "Megaros",
+        "Charles",
+        "Astinomis",
         "Alina",
-        "mini",
+        "Maisarah",
         "Eugene",
-        "inddy",
-        "welly"
+        "Hiroshi",
+        "Evan"
       ],
-      "home": "mainControlRoom"
+      "home": "mainControlRoom",
+      "type": "CABINET"
     },
     "interior": {
-      "type": "division",
-      "leader": "charlie",
-      "members": [
-        "charlie",
-        "selli1",
-        "selli2"
+      "type": "DIVISION",
+      "leader": "Charles",
+      "_members": [
+        "Charles",
+        "Boulos",
+        "Agros"
       ],
-      "home": "mainControlRoom"
+      "home": "interiorHeadquarters",
+      "policies": [
+        "administratorIncentive",
+        "banReligiousPractices",
+        "seniority",
+        "jobSecurity"
+      ]
     },
     "mining": {
-      "type": "division",
-      "leader": "mini",
-      "members": [
-        "mini",
-        "mini1",
-        "mini2"
+      "type": "DIVISION",
+      "leader": "Maisarah",
+      "_members": [
+        "Maisarah",
+        "Metros",
+        "Dion"
       ],
-      "home": "excavationShaftA"
+      "home": "miningHeadquarters",
+      "policies": [
+        "minerIncentive",
+        "seniority",
+        "jobSecurity"
+      ]
     },
     "education": {
-      "type": "division",
+      "type": "DIVISION",
       "leader": "Eugene",
-      "members": [
-        "Eugene"
+      "_members": [
+        "Eugene",
+        "Jan",
+        "teacher2"
       ],
-      "home": "miningSchool"
+      "home": "educationHeadquarters",
+      "policies": [
+        "administratorIncentive",
+        "banReligiousPractices",
+        "seniority",
+        "jobSecurity",
+        "noTitles"
+      ]
     },
     "industry": {
-      "type": "division",
-      "leader": "inddy",
-      "members": [
-        "inddy",
-        "inddy2"
+      "type": "DIVISION",
+      "leader": "Hiroshi",
+      "_members": [
+        "Hiroshi",
+        "Indu"
       ],
-      "home": "farm"
+      "home": "industryHeadquarters",
+      "policies": [
+        "engineerIncentive",
+        "paternityLeave"
+      ]
     },
     "safety": {
-      "type": "division",
-      "leader": "seefy",
-      "members": [
-        "seefy"
+      "type": "DIVISION",
+      "leader": "Astinomis",
+      "_members": [
+        "Astinomis",
+        "Muos",
+        "Kae",
+        "Peiyu",
+        "Kasem",
+        "Bahriye"
       ],
-      "home": "rescueStationNorth"
+      "home": "safetyHeadquarters",
+      "policies": [
+        "soldierIncentive",
+        "banReligiousPractices",
+        "seniority",
+        "jobSecurity",
+        "banUnion"
+      ]
     },
     "bioengineering": {
-      "type": "division",
-      "leader": "welly",
-      "members": [
-        "welly",
+      "type": "DIVISION",
+      "leader": "Evan",
+      "_members": [
+        "Evan",
         "DrPaik",
-        "doci2"
+        "DrHess"
       ],
-      "home": "welfareStationEast"
+      "home": "bioengineeringHeadquarters",
+      "policies": [
+        "engineerIncentive",
+        "lockoutExperiments",
+        "jobSecurity"
+      ]
     },
     "infrastructure": {
-      "type": "division",
+      "type": "DIVISION",
       "leader": "Alina",
-      "members": [
+      "_members": [
         "Alina",
         "Rui",
         "Krailin",
         "Vaeme",
-        "Mentor",
+        "Yuhoa",
         "Salvor"
       ],
-      "home": "constructionYardNorth"
+      "home": "infrastructureHeadquarters",
+      "policies": [
+        "engineerIncentive",
+        "lockoutExperiments",
+        "noTitles"
+      ]
     }
-  },
-  "marketResources": {
-    "water": 300000,
-    "ration": 100000,
-    "oxygen": 100000
   },
   "eventSystem": {
     "dataBase": [
-      {
-        "type": "com.titaniumPolitics.game.events.Event_PrologueInfDivLeaderSpeech",
-        "name": "Introduction of InfDivLeader.",
-        "oneTime": true
-      }
     ]
   }
 }

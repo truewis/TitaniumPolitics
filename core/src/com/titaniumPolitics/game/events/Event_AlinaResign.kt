@@ -1,41 +1,28 @@
 package com.titaniumPolitics.game.events
 
-import com.titaniumPolitics.game.core.GameState
-import com.titaniumPolitics.game.ui.DialogueUI
+import com.titaniumPolitics.game.core.Request
+import com.titaniumPolitics.game.core.gameActions.Resign
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.Transient
 
 @Serializable
-class Event_AlinaResign : EventObject("Introduction of Alina.", true)
-{
-    //Infrastructure Division Leader gives a speech. Quest is completed when the game starts.
-    override fun injectParent(gameState: GameState)
-    {
-        super.injectParent(gameState)
-        //Injected at the start of the game. No action required.
+class Event_AlinaResign : EventObject("Introduction of Alina.", true) {
 
-    }
-
-    @Transient
-    val func = { _: Int, newTime: Int ->
-        if (newTime > 96 && parent.player.currentMeeting != null && parent.parties["infrastructure"]!!.leader == "Alina" && parent.player.currentMeeting!!.currentCharacters.containsAll(
-                listOf("Alina")
-            )
-        )
-        {
-            DialogueUI.instance.playDialogue("AlinaResign")
-            parent.eventSystem.dataBase.add(Event_BecameDivLeader().also { it.injectParent(parent) })
+    override fun exec(a: Int, b: Int) {
+        if (parent.day > 1 && parent.player.currentMeeting != null && parent.parties["infrastructure"]!!.leader == "Alina" && parent.player.currentMeeting!!.currentSpeaker == "Alina"
+            && parent.player.currentMeeting!!.type == com.titaniumPolitics.game.core.Meeting.MeetingType.DIVISION_DAILY_CONFERENCE
+        ) {
+            onPlayDialogue("AlinaResign")
+            parent.eventSystem.add(Event_BecameDivLeader())
+            //Create request for Resign. This is a system request, so issuedBy is empty.
+            Request(
+                action = Resign("Alina", parent.parties["infrastructure"]!!.home!!),
+                issuedTo = hashSetOf("Alina"),
+            ).apply {
+                parent.requests[generateName()] = this
+            }
             deactivate()
         }
     }
 
-    override fun activate()
-    {
-        parent.timeChanged += func
-    }
 
-    override fun deactivate()
-    {
-        parent.timeChanged -= func
-    }
 }

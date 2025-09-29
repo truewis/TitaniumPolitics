@@ -1,9 +1,14 @@
 package com.titaniumPolitics.game.ui
 
+import com.badlogic.gdx.math.Vector2
+import com.badlogic.gdx.scenes.scene2d.Actor
+import com.badlogic.gdx.scenes.scene2d.Group
+import com.titaniumPolitics.game.core.Character
 import com.titaniumPolitics.game.core.GameEngine
 import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.core.ReadOnly
 import com.titaniumPolitics.game.core.gameActions.Talk
+import com.titaniumPolitics.game.ui.actions.ResourceTransferUI
 import com.titaniumPolitics.game.ui.map.PlaceSelectionUI
 import ktx.scene2d.button
 import ktx.scene2d.label
@@ -11,26 +16,23 @@ import ktx.scene2d.scene2d
 
 //This UI is a window that pops up when the player clicks on a character in the map. It allows the player to talk to the character or select them.
 class CharacterInteractionWindowUI(var gameState: GameState) :
-    FloatingWindowUI()
-{
+    FloatingWindowUI() {
     var characterDisplayed = ""
     var mode = ""
     private val talkButton = scene2d.button {
-        label("Talk With...") {
-            setFontScale(2f)
+        label(ReadOnly.prop("characterInteractionWindowUI-talkWith"), "description") {
+            setFontScale(0.3f)
         }
 
-        addListener(object : com.badlogic.gdx.scenes.scene2d.utils.ClickListener()
-        {
-            override fun clicked(event: com.badlogic.gdx.scenes.scene2d.InputEvent?, x: Float, y: Float)
-            {
+        addListener(object : com.badlogic.gdx.scenes.scene2d.utils.ClickListener() {
+            override fun clicked(event: com.badlogic.gdx.scenes.scene2d.InputEvent?, x: Float, y: Float) {
                 //Move to place.
                 val action = Talk(
                     this@CharacterInteractionWindowUI.gameState.playerName,
-                    this@CharacterInteractionWindowUI.gameState.player.place.name
+                    this@CharacterInteractionWindowUI.gameState.player.place.name,
+                    this@CharacterInteractionWindowUI.characterDisplayed,
+                    this@CharacterInteractionWindowUI.gameState
                 )
-                action.who = this@CharacterInteractionWindowUI.characterDisplayed
-                action.injectParent(this@CharacterInteractionWindowUI.gameState)
                 this@CharacterInteractionWindowUI.isVisible = false
                 GameEngine.acquireCallback(action)
             }
@@ -38,35 +40,31 @@ class CharacterInteractionWindowUI(var gameState: GameState) :
     }
 
     private val giveResourceButton = scene2d.button {
-        label("Give resources...") {
-            setFontScale(2f)
+        label(ReadOnly.prop("characterInteractionWindowUI-giveResources"), "description") {
+            setFontScale(0.3f)
         }
 
-        addListener(object : com.badlogic.gdx.scenes.scene2d.utils.ClickListener()
-        {
-            override fun clicked(event: com.badlogic.gdx.scenes.scene2d.InputEvent?, x: Float, y: Float)
-            {
+        addListener(object : com.badlogic.gdx.scenes.scene2d.utils.ClickListener() {
+            override fun clicked(event: com.badlogic.gdx.scenes.scene2d.InputEvent?, x: Float, y: Float) {
                 this@CharacterInteractionWindowUI.isVisible = false
-                ResourceTransferUI.instance.isVisible = true
-                ResourceTransferUI.instance.toWhere = "home_${this@CharacterInteractionWindowUI.characterDisplayed}"
-                ResourceTransferUI.instance.refresh(
-                    "private",
-                    GameEngine.acquireCallback,
-                    this@CharacterInteractionWindowUI.gameState.player.resources
+                val resUI = ResourceTransferUI(this@CharacterInteractionWindowUI.gameState, GameEngine.acquireCallback)
+                resUI.toWhere = "home_${this@CharacterInteractionWindowUI.characterDisplayed}"
+                resUI.refresh(
+                    "private"
                 )
+                InterfaceRoot.instance.avAUI.setActionSheet(resUI)
+
             }
         })
     }
 
     private val selectButton = scene2d.button {
-        label("Select Character") {
-            setFontScale(2f)
+        label(ReadOnly.prop("characterInteractionWindowUI-selectCharacter"), "description") {
+            setFontScale(0.3f)
         }
 
-        addListener(object : com.badlogic.gdx.scenes.scene2d.utils.ClickListener()
-        {
-            override fun clicked(event: com.badlogic.gdx.scenes.scene2d.InputEvent?, x: Float, y: Float)
-            {
+        addListener(object : com.badlogic.gdx.scenes.scene2d.utils.ClickListener() {
+            override fun clicked(event: com.badlogic.gdx.scenes.scene2d.InputEvent?, x: Float, y: Float) {
                 //Select place.
                 PlaceSelectionUI.instance.selectedPlaceCallback(this@CharacterInteractionWindowUI.characterDisplayed)
             }
@@ -74,74 +72,78 @@ class CharacterInteractionWindowUI(var gameState: GameState) :
         )
     }
 
+    private val descButton = scene2d.button {
+        label(ReadOnly.prop("characterInteractionWindowUI-more"), "description") {
+            setFontScale(0.3f)
+        }
 
-    init
-    {
+        addListener(object : com.badlogic.gdx.scenes.scene2d.utils.ClickListener() {
+            override fun clicked(event: com.badlogic.gdx.scenes.scene2d.InputEvent?, x: Float, y: Float) {
+                CharacterDetailUI.instance.refresh(this@CharacterInteractionWindowUI.gameState.characters[this@CharacterInteractionWindowUI.characterDisplayed]!!)
+                CharacterDetailUI.instance.isVisible = true
+            }
+        }
+        )
+    }
+
+
+    init {
         instance = this
         isVisible = false
-        titleLabel.setFontScale(2f)
         setSize(300f, 200f)
         setPosition(100f, 100f)
 
     }
 
-    fun refresh(x: Float, y: Float, charName: String)
-    {
-        //If the window is already visible, hide it.
-        if (characterDisplayed == charName)
-        {
-            isVisible = false
-            characterDisplayed = ""
+    var followingActor: Actor? = null
+    var followingOffsetX = 0f
+    var followingOffsetY = 0f
 
-        } else
-        {
-            val XOFFSET = 0
-            val YOFFSET = 0
-            setPosition(x + XOFFSET, y + YOFFSET)
-            isVisible = true
-            if (!charName.contains("Anon"))
-                this.titleLabel.setText(ReadOnly.prop(charName))
-            else
-                this.titleLabel.setText("Survivor")
-            characterDisplayed = charName
+    fun display(x: Float, y: Float, charName: String) {
+        val XOFFSET = 0
+        val YOFFSET = 0
+        setPosition(x + XOFFSET, y + YOFFSET)
+        isVisible = true
+        if (gameState.characters[charName]!!.type != Character.Type.ANON)
+            this.titleLabel.setText(ReadOnly.charProp(charName))
+        else
+            this.titleLabel.setText(ReadOnly.prop("characterInteractionWindowUI-survivor"))
+        characterDisplayed = charName
 
-            //Clear the list of any previous buttons.
-            content.apply {
-                clear()
+        //Clear the list of any previous buttons.
+        content.apply {
+            clear()
 
-                add(MutualityMeter(gameState, tgtCharacter = characterDisplayed, who = gameState.playerName).also {
-                    it.remove() //Do not refresh the meter, since this window is not persistent.
-                })
+            add(MutualityMeter(gameState, tgtCharacter = characterDisplayed, who = gameState.playerName).also {
+                it.remove() //Do not refresh the meter, since this window is not persistent.
+            })
+            row()
+            //If place selection mode is active, add the selection button and nothing else.
+            if (mode == "CharSelection") {
+                add(selectButton).fill().size(200f, 50f)
                 row()
-                //If place selection mode is active, add the selection button and nothing else.
-                if (mode == "CharSelection")
-                {
-                    add(selectButton).fill().size(200f, 50f)
+            } else {
+                //Disable the button if the player is already in the place. Calling place property will throw an exception when the game is first loaded.
+                //Also, disable the button if the character is already in the meeting ("talking" to them already).
+                if (gameState.player.currentMeeting?.currentCharacters?.contains(
+                        characterDisplayed
+                    ) != true
+                ) {
+                    add(talkButton).fill().size(200f, 50f)
                     row()
-                } else
-                {
-                    //Disable the button if the player is already in the place. Calling place property will throw an exception when the game is first loaded.
-                    //Also, disable the button if the character is already in the meeting ("talking" to them already).
-                    if (gameState.player.currentMeeting?.currentCharacters?.contains(
-                            characterDisplayed
-                        ) != true
-                    )
-                    {
-                        add(talkButton).fill().size(200f, 50f)
-                        row()
-                        add(giveResourceButton).fill().size(200f, 50f)
-                        row()
-                    }
+                    add(giveResourceButton).fill().size(200f, 50f)
+                    row()
                 }
-                add(closeButton).fill().size(200f, 50f)
-
             }
-            setSize(350f, 50f + content.prefHeight)
+            add(descButton).fill().size(200f, 50f)
+            row()
+            add(closeButton).fill().size(200f, 50f)
+
         }
+        setSize(350f, 50f + content.prefHeight)
     }
 
-    companion object
-    {
+    companion object {
         //Singleton instance, because there should only be one of this UI appearing at a time.
         lateinit var instance: CharacterInteractionWindowUI
     }

@@ -1,46 +1,146 @@
 package com.titaniumPolitics.game.core
 
+import com.titaniumPolitics.game.core.ReadOnly.IDTH
 import com.titaniumPolitics.game.events.*
-import com.titaniumPolitics.game.ui.DialogueUI
+import com.titaniumPolitics.game.ui.Quest
+import com.titaniumPolitics.game.ui.widget.SpeechUI
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 
 
 //Events are quests that never expire. Some can be triggered many times, some only once.
 @Serializable
-class EventSystem : GameStateElement()
-{
+class EventSystem : GameStateElement() {
     override val name: String
         get() = "EventSystem" //There is only one EventSystem object in the game.
-    val dataBase = arrayListOf<EventObject>()
+    private val dataBase = arrayListOf<EventObject>()
+    private val tmpdataBase = arrayListOf<EventObject>()
 
+    /**
+     * Currently active quests.
+     * Do not serialize, as they will be reconstructed from the events when loading a game.
+     */
+    @Transient
+    val activeQuests =
+        arrayListOf<Quest>() //Do not use hashSet, it is not meant to be used with objects that can be modified.
 
-    //Add an objective with a time limit.
+    val successfulQuests = arrayListOf<Quest>()
 
-    override fun injectParent(gameState: GameState)
-    {
-        super.injectParent(gameState)
-        dataBase.add(Event_PrologueInfDivLeaderSpeech())
-        dataBase.add(Event_BribeDoctor1())
-        dataBase.add(Event_BoyFindingMom())
+    @Transient
+    val failedQuests = arrayListOf<Quest>()
+
+    //Utility function called once when a new game starts.
+    fun newGame() {
+        add(Event_PrologueAlinaSpeech())
+        add(Event_DelayRepair1())
+        add(Event_BribeDoctor1())
+        add(Event_BoyFindingMom())
         //dataBase.add(Event_ObserverIntro())
-        dataBase.add(Event_AlinaIllTheory1())
-        dataBase.add(Event_SalvorElection())
-        dataBase.forEach {
-            it.injectParent(parent)
-            it.activate()
-        }
+        add(Event_AlinaIllTheory1())
+        add(Event_SalvorElection())
+        add(Event_SecureOuterBarrierEast())
     }
 
-    fun refresh()
-    {
-        dataBase.forEach {
-            it.deactivate()
+    fun updateQuest(event: IQuestEventObject, quest: Quest) {
+        quest.parent = parent
+        quest.event = event
+        if (activeQuests.any { it.name == quest.name }) {
+            activeQuests.removeIf { it.name == quest.name }
         }
+        activeQuests.add(quest)
+    }
+
+    fun finishQuest(event: IQuestEventObject, success: Boolean = true) {
+        val toRemove = arrayListOf<Quest>()
+        activeQuests.filter { it.event == event }.forEach { quest ->
+            quest.completionTime = parent.time
+            if (success)
+                successfulQuests.add(quest)
+            else
+                failedQuests.add(quest)
+            toRemove.add(quest)
+        }
+        activeQuests.removeAll(toRemove)//I am afraid of set equality check, so I used list here.
+
+    }
+
+    override fun injectParent(gameState: GameState) {
+        super.injectParent(gameState)
         dataBase.forEach {
-            it.activate()
+            it.injectParent(gameState)
+            if (it.active)
+                println(
+                    "Injecting parent to event ${it.name} active=${it.active}" +
+                            if (it is IQuestEventObject) " quest=${it.quest.name}" else ""
+                )
+        }
+        gameState.timeChanged += { a, b ->
+            dataBase.forEach { if (it.active) it.exec(a, b) }
+            tmpdataBase.forEach {
+                it.injectParent(gameState)
+                dataBase += it
+            }
+            tmpdataBase.clear()
+            gameState.requests.filter {
+                !it.value.completed &&
+                        gameState.playerName in it.value.issuedTo
+            }.forEach { (_, req) ->
+
+                add(Event_GenuineRequest(req.name))
+
+            }
+            gameState.scheduledMeetings.filter {
+                it.value.type == Meeting.MeetingType.DIVISION_LEADER_ELECTION && it.value.involvedParty == gameState.player.division?.name
+            }.keys.firstOrNull()?.let { add(Event_ElectionApproaching(it)) }
+            gameState.scheduledMeetings.filter {
+                it.value.type == Meeting.MeetingType.BUDGET_PROPOSAL && gameState.playerName in it.value.scheduledCharacters
+            }.keys.firstOrNull()?.let { add(Event_ProposeBudget(it)) }
+            gameState.scheduledMeetings.filter {
+                it.value.type == Meeting.MeetingType.BUDGET_RESOLUTION && gameState.playerName in it.value.scheduledCharacters
+            }.keys.firstOrNull()?.let { add(Event_ResolveBudget(it)) }
+            val relevantInfos = parent.player.preparedInfoKeys.map {
+                parent.informations[it]!!
+            }.filter { info ->
+                parent.time - info.tgtTime < 168 * IDTH //Has to be recent enough
+            }
+            parent.parties.values.filter {
+                it.leader == parent.playerName && it.type == Party.Type.WORKPLACE
+            }.forEach {
+                val place = it.workplace.name
+                if (relevantInfos.none { it.type == InformationType.HUMAN_RESOURCES && it.tgtPlace == place }
+                    || relevantInfos.none { it.type == InformationType.APPARATUS && it.tgtPlace == place }
+                    || relevantInfos.none { it.type == InformationType.RESOURCES && it.tgtPlace == place })
+                    add(Event_ExpiredWorkplaceInformation(place))
+                if (!it.isSalaryPaid)
+                    add(Event_PaySalary(it.name))
+            }
+            parent.parties.values.filter {
+                it.leader == parent.playerName
+            }.forEach {
+                val hatefulMembers = it.members.filter {
+                    parent.getMutNorm(it, parent.playerName) < -0.25
+                }
+                if (hatefulMembers.isNotEmpty())
+                    add(Event_HatefulDirectReport(hatefulMembers, it.name))
+                if (it.integrity < -0.25)
+                    add(Event_ImprovePartyIntegrity(it.name))
+
+            }
         }
 
+    }
+
+    fun add(event: EventObject) {
+        tmpdataBase.add(event)
+    }
+
+    fun displayEmoji(who: String): SpeechUI.EmojiType {
+        return dataBase.firstOrNull { it.active && it.displayEmoji(who) != SpeechUI.EmojiType.NONE }
+            ?.displayEmoji(who) ?: SpeechUI.EmojiType.NONE
+    }
+
+    companion object {
+        val onPlayDialogue = arrayListOf<(String) -> Unit>()
     }
 
 }

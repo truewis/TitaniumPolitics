@@ -1,24 +1,29 @@
 package com.titaniumPolitics.game.ui
 
 
+import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.scenes.scene2d.ui.*
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable
 
 import com.badlogic.gdx.utils.Align
+import com.rafaskoberg.gdx.typinglabel.TypingLabel
 
-import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.core.Information
+import com.titaniumPolitics.game.core.ReadOnly
+import com.titaniumPolitics.game.debugTools.Logger
+import com.titaniumPolitics.game.ui.widget.DescriptionLabel
+import com.titaniumPolitics.game.ui.widget.InformationSourceUI
+import com.titaniumPolitics.game.ui.widget.WindowUI
+import kotlinx.serialization.json.jsonObject
+import kotlinx.serialization.json.jsonPrimitive
 
 import ktx.scene2d.*
-import ktx.scene2d.Scene2DSkin.defaultSkin
 
 
-class ApparatusInfoUI : WindowUI("ApparatusInfoTitle")
-{
-    private val dataTable = Table()
+class ApparatusInfoUI : WindowUI("ApparatusInfoTitle") {
+    private val dataTable = scene2d.table()
 
-    init
-    {
+    init {
         isVisible = false
         instance = this
         val informationPane = ScrollPane(dataTable)
@@ -28,37 +33,91 @@ class ApparatusInfoUI : WindowUI("ApparatusInfoTitle")
 
     }
 
-    fun refresh(information: Information)
-    {
+    fun display(information: Information) {
+        isVisible = true
         dataTable.clear()
         dataTable.apply {
+            image("CogGrunge") {
+                it.size(200f, 200f)
+                try {
+                    drawable = TextureRegionDrawable(
+                        CapsuleStage.instance.assetManager.get( //TODO: Temporary solution for portrait image loading. PortraitUI does not have a stage.
+                            ReadOnly.appJson[information.tgtApparatusName]!!.jsonObject["image"]!!.jsonPrimitive.content,
+                            Texture::class.java
+                        )!!
+                    )
+                } catch (e: Exception) {
+                    Logger.write("Portrait Image Error: ${information.tgtApparatusName}", Logger.LogLevel.INFO)
+                }
+            }
+            row()
 
-            add(label("Author: ${information.author}") {
+
+            label(ReadOnly.appProp(information.tgtApparatusName!!), "description") {
                 setAlignment(Align.center)
-                setFontScale(2f)
-            })
+                setFontScale(0.5f)
+            }
             row()
-            add(label("Creation Time: ${information.creationTime}") {
-                setAlignment(Align.center)
-                setFontScale(2f)
-            })
+            add(DescriptionLabel(ReadOnly.appProp(information.tgtApparatusName!! + "-desc"))).size(400f, 100f).fill()
+            row()
+            add(TypingLabel("", Scene2DSkin.defaultSkin, "description").apply {
+                val text1 = if ((information.variables["durability"] ?: 1.0) > .0) {
+                    ReadOnly.appProp("status-running")
+                        .format(
+                            ReadOnly.appProp(information.tgtApparatusName ?: ReadOnly.appProp("unknownApparatus")),
+                            information.variables["durability"]
+                        )
+                } else {
+                    ReadOnly.appProp("status-broken")
+                }
+                val text2 = if ((information.variables["temperature"] ?: 300.0) > (information.variables["maxTemp"]
+                        ?: Double.POSITIVE_INFINITY)
+                ) ReadOnly.appProp("status-highTemp").format(
+                    information.variables["maxTemp"] ?: Double.POSITIVE_INFINITY,
+                    information.variables["temperature"]
+                )
+                else if ((information.variables["temperature"] ?: 300.0) < (information.variables["minTemp"]
+                        ?: .0)
+                ) ReadOnly.appProp("status-lowTemp").format(
+                    information.variables["minTemp"] ?: 0.0,
+                    information.variables["temperature"]
+                )
+                else ""
+                val text3 =
+                    ReadOnly.appProp("status-worker")
+                        .format(
+                            (information.variables["efficiency"] ?: .0) * 100,
+                            information.variables["currentWorker"]?.toInt() ?: 0
+                        )
+                val text4 = if ((information.variables["currentWorker"]?.toInt()
+                        ?: 0) > (information.variables["idealWorker"]?.toInt() ?: 0)
+                )
+                    ReadOnly.appProp("status-overWorked")
+                else if ((information.variables["currentWorker"]?.toInt()
+                        ?: 0) < (information.variables["idealWorker"]?.toInt() ?: 0)
+                ) ReadOnly.appProp("status-underWorked")
+                else ""
+                val text5 = if ((information.variables["graveDanger"] ?: 0.0) > 0.0) {
+                    ReadOnly.appProp("status-highDanger")
+                } else if ((information.variables["danger"] ?: 0.0) > 0.0) {
+                    ReadOnly.appProp("status-mediumDanger")
+                } else ReadOnly.appProp("status-minimumDanger")
+                setText(
+                    text1 + "\n" + text2 + "\n" + text3 + "\n" + text4 + "\n" + text5
+                )
+                setAlignment(Align.left)
+                setFontScale(0.2f)
+                skipToTheEnd() //Skip the typing effect for this label.
+            }).padTop(100f)
 
             row()
-            add(label("Apparatus Name: ${information.tgtApparatus}") {
-                setAlignment(Align.center)
-                setFontScale(2f)
-            })
-            row()
-            add(label("Durability: ${information.amount}") {
-                setAlignment(Align.center)
-                setFontScale(2f)
-            })
+            add(InformationSourceUI(information)).fill()
+
         }
 
     }
 
-    companion object
-    {
+    companion object {
         //Singleton
         lateinit var instance: ApparatusInfoUI
     }

@@ -1,135 +1,109 @@
 package com.titaniumPolitics.game.ui
 
 import com.badlogic.gdx.Gdx
-import com.badlogic.gdx.graphics.Color
-import com.badlogic.gdx.scenes.scene2d.InputEvent
-import com.badlogic.gdx.scenes.scene2d.ui.*
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
-import com.titaniumPolitics.game.core.GameEngine
+import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane
+import com.badlogic.gdx.scenes.scene2d.ui.Table
+import com.badlogic.gdx.scenes.scene2d.ui.VerticalGroup
 import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.core.InformationType
 import com.titaniumPolitics.game.core.ReadOnly
 import com.titaniumPolitics.game.core.gameActions.Move
+import com.titaniumPolitics.game.core.gameActions.Wait
 import ktx.scene2d.Scene2DSkin.defaultSkin
-import ktx.scene2d.scene2d
-import ktx.scene2d.*
 
-class AlertUI(var gameState: GameState) : Table(defaultSkin)
-{
+class AlertUI(var gameState: GameState) : Table(defaultSkin) {
     private val docList = VerticalGroup()
-    private val previousInformation = hashSetOf<String>()
     private var newInformation = hashSetOf<String>()
 
-    init
-    {
+    init {
         instance = this
         val docScr = ScrollPane(docList)
         docList.grow()
 
         add(docScr).grow()
-        gameState.timeChanged += { old, new -> if (old != new) refreshList() }
+        gameState.onAddInfo += { it -> if (it.knownTo.contains(gameState.playerName)) newInformation.add(it.name) }
         gameState.updateUI += { _ -> displayAlerts(); }
-    }
-
-    fun addAlert(type: String, vararg params: String, action: () -> Unit = {})
-    {
-        if (type in listOf("vital", "hunger", "thirst") && docList.children.none {
-                (it as AlertPanelUI).type == type
-            })//Only one alert of each type is visible at a time.
-            docList.addActor(AlertPanelUI(type, action, docList, *params))
-        else if (type !in listOf("vital", "hunger", "thirst"))
-            docList.addActor(AlertPanelUI(type, action, docList, *params))
-        if (!isVisible)
-            isVisible = true
-    }
-
-    //Sort which information is new and which is old.
-    fun refreshList()
-    {
-        //New Information
-        if (previousInformation.isEmpty())
-            previousInformation.addAll(gameState.informations.keys.filter {
-                gameState.informations[it]!!.knownTo.contains(
-                    gameState.playerName
-                )
-            }.toHashSet()) //TODO: this is a temporary solution. It has to work when the game loads.
-        else
-        {
-            newInformation = gameState.informations.keys.filter {
-                gameState.informations[it]!!.knownTo.contains(
-                    gameState.playerName
-                )
-            }.toHashSet()
-            newInformation.removeAll(previousInformation)
-            previousInformation.clear()
-            previousInformation.addAll(newInformation)
+        gameState.onPlayerAction += {
+            //Remove all alerts.
+            Gdx.app.postRunnable {
+                docList.clear()
+            }
         }
-
     }
 
-    fun displayAlerts()
-    {
-        //Remove all alerts.
-        docList.children.forEach {
-            it.remove()
+    fun addAlert(type: String, vararg params: String, action: () -> Unit = {}) {
+        Gdx.app.postRunnable {//This function is often called from the main thread, so we need to post it to the UI thread.
+            if (type in listOf("vital", "hunger", "thirst", "will") && docList.children.none {
+                    (it as AlertPanelUI).type == type
+                })//Only one alert of each type is visible at a time.
+                docList.addActor(AlertPanelUI(type, action, docList, *params))
+            else if (type !in listOf("vital", "hunger", "thirst", "will"))
+                docList.addActor(AlertPanelUI(type, action, docList, *params))
+            if (!isVisible)
+                isVisible = true
         }
+    }
+
+    fun displayAlerts() {
 
         newInformation.forEach {
             //Decide whether to show the alert based on the type of information.
             val info = gameState.informations[it]!!
-            if (info.tgtCharacter.contains("Anon")) return@forEach //Never show information about anonymous characters.
-            when (info.type)
-            {
-                InformationType.CASUALTY ->
-                {
-                    addAlert("accident") {
-                        InformationViewUI.instance.refresh(gameState, "creationTime")
-                        InformationViewUI.instance.isVisible = true
+            if (info.tgtCharacter == null || info.tgtCharacter !in gameState.knownCharactersToPlayer
+            ) return@forEach //Never show information about unknown characters to the player.
+            when (info.type) {
+                InformationType.ACCIDENT -> {
+                    addAlert("accident", ReadOnly.placeProp(info.tgtPlace), gameState.formatTime()) {
+                        AssistantUI.instance.informationButton.changeOpenState(true)
                     }
                 }
 
-                InformationType.ACTION ->
-                {
-                    if (info.tgtCharacter == gameState.playerName//Ignore my actions, they are not surprising.
-                        || setOf(
+                InformationType.CASUALTY -> {
+                    addAlert(
+                        "casualty",
+                        params = arrayOf(
+                            info.amount.toString(),
+                            ReadOnly.placeProp(info.tgtPlace)
+                        )
+                    ) {
+                        AssistantUI.instance.informationButton.changeOpenState(true)
+                    }
+                }
 
-                            "Wait"
-                        ).contains(info.action!!.javaClass.simpleName)
+                InformationType.ACTION -> {
+                    if (info.tgtCharacter == gameState.playerName//Ignore my actions, they are not surprising.
+                        || info.action is Wait
                     )//Ignore boring actions, even if they are not mine.
                     {
                         //Do nothing.
-                    } else if (info.action!!.javaClass.simpleName == "Move") //If the action is a move, show the dedicated alert.
+                    } else if (info.action is Move) //If the action is a move, show the dedicated alert.
                     {
                         addAlert(
                             "moved",
                             params = arrayOf(
-                                ReadOnly.prop(info.tgtCharacter),
-                                ReadOnly.prop((info.action as Move).placeTo)
+                                ReadOnly.charProp(info.tgtCharacter ?: "Someone"),
+                                ReadOnly.placeProp((info.action as Move).placeTo)
                             )
                         ) {
-                            InformationViewUI.instance.refresh(gameState, "creationTime")
-                            InformationViewUI.instance.isVisible = true
+                            AssistantUI.instance.informationButton.changeOpenState(true)
                         }
-                    } else
-                    {
-                        addAlert("newInfo") {
-                            InformationViewUI.instance.refresh(gameState, "creationTime")
-                            InformationViewUI.instance.isVisible = true
-                        }
+                    } else {
+                        //TODO: Anything else are hidden for now. Display action alerts that are important for the player.
+//                        addAlert("newInfo") {
+//                            InformationViewUI.instance.refresh(gameState, "creationTime")
+//                            InformationViewUI.instance.isVisible = true
+//                        }
                     }
 
                 }
 
-                InformationType.APPARATUS_DURABILITY ->
-                {
+                InformationType.APPARATUS -> {
                     addAlert("apparatus") {
-                        ApparatusInfoUI.instance.refresh(info)
-                        ApparatusInfoUI.instance.isVisible = true
+                        ApparatusInfoUI.instance.display(info)
                     }
                 }
 
-                else ->
-                {
+                else -> {
                     //Do nothing.
                 }
             }
@@ -140,14 +114,16 @@ class AlertUI(var gameState: GameState) : Table(defaultSkin)
             addAlert("hunger")
         if (gameState.player.thirst > ReadOnly.const("thirstThreshold"))
             addAlert("thirst")
-        if (gameState.player.health < 20)
+        if (gameState.player.health < ReadOnly.const("CriticalHealth"))
             addAlert("vital")
+        if (gameState.player.will < ReadOnly.const("CriticalWill"))
+            addAlert("will")
 
-        isVisible = !docList.children.isEmpty
+        newInformation.clear()
+
     }
 
-    companion object
-    {
+    companion object {
         lateinit var instance: AlertUI
     }
 

@@ -1,65 +1,112 @@
 {
-  "charlie": {
-    "image": "portraits/default.png"
+  "Charlie": {
+    "name": "Charlie",
+    "image": "portraits/default.png",
+    "headImage": "portraits/defaultHead.png"
   },
-  "seefy": {
-    "image": "portraits/default.png"
+  "Astinomis": {
+    "name": "Astinomis",
+    "image": "portraits/default.png",
+    "headImage": "portraits/defaultHead.png"
   },
   "Alina": {
-    "image": "portraits/Alina.png"
+    "name": "Alina",
+    "image": "portraits/Alina.png",
+    "headImage": "portraits/AlinaHead.png"
   },
-  "mini": {
-    "image": "portraits/default.png"
+  "Maisarah": {
+    "name": "Maisarah",
+    "image": "portraits/default.png",
+    "headImage": "portraits/defaultHead.png"
   },
   "Eugene": {
-    "image": "portraits/default.png"
+    "name": "Eugene",
+    "image": "portraits/default.png",
+    "headImage": "portraits/defaultHead.png"
   },
-  "inddy": {
-    "image": "portraits/default.png"
+  "Rui": {
+    "name": "Rui",
+    "image": "portraits/Rui.png",
+    "headImage": "portraits/RuiHead.png"
   },
-  "inddy2": {
-    "image": "portraits/default.png"
+  "Hiroshi": {
+    "name": "Hiroshi",
+    "image": "portraits/default.png",
+    "headImage": "portraits/defaultHead.png"
   },
-  "welly": {
-    "image": "portraits/default.png"
+  "Indu": {
+    "name": "Indu",
+    "image": "portraits/default.png",
+    "headImage": "portraits/defaultHead.png"
+  },
+  "Evan": {
+    "name": "Evan",
+    "image": "portraits/default.png",
+    "headImage": "portraits/defaultHead.png"
   },
   "Krailin": {
-    "image": "portraits/default.png"
+    "name": "Krailin",
+    "image": "portraits/Krailin.png",
+    "headImage": "portraits/KrailinHead.png"
   },
   "Vaeme": {
-    "image": "portraits/default.png"
+    "name": "Vaeme",
+    "image": "portraits/Vaeme.png",
+    "headImage": "portraits/VaemeHead.png"
   },
-  "Mentor": {
-    "image": "portraits/default.png"
+  "Yuhoa": {
+    "name": "Yuhoa",
+    "image": "portraits/default.png",
+    "headImage": "portraits/defaultHead.png"
   },
   "Salvor": {
-    "image": "portraits/default.png"
+    "name": "Salvor",
+    "image": "portraits/default.png",
+    "headImage": "portraits/defaultHead.png"
   },
-  "mini1": {
-    "image": "portraits/default.png"
+  "Metros": {
+    "name": "Metros",
+    "image": "portraits/default.png",
+    "headImage": "portraits/defaultHead.png"
   },
-  "mini2": {
-    "image": "portraits/default.png"
+  "Dias": {
+    "name": "Dias",
+    "image": "portraits/default.png",
+    "headImage": "portraits/defaultHead.png"
   },
   "DrPaik": {
-    "image": "portraits/default.png"
+    "name": "Dr. Paik",
+    "image": "portraits/default.png",
+    "headImage": "portraits/defaultHead.png"
   },
-  "doci2": {
-    "image": "portraits/default.png"
+  "DrHess": {
+    "name": "Dr. Hess",
+    "image": "portraits/default.png",
+    "headImage": "portraits/defaultHead.png"
   },
-  "selli1": {
-    "image": "portraits/default.png"
+  "Boulos": {
+    "name": "Boulos",
+    "image": "portraits/default.png",
+    "headImage": "portraits/defaultHead.png"
   },
-  "selli2": {
-    "image": "portraits/default.png"
+  "Agros": {
+    "name": "Agros",
+    "image": "portraits/default.png",
+    "headImage": "portraits/defaultHead.png"
   },
-  "oldie": {
-    "image": "portraits/default.png"
+  "Megaros": {
+    "name": "Megaros",
+    "image": "portraits/default.png",
+    "headImage": "portraits/defaultHead.png"
   },
   "ctrler": {
-    "image": "portraits/ctrler.png"
+    "name": "The Controller",
+    "image": "portraits/ctrler.png",
+    "headImage": "portraits/ctrlerHead.png"
   },
   "observer": {
-    "image": "portraits/observer.png"
+    "name": "The Observer",
+    "image": "portraits/observer.png",
+    "headImage": "portraits/observerHead.png"
   }
 }

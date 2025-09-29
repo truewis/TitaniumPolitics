@@ -1,10 +1,12 @@
 package com.titaniumPolitics.game.core
 
 import com.titaniumPolitics.game.core.NPCRoutines.*
-import com.titaniumPolitics.game.core.gameActions.*
+import com.titaniumPolitics.game.core.ReadOnly.IDTH
+import com.titaniumPolitics.game.core.ReadOnly.const
+import com.titaniumPolitics.game.core.gameActions.GameAction
+import com.titaniumPolitics.game.core.gameActions.Wait
+import com.titaniumPolitics.game.debugTools.Logger
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.Transient
-import kotlin.math.min
 
 /*
 *  NonPlayerAgent is a character that is not controlled by the player.
@@ -16,162 +18,233 @@ import kotlin.math.min
 *
 * */
 @Serializable
-class NonPlayerAgent : Agent()
-{
+class NonPlayerAgent : Agent() {
+    /**Routines are sorted by priority. The first element is the current routine. All other routines are executed when the current routine is finished.
+     *
+     */
+    var routines =
+        arrayListOf<Routine>()
 
-    private var routines =
-        arrayListOf<Routine>()//Routines are sorted by priority. The first element is the current routine. All other routines are executed when the current routine is finished.
+    override fun printStatus(): String {
+        return "Routines: $routines"
+    }
 
-    override fun chooseAction(): GameAction
-    {
+    /**
+     * Routines that are to be removed after the current routine is executed.
+     */
+    private val removeList =
+        arrayListOf<Routine>()
+
+    /**
+     * Routines that are to be added after the current routine is executed.
+     */
+    private val addList =
+        arrayListOf<Routine>()
+
+    override fun chooseAction(): GameAction {
         //1. High priority routine change
         selectRoutine()
         //2. Execute action according to the current routine. This includes low priority switching routines.
         return executeRoutine()
     }
 
-    private fun selectRoutine()
-    {
-        //If there is almost no food or water, stop all activities and try to get some. ----------------------------------------------------------------------------
-        if ((parent.characters[name]!!.resources["ration"]
-                ?: 0) <= (parent.characters[name]!!.reliants.size + 1) || (parent.characters[name]!!.resources["water"]
-                ?: 0) <= (parent.characters[name]!!.reliants.size + 1)
-        )
-        {
-            val wantedResource = if ((parent.characters[name]!!.resources["ration"]
-                    ?: 0) <= (parent.characters[name]!!.reliants.size + 1)
-            ) "ration" else "water"
-            if (parent.characters[name]!!.trait.contains("thief"))
-            {
-                //Find a place within my division with maximum res.
-                if (routines.none { it is StealRoutine })
-                    routines.add(StealRoutine().apply {
-                        priority = 1000
-                        variables["stealResource"] = wantedResource
-                        intVariables["routineStartTime"] = parent.time
-                    })//Add a routine, priority higher than work.
+    //Also Check AnonAgent.kt
+    private fun selectRoutine() {
+        var pri = 10
+        routines.sortByDescending { it.priority }
 
-            } else if (parent.characters[name]!!.trait.contains("bargainer"))
-            {
-                if (routines.none { it is BuyRoutine })
-                    routines.add(BuyRoutine().apply {
-                        priority = 1000
-                        variables["wantedResource"] = wantedResource
-                        intVariables["routineStartTime"] = parent.time
+        if (!routines.isEmpty())
+            pri = routines[0].priority + 10
+        //If there is almost no food or water, stop all activities and try to get some. ----------------------------------------------------------------------------
+        if (character.resources["ration"] <= (character.reliant) || character.resources["water"] <= (character.reliant)
+        ) {
+            val wantedResource =
+                if (character.resources["ration"] <= (character.reliant)
+                ) "ration" else "water"
+            if (character.trait.contains("thief")) {
+                //Find a place within my division with maximum res.
+                if (routines.none { it is StealRoutine }) {
+                    routines.clear()
+                    routines.add(
+                        StealRoutine(
+                            wantedResource,
+                            (character.reliant + 1/*Numerically incorrect for anon agents, but ensure non zero value.*/) * const(
+                                "StealAmountMultiplier"
+                            )
+                        ).apply {
+                            priority = PRIORITY_LIFE_SUPPORT
+                            routineStartTime = parent.time
+                        })//Add a routine, priority higher than work.
+                    return
+                }
+
+            } else if (character.trait.contains("bargainer")) {
+                if (routines.none { it is BuyRoutine }) {
+                    routines.clear()
+                    routines.add(BuyRoutine(wantedResource, character.reliant * 10.0).apply {
+                        priority = PRIORITY_LIFE_SUPPORT
+                        routineStartTime = parent.time
                     })//Add a routine, priority higher than work.
+                    return
+                }
+            }
+        }
+        //If health is low, rest
+        if (character.health < const("TiredHealth") ||
+            (character.hunger > const("hungerThreshold")) ||
+            (character.thirst > const("thirstThreshold"))
+        ) {
+            if (routines.none { it is RestRoutine }) {
+                routines.clear()
+                routines.add(RestRoutine(parent.getWorkplace(name)?.name).apply {
+                    priority = pri
+                    routineStartTime = parent.time
+                })//Add a routine, priority higher than work.
+                return
             }
         }
 
         //If will is low, downTime.
-        if (parent.getMutuality(name) < 30)
-        {
-            if (routines.none { it is DowntimeRoutine })
-                routines.add(DowntimeRoutine().apply {
-                    priority = 800
-                    intVariables["routineStartTime"] = parent.time
-                })//Add a routine, priority higher than work.
-        }
+        if (parent.getMutuality(name) < const("DowntimeWill")) {
+            if (routines.none { it is DowntimeRoutine }) {
+                routines.clear()
+                routines.add(DowntimeRoutine(parent.getWorkplace(name)?.name).apply {
 
+                    priority = pri
+                    routineStartTime = parent.time
+                })//Add a routine, priority higher than work.
+                return
+            }
+        }
 
     }
 
     //This is a recursive function. It returns the action to be executed.
-    private fun executeRoutine(): GameAction
-    {
-        if (routines.isEmpty())
-        {
-            whenIdle()
-            if (routines.isEmpty())
-                return Wait(name, place)
-        }
+    private fun executeRoutine(): GameAction {
         routines.sortByDescending { it.priority }
-        //Leave meeting or conference if the routine was changed.
-        //This allows the character to leave the meeting if it has a higher priority routine.
-        //In this case, attendMeetingRoutine is still alive in the queue,
-        //but it will be removed immediately when it becomes the current routine, as the character is not in a meeting.
-        if ((routines[0] !is IMeetingRoutine && character.currentMeeting != null))
-        {
-            return LeaveMeeting(name, place)
-        }
-        //Force start meeting routing if the character is in a meeting. Note that the character will leave the meeting immediately if nothing interests it.
-        //Note that even if the character has a higher priority routine, this block will not trigger.
-        if (parent.ongoingMeetings.any { it.value.currentCharacters.contains(name) } && routines.none { it is AttendMeetingRoutine })
-            routines.add(
-                AttendMeetingRoutine().apply {
-                    priority = 800
-                    intVariables["routineStartTime"] = parent.time
-                }
-            )
 
-        //If there is a command that is within the set time window, issued party is trusted enough, and seems to be executable at the exact place the character is in right now,(AvailableActions), start execution routine.
-        //Note that the command may not be valid even if it in AvailableActions list. For example, if the character is already at the place, move command is not valid.
-        //We should not enter executeCommand routine if it is already in the routine list.
-        if (routines.none { it is ExecuteCommandRoutine })
-        {
-            val request = parent.requests.values.firstOrNull {
-                GameEngine.availableActions(
-                    parent,
-                    it.action.tgtPlace,
-                    name
-                ).contains(it.action.javaClass.simpleName) && it.action.tgtPlace == place
+        var routineSettled = false
+        var loopCounter = 0
+        var maxLoopCounter = 20
+        while (!routineSettled) {
+            loopCounter++
+            if (loopCounter == maxLoopCounter) {
+                Logger.write(
+                    "//////////////////////Routine loop counter exceeded for $name. Collecting Trace.//////////////////////",
+                    Logger.LogLevel.INFO
+                )
             }
-            if (request != null)
-            {
-                routines.add(
-                    ExecuteCommandRoutine().apply {
-                        priority = routines[0].priority + 10
-                        variables["request"] = request.name
-                        intVariables["routineStartTime"] = parent.time
-                    }
-                )//Add the routine with higher priority.
+            if (loopCounter > maxLoopCounter + 5) {
+                throw RuntimeException("Routine loop counter exceeded for $name.")
             }
-        }
-        var nextRoutine = routines[0]
-        nextRoutine.injectParent(parent)
-        while (true)
-        {
-            val v = nextRoutine.newRoutineCondition(name, place)
-            if (v != null)
-            {
-                v.injectParent(parent)
-                nextRoutine = v.apply { priority = nextRoutine.priority + 10 }
-                routines.add(nextRoutine)
-                nextRoutine.intVariables["routineStartTime"] = parent.time
-                routines.sortByDescending { it.priority }
-                continue
-            } else if (nextRoutine.endCondition(name, place))
-            {
-                routines.remove(nextRoutine)
-                routines.sortByDescending { it.priority }
-                if (routines.isEmpty())
-                {
-                    whenIdle()
-                    if (routines.isEmpty())
-                    {
-                        println("Warning: No routine is available for $name. Waiting.")
-                        return Wait(name, place)
+            routineSettled = true
+            routines.forEach {
+                it.injectParent(parent)
+            }
+            routines.forEach {
+                it.newRoutineCondition(name, place, it.subroutines.map { routines.first { rt -> rt.ID == it } })
+                    ?.let { v ->
+                        if (!it.subroutines.isEmpty()) return@let//Only support one subroutine for now.
+                        v.routineStartTime = parent.time
+                        v.priority = it.priority + 10 //Set the priority to be higher than the current routine.
+                        it.subroutines += v.ID
+                        addList += v
+                        if (loopCounter > maxLoopCounter)
+                            Logger.write("Adding new routine $v from $it", Logger.LogLevel.INFO)
+                        routineSettled = false
                     }
+            }
+            routines += addList
+            addList.clear()
+            routines.forEach {
+                if (it.success) {
+                    routineSettled = false
+                    endRoutine(it)
                 }
-                nextRoutine = routines[0]
-                nextRoutine.injectParent(parent)
-                continue
-            } else break
+            }
+            routines.forEach {
+                if (it.failed) {
+                    routineSettled = false
+                    failRoutine(it)
+                }
+            }
+            //////////////////////////////////
+            if (loopCounter > maxLoopCounter)
+                Logger.write("Routines $removeList is being removed.", Logger.LogLevel.INFO)
+            routines.removeAll(removeList)
+            routines.forEach { routine -> routine.subroutines.removeIf { s -> routines.none { it.ID == s } } } //Remove the subroutines that were removed.
+            removeList.clear()
+            //////////////////////////////////
+            if (routines.isEmpty()) {
+                routineSettled = false
+                whenIdle()
+                if (routines.isEmpty()) {
+                    Logger.write("There is truly nothing to do for $name. This is likely a bug.")
+                    return Wait(name, place)
+                }
+            }
         }
-        return nextRoutine.execute(name, place)
+
+        routines.forEach {
+            it.injectParent(parent)
+        }
+        routines.sortByDescending { routine -> routine.priority }//WARNING: Soring must be done here, after the routines are updated and before the blockExecution.
+        blockExecution(routines)?.also { return it }
+        return routines[0].execute(name, place)
 
     }
 
+    /**Recursively stop the routine and all its subroutines.
+     *
+     */
+    fun endRoutine(routine: Routine) {
+        routine.subroutines.forEach { id -> routines.firstOrNull { it.ID == id }?.let { endRoutine(it) } }
+        removeList += (routine)
+    }
 
-    private fun whenIdle()
-    {
-        //When work hours, work
-        if (parent.hour in 8..18)
-        {
-            routines.add(WorkRoutine())
+    /**Recursively stop the routine and all its subroutines.
+     * Also call the parent routine's onSubroutineFail if exists.
+     */
+    fun failRoutine(routine: Routine) {
+        routine.subroutines.forEach { id -> routines.firstOrNull { it.ID == id }?.let { endRoutine(it) } }
+        removeList += (routine)
+        //Call parent routine's onSubroutineFail if exists.
+        routines.filter { it.subroutines.contains(routine.ID) }.forEach { it.onSubroutineFail(routine) }
+    }
+
+
+    private fun whenIdle() {
+        //If life support is needed, do it first.
+        if (character.health < const("TiredHealth") ||
+            (character.hunger > const("hungerThreshold")) ||
+            (character.thirst > const("thirstThreshold"))
+        ) {
+            routines.add(RestRoutine(parent.getWorkplace(name)?.name).also {
+                it.routineStartTime = parent.time
+            })
             return
-        } else
-        //When not work hours, rest
-            routines.add(RestRoutine())
+        }
+        //When work hours, work
+        parent.getWorkplace(name)?.let { wkplace ->
+            if (Routine.isWorkCondition(name, place, wkplace.name, parent)) {
+                if (name.contains("Anon")) {
+                    routines.add(WorkAnonRoutine(wkplace.name).also {
+                        it.routineStartTime = parent.time
+                    })
+                } else {
+                    routines.add(WorkRoutine(wkplace.name).also {
+                        it.routineStartTime = parent.time
+                    })
+                }
+                return
+            }
+        }
+
+        //When no work and no life support, play
+        routines.add(DowntimeRoutine(parent.getWorkplace(name)?.name).also {
+            it.routineStartTime = parent.time
+        })
+
     }
 
     @Deprecated("This function is not used anymore because we don't have trade action anymore.")
@@ -181,8 +254,7 @@ class NonPlayerAgent : Agent()
         value2: Double/*value of the items I will receive*/,
         valuea: Double,
         valuea2: Double
-    ): Boolean
-    {
+    ): Boolean {
         val friendlinessFactor =
             0.5//TODO: this should be determined by the character's trait. More friendly characters are more likely to accept the trade which benefits the other character.
         return value >= value2 + (parent.getMutuality(

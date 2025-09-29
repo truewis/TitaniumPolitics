@@ -1,19 +1,48 @@
 package com.titaniumPolitics.game.core.gameActions
 
+import com.titaniumPolitics.game.core.GameState
+import com.titaniumPolitics.game.core.MutualityMatrix
+import com.titaniumPolitics.game.core.ReadOnly
 import kotlinx.serialization.Serializable
 
 @Serializable
-class Wait(override val sbjCharacter: String, override val tgtPlace: String) : GameAction()
-{
-
-    override fun execute()
-    {
-        super.execute()
+data class Wait(override val sbjCharacter: String, override val tgtPlace: String) : GameAction() {
+    constructor(sbjCharacter: String, tgtPlace: String, gameState: GameState) : this(sbjCharacter, tgtPlace) {
+        injectParent(gameState)
     }
 
-    override fun isValid(): Boolean
-    {
-        return true
+    override fun execute() {
+        //Not affected by the will of the character, so no need to call super.execute()
+        sbjCharObj.frozen += ReadOnly.constInt("WaitDuration")
+    }
+
+    override fun isValid(): Boolean {
+        //If there is a meeting which I am the current speaker, I cannot wait.
+        return !(sbjCharObj.currentMeeting != null && sbjCharObj.currentMeeting!!.currentSpeaker == sbjCharacter)
+
+    }
+
+    override fun deltaWill(): MutualityMatrix {
+        val ret = MutualityMatrix()
+        // If in one of the public places, the will is increased.
+        if (tgtPlace in listOf("market", "squareSouth", "squareNorth")) {
+            // Unless the character has trait "agoraphobia", in which case the will is decreased.
+            if ("agoraphobia" in sbjCharObj.trait) {
+                ret.addWill(sbjCharacter, -expectedDuration * 0.5, "PublicPlaceAgoraphobia")
+            } else {
+                ret.addWill(sbjCharacter, delta = +expectedDuration * 1.0, reasonKey = "PublicPlace")
+            }
+        }
+        // If in one of the remote places, the will is increased.
+        else if (tgtPlace in listOf("reservoirEast", "reservoirWest", "observatory", "cemetery", "spaceport")) {
+            if ("introvert" in sbjCharObj.trait) {
+                ret.addWill(sbjCharacter, delta = expectedDuration * 1.5, reasonKey = "RemotePlaceIntrovert")
+            } else {
+                ret.addWill(sbjCharacter, delta = expectedDuration * 1.0, reasonKey = "RemotePlace")
+            }
+
+        }
+        return ret
     }
 
 }

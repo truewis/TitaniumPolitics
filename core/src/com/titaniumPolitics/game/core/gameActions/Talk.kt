@@ -1,52 +1,102 @@
 package com.titaniumPolitics.game.core.gameActions
 
+import com.titaniumPolitics.game.core.Character
 import com.titaniumPolitics.game.core.GameEngine
+import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.core.Meeting
+import com.titaniumPolitics.game.core.MutualityMatrix
+import com.titaniumPolitics.game.core.ReadOnly
+import com.titaniumPolitics.game.debugTools.Logger
 import kotlinx.serialization.Serializable
 
 @Serializable
 //Talk is considered as an on-the-fly meeting.
 //If the object (who) is already in a meeting, join the meeting if possible. Otherwise, create a new meeting with me(tgtCharacter) and the object (who).
 //Note that if the me(tgtCharacter) is in the meeting, this action is invalid.
-class Talk(override val sbjCharacter: String, override val tgtPlace: String) : GameAction()
-{
-    var who = ""
-    override fun chooseParams()
-    {
+data class Talk(
+    override val sbjCharacter: String, override val tgtPlace: String,
+    var who: String
+) : GameAction() {
+    constructor(sbjCharacter: String, tgtPlace: String, who: String, gameState: GameState) : this(
+        sbjCharacter,
+        tgtPlace,
+        who
+    ) {
+        injectParent(gameState)
+    }
+
+    override fun chooseParams() {
         who =
             GameEngine.acquire(tgtPlaceObj.characters.filter { it != sbjCharacter }.toList())
-        if (parent.characters[who]!!.frozen > 1) println("Warning: $who is already busy.")
+        if (parent.characters[who]!!.frozen > 1) Logger.write("Warning: $who is already busy.", Logger.LogLevel.INFO)
     }
 
     //Also refer to StartMeeting.execute()
-    override fun execute()
-    {
-        if (sbjCharObj.currentMeeting == null)
-        {
-            parent.ongoingMeetings["meeting-$tgtPlace-$sbjCharacter-${parent.time}"] =
-                Meeting(parent.time, tgtPlace, scheduledCharacters = hashSetOf(who, sbjCharacter), tgtPlace)
-            parent.ongoingMeetings["meeting-$tgtPlace-$sbjCharacter-${parent.time}"]!!.currentCharacters.add(
-                sbjCharacter
-            )
+    override fun execute() {
+        if (parent.characters[who]!!.currentMeeting == null) {
+            parent.addOngoingMeeting(
+                Meeting(
+                    parent.time,
+                    Meeting.MeetingType.TALK,
+                    scheduledCharacters = hashSetOf(who, sbjCharacter),
+                    tgtPlace
+                ).also {
+                    it.currentCharacters.addAll(
+
+                        listOf(sbjCharacter, who)
+                    )
+                    it.currentSpeaker = sbjCharacter
+                    it.currentAttention = (sbjCharObj.will * sbjCharObj.stats.pScale).toInt()
+                    it.startTime = parent.time
+                })
+
 
             super.execute()
-        } else
-        {
-            sbjCharObj.currentMeeting!!.currentCharacters.add(who)
+        } else {
+            parent.characters[who]!!.currentMeeting!!.currentCharacters.add(sbjCharacter)
             super.execute()
+        }
+        //Only add to known characters if directly talking to the player.
+        if (who == parent.playerName) {
+            parent.knownCharactersToPlayer += sbjCharacter
         }
     }
 
-    override fun isValid(): Boolean
-    {
+    override fun deltaWill(): MutualityMatrix {
+        val w = MutualityMatrix()
+
+        //The person's mutuality toward the subject character decreases.
+        //But only if who doesn't like the subject character and the subject character is not the boss of who.
+        if (parent.getMutNorm(
+                who,
+                sbjCharacter
+            ) < 0 && parent.parties.none { who in it.value.members && it.value.leader == sbjCharacter }
+        )
+            w.addMutuality(
+                who,
+                sbjCharacter,
+                -ReadOnly.const("talkMutualityDecrease") * parent.characters[who]!!.stats.pScale,
+                "TalkWithoutNotice"
+            )
+        return w
+    }
+
+    override fun isValid(): Boolean {
+        if (sbjCharObj.type == Character.Type.ANON)
+            return false
+        if (parent.characters[who]!!.type == Character.Type.ANON)
+            return false
         //The subject character must not be in any meeting, otherwise they are too busy to talk.
         if (sbjCharObj.currentMeeting != null)
             return false
 
+        //Can't talk to oneself.
+        if (sbjCharacter == who)
+            throw Exception("Invalid Talk action: subject and object are the same.")
+
         if (parent.characters[who]!!.currentMeeting == null)
             return tgtPlaceObj.characters.contains(who)
-        else
-        {
+        else {
             //If the object character is already in a meeting, join the meeting. Note that this bypasses the scheduledCharacters condition.
             return !parent.characters[who]!!.currentMeeting!!.currentCharacters.contains(sbjCharacter)
         }

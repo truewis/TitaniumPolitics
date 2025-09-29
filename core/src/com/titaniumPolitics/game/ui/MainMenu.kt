@@ -16,26 +16,32 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable
 import com.badlogic.gdx.utils.Align
 import com.badlogic.gdx.utils.viewport.FitViewport
 import com.titaniumPolitics.game.EntryClass
+import com.titaniumPolitics.game.GameEngineThreadHandler
 import com.titaniumPolitics.game.core.GameEngine
 import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.core.ReadOnly
+import com.titaniumPolitics.game.debugTools.Logger
+import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
-import ktx.scene2d.Scene2DSkin
-import ktx.scene2d.button
 import ktx.scene2d.label
 import ktx.scene2d.scene2d
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Date
+import java.util.Locale
 import kotlin.concurrent.thread
+import kotlin.coroutines.resume
+import kotlin.coroutines.suspendCoroutine
 
-class MainMenu(val entry: EntryClass) : Stage(FitViewport(1920F, 1080F))
-{
+class MainMenu(val entry: EntryClass) : Stage(FitViewport(1920F, 1080F)) {
     var background = Image()
 
     val rootStack = Stack()
     val menu = Table()
     val assetManager = AssetManager()
-    val music = Gdx.audio.newMusic(Gdx.files.internal("data/mainMenu.mp3"))
+    val music = Gdx.audio.newMusic(Gdx.files.internal("data/music/mainMenu.mp3"))
     val startbutton = scene2d.label("Click to Start", "trnsprtConsole") {
         addAction(
             Actions.forever(
@@ -52,18 +58,14 @@ class MainMenu(val entry: EntryClass) : Stage(FitViewport(1920F, 1080F))
                 )))
         setFontScale(3f)
         setAlignment(Align.bottomRight, Align.bottomRight)
-        addListener(object : ClickListener()
-        {
-            override fun clicked(event: com.badlogic.gdx.scenes.scene2d.InputEvent?, x: Float, y: Float)
-            {
-                println("Start button clicked.")
+        addListener(object : ClickListener() {
+            override fun clicked(event: com.badlogic.gdx.scenes.scene2d.InputEvent?, x: Float, y: Float) {
                 startGame()
             }
         })
     }
 
-    init
-    {
+    init {
 
         instance = this
         val resolver = InternalFileHandleResolver()
@@ -105,41 +107,39 @@ class MainMenu(val entry: EntryClass) : Stage(FitViewport(1920F, 1080F))
         }
     }
 
-    fun playMusic()
-    {
+    fun playMusic() {
 
         music.isLooping = true
         music.play()
 
     }
 
-    override fun keyTyped(character: Char): Boolean
-    {
+    override fun keyTyped(character: Char): Boolean {
 
         return super.keyTyped(character)
     }
 
-    fun startGame()
-    {
+    fun startGame() {
         music.stop()
         val savedGamePath = System.getenv("SAVED_GAME")
         var newGame: GameState
         startbutton.setText("Loading...")
-        if (savedGamePath == null)
-        {
+        if (savedGamePath == null) {
             println("Loading init.json...")
             newGame = Json.decodeFromString(
                 GameState.serializer(),
                 Gdx.files.internal("json/init.json").readString()
             ).also {
                 println("Loading complete.")
+                it.workingDirectory =
+                    "data" + Calendar.getInstance().time.toString("YYYYMMdd_HHmmss")//DO not put this statement when loading existing game or in initialize(); it will mess up with GameEngineTest.
                 it.initialize()
                 entry.stage = CapsuleStage(it)
                 Gdx.input.inputProcessor = entry.stage
             }
             newGame.onStart.forEach { it() }
-        } else
-        {
+        } else {
+            //TODO: Check QuickLoad for the same logic.
             println("Loading saved game from $savedGamePath...")
             newGame = Json.decodeFromString(
                 GameState.serializer(),
@@ -152,16 +152,16 @@ class MainMenu(val entry: EntryClass) : Stage(FitViewport(1920F, 1080F))
             }
         }
         println("Starting game engine.")
+        GameEngineThreadHandler.startEngine(newGame)
+    }
 
-        thread(start = true) {
-            val engine = GameEngine(newGame)
-            engine.startGame()
-        }
+    private fun Date.toString(format: String, locale: Locale = Locale.getDefault()): String {
+        val formatter = SimpleDateFormat(format, locale)
+        return formatter.format(this)
     }
 
 
-    companion object
-    {
+    companion object {
         lateinit var instance: MainMenu
     }
 

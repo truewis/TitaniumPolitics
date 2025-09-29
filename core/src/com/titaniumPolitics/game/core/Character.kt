@@ -1,44 +1,76 @@
 package com.titaniumPolitics.game.core
 
+import com.titaniumPolitics.game.core.ReadOnly.const
+import com.titaniumPolitics.game.core.gameActions.Arrest
+import com.titaniumPolitics.game.core.gameActions.BlockAccess
+import com.titaniumPolitics.game.core.gameActions.ClearAccidentScene
 import com.titaniumPolitics.game.core.gameActions.GameAction
+import com.titaniumPolitics.game.core.gameActions.InvestigateAccidentScene
+import com.titaniumPolitics.game.core.gameActions.NewAgenda
+import com.titaniumPolitics.game.core.gameActions.OfficialResourceTransfer
+import com.titaniumPolitics.game.core.gameActions.Repair
+import com.titaniumPolitics.game.core.gameActions.UnofficialResourceTransfer
+import com.titaniumPolitics.game.debugTools.Logger
 import kotlinx.serialization.Serializable
+import kotlin.math.max
+import kotlin.math.min
 
 @Serializable
-class Character : GameStateElement()
-{
+class Character : GameStateElement() {
+    @Serializable
+    enum class Type {
+        DIRECTOR, EMPLOYEE, ANON
+    }
+
+    /**
+     * The will of the character to do something.
+     * It is calculated based on the mutuality with the character.
+     * Do not set it here,  as it has to be set with reasonKey with setMutuality() function.
+     */
+    val will: Double
+        get() = parent.getMutuality(name)
+    private var _name: String? = null
     override val name: String
-        get() = parent.characters.filter { it.value == this }.keys.first()
+        get() = _name ?: parent.characters.filter { it.value == this }.keys.first().also { _name = it }
     var alive = true
+        private set
     var trait = hashSetOf<String>()
-    var resources = hashMapOf<String, Int>()
-    var preparedInfoKeys = arrayListOf<String>()//Information that can be presented in meetings.
-    var health = 0
-        set(value)
-        {
-            field = if (value < 100) value else 100//Max health is 100.
+    var type = Type.DIRECTOR
+
+    val resources: Resources
+        get() =
+            parent.places["home_$name"]!!.resources
+
+    /**Information that can be presented in meetings. Note that preparing the information prevents it from expiring.*/
+    var preparedInfoKeys =
+        arrayListOf<String>()
+
+    var stats = Stat() //Stats of the character. Used to calculate the effectiveness of actions.
+    var age = 30
+    var health = .0
+        set(value) {
+            field = if (value < const("HealthMax")) value else const("HealthMax")//Max health is 100.
         }
-    var hunger = 0
-        set(value)
-        {
-            field = when
-            {
-                value < 0 -> 0
-                value > 100 -> 100
+    var hunger = .0
+        set(value) {
+            field = when {
+                value < .0 -> .0
+                value > const("HungerMax") -> const("HungerMax")
                 else -> value
             }//Max hunger is 100.
         }
-    var thirst = 0
-        set(value)
-        {
-            field = when
-            {
-                value < 0 -> 0
-                value > 100 -> 100
+    var thirst = .0
+        set(value) {
+            field = when {
+                value < .0 -> .0
+                value > const("ThirstMax") -> const("ThirstMax")
                 else -> value
             }//Max thirst is 100.
         }
-    var reliants =
-        hashSetOf<String>() //Characters that this character is responsible for. If they die, this character will be sad. They consume water and ration every day.
+
+    /**Characters that this character is responsible for. If they die, this character will be sad. They consume water and ration every day. Always bigger or equal to 1*/
+    var reliant =
+        1
     val scheduledMeetings: HashMap<String, Meeting>
         get() = parent.scheduledMeetings.filter { it.value.scheduledCharacters.contains(name) } as HashMap<String, Meeting>
     var livingBy = ""
@@ -49,139 +81,447 @@ class Character : GameStateElement()
 
     val currentMeeting
         get() = parent.ongoingMeetings.values.firstOrNull { it.currentCharacters.contains(name) }
+    val division
+        get() = parent.parties.values.find { it.members.contains(name) && it.type == Party.Type.DIVISION }
+    var assistants =
+        hashSetOf<String>()//TODO: Think about utilizing assistants. How do we pay them? How is it different from requests between free individuals?
 
-    val history = hashMapOf<Int, String>()
-    val finishedRequests =
-        HashSet<String>() //Requests that this character thinks are finished. The recipient of the request may not be aware of this yet.
+    //They improve resource transfer speed and prepare information speed.
+    //You can hire specialists to write you various reports, which appears as separate UIs as well.
+    var mercenaries = hashSetOf<String>()
 
+    val history = arrayListOf<String>()
+    val onSpeech = arrayListOf<(String, Double) -> Unit>()
 
-    //TODO: value may be affected by power dynamics.
-    fun itemValue(item: String): Double
-    {
-        return when (item)
-        {
-            //Value of ration and water is based on the current need of the character.
-            "ration" -> 5.0 * (reliants.size + 1.0) / ((resources["ration"] ?: 0) + 1.0)
-            "water" -> (reliants.size + 1.0) / ((resources["water"] ?: 0) + 1.0)
-            "hydrogen" -> 1.0
-            "organics" -> 5.0
-            "lightMetal" -> 1.0
-            "heavyMetal" -> 1.0
-            "rareMetal" -> 5.0
-            "silicon" -> 1.0
-            "plastic" -> 10.0
-            "glass" -> 1.0
-            "ceramic" -> 1.0
-            "diamond" -> 3.0
-            "helium" -> 1.0
-            "glassClothes" -> 1.0
-            "cottonClothes" -> 10.0
+    /**Requests that this character thinks are finished. The recipient of the request may not be aware of this yet. This is handled in Request.refresh().*/
+    val executedRequests =
+        HashSet<String>()
 
-            else -> 0.0
-        }
+    fun hireCost(): Double {
+        return 10000.0 / parent.idlePop
+    }
+
+    /**Item value is normalized to mutuality.*/
+    fun itemValue(resources: Resources): Double {
+        var sum = .0
+        resources.forEach { (key, value) -> sum += itemValue(key) * value }
+        return sum
 
     }
 
-    fun actionValue(action: GameAction): Double
-    {
-        //TODO: the value of the action should be calculated based on the expected outcome.
-        //TODO: Action to remove rivals is more valuable.
-        //TODO: Action to acquire resources is more valuable.
-
-        //Action to repair the character's apparatus is more valuable.
-        if (action.javaClass.simpleName == "repair" && parent.parties[parent.places[action.tgtPlace]!!.responsibleParty]?.members?.contains(
-                name
-            ) == true
+    fun randomizeTraitAndStats() {
+        //Randomly assign a trait to the character.
+        val traits = listOf(
+            "gourmand",
+            "psychopath",
+            "charismatic",
+            "shy",
+            "introvert",
+            "extrovert",
+            "lazy",
+            "hardworking",
+            "atheist",
+            "artificialist",
+            "spiritualist"
         )
-        {
-            val urgency =
-                100.0 - parent.places[action.tgtPlace]!!.apparatuses.sumOf { it.durability } / parent.places[action.tgtPlace]!!.apparatuses.size
-            return urgency
+        trait.add(traits.random())
+        //Everyone is either a thief or a bargainer.
+        if ((0..1).random() == 0)
+            trait.add("thief")
+        else
+            trait.add("bargainer")
+        //Randomly assign stats to the character.
+        stats = Stat(
+            logos = (6..15).random(),
+            ethos = (6..15).random(),
+            pathos = (6..15).random(),
+            riskTaking = (6..15).random(),
+        )
+        age = (20..60).random()
+        if (type == Type.EMPLOYEE) {
+            reliant = (1..5).random() //Employees have 1 to 5 reliant.
         }
-
-        return 1.0
+        if (reliant == 0 && type != Type.ANON) {
+            //If the character has no reliant, they are more willing to take risks.
+            stats.riskTaking += 5
+        }
+        if ("introvert" in trait) {
+            stats.logos = min(stats.logos + 1, 20)
+            stats.ethos = max(stats.ethos - 1, 1)
+            stats.pathos = max(stats.pathos - 1, 1)
+        }
+        if ("extrovert" in trait) {
+            stats.logos = max(stats.logos - 1, 1)
+            stats.ethos = min(stats.ethos + 1, 20)
+            stats.pathos = min(stats.pathos + 1, 20)
+        }
+        if ("miner" in trait) {
+            stats.riskTaking = min(stats.riskTaking + 3, 20)
+        }
+        if ("administrator" in trait) {
+            stats.riskTaking = max(stats.riskTaking - 3, 1)
+        }
     }
 
-    //The character's preference of this information spreading. -1 is hate, 0 is neutral, 1 is like.
-    //TODO: preference depend on the trait of the character. When other characters use this function, the trait must be not reflected since they don't know the trait.
-    fun infoPreference(info: Information): Double
-    {
-        //Is the information about the character itself?
-        if (info.tgtCharacter == name)
-        {
-            //The character don't like information about its wrongdoings.
-            //Stole resource
-            if (info.type == InformationType.ACTION && info.action!!.javaClass.simpleName == "UnofficialResourceTransfer")
-                return -1.0
-            //Stayed in home during work hours
-            //Did their job well
-            if (info.type == InformationType.ACTION && info.action!!.javaClass.simpleName == "NewAgenda")
-                return 0.5
-            if (info.type == InformationType.ACTION && info.action!!.javaClass.simpleName == "AddInfo")
-                return 0.5
-            if (info.type == InformationType.ACTION && info.action!!.javaClass.simpleName == "OfficialResourceTransfer")
-                return 0.5
-            if (info.type == InformationType.ACTION && info.action!!.javaClass.simpleName == "InvestigateAccidentScene")
-                return 1.0
-            if (info.type == InformationType.ACTION && info.action!!.javaClass.simpleName == "ClearAccidentScene")
-                return 1.0
+    fun kill() {
+        if (!alive)
+            Logger.write("${name} is already dead.", Logger.LogLevel.ERROR)
+        if (type == Type.ANON)
+            Logger.write(
+                "${name} is an anon, killing them is not allowed.",
+                Logger.LogLevel.ERROR
+            )
+        Logger.write("${name} died.", Logger.LogLevel.INFO)
+        place.resources.plusAssign(Resources("corpse" to 100.0 * reliant)) //Add corpses to the place.
+        place.characters -= name //Remove from the place.
+        parent.parties.values.forEach {
+            it.removeMember(name)
+        } //Remove from all parties.
+        alive = false
+    }
 
-            //Depends on their party
-            parent.parties.filter { it.value.members.contains(name) }.forEach { party ->
-                when (party.key)
-                {
-                    "infrastructure" ->
-                    {
-                        if (info.type == InformationType.ACTION && info.action!!.javaClass.simpleName == "Repair")
-                            return 1.0
+    fun killReliant(num: Int) {
+        if (num == 0) return
+        if (num >= reliant) throw Exception()
+        reliant -= num
+        parent.popChanged.forEach { it() }
+        hunger = 0.0//This character ate the reliant.
+        thirst = 0.0
+        resources["corpse"] += num * 100.0 //1 corpse is 100 kg.
+        Logger.write(
+            "Killed $num reliant of $name at ${place.name}. Now has ${reliant} reliant.",
+            Logger.LogLevel.INFO
+        )
+        if (type != Type.ANON) {
+            //The character is sad.
+            parent.setMutuality(
+                name,
+                name,
+                -100.0,
+                "killReliant"
+            )
+            //Risk taking decreases if reliant is still greater than 0.
+            if (reliant > 0)
+                stats.riskTaking = max(stats.riskTaking - 2, 0)
+            else
+            //Risk taking increases if no reliant is left.
+                stats.riskTaking = min(stats.riskTaking + 5, 20)
+            //If the character is atheist, they may become religious.
+            if ("atheist" in trait) {
+                trait.remove("atheist")
+                if ((0..1).random() == 0)
+                    trait.add("spiritualist")
+                else
+                    trait.add("artificialist")
+            }
+        }
+        Information.createRumor(parent).apply {
+            type = InformationType.CASUALTY
+            tgtPlace = place.name
+            auxParty = place.responsibleDivision
+            amount = num
+        }.also {
+            it.knownTo += name
+        }
+
+    }
+
+    fun itemValueModifier(item: String): Double {
+        when (item) {
+            "ration" -> return max(
+                (reliant) / (resources["ration"] + 1.0),
+                1.0
+            )//1 kg of ration is enough for 1 people for a day.
+            "water" -> max((reliant) / (resources["water"] + 1.0), 1.0)//1 kg of water is enough for 1 people for a day.
+        }
+        return 1.0 //TODO: Implement item value modifier based on the character's trait.
+    }
+
+    /**Item value is normalized to mutuality.*/
+    //TODO: value may be affected by power dynamics.
+    fun itemValue(item: String): Double {
+        val ret = parent.getMarketPrice(item)
+        return ret * itemValueModifier(item)
+
+    }
+
+    fun actionValue(action: GameAction): Double {
+        //TODO: the value of the action should be calculated based on the expected outcome.
+
+        when (action) {
+            is UnofficialResourceTransfer -> {
+                //Action value of unofficial resource transfer from me is equal to the value of the resources transferred.
+                if (action.sbjCharacter == name && action.fromHome) {
+                    val ret = -itemValue(action.resources)
+                    onSpeech.forEach {
+                        it("ActionValue-UnofficialResourceTransfer", ret)
+                    }
+                    return ret
+                }
+                if (action.toWhere == "home_$name") {
+                    val ret = itemValue(action.resources)
+                    onSpeech.forEach {
+                        it("ActionValue-UnofficialResourceTransfer", ret)
+                    }
+                    return ret
+                }
+            }
+
+            is OfficialResourceTransfer -> {
+                //Action value of official resource transfer depends on the division integrity.
+                //for not, set it to 0.
+                return .0
+            }
+
+            is Repair -> {
+                //Fixing the apparatus where I am the manager is more valuable.
+                //This scales with division integrity.
+                val div =
+                    parent.parties.filter { name in it.value.members && it.value.type == Party.Type.DIVISION }.keys.firstOrNull()
+                        ?: return 0.0
+                val factor = if (place.manager == name) 2.0 else 1.0
+                val urgency =
+                    1.0 - parent.places[action.tgtPlace]!!.apparatuses.sumOf { it.durability } / parent.places[action.tgtPlace]!!.apparatuses.size / 100.0
+                if (parent.places[action.tgtPlace]!!.responsibleDivision == div) {
+                    val ret = urgency * parent.getPartyMutuality(div) * factor
+                    onSpeech.forEach {
+                        it("ActionValue-Repair", ret)
+                    }
+                    return ret
+                }
+                //Otherwise, the action value is 0.
+                return 0.0
+            }
+
+            is ClearAccidentScene -> {
+                //Clearing the accident scene is more valuable if I am the manager of the place.
+                if (parent.places[action.tgtPlace]!!.responsibleDivision == division?.name) {
+                    val factor = if (place.manager == name) 2.0 else 1.0
+                    val ret = factor * parent.getPartyMutuality(division!!.name)
+                    onSpeech.forEach {
+                        it("ActionValue-ClearAccidentScene", ret)
+                    }
+                    return ret
+                }
+                return 0.0
+            }
+
+            is InvestigateAccidentScene -> {
+                //I hate someone investigating the accident scene where I am the manager.
+                if (parent.places[action.tgtPlace]!!.responsibleDivision == division?.name) {
+                    if (place.manager == name && action.sbjCharacter != name) {
+                        val ret = (const("mutualityMax") - parent.getPartyMutuality(division!!.name)) * 0.5
+                        onSpeech.forEach {
+                            it("ActionValue-InvestigateAccidentScene", ret)
+                        }
+                        return ret
+                    }
+                }
+                return 0.0
+            }
+
+            is NewAgenda -> {
+                when (action.agenda.type) {
+                    AgendaType.PROOF_OF_WORK -> return 0.0 //TODO()
+                    AgendaType.NOMINATE -> {
+                        //If it is someone else nominating me, like. If it is nominating someone else, dislike. Neutral if it is not my division.
+                        if (action.agenda.subjectParams["character"] == name)
+                            return 20.0
+                        else if (action.agenda.subjectParams["party"] == division?.name)
+                            return -10.0
+                        return 0.0
+                    }
+
+
+                    AgendaType.REQUEST -> return 0.0 // Prevent nested request!
+                    AgendaType.PRAISE -> {
+                        //Based on the mutuality.
+                        val ret = parent.getMutNorm(name, action.agenda.subjectParams["character"]!!) * 5.0
+                        onSpeech.forEach {
+                            it("ActionValue-Praise", ret)
+                        }
+                        return ret
+                    }
+
+                    AgendaType.DENOUNCE -> {
+                        //Based on the mutuality.
+                        val ret = parent.getMutNorm(name, action.agenda.subjectParams["character"]!!) * -7.0
+                        onSpeech.forEach {
+                            it("ActionValue-Denounce", ret)
+                        }
+                        return ret
+                    }
+
+                    AgendaType.PRAISE_PARTY -> {
+                        //Based on the party's mutuality.
+                        return parent.getMutNorm(
+                            name, parent.parties[action.agenda.subjectParams["party"]!!
+                            ]!!.leader
+                        ) * 3.0
+                    }
+
+                    AgendaType.DENOUNCE_PARTY -> {
+                        //Based on the party's friendliness.
+                        return parent.getMutNorm(
+                            name, parent.parties[action.agenda.subjectParams["party"]!!
+                            ]!!.leader
+                        ) * -5.0
+                    }
+
+                    AgendaType.BUDGET_PROPOSAL -> return 0.0 // TODO()
+                    AgendaType.BUDGET_RESOLUTION -> return 0.0 // TODO()
+                    AgendaType.APPOINT_MEETING -> return 0.0// TODO()
+                    AgendaType.FIRE_MANAGER -> {
+                        //If firing me, heavy dislike.
+                        if (action.agenda.subjectParams["character"] == name)
+                            return -30.0
+                        //Otherwise, if firing my friend, dislike.
+                        else return parent.getMutNorm(name, action.agenda.subjectParams["character"]!!) * -20.0
                     }
                 }
             }
 
+            else -> {
+
+            }
         }
-        //If the information is about some other people, the character's preference depends on their relationship with the target.
-        //The target character's preference is reflected.
-        else
-        {
-            if (parent.getMutuality(
-                    name,
-                    info.tgtCharacter
-                ) > (ReadOnly.const("mutualityMin") + ReadOnly.const("mutualityMax")) / 2
-            )
-                return parent.characters[info.tgtCharacter]!!.infoPreference(info)
-            else
-                return -parent.characters[info.tgtCharacter]!!.infoPreference(info)
+
+
+        //TODO: Action to remove rivals is more valuable.
+
+        return .0
+    }
+
+    /**The character's preference of this information spreading. -100 is hate, 0 is neutral, 100 is like.*/
+    //TODO: preference depend on the trait of the character. When other characters use this function, the trait must be not reflected since they don't know the trait.
+    fun infoPreference(info: Information): Double {
+        var ret = .0
+        //Is the information about the character itself?
+        if (info.tgtCharacter == name) {
+            //The character don't like information about its wrongdoings.
+            //Stole resource
+            if (info.type == InformationType.ACTION && info.action is UnofficialResourceTransfer && !(info.action as UnofficialResourceTransfer).fromHome /*If not from any homes, it is probably stolen. We don't care about the destination.*/)
+                ret = -1e-1 * stats.pScale
+            //Stayed in home during work hours?
+            //Did their job well
+            if (info.type == InformationType.ACTION && info.action is OfficialResourceTransfer)
+                ret = 5e-2
+            if (info.type == InformationType.ACTION && info.action is InvestigateAccidentScene)
+                ret = 1e-1
+            if (info.type == InformationType.ACTION && info.action is ClearAccidentScene)
+                ret = 1e-1
+
+            //Depends on their party
+            parent.parties.filter { it.value.members.contains(name) }.forEach { party ->
+                when (party.key) {
+                    "infrastructure" -> {
+                        if (info.type == InformationType.ACTION && info.action is Repair)
+                            ret = 1e-1
+                    }
+
+                    "safety" -> {
+                        if (info.type == InformationType.ACTION && info.action is BlockAccess)
+                            ret = 1e-1
+                        if (info.type == InformationType.ACTION && info.action is Arrest)
+                            ret = 1e-1
+                    }
+                }
+            }
+
+        } else {
+            when (info.type) {
+                //If the information is about casualties in a place I manage or my division manages, I don't like it.
+                //Otherwise, I like it.
+                InformationType.CASUALTY, InformationType.ACCIDENT, InformationType.SOUND -> {
+                    val plObj = parent.places[info.tgtPlace]!!
+                    if (plObj.workplaceParty?.leader == name || parent.parties[plObj.responsibleDivision]?.leader == name) {
+                        ret = -1e-1 * stats.lScale
+                    } else
+                        ret = 3e-2 * stats.lScale
+                }
+
+                InformationType.ACTION -> {
+                    //I don't like unresolved requests that are given to me.
+                    if ((info.action is NewAgenda) && (info.action as NewAgenda).agenda.type == AgendaType.REQUEST
+                        && (info.action as NewAgenda).agenda.attachedRequest!!.issuedTo.contains(name) && !(info.action as NewAgenda).agenda.attachedRequest!!.completed
+                    ) {
+                        ret = -1e-1 * (1 - (info.action as NewAgenda).agenda.attachedRequest!!.issuedBy.sumOf {
+                            parent.getMutNorm(
+                                name,
+                                it
+                            )
+                        } / (info.action as NewAgenda).agenda.attachedRequest!!.issuedBy.size) * stats.pScale
+                        //If I hate the issuers, I hate this information even more. If I like the issuers, I don't hate this information as much.
+                    }
+                }
+
+                InformationType.APPARATUS -> {
+                    //If the information is about the apparatus of a place I manage or my division manages, I like it depends on the condition of the apparatus.
+                    val plObj = parent.places[info.tgtPlace]!!
+                    if (plObj.manager == name || parent.parties[plObj.responsibleDivision]?.leader == name) {
+                        ret =
+                            1e-1 * stats.eScale * (parent.getApparatus(info.tgtApparatusID!!).durability / 100.0 - 0.7)
+                    }
+                }
+
+                InformationType.HUMAN_RESOURCES, InformationType.RESOURCES -> {
+                    //I generally don't like information about resources and human resources of places I manage or my division manages.
+                    val plObj = parent.places[info.tgtPlace]!!
+                    if (plObj.manager == name || parent.parties[plObj.responsibleDivision]?.leader == name) {
+                        ret = -5e-2 * stats.pScale
+                    }
+                }
+
+                else -> {
+                    //Otherwise, if the information is about some other people, the character's preference depends on their relationship with the target.
+                    //The target character's preference is reflected.
+                    info.tgtCharacter?.run {
+                        ret =
+                            parent.characters[this]!!.infoPreference(info) / const("mutualityMax") * parent.getMutNorm(
+                                name,
+                                this
+                            ) * stats.eScale
+                    }
+                }
+            }
+
+
+            //Mutuality and Party Mutuality information are only used as decisions, not gossips.
+            //For gossips, characters can share actual actions and casualties.
 
         }
 
 
         //Otherwise, the character is neutral to the information.
-        return 0.0
+        return ret * const("mutualityMax")
     }
 
-    @Deprecated("This function has lost its purpose with the removal of trade.")
-    fun infoValue(info: Information): Double
-    {
-        //Known information is less valuable.
-        if (info.knownTo.contains(name))
-            return 0.0
-        //Information about the character itself is more valuable.
-        if (info.tgtCharacter == name)
-            return 2.0
-        //Information about the character's party is more valuable.
-        if (parent.parties[info.tgtParty]?.members?.contains(name) == true)
-            return 2.0
-        //Information about valuable resource is more valuable.
-        if (info.type == InformationType.RESOURCES)
-            return info.resources.keys.sumOf { itemValue(it) * info.resources[it]!! }
-        //UnofficialTransfer is more valuable if it is not known to the other character.
-        if (info.type == InformationType.ACTION && info.action!!.javaClass.simpleName == "unofficialResourceTransfer" && !info.knownTo.contains(
-                name
-            )
-        )
-            return 10.0
-
-        return 1.0
+    fun generatePositionText(): String {
+        var position = ""
+        if (this.name == "ctrler")
+            return ReadOnly.prop("ctrler")
+        if (this.name == "observer")
+            return ReadOnly.prop("observer")
+        val leadingParties = parent.parties.values.filter { it.leader == this.name }
+        if (leadingParties.isEmpty()) {
+            val workplaceParty =
+                parent.parties.values.firstOrNull { this.name in it.members && it.type == Party.Type.WORKPLACE }
+            if (workplaceParty != null) {
+                position = ReadOnly.prop(workplaceParty.getRole(this.name).toString() + "-dialogue")
+                    .format(ReadOnly.placeProp(workplaceParty.home!!))
+            }
+        } else {
+            //Check if char leads cabinet, division, or workplace party
+            if (leadingParties.any { it.type == Party.Type.CABINET }) {
+                position = ReadOnly.prop("mechanic")
+            } else if (leadingParties.any { it.type == Party.Type.DIVISION }) {
+                val divisionParty = leadingParties.first { it.type == Party.Type.DIVISION }
+                position = ReadOnly.prop("divisionLeader-dialogue").format(ReadOnly.prop(divisionParty.name))
+            } else if (leadingParties.any { it.type == Party.Type.WORKPLACE }) {
+                val workplaceParty = leadingParties.first { it.type == Party.Type.WORKPLACE }
+                position = ReadOnly.prop("director-dialogue").format(ReadOnly.placeProp(workplaceParty.home!!))
+            }
+        }
+        return position
     }
-
 }

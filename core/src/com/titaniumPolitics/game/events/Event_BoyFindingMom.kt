@@ -1,39 +1,27 @@
 package com.titaniumPolitics.game.events
 
-import com.titaniumPolitics.game.core.GameState
-import com.titaniumPolitics.game.ui.DialogueUI
+import com.titaniumPolitics.game.core.Request
+import com.titaniumPolitics.game.core.gameActions.Talk
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.Transient
 
 @Serializable
-class Event_BoyFindingMom : EventObject("A boy with a box.", true)
-{
-    //Infrastructure Division Leader gives a speech. Quest is completed when the game starts.
-    override fun injectParent(gameState: GameState)
-    {
-        super.injectParent(gameState)
-        //Injected at the start of the game. No action required.
+class Event_BoyFindingMom : EventObject("A boy with a box.", true) {
 
-    }
-
-    @Transient
-    val func = { _: Int, _: Int ->
-        if (parent.hour in 9..12 && parent.player.currentMeeting == null && parent.player.place.name == "squareNorth"
-        )
-        {
-            DialogueUI.instance.playDialogue("FindMom")
-            parent.eventSystem.dataBase.add(Event_BoyFindingMom2())
+    override fun exec(a: Int, b: Int) {
+        if (parent.hour in 9..12 && parent.player.currentMeeting == null && parent.player.place.name == "market" &&
+            "Yuri" in parent.player.place.characters
+        ) {
+            onPlayDialogue("FindMom")
+            Request(
+                action = Talk("Yuri", "market", "Rui"),
+                issuedTo = hashSetOf("Yuri"),
+            ).apply {
+                parent.requests[generateName()] = this
+            }
+            parent.eventSystem.add(Event_BoyFindingMom2())
             deactivate()
         }
     }
 
-    override fun activate()
-    {
-        parent.timeChanged += func
-    }
 
-    override fun deactivate()
-    {
-        parent.timeChanged -= func
-    }
 }

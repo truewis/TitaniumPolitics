@@ -1,39 +1,25 @@
 package com.titaniumPolitics.game.events
 
-import com.titaniumPolitics.game.core.GameState
-import com.titaniumPolitics.game.ui.DialogueUI
+import com.titaniumPolitics.game.ui.Quest
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 
 @Serializable
-class Event_ObserverIntroAfterMeeting1 : EventObject("Mysterious orders from the Observer.", true)
-{
-    //Infrastructure Division Leader gives a speech. Quest is completed when the game starts.
-    override fun injectParent(gameState: GameState)
-    {
-        super.injectParent(gameState)
-        //Injected at the start of the game. No action required.
-
-    }
+class Event_ObserverIntroAfterMeeting1 : EventObject("Mysterious orders from the Observer.", true), IQuestEventObject {
 
     @Transient
-    val func = { _: Int , _: Int ->
-        if(parent.player.currentMeeting == null) {
-            DialogueUI.instance.playDialogue("ObserverIntroAfterMeeting1")
-            parent.eventSystem.dataBase.add(Event_ObserverIntroAfterMeeting2())
+    override val quest = Quest(
+        "Mysterious orders from the Observer",
+        "The Observer has told you to pay a visit to the Observatory.",
+        "observatory"
+    )
+
+    override fun exec(a: Int, b: Int) {
+        if (parent.player.currentMeeting == null) {
+            onPlayDialogue("ObserverIntroAfterMeeting1")
+            parent.eventSystem.add(Event_ObserverIntroAfterMeeting2())
             deactivate()
         }
     }
 
-    override fun activate()
-    {
-        //Play dialogue right after the meeting
-        //TODO: check if the player has followed the orders.
-        parent.timeChanged += func
-    }
-
-    override fun deactivate()
-    {
-        parent.timeChanged -= func
-    }
 }

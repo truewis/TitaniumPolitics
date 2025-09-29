@@ -1,6 +1,9 @@
 package com.titaniumPolitics.game.events
 
+import com.titaniumPolitics.game.core.EventSystem
 import com.titaniumPolitics.game.core.GameState
+import com.titaniumPolitics.game.debugTools.Logger
+import com.titaniumPolitics.game.ui.widget.SpeechUI
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 
@@ -8,24 +11,46 @@ import kotlinx.serialization.Transient
  *
  */
 @Serializable
-sealed class EventObject(var name: String, val oneTime: Boolean)
-{
+sealed class EventObject(var name: String, val oneTime: Boolean) {
     @Transient
     lateinit var parent: GameState
-    open fun injectParent(gameState: GameState)
-    {
+
+    var active = true
+        private set
+
+    open fun injectParent(gameState: GameState) {
         parent = gameState
+        //Only update the quest for active quests.
+        if (active && this is IQuestEventObject) {
+            try {
+                parent.eventSystem.updateQuest(this, quest)
+            } catch (e: Exception) {
+                Logger.write("Error updating quest for event $name: ${e.message}")
+            }
+        }
     }
 
-    //This event will be triggered by the game. Subscribe to events here.
-    abstract fun activate()
+    abstract fun exec(a: Int, b: Int)
+
 
     //This event will not be triggered by the game. Unsubscribe from events here.
-    abstract fun deactivate()
+    fun deactivate(success: Boolean = true) {
+        active = false
+        if (this is IQuestEventObject) {
+            try {
+                parent.eventSystem.finishQuest(this, success)
+            } catch (e: Exception) {
+                Logger.write("Error finishing quest for event $name: ${e.message}")
+            }
+        }
+    }
 
-    open fun displayEmoji(who: String): Boolean
-    {
-        return false
+    open fun displayEmoji(who: String): SpeechUI.EmojiType {
+        return SpeechUI.EmojiType.NONE
+    }
+
+    fun onPlayDialogue(dialogueKey: String) {
+        EventSystem.onPlayDialogue.forEach { it(dialogueKey) }
     }
 
 }

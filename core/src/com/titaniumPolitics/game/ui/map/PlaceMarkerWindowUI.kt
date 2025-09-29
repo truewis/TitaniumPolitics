@@ -1,98 +1,289 @@
 package com.titaniumPolitics.game.ui.map
 
-import com.titaniumPolitics.game.core.GameEngine
-import com.titaniumPolitics.game.core.GameState
-import com.titaniumPolitics.game.core.ReadOnly
+import com.badlogic.gdx.graphics.Color
+import com.badlogic.gdx.graphics.Color.BLACK
+import com.badlogic.gdx.scenes.scene2d.Actor
+import com.badlogic.gdx.scenes.scene2d.ui.Label
+import com.badlogic.gdx.scenes.scene2d.ui.Table
+import com.badlogic.gdx.utils.Align
+import com.titaniumPolitics.game.core.*
+import com.titaniumPolitics.game.core.GameEngine.Companion.AcquireParams
 import com.titaniumPolitics.game.core.gameActions.Move
-import com.titaniumPolitics.game.ui.FloatingWindowUI
+import com.titaniumPolitics.game.core.gameActions.Talk
+import com.titaniumPolitics.game.core.gameActions.Wait
+import com.titaniumPolitics.game.debugTools.Logger
+import com.titaniumPolitics.game.ui.AlertUI
+import com.titaniumPolitics.game.ui.ProgressBackgroundUI
+import com.titaniumPolitics.game.ui.widget.DescriptionLabel
+import com.titaniumPolitics.game.ui.widget.InformationSourceUI
+import com.titaniumPolitics.game.ui.widget.ResourceDisplayUI
+import com.titaniumPolitics.game.ui.widget.TitleLabel
 import ktx.scene2d.button
 import ktx.scene2d.label
 import ktx.scene2d.scene2d
+import ktx.scene2d.stack
+import ktx.scene2d.table
 
-class PlaceMarkerWindowUI(var gameState: GameState, var owner: MapUI) : FloatingWindowUI()
-{
+class PlaceMarkerWindowUI(var gameState: GameState, var owner: MapUI) : Table() {
     var placeDisplayed = ""
+    val distance
+        get() = (gameState.player.place.shortestPathAndTimeTo(placeDisplayed, gameState.playerName)?.second
+            ?: 0) * ReadOnly.DT / 60
     var mode = ""
-    private val moveButton = scene2d.button {
-        label("Move to Place") {
-            setFontScale(2f)
-        }
+    var interrupted =
+        true//Only used in move mode. Initially true to prevent any interruption handling before move starts.
+    var tgtDestination = ""//Only used in move mode.
+    private val onRefresh = mutableListOf<() -> Unit>()
+    val onClose = mutableListOf<() -> Unit>()
+    val content = Table()
+    val titleLabel = TitleLabel("", 0.5f)
 
-        addListener(object : com.badlogic.gdx.scenes.scene2d.utils.ClickListener()
-        {
-            override fun clicked(event: com.badlogic.gdx.scenes.scene2d.InputEvent?, x: Float, y: Float)
-            {
-                //Move to place.
-                val action = Move(
-                    this@PlaceMarkerWindowUI.gameState.playerName,
-                    this@PlaceMarkerWindowUI.gameState.player.place.name
-                )
-                action.placeTo = this@PlaceMarkerWindowUI.placeDisplayed
-                action.injectParent(this@PlaceMarkerWindowUI.gameState)
-                this@PlaceMarkerWindowUI.owner.isVisible = false
-                this@PlaceMarkerWindowUI.isVisible = false
-                GameEngine.acquireCallback(action)
+    init {
+        add(titleLabel).growX().fill()
+        row()
+        add(content).grow()
+        gameState.onAddInfo += this::moveInterruptCondition
+    }
+
+    lateinit var moveLabel: Label
+    private val moveButton = scene2d.button {
+        this@PlaceMarkerWindowUI.moveLabel =
+            label("Move to Place: " + this@PlaceMarkerWindowUI.distance + "m", "description") {
+                setFontScale(0.4f)
+                setAlignment(Align.center)
+                color = Color.WHITE
+            }
+
+        addListener(object : com.badlogic.gdx.scenes.scene2d.utils.ChangeListener() {
+            override fun changed(event: ChangeEvent?, actor: Actor?) {
+                this@PlaceMarkerWindowUI.interrupted = false
+                this@PlaceMarkerWindowUI.tgtDestination = this@PlaceMarkerWindowUI.placeDisplayed
+                GameEngine.acquireEvent += this@PlaceMarkerWindowUI::spendTime
+                spendTime(AcquireParams("", hashMapOf()))
+                ProgressBackgroundUI.instance.setVisibleWithFade(true, "Move")
+                //Close the window after the move action is initiated.
+                onClose.forEach { it() }
             }
         })
     }
 
     private val selectButton = scene2d.button {
-        label("Select Place") {
-            setFontScale(2f)
+        label("Select Place", "description") {
+            setFontScale(0.4f)
+            setAlignment(Align.center)
+            color = Color.WHITE
         }
 
-        addListener(object : com.badlogic.gdx.scenes.scene2d.utils.ClickListener()
-        {
-            override fun clicked(event: com.badlogic.gdx.scenes.scene2d.InputEvent?, x: Float, y: Float)
-            {
+        addListener(object : com.badlogic.gdx.scenes.scene2d.utils.ChangeListener() {
+            override fun changed(event: ChangeEvent?, actor: Actor?) {
                 //Select place.
                 PlaceSelectionUI.instance.selectedPlaceCallback(this@PlaceMarkerWindowUI.placeDisplayed)
-                this@PlaceMarkerWindowUI.owner.isVisible = false
             }
         }
         )
     }
 
-    fun refresh(x: Float, y: Float, placeName: String)
-    {
-        //If the window is already visible, hide it.
-        if (placeDisplayed == placeName && isVisible)
-        {
-            isVisible = false
-            placeDisplayed = ""
 
-        } else
-        {
-            val XOFFSET = 10f
-            val YOFFSET = 10f
-            setPosition(x + XOFFSET, y + YOFFSET)
-            isVisible = true
-            if (placeName.contains("home")) this.titleLabel.setText(ReadOnly.prop("home"))
-            else
-                this.titleLabel.setText(ReadOnly.prop(placeName))
-            placeDisplayed = placeName
+    val resourceInformation = scene2d.table {
+        name = "resourceInformation"
+        it.height = 50f
+        add(
+            TitleLabel(
+                ReadOnly.prop("resourceInformation"),
+                0.3f,
+                BLACK
+            ).apply { left(); label.setAlignment(Align.left) }).height(50f).growX().fill()
+        row()
+        stack {
+            it.growX()
+            val shortLabel = label("No resource information available", "description") {
+                setFontScale(0.2f)
+                setAlignment(Align.left)
+                color = Color.WHITE
+                wrap = true
+            }
+            val rdUI = ResourceDisplayUI()
 
-            //Clear the list of any previous buttons.
-            content.apply {
-                clear()
-                //If place selection mode is active, add the selection button and nothing else.
-                if (mode == "PlaceSelection")
-                {
-                    add(selectButton).size(200f, 50f).fill()
-                    row()
-                } else
-                {
-                    //Disable the button if the player is already in the place. Calling place property will throw an exception when the game is first loaded.
-                    if (gameState.characters[gameState.playerName]!!.place.connectedPlaces.contains(placeDisplayed))
-                    {
-                        add(moveButton).size(200f, 50f).fill()
+            val tb = table {
+            }
+            this@PlaceMarkerWindowUI.onRefresh += {
+                //Update the resource information label with the most recent information about the place.
+                val gState = this@PlaceMarkerWindowUI.gameState
+                gState.informations.values.filter {
+                    it.type == InformationType.RESOURCES && it.tgtPlace == this@PlaceMarkerWindowUI.placeDisplayed && it.knownTo.contains(
+                        gState.playerName
+                    )
+                }.maxByOrNull { it.tgtTime }?.let { info ->
+                    rdUI.current = info.resources
+                    rdUI.refresh()
+                    shortLabel.isVisible = false
+                    tb.isVisible = true
+                    tb.clear()
+                    tb.apply {
+                        this.add(rdUI).growX().fill()
                         row()
+                        this.add(InformationSourceUI(info)).growX()
                     }
                 }
+                    ?: run {
+                        //If no information is available, display a message.
+                        shortLabel.isVisible = true
+                        tb.isVisible = false
+                        shortLabel.setText(
+                            ReadOnly.prop("noResourceInformationAvailable")
+                        )
 
-                add(closeButton).fill().size(200f, 50f)
+                    }
+
             }
-            setSize(350f, 50f + content.prefHeight)
         }
+
+    }
+    val managementInformation = scene2d.table {
+        name = "managementInformation"
+        it.height = 50f
+        add(
+            TitleLabel(
+                ReadOnly.prop("managementInformation"),
+                0.3f,
+                BLACK
+            ).apply { left(); label.setAlignment(Align.left) }).height(50f).growX().fill()
+        row()
+        val divisionLabel = label("Division: ", "description") {
+            it.left()
+            setFontScale(0.2f)
+            setAlignment(Align.left)
+            color = Color.WHITE
+        }
+        row()
+        val managerLabel = label("Manager: ", "description") {
+            it.left()
+            setFontScale(0.2f)
+            setAlignment(Align.left)
+            color = Color.WHITE
+        }
+        this@PlaceMarkerWindowUI.onRefresh += {
+            //Update the resource information label with the most recent information about the place.
+            val gState = this@PlaceMarkerWindowUI.gameState
+            gState.places[this@PlaceMarkerWindowUI.placeDisplayed]!!.responsibleDivision?.run {
+
+                divisionLabel.setText(
+                    "Managed by " + ReadOnly.prop(this)
+                )
+            } ?: divisionLabel.setText(
+                "Managed by: Not assigned"
+            )
+            gState.places[this@PlaceMarkerWindowUI.placeDisplayed]!!.manager?.run {
+                managerLabel.setText(
+                    "Manager: " + ReadOnly.charProp(this)
+                )
+            }
+                ?: managerLabel.setText(
+                    "Manager: Not assigned"
+                )
+        }
+
+    }
+
+    private fun moveInterruptCondition(info: Information) {
+        if (interrupted)
+            return // If already interrupted, do not process further.
+        if (info.tgtPlace == gameState.player.place.name && info.tgtCharacter != gameState.playerName &&
+            info.action is Talk && info.knownTo.contains(gameState.playerName) && info.tgtCharacter in gameState.knownCharactersToPlayer
+        ) {
+
+            AlertUI.instance.addAlert("interruptedMove", ReadOnly.charProp(info.tgtCharacter ?: "Someone"))
+            interrupted = true
+            Logger.write("MoveUI: Move interrupted by ${info.author} at ${info.tgtPlace}", Logger.LogLevel.INFO)
+        }
+        //If I am in a meeting, interrupt the move.
+        if (gameState.player.currentMeeting != null) {
+            AlertUI.instance.addAlert(
+                "interruptedMove",
+                ReadOnly.charProp(
+                    (gameState.player.currentMeeting!!.currentCharacters - gameState.playerName).firstOrNull()
+                        ?: "Someone"
+                )
+            )
+            interrupted = true
+            Logger.write("MoveUI: Move interrupted by ${info.author} at ${info.tgtPlace}", Logger.LogLevel.INFO)
+        }
+
+    }
+
+    /**
+     * This function is called every time the player turn starts while the player is moving to the target destination.
+     * It is called last time when the player arrives at the destination or the move is interrupted, but it does not add a new move action in that case.
+     */
+    fun spendTime(AcquireParams: GameEngine.Companion.AcquireParams) {
+        println("Spend time called in PlaceMarkerWindowUI: ${gameState.time}")
+        if (interrupted) {
+            GameEngine.acquireEvent -= this::spendTime
+            ProgressBackgroundUI.instance.setVisibleWithFade(false, "Move")
+            return
+        }
+        if (gameState.player.place.name == tgtDestination) {
+            GameEngine.acquireEvent -= this::spendTime
+            ProgressBackgroundUI.instance.setVisibleWithFade(false, "Move")
+            return
+        }
+        val nextStop = gameState.player.place.shortestPathAndTimeTo(tgtDestination, gameState.playerName)?.first?.get(1)
+        if (nextStop == null) {
+            AlertUI.instance.addAlert("interruptedMove-noPath", tgtDestination)
+            interrupted = true
+            GameEngine.acquireEvent -= this::spendTime
+            ProgressBackgroundUI.instance.setVisibleWithFade(false, "Move")
+            return
+        }
+        GameEngine.acquireCallback(
+            Move(
+                gameState.playerName,
+                gameState.player.place.name
+            ).apply {
+                placeTo = nextStop
+            }
+        )
+
+    }
+
+    fun refresh(placeName: String) {
+        //setPosition(x + XOFFSET, y + YOFFSET)
+        val txt = ReadOnly.placeProp(placeName)
+        this.titleLabel.label.setText(txt)
+        if (txt.length > 27)
+            this.titleLabel.label.setFontScale(0.4f) //TODO: This is a temporary fix, should be replaced with Issue #124
+        else
+            this.titleLabel.label.setFontScale(0.5f)
+        placeDisplayed = placeName
+
+        //Clear the list of any previous buttons.
+        content.apply {
+            top()
+            clear()
+            //If place selection mode is active, add the selection button and nothing else.
+            if (mode == "PlaceSelection") {
+                add(selectButton).size(400f, 75f).fill()
+                row()
+            } else {
+                moveLabel.setText("Move to Place: ${distance}min")
+                //Disable the button if the player is already in the place. Calling place property will throw an exception when the game is first loaded.
+                if (gameState.characters[gameState.playerName]!!.place.name != placeDisplayed) {
+                    add(moveButton).size(400f, 75f).fill()
+                    row()
+                }
+            }
+            add(resourceInformation).fillX().expandX()
+            row()
+            add(managementInformation).fillX().expandX()
+            row()
+            add(DescriptionLabel(ReadOnly.placeProp("$placeDisplayed-desc")).apply {
+                with(label) {
+                    color = Color.LIGHT_GRAY
+                }
+            }).growX().height(200f).fill().padTop(50f)
+        }
+        setSize(350f, 50f + content.prefHeight)
+        //Update the resource information and management information tables.
+        onRefresh.forEach { it() }
     }
 }

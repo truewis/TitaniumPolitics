@@ -6,12 +6,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton
 import com.titaniumPolitics.game.core.GameState
 import ktx.scene2d.Scene2DSkin.defaultSkin
 
-class ApprovalMeter(gameState: GameState) : Table(defaultSkin)
-{
+class ApprovalMeter(gameState: GameState) : Table(defaultSkin) {
     var l: Label
 
-    init
-    {
+    init {
         l = Label("", defaultSkin, "trnsprtConsole")
         l.setFontScale(2f)
         val b = TextButton("Approval", defaultSkin)
@@ -21,8 +19,7 @@ class ApprovalMeter(gameState: GameState) : Table(defaultSkin)
         gameState.updateUI += { y -> setValue(0/* characters[gameState.playerAgent]!!.approval*/) }
     }
 
-    fun setValue(value: Int)
-    {
+    fun setValue(value: Int) {
         l.setText(value.toString().padStart(2, '0'))
     }
 }

@@ -16,6 +16,7 @@ buildscript {
 plugins {
     id 'org.jetbrains.kotlin.multiplatform' version '1.9.0'
     id 'org.jetbrains.kotlin.plugin.serialization' version '1.9.0'
+    //id "org.jetbrains.kotlinx.dataframe" version "0.15.0"
 }
 allprojects {
     apply plugin: "eclipse"
@@ -74,6 +75,13 @@ project(":core") {
         api "com.rafaskoberg.gdx:typing-label:$typingLabelVersion"
         implementation "space.earlygrey:shapedrawer:$shapedrawerVersion"
         api 'com.github.raeleus.TenPatch:tenpatch:5.2.3'
+        implementation 'org.junit.jupiter:junit-jupiter:5.11.1'
+        implementation "org.junit.platform:junit-platform-launcher:1.7.3"
+        implementation "org.junit.jupiter:junit-jupiter-engine:5.11.1"
+        implementation "org.junit.vintage:junit-vintage-engine:5.11.1"
+        implementation "com.badlogicgames.gdx:gdx-backend-headless:$gdxVersion"
+        implementation "org.jetbrains.kotlinx:dataframe:0.15.0"
+
     }
 }
 kotlin {

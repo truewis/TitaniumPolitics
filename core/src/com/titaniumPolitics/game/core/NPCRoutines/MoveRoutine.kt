@@ -2,45 +2,45 @@ package com.titaniumPolitics.game.core.NPCRoutines
 
 import com.titaniumPolitics.game.core.gameActions.GameAction
 import com.titaniumPolitics.game.core.gameActions.Move
+import com.titaniumPolitics.game.core.gameActions.Wait
+import com.titaniumPolitics.game.debugTools.Logger
 import kotlinx.serialization.Serializable
 
+/**
+ * A routine that moves a character to a destination.
+ * The routine ends when the character reaches the destination.
+ * Shortest path is used to determine the next stop.
+ * If there is no path to the destination, the routine ends with an error.
+ */
 @Serializable
-class MoveRoutine() : Routine()
-{
-    override fun newRoutineCondition(name: String, place: String): Routine?
-    {
+class MoveRoutine(var destination: String) : Routine() {
+    var nextStop = ""
+    override fun newRoutineCondition(name: String, place: String, subroutines: List<Routine>): Routine? {
+        if (place == destination) {
+            return success()
+        } else {
+            if (gState.places[place]!!.shortestPathAndTimeTo(destination, name)?.also {
+                    nextStop = it.first[1]
+                } == null) {
+
+                Logger.write(
+                    "There is no path from $place to ${destination}! Terminating moveRoutine...",
+                    Logger.LogLevel.CONDITION_VERBOSE
+                )
+                return failed()
+            }
+
+        }
         return null
     }
 
-    override fun execute(name: String, place: String): GameAction
-    {
-        val livingBy = gState.characters[name]!!.livingBy
-        if (variables["movePlace"] == "home_$name")
-        {
-            if (place != livingBy)
-            {
-                return Move(name, place).also {
-                    it.placeTo = livingBy
-                }//If player is far from the home, go outside the home.
-            } else
-            {
-                return Move(name, place).also {
-                    it.placeTo = "home_$name"
-                }//If player is outside the home, go inside.
-            }
-        } else
-        {
-            if (place == "home")//If the character is at home, go outside.
-                return Move(name, place).also { it.placeTo = livingBy }
-            return Move(name, place).also { it.placeTo = variables["movePlace"]!! }
+    override fun execute(name: String, place: String): GameAction {
+        Move(name, place, gState).also {
+            it.placeTo = nextStop
+            if (it.isValid()) return it
         }
-
-        //TODO: implement pathfinding. For now, just teleport to the place
-    }
-
-    override fun endCondition(name: String, place: String): Boolean
-    {
-        return place == variables["movePlace"]
-        //TODO: when pathfinding fails, return true.
+        //If move is not valid, wait and terminate the routine with an error.
+        failed()
+        return Wait(name, place)
     }
 }

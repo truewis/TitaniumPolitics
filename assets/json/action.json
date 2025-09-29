@@ -1,17 +1,98 @@
 {
   "Move": {
+    "image": "icon_activity_30",
     "sound": "data/move.mp3"
   },
   "Wait": {
+    "image": "DotsGrunge",
     "sound": "data/wait.mp3"
   },
+  "Sleep": {
+    "image": "icon_activity_117",
+    "sound": "data/attack.mp3"
+  },
   "OfficialResourceTransfer": {
+    "image": "TilesGrunge",
     "sound": "data/open.mp3"
   },
   "UnofficialResourceTransfer": {
+    "image": "TilesGrunge",
     "sound": "data/open.mp3"
   },
   "Eat": {
-    "sound": "data/eat.mp3"
+    "image": "AppleGrunge",
+    "sound": "data/sounds/eat.mp3"
+  },
+  "Repair": {
+    "image": "CogGrunge",
+    "sound": "data/repair.mp3"
+  },
+  "Examine": {
+    "image": "SearchGrunge",
+    "sound": "data/repair.mp3"
+  },
+  "AddInfo": {
+    "image": "icon_app_112",
+    "sound": "data/repair.mp3"
+  },
+  "EndSpeech": {
+    "image": "icon_app_13",
+    "sound": "data/repair.mp3"
+  },
+  "InvestigateAccidentScene": {
+    "image": "SearchGrunge",
+    "sound": "data/repair.mp3"
+  },
+  "ClearAccidentScene": {
+    "image": "ShovelGrunge",
+    "sound": "data/repair.mp3"
+  },
+  "LeaveMeeting": {
+    "image": "icon_app_160",
+    "sound": "data/repair.mp3"
+  },
+  "EndMeeting": {
+    "image": "icon_app_160",
+    "sound": "data/repair.mp3"
+  },
+  "Intercept": {
+    "image": "icon_app_6",
+    "sound": "data/repair.mp3"
+  },
+  "Salary": {
+    "image": "icon_store_165",
+    "sound": "data/repair.mp3"
+  },
+  "SetWorkHours": {
+    "image": "icon_app_166",
+    "sound": "data/repair.mp3"
+  },
+  "SetWorkers": {
+    "image": "icon_app_25",
+    "sound": "data/repair.mp3"
+  },
+  "Resign": {
+    "image": "icon_app_7",
+    "sound": "data/repair.mp3"
+  },
+  "Suicide": {
+    "image": "icon_app_7",
+    "sound": "data/repair.mp3"
+  },
+  "PrepareInfo": {
+    "image": "icon_app_112",
+    "sound": "data/repair.mp3"
+  },
+  "JoinMeeting": {
+    "image": "ChatGrunge",
+    "sound": "data/repair.mp3"
+  },
+  "StartMeeting": {
+    "image": "ChatGrunge",
+    "sound": "data/repair.mp3"
+  },
+  "NewAgenda": {
+    "image": "PlusGrunge",
+    "sound": "data/repair.mp3"
   }
 }

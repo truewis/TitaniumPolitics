@@ -1,30 +1,29 @@
 package com.titaniumPolitics.game.core.gameActions
 
 import com.titaniumPolitics.game.core.GameEngine
+import com.titaniumPolitics.game.core.GameState
 
 @Deprecated("This class is deprecated. Only internal division leader can announce.")
-class InfoAnnounce(override val sbjCharacter: String, override val tgtPlace: String) : GameAction()
-{
+data class InfoAnnounce(override val sbjCharacter: String, override val tgtPlace: String) : GameAction() {
+    constructor(sbjCharacter: String, tgtPlace: String, gameState: GameState) : this(sbjCharacter, tgtPlace) {
+        injectParent(gameState)
+    }
+
     var who = hashSetOf<String>()
     var what = ""
-    override fun chooseParams()
-    {
+    override fun chooseParams() {
         //TODO: ability to fabricate information
         what =
             GameEngine.acquire(parent.informations.filter { it.value.knownTo.contains(sbjCharacter) }.map { it.key })
         who = parent.places[tgtPlace]!!.characters
     }
 
-    override fun execute()
-    {
+    override fun execute() {
         parent.informations[what]!!.knownTo += who
-        val party = parent.places[tgtPlace]!!.responsibleParty
-        //TODO: match unit of publicity to number of people in the party
         parent.characters[sbjCharacter]!!.frozen++
     }
 
-    override fun isValid(): Boolean
-    {
+    override fun isValid(): Boolean {
         return listOf("mainControlRoom", "market", "squareNorth", "squareSouth").contains(tgtPlace)
     }
 

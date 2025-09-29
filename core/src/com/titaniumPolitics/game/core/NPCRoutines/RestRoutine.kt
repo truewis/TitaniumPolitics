@@ -1,31 +1,61 @@
 package com.titaniumPolitics.game.core.NPCRoutines
 
+import com.titaniumPolitics.game.core.GameState
+import com.titaniumPolitics.game.core.ReadOnly
+import com.titaniumPolitics.game.core.ReadOnly.IDTH
+import com.titaniumPolitics.game.core.gameActions.Eat
 import com.titaniumPolitics.game.core.gameActions.GameAction
+import com.titaniumPolitics.game.core.gameActions.Sleep
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.Transient
 
 @Serializable
-class RestRoutine() : Routine()
-{
-    override fun newRoutineCondition(name: String, place: String): Routine?
-    {
+class RestRoutine(var workplace: String? = null) : Routine() {
+    init {
+        priority = PRIORITY_LIFE_SUPPORT
+    }
+
+    override fun newRoutineCondition(name: String, place: String, subroutines: List<Routine>): Routine? {
+
+        if (endRestCondition(name, place, workplace, gState)) return success()
         if (place != "home_$name")
-            return MoveRoutine().apply {
-                variables["movePlace"] = "home_$name"
-            }//Add a move routine with higher priority.
+            return MoveRoutine("home_$name")//Add a move routine with higher priority.
         return null
     }
 
-    override fun execute(name: String, place: String): GameAction
-    {
-        return pickAction(name, place)
+    override fun execute(name: String, place: String): GameAction {
+        //If hungry or thirsty, eat.
+        if (gState.characters[name]!!.hunger > ReadOnly.const("hungerThreshold")
+            ||
+            gState.characters[name]!!.thirst > ReadOnly.const("thirstThreshold")
+        ) {
+            Eat(name, place, gState).also {
+                if (it.isValid())
+                    return it
+            }
+        }
+        //Otherwise, sleep or wait.
+        return Sleep(name, place, gState)
     }
 
-    override fun endCondition(name: String, place: String): Boolean
-    {
-        return (gState.hour in 8..18)
-    }
+    companion object {
 
-    @Transient
-    override val availableActions = listOf("Eat", "Sleep", "Wait")
+        fun endRestCondition(name: String, place: String, workplace: String?, gState: GameState): Boolean {
+            // Wake up based on eta to workplace and workplace work hours.
+            if (gState.characters[name]!!.health < ReadOnly.const("TiredHealth")) return false
+            if (gState.characters[name]!!.hunger > ReadOnly.const("hungerThreshold")) return false
+            if (gState.characters[name]!!.thirst > ReadOnly.const("thirstThreshold")) return false
+
+            if (workplace == null)
+                return (gState.hour in 8..18)
+            else {
+                return isWorkHourWithETA(
+                    gState,
+                    name,
+                    place,
+                    workplace,
+                    IDTH
+                )//Allow waking up 1 hour before commuting to work.
+            }
+        }
+    }
 }

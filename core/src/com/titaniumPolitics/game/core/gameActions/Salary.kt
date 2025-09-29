@@ -1,86 +1,121 @@
 package com.titaniumPolitics.game.core.gameActions
 
+import com.titaniumPolitics.game.core.GameState
+import com.titaniumPolitics.game.core.MutualityMatrix
+import com.titaniumPolitics.game.core.Party
+import com.titaniumPolitics.game.core.ReadOnly
+import com.titaniumPolitics.game.core.Resources
 import kotlinx.serialization.Serializable
+import kotlin.collections.get
 
 @Serializable
 //Salary is performed by the party leader. It decides the amount of resources to be paid to the party members.
-class Salary(override val sbjCharacter: String, override val tgtPlace: String) : GameAction()
-{
-    var resources = hashMapOf("ration" to 2, "water" to 2)
-    override fun chooseParams()
-    {
+data class Salary(override val sbjCharacter: String, override val tgtPlace: String) : GameAction() {
+    constructor(sbjCharacter: String, tgtPlace: String, gameState: GameState) : this(sbjCharacter, tgtPlace) {
+        injectParent(gameState)
     }
 
-    override fun execute()
-    {
-        val who =
-            (parent.ongoingMeetings.filter { it.value.currentCharacters.contains(sbjCharacter) }
-                .flatMap { it.value.currentCharacters }).toHashSet()
+    val who
+        get() =
+            party.members - sbjCharacter
 
-        val party = parent.parties.values.find { it.members.containsAll(who + sbjCharacter) }!!
+    val party get() = parent.parties[sbjCharObj.currentMeeting!!.involvedParty]!!
+
+    val standardRate
+        get() = standardQuarterlyRate(parent.parties[sbjCharObj.currentMeeting!!.involvedParty!!]!!.type!!)
+
+    override fun chooseParams() {
+    }
+
+    override fun execute() {
+
         val guildHall = party.home
-//        if (party.isDailySalaryPaid.keys.none { it == tgtCharacter })
-//        {
-//            println("Warning: $tgtCharacter is not eligible to be paid from ${party.name}.")
-//            return
-//        }
-//        if (party.isDailySalaryPaid[tgtCharacter] == true)
-//        {
-//            println("Warning: $tgtCharacter has already been paid from ${party.name} today.")
-//            return
-//        }
-        who.forEach { character ->
-            if (
-                resources.all { (what, amount) -> (parent.places[guildHall]!!.resources[what] ?: 0) >= amount }
-            )
-            {
-                resources.forEach { (what, amount) ->
-                    parent.places[guildHall]!!.resources[what] =
-                        (parent.places[guildHall]!!.resources[what] ?: 0) - amount
-                    parent.characters[character]!!.resources[what] =
-                        (parent.characters[character]!!.resources[what] ?: 0) + amount
-                }
-                //party.isDailySalaryPaid[tgtCharacter] = true
-                println("$character is paid $resources from $${party.name}.")
-                parent.characters[character]!!.frozen++
 
-            } else
-            {
-                println("Not enough resources to pay salary to $character: $tgtPlace, ${parent.places[tgtPlace]!!.resources}")
-                //Party integrity decreases
-                parent.setPartyMutuality(party.name, party.name, -1.0)
-                //Opinion of the leader of the party decreases
-                if (party.leader != "")
-                {
-                    parent.setMutuality(character, party.leader, -1.0)
+        who.forEach { character ->
+            var multiplyer = 1.0
+            val charObj = parent.characters[character]!!
+            if ("engineerIncentive" in parent.characters[character]!!.division!!.policies) {
+                if ("engineer" in charObj.trait) {
+                    multiplyer += 0.5
+                } else {
+                    multiplyer -= 0.2
                 }
-                //TODO: are we sure that if the unpaid people are not in the meeting, there is no penalty to the party integrity?
-//
             }
+            if ("soldierIncentive" in parent.characters[character]!!.division!!.policies) {
+                if ("soldier" in charObj.trait) {
+                    multiplyer += 0.5
+                } else {
+                    multiplyer -= 0.2
+                }
+            }
+            if ("administratorIncentive" in parent.characters[character]!!.division!!.policies) {
+                if ("administrator" in charObj.trait) {
+                    multiplyer += 0.5
+                } else {
+                    multiplyer -= 0.2
+                }
+            }
+            if ("minerIncentive" in parent.characters[character]!!.division!!.policies) {
+                if ("miner" in charObj.trait) {
+                    multiplyer += 0.5
+                } else {
+                    multiplyer -= 0.2
+                }
+            }
+            if ("seniority" in parent.characters[character]!!.division!!.policies) {
+                multiplyer += 0.1 * (charObj.age - 40) / 10.0
+            }
+            parent.places[guildHall]!!.resources -= standardRate * multiplyer
+            charObj.resources += standardRate * multiplyer
+            //Opinion of the leader of the party increases.
+
+
         }
+        //Party integrity increases
+        parent.setPartyMutuality(
+            party.name,
+            weightedDelta = ReadOnly.const("salaryMutualityIncrease"),
+            reasonKey = "SalaryIntegrityIncrease"
+        )
+
         party.isSalaryPaid =
             true//Even if some members are not paid, the salary is considered paid, and cannot be paid again this quarter.
+        super.execute()
 
     }
 
-    override fun isValid(): Boolean
-    {
-        val who =
-            (parent.ongoingMeetings.filter { it.value.currentCharacters.contains(sbjCharacter) }
-                .flatMap { it.value.currentCharacters }).toHashSet()
+    override fun deltaWill(): MutualityMatrix {
+        val ret = super.deltaWill()
 
-        val party = parent.parties.values.find { it.members.containsAll(who + sbjCharacter) }!!
-//        if (party.isDailySalaryPaid.keys.none { it == tgtCharacter })
-//        {
-//            //println("Warning: $tgtCharacter is not eligible to be paid from ${party.name}.")
-//            return false
-//        }
-//        if (party.isDailySalaryPaid[tgtCharacter] == true)
-//        {
-//            //println("Warning: $tgtCharacter has already been paid from ${party.name} today.")
-//            return false
-//        }
-        return !party.isSalaryPaid && who.isNotEmpty() && sbjCharacter == party.leader
+        who.forEach { character ->
+            ret.addMutuality(
+                character,
+                party.leader!!,
+                ReadOnly.const("salaryMutualityIncrease"),
+                "SalaryLeaderTrustIncrease"
+            )
+        }
+        return ret
+    }
+
+    override fun isValid(): Boolean {
+        if (sbjCharObj.currentMeeting == null) return false
+        if (sbjCharObj.currentMeeting!!.involvedParty == null) return false
+        return !party.isSalaryPaid && who.isNotEmpty() && sbjCharacter == party.leader && reason(
+            standardRate.all { (what, amount) -> parent.places[party.home]!!.resources[what] >= amount * who.size },
+            "salary-resources"
+        )
+    }
+
+    companion object {
+        fun standardQuarterlyRate(partyType: Party.Type): Resources {
+            return when (partyType) {
+                Party.Type.CABINET -> Resources("ration" to 50.0, "water" to 50.0, "phosphorus" to 0.1)
+                Party.Type.DIVISION -> Resources("ration" to 30.0, "water" to 30.0, "phosphorus" to 0.03)
+                Party.Type.WORKPLACE -> Resources("ration" to 15.0, "water" to 15.0, "phosphorus" to 0.01)
+                else -> throw IllegalArgumentException("Salary can only be performed in cabinet or division daily conferences.")
+            }
+        }
     }
 
 }

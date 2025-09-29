@@ -1,36 +1,41 @@
 package com.titaniumPolitics.game.core.gameActions
 
-@Deprecated("This class is deprecated. BudgetProposal is a separate agenda item.")
-class BudgetProposal(override val sbjCharacter: String, override val tgtPlace: String) : GameAction()
-{
-    val budget = hashMapOf<String, Int>()//"mainControlRoom" to 11520, "redMine" to 38400, "blackMine" to 38400,
+import com.titaniumPolitics.game.core.GameState
+import com.titaniumPolitics.game.core.Meeting
+import com.titaniumPolitics.game.debugTools.Logger
 
-    override fun chooseParams()
-    {
+@Deprecated("This class is deprecated. BudgetProposal is a separate agenda item.")
+data class BudgetProposal(override val sbjCharacter: String, override val tgtPlace: String) : GameAction() {
+    constructor(sbjCharacter: String, tgtPlace: String, gameState: GameState) : this(sbjCharacter, tgtPlace) {
+        injectParent(gameState)
+    }
+
+    val budget = hashMapOf<String, Double>()//"mainControlRoom" to 11520, "redMine" to 38400, "blackMine" to 38400,
+
+    override fun chooseParams() {
         //TODO: set up the budget proposal
         parent.places.forEach {
-            if (it.key == "home" || it.value.responsibleParty == "") return@forEach else budget[it.value.responsibleParty] =
-                (budget[it.value.responsibleParty]
-                    ?: 0) + it.value.plannedWorker * (it.value.workHoursEnd - it.value.workHoursStart) * 15
+            if (it.key == "home" || it.value.responsibleDivision == null) return@forEach else budget[it.value.responsibleDivision!!] =
+                (budget[it.value.responsibleDivision]
+                    ?: .0) + it.value.plannedWorker * (it.value.workHoursEnd - it.value.workHoursStart) * 15.0
         }
     }
 
     override fun isValid(): Boolean =
-        parent.ongoingMeetings.any { it.value.type == "budgetProposal" } and
-                parent.ongoingMeetings.filter { it.value.type == "budgetProposal" }.values.first().currentCharacters.containsAll(
+        parent.ongoingMeetings.any { it.value.type == Meeting.MeetingType.BUDGET_PROPOSAL } and
+                parent.ongoingMeetings.filter { it.value.type == Meeting.MeetingType.BUDGET_PROPOSAL }.values.first().currentCharacters.containsAll(
                     parent.parties["cabinet"]!!.members
                 )
 
-    override fun execute()
-    {
+    override fun execute() {
         //TODO: vote on the budget proposal
 
-        println("Budget proposal executed.")
-        parent.isBudgetProposed = true
+        Logger.write("Budget proposal executed.", Logger.LogLevel.INFO)
+        //parent.isBudgetProposed = true
         parent.budget = budget
         //Now, take the time of all characters present.
-        parent.ongoingMeetings.filter { it.value.type == "budgetProposal" }.values.first().currentCharacters.forEach { parent.characters[it]!!.frozen++ }
-        println(budget)
+        parent.ongoingMeetings.filter { it.value.type == Meeting.MeetingType.BUDGET_PROPOSAL }.values.first().currentCharacters.forEach { parent.characters[it]!!.frozen++ }
+        Logger.write(budget.toString(), Logger.LogLevel.INFO)
     }
 
 }

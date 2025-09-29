@@ -1,48 +1,34 @@
 package com.titaniumPolitics.game.core.NPCRoutines
 
+import com.titaniumPolitics.game.core.ReadOnly.IDTH
 import com.titaniumPolitics.game.core.gameActions.GameAction
-import com.titaniumPolitics.game.core.gameActions.Move
+import com.titaniumPolitics.game.core.gameActions.Wait
 import kotlinx.serialization.Serializable
 
 @Serializable
-class FindCharacterRoutine() : Routine()
-{
-    var time = 0
-    override fun newRoutineCondition(name: String, place: String): Routine?
-    {
+class FindCharacterRoutine(val character: String) : Routine() {
+    private var waitForCharacter = false
+    override fun newRoutineCondition(name: String, place: String, subroutines: List<Routine>): Routine? {
+        if (place == gState.places.values.find { it.characters.contains(character) }!!.name)
+            return success()
         //Stop if spent too much time
-        if (time != 0)
-        {
-            if (gState.time - time > 10)
-            {
-                executeDone = true
-                return null
-            }
-        } else
-        {
-            time = gState.time
+        if (gState.time - routineStartTime > IDTH) {
+            return failed()
         }
 
-        if (endCondition(name, place))
-        {
-            return null
-        }
-
-        return MoveRoutine().also {
-            it.variables["movePlace"] =
-                gState.places.values.find { it.characters.contains(variables["character"]) }!!.name
-        }
+        if (!waitForCharacter)
+            return MoveRoutine(gState.places.values.find { it.characters.contains(character) }!!.name)
+        return null
     }
 
-    override fun execute(name: String, place: String): GameAction
-    {
-        TODO("Not supposed to be called.")
+    override fun onSubroutineFail(subroutine: Routine) {
+        //Can't move to the character. For example, they are in their home or other places this character does not have permission to move into.
+        //Just wait here
+        waitForCharacter = true
     }
 
-    override fun endCondition(name: String, place: String): Boolean
-    {
-        //Stop if the character is at the same place
-        return executeDone || place == gState.places.values.find { it.characters.contains(variables["character"]) }!!.name
-        //TODO: when pathfinding fails, return true.
+    override fun execute(name: String, place: String): GameAction {
+        return Wait(name, place)
     }
+
 }

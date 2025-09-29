@@ -1,0 +1,119 @@
+package com.titaniumPolitics.game.ui.widget
+
+import com.badlogic.gdx.graphics.Color
+import com.badlogic.gdx.scenes.scene2d.InputEvent
+import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
+import com.badlogic.gdx.utils.Align
+import com.titaniumPolitics.game.core.Character
+import com.titaniumPolitics.game.core.GameState
+import com.titaniumPolitics.game.core.ReadOnly
+import ktx.scene2d.*
+
+//This UI is used to select a character as a parameter for an action.
+//It displays all characters in a table format, with division tab button.
+//TODO: Perhaps only allow to select known characters to the player?
+class CharacterSelectUI(val gameState: GameState) : WindowUI("CharacterSelectTitle"), KTable {
+
+    val charactersTable = scene2d.table()
+    val scrollPane = ScrollPane(charactersTable)
+    val divisionSelectionBox = scene2d.buttonGroup(0, 1)
+    var selectedCharacterCallback: (String) -> Unit = {}
+
+    init {
+        instance = this
+        isVisible = false
+        scrollPane.setScrollingDisabled(true, false)
+        content.add(divisionSelectionBox).growX()
+        content.row()
+        content.add(scrollPane).grow()
+        listOf(
+            "infrastructure",
+            "interior",
+            "safety",
+            "bioengineering",
+            "mining",
+            "education",
+            "industry"
+        ).forEach { tobj ->
+            val t = scene2d.button {
+                //TODO:Agenda Tooltip addListener(ActionTooltipUI(tobj))
+                container {
+                    it.size(150f)
+                    it.fill(0.66f, 0.66f)
+                    it.align(Align.center)
+                    image("Help") {
+                        this.setDrawable(Scene2DSkin.defaultSkin, tobj + "Division")
+
+                    }
+                }
+                this@button.addListener(object : ClickListener() {
+                    override fun clicked(
+                        event: InputEvent?,
+                        x: Float,
+                        y: Float
+                    ) {
+                        this@CharacterSelectUI.refresh(tobj)
+                    }
+                })
+            }
+            divisionSelectionBox.add(t).size(150f).fill()
+        }
+    }
+
+    fun refresh(
+        division: String = "",
+        characters: Set<String> = gameState.characters.filter { it.value.alive && it.key in gameState.knownCharactersToPlayer }.keys
+    )//This function refreshes the character selection UI based on the selected division. If no division is selected, it shows all characters.
+    {
+        divisionSelectionBox.isVisible =
+            characters.size > 10 //If there are more than 10 characters, show the division selection box.
+        //This is a hack to avoid showing the division selection box when there are only a few characters.
+        //This way, if the character set is not default, divisionSelectionBox would be hidden most of the time.
+
+        charactersTable.clearChildren()
+        val fcharacters = characters.filter { division == "" || gameState.characters[it]!!.division?.name == division }
+        with(charactersTable) {
+            if (fcharacters.isEmpty()) {
+                label("No characters available", "docTitle") {
+                    setFontScale(0.5f)
+                    setAlignment(Align.center, Align.center)
+                    color = Color.RED
+                }
+                return
+            }
+            fcharacters.forEach { character ->
+                button {
+                    it.fillX()
+                    it.height(150f)
+                    it.width(150f)
+                    add(SimpleHeadPortraitUI(character, interactable = false)).size(100f)
+                    row()
+                    label(ReadOnly.charProp(character), "docTitle") {
+                        setAlignment(Align.center, Align.center)
+                        color = Color.WHITE
+                        setFontScale(0.2f)
+                    }
+                    addListener(object : ClickListener() {
+                        override fun clicked(event: InputEvent?, x: Float, y: Float) {
+                            this@CharacterSelectUI.selectedCharacterCallback(character)
+                        }
+                    })
+
+
+                }
+                //If the current row is full, add a new row.
+                if (children.size % 6 == 0) {
+                    row()
+                }
+
+            }
+        }
+
+    }
+
+    companion object {
+        lateinit var instance: CharacterSelectUI
+
+    }
+}
