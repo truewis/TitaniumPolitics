@@ -35,13 +35,13 @@ class DialogueUI(val gameState: GameState) : Table(defaultSkin), KTable {
         setFontScale(0.5f)
         touchable = Touchable.disabled
         wrap = true
-        typingListener = object : TypingAdapter() {
+        addTypingListener(object : TypingAdapter() {
             // Sense TypingLabel animation end and play next log in queue.
             override fun end() {
                 super.end()
 
             }
-        }
+        })
     }
 
     private val speakerNameDisplay = Label("", skin, "docTitle").apply {

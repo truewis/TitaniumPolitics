@@ -67,7 +67,7 @@ class LocationUI(val gameState: GameState) : Table(defaultSkin) {
         oldTextDisplay.setFontScale(2f)
         currentTextDisplay.touchable = Touchable.disabled
         oldTextDisplay.touchable = Touchable.disabled
-        currentTextDisplay.typingListener = object : TypingAdapter() {
+        currentTextDisplay.addTypingListener(object : TypingAdapter() {
             // Sense TypingLabel animation end and play next log in queue.
             override fun end() {
                 super.end()
@@ -82,7 +82,7 @@ class LocationUI(val gameState: GameState) : Table(defaultSkin) {
                 }
 
             }
-        }
+        })
         ctnuButton.setPosition(1800f, 0f)
         ctnuButton.setFontScale(2f)
         // Blinking ctnuButton

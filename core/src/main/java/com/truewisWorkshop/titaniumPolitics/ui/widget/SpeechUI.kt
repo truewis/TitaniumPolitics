@@ -31,7 +31,7 @@ class SpeechUI : Table(defaultSkin), KTable {
         setFontScale(0.4f)
         color = Color.WHITE
         wrap = true
-        typingListener = object : TypingListener {
+        addTypingListener( object : TypingListener {
             override fun event(event: String?) {
 
             }
@@ -56,7 +56,7 @@ class SpeechUI : Table(defaultSkin), KTable {
             override fun onChar(ch: Char?) {
 
             }
-        }
+        })
 
     }
 

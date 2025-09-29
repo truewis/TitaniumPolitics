@@ -1,0 +1,41 @@
+apply plugin: 'application'
+apply plugin: 'org.jetbrains.kotlin.jvm'
+
+
+java.sourceCompatibility = 15
+java.targetCompatibility = 15
+if (JavaVersion.current().isJava9Compatible()) {
+        compileJava.options.release.set(15)
+}
+kotlin.compilerOptions.jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_15)
+
+mainClassName = "com.truewisWorkshop.titaniumPolitics.headless.HeadlessLauncher"
+application.setMainClass(mainClassName)
+eclipse.project.name = appName + '-headless'
+
+dependencies {
+  implementation "com.badlogicgames.gdx:gdx-backend-headless:$gdxVersion"
+  implementation "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-desktop"
+  implementation "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
+  implementation project(':core')
+}
+
+jar {
+  archiveBaseName.set(appName)
+  duplicatesStrategy(DuplicatesStrategy.EXCLUDE)
+  dependsOn configurations.runtimeClasspath
+  from { configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) } }
+// setting the manifest makes the JAR runnable.
+// enabling native access helps avoid a warning when Java 24 or later runs the JAR.
+  manifest {
+    attributes 'Main-Class': project.mainClassName, 'Enable-Native-Access': 'ALL-UNNAMED'
+  }
+  doLast {
+    file(archiveFile).setExecutable(true, false)
+  }
+}
+
+// Equivalent to the jar task; here for compatibility with gdx-setup.
+tasks.register('dist') {
+  dependsOn 'jar'
+}
