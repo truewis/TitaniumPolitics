@@ -3,9 +3,11 @@ package com.truewisWorkshop.titaniumPolitics.headless;
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.backends.headless.HeadlessApplication;
 import com.badlogic.gdx.backends.headless.HeadlessApplicationConfiguration;
-import com.truewisWorkshop.titaniumPolitics.Main;
+import com.titaniumPolitics.game.EntryClass;
 
-/** Launches the headless application. Can be converted into a utilities project or a server application. */
+/**
+ * Launches the headless application. Can be converted into a utilities project or a server application.
+ */
 public class HeadlessLauncher {
     public static void main(String[] args) {
         createApplication();
@@ -13,7 +15,7 @@ public class HeadlessLauncher {
 
     private static Application createApplication() {
         // Note: you can use a custom ApplicationListener implementation for the headless project instead of Main.
-        return new HeadlessApplication(new Main(), getDefaultConfiguration());
+        return new HeadlessApplication(new EntryClass(), getDefaultConfiguration());
     }
 
     private static HeadlessApplicationConfiguration getDefaultConfiguration() {

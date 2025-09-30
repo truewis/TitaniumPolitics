@@ -2,7 +2,7 @@ package com.truewisWorkshop.titaniumPolitics.teavm;
 
 import com.github.xpenatan.gdx.backends.teavm.TeaApplicationConfiguration;
 import com.github.xpenatan.gdx.backends.teavm.TeaApplication;
-import com.truewisWorkshop.titaniumPolitics.Main;
+import com.titaniumPolitics.game.EntryClass;
 
 /**
  * Launches the TeaVM/HTML application.
@@ -19,6 +19,6 @@ public class TeaVMLauncher {
         //// If width and height are both -1, then the app will fill the canvas size.
         config.width = -1;
         config.height = -1;
-        new TeaApplication(new Main(), config);
+        new TeaApplication(new EntryClass(), config);
     }
 }
