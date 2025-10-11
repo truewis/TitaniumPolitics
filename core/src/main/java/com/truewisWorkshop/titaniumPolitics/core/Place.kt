@@ -118,7 +118,7 @@ class Place : GameStateElement() {
      */
     fun isAuthorized(sbjCharacter: String): Boolean =
         (authorizedDivisions.isEmpty() || parent.characters[sbjCharacter]!!.division?.name in authorizedDivisions)
-                && (authorizedCharacters.isEmpty() || sbjCharacter in authorizedCharacters)
+            && (authorizedCharacters.isEmpty() || sbjCharacter in authorizedCharacters)
 
     fun movableConnectedPlaces(sbjCharacter: String): List<String> = connectedPlaces.filter { placeTo ->
         parent.places[placeTo]!!.isAuthorized(sbjCharacter)
@@ -216,7 +216,7 @@ class Place : GameStateElement() {
                 val potentialDiff = coordinates.z - place.coordinates.z
                 val ratio = exp(
                     -(ReadOnly.GA * mass * potentialDiff) / (ReadOnly.KB * temperature) //[J] = [kg*m^2/s^2]
-                ) //Boltzmann distribution. TODO: reflect the volume of the place.
+                ) //Boltzmann distribution.
                 val equilabriumPressure =
                     (gasPressure(key) * volume + place.gasPressure(key) * place.volume) / (volume + ratio * place.volume)
 

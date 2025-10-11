@@ -36,8 +36,6 @@ class GameEngine(val gameState: GameState) {
 
 
     init {
-        Logger.gState = gameState
-        Logger.init()
     }
 
     fun startGame() {
@@ -210,7 +208,7 @@ class GameEngine(val gameState: GameState) {
         }
         char.history.add(
             action.javaClass.simpleName + ";" +
-                    gameState.formatTime() + " at " + gameState.places.values.find { it.characters.contains(char.name) }!!.name
+                gameState.formatTime() + " at " + gameState.places.values.find { it.characters.contains(char.name) }!!.name
         )
         val place = gameState.places.values.find {
             it.characters.contains(
@@ -438,7 +436,7 @@ class GameEngine(val gameState: GameState) {
 
                         if (gameState.scheduledMeetings.values.none {
                                 it.place == party.home &&
-                                        it.type == Meeting.MeetingType.DIVISION_LEADER_ELECTION
+                                    it.type == Meeting.MeetingType.DIVISION_LEADER_ELECTION
                             }) {
                             //If the division leader is not assigned, the division leader election is scheduled.
                             //The conference is attended by the director of the workplace and all division members.
@@ -456,7 +454,7 @@ class GameEngine(val gameState: GameState) {
                     } else if (!party.isBudgetProposed) {
                         if (gameState.scheduledMeetings.values.none {
                                 it.place == party.home &&
-                                        it.type == Meeting.MeetingType.BUDGET_PROPOSAL
+                                    it.type == Meeting.MeetingType.BUDGET_PROPOSAL
                             }) {
                             //If budget is not proposed, the budget proposal meeting is scheduled.
                             //The conference is attended by directors.
@@ -474,7 +472,7 @@ class GameEngine(val gameState: GameState) {
                     } else if (!party.isBudgetResolved) {
                         if (gameState.scheduledMeetings.values.none {
                                 it.place == party.home &&
-                                        it.type == Meeting.MeetingType.BUDGET_RESOLUTION
+                                    it.type == Meeting.MeetingType.BUDGET_RESOLUTION
                             }) {
                             //If budget is not resolved, the budget resolution meeting is scheduled.
                             //The conference is attended by directors.
@@ -497,7 +495,7 @@ class GameEngine(val gameState: GameState) {
                 if (party.leader != null) {
                     if (gameState.scheduledMeetings.values.none {
                             it.time == tgtMidnight + 12 * 3600 / DT /*9 in the morning*/ && it.place == party.home &&
-                                    it.type == Meeting.MeetingType.DIVISION_DAILY_CONFERENCE
+                                it.type == Meeting.MeetingType.DIVISION_DAILY_CONFERENCE
                         }) {
                         val conference = Meeting(
                             tgtMidnight + 12 * 3600 / DT /*12 in the afternoon*/,
@@ -518,7 +516,7 @@ class GameEngine(val gameState: GameState) {
                 //Cabinet has a conference every day. The conference is attended by the division leaders
                 if (gameState.scheduledMeetings.values.none {
                         it.time == tgtMidnight + 15 * 3600 / DT /*9 in the morning*/ && it.place == cabinet.home!! &&
-                                it.type == Meeting.MeetingType.CABINET_DAILY_CONFERENCE
+                            it.type == Meeting.MeetingType.CABINET_DAILY_CONFERENCE
                     }) {
                     val conference = Meeting(
                         tgtMidnight + 15 * 3600 / DT /*12 in the afternoon*/,
@@ -537,7 +535,7 @@ class GameEngine(val gameState: GameState) {
                 )
                 if (gameState.scheduledMeetings.values.none {
                         it.place == cabinet.home &&
-                                it.type == Meeting.MeetingType.BUDGET_PROPOSAL
+                            it.type == Meeting.MeetingType.BUDGET_PROPOSAL
                     }) {
                     //If budget is not proposed, the budget proposal meeting is scheduled.
                     //The conference is attended by directors.
@@ -565,7 +563,7 @@ class GameEngine(val gameState: GameState) {
                 )
                 if (gameState.scheduledMeetings.values.none {
                         it.place == triumvirate.home &&
-                                it.type == Meeting.MeetingType.BUDGET_RESOLUTION
+                            it.type == Meeting.MeetingType.BUDGET_RESOLUTION
                     }) {
                     //If budget is not resolved, the budget resolution meeting is scheduled.
                     //The conference is attended by directors.
@@ -584,7 +582,7 @@ class GameEngine(val gameState: GameState) {
                 //Triumvirate has a conference every day.
                 if (gameState.scheduledMeetings.values.none {
                         it.time == tgtMidnight + 15 * 3600 / DT /*9 in the morning*/ && it.place == triumvirate.home!! &&
-                                it.type == Meeting.MeetingType.TRIUMVIRATE_DAILY_CONFERENCE
+                            it.type == Meeting.MeetingType.TRIUMVIRATE_DAILY_CONFERENCE
                     }) {
                     val conference2 = Meeting(
                         tgtMidnight + 15 * 3600 / DT /*3 in the afternoon*/,
@@ -615,8 +613,8 @@ class GameEngine(val gameState: GameState) {
         energyPlaces
             .forEach { place ->
                 place.resources["energy"] = (place.resources["energy"]
-                        ) + (energyStorage / energyStorageCount * place.apparatuses.filter { it.name == "energyStorage" }.size - (place.resources["energy"]
-                        )) / energyDistributionTau * S_PER_HR
+                    ) + (energyStorage / energyStorageCount * place.apparatuses.filter { it.name == "energyStorage" }.size - (place.resources["energy"]
+                    )) / energyDistributionTau * S_PER_HR
             }
     }
 
@@ -724,8 +722,8 @@ class GameEngine(val gameState: GameState) {
             //For some meeting types, check if the leader is assigned. If not, remove the meeting.
             scheduledMeetings.filter {
                 (it.value.type == Meeting.MeetingType.DIVISION_DAILY_CONFERENCE || it.value.type == Meeting.MeetingType.CABINET_DAILY_CONFERENCE ||
-                        it.value.type == Meeting.MeetingType.BUDGET_PROPOSAL
-                        ) && parties[it.value.involvedParty!!]!!.leader == null && !missedMeetings.contains(
+                    it.value.type == Meeting.MeetingType.BUDGET_PROPOSAL
+                    ) && parties[it.value.involvedParty!!]!!.leader == null && !missedMeetings.contains(
                     it.key
                 )
             }.forEach {
@@ -1017,7 +1015,7 @@ class GameEngine(val gameState: GameState) {
                             actions.add("HireManager")
                         if (gameState.parties.values.any {
                                 it.type == Party.Type.DIVISION
-                                        && it.leader == character
+                                    && it.leader == character
 
                             })
                             actions.add("HireDirector")
@@ -1109,7 +1107,7 @@ class GameEngine(val gameState: GameState) {
             val availableMeetings =
                 gameState.scheduledMeetings.filter {
                     it.value.isValidTimeToStart(gameState.time)
-                            && it.value.place == place
+                        && it.value.place == place
                 }
                     .filter { !gameState.ongoingMeetings.containsKey(it.key) }
                     .filter { it.value.scheduledCharacters.contains(character) }

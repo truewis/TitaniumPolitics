@@ -93,7 +93,7 @@
   },
   "barrier": {
     "image": "defaultApparatus.png",
-    "durabilityTau": 8.64e5,
+    "durabilityTau": 8.64e6,
     "baseDanger": 3.0E-4,
     "accidentType": [
       "COLLAPSE"
@@ -122,6 +122,34 @@
       "storageType": "water",
       "storageAmount": 3e5
     }
+  },
+  "supportColumn": {
+    "image": "defaultApparatus.png",
+    "durabilityTau": 8.64e6,
+    "baseDanger": 1.0E-4,
+    "accidentType": [
+      "COLLAPSE"
+    ],
+    "requiredResourcePerRepair": [
+      {
+        "_resources": {
+          "structure": 2500
+        }
+      },
+      {
+        "_resources": {
+          "component": 500,
+          "structure": 5000
+        }
+      },
+      {
+        "_resources": {
+          "structure": 10000,
+          "component": 1000
+        }
+      }
+    ],
+    "idealWorker": 0
   },
   "oxygenStorage": {
     "image": "defaultApparatus.png",

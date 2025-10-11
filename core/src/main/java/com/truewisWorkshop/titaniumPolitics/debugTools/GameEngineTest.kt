@@ -30,6 +30,9 @@ class GameEngineTest {
             it.workingDirectory = directory
             it.nonPlayerAgents[it.playerName] = NonPlayerAgent()
             println("Loading complete.")
+            Logger.gState = it
+            Logger.init()
+            ReadOnly.setLocale(Locale.KOREAN)
             it.initialize()
         }
         val fNameInit = "$directory/dataInit.json"
@@ -133,7 +136,7 @@ class GameEngineTest {
             }
 
             val places = suffocating.map { gState.characters[it]!!.place.name }.toSet() +
-                    hot.map { gState.characters[it]!!.place.name }.toSet()
+                hot.map { gState.characters[it]!!.place.name }.toSet()
             if (places.isNotEmpty()) {
                 Logger.write(
                     "Characters in places with extreme conditions: ${places.joinToString(", ")}",
