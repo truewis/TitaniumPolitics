@@ -42,7 +42,7 @@ class MainMenu(val entry: EntryClass) : Stage(FitViewport(1920F, 1080F)) {
     val menu = Table()
     val assetManager = AssetManager()
     val music = Gdx.audio.newMusic(Gdx.files.internal("data/music/mainMenu.mp3"))
-    val startbutton = scene2d.label(ReadOnly.prop("MainMenu-ClickToStart"), "trnsprtConsole") {
+    val startbutton = scene2d.label("Start Game", "trnsprtConsole") {
         addAction(
             Actions.forever(
                 Actions.sequence(

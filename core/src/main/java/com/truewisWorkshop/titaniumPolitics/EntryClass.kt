@@ -22,15 +22,15 @@ class EntryClass : ApplicationAdapter() {
 
     fun loadFonts(): ObjectMap<String, Any> {
         val fontMap = ObjectMap<String, Any>()
-        // 1. Define the original font map keys and the target locale.
-        // These keys must match the prefixes in the properties files (e.g., 'fixedsys').
-        val fontKeys = listOf("fixedsys", "GrotleyRegular", "Martius")
         val targetLocale = Locale("ko") // TODO: Change this to dynamically load the current language locale
 
 
         // Load the I18N bundle (which reads the correct properties file: fonts.properties or fonts_ko.properties)
         val fontBundle = I18NBundle.createBundle(Gdx.files.internal("fonts/fonts"), targetLocale)
 
+        // 1. Define the original font map keys and the target locale.
+        // These keys must match the prefixes in the properties files (e.g., 'fixedsys').
+        val fontKeys = fontBundle.get("fontKeys").split(",").map { it.trim() }
 
         // Load the necessary character set once.
         // This ensures Unicode support for the generated fonts.

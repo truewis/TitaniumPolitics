@@ -31,7 +31,7 @@ class PlayerStatusUI(gameState: GameState) : Table(defaultSkin), KTable {
                 padTop(40f)
                 padBottom(40f)
                 table {
-                    label("The Triumvirate of Titanium     " + UUID.randomUUID(), "docTitle") {
+                    label("The Triumvirate of Titanium     " + UUID.randomUUID(), "MartiusEnglish") {
                         it.colspan(3)
                         it.left()
                         it.padLeft(10f)
@@ -51,7 +51,7 @@ class PlayerStatusUI(gameState: GameState) : Table(defaultSkin), KTable {
                             color = this@PlayerStatusUI.skin.getColor("BackgroundGray")
                         }
                         row()
-                        label(ReadOnly.prop("PlayerStatusUI-IDNumber"), "docTitle") {
+                        label(ReadOnly.prop("PlayerStatusUI-IDNumber"), "MartiusEnglish") {
                             it.center()
                             //it.padLeft(2f)
                             setFontScale(0.3f)
@@ -61,7 +61,7 @@ class PlayerStatusUI(gameState: GameState) : Table(defaultSkin), KTable {
                     }
 
                     table {
-                        label(gameState.player.name, "docTitle") {
+                        label(ReadOnly.charProp(gameState.player.name), "docTitle") {
                             it.left()
                             //it.padLeft(2f)
                             setFontScale(0.7f)

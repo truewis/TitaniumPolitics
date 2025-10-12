@@ -19,7 +19,7 @@ import com.titaniumPolitics.game.ui.widget.SimpleTextTooltipUI
 import ktx.scene2d.*
 
 class ExamineUI(var gameState: GameState, actionCallback: (GameAction) -> Unit) :
-    ActionSheetUI(ReadOnly.prop("examineUI"), gameState, actionCallback), KTable {
+    ActionSheetUI("examineUI", gameState, actionCallback), KTable {
     val button1 = scene2d.button("document") {
         image("UserGrunge") {
             it.size(70f)
