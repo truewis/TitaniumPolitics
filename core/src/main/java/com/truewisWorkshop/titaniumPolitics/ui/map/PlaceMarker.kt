@@ -11,6 +11,7 @@ import com.badlogic.gdx.utils.Align
 import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.core.ReadOnly
 import com.titaniumPolitics.game.ui.TasksUI
+import ktx.actors.alpha
 import ktx.scene2d.Scene2DSkin.defaultSkin
 import ktx.scene2d.container
 import ktx.scene2d.image
@@ -197,6 +198,8 @@ open class PlaceMarker(val gameState: GameState, val owner: MapUI, val place: St
                     Actions.sequence(
                         Actions.run {
                             buildingsInThisPlaceUI.isVisible = true
+                            buildingsInThisPlaceUI.alpha = 0f // Start from invisible
+                            buildingsInThisPlaceUI.setScale(0.1f)
                         },
                         Actions.parallel(
                             Actions.fadeIn(0.3f),

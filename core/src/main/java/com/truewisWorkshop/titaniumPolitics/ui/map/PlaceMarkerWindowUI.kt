@@ -48,7 +48,10 @@ class PlaceMarkerWindowUI(var gameState: GameState, var owner: MapUI) : Table() 
     lateinit var moveLabel: Label
     private val moveButton = scene2d.button {
         this@PlaceMarkerWindowUI.moveLabel =
-            label("${ReadOnly.prop("PlaceMarkerWindowUI-MoveToPlacePrefix")} " + this@PlaceMarkerWindowUI.distance + "m", "description") {
+            label(
+                "${ReadOnly.prop("PlaceMarkerWindowUI-MoveToPlacePrefix")} " + this@PlaceMarkerWindowUI.distance + "m",
+                "description"
+            ) {
                 setFontScale(0.4f)
                 setAlignment(Align.center)
                 color = Color.WHITE
@@ -168,18 +171,19 @@ class PlaceMarkerWindowUI(var gameState: GameState, var owner: MapUI) : Table() 
             gState.places[this@PlaceMarkerWindowUI.placeDisplayed]!!.responsibleDivision?.run {
 
                 divisionLabel.setText(
-                    "Managed by " + ReadOnly.prop(this)
+                    ReadOnly.prop("PlaceMarkerWindowUI-ManagedBy").format(ReadOnly.prop(this))
                 )
             } ?: divisionLabel.setText(
-                "Managed by: Not assigned"
+                ReadOnly.prop("PlaceMarkerWindowUI-ManagedBy").format(ReadOnly.charProp("NotAssigned"))
+
             )
             gState.places[this@PlaceMarkerWindowUI.placeDisplayed]!!.manager?.run {
                 managerLabel.setText(
-                    "Manager: " + ReadOnly.charProp(this)
+                    ReadOnly.prop("PlaceMarkerWindowUI-ManagerIs").format(ReadOnly.charProp(this))
                 )
             }
                 ?: managerLabel.setText(
-                    "Manager: Not assigned"
+                    ReadOnly.prop("PlaceMarkerWindowUI-ManagerIs").format(ReadOnly.charProp("NotAssigned"))
                 )
         }
 
@@ -265,7 +269,7 @@ class PlaceMarkerWindowUI(var gameState: GameState, var owner: MapUI) : Table() 
                 add(selectButton).size(400f, 75f).fill()
                 row()
             } else {
-                moveLabel.setText("Move to Place: ${distance}min")
+                moveLabel.setText(ReadOnly.prop("PlaceMarkerWindowUI-TimeToDest").format(distance))
                 //Disable the button if the player is already in the place. Calling place property will throw an exception when the game is first loaded.
                 if (gameState.characters[gameState.playerName]!!.place.name != placeDisplayed) {
                     add(moveButton).size(400f, 75f).fill()
