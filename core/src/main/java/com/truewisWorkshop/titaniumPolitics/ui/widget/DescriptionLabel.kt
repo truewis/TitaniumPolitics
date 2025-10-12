@@ -30,7 +30,7 @@ class DescriptionLabel(text: String) : Table(Scene2DSkin.defaultSkin), KTable {
         restart()
     }
     val cont = container(this@DescriptionLabel.label) {
-        pad(10f)
+        pad(50f)
     }
 
     init {
