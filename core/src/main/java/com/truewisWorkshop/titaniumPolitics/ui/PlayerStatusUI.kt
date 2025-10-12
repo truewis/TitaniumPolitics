@@ -44,14 +44,14 @@ class PlayerStatusUI(gameState: GameState) : Table(defaultSkin), KTable {
                         it.size(100f, 200f).top().padRight(5f).padTop(10f)
                         add(SimpleHeadPortraitUI(gameState.player.name, false)).fill().top().size(100f).expandY()
                         row()
-                        label("Verified", "docTitle") {
+                        label(ReadOnly.prop("PlayerStatusUI-Verified"), "docTitle") {
                             it.center()
                             //it.padLeft(2f)
                             setFontScale(0.2f)
                             color = this@PlayerStatusUI.skin.getColor("BackgroundGray")
                         }
                         row()
-                        label("18627101", "docTitle") {
+                        label(ReadOnly.prop("PlayerStatusUI-IDNumber"), "docTitle") {
                             it.center()
                             //it.padLeft(2f)
                             setFontScale(0.3f)
@@ -77,7 +77,7 @@ class PlayerStatusUI(gameState: GameState) : Table(defaultSkin), KTable {
                             setAlignment(com.badlogic.gdx.utils.Align.center)
                         }
                         row()
-                        label("Director", "docTitle") {
+                        label(ReadOnly.prop("PlayerStatusUI-Director"), "docTitle") {
                             it.left()
                             //it.padLeft(2f)
                             setFontScale(0.20f)

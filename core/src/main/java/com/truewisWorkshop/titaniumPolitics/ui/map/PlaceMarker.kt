@@ -9,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Button
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.badlogic.gdx.utils.Align
 import com.titaniumPolitics.game.core.GameState
+import com.titaniumPolitics.game.core.ReadOnly
 import com.titaniumPolitics.game.ui.TasksUI
 import ktx.scene2d.Scene2DSkin.defaultSkin
 import ktx.scene2d.container
@@ -92,7 +93,7 @@ open class PlaceMarker(val gameState: GameState, val owner: MapUI, val place: St
                             alpha = 1f
                         }
                     )))
-            val infoText = scene2d.label("YOU ARE HERE", "docTitle") {
+            val infoText = scene2d.label(ReadOnly.prop("PlaceMarker-YouAreHere"), "docTitle") {
                 setFontScale(0.2f)
                 setAlignment(Align.center)
                 color = Color.RED

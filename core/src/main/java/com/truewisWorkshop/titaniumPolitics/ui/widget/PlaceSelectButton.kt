@@ -10,7 +10,7 @@ import ktx.scene2d.Scene2DSkin
 import ktx.scene2d.label
 
 class PlaceSelectButton(callback: (String) -> Unit) : Button(Scene2DSkin.defaultSkin, "default"), KTable {
-    val placeLabel = label("Place:", "docTitle") { setFontScale(0.5f) }
+    val placeLabel = label(ReadOnly.prop("PlaceSelectButton-PlacePrefix"), "docTitle") { setFontScale(0.5f) }
 
     init {
 
@@ -29,6 +29,6 @@ class PlaceSelectButton(callback: (String) -> Unit) : Button(Scene2DSkin.default
     }
 
     fun clearSelection() {
-        placeLabel.setText("Place:")
+        placeLabel.setText(ReadOnly.prop("PlaceSelectButton-PlacePrefix"))
     }
 }

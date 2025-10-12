@@ -5,6 +5,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.titaniumPolitics.game.core.Information
 import com.titaniumPolitics.game.core.InformationType
+import com.titaniumPolitics.game.core.ReadOnly
 import com.titaniumPolitics.game.ui.ApparatusInfoUI
 import com.titaniumPolitics.game.ui.InformationViewUI
 import com.titaniumPolitics.game.ui.ResourceInfoUI
@@ -25,7 +26,7 @@ class InfoBubbleUI(val info: Information, val onClick: (() -> Unit)) : Table(), 
                         InformationType.ACTION -> {
                             image("HelpGrunge") {
                             }
-                            label("Action:$tgtCharacter", "description") {
+                            label("${ReadOnly.prop("InfoBubbleUI-ActionPrefix")}$tgtCharacter", "description") {
                                 setFontScale(0.2f)
                             }
                         }
@@ -33,7 +34,7 @@ class InfoBubbleUI(val info: Information, val onClick: (() -> Unit)) : Table(), 
                         InformationType.RESOURCES -> {
                             image("LightGrunge") {
                             }
-                            label("Resources:$tgtPlace", "description") {
+                            label("${ReadOnly.prop("InfoBubbleUI-ResourcesPrefix")}$tgtPlace", "description") {
                                 setFontScale(0.2f)
                             }
                         }
@@ -41,7 +42,7 @@ class InfoBubbleUI(val info: Information, val onClick: (() -> Unit)) : Table(), 
                         InformationType.CASUALTY -> {
                             image("HeartGrunge") {
                             }
-                            label("Casualty:$tgtPlace", "description") {
+                            label("${ReadOnly.prop("InfoBubbleUI-CasualtyPrefix")}$tgtPlace", "description") {
                                 setFontScale(0.2f)
                             }
 

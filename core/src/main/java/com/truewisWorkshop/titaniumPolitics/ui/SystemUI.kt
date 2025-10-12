@@ -9,6 +9,7 @@ import com.badlogic.gdx.utils.Array
 import com.titaniumPolitics.game.core.AgendaType
 import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.core.MeetingAgenda
+import com.titaniumPolitics.game.core.ReadOnly
 import com.titaniumPolitics.game.ui.widget.WindowUI
 import ktx.scene2d.label
 import ktx.scene2d.scene2d
@@ -25,7 +26,7 @@ class SystemUI(val gameState: GameState) : WindowUI("SystemUITitle") {
         row()
         table {
             it.fill()
-            label("Music:", "docTitle") {
+            label(ReadOnly.prop("SystemUI-MusicPrefix"), "docTitle") {
                 it.fill()
                 setFontScale(0.5f)
             }

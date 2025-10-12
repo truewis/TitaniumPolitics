@@ -8,6 +8,7 @@ import com.titaniumPolitics.game.EntryClass
 import com.titaniumPolitics.game.GameEngineThreadHandler
 import com.titaniumPolitics.game.core.GameEngine
 import com.titaniumPolitics.game.core.GameState
+import com.titaniumPolitics.game.core.ReadOnly
 import com.titaniumPolitics.game.debugTools.Logger
 import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.json.Json
@@ -25,7 +26,7 @@ class QuickLoad() : Table(defaultSkin), KTable {
 
     init {
         button {
-            label("Load", "docTitle")
+            label(ReadOnly.prop("QuickLoad-Load"), "docTitle")
             addListener(object : ClickListener() {
                 override fun clicked(event: InputEvent, x: Float, y: Float) {
                     super.clicked(event, x, y)

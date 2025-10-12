@@ -144,7 +144,7 @@ class CalendarUI(val gameState: GameState) : Table(Scene2DSkin.defaultSkin) {
                                 )
                             ).size(50f)
                         }
-                        val meetingLabel = scene2d.label("Meeting: ${entry.place}", "description")
+                        val meetingLabel = scene2d.label("${ReadOnly.prop("CalendarUI-MeetingPrefix")} ${entry.place}", "description")
                         meetingLabel.setFontScale(0.2f)
                         cellTable.add(meetingLabel).left()
                         cellTable.row()
