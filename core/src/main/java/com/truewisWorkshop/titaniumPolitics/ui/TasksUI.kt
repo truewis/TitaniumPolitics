@@ -9,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.VerticalGroup
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.badlogic.gdx.utils.Align
 import com.titaniumPolitics.game.core.GameState
+import com.titaniumPolitics.game.core.ReadOnly
 import com.titaniumPolitics.game.events.IQuestEventObject
 import com.titaniumPolitics.game.ui.widget.TimeAmountUI
 import kotlinx.serialization.Serializable
@@ -24,7 +25,7 @@ class TasksUI(var gameState: GameState) : Table(defaultSkin) {
         isVisible = false
         val docScr = ScrollPane(docList)
         docList.grow().left()
-        add(scene2d.label("Tasks", "description") {
+        add(scene2d.label(ReadOnly.prop("TasksUI-Tasks"), "description") {
             setAlignment(Align.left)
             setFontScale(0.5f)
             color = Color.WHITE

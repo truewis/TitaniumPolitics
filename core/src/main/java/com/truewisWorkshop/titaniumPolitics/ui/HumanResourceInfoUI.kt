@@ -5,6 +5,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.utils.Align
 import com.titaniumPolitics.game.core.Place
+import com.titaniumPolitics.game.core.ReadOnly
 import ktx.scene2d.Scene2DSkin.defaultSkin
 import ktx.scene2d.label
 import ktx.scene2d.scene2d
@@ -27,16 +28,16 @@ class HumanResourceInfoUI : Table(defaultSkin) {
         dataTable.clear()
         dataTable.apply {
 
-            add(scene2d.label("Report Time: $reportTime") { setAlignment(Align.center) })
+            add(scene2d.label("${ReadOnly.prop("HumanResourceInfoUI-ReportTimePrefix")} $reportTime") { setAlignment(Align.center) })
 
             row()
-            add(scene2d.label("Work Hours: ${place.workHoursStart} - ${place.workHoursEnd}") { setAlignment(Align.center) })
+            add(scene2d.label("${ReadOnly.prop("HumanResourceInfoUI-WorkHoursPrefix")} ${place.workHoursStart} - ${place.workHoursEnd}") { setAlignment(Align.center) })
             row()
-            add(scene2d.label("Planned Workers: ${place.plannedWorker}") { setAlignment(Align.center) })
+            add(scene2d.label("${ReadOnly.prop("HumanResourceInfoUI-PlannedWorkersPrefix")} ${place.plannedWorker}") { setAlignment(Align.center) })
             row()
-            add(scene2d.label("Current Workers: ${place.currentWorker}") { setAlignment(Align.center) })
+            add(scene2d.label("${ReadOnly.prop("HumanResourceInfoUI-CurrentWorkersPrefix")} ${place.currentWorker}") { setAlignment(Align.center) })
             row()
-            add(scene2d.label("Ideal Workers: ${place.apparatuses.sumOf { it.idealWorker }}") { setAlignment(Align.center) })
+            add(scene2d.label("${ReadOnly.prop("HumanResourceInfoUI-IdealWorkersPrefix")} ${place.apparatuses.sumOf { it.idealWorker }}") { setAlignment(Align.center) })
         }
 
     }

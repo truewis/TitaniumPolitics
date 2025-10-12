@@ -48,7 +48,7 @@ class RepairUI(val gameState: GameState, actionCallback: (GameAction) -> Unit) :
         table {
             it.size(400f, 200f)
             it.fill()
-            val name = label("Apparatus Name:", "docTitle") {
+            val name = label(ReadOnly.prop("RepairUI-ApparatusNamePrefix"), "docTitle") {
                 it.size(400f, 50f)
                 it.fill()
                 setAlignment(Align.center)
@@ -58,7 +58,7 @@ class RepairUI(val gameState: GameState, actionCallback: (GameAction) -> Unit) :
             val desc = DescriptionLabel("")
             add(desc).size(400f, 100f).fill()
             row()
-            val dur = label("Durability:", "docTitle") {
+            val dur = label(ReadOnly.prop("RepairUI-DurabilityPrefix"), "docTitle") {
                 it.size(400f, 50f)
                 it.fill()
                 setAlignment(Align.center)

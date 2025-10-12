@@ -37,7 +37,7 @@ class InformationViewUI(var gameState: GameState) : Table(defaultSkin) {
 
     val filters = scene2d.table {
         val clearFilterButton = scene2d.button {
-            label("Clear Filter", "docTitle") {
+            label(ReadOnly.prop("InformationViewUI-ClearFilter"), "docTitle") {
                 setAlignment(Align.center)
                 setFontScale(0.5f)
             }

@@ -96,7 +96,7 @@ class PlaceMarkerWindowUI(var gameState: GameState, var owner: MapUI) : Table() 
         row()
         stack {
             it.growX()
-            val shortLabel = label("No resource information available", "description") {
+            val shortLabel = label(ReadOnly.prop("PlaceMarkerWindowUI-NoResourceInfoAvailable"), "description") {
                 setFontScale(0.2f)
                 setAlignment(Align.left)
                 color = Color.WHITE

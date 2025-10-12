@@ -49,9 +49,9 @@ class ResourceTransferUI(
             it.grow()
             table {
                 this@ResourceTransferUI.modeLabel =
-                    label("Transaction", "docTitle") { setFontScale(0.5f); color = Color.BLACK }
+                    label(ReadOnly.prop("ResourceTransferUI-Transaction"), "docTitle") { setFontScale(0.5f); color = Color.BLACK }
                 row()
-                label("Transfer resources to", "docTitle") { setFontScale(0.5f); color = Color.BLACK }
+                label(ReadOnly.prop("ResourceTransferUI-TransferResourcesTo"), "docTitle") { setFontScale(0.5f); color = Color.BLACK }
                 //Select place to transfer resources to.
                 this@ResourceTransferUI.placeButton = PlaceSelectButton({
                     this@ResourceTransferUI.toWhere = it

@@ -19,7 +19,7 @@ import ktx.scene2d.table
 
 
 class GameOverUI(val gameState: GameState) : WindowUI("GameOversUITitle") {
-    val reasonLabel = scene2d.label("Reason: Unknown", "description") {
+    val reasonLabel = scene2d.label(ReadOnly.prop("GameOverUI-ReasonUnknown"), "description") {
         setFontScale(0.5f)
     }
     private val dataTable = scene2d.table {
@@ -31,7 +31,7 @@ class GameOverUI(val gameState: GameState) : WindowUI("GameOversUITitle") {
         row()
         table {
             it.fill()
-            label("Music:", "docTitle") {
+            label(ReadOnly.prop("GameOverUI-MusicPrefix"), "docTitle") {
                 it.fill()
                 setFontScale(0.5f)
             }

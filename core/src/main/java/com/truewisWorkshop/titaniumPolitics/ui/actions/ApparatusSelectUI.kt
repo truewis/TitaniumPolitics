@@ -29,13 +29,13 @@ class ApparatusSelectUI(val gameState: GameState, val callback: (Information) ->
         }
     private var appSelectBox: Table
     private val noSuitableAppLabel = table {
-        label("No suitable apparatus to repair.", "docTitle") {
+        label(ReadOnly.prop("ApparatusSelectUI-NoSuitableApparatus"), "docTitle") {
             it.fill()
             setAlignment(Align.center)
             setFontScale(0.5f)
         }
         row()
-        label("Make sure there is an apparatus that is damaged and you have the information of it.", "description") {
+        label(ReadOnly.prop("ApparatusSelectUI-MakeSureInfo"), "description") {
             it.fill()
             setAlignment(Align.center)
             setFontScale(0.3f)
