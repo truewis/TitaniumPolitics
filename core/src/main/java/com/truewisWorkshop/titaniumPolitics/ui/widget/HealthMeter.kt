@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.utils.Align
 import com.titaniumPolitics.game.core.GameState
+import com.titaniumPolitics.game.core.ReadOnly
 import ktx.scene2d.KTable
 import ktx.scene2d.Scene2DSkin.defaultSkin
 import ktx.scene2d.container
@@ -16,7 +17,7 @@ class HealthMeter(gameState: GameState) : Table(defaultSkin), KTable {
     init {
         stack {
             it.grow()
-            label("Health", "docTitle") {
+            label(ReadOnly.prop("HealthMeter-Health"), "docTitle") {
                 setFontScale(0.2f)
                 setAlignment(Align.topLeft)
                 color = Color.GRAY

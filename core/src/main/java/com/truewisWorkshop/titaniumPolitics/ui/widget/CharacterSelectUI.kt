@@ -75,7 +75,7 @@ class CharacterSelectUI(val gameState: GameState) : WindowUI("CharacterSelectTit
         val fcharacters = characters.filter { division == "" || gameState.characters[it]!!.division?.name == division }
         with(charactersTable) {
             if (fcharacters.isEmpty()) {
-                label("No characters available", "docTitle") {
+                label(ReadOnly.prop("CharacterSelectUI-NoCharactersAvailable"), "docTitle") {
                     setFontScale(0.5f)
                     setAlignment(Align.center, Align.center)
                     color = Color.RED

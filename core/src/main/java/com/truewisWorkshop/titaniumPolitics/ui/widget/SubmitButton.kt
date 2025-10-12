@@ -6,6 +6,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Button
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener
 import com.badlogic.gdx.utils.Align
 import com.titaniumPolitics.game.core.gameActions.GameAction
+import com.titaniumPolitics.game.core.ReadOnly
 import ktx.scene2d.KTable
 import ktx.scene2d.Scene2DSkin
 import ktx.scene2d.label
@@ -24,7 +25,7 @@ class SubmitButton(private var action: GameAction? = null, var actionCallback: (
         isDisabled = true
         isVisible = false
         addListener(tooltip)
-        label("Submit", "docTitle") {
+        label(ReadOnly.prop("SubmitButton-Submit"), "docTitle") {
             color = Color.WHITE
             setAlignment(Align.center)
             setFontScale(0.5f)

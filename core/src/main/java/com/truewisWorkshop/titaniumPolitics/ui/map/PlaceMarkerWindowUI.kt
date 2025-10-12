@@ -48,7 +48,7 @@ class PlaceMarkerWindowUI(var gameState: GameState, var owner: MapUI) : Table() 
     lateinit var moveLabel: Label
     private val moveButton = scene2d.button {
         this@PlaceMarkerWindowUI.moveLabel =
-            label("Move to Place: " + this@PlaceMarkerWindowUI.distance + "m", "description") {
+            label("${ReadOnly.prop("PlaceMarkerWindowUI-MoveToPlacePrefix")} " + this@PlaceMarkerWindowUI.distance + "m", "description") {
                 setFontScale(0.4f)
                 setAlignment(Align.center)
                 color = Color.WHITE
@@ -68,7 +68,7 @@ class PlaceMarkerWindowUI(var gameState: GameState, var owner: MapUI) : Table() 
     }
 
     private val selectButton = scene2d.button {
-        label("Select Place", "description") {
+        label(ReadOnly.prop("PlaceMarkerWindowUI-SelectPlace"), "description") {
             setFontScale(0.4f)
             setAlignment(Align.center)
             color = Color.WHITE
@@ -96,7 +96,7 @@ class PlaceMarkerWindowUI(var gameState: GameState, var owner: MapUI) : Table() 
         row()
         stack {
             it.growX()
-            val shortLabel = label("No resource information available", "description") {
+            val shortLabel = label(ReadOnly.prop("PlaceMarkerWindowUI-NoResourceInfoAvailable"), "description") {
                 setFontScale(0.2f)
                 setAlignment(Align.left)
                 color = Color.WHITE
@@ -149,14 +149,14 @@ class PlaceMarkerWindowUI(var gameState: GameState, var owner: MapUI) : Table() 
                 BLACK
             ).apply { left(); label.setAlignment(Align.left) }).height(50f).growX().fill()
         row()
-        val divisionLabel = label("Division: ", "description") {
+        val divisionLabel = label(ReadOnly.prop("PlaceMarkerWindowUI-DivisionPrefix"), "description") {
             it.left()
             setFontScale(0.2f)
             setAlignment(Align.left)
             color = Color.WHITE
         }
         row()
-        val managerLabel = label("Manager: ", "description") {
+        val managerLabel = label(ReadOnly.prop("PlaceMarkerWindowUI-ManagerPrefix"), "description") {
             it.left()
             setFontScale(0.2f)
             setAlignment(Align.left)

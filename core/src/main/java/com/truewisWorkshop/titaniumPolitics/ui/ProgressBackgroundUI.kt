@@ -38,7 +38,7 @@ class ProgressBackgroundUI(var gameState: GameState) : Table(Scene2DSkin.default
                 }).size(300f, 100f)
                 row()
 
-                this@ProgressBackgroundUI.progressLabel = label("Loading...", "description") {
+                this@ProgressBackgroundUI.progressLabel = label(ReadOnly.prop("ProgressBackgroundUI-Loading"), "description") {
                     setFontScale(0.5f)
                     setColor(Color.WHITE)
                     setAlignment(Align.center)

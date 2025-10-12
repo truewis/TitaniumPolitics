@@ -37,7 +37,7 @@ class OtherCharacterProgressBackgroundUI(var gameState: GameState) : Table(Scene
                 color = Color.BLACK
             }
             table {
-                this@OtherCharacterProgressBackgroundUI.progressLabel = label("Loading...", "description") {
+                this@OtherCharacterProgressBackgroundUI.progressLabel = label(ReadOnly.prop("OtherCharacterProgressBackgroundUI-Loading"), "description") {
                     setFontScale(3f)
                     setColor(Color.WHITE)
                     setAlignment(Align.center)

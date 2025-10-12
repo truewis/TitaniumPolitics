@@ -66,28 +66,28 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable 
                             color = this@AvailableActionsUI.skin.getColor("BackgroundGray")
                             it.grow()
                             it.left()
-                            label("Form 28-1", "docTitle") {
+                            label(ReadOnly.prop("AvailableActionsUI-Form28-1"), "docTitle") {
                                 it.left()
                                 setFontScale(0.4f)
                                 color = this@AvailableActionsUI.skin.getColor("BackgroundGray")
                                 setAlignment(Align.left)
                             }
                             row()
-                            label("Rev. Megaros 23. 4. 1.", "docTitle") {
+                            label(ReadOnly.prop("AvailableActionsUI-RevMegaros"), "docTitle") {
                                 it.left()
                                 setFontScale(0.2f)
                                 color = this@AvailableActionsUI.skin.getColor("BackgroundGray")
                                 setAlignment(Align.left)
                             }
                             row()
-                            label("Division of Internal Affairs", "docTitle") {
+                            label(ReadOnly.prop("AvailableActionsUI-DivisionInternalAffairs"), "docTitle") {
                                 it.left()
                                 setFontScale(0.2f)
                                 color = this@AvailableActionsUI.skin.getColor("BackgroundGray")
                                 setAlignment(Align.left)
                             }
                         }
-                        label("Administrative Action Report", "docTitle") {
+                        label(ReadOnly.prop("AvailableActionsUI-AdministrativeActionReport"), "docTitle") {
                             it.center()
                             it.fill()
                             it.expandX()
@@ -138,7 +138,7 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable 
                     }
                     row()
 
-                    label("Action Performed", "docTitle") {
+                    label(ReadOnly.prop("AvailableActionsUI-ActionPerformed"), "docTitle") {
                         it.center()
                         setFontScale(0.25f)
                         color = Color.BLACK
