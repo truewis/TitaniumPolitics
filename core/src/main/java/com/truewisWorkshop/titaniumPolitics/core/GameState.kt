@@ -35,7 +35,7 @@ class GameState {
 
     @Transient
     lateinit var gdh:
-            GameDataHandler
+        GameDataHandler
     private var _time = 0
     var time: Int
         get() = _time
@@ -58,7 +58,7 @@ class GameState {
 
 
     @Transient
-            /*Old time is the time before the change. New time is the time after the change.*/
+        /*Old time is the time before the change. New time is the time after the change.*/
     val timeChanged =
         arrayListOf<(Int, Int) -> Unit>()
 
@@ -397,7 +397,7 @@ class GameState {
         }
         characters.forEach {
             if (it.value.type == Character.Type.DIRECTOR || (it.value.type == Character.Type.EMPLOYEE &&
-                        it.value.division == player.division) //Add all directors and above. Only add employees that are in the same division as the player.
+                    it.value.division == player.division) //Add all directors and above. Only add employees that are in the same division as the player.
             )
                 knownCharactersToPlayer += it.key //Add characters to the known characters of the player.
         }
@@ -700,12 +700,13 @@ class GameState {
         val year = tmpDay / (constInt("quarterInDays") * 4) + 27 // 60 days per year
         val quarter =
             (tmpDay % (constInt("quarterInDays") * 4)) / constInt("quarterInDays") // 15 days per quarter
+        val watchmaker = characters.values.find { it.trait.contains("watchmaker") }!!.name
         when (type) {
-            "full" -> return "Megaros $year. ${quarter + 1}. ${tmpDay % constInt("quarterInDays") + 1}"
-            "year" -> return "Megaros $year."
+            "full" -> return "${ReadOnly.charProp(watchmaker)} $year. ${quarter + 1}. ${tmpDay % constInt("quarterInDays") + 1}"
+            "year" -> return "${ReadOnly.charProp(watchmaker)} $year."
             "month" -> return "${quarter + 1}"
             "monthDate" -> return "${quarter + 1}. ${tmpDay % 15 + 1}"
-            else -> return "Megaros $year. ${quarter + 1}. ${tmpDay % constInt("quarterInDays") + 1}"
+            else -> return "${ReadOnly.charProp(watchmaker)} $year. ${quarter + 1}. ${tmpDay % constInt("quarterInDays") + 1}"
         }
     }
 
@@ -736,7 +737,7 @@ class GameState {
 
         return (ReadOnly.resJson[item]?.jsonObject?.get("baseEGP(g/g)")?.jsonPrimitive?.double
             ?: .0) * 1000 /* Convert to Kg */ *
-                (ReadOnly.const("mutualityMax") * 1e-3 /*1000 egP = 100 mutuality*/) * elasticityModifier
+            (ReadOnly.const("mutualityMax") * 1e-3 /*1000 egP = 100 mutuality*/) * elasticityModifier
     }
 
     fun destroy() {
