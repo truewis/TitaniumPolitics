@@ -1,9 +1,9 @@
 ENTER Rui
 ENTER Yuhoa
 Rui, smile: You don't look so great. Anything wrong?
-Yuhoa, anxious: I'm fine. I'm just a little tired.
-Rui, anxious: Huh?
-Yuhoa, anxious: I said I'm fine.
-Rui, anxious: (Well, he is definitely hiding {SICK}something{ENDSICK} from me. He looks like he hasn't slept in days.)
-Yuhoa, anxious: Oh, Rui. Don't look at me like that. I'll let you know after this is over. Excuse me then.
-Rui, anxious: (Where is he going during the shift? I've never seen him like that before. I should follow him.)
+Yuhoa, confused: I'm fine. I'm just a little tired.
+Rui, confused: Huh?
+Yuhoa, confused: I said I'm fine.
+Rui, confused: (Well, he is definitely hiding {SICK}something{ENDSICK} from me. He looks like he hasn't slept in days.)
+Yuhoa, confused: Oh, Rui. Don't look at me like that. I'll let you know after this is over. Excuse me then.
+Rui, confused: (Where is he going during the shift? I've never seen him like that before. I should follow him.)

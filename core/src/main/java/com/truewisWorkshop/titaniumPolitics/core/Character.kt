@@ -79,6 +79,13 @@ class Character : GameStateElement() {
     val place
         get() = parent.places.values.first { it.characters.contains(name) }
 
+    fun forceMoveToPlace(placeName: String) {
+        Logger.write("$name is force moved from ${place.name} to $placeName.", Logger.LogLevel.WARNING)
+        val oldPlace = place
+        oldPlace.characters -= name
+        parent.places[placeName]!!.characters += name
+    }
+
     val currentMeeting
         get() = parent.ongoingMeetings.values.firstOrNull { it.currentCharacters.contains(name) }
     val division

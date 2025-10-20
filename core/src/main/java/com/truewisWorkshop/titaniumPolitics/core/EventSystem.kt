@@ -31,7 +31,7 @@ class EventSystem : GameStateElement() {
 
     //Utility function called once when a new game starts.
     fun newGame() {
-        add(Event_PrologueAlinaSpeech())
+        add(Event_PrologueAlinaAccident())
         add(Event_DelayRepair1())
         add(Event_BribeDoctor1())
         add(Event_BoyFindingMom())
@@ -71,7 +71,7 @@ class EventSystem : GameStateElement() {
             if (it.active)
                 println(
                     "Injecting parent to event ${it.name} active=${it.active}" +
-                            if (it is IQuestEventObject) " quest=${it.quest.name}" else ""
+                        if (it is IQuestEventObject) " quest=${it.quest.name}" else ""
                 )
         }
         gameState.timeChanged += { a, b ->
@@ -83,7 +83,7 @@ class EventSystem : GameStateElement() {
             tmpdataBase.clear()
             gameState.requests.filter {
                 !it.value.completed &&
-                        gameState.playerName in it.value.issuedTo
+                    gameState.playerName in it.value.issuedTo
             }.forEach { (_, req) ->
 
                 add(Event_GenuineRequest(req.name))

@@ -4,16 +4,16 @@ Agros: Hey, think we've met before. You're our messiah to fix the eastern barrie
 Rui, smile: Well, I guess these days messiahs are hired in quarterly contracts. But no, I'm just nobody working in the infrastructure division.
 Agros: Good. I am a director in the interior division. How's your new job? Will we live to see another quarter?
 Rui: I definitely hope so.
-Agros, anxious: How does the barrier look like?
+Agros, confused: How does the barrier look like?
 Rui: Inner structure is badly damaged. I am trying to get steel bemas from the industry division to replace those, but the dates are being pushed forever.
 Agros, surprised: Oh man, that should really not be the case. Here, let me work on that.
-Rui, anxious: Do you think you can talk with Hiroshi?
+Rui, confused: Do you think you can talk with Hiroshi?
 Agros: Oh no, definitely not. You know how he is like. But we as an interior people have some collective power to make stuff happen.
 Rui, surprised: Wow.
 Agros, smile: I know, I know. I was definitely surprised when I first arrived in the division. I think we can do so much more than what we are doing currently. I'll definitely bring this up in our next meeting so that Hiroshi is aware of the situation.
 Rui, smile: Thank you!
 Agros: That being said, may I also ask you to do me a favor?
-Rui, anxious: Can't promise, but I can try.
+Rui, confused: Can't promise, but I can try.
 Agros: Is it true that the ammonia production system is under repair?
 Rui: Well, I can't confirm that news. I am not responsible for that system.
 Agros: Could you divert that workforce to fixing the hospital plumbing system instead? We have plenty of ammonia in inventory already. I'll show you the graph.

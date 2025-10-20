@@ -18,6 +18,7 @@ import com.titaniumPolitics.game.debugTools.Logger
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
 import java.util.Locale
+import kotlin.io.path.Path
 
 class CapsuleStage(val gameState: GameState) : Stage(FitViewport(1920F, 1080F)) {
     var background = Image()
@@ -48,10 +49,29 @@ class CapsuleStage(val gameState: GameState) : Stage(FitViewport(1920F, 1080F)) 
         assetManager.load("idcard_contrast.png", Texture::class.java)
         assetManager.load("MapGrid.png", Texture::class.java)
         ReadOnly.charJson.forEach {
-            assetManager.load(
-                it.value.jsonObject["image"]?.jsonPrimitive?.content ?: "portraits/${it.key}.png",
-                Texture::class.java
-            )
+            val idleImagePath = it.value.jsonObject["image"]?.jsonPrimitive?.content
+            // If idleImagePath points to idle.png, load all emotion images in the same directory as well.
+            if (idleImagePath != null && idleImagePath.endsWith("idle.png")) {
+                val basePath = idleImagePath.removeSuffix("idle.png")
+                // emotions to load defined by files present in the directory
+                val emotions = Gdx.files.internal(idleImagePath).parent().list().map {
+                    it.name()
+                }.filter {
+                    it.endsWith(".png")
+                }
+                emotions.forEach { emotionImage ->
+                    try {
+                        assetManager.load(basePath + emotionImage, Texture::class.java)
+                    } catch (e: Exception) {
+                        Logger.write("Failed to load emotion image: ${basePath + emotionImage}", Logger.LogLevel.INFO)
+                    }
+                }
+            } else {
+                assetManager.load(
+                    it.value.jsonObject["image"]?.jsonPrimitive?.content ?: "portraits/${it.key}.png",
+                    Texture::class.java
+                )
+            }
             assetManager.load(
                 it.value.jsonObject["headImage"]?.jsonPrimitive?.content ?: "portraits/${it.key}Head.png",
                 Texture::class.java
@@ -60,8 +80,8 @@ class CapsuleStage(val gameState: GameState) : Stage(FitViewport(1920F, 1080F)) 
         ReadOnly.appJson.forEach {
             assetManager.load(it.value.jsonObject["image"]!!.jsonPrimitive.content, Texture::class.java)
         }
-        Logger.write("Explicit asset imports successful.", Logger.LogLevel.INFO)
         assetManager.finishLoading()
+        Logger.write("Explicit asset imports successful.", Logger.LogLevel.INFO)
 
         rootStack.setFillParent(true)
         rootStack.add(background)

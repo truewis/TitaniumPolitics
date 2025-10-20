@@ -11,8 +11,8 @@
   },
   "Alina": {
     "name": "Alina",
-    "image": "portraits/Alina.png",
-    "headImage": "portraits/AlinaHead.png"
+    "image": "portraits/Alina/idle.png",
+    "headImage": "portraits/Alina/AlinaHead.png"
   },
   "Maisarah": {
     "name": "Maisarah",
@@ -26,8 +26,8 @@
   },
   "Rui": {
     "name": "Rui",
-    "image": "portraits/Rui.png",
-    "headImage": "portraits/RuiHead.png"
+    "image": "portraits/Rui/idle.png",
+    "headImage": "portraits/Rui/RuiHead.png"
   },
   "Hiroshi": {
     "name": "Hiroshi",
@@ -101,8 +101,8 @@
   },
   "ctrler": {
     "name": "The Controller",
-    "image": "portraits/ctrler.png",
-    "headImage": "portraits/ctrlerHead.png"
+    "image": "portraits/ctrler/idle.png",
+    "headImage": "portraits/ctrler/ctrlerHead.png"
   },
   "observer": {
     "name": "The Observer",

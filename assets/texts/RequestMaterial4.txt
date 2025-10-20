@@ -1,7 +1,7 @@
 ENTER Rui
 ENTER Alina
 Alina: Something went wrong?
-Rui, anxious: How did you know?
+Rui, confused: How did you know?
 Alina: It's written all over your face. Honestly again, try to hide it better if you want to stay in the job.
 Rui: Yes, ma'am.
 Alina: So, what happened?

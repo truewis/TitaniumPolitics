@@ -4,8 +4,8 @@ DrPaik, smile: Ah, our beloved engineer. How can I help you today?
 Rui: I need to ask you something. Do you know Sylvia? She's one of the patients here.
 DrPaik: Sylvia? Oh, yes. She's a very nice lady. She's been here for a while now. What about her?
 Rui: I heard that the hospital is planning to discharge her soon. Is that true?
-DrPaik, anxious: Who told you that?
-Rui, anxious: I am not sure why that matters. I just want to know if it's true.
+DrPaik, confused: Who told you that?
+Rui, confused: I am not sure why that matters. I just want to know if it's true.
 DrPaik: I don't know where you heard that from, but Sylvia is still under our care and we are trying our best to help her recover.
 BELL
 DrPaik: Sorry, but we just got a new patient. I have to go now. Bye.

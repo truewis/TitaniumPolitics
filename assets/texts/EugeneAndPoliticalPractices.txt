@@ -1,9 +1,9 @@
 Eugene, smile: Welcome to our first theory lesson, my friend.
 Rui, smile: Thank you, Eugene.
 Eugene, smile: One thing we should all acknowledge as politicians is that we are useless by ourselves. Do you concur?
-Rui, anxious: Somewhat. Still in the learning phase. If I knew this earlier I probably wouldn't have become one.
+Rui, confused: Somewhat. Still in the learning phase. If I knew this earlier I probably wouldn't have become one.
 Eugene: Huh, what did you expect of this job then?
-Rui, anxious: Having more privileges so that I can do much more by myself. But here I am, left without an ability to file a single resource report without chasing down the treasurer.
+Rui, confused: Having more privileges so that I can do much more by myself. But here I am, left without an ability to file a single resource report without chasing down the treasurer.
 Eugene: Ok, but think it this way; why do you even have to file the resource report yourself? That is not what you are promoted for.
 Rui: But most of the treasurers I see are {SHAKE}SO{ENDSHAKE} slow! I could probably file reports twice as fast as them.
 Eugene: You are one of my best students, Rui, so I believe you. However, even if you could investigate the inventory much faster than them, you probably shouldn't, Rui. Who would schedule the next work schedule then?

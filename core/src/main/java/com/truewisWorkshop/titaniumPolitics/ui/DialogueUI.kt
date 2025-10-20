@@ -161,7 +161,9 @@ class DialogueUI(val gameState: GameState) : Table(defaultSkin), KTable {
                 TODO()
             }
             if (line.startsWith("SLAM")) {
-                TODO()
+                //TODO()
+                nextLine()
+                return
             }
 
             playLine(currentLineNumber)

@@ -1,12 +1,12 @@
-Eugene, anxious: You don't look so great, my friend.
-Rui, anxious: I don't think I will ever be a good manager.
-Eugene, anxious: What happened, Rui?
-Rui, anxious: One of the employees is never reporting back any work. I mean, that itself is not a problem, it was his new job, he could've learned.
+Eugene, confused: You don't look so great, my friend.
+Rui, confused: I don't think I will ever be a good manager.
+Eugene, confused: What happened, Rui?
+Rui, confused: One of the employees is never reporting back any work. I mean, that itself is not a problem, it was his new job, he could've learned.
 Rui: But he hasn't. Now I am questioning the way I trained him.
 Eugene: What do you suspect you did wrong?
 Rui: I don't know....... Nothing seemed to go through. After a quarter he was making exact same mistakes he was making on day 1. What was even worse, is that he than refused to take responsibility or learn anything really.
 Eugene: Oh, well. Rui, I know you won't like this, but I have to tell you this, Some people can't be trained. They are simply unprepared to stand on themselves as adults, and it is not our job to fix their darn lives.
 Eugene: You have to fire them. By doing so, not only you will massively improve your workplace's performance, but your other, better employees will be happier as well. Keep in mind that it is one of your responsibilities to protect your direct reports from potentially harmful and toxic coworkers.
-Rui, anxious: I guess you are correct. I just tried to follow the principle, you know. People can be made better.
+Rui, confused: I guess you are correct. I just tried to follow the principle, you know. People can be made better.
 Eugene, angry: {SHAKE}Rui, don't ever say that phrase again!{ENDSHAKE} It doesn't mean what you think it means.
 Rui, confused: I am sorry. I didn't know that.

@@ -21,14 +21,20 @@ import ktx.scene2d.scene2d
 class SimplePortraitUI(character: String, scale: Float, interactable: Boolean) : Table(Scene2DSkin.defaultSkin),
     KTable {
     fun setEmotion(emotion: String) {
-        when (emotion) {
-            "idle" -> {}
-            "smile" -> {}
-            "confused" -> {}
-            "anxious" -> {}
-            "angry" -> {}
-            "fury" -> {}
+        val baseImagePath =
+            ReadOnly.charJson[tgtCharacter]!!.jsonObject["image"]!!.jsonPrimitive.content
+        val emotionImagePath = if (baseImagePath.endsWith("idle.png")) {
+            baseImagePath.removeSuffix("idle.png") + "$emotion.png"
+        } else {
+            baseImagePath
         }
+
+        portrait.drawable = TextureRegionDrawable(
+            CapsuleStage.instance.assetManager.get(
+                emotionImagePath,
+                Texture::class.java
+            )!!
+        )
     }
 
     init {

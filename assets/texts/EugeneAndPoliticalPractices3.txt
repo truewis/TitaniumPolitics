@@ -1,9 +1,9 @@
 Eugene, smile: Welcome to our third lesson, my friend.
-Rui, anxious: Sorry I am late, I just stumbled upon bunch of kids at the public market.
-Eugene, anxious: Well, unfortunately, once they grow up or their parents pass away, they will realize that they have to stood in their own.
-Eugene, anxious: And quite frankly, I don't think the future awaiting them is very bright. Sure, some of them will figure it out in a hard way. Others will perish before they do.
-Rui, anxious: You are an educator. Not just any, but the leader of the division. Do you find yourself responsible for the situation?
+Rui, confused: Sorry I am late, I just stumbled upon bunch of kids at the public market.
+Eugene, confused: Well, unfortunately, once they grow up or their parents pass away, they will realize that they have to stood in their own.
+Eugene, confused: And quite frankly, I don't think the future awaiting them is very bright. Sure, some of them will figure it out in a hard way. Others will perish before they do.
+Rui, confused: You are an educator. Not just any, but the leader of the division. Do you find yourself responsible for the situation?
 Eugene, angry: Yes, very much so! But you know what, Rui? Good teachers are prerequisite of good education. Where are the engineering schools best, most talented graduates working right now?
-Eugene, anxious: Surely you have an answer, Rui. How many of them are scribbling letters on pieces of broken slates in a run down orphan shelter at the upper deck?
-Rui, anxious: ......
+Eugene, confused: Surely you have an answer, Rui. How many of them are scribbling letters on pieces of broken slates in a run down orphan shelter at the upper deck?
+Rui, confused: ......
 Eugene: And could you recall what you said earlier to Jan? You were correct, Rui. Word by word. What you said is the reality of public education of this era.
