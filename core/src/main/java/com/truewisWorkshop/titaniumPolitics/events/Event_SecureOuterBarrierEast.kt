@@ -2,10 +2,10 @@ package com.titaniumPolitics.game.events
 
 import com.badlogic.gdx.graphics.Color.RED
 import com.titaniumPolitics.game.core.Apparatus
-import com.titaniumPolitics.game.core.GameDataHandler
 import com.titaniumPolitics.game.core.GameEngine
 import com.titaniumPolitics.game.ui.GraphInfoUI
 import com.titaniumPolitics.game.ui.Quest
+import com.truewisWorkshop.titaniumPolitics.ui.GraphScreen
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 

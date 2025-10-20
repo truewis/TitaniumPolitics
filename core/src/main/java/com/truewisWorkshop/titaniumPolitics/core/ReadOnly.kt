@@ -59,14 +59,14 @@ object ReadOnly {
      */
     private fun loadLocalizedProperties(baseName: String, locale: Locale): Properties {
         // Base path for default file: texts/ui.properties
-        val defaultPath = "texts/$baseName.properties"
+        val defaultPath = Gdx.files.internal("texts/$baseName.properties")
 
         // Localized path: texts/ui_fr.properties (simple language matching)
         val localeTag = if (locale.language.isEmpty()) "" else "_${locale.language}"
-        val localizedPath = "texts/$baseName$localeTag.properties"
+        val localizedPath = Gdx.files.internal("texts/$baseName$localeTag.properties")
 
-        val defaultContent = FileReader(defaultPath)
-        val localizedContent = FileReader(localizedPath)
+        val defaultContent = defaultPath.reader()
+        val localizedContent = localizedPath.reader()
 
         val mergedProps = Properties()
 
@@ -129,10 +129,7 @@ object ReadOnly {
      */
     fun setCharacterProp(key: String, value: String) {
         ensureBundlesLoaded()
-        propertyBundles["character"]?.setProperty(key, value) ?: Logger.write(
-            "ERROR: Could not find 'character' bundle to set property $key",
-            Logger.LogLevel.ERROR
-        )
+        propertyBundles["character"]!!.setProperty(key, value)
     }
 
     // --- Accessor Functions (Refactored to use the dynamic map) ---

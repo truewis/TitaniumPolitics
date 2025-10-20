@@ -23,6 +23,8 @@ class Logger {
             writer1 = File(gState.workingDirectory + "/actions.txt").bufferedWriter()
             writer2 = File(gState.workingDirectory + "/apparatus.txt").bufferedWriter()
             writer3 = File(gState.workingDirectory + "/conditions.txt").bufferedWriter()
+            write("Logger initialized.", LogLevel.INFO)
+            writer.flush()
         }
 
         fun write(txt: String, level: LogLevel = LogLevel.WARNING) {

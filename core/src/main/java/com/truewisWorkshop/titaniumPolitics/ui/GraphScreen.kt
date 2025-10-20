@@ -1,3 +1,5 @@
+package com.truewisWorkshop.titaniumPolitics.ui
+
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.Pixmap
 import com.badlogic.gdx.graphics.Texture
@@ -9,7 +11,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image
 import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.utils.Align
-import com.titaniumPolitics.game.EntryClass
 import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.ui.widget.SimpleTextTooltipUI
 import ktx.scene2d.Scene2DSkin
@@ -28,8 +29,8 @@ class GraphScreen(private var data: Map<Int, Float>, yDataType: DataType) : Tabl
 
     private val axesPadding = 50f
 
-    private val xAxisLabels = mutableListOf<com.badlogic.gdx.scenes.scene2d.ui.Label>()
-    private val yAxisLabels = mutableListOf<com.badlogic.gdx.scenes.scene2d.ui.Label>()
+    private val xAxisLabels = mutableListOf<Label>()
+    private val yAxisLabels = mutableListOf<Label>()
 
     private val xLines = hashMapOf<String, LineAttributes>()
     private val yLines = hashMapOf<String, LineAttributes>()

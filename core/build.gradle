@@ -45,14 +45,17 @@ dependencies {
   api "org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinxCoroutinesVersion"
   implementation "space.earlygrey:shapedrawer:$shapedrawerVersion"
   api "org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0"
-  implementation 'org.junit.jupiter:junit-jupiter:5.11.1'
-  implementation "org.junit.platform:junit-platform-launcher:1.7.3"
-  implementation "org.junit.jupiter:junit-jupiter-engine:5.11.1"
-  implementation "org.junit.vintage:junit-vintage-engine:5.11.1"
+  testImplementation 'org.junit.jupiter:junit-jupiter:5.11.1'
+  testRuntimeOnly "org.junit.platform:junit-platform-launcher:1.7.3"
+  testImplementation "org.junit.jupiter:junit-jupiter-engine:5.11.1"
+  testImplementation "org.junit.vintage:junit-vintage-engine:5.11.1"
   implementation "org.jetbrains.kotlin:kotlin-reflect:1.9.0"
   api 'com.github.raeleus.TenPatch:tenpatch:5.2.3'
 
-  if(enableGraalNative == 'true') {
+  if (enableGraalNative == 'true') {
     implementation "io.github.berstanio:gdx-svmhelper-annotations:$graalHelperVersion"
   }
+}
+tasks.named('test', Test) {
+  useJUnitPlatform()
 }

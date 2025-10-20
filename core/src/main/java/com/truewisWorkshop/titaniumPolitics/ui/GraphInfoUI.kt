@@ -1,10 +1,8 @@
 package com.titaniumPolitics.game.ui
 
-import GraphScreen
-import GraphScreen.LineAttributes
+import com.truewisWorkshop.titaniumPolitics.ui.GraphScreen
 import com.badlogic.gdx.graphics.Color
 import com.titaniumPolitics.game.ui.widget.WindowUI
-import kotlin.collections.set
 
 class GraphInfoUI : WindowUI("GraphTitle") {
 

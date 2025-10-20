@@ -4,6 +4,7 @@ import com.badlogic.gdx.math.MathUtils.clamp
 import com.titaniumPolitics.game.core.Party.Role
 import com.titaniumPolitics.game.core.ReadOnly.IDTH
 import com.titaniumPolitics.game.core.ReadOnly.constInt
+import com.titaniumPolitics.game.debugTools.Logger
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
@@ -262,7 +263,8 @@ class GameState {
      * This function is only called once when new game starts. Not called when loading existing games.
      * */
     fun initialize() {
-        println("Initializing game state...")
+        Logger.write("Initializing game state...", Logger.LogLevel.INFO)
+        Logger.writer.flush()
         injectDependency()
 
         //Create NonPlayerAgents for predefined characters.
@@ -405,7 +407,7 @@ class GameState {
         randomize()
         addFactions()
         eventSystem.newGame()
-        println("Game state initialized successfully.")
+        Logger.write("Game state initialized successfully.", Logger.LogLevel.INFO)
     }
 
     fun randomize() {
@@ -649,7 +651,7 @@ class GameState {
         parties.forEach { it.value.injectParent(this) }
         nonPlayerAgents.forEach { it.value.injectParent(this) }
         eventSystem.injectParent(this)
-        println("GameState injected successfully.")
+        Logger.write("GameState injected successfully.", Logger.LogLevel.INFO)
     }
 
 

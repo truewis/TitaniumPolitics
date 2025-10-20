@@ -135,7 +135,7 @@ class MainMenu(val entry: EntryClass) : Stage(FitViewport(1920F, 1080F)) {
                     "data" + Calendar.getInstance().time.toString("YYYYMMdd_HHmmss")//DO not put this statement when loading existing game or in initialize(); it will mess up with GameEngineTest.
                 Logger.gState = it
                 Logger.init()
-                ReadOnly.setLocale(Locale.KOREAN)
+                //ReadOnly.setLocale(Locale.KOREAN)
                 it.initialize()
                 entry.stage = CapsuleStage(it)
                 Gdx.input.inputProcessor = entry.stage
