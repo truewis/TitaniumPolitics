@@ -6,6 +6,7 @@ import com.titaniumPolitics.game.debugTools.Logger
 import kotlinx.serialization.json.*
 import java.io.File
 import java.io.FileReader
+import java.nio.charset.StandardCharsets
 import java.util.*
 import kotlin.toString
 
@@ -65,8 +66,8 @@ object ReadOnly {
         val localeTag = if (locale.language.isEmpty()) "" else "_${locale.language}"
         val localizedPath = Gdx.files.internal("texts/$baseName$localeTag.properties")
 
-        val defaultContent = defaultPath.reader()
-        val localizedContent = localizedPath.reader()
+        val defaultContent = defaultPath.reader("UTF-8")
+        val localizedContent = localizedPath.reader("UTF-8")
 
         val mergedProps = Properties()
 
