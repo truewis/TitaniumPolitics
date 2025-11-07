@@ -1,6 +1,9 @@
 package com.titaniumPolitics.game.core
 
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.boolean
+import kotlinx.serialization.json.jsonObject
+import kotlinx.serialization.json.jsonPrimitive
 
 /**
  * A class representing a collection of in-game resources, where each resource is identified by a string key and has a double value.
@@ -144,6 +147,15 @@ class Resources(var positive: Boolean = true) {
         return _resources.isNotEmpty()
     }
 
+    fun floor(): Resources {
+        val result = Resources(false)
+        _resources.forEach { (key, value) ->
+            result[key] = kotlin.math.floor(value)
+        }
+        return result
+
+    }
+
     val keys: Set<String>
         get() {
             return _resources.keys
@@ -151,5 +163,22 @@ class Resources(var positive: Boolean = true) {
 
     override fun toString(): String {
         return _resources.toString()
+    }
+
+    companion object {
+        /**
+         * Checks if a resource identified by the given key is discrete based on the ReadOnly resource definitions.
+         * Discrete resources are those that cannot be divided into smaller units than integers.
+         * Internally, they are represented as doubles for consistency, but whenever they are presented to the player, they are rounded to the nearest integer.
+         * If the integer is zero, the resource is not shown at all.
+         * @param key The key of the resource to check.
+         * @return True if the resource is discrete, false otherwise.
+         */
+        fun isDiscreteResource(key: String): Boolean {
+            ReadOnly.resJson[key]?.let {
+                return it.jsonObject["discrete"]?.jsonPrimitive?.boolean ?: false
+            }
+            return false
+        }
     }
 }

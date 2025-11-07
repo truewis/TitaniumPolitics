@@ -40,7 +40,7 @@ class ResourceDisplayUI(var current: Resources = Resources(), var callback: (Str
     fun refresh() {
         docTable.clear()
         with(docTable) {
-            this@ResourceDisplayUI.current.forEach { (resourceName, resourceAmount) ->
+            this@ResourceDisplayUI.current.floor().forEach { (resourceName, resourceAmount) ->
                 if (abs(resourceAmount) > 1e-6) {
                     table {
                         it.grow()
@@ -52,10 +52,16 @@ class ResourceDisplayUI(var current: Resources = Resources(), var callback: (Str
                         }
                         this@ResourceDisplayUI.labelList.add(
                             label(
-                                "%s: %.1f".format(
-                                    ReadOnly.itemProp(resourceName),
-                                    resourceAmount
-                                ), "docTitle"
+                                if (Resources.isDiscreteResource(resourceName))
+                                    "%s: %d".format(
+                                        ReadOnly.itemProp(resourceName),
+                                        resourceAmount.toInt()
+                                    )
+                                else
+                                    "%s: %.1f".format(
+                                        ReadOnly.itemProp(resourceName),
+                                        resourceAmount
+                                    ), "docTitle"
                             ) {
                                 setFontScale(0.5f)
                                 setAlignment(Align.left)

@@ -49,9 +49,13 @@ class ResourceTransferUI(
             it.grow()
             table {
                 this@ResourceTransferUI.modeLabel =
-                    label(ReadOnly.prop("ResourceTransferUI-Transaction"), "docTitle") { setFontScale(0.5f); color = Color.BLACK }
+                    label(ReadOnly.prop("ResourceTransferUI-Transaction"), "docTitle") {
+                        setFontScale(0.5f); color = Color.BLACK
+                    }
                 row()
-                label(ReadOnly.prop("ResourceTransferUI-TransferResourcesTo"), "docTitle") { setFontScale(0.5f); color = Color.BLACK }
+                label(ReadOnly.prop("ResourceTransferUI-TransferResourcesTo"), "docTitle") {
+                    setFontScale(0.5f); color = Color.BLACK
+                }
                 //Select place to transfer resources to.
                 this@ResourceTransferUI.placeButton = PlaceSelectButton({
                     this@ResourceTransferUI.toWhere = it
@@ -198,26 +202,50 @@ class ResourceTransferUI(
             slider.removeListener(slider.listeners.firstOrNull { it is ChangeListener })
             slider.addListener(object : ChangeListener() {
                 override fun changed(event: ChangeEvent?, actor: Actor?) {
-                    this@ResourceSelectTable.label.setText(
-                        ReadOnly.prop("ResourceTransferUI-amountSelected")
-                            .format(
-                                slider.value,
-                                if (hourlyConsumption == 0.0) 0.0 else slider.value / hourlyConsumption
-                            )
-                    )
-                    owner.target[resName] = slider.value.toDouble()
+                    if (Resources.isDiscreteResource(resName)) {
+                        this@ResourceSelectTable.label.setText(
+                            ReadOnly.prop("ResourceTransferUI-amountSelectedInt")
+                                .format(
+                                    slider.value.toInt(),
+                                    if (hourlyConsumption == 0.0) 0.0 else slider.value / hourlyConsumption
+                                )
+                        )
+                        owner.target[resName] = slider.value.toInt().toDouble()
+                    } else {
+                        this@ResourceSelectTable.label.setText(
+                            ReadOnly.prop("ResourceTransferUI-amountSelected")
+                                .format(
+                                    slider.value,
+                                    if (hourlyConsumption == 0.0) 0.0 else slider.value / hourlyConsumption
+                                )
+                        )
+                        owner.target[resName] = slider.value.toDouble()
+                    }
                     owner.refreshAction()
                     owner.refresh()
                 }
 
             })
-            slider.value = currentAmount.toFloat()
-            slider.stepSize = maxAmount.toFloat() / 100f
-            slider.setRange(0f, maxAmount.toFloat())
-            label.setText(
-                ReadOnly.prop("ResourceTransferUI-amountSelected")
-                    .format(currentAmount, if (hourlyConsumption == 0.0) 0.0 else currentAmount / hourlyConsumption)
-            )
+            if (Resources.isDiscreteResource(resName)) {
+                slider.stepSize = 1f
+                slider.value = currentAmount.toInt().toFloat()
+                slider.setRange(0f, maxAmount.toInt().toFloat())
+                label.setText(
+                    ReadOnly.prop("ResourceTransferUI-amountSelectedInt")
+                        .format(
+                            currentAmount.toInt(),
+                            if (hourlyConsumption == 0.0) 0.0 else currentAmount / hourlyConsumption
+                        )
+                )
+            } else {
+                slider.stepSize = maxAmount.toFloat() / 100f
+                slider.value = currentAmount.toFloat()
+                slider.setRange(0f, maxAmount.toFloat())
+                label.setText(
+                    ReadOnly.prop("ResourceTransferUI-amountSelected")
+                        .format(currentAmount, if (hourlyConsumption == 0.0) 0.0 else currentAmount / hourlyConsumption)
+                )
+            }
 
         }
     }

@@ -7,7 +7,8 @@
   "ration": {
     "baseEGP(g/g)": 1e-3,
     "demandPopElasticity(g/day/person)": 1000,
-    "demandPriceElasticity": 0.2
+    "demandPriceElasticity": 0.2,
+    "discrete": true
   },
   "water": {
     "baseEGP(g/g)": 1e-4,
@@ -82,11 +83,37 @@
   "glassClothes": {
     "baseEGP(g/g)": 1e-3,
     "demandPopElasticity(g/day/person)": 10,
-    "demandPriceElasticity": 0.5
+    "demandPriceElasticity": 0.5,
+    "discrete": true
   },
   "cottonClothes": {
     "baseEGP(g/g)": 1e-2,
     "demandPopElasticity(g/day/person)": 1,
-    "demandPriceElasticity": 2
+    "demandPriceElasticity": 2,
+    "discrete": true
+  },
+  "corpse": {
+    "baseEGP(g/g)": 0,
+    "demandPopElasticity(g/day/person)": 0,
+    "demandPriceElasticity": 0,
+    "discrete": true
+  },
+  "plumbing": {
+    "baseEGP(g/g)": 1e-3,
+    "demandPopElasticity(g/day/person)": 0,
+    "demandPriceElasticity": 1,
+    "discrete": true
+  },
+  "electronics": {
+    "baseEGP(g/g)": 1e-3,
+    "demandPopElasticity(g/day/person)": 0,
+    "demandPriceElasticity": 1,
+    "discrete": true
+  },
+  "component": {
+    "baseEGP(g/g)": 1e-3,
+    "demandPopElasticity(g/day/person)": 0,
+    "demandPriceElasticity": 1,
+    "discrete": true
   }
 }
