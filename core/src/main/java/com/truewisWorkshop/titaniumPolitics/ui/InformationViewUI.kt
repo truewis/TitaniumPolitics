@@ -1,5 +1,6 @@
 package com.titaniumPolitics.game.ui
 
+import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
@@ -64,6 +65,13 @@ class InformationViewUI(var gameState: GameState) : Table(defaultSkin) {
                 clearFilterButton.isVisible = false
             }
         })
+        label(ReadOnly.prop("InformationViewUI-Filter"), "docTitle") {
+            setAlignment(Align.center)
+            setFontScale(0.3f)
+            color = Color.LIGHT_GRAY
+            it.colspan(3)
+        }
+        row()
         add(charFilter).size(150f).fill()
         add(placeFilter).size(300f, 150f).fill()
         add(clearFilterButton).size(200f, 150f).fill()
@@ -114,7 +122,7 @@ class InformationViewUI(var gameState: GameState) : Table(defaultSkin) {
         val informationList: List<Information>
         val knownInfos = gameState.informations.values.filter {
             it.knownTo.contains(gameState.playerName) &&
-                    it.tgtCharacter?.let { it in gameState.knownCharactersToPlayer } ?: true
+                it.tgtCharacter?.let { it in gameState.knownCharactersToPlayer } ?: true
             // Filter out information that is not known to the player or about unknown characters.
         }
         if (knownInfos.isEmpty()) {

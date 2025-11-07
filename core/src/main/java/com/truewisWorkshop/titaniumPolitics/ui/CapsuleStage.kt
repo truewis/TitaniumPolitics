@@ -50,20 +50,31 @@ class CapsuleStage(val gameState: GameState) : Stage(FitViewport(1920F, 1080F)) 
         assetManager.load("MapGrid.png", Texture::class.java)
         ReadOnly.charJson.forEach {
             val idleImagePath = it.value.jsonObject["image"]?.jsonPrimitive?.content
+            println("Loading character images for ${it.key}, idle image path: $idleImagePath")
             // If idleImagePath points to idle.png, load all emotion images in the same directory as well.
             if (idleImagePath != null && idleImagePath.endsWith("idle.png")) {
                 val basePath = idleImagePath.removeSuffix("idle.png")
                 // emotions to load defined by files present in the directory
-                val emotions = Gdx.files.internal(idleImagePath).parent().list().map {
-                    it.name()
-                }.filter {
-                    it.endsWith(".png")
-                }
+                val emotions = listOf(
+                    "idle.png",
+                    //TODO: Add more emotions and corresponding images.
+                    //"happy.png",
+                    "smile.png",
+                    //"sad.png",
+                    "angry.png",
+                    "surprised.png",
+                    "confused.png",
+                    //"determined.png"
+                )
                 emotions.forEach { emotionImage ->
-                    try {
-                        assetManager.load(basePath + emotionImage, Texture::class.java)
-                    } catch (e: Exception) {
-                        Logger.write("Failed to load emotion image: ${basePath + emotionImage}", Logger.LogLevel.INFO)
+                    // Check if the file exists before loading
+                    val fullPath = basePath + emotionImage
+                    val fileHandle = Gdx.files.internal(fullPath)
+                    if (fileHandle.exists()) {
+                        assetManager.load(fullPath, Texture::class.java)
+                        println("Loaded emotion image for ${it.key}: $fullPath")
+                    } else {
+                        println("Emotion image not found for ${it.key}: $fullPath")
                     }
                 }
             } else {
