@@ -1,18 +1,18 @@
 ENTER Krailin
 ENTER Rui
-Krailin, smile: What's up, cute girl?
-Rui, annoyed: What's up, drunk grandpa?
-Krailin, laugh: You're absolutely correct that I am drunk.
-Rui: You're a director. Please behave when with your employees.
-Krailin, smile: Well, I'm behaving, can't you see? You're in the tavern! How else should you behave besides being drunk?
-Rui: Good point, but please don't make it loud and annoying.
-Krailin, smile: And fuck that director thing. I never asked to get promoted anyway.
-Rui, confused: Huh, that's surprising. Why wouldn't you? The pay is much better.
-Krailin, smile: Y'know the problem of school girls like you or Alina? They always judge people based on their own privileged life experiences. Fuck that.
-Rui: Well, could you expand on that?
-Krailin, smile: Man, even that sounds like a school girl! Sometimes a gut feeling is far better than wordy explanation.
-Krailin: But since you asked for one, sure. For the vast majority of my life, noone expected me to do anything. And as a return, I was not responsible for anyone's life.
-Krailin: But now, I can't live a single day without bullshit form, useless meeting, and some bit of budget missing.
-Krailin: At the same time, these kiddos are begging me for salary increase almost every quarter. While Alina trying to cut the budget as often.
-Krailin: So, in this insane world, it is a completely acceptable behavior to be soaked in this wisdom beverage all the time, isn't it, girl?
-Rui, confused: Well, go do whatever you want.
+Krailin, smile: 잘 지내, 귀여운 아가씨?
+Rui, annoyed: 잘 지내, 취한 할아버지?
+Krailin, laugh: 내가 취했다는 건 완전히 맞아.
+Rui: 당신은 이사예요. 직원들과 함께 있을 때 행동을 조심하세요.
+Krailin, smile: 글쎄, 나는 행동을 조심하고 있어, 안 보여? 여기는 선술집이야! 취하는 것 말고 다른 어떻게 행동해야 해?
+Rui: 좋은 지적이지만, 크고 짜증나게 만들지는 마세요.
+Krailin, smile: 그리고 그 이사 따위는 집어치워. 애초에 승진하고 싶다고 한 적 없어.
+Rui, confused: 응, 놀랍네요. 왜 안 그러고 싶어요? 급여가 훨씬 나은데.
+Krailin, smile: 있잖아 너나 Alina 같은 여학생들의 문제가 뭔지 알아? 그들은 항상 자신의 특권적인 삶의 경험을 바탕으로 사람들을 판단해. 집어치워.
+Rui: 글쎄, 그것에 대해 자세히 설명해줄 수 있어요?
+Krailin, smile: 이런, 그것조차도 여학생처럼 들려! 때로는 직감이 말로 된 설명보다 훨씬 나아.
+Krailin: 하지만 하나 요청했으니까, 물론이지. 내 인생의 대부분 동안, 아무도 내가 뭔가를 하길 기대하지 않았어. 그리고 그 대가로, 나는 누구의 삶에도 책임이 없었지.
+Krailin: 하지만 이제는, 쓸데없는 서류, 무용한 회의, 그리고 약간의 예산 부족 없이 하루도 살 수 없어.
+Krailin: 동시에, 이 꼬맹이들은 거의 매 분기마다 임금 인상을 간청하고 있어. Alina는 그만큼 자주 예산을 삭감하려고 하면서.
+Krailin: 그래서, 이 미친 세상에서, 이 지혜의 음료에 항상 흠뻑 젖어 있는 건 완전히 받아들일 만한 행동이야, 그렇지 않아, 아가씨?
+Rui, confused: 글쎄, 하고 싶은 대로 해요.

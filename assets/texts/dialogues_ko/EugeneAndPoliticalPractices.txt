@@ -1,11 +1,11 @@
-Eugene, smile: Welcome to our first theory lesson, my friend.
-Rui, smile: Thank you, Eugene.
-Eugene, smile: One thing we should all acknowledge as politicians is that we are useless by ourselves. Do you concur?
-Rui, confused: Somewhat. Still in the learning phase. If I knew this earlier I probably wouldn't have become one.
-Eugene: Huh, what did you expect of this job then?
-Rui, confused: Having more privileges so that I can do much more by myself. But here I am, left without an ability to file a single resource report without chasing down the treasurer.
-Eugene: Ok, but think it this way; why do you even have to file the resource report yourself? That is not what you are promoted for.
-Rui: But most of the treasurers I see are {SHAKE}SO{ENDSHAKE} slow! I could probably file reports twice as fast as them.
-Eugene: You are one of my best students, Rui, so I believe you. However, even if you could investigate the inventory much faster than them, you probably shouldn't, Rui. Who would schedule the next work schedule then?
-Eugene: In other words, you must think of comparative advantage. Let's say you have x2 advantage for filing reports to your treasurer. However, you are almost infinitely better at work scheduling to them because they, very often, cannot think ahead of time at all.
-Eugene: It is dead clear which job you should do yourself and which task you should delegate.
+Eugene, smile: 우리의 첫 이론 수업에 온 걸 환영해, 친구.
+Rui, smile: 감사합니다, Eugene.
+Eugene, smile: 정치인으로서 우리 모두가 인정해야 할 한 가지는 우리는 혼자서는 쓸모없다는 거야. 동의해?
+Rui, confused: 어느 정도요. 아직 배우는 단계예요. 이걸 더 일찍 알았다면 아마 정치인이 되지 않았을 거예요.
+Eugene: 허, 그럼 이 일에서 뭘 기대했어?
+Rui, confused: 더 많은 특권을 가져서 혼자서 훨씬 더 많은 걸 할 수 있을 거라고요. 하지만 여기 있는 나는, 회계를 쫓아다니지 않고는 단 하나의 자원 보고서도 제출할 능력이 없어요.
+Eugene: 알겠어, 하지만 이렇게 생각해봐; 왜 자원 보고서를 직접 제출해야 하는 거야? 그게 승진한 이유가 아니잖아.
+Rui: 하지만 제가 보는 대부분의 회계들은 {SHAKE}너무{ENDSHAKE} 느려요! 아마 그들보다 두 배는 빠르게 보고서를 제출할 수 있을 거예요.
+Eugene: 넌 내 최고의 학생 중 하나야, Rui, 그러니 믿어. 하지만, 네가 그들보다 훨씬 빠르게 재고를 조사할 수 있다고 해도, 아마 그러면 안 돼, Rui. 그럼 누가 다음 작업 일정을 계획하겠어?
+Eugene: 다시 말해서, 비교 우위를 생각해야 해. 네가 회계에 대해 보고서 제출에 2배 우위를 가지고 있다고 해보자. 하지만 넌 작업 일정 계획에서 그들보다 거의 무한히 뛰어나, 왜냐하면 그들은 대부분 미리 생각할 수 없거든.
+Eugene: 어떤 일을 직접 해야 하고 어떤 일을 위임해야 하는지는 완전히 명백해.

@@ -1,17 +1,17 @@
 ENTER Rui
 ENTER Yuri
-{ANON}Yuri, smile: Hey there!
-Rui, confused: Do you know me?
-{ANON}Yuri, smile: I saw you at the square. You were with my mom!
-Rui: Oh, cool. Anything else?
-{ANON}Yuri: Can you give this to my mom? She left it when she went to work.
-Rui, smile: I don't even know who your mom is. I meet a lot of people at the square.
-{ANON}Yuri: She works in the mine. She'll see you if you wait there with the box!
-Rui, smile: I'm sorry, but I can't do that. First of all, I am far too busy to just stand in the mine entrance indefinitely. Second, people can be very hesitant to approach strangers. I don't want to make your mom uncomfortable.
-{ANON}Yuri: If you don't take this, I'll let my mom know that an engineer with the name Rui harassed me.
-Rui, confused: (Ick...) That's not true at all. I'm not harassing you. I'm just trying to explain why I can't help you.
-{ANON}Yuri: Doesn't matter. Why would my mom believe you over me?
-Rui: Darn it. Give me the box. I'll try my best to give it to your mom.
-Yuri, smile: Thanks! If you are not sure where my mom is, just shout out this is from Yuri.
-Rui: Sure. And one last word, young man. You better be more polite to strangers. Some people will not accept this kind of behavior.
-Yuri: Sure they won't!
+{ANON}Yuri, smile: 저기요!
+Rui, confused: 날 아니?
+{ANON}Yuri, smile: 광장에서 봤어요. 우리 엄마랑 함께 있었잖아요!
+Rui: 오, 그래. 또 뭔데?
+{ANON}Yuri: 이거 우리 엄마한테 전해줄 수 있어요? 엄마가 일하러 갈 때 두고 가셨어요.
+Rui, smile: 너희 엄마가 누군지도 모르는데. 광장에서 많은 사람들을 만나거든.
+{ANON}Yuri: 엄마는 광산에서 일해요. 상자를 들고 거기서 기다리면 엄마가 볼 거예요!
+Rui, smile: 미안하지만, 그럴 수 없어. 첫째로, 광산 입구에서 무한정 서 있기엔 너무 바빠. 둘째로, 사람들은 낯선 사람에게 다가가는 걸 매우 주저할 수 있어. 너희 엄마를 불편하게 만들고 싶지 않아.
+{ANON}Yuri: 이거 안 가져가면, Rui라는 이름의 엔지니어가 날 괴롭혔다고 우리 엄마한테 말할 거예요.
+Rui, confused: (으윽...) 전혀 사실이 아니야. 난 널 괴롭히지 않아. 그냥 왜 도와줄 수 없는지 설명하려는 거야.
+{ANON}Yuri: 상관없어요. 왜 우리 엄마가 저보다 당신을 믿겠어요?
+Rui: 젠장. 상자 줘. 최선을 다해서 너희 엄마한테 전해줄게.
+Yuri, smile: 고마워요! 우리 엄마가 어디 있는지 확실하지 않으면, Yuri에게서 왔다고 외치기만 하면 돼요.
+Rui: 알겠어. 그리고 마지막으로 한마디, 어린 친구. 낯선 사람들에게 더 예의 바르게 굴어. 어떤 사람들은 이런 행동을 받아들이지 않을 거야.
+Yuri: 확실히 안 받아들일 거예요!

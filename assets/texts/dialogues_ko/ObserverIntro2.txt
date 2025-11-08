@@ -1,4 +1,4 @@
-observer: Welcome back.
-observer: We are in your room now. Normally, other people cannot be in your room. Neither can you be in theirs.
-observer: The map of the station is at the bottom left of the screen. At your current location, you can move to the adjacent nodes in order to move locations. Currently, this takes approximately 30 minutes in the Station.
-observer: Why don't you try going outside? I'll see you there.
+observer: 돌아오신 걸 환영합니다.
+observer: 우리는 지금 당신의 방에 있습니다. 보통 다른 사람들은 당신의 방에 있을 수 없습니다. 당신도 그들의 방에 있을 수 없고요.
+observer: 스테이션의 지도는 화면 왼쪽 하단에 있습니다. 현재 위치에서, 위치를 이동하기 위해 인접한 노드로 이동할 수 있습니다. 현재 스테이션에서는 약 30분이 소요됩니다.
+observer: 밖으로 나가보는 게 어떨까요? 거기서 뵙겠습니다.

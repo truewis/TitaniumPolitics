@@ -1,8 +1,8 @@
 ENTER Rui
 ENTER Maisarah
-Maisarah, smile: Hi! I don't think I've seen you around here.
-Rui, smile: Hello Dear Leader, I am Rui, a new director of the eastern barrier sector. I got your invitation.
-Maisarah, smile: Oh! Of course! Sorry, we often have too many people in the party.
-Rui: This place is indeed surprisingly crowded.
-Maisarah, smile: You shouldn't be surprised! We have the best food and booze in the entire station! All reserved for our hardworking directors and engineers!
-Maisarah: Oh my! I forgot you traveled a long way from the upper deck. You must be exhausted. Please get seated! I'll call the bartender for you.
+Maisarah, smile: 안녕! 여기서 본 적이 없는 것 같은데.
+Rui, smile: 안녕하세요 리더님, 저는 Rui입니다, 동쪽 장벽 구역의 새 이사예요. 초대를 받았어요.
+Maisarah, smile: 오! 물론이지! 죄송해요, 파티에 사람이 너무 많아서요.
+Rui: 이곳은 정말 놀랍도록 붐비네요.
+Maisarah, smile: 놀라지 말아야죠! 우리는 전체 스테이션에서 최고의 음식과 술을 가지고 있어요! 모두 우리의 열심히 일하는 이사들과 엔지니어들을 위해 예약되어 있어요!
+Maisarah: 오 맙소사! 상부 갑판에서 먼 길을 왔다는 걸 잊었네요. 피곤하시겠어요. 앉으세요! 바텐더를 불러드릴게요.

@@ -1,13 +1,13 @@
 ENTER Rui
 ENTER Yuri
-Rui: What's up, young man?
-Yuri: Good evening, dear engineer.
-Rui: It's late. Why aren't you going to bed?
-Yuri: Dear engineer, My mom told me that I cannot come back in until I learn how to respect the authorities.
-Rui, smile: Well, it seems you learned already.
-Yuri: And I apologize for not respecting you last time I saw you, dear engineer.
-Rui, smile: Quite frankly, I think boy of your age should learn how to play with friends way before then to respect the useless authorities, including me.
-Rui, smile: But don't tell this to anybody. Go back to home and tell mom that I accepted your apology.
-Yuri: But why would she believe that?
-Rui, smile: Ha! Now the table is flipped, isn't it? But I can't just run into your house. That will frighten your mom. Instead, I'll write you the proof. That is how the politics is done here.
-Yuri: Thank you, dear engineer.
+Rui: 무슨 일이야, 어린 친구?
+Yuri: 안녕하세요, 엔지니어님.
+Rui: 늦었네. 왜 자러 가지 않아?
+Yuri: 엔지니어님, 엄마가 권위자들을 존중하는 법을 배울 때까지 집에 들어올 수 없다고 하셨어요.
+Rui, smile: 글쎄, 이미 배운 것 같은데.
+Yuri: 그리고 지난번에 뵀을 때 당신을 존중하지 않아서 사과드려요, 엔지니어님.
+Rui, smile: 솔직히 말하면, 나는 너 나이의 소년은 나를 포함한 쓸모없는 권위자들을 존중하는 법보다 훨씬 먼저 친구들과 노는 법을 배워야 한다고 생각해.
+Rui, smile: 하지만 이건 아무한테도 말하지 마. 집에 돌아가서 엄마한테 내가 네 사과를 받아들였다고 말해.
+Yuri: 하지만 왜 엄마가 그걸 믿겠어요?
+Rui, smile: 하! 이제 상황이 뒤집혔네, 그렇지? 하지만 난 그냥 너희 집에 뛰어들어갈 수 없어. 그럼 엄마가 놀랄 거야. 대신, 증거를 써줄게. 그게 여기서 정치가 이루어지는 방식이야.
+Yuri: 감사합니다, 엔지니어님.

@@ -1,26 +1,26 @@
 ENTER Rui
 ENTER Peiyu
-Rui: I have to go to work.
-Peiyu: Not before the charges against you are lifted, ma'am.
-Peiyu: This is a high profile case involving one of the division leaders. We cannot handle this lightly.
+Rui: 일하러 가야 해요.
+Peiyu: 당신에 대한 혐의가 해제되기 전에는 안 돼요, 부인.
+Peiyu: 이건 부서장 중 한 명이 관련된 중대 사건이에요. 가볍게 처리할 수 없어요.
 ENTER Astinomis
-Peiyu: We serve for the humanity, Dear Leader.
-Astinomis: Get back to work. How's it going?
-Peiyu: She answered to all our initial questions, sir.
-Astinomis: Let's see...... Surprisingly consistent answers, huh?
-Astinomis: So none of this was planned, just pure incompetency? Infra people as always, isn't it? No wonder we are in this situation right now.
-Peiyu: Most definitely, sir.
-Astinomis: And why is this particular barrier sector always in trouble? Where did all the budget go? They are spending twice as much as us, probably throwing tantrums like this every other day.
+Peiyu: 우리는 인류를 위해 봉사합니다, 리더님.
+Astinomis: 일로 돌아가. 어떻게 되어가고 있나?
+Peiyu: 그녀는 우리의 모든 초기 질문에 답했어요, 국장님.
+Astinomis: 보자...... 놀랍도록 일관된 답변이네, 응?
+Astinomis: 그래서 이 모든 게 계획된 게 아니라, 순수한 무능함이라고? 항상 그렇듯 인프라 사람들이지, 그렇지? 우리가 지금 이 상황에 처한 게 놀랍지 않네.
+Peiyu: 확실히 그렇습니다, 국장님.
+Astinomis: 그리고 왜 이 특정 장벽 구역은 항상 문제가 있지? 모든 예산은 어디로 갔어? 그들은 우리보다 두 배나 많이 쓰고 있어, 아마 격일로 이런 발작을 하고 있겠지.
 ENTER ctrler
-Astinomis: Dear Controller, how can I serve you?
-ctrler: Astinomis, let Rui go. I was at the spot. I saw her face. It was not a face of a murderer.
-Astinomis: Dear Controller, the safety division was approaching to the same answer.
-Astinomis: As you wish, Dear Controller.
+Astinomis: Controller님, 어떻게 모실까요?
+ctrler: Astinomis, Rui를 보내줘. 나는 현장에 있었어. 그녀의 얼굴을 봤어. 살인자의 얼굴이 아니었어.
+Astinomis: Controller님, 안전 부서도 같은 결론에 접근하고 있었습니다.
+Astinomis: 원하시는 대로, Controller님.
 EXIT ctrler
-Astinomis: Peiyu, till when could you submit the release form?
-Peiyu: Within this hour, sir.
-Astinomis: Do it quickly. I lost too much time on this useless incident.
-Peiyu: Absolutely, sir. Now...remind me of your name?
-Rui: Rui.
-Peiyu: Right. Rui, you are good to go now.
-Rui, confused: Well, thank you...?
+Astinomis: Peiyu, 언제까지 석방 양식을 제출할 수 있나?
+Peiyu: 한 시간 이내에요, 국장님.
+Astinomis: 빨리 해. 이 쓸모없는 사건에 너무 많은 시간을 낭비했어.
+Peiyu: 물론이죠, 국장님. 이제...이름이 뭐였죠?
+Rui: Rui예요.
+Peiyu: 맞아. Rui, 이제 가도 돼.
+Rui, confused: 글쎄, 감사합니다...?

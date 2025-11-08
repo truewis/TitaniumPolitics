@@ -1,6 +1,6 @@
-observer: Hope that wasn't a hassle.
-observer: We are in the construction yard now, your workplace.
-observer: There is a meeting scheduled tomorrow morning. You are free to do whatever you want until then.
-observer: Keep your eyes on the bottom right of the screen though. Should the vitals go empty, you will die.
-observer: You can always restore the vitals back in your room, given that you have the supplies.
-observer: Well, now I have to go. The station is not small and there is only one observer. We shall see again soon. Good luck.
+observer: 번거롭지 않았기를 바랍니다.
+observer: 우리는 지금 건설 현장에 있습니다, 당신의 직장이죠.
+observer: 내일 아침에 회의가 예정되어 있습니다. 그때까지 원하는 무엇이든 자유롭게 할 수 있습니다.
+observer: 하지만 화면 오른쪽 하단을 주시하세요. 생존 지표가 바닥나면 죽을 겁니다.
+observer: 보급품이 있다면, 방에서 언제든지 생존 지표를 회복할 수 있습니다.
+observer: 글쎄요, 이제 가봐야겠네요. 스테이션은 작지 않고 observer는 하나뿐입니다. 곧 다시 만나요. 행운을 빕니다.
