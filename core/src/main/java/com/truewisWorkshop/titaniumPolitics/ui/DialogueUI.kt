@@ -174,7 +174,6 @@ class DialogueUI(val gameState: GameState) : Table(defaultSkin), KTable {
                 TODO()
             }
             if (line.startsWith("SLAM")) {
-                //TODO()
                 addSlamAction()
                 addAction(
                     Actions.sequence(
