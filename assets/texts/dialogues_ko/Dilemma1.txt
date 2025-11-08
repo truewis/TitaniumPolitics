@@ -1,8 +1,8 @@
-Rui: So, that will do it.
-Woman: So...what happens to the people inside, dear engineers? I haven't seen my son! He might still be inside!
-Salvor: The diligent members of the division are trying their best to save the people.
-Woman: But didn't you say that you will extinguish the fire by depressurizing the section?
-Rui: Um...I have no intent of glossing over this, madam. They will die.
-Woman: There...there must be a better way. Please hear me, dear engineer. I worked as a firefighter in the safety division for my entire life.
-Rui: I am glad you brought that point out. Have you ever been into a position where you have to make a decision?
-Rui: The fire is spreading too fast. If it reaches one of the energy storage units, it will cause violent explosion. We only have a few minutes until then.
+Rui: 그래서, 그렇게 할 거예요.
+Woman: 그래서...안에 있는 사람들에게는 무슨 일이 일어나나요, 엔지니어님? 제 아들을 못 봤어요! 그 애가 아직 안에 있을 수도 있어요!
+Salvor: 부서의 근면한 구성원들이 사람들을 구하기 위해 최선을 다하고 있습니다.
+Woman: 하지만 구역의 압력을 낮춰서 불을 끄겠다고 하지 않았나요?
+Rui: 음...이걸 얼버무릴 생각은 없어요, 부인. 그들은 죽을 거예요.
+Woman: 더...더 좋은 방법이 있을 거예요. 제발 들어주세요, 엔지니어님. 저는 평생 안전 부서에서 소방관으로 일했어요.
+Rui: 그 점을 지적해주셔서 기뻐요. 결정을 내려야 하는 상황에 처해본 적이 있나요?
+Rui: 불이 너무 빨리 번지고 있어요. 에너지 저장 장치 중 하나에 도달하면, 격렬한 폭발을 일으킬 거예요. 그때까지 몇 분밖에 없어요.

@@ -1,9 +1,9 @@
-Krailin: I think it's all fake.
-Vaeme: {SLIDE}Fake? Okay, explain.{ENDSLIDE}
-Krailin: There's nothing wrong. With her. She wants to leave the Division.
-Salvor: {FADE}And why's that?{ENDFADE}
-Krailin: Because! Look at the state. Of this place. Look. Around you. The Engine. Is breaking down. Nobody can fix it. Who wants to. Be held responsible?
-Vaeme: {SLIDE}She wouldn't be held responsible if everyone was dead, now would she? Numbskull.{ENDSLIDE}
-Salvor: {FADE}Hey, let's not-{ENDFADE}
-Krailin: Brainless higlot.
-Vaeme: {SLIDE}You wanna go?{ENDSLIDE}
+Krailin: 다 거짓이라고 생각해.
+Vaeme: {SLIDE}거짓? 좋아, 설명해봐.{ENDSLIDE}
+Krailin: 아무 문제 없어. 그녀한테. 그녀는 부서를 떠나고 싶은 거야.
+Salvor: {FADE}왜 그럴까?{ENDFADE}
+Krailin: 왜냐면! 이곳의 상태를 봐. 주변을 둘러봐. 엔진이 고장 나고 있어. 아무도 고칠 수 없어. 누가 책임지고 싶겠어?
+Vaeme: {SLIDE}모두가 죽으면 그녀가 책임질 일도 없겠지, 안 그래? 멍청이.{ENDSLIDE}
+Salvor: {FADE}야, 그만-{ENDFADE}
+Krailin: 머리 빈 히글롯.
+Vaeme: {SLIDE}한판 붙을래?{ENDSLIDE}

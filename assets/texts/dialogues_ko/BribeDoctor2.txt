@@ -1,16 +1,16 @@
 ENTER Rui
 ENTER DrPaik
-DrPaik, smile: Ah, our beloved engineer. How can I help you today?
-Rui: I need to ask you something. Do you know Sylvia? She's one of the patients here.
-DrPaik: Sylvia? Oh, yes. She's a very nice lady. She's been here for a while now. What about her?
-Rui: I heard that the hospital is planning to discharge her soon. Is that true?
-DrPaik, confused: Who told you that?
-Rui, confused: I am not sure why that matters. I just want to know if it's true.
-DrPaik: I don't know where you heard that from, but Sylvia is still under our care and we are trying our best to help her recover.
+DrPaik, smile: 아, 우리의 사랑받는 엔지니어. 오늘은 어떻게 도와드릴까요?
+Rui: 물어볼 게 있어요. Sylvia를 아세요? 여기 환자 중 한 명이에요.
+DrPaik: Sylvia? 오, 네. 아주 좋은 분이죠. 꽤 오랫동안 여기 계셨어요. 그분이 어떻게요?
+Rui: 병원이 곧 그녀를 퇴원시킬 계획이라고 들었어요. 사실인가요?
+DrPaik, confused: 누가 그렇게 말했죠?
+Rui, confused: 그게 왜 중요한지 모르겠네요. 그냥 사실인지 알고 싶어요.
+DrPaik: 어디서 그런 얘기를 들었는지 모르겠지만, Sylvia는 여전히 우리 관리 하에 있고 우리는 그녀의 회복을 돕기 위해 최선을 다하고 있어요.
 BELL
-DrPaik: Sorry, but we just got a new patient. I have to go now. Bye.
-Rui, confused: Wait! Can I do anything to help her recovery?
-DrPaik: Well, our hospital is always in need of help, especially from a engineer. One of the water tanks are leaking. Can you take a look at it?
-Rui, confused: But will you keep Sylvia here?
-DrPaik: Thank you. Patients did not have clean water for a while now. That includes Sylvia. If you can fix the tank, it will help her recovery.
-Rui: I will do my best. I'll have to investigate the tank first.
+DrPaik: 죄송하지만, 방금 새 환자가 왔어요. 이제 가봐야 해요. 안녕히 계세요.
+Rui, confused: 잠깐! 그녀의 회복을 돕기 위해 제가 할 수 있는 게 있나요?
+DrPaik: 글쎄요, 우리 병원은 항상 도움이 필요해요, 특히 엔지니어의 도움이요. 물탱크 중 하나가 새고 있어요. 한번 봐주실 수 있나요?
+Rui, confused: 하지만 Sylvia를 여기 계속 두실 건가요?
+DrPaik: 감사합니다. 환자들이 한동안 깨끗한 물을 마시지 못했어요. Sylvia도 포함해서요. 탱크를 고쳐주시면 그녀의 회복에 도움이 될 거예요.
+Rui: 최선을 다하겠어요. 먼저 탱크를 조사해야겠어요.

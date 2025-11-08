@@ -1,33 +1,33 @@
 ENTER Rui
 ENTER DrPaik
-Rui: Here is the requested tank.
-DrPaik, smile: Thank you so much. Your kind act will save hundreds of lives.
-Rui, confused: Will you keep Sylvia in the hospital now?
-DrPaik, smile: She already went home, perfectly healthy.
-Rui, confused: What...? You can't just suddenly cure someone of a terminal illness.
-DrPaik: Yes, you can. You just need the right medicine.
+Rui: 요청하신 탱크 여기 있어요.
+DrPaik, smile: 정말 감사합니다. 당신의 친절한 행동이 수백 명의 생명을 구할 거예요.
+Rui, confused: 이제 Sylvia를 병원에 계속 두실 건가요?
+DrPaik, smile: 그녀는 이미 집에 갔어요, 완전히 건강하게요.
+Rui, confused: 뭐...? 말기 질환을 갑자기 치료할 수는 없잖아요.
+DrPaik: 네, 할 수 있어요. 적절한 약만 있으면요.
 SLAM
 ENTER LOST
-DrPaik, smile: Just a moment. Hi! How can I help you?
-LOST: Explain what happened to our daughter. Right now!
-DrPaik: I'm really sorry. We tried everything we could, but she didn't make it.
-LOST: You're lying you fucking crook! I was told you finally got the pill delivered!
-DrPaik: We thought so. But it turned out that the pill was not available anymore. We could not find a second dose in time.
-LOST: What...? You must be fucking joking.
+DrPaik, smile: 잠깐만요. 안녕하세요! 어떻게 도와드릴까요?
+LOST: 우리 딸에게 무슨 일이 있었는지 설명해. 지금 당장!
+DrPaik: 정말 죄송합니다. 우리가 할 수 있는 모든 걸 했지만, 그녀는 살아남지 못했어요.
+LOST: 거짓말하지 마, 이 사기꾼 새끼! 약이 드디어 배달됐다고 들었어!
+DrPaik: 우리도 그렇게 생각했어요. 하지만 그 약은 더 이상 구할 수 없다는 게 밝혀졌어요. 제때 두 번째 복용량을 찾을 수 없었어요.
+LOST: 뭐...? 농담하는 거겠지.
 SLAM
 ENTER Guard
-Guard: I'm sorry for your loss sir, but you can't do this.
-LOST: My sweet angel... Papa is so sorry. Shouldn't have trusted these monsters...
-Guard: Come with us.
-DrPaik: Thank you.
+Guard: 실례합니다만, 이렇게는 안 됩니다.
+LOST: 내 사랑스러운 천사... 아빠가 미안해. 이 괴물들을 믿지 말았어야 했는데...
+Guard: 우리와 함께 가시죠.
+DrPaik: 감사합니다.
 EXIT LOST
 EXIT Guard
-DrPaik, smile: Sorry for the havoc.
-Rui, angry: Tell me what I'm thinking is not true.
-DrPaik: The right medicine to cure a disease can be exceedingly rare.
-Rui, angry: You are full of shit.
-DrPaik: Hear me out. For months the infrastructure division could not repair one simple water tank in the hospital, one of the most critical facilities in the station.
-DrPaik: Hundreds of people died here right in front of me because of that.
-DrPaik, smile: And all of a sudden, it is fixed magically, right after the wife of a senior member of the division got ill. What a coincidence!
-Rui, angry: I'm leaving.
-DrPaik, smile: You did a good deed after all. And you helped Sylvia too! I'm sorry for the father, but our decision saved more lives overall.
+DrPaik, smile: 소란을 끼쳐서 죄송합니다.
+Rui, angry: 내가 생각하는 게 사실이 아니라고 말해줘요.
+DrPaik: 질병을 치료하는 적절한 약은 매우 희귀할 수 있어요.
+Rui, angry: 당신은 완전히 쓰레기야.
+DrPaik: 들어봐요. 몇 달 동안 인프라 부서는 스테이션에서 가장 중요한 시설 중 하나인 병원의 단순한 물탱크 하나를 수리하지 못했어요.
+DrPaik: 수백 명의 사람들이 그것 때문에 바로 내 앞에서 죽었어요.
+DrPaik, smile: 그리고 갑자기, 부서의 고위 구성원 아내가 아프자마자 마법처럼 고쳐졌어요. 정말 우연이네요!
+Rui, angry: 나 간다.
+DrPaik, smile: 결국 좋은 일을 한 거예요. 그리고 Sylvia도 도왔고요! 그 아버지에게는 미안하지만, 우리의 결정이 전체적으로 더 많은 생명을 구했어요.
