@@ -31,7 +31,7 @@ class SpeechUI : Table(defaultSkin), KTable {
         setFontScale(0.4f)
         color = Color.WHITE
         wrap = true
-        addTypingListener( object : TypingListener {
+        addTypingListener(object : TypingListener {
             override fun event(event: String?) {
 
             }
@@ -66,8 +66,8 @@ class SpeechUI : Table(defaultSkin), KTable {
     fun displaySpeech(text: String) {
         runBlocking {
             bubble.isVisible = true
+            println("Displaying speech: $text")
             Gdx.app.postRunnable {
-                println("Displaying speech: $text")
                 speech.restart("$text ")// Add a space to ensure the last word is rendered.
             }
             suspendCoroutine { continuation ->
