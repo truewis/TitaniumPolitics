@@ -66,10 +66,12 @@ class InformationViewUI(var gameState: GameState) : Table(defaultSkin) {
             }
         })
         label(ReadOnly.prop("InformationViewUI-Filter"), "docTitle") {
-            setAlignment(Align.center)
-            setFontScale(0.3f)
-            color = Color.LIGHT_GRAY
+            it.left()
+            setAlignment(Align.left)
+            setFontScale(0.5f)
+            color = Color.BLACK
             it.colspan(3)
+            it.padLeft(10f)
         }
         row()
         add(charFilter).size(150f).fill()

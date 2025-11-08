@@ -2,11 +2,15 @@ package com.titaniumPolitics.game.ui.map
 
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.Color.LIGHT_GRAY
+import com.badlogic.gdx.graphics.Color.RED
 import com.badlogic.gdx.graphics.Texture
+import com.badlogic.gdx.scenes.scene2d.actions.Actions
+import com.badlogic.gdx.scenes.scene2d.actions.AlphaAction
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable
+import com.badlogic.gdx.utils.Align
 import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.core.ReadOnly
 import com.titaniumPolitics.game.debugTools.Logger
@@ -16,11 +20,19 @@ import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
 import ktx.scene2d.*
 import ktx.scene2d.Scene2DSkin.defaultSkin
+import kotlin.math.abs
+import kotlin.math.atan2
+import kotlin.math.cos
+import kotlin.math.sin
 
 open class MapUI(val gameState: GameState) : Table(defaultSkin) {
     val currentConnections = arrayListOf<Connection>()
     val currentMarkers = arrayListOf<PlaceMarker>()
     val currentPlaceMarkerWindow = PlaceMarkerWindowUI(gameState, this)
+    val currentPlaceIndicator = scene2d.image("Arrow2Right") {
+        color = RED
+        isVisible = false
+    }
     private lateinit var scrollPane: ScrollPane
     val dataTable = Table(skin)
     val PADDING = 100f
@@ -72,6 +84,24 @@ open class MapUI(val gameState: GameState) : Table(defaultSkin) {
         currentPlaceMarkerWindow.isVisible = true
         add(currentPlaceMarkerWindow).growY().fill().width(400f)
         dataTable.add().grow()
+
+        //////// Add current place indicator
+        addActor(currentPlaceIndicator)
+        currentPlaceIndicator.setSize(50f, 50f)
+        currentPlaceIndicator.setOrigin(Align.center)
+        currentPlaceIndicator.addAction(
+            Actions.forever(
+                Actions.sequence(
+                    Actions.delay(0.5f),
+                    AlphaAction().apply {
+                        duration = 0.2f
+                        alpha = 0f
+                    },
+                    AlphaAction().apply {
+                        duration = 0.2f
+                        alpha = 1f
+                    }
+                )))
 
 
     }
@@ -174,6 +204,45 @@ open class MapUI(val gameState: GameState) : Table(defaultSkin) {
             PADDING + (dataTable.width - 2 * PADDING) * (x - minX) / (maxX - minX), //We do absolute coordinates for now. We can replace x with rel_x.
             PADDING + (dataTable.height - 2 * PADDING) * (y - minY) / (maxY - minY)
         )
+    }
+
+    override fun act(delta: Float) {
+        super.act(delta)
+        // Read scrollPane coordinates, check if player current position is out of view, if so, create a floating indicator pointing to the player position.
+        currentMarkers.firstOrNull { it.place == gameState.player.place.name }?.let { playerPlaceMarker ->
+            val viewX = scrollPane.scrollX
+            val viewY = scrollPane.actor.height - scrollPane.scrollY
+            val viewWidth = scrollPane.scrollWidth
+            val viewHeight = scrollPane.scrollHeight
+            if (playerPlaceMarker.x < viewX || playerPlaceMarker.x > viewX + viewWidth ||
+                playerPlaceMarker.y > viewY || playerPlaceMarker.y < viewY - viewHeight
+            ) {
+                //Out of view
+                currentPlaceIndicator.isVisible = true
+                //Calculate angle to point to the player position.
+                val centerX = viewX + viewWidth / 2
+                val centerY = viewY - viewHeight / 2
+                val angle = atan2(
+                    (playerPlaceMarker.y + playerPlaceMarker.height / 2) - centerY,
+                    (playerPlaceMarker.x + playerPlaceMarker.width / 2) - centerX
+                ).toDouble()
+                //Place the indicator at the edge of the view.
+                //Pick r so that edgeX and edgeY are at the edge of the view.
+                val r = if (abs(cos(angle)) * (viewHeight - 100) < abs(sin(angle)) * (viewWidth - 100)) {
+                    (viewHeight - 100) / 2 / abs(sin(angle)).toFloat()
+                } else {
+                    (viewWidth - 100) / 2 / abs(cos(angle)).toFloat()
+                }
+                val edgeX = scrollPane.x + scrollPane.width / 2 + r * cos(angle).toFloat()
+                val edgeY = scrollPane.y + scrollPane.height / 2 + r * sin(angle).toFloat()
+                currentPlaceIndicator.setPosition(edgeX, edgeY, Align.center)
+                currentPlaceIndicator.rotation = Math.toDegrees(angle).toFloat()
+            } else {
+                currentPlaceIndicator.isVisible = false
+            }
+        }
+
+
     }
 
     //DO not make this class singleton, as it is used in multiple places such as PlaceSelectionUI.
