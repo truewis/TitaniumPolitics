@@ -97,6 +97,10 @@ class Character : GameStateElement() {
     //You can hire specialists to write you various reports, which appears as separate UIs as well.
     var mercenaries = hashSetOf<String>()
 
+    /*
+    History of actions made by this character. Used for dialogue generation.
+    Format: "[actionName];[time] at [place]
+     */
     val history = arrayListOf<String>()
     val onSpeech = arrayListOf<(String, Double) -> Unit>()
 

@@ -38,9 +38,13 @@ class GameEngine(val gameState: GameState) {
     init {
     }
 
+    /*
+    * This method starts the game loop.
+     */
     fun startGame() {
-        //Start the game.
 
+        //Ensure time is non-negative. This also calls time change observers.
+        gameState.time = gameState.time.coerceAtLeast(0)
         onObserverCall.forEach { it(gameState) }
         Logger.write("Game started. Time: ${gameState.time}. Starting main loop.", Logger.LogLevel.INFO)
         //Main loop

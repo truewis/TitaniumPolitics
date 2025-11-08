@@ -14,6 +14,10 @@ class EventSystem : GameStateElement() {
     override val name: String
         get() = "EventSystem" //There is only one EventSystem object in the game.
     private val dataBase = arrayListOf<EventObject>()
+
+    /*
+    Temporary database to hold newly added events until the next time update is called. This is to avoid concurrent modification exception when events add new events during execution.
+     */
     private val tmpdataBase = arrayListOf<EventObject>()
 
     /**
@@ -75,11 +79,12 @@ class EventSystem : GameStateElement() {
                 )
         }
         gameState.timeChanged += { a, b ->
-            dataBase.forEach { if (it.active) it.exec(a, b) }
             tmpdataBase.forEach {
                 it.injectParent(gameState)
                 dataBase += it
             }
+            dataBase.forEach { if (it.active) it.exec(a, b) }
+
             tmpdataBase.clear()
             gameState.requests.filter {
                 !it.value.completed &&

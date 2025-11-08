@@ -118,7 +118,9 @@ class CharactersInPlaceUI(var gameState: GameState) : Table(defaultSkin) {
         }
         placeCharacterPortrait()
         portraits.forEach {
-            it.speechUI.displayActionEmoji(gameState.characters[it.tgtCharacter]!!.history.last().split(';').first())
+            gameState.characters[it.tgtCharacter]!!.history.lastOrNull()?.let { lastAction ->
+                it.speechUI.displaySpeech(lastAction.split(';').first())
+            }
         }
     }
 
