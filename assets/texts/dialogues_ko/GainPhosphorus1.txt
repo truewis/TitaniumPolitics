@@ -1,8 +1,8 @@
-Nestor: None of this makes any sense.
-Rui: It does to me. Phosphorus nucleosynthesis is simply really complicated. And the major bottleneck is that we cannot turn off the reactor during construction.
-ctrler: Please do not tell me that people are getting hurt!
-Rui: They're not. We are controlling dose so that no one is dying from the radiation, at least not in the short term.
-Nestor: Does the construction division has any timeline at this point? All the major construction milestones are being delayed indefinitely.
-Rui: I'm very new to the position you know. And the political turmoil didn't help.
-Nestor: Oh, well. What did I expect.
-ctrler: Please mind your language, Nestor! Losing positivity is losing everything!
+Nestor: 이 모든 게 이해가 안 돼.
+Rui: 나한테는 이해가 돼. 인 핵합성은 정말 복잡해. 그리고 주요 병목 현상은 건설 중에 원자로를 끌 수 없다는 거야.
+ctrler: 사람들이 다치고 있다고 말하지 마세요!
+Rui: 다치지 않아요. 우리는 아무도 방사선으로 죽지 않도록, 적어도 단기적으로는, 선량을 조절하고 있어요.
+Nestor: 건설 부서가 이 시점에서 일정이 있나요? 모든 주요 건설 이정표가 무기한 지연되고 있어요.
+Rui: 이 직책에 아주 새로 왔다는 걸 알잖아요. 그리고 정치적 혼란도 도움이 되지 않았고요.
+Nestor: 오, 글쎄. 내가 뭘 기대했겠어.
+ctrler: 언어를 조심하세요, Nestor! 긍정성을 잃는 건 모든 걸 잃는 거예요!

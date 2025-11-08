@@ -1,19 +1,19 @@
 ENTER Alina
-Alina: Good morning everyone.
-Krailin: Mornin'.
-Rui: Good morning, Dear Leader!
-Alina: Ah, ditch that nonsense. We don't do that here.
-Vaeme: Good to see you healthy again, ma'am. I was deeply concerned when I heard the news.
-Alina: Well, Vaeme, that caving could easily have opened up a room for your promotion. Maybe give it another chance!
-Vaeme, confused: I always loved your jokes, ma'am.
-Alina: So, we have a new director. Rui is from our newest batch of engineers.
-Alina: Now, you might think that you're going to be working directly on solutions to the engine problems here on The Station.
-Alina: You might think you're the special one who's going to figure out what's wrong with it and save us all. Maybe you will be. But probably not.
-Alina: Nonetheless, you're still going to have to be useful in some capacity, no? Since we have some......grave fiasco done in the eastern section. We needed someone new to undo the harm.
+Alina: 안녕하세요 여러분.
+Krailin: 좋은 아침.
+Rui: 좋은 아침입니다, 리더님!
+Alina: 아, 그런 헛소리는 집어치워. 우리는 여기서 그런 거 안 해.
+Vaeme: 다시 건강하신 모습을 뵈어서 좋습니다, 부장님. 소식을 들었을 때 깊이 걱정했어요.
+Alina: 글쎄, Vaeme, 그 동굴은 네 승진을 위한 자리를 쉽게 열어줄 수도 있었어. 다시 한번 기회를 줘볼까!
+Vaeme, confused: 항상 부장님의 농담을 좋아했어요.
+Alina: 그래서, 우리에게 새 이사가 생겼어요. Rui는 우리의 가장 최근 엔지니어 배치 출신이에요.
+Alina: 이제, 당신은 스테이션의 엔진 문제에 대한 해결책을 직접 작업할 거라고 생각할 수도 있어요.
+Alina: 당신이 무엇이 잘못되었는지 알아내고 우리 모두를 구할 특별한 사람이라고 생각할 수도 있어요. 아마 그럴 수도 있겠죠. 하지만 아마 아닐 거예요.
+Alina: 그럼에도 불구하고, 당신은 여전히 어떤 방식으로든 유용해야 할 거예요, 그렇지 않나요? 동쪽 구역에서 좀......심각한 대참사가 있었으니까요. 피해를 복구할 새로운 사람이 필요했어요.
 ENTER Salvor
-Salvor: Excuse me, but in the job description, it's written that all engineers will work on the engine-
-Alina: Yeah? And I'm the one who wrote that job description, and I'm telling you only some of you will be.
-Alina: {SICK}Damn, what a waste of time.{ENDSICK}
-Alina: Look, the fact of the matter is, if anyone makes the slightest mistake, we're all gone. Infrastructure, bioengineering, safety, industry, education - hell, even those soulless bastards at the Division of the Interior. All of it. So if you aren't the best, the smartest, then you have no business being here at all, let alone with the engine.
-Alina: Anyone else that wants to ask questions, figure it out. Otherwise, ask someone who's been here longer than you.
-Alina: We meet every morning here at 0900. On time is late. Be here by 0830 or you won't be here for long. Meeting adjourned.
+Salvor: 실례지만, 직무 설명서에는 모든 엔지니어가 엔진에서 일할 거라고 적혀 있는데-
+Alina: 그래? 그리고 그 직무 설명서를 쓴 사람이 나고, 너희 중 일부만 그럴 거라고 말하고 있어.
+Alina: {SICK}젠장, 시간 낭비네.{ENDSICK}
+Alina: 봐봐, 사실은 말이야, 누군가가 조금이라도 실수하면, 우리는 모두 사라져. 인프라, 생명공학, 안전, 산업, 교육 - 젠장, 심지어 내무부의 그 영혼 없는 놈들까지도. 모두 다. 그래서 네가 최고가 아니라면, 가장 똑똑하지 않다면, 엔진은커녕 여기 있을 자격조차 없어.
+Alina: 질문하고 싶은 다른 사람 있으면, 알아서 해결해. 그렇지 않으면, 너보다 오래 있던 사람한테 물어봐.
+Alina: 우리는 매일 아침 0900시에 여기서 만나. 제시간은 늦은 거야. 0830시까지 여기 와, 안 그러면 오래 여기 있지 못할 거야. 회의 종료.

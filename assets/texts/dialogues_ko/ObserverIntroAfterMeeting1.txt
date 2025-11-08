@@ -1,13 +1,13 @@
 ENTER Rui
 ENTER observer
-observer: Hello. I was waiting for you.
-Rui, smile: Nice to see you dear Observer! How can I help you?
-observer: Tell me about yourself. Your name and current position.
-Rui: Huh... understood, dear Observer. My name is Rui, and I just became a junior technician of the infrastructure division.
-observer: Well said. Your identity has been verified. It seems you have followed my instructions successfully in the meeting.
-Rui, confused: Pardon me, dear observer. But what instruction do you mean? You just came to see me.
-observer: That is an extremely well versed response from you.
-observer: One more thing, the map of the station is at the bottom left of the screen. At your current location, you can move to the adjacent nodes in order to move locations. Currently, this takes approximately 30 minutes in the Station.
-Rui, confused: I am so sorry, dear observer, but I am not following the entirety of this conversation. Which screen do you mean? I don't see any. Also, I am able-bodied. I can walk to places without assistance.
-observer: It shouldn't make much sense to you. But each sentence I spoke was deemed necessary. I'll see you at the observatory.
-Rui: As you wish, dear Observer.
+observer: 안녕하세요. 당신을 기다리고 있었습니다.
+Rui, smile: 만나서 반갑습니다 Observer님! 어떻게 도와드릴까요?
+observer: 자신에 대해 말해보세요. 이름과 현재 직위요.
+Rui: 응... 알겠습니다, Observer님. 제 이름은 Rui이고, 방금 인프라 부서의 주니어 기술자가 되었어요.
+observer: 잘 말했습니다. 당신의 신원이 확인되었습니다. 회의에서 제 지시를 성공적으로 따른 것 같네요.
+Rui, confused: 실례지만, observer님. 무슨 지시를 말씀하시는 건가요? 방금 막 저를 만나러 오셨잖아요.
+observer: 당신으로부터 극히 잘 숙달된 대답이네요.
+observer: 한 가지 더, 스테이션의 지도는 화면 왼쪽 하단에 있습니다. 현재 위치에서, 위치를 이동하기 위해 인접한 노드로 이동할 수 있습니다. 현재 스테이션에서는 약 30분이 소요됩니다.
+Rui, confused: 정말 죄송하지만, observer님, 이 대화의 전체를 따라가지 못하겠어요. 어떤 화면을 말씀하시는 건가요? 아무것도 안 보여요. 그리고 저는 건강해요. 도움 없이 장소를 걸어갈 수 있어요.
+observer: 당신에게 큰 의미가 없을 겁니다. 하지만 제가 말한 각 문장은 필요하다고 판단되었습니다. 천문대에서 뵙겠습니다.
+Rui: 원하시는 대로요, Observer님.

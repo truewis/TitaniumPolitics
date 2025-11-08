@@ -1,4 +1,4 @@
-observer: Hello. Welcome to Titanium Politics.
-observer: We will take this time to teach you what you need to know about affecting the Station.
-observer: You interact with the world through taking actions, which are represented by buttons at the bottom of the screen.
-observer: One action you can always take is to wait. Why don’t you try that right now? See you in a bit.
+observer: 안녕하세요. Titanium Politics에 오신 걸 환영합니다.
+observer: 우리는 이 시간을 활용하여 스테이션에 영향을 미치는 데 필요한 것들을 가르쳐드릴 겁니다.
+observer: 화면 하단의 버튼으로 표시되는 행동을 취함으로써 세계와 상호작용합니다.
+observer: 항상 취할 수 있는 한 가지 행동은 기다리는 것입니다. 지금 바로 시도해보는 게 어떨까요? 곧 뵙겠습니다.

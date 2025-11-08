@@ -1,15 +1,15 @@
-Salvor: If nobody else would like to begin, I'd be happy to start. Is that okay with you all?
-Salvor: Thank you for your attention. I'd like to say that, from the few years I've been here, we've been doing a wonderful job, but we aren't working at maximum capacity.
-Salvor: Because of a lack of resources invested in our work - which is arguably the most important job in the entire Station, bar none - we haven't been allowed to pursue all of the research we would like to.
-Salvor: Research that would benefit all of us, not just the people here, but the entire Station. I'm proud to look at how far we've come over the past years, and how much progress we have made, but I'm worried that it won't be enough.
-Salvor: Unless there is a change, and we can truly work to our full capacity, we may all be doomed.
-Salvor: That's why, if you would all allow me to, I plan on doing nothing but creating the best environment for all of you to do your best.
-Salvor: To use your ingenuity, your creativity, your technique, your experience, to the fullest, and ultimately, save us all.
-Salvor: And who knows? After that, maybe we could work even harder together to improve everyone's lives in more ways. Thank you for your attention.
-Rui: Hello. I'm Rui, I'm pretty new here, but wasn't Alina doing the exact same thing? She was trying her best to give us that environment, while also verifying what we were doing was technically sound.
-Krailin: Yeah! What're you tryin' to say, that she could've been doing more?
-Vaeme: More than what she was already doing? How would that have been possible? We all saw how hard she was working.
-Rui: It might be more accurate to say we barely saw her, she was working so hard. But really, what do you think could be done to improve the situation? What makes any of us as qualified as her?
-Salvor:  If I'm being totally honest, I would be happy if I was half as qualified as her. She had an effect on all of us. But the thing is, I don't need to be. If we just keep going the way she was, and follow the path she set for us, then I'm sure it'd be a lot more manageable. She already opened a door for us. We just need to step through.
-Rui: I'll be the first one to say that she did wonderfully. But Alina wasn't an administrator. Look, I didn't know her for long, but she was one of us. She was an engineer. She could make anything with fuel work - anything. But the Watchmaker, the Controller and the Observer? Nobody can get them to work. They're the ones who can really make change.
-Rui: And I intend to get them on our side, because if they're really here for the benefit of the Station, then they'll see that we're everyone's one and only hope for survival. And that the alternative isn't that far in the future. That's how we get the resources we need. That's how we get access to the minerals we need, instead of letting them be turned into another set of batons, or another useless toy.
+Salvor: 다른 누구도 시작하고 싶지 않다면, 제가 기꺼이 시작하겠습니다. 괜찮으신가요?
+Salvor: 관심 가져주셔서 감사합니다. 제가 여기 있었던 몇 년 동안, 우리는 훌륭한 일을 해왔지만, 최대 능력으로 일하고 있지는 않다고 말하고 싶습니다.
+Salvor: 우리 일에 투자되는 자원의 부족 때문에 - 이건 틀림없이 전체 스테이션에서 가장 중요한 일인데도 - 우리가 원하는 모든 연구를 추구할 수 없었습니다.
+Salvor: 여기 사람들뿐만 아니라 전체 스테이션 모두에게 이익이 될 연구요. 지난 몇 년 동안 우리가 얼마나 멀리 왔는지, 얼마나 많은 진전을 이뤘는지 보는 것이 자랑스럽지만, 그것으로 충분하지 않을까 걱정됩니다.
+Salvor: 변화가 없고, 우리가 진정으로 최대 능력으로 일할 수 없다면, 우리 모두 운명에 처할 수 있습니다.
+Salvor: 그래서, 여러분이 허락해주신다면, 저는 여러분 모두가 최선을 다할 수 있는 최고의 환경을 만드는 것만 할 계획입니다.
+Salvor: 여러분의 창의력, 창조성, 기술, 경험을 최대한 활용하여, 궁극적으로 우리 모두를 구하는 거죠.
+Salvor: 그리고 누가 알겠어요? 그 후에, 아마 우리는 더 많은 방법으로 모두의 삶을 개선하기 위해 더 열심히 함께 일할 수 있을지도. 관심 가져주셔서 감사합니다.
+Rui: 안녕하세요. 저는 Rui입니다, 여기 꽤 새로 왔는데요, Alina가 정확히 같은 일을 하고 있지 않았나요? 그녀는 우리가 하는 일이 기술적으로 타당한지 검증하면서도 우리에게 그런 환경을 제공하기 위해 최선을 다하고 있었어요.
+Krailin: 그래! 뭘 말하려는 거야, 그녀가 더 많이 할 수 있었다는 거야?
+Vaeme: 그녀가 이미 하고 있던 것보다 더? 어떻게 그게 가능했겠어요? 우리 모두 그녀가 얼마나 열심히 일했는지 봤잖아요.
+Rui: 그녀가 너무 열심히 일해서 우리는 그녀를 거의 보지 못했다고 말하는 게 더 정확할지도 몰라요. 하지만 정말로, 상황을 개선하기 위해 뭘 할 수 있다고 생각하세요? 우리 중 누가 그녀만큼 자격이 있나요?
+Salvor: 완전히 솔직히 말하자면, 제가 그녀의 절반만큼만 자격이 있어도 행복할 거예요. 그녀는 우리 모두에게 영향을 미쳤어요. 하지만 문제는, 그럴 필요가 없다는 거예요. 우리가 그녀가 하던 방식대로 계속하고, 그녀가 우리를 위해 세운 길을 따라간다면, 훨씬 더 관리하기 쉬울 거라고 확신해요. 그녀는 이미 우리를 위해 문을 열었어요. 우리는 그냥 걸어 들어가기만 하면 돼요.
+Rui: 제가 제일 먼저 그녀가 훌륭하게 했다고 말하겠어요. 하지만 Alina는 행정가가 아니었어요. 보세요, 저는 그녀를 오래 알지 못했지만, 그녀는 우리 중 한 명이었어요. 그녀는 엔지니어였어요. 연료로 작동하는 무엇이든 만들 수 있었어요 - 무엇이든. 하지만 Watchmaker, Controller 그리고 Observer는? 아무도 그들을 작동시킬 수 없어요. 그들이 진정으로 변화를 만들 수 있는 사람들이에요.
+Rui: 그리고 저는 그들을 우리 편으로 만들 생각이에요, 왜냐하면 그들이 정말로 스테이션의 이익을 위해 여기 있다면, 그들은 우리가 모두의 유일한 생존 희망이라는 걸 볼 거예요. 그리고 대안이 그리 먼 미래에 있지 않다는 걸요. 그게 우리가 필요한 자원을 얻는 방법이에요. 그게 우리가 필요한 광물에 접근하는 방법이에요, 그것들이 또 다른 경찰봉이나 또 다른 쓸모없는 장난감으로 변하는 대신에요.

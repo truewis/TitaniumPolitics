@@ -1,15 +1,15 @@
 ENTER Rui
 ENTER Alina
 ENTER Salvor
-Alina: Just heard this from the cabinet meeting. We are running out of ammonia supply fast. In fact, we only have about a week's worth of it left until the farm operation will be impacted.
-Salvor: I sincerely apologise for the delay. But all the plumbers are occupied right now.
-Alina: Huh? How so? I definitely said that it is the top priority of the division to fix the ammonia system.
-Salvor: Well, last time I checked, Rui booked them.
-Alina: Rui, is that true? I thought the impact barrier doesn't need any more plumbers.
-Rui: Sorry, I diverted them to fix the hospital plumbing system.
-Alina: Well, that is a good deed, but definitely not what I ordered. Who told you to do so?
-Rui: Well, I did it by myself. But I thought there is an ample inventory of ammonia, because a director in the interior division told me so.
-Alina: Oh you mean Agros, whose family runs a chemical retail business? Yeah, the ammonia prices are soaring, aren't they? And their business definitely has an ample amount of them, it's just not available for rest of us.
-Rui: (Shit......)
-Alina: Well, now it is your problem Rui. Get the ammonia system fixed within two days. You'll be in a big trouble otherwise, and I won't be able to cover this up.
-Rui: Understood, ma'am.
+Alina: 방금 내각 회의에서 들었어요. 암모니아 공급이 빠르게 바닥나고 있어요. 사실, 농장 운영에 영향을 미치기까지 일주일치밖에 남지 않았어요.
+Salvor: 지연에 대해 진심으로 사과드립니다. 하지만 모든 배관공들이 지금 바빠요.
+Alina: 응? 어떻게? 암모니아 시스템 수리가 부서의 최우선 순위라고 분명히 말했는데요.
+Salvor: 글쎄요, 마지막으로 확인했을 때, Rui가 그들을 예약했어요.
+Alina: Rui, 사실이에요? 충격 장벽에는 더 이상 배관공이 필요 없다고 생각했는데요.
+Rui: 죄송해요, 병원 배관 시스템을 고치는 쪽으로 전환했어요.
+Alina: 글쎄요, 좋은 일이긴 하지만, 분명히 내가 명령한 게 아니에요. 누가 그렇게 하라고 했어요?
+Rui: 글쎄요, 제가 스스로 했어요. 하지만 내부 부서의 이사가 그렇게 말해서 암모니아 재고가 충분하다고 생각했어요.
+Alina: 오 Agros를 말하는 거군요, 그의 가족이 화학 소매 사업을 운영하는? 네, 암모니아 가격이 치솟고 있죠, 그렇지 않나요? 그리고 그들의 사업에는 분명히 충분한 양이 있어요, 그냥 우리 나머지에게는 제공되지 않을 뿐이죠.
+Rui: (젠장......)
+Alina: 글쎄요, 이제 당신 문제예요 Rui. 이틀 안에 암모니아 시스템을 고치세요. 그렇지 않으면 큰 문제에 처할 거고, 나는 이걸 덮을 수 없어요.
+Rui: 알겠습니다, 부장님.

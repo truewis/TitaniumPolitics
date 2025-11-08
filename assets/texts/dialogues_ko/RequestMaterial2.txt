@@ -1,9 +1,9 @@
 ENTER Alina
 ENTER Rui
-Alina: Good. It seems to me that we don't nearly have enough number of {COLOR=RED}components{ENDCOLOR} there. I think we need 200 more.
-Rui: Where did you get that number from?
-Alina: I just made it up.
+Alina: 좋아. 내가 보기엔 거기에 {COLOR=RED}부품{ENDCOLOR}이 충분하지 않은 것 같아. 200개 더 필요하다고 생각해.
+Rui: 그 숫자는 어디서 나온 거예요?
+Alina: 그냥 지어낸 거야.
 Rui, confused: ......?
-Alina: Honestly Rui, your job is not to question me. I'm saying this for your own good; you won't last long with that attitude.
-Alina: Your job now is to find the industry division leader and file the request for 200 more {COLOR=RED}components{ENDCOLOR}.
-Rui: Got it.
+Alina: 솔직히 Rui, 네 일은 날 의심하는 게 아니야. 너를 위해서 하는 말인데; 그런 태도로는 오래 버티지 못할 거야.
+Alina: 이제 네 일은 산업 부서장을 찾아서 {COLOR=RED}부품{ENDCOLOR} 200개 더 달라는 요청서를 제출하는 거야.
+Rui: 알겠어요.

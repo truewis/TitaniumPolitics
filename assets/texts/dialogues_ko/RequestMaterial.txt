@@ -1,4 +1,4 @@
 ENTER Rui
 ENTER Alina
-Alina: Here's your first task. As you know. we keep the construction materials in the yards. I haven't had time to check the lower deck yard though.
-Alina: Go there and examine the inventory. Come back to me with a report of what you find.
+Alina: 여기 첫 번째 작업이야. 알다시피. 우리는 건설 자재를 야적장에 보관해. 하지만 하부 갑판 야적장을 확인할 시간이 없었어.
+Alina: 거기 가서 재고를 조사해. 발견한 것에 대한 보고서를 가지고 내게 돌아와.

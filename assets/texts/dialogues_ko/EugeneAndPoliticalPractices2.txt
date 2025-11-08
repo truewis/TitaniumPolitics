@@ -1,12 +1,12 @@
-Eugene, confused: You don't look so great, my friend.
-Rui, confused: I don't think I will ever be a good manager.
-Eugene, confused: What happened, Rui?
-Rui, confused: One of the employees is never reporting back any work. I mean, that itself is not a problem, it was his new job, he could've learned.
-Rui: But he hasn't. Now I am questioning the way I trained him.
-Eugene: What do you suspect you did wrong?
-Rui: I don't know....... Nothing seemed to go through. After a quarter he was making exact same mistakes he was making on day 1. What was even worse, is that he than refused to take responsibility or learn anything really.
-Eugene: Oh, well. Rui, I know you won't like this, but I have to tell you this, Some people can't be trained. They are simply unprepared to stand on themselves as adults, and it is not our job to fix their darn lives.
-Eugene: You have to fire them. By doing so, not only you will massively improve your workplace's performance, but your other, better employees will be happier as well. Keep in mind that it is one of your responsibilities to protect your direct reports from potentially harmful and toxic coworkers.
-Rui, confused: I guess you are correct. I just tried to follow the principle, you know. People can be made better.
-Eugene, angry: {SHAKE}Rui, don't ever say that phrase again!{ENDSHAKE} It doesn't mean what you think it means.
-Rui, confused: I am sorry. I didn't know that.
+Eugene, confused: 안 좋아 보이네, 친구.
+Rui, confused: 나는 절대 좋은 관리자가 될 수 없을 것 같아요.
+Eugene, confused: 무슨 일이야, Rui?
+Rui, confused: 직원 중 한 명이 절대 작업을 보고하지 않아요. 그 자체는 문제가 아니에요, 새로운 일이었으니까, 배울 수 있었죠.
+Rui: 하지만 배우지 않았어요. 이제 내가 그를 훈련시킨 방법에 의문을 갖고 있어요.
+Eugene: 뭘 잘못했다고 생각해?
+Rui: 모르겠어요....... 아무것도 통하지 않는 것 같았어요. 분기가 지난 후에도 첫날 했던 것과 똑같은 실수를 하고 있었어요. 더 나쁜 건, 그가 책임을 지거나 정말 뭔가를 배우는 걸 거부했다는 거예요.
+Eugene: 오, 글쎄. Rui, 넌 이걸 좋아하지 않을 걸 알지만, 말해줘야겠어, 어떤 사람들은 훈련될 수 없어. 그들은 단순히 성인으로서 스스로 서기에 준비가 안 되어 있고, 그들의 빌어먹을 삶을 고치는 건 우리 일이 아니야.
+Eugene: 그들을 해고해야 해. 그렇게 함으로써, 직장의 성과를 대폭 향상시킬 뿐만 아니라, 다른 더 나은 직원들도 더 행복해질 거야. 직속 부하들을 잠재적으로 해롭고 독성 있는 동료들로부터 보호하는 것이 너의 책임 중 하나라는 걸 명심해.
+Rui, confused: 맞는 것 같아요. 그냥 원칙을 따르려고 했어요, 있잖아요. 사람들은 더 나아질 수 있다고.
+Eugene, angry: {SHAKE}Rui, 그 말은 다시는 하지 마!{ENDSHAKE} 그건 네가 생각하는 의미가 아니야.
+Rui, confused: 죄송해요. 몰랐어요.

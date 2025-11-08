@@ -1,7 +1,7 @@
 ENTER Rui
-Rui: Hmm, what is that bustling noise
+Rui: 흠, 저 시끌벅적한 소리는 뭐지
 ENTER Vaeme
-Rui: Hi Vaeme! Another happy day for the people!
-Vaeme: Oh Hi Rui! It is our pleasure!
-Rui: Thank you for
-Narrator: New information has been added.
+Rui: 안녕 Vaeme! 사람들에게 또 다른 행복한 날이네!
+Vaeme: 오 안녕 Rui! 우리의 기쁨이지!
+Rui: 감사합니다
+Narrator: 새로운 정보가 추가되었습니다.

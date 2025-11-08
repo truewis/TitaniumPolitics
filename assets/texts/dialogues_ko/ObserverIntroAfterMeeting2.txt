@@ -1,14 +1,14 @@
 ENTER Rui
 ENTER observer
-observer: Hope that wasn't a hassle.
-Rui, smile: It was not, dear Observer! It is a great pleasure to be invited to your workplace.
-observer: That is correct, we are in the observatory now. Now, could you do me a favor?
-Rui: I am always ready to serve you, dear Observer.
-observer: I would like to you repair the power system of the observatory.
-Rui, confused: It is such a pleasure to partake in such an important task, dear Observer. But are you sure you want me, not other more experienced personals, to work on the machinery?
-observer: Rui, there is one fact I would like to remind you. Every word I pronounce is supported by...
-Rui: "The Reason", dear Observer. I apologize for not remembering the fact. I believe your decision is correct.
-observer: Rather than questioning your ability, you could have asked, "is there any responsibility I must be aware of while fixing the system?"
-observer: The answer is, there is none. Nothing is operational right now, so nothing of value will be lost even if you further destroy the system.
-Rui: Understood, dear Observer.
-observer: Very good. Now, you have my permission to work on the power system. Have fun.
+observer: 번거롭지 않았기를 바랍니다.
+Rui, smile: 아니에요, Observer님! 당신의 직장에 초대받아서 큰 기쁨이에요.
+observer: 맞습니다, 우리는 지금 천문대에 있습니다. 이제, 부탁 하나 해도 될까요?
+Rui: 항상 당신을 섬길 준비가 되어 있어요, Observer님.
+observer: 천문대의 전력 시스템을 수리해주셨으면 합니다.
+Rui, confused: 그렇게 중요한 작업에 참여하게 되어 큰 기쁨이에요, Observer님. 하지만 더 경험 많은 사람들이 아니라 제가 기계를 다루길 원하시는 게 확실하신가요?
+observer: Rui, 당신에게 상기시키고 싶은 한 가지 사실이 있습니다. 제가 말하는 모든 단어는...
+Rui: "Reason"에 의해 뒷받침됩니다, Observer님. 사실을 기억하지 못해서 사과드려요. 당신의 결정이 옳다고 믿어요.
+observer: 당신의 능력을 의심하기보다는, "시스템을 수리하는 동안 제가 알아야 할 책임이 있나요?"라고 물어볼 수도 있었습니다.
+observer: 답은, 없습니다. 지금은 아무것도 작동하지 않으므로, 시스템을 더 파괴하더라도 가치 있는 것을 잃지 않을 겁니다.
+Rui: 알겠습니다, Observer님.
+observer: 아주 좋습니다. 이제, 전력 시스템을 다룰 수 있는 권한을 드립니다. 즐기세요.

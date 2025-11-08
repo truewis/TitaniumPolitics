@@ -1,13 +1,13 @@
 ENTER DrPaik
 ENTER Rui
-Rui: That is not a 'leaking' tank by any means. It is a completely busted tank. The only way to fix that is to replace the tank.
-DrPaik, smile: That would be wonderful! Imagine having a fully functional water system in the hospital again!
-Rui: I will get right on it, but we need a titanium tank for drinking water. That shit is hard to build. I am not authorized to make purchases, but I will file a report to my supervisor.
-DrPaik, confused: But that will take weeks! I know the system too well. We need to fix this now.
-Rui: That is the fastest I can do. I am sorry.
-DrPaik: But we might lose Sylvia if we don't fix this now!
-Rui, angry: {SHAKE}Sir, are you seriously threatening an engineer?{ENDSHAKE}
-DrPaik, smile: I heard that somewhere at the outer barrier loading bay there are a few tanks ready.
-Rui, angry: That information is confidential, whether it is true or not. And now you're suggesting stealing a division property. All of this is strictly illegal.
-DrPaik: The patients need your help desperately. I'll be waiting here.
+Rui: 이건 '새는' 탱크가 아니에요. 완전히 망가진 탱크예요. 고치는 유일한 방법은 탱크를 교체하는 거예요.
+DrPaik, smile: 그거 좋겠네요! 병원에 완전히 작동하는 물 시스템이 다시 생긴다는 걸 상상해봐요!
+Rui: 바로 시작하겠지만, 식수용 티타늄 탱크가 필요해요. 그건 만들기 어려워요. 전 구매 권한이 없지만, 상사에게 보고서를 제출하겠어요.
+DrPaik, confused: 하지만 그건 몇 주가 걸릴 거예요! 나도 시스템을 너무 잘 알아요. 지금 당장 고쳐야 해요.
+Rui: 그게 제가 할 수 있는 가장 빠른 방법이에요. 죄송해요.
+DrPaik: 하지만 지금 고치지 않으면 Sylvia를 잃을 수도 있어요!
+Rui, angry: {SHAKE}선생님, 지금 엔지니어를 협박하는 거예요?{ENDSHAKE}
+DrPaik, smile: 외부 장벽 적재 구역 어딘가에 탱크 몇 개가 준비되어 있다고 들었어요.
+Rui, angry: 그 정보는 기밀이에요, 사실이든 아니든. 그리고 이제 당신은 부서 재산을 훔치자고 제안하는 거예요. 이 모든 게 엄격히 불법이에요.
+DrPaik: 환자들이 당신의 도움을 절실히 필요로 해요. 여기서 기다리고 있을게요.
 
