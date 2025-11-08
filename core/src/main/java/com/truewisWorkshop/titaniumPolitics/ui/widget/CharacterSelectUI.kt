@@ -8,6 +8,7 @@ import com.badlogic.gdx.utils.Align
 import com.titaniumPolitics.game.core.Character
 import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.core.ReadOnly
+import com.truewisWorkshop.titaniumPolitics.ui.widget.DivisionSelectButtonGroup
 import ktx.scene2d.*
 
 //This UI is used to select a character as a parameter for an action.
@@ -17,7 +18,9 @@ class CharacterSelectUI(val gameState: GameState) : WindowUI("CharacterSelectTit
 
     val charactersTable = scene2d.table()
     val scrollPane = ScrollPane(charactersTable)
-    val divisionSelectionBox = scene2d.buttonGroup(0, 1)
+    val divisionSelectionBox = DivisionSelectButtonGroup {
+        this.refresh(it)
+    }
     var selectedCharacterCallback: (String) -> Unit = {}
 
     init {
@@ -27,38 +30,6 @@ class CharacterSelectUI(val gameState: GameState) : WindowUI("CharacterSelectTit
         content.add(divisionSelectionBox).growX()
         content.row()
         content.add(scrollPane).grow()
-        listOf(
-            "infrastructure",
-            "interior",
-            "safety",
-            "bioengineering",
-            "mining",
-            "education",
-            "industry"
-        ).forEach { tobj ->
-            val t = scene2d.button {
-                //TODO:Agenda Tooltip addListener(ActionTooltipUI(tobj))
-                container {
-                    it.size(150f)
-                    it.fill(0.66f, 0.66f)
-                    it.align(Align.center)
-                    image("Help") {
-                        this.setDrawable(Scene2DSkin.defaultSkin, tobj + "Division")
-
-                    }
-                }
-                this@button.addListener(object : ClickListener() {
-                    override fun clicked(
-                        event: InputEvent?,
-                        x: Float,
-                        y: Float
-                    ) {
-                        this@CharacterSelectUI.refresh(tobj)
-                    }
-                })
-            }
-            divisionSelectionBox.add(t).size(150f).fill()
-        }
     }
 
     fun refresh(

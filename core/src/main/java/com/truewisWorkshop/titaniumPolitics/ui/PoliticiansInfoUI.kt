@@ -12,12 +12,16 @@ import com.titaniumPolitics.game.core.Party
 import com.titaniumPolitics.game.core.ReadOnly
 import com.titaniumPolitics.game.ui.actions.ApparatusSelectUI
 import com.titaniumPolitics.game.ui.widget.BudgetDisplayUI
+import com.titaniumPolitics.game.ui.widget.DivisionBannerUI
 import com.titaniumPolitics.game.ui.widget.ResourceDisplayUI
 import com.titaniumPolitics.game.ui.widget.TitleLabel
+import com.truewisWorkshop.titaniumPolitics.ui.widget.DivisionSelectButtonGroup
+import ktx.actors.alpha
 import ktx.scene2d.KTable
 import ktx.scene2d.Scene2DSkin.defaultSkin
 import ktx.scene2d.button
 import ktx.scene2d.buttonGroup
+import ktx.scene2d.container
 import ktx.scene2d.label
 import ktx.scene2d.scene2d
 import ktx.scene2d.scrollPane
@@ -28,7 +32,18 @@ import ktx.scene2d.table
 class PoliticiansInfoUI(val gameState: GameState) : Table(defaultSkin), KTable {
     private val peopleDataTable = Table()
     private val peopleInformationPane = ScrollPane(peopleDataTable)
+    private val divisionSelection = DivisionSelectButtonGroup { divisionName ->
+        // Handle division selection change if needed
+        selectedDivision = divisionName
+        refresh()
+    }
+    private val peopleInformationRootTable = scene2d.table {
+        add(this@PoliticiansInfoUI.divisionSelection).growX()
+        row()
+        add(this@PoliticiansInfoUI.peopleInformationPane)
+    }
     private val divisionDataTable = scene2d.table()
+    var selectedDivision: String = gameState.player.division?.name ?: ""
 
     //private val divisionInformationPane = ScrollPane(divisionDataTable)
     private val workplaceDataTables = hashMapOf<String, KTable>()
@@ -50,7 +65,7 @@ class PoliticiansInfoUI(val gameState: GameState) : Table(defaultSkin), KTable {
                         object : com.badlogic.gdx.scenes.scene2d.utils.ChangeListener() {
                             override fun changed(event: ChangeEvent?, actor: Actor?) {
                                 if (!isChecked) return
-                                this@PoliticiansInfoUI.peopleDataTable.isVisible = true
+                                this@PoliticiansInfoUI.peopleInformationRootTable.isVisible = true
                                 this@PoliticiansInfoUI.divisionDataTable.isVisible = false
                                 this@PoliticiansInfoUI.workplaceDataTables.values.forEach {
                                     (it as Table).isVisible = false
@@ -65,7 +80,7 @@ class PoliticiansInfoUI(val gameState: GameState) : Table(defaultSkin), KTable {
                         object : com.badlogic.gdx.scenes.scene2d.utils.ChangeListener() {
                             override fun changed(event: ChangeEvent?, actor: Actor?) {
                                 if (!isChecked) return
-                                this@PoliticiansInfoUI.peopleDataTable.isVisible = false
+                                this@PoliticiansInfoUI.peopleInformationRootTable.isVisible = false
                                 this@PoliticiansInfoUI.divisionDataTable.isVisible = true
                                 this@PoliticiansInfoUI.workplaceDataTables.values.forEach {
                                     (it as Table).isVisible = false
@@ -84,7 +99,7 @@ class PoliticiansInfoUI(val gameState: GameState) : Table(defaultSkin), KTable {
                                 object : com.badlogic.gdx.scenes.scene2d.utils.ChangeListener() {
                                     override fun changed(event: ChangeEvent?, actor: Actor?) {
                                         if (!isChecked) return
-                                        this@PoliticiansInfoUI.peopleDataTable.isVisible = false
+                                        this@PoliticiansInfoUI.peopleInformationRootTable.isVisible = false
                                         this@PoliticiansInfoUI.divisionDataTable.isVisible = false
                                         this@PoliticiansInfoUI.workplaceDataTables.values.forEach {
                                             (it as Table).isVisible = false
@@ -100,7 +115,7 @@ class PoliticiansInfoUI(val gameState: GameState) : Table(defaultSkin), KTable {
             row()
             stack {
                 it.grow()
-                add(this@PoliticiansInfoUI.peopleInformationPane)
+                add(this@PoliticiansInfoUI.peopleInformationRootTable)
                 add(this@PoliticiansInfoUI.divisionDataTable)
                 this@PoliticiansInfoUI.workplaceDataTables.forEach {
                     add(it.value as Table)
@@ -125,7 +140,11 @@ class PoliticiansInfoUI(val gameState: GameState) : Table(defaultSkin), KTable {
         // List all characters except the player
         val player = gameState.playerName
         val allCharacters =
-            gameState.characters.filter { it.key != player && it.key in gameState.knownCharactersToPlayer }
+            gameState.characters.filter {
+                it.key != player && it.key in gameState.knownCharactersToPlayer && (selectedDivision == "" || it.value.division?.name == selectedDivision
+                    /**/)
+            }
+                .toSortedMap()
         for (character in allCharacters) {
             // Name
             peopleDataTable.add(
@@ -159,33 +178,40 @@ class PoliticiansInfoUI(val gameState: GameState) : Table(defaultSkin), KTable {
             val division =
                 this@PoliticiansInfoUI.gameState.parties.filter { it.value.type == Party.Type.DIVISION && this@PoliticiansInfoUI.gameState.playerName in it.value.members }
                     .values.first()
-            table {
+            stack {
                 it.grow()
-                label(ReadOnly.prop(division.name), "docTitle").apply {
-                    setFontScale(0.7f)
-                    setAlignment(Align.left)
-                }
-                row()
-                //Division headquarter, useless info
+                table {
+                    //Division name, already shown in banner
+//                    label(ReadOnly.prop(division.name), "docTitle").apply {
+//                        setFontScale(0.7f)
+//                        setAlignment(Align.left)
+//                    }
+//                    row()
+                    //Division headquarter, useless info
 //            label(ReadOnly.placeProp(division.home!!), "docTitle").apply {
 //                setFontScale(0.5f)
 //                setAlignment(Align.left)
 //            }
 //            row()
-                label(
-                    ReadOnly.prop("PoliticiansInfoUI-DivisionLeader") + ": " + ReadOnly.charProp(
-                        (division.leader ?: "NotAssigned")
-                    ), "docTitle"
-                ).apply {
-                    setFontScale(0.5f)
-                    setAlignment(Align.left)
+                    label(
+                        ReadOnly.prop("PoliticiansInfoUI-DivisionLeader") + ": " + ReadOnly.charProp(
+                            (division.leader ?: "NotAssigned")
+                        ), "docTitle"
+                    ).apply {
+                        setFontScale(0.5f)
+                        setAlignment(Align.left)
+                    }
+                    row()
+                    label(
+                        ReadOnly.prop("PoliticiansInfoUI-Size").format(division.size), "docTitle"
+                    ).apply {
+                        setFontScale(0.3f)
+                        setAlignment(Align.left)
+                    }
                 }
-                row()
-                label(
-                    ReadOnly.prop("PoliticiansInfoUI-Size").format(division.size), "docTitle"
-                ).apply {
-                    setFontScale(0.3f)
-                    setAlignment(Align.left)
+                container(DivisionBannerUI(division, size = 380f)) {
+                    center()
+                    alpha = 0.1f
                 }
             }
             scrollPane {
