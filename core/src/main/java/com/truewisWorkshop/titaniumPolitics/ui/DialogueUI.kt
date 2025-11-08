@@ -49,6 +49,11 @@ class DialogueUI(val gameState: GameState) : Table(defaultSkin), KTable {
         touchable = Touchable.disabled
         setAlignment(Align.bottomLeft)
     }
+    private val speakerPositionDisplay = Label("", skin, "docTitle").apply {
+        setFontScale(0.3f)
+        touchable = Touchable.disabled
+        setAlignment(Align.bottomLeft)
+    }
     private val ctnuButton = Label(">>>", skin, "consoleWhite")
     val donePlayingLine = ArrayList<(Int) -> Unit>()
     private val background = Image(defaultSkin, "BackgroundNoiseHD")
@@ -74,7 +79,15 @@ class DialogueUI(val gameState: GameState) : Table(defaultSkin), KTable {
                 stack {
                     it.growX()
                     val t = table {
-                        add(this@DialogueUI.speakerNameDisplay).fill().growX()
+                        table {
+                            background = skin.getDrawable(
+                                "n_panel"
+                            )
+                            it.grow()
+                            add(this@DialogueUI.speakerNameDisplay).fill().growX().left()
+                            row()
+                            add(this@DialogueUI.speakerPositionDisplay).fill().growX().left().padBottom(15f)
+                        }
                         row()
                         add(this@DialogueUI.currentTextDisplay).fill().growX()
                         row()
@@ -162,7 +175,15 @@ class DialogueUI(val gameState: GameState) : Table(defaultSkin), KTable {
             }
             if (line.startsWith("SLAM")) {
                 //TODO()
-                nextLine()
+                addSlamAction()
+                addAction(
+                    Actions.sequence(
+                        Actions.delay(0.5f),
+                        Actions.run {
+                            nextLine()
+                        }
+                    )
+                )
                 return
             }
 
@@ -172,6 +193,22 @@ class DialogueUI(val gameState: GameState) : Table(defaultSkin), KTable {
             ctnuCallback = {}
             instance.isVisible = false
         }
+    }
+
+    fun addSlamAction() {
+        //Shake the screen or add sound effect
+        val objectsToShake =
+            listOf(background, portraitsTable, currentTextDisplay, speakerNameDisplay, speakerPositionDisplay)
+        objectsToShake.forEach {
+            it.addAction(
+                Actions.sequence(
+                    Actions.moveBy(10f, 0f, 0.05f),
+                    Actions.moveBy(-20f, 0f, 0.1f),
+                    Actions.moveBy(10f, 0f, 0.05f)
+                )
+            )
+        }
+        SoundEngine.playSound("slam.mp3")
     }
 
     fun playDialogue(dialogueKey: String) {
@@ -315,10 +352,13 @@ class DialogueUI(val gameState: GameState) : Table(defaultSkin), KTable {
         val speaker = prefix[0]
         val text = parts[1]
 
-        if (speaker == "Narrator")
+        if (speaker == "Narrator") {
             speakerNameDisplay.setText("")
-        else
+            speakerPositionDisplay.setText("")
+        } else {
             speakerNameDisplay.setText(ReadOnly.charProp(speaker))
+            speakerPositionDisplay.setText(gameState.characters[speaker]?.generatePositionText() ?: "")
+        }
         currentTextDisplay.restart(text)
 
         // Bring the current speaker to the foreground

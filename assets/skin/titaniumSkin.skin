@@ -476,6 +476,16 @@ com.badlogic.gdx.scenes.scene2d.ui.Slider$SliderStyle: {
 		background: SliderFillTiledColor
 		knobBefore: SliderFillTiled
 	}
+	mechanical-horizontal: {
+		knobDown: n_slider-knob-pressed-horizontal
+		background: n_scrollbar-horizontal
+		knob: n_slider-knob-horizontal
+	}
+	mechanical-vertical: {
+		knobDown: n_slider-knob-pressed-vertical
+		background: n_scrollbar-vertical
+		knob: n_slider-knob-vertical
+	}
 }
 com.badlogic.gdx.scenes.scene2d.ui.TextButton$TextButtonStyle: {
 	default: {
