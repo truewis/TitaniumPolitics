@@ -184,7 +184,7 @@
     ]
   },
   "outerBarrierWest": {
-    "image": "data/conYard.png",
+    "image": "data/outerbarrier.png",
     "sound": "data/sounds/conYard.mp3",
     "desc": "Center of the hexagonal frame.",
     "ind": "capsuleMapIndCenter",
@@ -196,7 +196,7 @@
     ]
   },
   "outerBarrierCenter": {
-    "image": "data/conYard.png",
+    "image": "data/outerbarrier.png",
     "sound": "data/sounds/conYard.mp3",
     "desc": "Center of the hexagonal frame.",
     "ind": "capsuleMapIndCenter",
@@ -208,7 +208,7 @@
     ]
   },
   "outerBarrierEast": {
-    "image": "data/conYard.png",
+    "image": "data/outerbarrier.png",
     "sound": "data/sounds/conYard.mp3",
     "desc": "Center of the hexagonal frame.",
     "ind": "capsuleMapIndCenter",
