@@ -1,11 +1,11 @@
 ENTER Rui
 ENTER Hiroshi
-Hiroshi: Ok. Your request is noted. I have one question though.
-Rui: Yes, sir.
-Hiroshi: Why didn't Alina directly come to me and ask for this?
-Rui: She's busy with other tasks. She asked me to do it.
-Hiroshi, angry: And what about me? Look at all these documents on my desk. I am not as idle as you think.
+Hiroshi: 알겠어요. 요청이 기록됐어요. 하지만 질문이 하나 있어요.
+Rui: 네, 국장님.
+Hiroshi: Alina가 왜 직접 나한테 와서 요청하지 않았죠?
+Rui: 그녀는 다른 일로 바빠요. 제가 하라고 했어요.
+Hiroshi, angry: 그럼 나는? 내 책상 위의 이 모든 문서들을 봐요. 나는 당신이 생각하는 것만큼 한가하지 않아요.
 Rui, confused: ......?
-Hiroshi, angry: What would my division people think of the leader if a random technician can come by freely and ask for things?
-Rui, confused: Uhm... being an efficient leader?
-Hiroshi: You really have a lot to learn. That's it, I will not file this request. Go and tell Alina to come directly to me.
+Hiroshi, angry: 무작위 기술자가 자유롭게 와서 물건을 요청할 수 있다면 내 부서 사람들은 리더를 어떻게 생각하겠어요?
+Rui, confused: 음... 효율적인 리더라고?
+Hiroshi: 정말 배울 게 많네요. 그거면 됐어요, 이 요청은 제출하지 않을 거예요. 가서 Alina한테 직접 나한테 오라고 전해요.

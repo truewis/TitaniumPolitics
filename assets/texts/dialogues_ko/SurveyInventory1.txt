@@ -1,6 +1,6 @@
-Alina: By the way, Rui, I finally found a job for you.
-Rui: I'm listening, ma'am.
-Alina: You are going to survey the inventory of our workplaces.
-Alina: To remind you, there are nine workplaces in total. Two construction yards, three recycling facilities, two electrolysis stations, two water reservoirs.
-Rui: That must take a while, but I can do that.
-Alina: Exactly. I'll give you two days. Report to me back in our daily meetings.
+Alina: 그런데, Rui, 드디어 너한테 줄 일을 찾았어.
+Rui: 듣고 있어요, 부장님.
+Alina: 너는 우리 작업장의 재고를 조사할 거야.
+Alina: 상기시켜주자면, 총 9개의 작업장이 있어. 건설 야적장 2개, 재활용 시설 3개, 전기분해 스테이션 2개, 물 저장소 2개.
+Rui: 시간이 좀 걸리겠지만, 할 수 있어요.
+Alina: 정확해. 이틀을 줄게. 일일 회의에서 나한테 보고해.
