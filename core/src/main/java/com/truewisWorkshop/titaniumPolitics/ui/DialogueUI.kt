@@ -188,7 +188,8 @@ class DialogueUI(val gameState: GameState) : Table(defaultSkin), KTable {
         )
 
         currentDialogue = dialogueKey
-        dialogueLines = Gdx.files.internal("texts/$currentDialogue.txt")
+        // Load dialogue folder based on current locale.
+        dialogueLines = Gdx.files.internal("texts/dialogues_${ReadOnly.currentLocale.language}/$currentDialogue.txt")
             .readString()
             .split("\n")
             .filter { it.isNotBlank() }

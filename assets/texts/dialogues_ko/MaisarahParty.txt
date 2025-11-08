@@ -1,0 +1,8 @@
+ENTER Rui
+ENTER Maisarah
+Maisarah, smile: Hi! I don't think I've seen you around here.
+Rui, smile: Hello Dear Leader, I am Rui, a new director of the eastern barrier sector. I got your invitation.
+Maisarah, smile: Oh! Of course! Sorry, we often have too many people in the party.
+Rui: This place is indeed surprisingly crowded.
+Maisarah, smile: You shouldn't be surprised! We have the best food and booze in the entire station! All reserved for our hardworking directors and engineers!
+Maisarah: Oh my! I forgot you traveled a long way from the upper deck. You must be exhausted. Please get seated! I'll call the bartender for you.

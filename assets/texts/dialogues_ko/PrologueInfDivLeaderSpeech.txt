@@ -1,0 +1,19 @@
+ENTER Alina
+Alina: Good morning everyone.
+Krailin: Mornin'.
+Rui: Good morning, Dear Leader!
+Alina: Ah, ditch that nonsense. We don't do that here.
+Vaeme: Good to see you healthy again, ma'am. I was deeply concerned when I heard the news.
+Alina: Well, Vaeme, that caving could easily have opened up a room for your promotion. Maybe give it another chance!
+Vaeme, confused: I always loved your jokes, ma'am.
+Alina: So, we have a new director. Rui is from our newest batch of engineers.
+Alina: Now, you might think that you're going to be working directly on solutions to the engine problems here on The Station.
+Alina: You might think you're the special one who's going to figure out what's wrong with it and save us all. Maybe you will be. But probably not.
+Alina: Nonetheless, you're still going to have to be useful in some capacity, no? Since we have some......grave fiasco done in the eastern section. We needed someone new to undo the harm.
+ENTER Salvor
+Salvor: Excuse me, but in the job description, it's written that all engineers will work on the engine-
+Alina: Yeah? And I'm the one who wrote that job description, and I'm telling you only some of you will be.
+Alina: {SICK}Damn, what a waste of time.{ENDSICK}
+Alina: Look, the fact of the matter is, if anyone makes the slightest mistake, we're all gone. Infrastructure, bioengineering, safety, industry, education - hell, even those soulless bastards at the Division of the Interior. All of it. So if you aren't the best, the smartest, then you have no business being here at all, let alone with the engine.
+Alina: Anyone else that wants to ask questions, figure it out. Otherwise, ask someone who's been here longer than you.
+Alina: We meet every morning here at 0900. On time is late. Be here by 0830 or you won't be here for long. Meeting adjourned.

@@ -1,0 +1,26 @@
+ENTER Rui
+ENTER Peiyu
+Rui: I have to go to work.
+Peiyu: Not before the charges against you are lifted, ma'am.
+Peiyu: This is a high profile case involving one of the division leaders. We cannot handle this lightly.
+ENTER Astinomis
+Peiyu: We serve for the humanity, Dear Leader.
+Astinomis: Get back to work. How's it going?
+Peiyu: She answered to all our initial questions, sir.
+Astinomis: Let's see...... Surprisingly consistent answers, huh?
+Astinomis: So none of this was planned, just pure incompetency? Infra people as always, isn't it? No wonder we are in this situation right now.
+Peiyu: Most definitely, sir.
+Astinomis: And why is this particular barrier sector always in trouble? Where did all the budget go? They are spending twice as much as us, probably throwing tantrums like this every other day.
+ENTER ctrler
+Astinomis: Dear Controller, how can I serve you?
+ctrler: Astinomis, let Rui go. I was at the spot. I saw her face. It was not a face of a murderer.
+Astinomis: Dear Controller, the safety division was approaching to the same answer.
+Astinomis: As you wish, Dear Controller.
+EXIT ctrler
+Astinomis: Peiyu, till when could you submit the release form?
+Peiyu: Within this hour, sir.
+Astinomis: Do it quickly. I lost too much time on this useless incident.
+Peiyu: Absolutely, sir. Now...remind me of your name?
+Rui: Rui.
+Peiyu: Right. Rui, you are good to go now.
+Rui, confused: Well, thank you...?
