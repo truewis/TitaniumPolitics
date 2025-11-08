@@ -10,15 +10,17 @@ import com.titaniumPolitics.game.core.*
 import com.titaniumPolitics.game.core.GameEngine.Companion.AcquireParams
 import com.titaniumPolitics.game.core.gameActions.Move
 import com.titaniumPolitics.game.core.gameActions.Talk
-import com.titaniumPolitics.game.core.gameActions.Wait
 import com.titaniumPolitics.game.debugTools.Logger
 import com.titaniumPolitics.game.ui.AlertUI
 import com.titaniumPolitics.game.ui.ProgressBackgroundUI
 import com.titaniumPolitics.game.ui.widget.DescriptionLabel
+import com.titaniumPolitics.game.ui.widget.DivisionBannerUI
 import com.titaniumPolitics.game.ui.widget.InformationSourceUI
 import com.titaniumPolitics.game.ui.widget.ResourceDisplayUI
 import com.titaniumPolitics.game.ui.widget.TitleLabel
+import ktx.actors.alpha
 import ktx.scene2d.button
+import ktx.scene2d.container
 import ktx.scene2d.label
 import ktx.scene2d.scene2d
 import ktx.scene2d.stack
@@ -45,17 +47,25 @@ class PlaceMarkerWindowUI(var gameState: GameState, var owner: MapUI) : Table() 
         gameState.onAddInfo += this::moveInterruptCondition
     }
 
-    lateinit var moveLabel: Label
+    lateinit var moveTimeLabel: Label
     private val moveButton = scene2d.button {
-        this@PlaceMarkerWindowUI.moveLabel =
-            label(
-                "${ReadOnly.prop("PlaceMarkerWindowUI-MoveToPlacePrefix")} " + this@PlaceMarkerWindowUI.distance + "m",
-                "description"
-            ) {
-                setFontScale(0.4f)
-                setAlignment(Align.center)
-                color = Color.WHITE
-            }
+        label(
+            "${ReadOnly.prop("PlaceMarkerWindowUI-MoveToPlacePrefix")} ",
+            "description"
+        ) {
+            setFontScale(0.4f)
+            setAlignment(Align.center)
+            color = Color.WHITE
+        }
+        row()
+        moveTimeLabel = label(
+            "",
+            "description"
+        ) {
+            setFontScale(0.2f)
+            setAlignment(Align.center)
+            color = Color.WHITE
+        }
 
         addListener(object : com.badlogic.gdx.scenes.scene2d.utils.ChangeListener() {
             override fun changed(event: ChangeEvent?, actor: Actor?) {
@@ -269,7 +279,7 @@ class PlaceMarkerWindowUI(var gameState: GameState, var owner: MapUI) : Table() 
                 add(selectButton).size(400f, 75f).fill()
                 row()
             } else {
-                moveLabel.setText(ReadOnly.prop("PlaceMarkerWindowUI-TimeToDest").format(distance))
+                moveTimeLabel.setText(ReadOnly.prop("PlaceMarkerWindowUI-TimeToDest").format(distance))
                 //Disable the button if the player is already in the place. Calling place property will throw an exception when the game is first loaded.
                 if (gameState.characters[gameState.playerName]!!.place.name != placeDisplayed) {
                     add(moveButton).size(400f, 75f).fill()
@@ -280,10 +290,20 @@ class PlaceMarkerWindowUI(var gameState: GameState, var owner: MapUI) : Table() 
             row()
             add(managementInformation).fillX().expandX()
             row()
-            add(DescriptionLabel(ReadOnly.placeProp("$placeDisplayed-desc")).apply {
-                with(label) {
-                    color = Color.LIGHT_GRAY
+            add(scene2d.stack {
+                add(DescriptionLabel(ReadOnly.placeProp("$placeDisplayed-desc")).apply {
+                    with(label) {
+                        color = Color.LIGHT_GRAY
+                    }
+                })
+
+                gameState.places[this@PlaceMarkerWindowUI.placeDisplayed]!!.responsibleDivision?.let { div ->
+                    container(DivisionBannerUI(gameState.parties[div]!!)) {
+                        align(Align.center)
+                        alpha = 0.2f
+                    }
                 }
+
             }).growX().height(200f).fill().padTop(50f)
         }
         setSize(350f, 50f + content.prefHeight)
