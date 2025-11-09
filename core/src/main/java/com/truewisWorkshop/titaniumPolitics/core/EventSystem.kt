@@ -83,9 +83,9 @@ class EventSystem : GameStateElement() {
                 it.injectParent(gameState)
                 dataBase += it
             }
-            dataBase.forEach { if (it.active) it.exec(a, b) }
-
             tmpdataBase.clear()
+
+            dataBase.forEach { if (it.active) it.exec(a, b) }
             gameState.requests.filter {
                 !it.value.completed &&
                     gameState.playerName in it.value.issuedTo

@@ -379,7 +379,18 @@
       0.4
     ]
   },
-  "rescueStationNorth": {
+  "rescueStationEast": {
+    "image": "data/testimage.png",
+    "desc": "Starboard-Fore arm of the station.",
+    "ind": "capsuleMapIndStarboardForeArm",
+    "light": [
+      0,
+      0,
+      0,
+      0.4
+    ]
+  },
+  "rescueStationWest": {
     "image": "data/testimage.png",
     "desc": "Starboard-Fore arm of the station.",
     "ind": "capsuleMapIndStarboardForeArm",

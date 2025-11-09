@@ -9,6 +9,11 @@
     "image": "portraits/default.png",
     "headImage": "portraits/defaultHead.png"
   },
+  "Peiyu": {
+    "name": "Peiyu",
+    "image": "portraits/default.png",
+    "headImage": "portraits/defaultHead.png"
+  },
   "Alina": {
     "name": "Alina",
     "image": "portraits/Alina/idle.png",

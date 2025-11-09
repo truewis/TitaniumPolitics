@@ -16,11 +16,11 @@ class SoundEngine {
             soundEnabled = enabled
         }
 
-        fun playSound(soundName: String) {
+        fun playSound(soundName: String, volume: Float = 1.0f) {
             if (soundEnabled) {
                 val sound =
                     Gdx.audio.newSound(Gdx.files.internal("data/sounds/$soundName"))
-                sound.play()
+                sound.play(volume)
             }
         }
 

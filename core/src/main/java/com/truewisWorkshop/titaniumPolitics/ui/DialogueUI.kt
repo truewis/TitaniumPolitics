@@ -80,9 +80,9 @@ class DialogueUI(val gameState: GameState) : Table(defaultSkin), KTable {
                     it.growX()
                     val t = table {
                         table {
-                            background = skin.getDrawable(
-                                "n_panel"
-                            )
+//                            background = skin.getDrawable(
+//                                "n_panel"
+//                            )
                             it.grow()
                             add(this@DialogueUI.speakerNameDisplay).fill().growX().left()
                             row()
@@ -207,7 +207,7 @@ class DialogueUI(val gameState: GameState) : Table(defaultSkin), KTable {
                 )
             )
         }
-        SoundEngine.playSound("slam.mp3")
+        SoundEngine.playSound("slam.mp3", 0.1f)
     }
 
     fun playDialogue(dialogueKey: String) {
