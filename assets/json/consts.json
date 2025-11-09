@@ -9,6 +9,7 @@
   "CriticalOxygenPressure": 15000,
   "CriticalCarbonDioxideRatio": 0.1,
   "SuffocationTau": 7200,
+  "UnconsciousDeathTau": 7200,
   "SuffocationIntegrityDamageTau": 360000,
   "TemperatureDifferenceTolerance": 40,
   "TemperatureDamageTau": 36000,

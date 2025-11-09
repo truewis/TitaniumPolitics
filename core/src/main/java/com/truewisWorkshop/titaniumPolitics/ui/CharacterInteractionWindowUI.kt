@@ -7,6 +7,7 @@ import com.titaniumPolitics.game.core.Character
 import com.titaniumPolitics.game.core.GameEngine
 import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.core.ReadOnly
+import com.titaniumPolitics.game.core.gameActions.Rescue
 import com.titaniumPolitics.game.core.gameActions.Talk
 import com.titaniumPolitics.game.ui.actions.ResourceTransferUI
 import com.titaniumPolitics.game.ui.map.PlaceSelectionUI
@@ -41,6 +42,25 @@ class CharacterInteractionWindowUI(var gameState: GameState) :
 
     private val giveResourceButton = scene2d.button {
         label(ReadOnly.prop("characterInteractionWindowUI-giveResources"), "description") {
+            setFontScale(0.3f)
+        }
+
+        addListener(object : com.badlogic.gdx.scenes.scene2d.utils.ClickListener() {
+            override fun clicked(event: com.badlogic.gdx.scenes.scene2d.InputEvent?, x: Float, y: Float) {
+                this@CharacterInteractionWindowUI.isVisible = false
+                val resUI = ResourceTransferUI(this@CharacterInteractionWindowUI.gameState, GameEngine.acquireCallback)
+                resUI.toWhere = "home_${this@CharacterInteractionWindowUI.characterDisplayed}"
+                resUI.refresh(
+                    "private"
+                )
+                InterfaceRoot.instance.avAUI.setActionSheet(resUI)
+
+            }
+        })
+    }
+
+    private val rescueButton = scene2d.button {
+        label(ReadOnly.prop("characterInteractionWindowUI-rescue"), "description") {
             setFontScale(0.3f)
         }
 
@@ -113,26 +133,41 @@ class CharacterInteractionWindowUI(var gameState: GameState) :
         //Clear the list of any previous buttons.
         content.apply {
             clear()
-
-            add(MutualityMeter(gameState, tgtCharacter = characterDisplayed, who = gameState.playerName).also {
-                it.remove() //Do not refresh the meter, since this window is not persistent.
-            })
-            row()
-            //If place selection mode is active, add the selection button and nothing else.
-            if (mode == "CharSelection") {
-                add(selectButton).fill().size(200f, 50f)
+            if (gameState.characters[charName]!!.isUnconscious) {
+                add(label(ReadOnly.prop("characterInteractionWindowUI-unconscious"), "docTitle") {
+                    setFontScale(0.3f)
+                })
+                if ("Rescue" in GameEngine.availableActions(
+                        gameState,
+                        gameState.player.place.name,
+                        gameState.playerName
+                    )
+                ) {
+                    row()
+                    add(rescueButton).fill().size(200f, 50f)
+                }
                 row()
             } else {
-                //Disable the button if the player is already in the place. Calling place property will throw an exception when the game is first loaded.
-                //Also, disable the button if the character is already in the meeting ("talking" to them already).
-                if (gameState.player.currentMeeting?.currentCharacters?.contains(
-                        characterDisplayed
-                    ) != true
-                ) {
-                    add(talkButton).fill().size(200f, 50f)
+                add(MutualityMeter(gameState, tgtCharacter = characterDisplayed, who = gameState.playerName).also {
+                    it.remove() //Do not refresh the meter, since this window is not persistent.
+                })
+                row()
+                //If place selection mode is active, add the selection button and nothing else.
+                if (mode == "CharSelection") {
+                    add(selectButton).fill().size(200f, 50f)
                     row()
-                    add(giveResourceButton).fill().size(200f, 50f)
-                    row()
+                } else {
+                    //Disable the button if the player is already in the place. Calling place property will throw an exception when the game is first loaded.
+                    //Also, disable the button if the character is already in the meeting ("talking" to them already).
+                    if (gameState.player.currentMeeting?.currentCharacters?.contains(
+                            characterDisplayed
+                        ) != true
+                    ) {
+                        add(talkButton).fill().size(200f, 50f)
+                        row()
+                        add(giveResourceButton).fill().size(200f, 50f)
+                        row()
+                    }
                 }
             }
             add(descButton).fill().size(200f, 50f)

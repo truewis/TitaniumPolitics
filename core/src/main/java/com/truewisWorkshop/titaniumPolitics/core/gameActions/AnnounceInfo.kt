@@ -21,7 +21,7 @@ data class AnnounceInfo(
 
     override fun execute() {
         //The information is known to all alive characters now.
-        parent.informations[infoKey]!!.knownTo.addAll(parent.aliveCharacters.keys)
+        parent.informations[infoKey]!!.knownTo.addAll(parent.activeCharacters.keys)
         super.execute()
     }
 
@@ -30,7 +30,7 @@ data class AnnounceInfo(
         //affect relation with the agenda author
         w.addWill(sbjCharacter, sbjCharObj.infoPreference(info), "AnnounceInfo")
         //The information is known to the characters in the meeting.
-        val newsCharacters = parent.aliveCharacters.filter { it.key !in info.knownTo }
+        val newsCharacters = parent.activeCharacters.filter { it.key !in info.knownTo }
         //Direct mutuality change caused by the information, if any.
         newsCharacters.forEach { listener ->
             //Affect mutualities based on inforPeference of the listener.

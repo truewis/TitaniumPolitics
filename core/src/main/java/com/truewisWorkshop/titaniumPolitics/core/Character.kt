@@ -34,6 +34,8 @@ class Character : GameStateElement() {
         get() = _name ?: parent.characters.filter { it.value == this }.keys.first().also { _name = it }
     var alive = true
         private set
+    val isUnconscious: Boolean
+        get() = health <= 0 && alive
     var trait = hashSetOf<String>()
     var type = Type.DIRECTOR
 
@@ -50,7 +52,26 @@ class Character : GameStateElement() {
     var health = .0
         set(value) {
             field = if (value < const("HealthMax")) value else const("HealthMax")//Max health is 100.
+            if (field <= 0.0 && alive) {
+                Logger.write("$name has fallen unconscious.", Logger.LogLevel.INFO)
+                turnUnconscious()
+            }
         }
+
+    fun turnUnconscious() {
+        //get removed from all meetings.
+        parent.ongoingMeetings.values.forEach { meeting ->
+            if (meeting.currentCharacters.contains(name)) {
+                meeting.currentCharacters -= name
+                Logger.write(
+                    "$name has been removed from meeting ${meeting} due to unconsciousness.",
+                    Logger.LogLevel.INFO
+                )
+            }
+        }
+
+    }
+
     var hunger = .0
         set(value) {
             field = when {

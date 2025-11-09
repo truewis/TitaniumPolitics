@@ -92,7 +92,7 @@ class GameState {
     val pickRandomRealCharacter: Character
         get() {
             //random party picker
-            return aliveCharacters.values.filter { it.type != Character.Type.ANON }.random()
+            return activeCharacters.values.filter { it.type != Character.Type.ANON }.random()
         }
 
     @Transient
@@ -111,8 +111,14 @@ class GameState {
     private var characterIndexCache =
         hashMapOf<String, Int>() //Cache for character indices to speed up mutuality calculations.
 
-    val aliveCharacters get() = characters.filter { it.value.alive }
+    val activeCharacters get() = characters.filter { it.value.alive && it.value.health > 0.0 }
 
+    /*
+    Characters that are alive but unconscious (health <= 0).
+    Unconscious characters have chances to die each time unit until they are healed.
+    They cannot perform normal actions, and need to be rescued.
+     */
+    val unconsciousCharacters get() = characters.filter { it.value.alive && it.value.health <= 0.0 }
     var nonPlayerAgents = hashMapOf<String, Agent>()
     var playerName = ""
 

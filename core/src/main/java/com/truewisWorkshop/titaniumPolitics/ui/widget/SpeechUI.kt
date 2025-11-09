@@ -105,9 +105,18 @@ class SpeechUI : Table(defaultSkin), KTable {
             EmojiType.LIGHT -> "LightGrunge"
             EmojiType.HEART -> "HeartGrunge"
             EmojiType.TALK -> "HelpGrunge"
+            EmojiType.UNCONSCIOUS -> "icon_activity_105"
             EmojiType.NONE -> ""
         }
         if (emojiType == EmojiType.NONE) return
+        theEmoji.color = when (emojiType) {
+            EmojiType.HELP -> Color.WHITE
+            EmojiType.LIGHT -> Color.YELLOW
+            EmojiType.HEART -> Color.WHITE
+            EmojiType.TALK -> Color.WHITE
+            EmojiType.UNCONSCIOUS -> Color.RED
+            else -> Color.WHITE
+        }
         theEmoji.setDrawable(defaultSkin, emojiTexture)
         theEmoji.addListener(SimpleTextTooltipUI(ReadOnly.prop("EmojiTooltip-" + emojiType.name)))
     }
@@ -158,6 +167,6 @@ class SpeechUI : Table(defaultSkin), KTable {
     }
 
     enum class EmojiType {
-        HELP, LIGHT, HEART, NONE, TALK
+        HELP, LIGHT, HEART, NONE, TALK, UNCONSCIOUS
     }
 }

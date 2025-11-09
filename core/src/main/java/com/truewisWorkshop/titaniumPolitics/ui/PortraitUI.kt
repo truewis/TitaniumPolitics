@@ -1,5 +1,6 @@
 package com.titaniumPolitics.game.ui
 
+import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.scenes.scene2d.Group
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.titaniumPolitics.game.core.GameState
@@ -21,7 +22,13 @@ class PortraitUI(character: String, var gameState: GameState) : Table(defaultSki
     val refresh = { state: GameState ->
         speechUI.clearSpeech()
         //Display emoji based on event conditions.
-        speechUI.displayEmoji(state.eventSystem.displayEmoji(tgtCharacter))
+        if (state.characters[tgtCharacter]?.isUnconscious == true) {
+            speechUI.displayEmoji(SpeechUI.EmojiType.UNCONSCIOUS)
+            portrait.setColor(0.6f, 0.6f, 0.6f, 1f)
+        } else {
+            speechUI.displayEmoji(state.eventSystem.displayEmoji(tgtCharacter))
+            portrait.setColor(Color.WHITE)
+        }
     }
 
 

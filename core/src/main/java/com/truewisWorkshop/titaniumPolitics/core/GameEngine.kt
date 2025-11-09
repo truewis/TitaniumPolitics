@@ -13,7 +13,6 @@ import com.titaniumPolitics.game.core.gameActions.Wait
 import com.titaniumPolitics.game.debugTools.Logger
 import com.titaniumPolitics.game.ui.GameOverUI
 import com.titaniumPolitics.game.ui.LogUI
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.json.Json
 import kotlin.coroutines.resume
@@ -22,7 +21,6 @@ import kotlin.math.abs
 import kotlin.math.log
 import kotlin.math.max
 import kotlin.random.Random
-import kotlin.system.exitProcess
 
 /*
 * GameEngine is a loop that runs the game. Each loop is a turn. Each turn, each character performs an action.
@@ -56,27 +54,25 @@ class GameEngine(val gameState: GameState) {
     }
 
     fun gameLoop() {
-        gameState.characters.values.sortedByDescending { if (it == gameState.player) 1 else 0 }.forEach {
-            if (it.alive) {
-                if (it.frozen > 0) {
-                    it.frozen--
-                    if (!it.trait.contains("robot")) {//Robots don't need to eat.
-                        it.health -= DT / const("HealthConsumptionTau") * const("HealthMax")
-                        it.hunger += DT / const("HungerConsumptionTau") * const("HungerMax")
-                        it.thirst += DT / const("ThirstConsumptionTau") * const("ThirstMax")
-                        if (it.hunger > const("hungerThreshold")) it.health -= DT / const("HealthConsumptionTau") * const(
-                            "HealthMax"
-                        )
-                        if (it.thirst > const("thirstThreshold")) it.health -= DT / const("HealthConsumptionTau") * const(
-                            "HealthMax"
-                        )
+        gameState.activeCharacters.values.sortedByDescending { if (it == gameState.player) 1 else 0 }.forEach {
+            if (it.frozen > 0) {
+                it.frozen--
+                if (!it.trait.contains("robot")) {//Robots don't need to eat.
+                    it.health -= DT / const("HealthConsumptionTau") * const("HealthMax")
+                    it.hunger += DT / const("HungerConsumptionTau") * const("HungerMax")
+                    it.thirst += DT / const("ThirstConsumptionTau") * const("ThirstMax")
+                    if (it.hunger > const("hungerThreshold")) it.health -= DT / const("HealthConsumptionTau") * const(
+                        "HealthMax"
+                    )
+                    if (it.thirst > const("thirstThreshold")) it.health -= DT / const("HealthConsumptionTau") * const(
+                        "HealthMax"
+                    )
 
-                    }
                 }
-                while (it.frozen == 0) {
-                    performAction(it)
-                    //if the action took any amount of time, exit the loop.
-                }
+            }
+            while (it.frozen == 0) {
+                performAction(it)
+                //if the action took any amount of time, exit the loop.
             }
         }
         progression()
@@ -742,7 +738,7 @@ class GameEngine(val gameState: GameState) {
 
     //TODO: Check for win/lose/interrupt conditions
     fun conditionCheck() {
-        gameState.aliveCharacters.forEach { entry ->
+        gameState.activeCharacters.forEach { entry ->
             val char = entry.value
 
             //Robots do not need to eat, breathe, or suffer from extreme temperatures.
@@ -823,6 +819,7 @@ class GameEngine(val gameState: GameState) {
                         killReliant(max(reliant / 10, 1))
                     }
                     if (alive && health <= 0) {
+                        //Anon characters cannot be unconscious, they either die (lose reliant) or stay healthy.
                         if (type == Type.ANON) {
                             killReliant(
                                 max(
@@ -832,13 +829,20 @@ class GameEngine(val gameState: GameState) {
                             ) //If the character is an anon, kill an arbitrary fraction of them.
                             //If the number of reliant becomes 0, the anon does not die but does not provide any labor.
                             health = const("HealthMax") //Reset health to max.
-                        } else
-                            (char).kill()
+                        } else {
+                            //Non-anon characters are moved to unconscious state.
+                        }
                     }
                 }
             }
         }
-        val l = gameState.aliveCharacters.filter { !it.value.trait.contains("robot") }
+        gameState.unconsciousCharacters.forEach { char ->
+            //Unconscious characters may die from their injuries.
+            if (random.nextDouble() < DT / const("UnconsciousDeathTau")) {
+                char.value.kill()
+            }
+        }
+        val l = gameState.activeCharacters.filter { !it.value.trait.contains("robot") }
         if (!l.contains(gameState.playerName)) {
 
             Logger.write("You died. Game over.", Logger.LogLevel.INFO)

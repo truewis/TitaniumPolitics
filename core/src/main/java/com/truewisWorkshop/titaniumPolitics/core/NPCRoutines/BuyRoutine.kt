@@ -4,7 +4,6 @@ import com.titaniumPolitics.game.core.AgendaType
 import com.titaniumPolitics.game.core.Character
 import com.titaniumPolitics.game.core.InformationType
 import com.titaniumPolitics.game.core.MeetingAgenda
-import com.titaniumPolitics.game.core.ReadOnly.IDTH
 import com.titaniumPolitics.game.core.Request
 import com.titaniumPolitics.game.core.Resources
 import com.titaniumPolitics.game.core.gameActions.GameAction
@@ -29,7 +28,7 @@ class BuyRoutine(val buyResource: String, val buyAmount: Double) : Routine() {
         tradeCharacter = if (info.isNotEmpty()) {//If this character knows a character with the resource
             info.random().tgtCharacter!!
         } else
-            gState.aliveCharacters.keys.filter { it != name && gState.characters[it]!!.type != Character.Type.ANON }
+            gState.activeCharacters.keys.filter { it != name && gState.characters[it]!!.type != Character.Type.ANON }
                 .random()
 
         //FindCharacter
@@ -48,7 +47,7 @@ class BuyRoutine(val buyResource: String, val buyAmount: Double) : Routine() {
                             true,
                             Resources(
                                 buyResource to
-                                        buyAmount
+                                    buyAmount
                             )
                         )//Created a command to transfer the resource.
                         ,

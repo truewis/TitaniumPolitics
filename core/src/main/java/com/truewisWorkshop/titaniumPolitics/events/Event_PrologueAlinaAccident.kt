@@ -14,6 +14,7 @@ class Event_PrologueAlinaAccident : EventObject("Introduction of Alina.", true) 
         //Move Rui and Alina to outerBarrierEast.
         parent.characters["Rui"]!!.forceMoveToPlace("outerBarrierEast")
         parent.characters["Alina"]!!.forceMoveToPlace("outerBarrierEast")
+        parent.characters["Alina"]!!.health = 0.0 //Alina is unconscious.
         onPlayDialogue("Prologue")
         parent.eventSystem.add(Event_PrologueAlinaSpeech())
         deactivate()

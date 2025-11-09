@@ -17,6 +17,7 @@ import com.titaniumPolitics.game.core.gameActions.OfficialResourceTransfer
 import com.titaniumPolitics.game.core.gameActions.PrepareInfo
 import com.titaniumPolitics.game.core.gameActions.Repair
 import com.titaniumPolitics.game.core.gameActions.Wait
+import com.titaniumPolitics.game.debugTools.Logger
 import kotlinx.serialization.Serializable
 import kotlin.math.max
 
@@ -178,10 +179,10 @@ class WorkRoutine(var workplace: String) : Routine() {
                         //Check if there is a request already
                             if (gState.requests.values.none {
                                     !it.completed &&
-                                            name in it.issuedBy
-                                            && it.action.let {
+                                        name in it.issuedBy
+                                        && it.action.let {
                                         it is OfficialResourceTransfer &&
-                                                it.toWhere == place1.name
+                                            it.toWhere == place1.name
                                     }
                                 })
                             //start new routine if there is a place with all the conditions met.
@@ -212,6 +213,26 @@ class WorkRoutine(var workplace: String) : Routine() {
                 }
             }
         }
+        //6. Rescue people
+        //only if I am in the safety division and has emt trait
+        if (character.division?.name == "safety" && "emt" in character.trait) {
+            gState.places.values.firstOrNull {
+                it.characters.any { charName ->
+                    gState.characters[charName]!!.isUnconscious
+                }
+            }?.also { place1 ->
+                val charToRescueName = place1.characters.first { charName ->
+                    gState.characters[charName]!!.isUnconscious
+                }
+                if (subroutines.none { it is RescueRoutine && it.rescuee == charToRescueName }) {
+                    Logger.write(
+                        "$name is going to rescue $charToRescueName at ${place1.name}",
+                        Logger.LogLevel.ACTION_VERBOSE
+                    )
+                    return RescueRoutine(charToRescueName)
+                }
+            }
+        }
 
         //6. Repair Apparatus
         //only if I am director
@@ -235,10 +256,10 @@ class WorkRoutine(var workplace: String) : Routine() {
                                 //Check if there is a request already
                                 if (gState.requests.values.none {
                                         !it.completed &&
-                                                name in it.issuedBy
-                                                && it.action.let {
+                                            name in it.issuedBy
+                                            && it.action.let {
                                             it is Repair &&
-                                                    it.apparatusID == apparatus.ID
+                                                it.apparatusID == apparatus.ID
                                         }
                                     }) {
                                     repairApparatusTimer = gState.time
@@ -268,7 +289,7 @@ class WorkRoutine(var workplace: String) : Routine() {
         ) {
             gState.informations.values.firstOrNull {
                 character.name in it.knownTo &&
-                        AnnounceInfo.isAnnounceable(it)
+                    AnnounceInfo.isAnnounceable(it)
             }?.let { info ->
                 //If I am able to announce it myself, announce it directly.
                 if (character.name in gState.parties["interior"]!!.directorMembers) {
@@ -283,10 +304,10 @@ class WorkRoutine(var workplace: String) : Routine() {
                         //Check if there is a request already
                         if (gState.requests.values.none {
                                 !it.completed &&
-                                        name in it.issuedBy
-                                        && it.action.let {
+                                    name in it.issuedBy
+                                    && it.action.let {
                                     it is AnnounceInfo &&
-                                            it.infoKey == info.name
+                                        it.infoKey == info.name
                                 }
                             }) {
                             announceInfoTimer = gState.time
@@ -318,13 +339,13 @@ class WorkRoutine(var workplace: String) : Routine() {
                     val eta =
                         gState.places[it.value.place]!!.shortestPathAndTimeTo(place, name)?.second ?: return@none false
                     it.value.scheduledCharacters.contains(name) &&
-                            it.value.isValidTimeToStart(gState.time + eta)
+                        it.value.isValidTimeToStart(gState.time + eta)
                 })//If a Meeting is not soon
             {
                 //If we haven't prapared info recently
                 if (gState.informations.none { (_, information) ->
                         information.author == character.name && information.type == InformationType.ACTION && information.action is PrepareInfo
-                                && gState.time - information.creationTime > ReadOnly.constInt("lengthOfDay") * 2
+                            && gState.time - information.creationTime > ReadOnly.constInt("lengthOfDay") * 2
                     }) {
                     //If we haven't tried this branch in the current routine
                     if (try_prepare_info == 0) {

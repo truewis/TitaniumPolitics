@@ -25,23 +25,23 @@ class ExecuteRequestRoutine() : Routine() {
             //Try to delegate the command to someone else if possible.
 
             if (delegationAttemptCount < ReadOnly.constInt("ExecuteCommandRoutineDelegationAttemptCount")) {
-                val charactersDelegatableTo = gState.aliveCharacters.filter {
+                val charactersDelegatableTo = gState.activeCharacters.filter {
                     it.key != name && it.key !in executableRequest.issuedBy && it.key !in executableRequest.issuedTo &&
-                            gState.getMutuality(
-                                name,
-                                it.key
-                            ) > executableRequest.difficulty(gState) //Someone I trust, does not matter if they trust me or not
-                            &&
-                            //But if I am an Employee, do not delegate the command, who would do the actual work then? Everyone else is just my boss.
-                            gState.parties.any {
-                                name == it.value.leader && it.value.members.contains(it.key)
-                            }
-                            &&
-                            executableRequest.action.isProofOfWork(
-                                Information(
-                                    action = executableRequest.action.copyRef(it.key)
-                                )
+                        gState.getMutuality(
+                            name,
+                            it.key
+                        ) > executableRequest.difficulty(gState) //Someone I trust, does not matter if they trust me or not
+                        &&
+                        //But if I am an Employee, do not delegate the command, who would do the actual work then? Everyone else is just my boss.
+                        gState.parties.any {
+                            name == it.value.leader && it.value.members.contains(it.key)
+                        }
+                        &&
+                        executableRequest.action.isProofOfWork(
+                            Information(
+                                action = executableRequest.action.copyRef(it.key)
                             )
+                        )
                 }
                 if (charactersDelegatableTo.isEmpty()) {
                     //No one to delegate to, stop trying.
