@@ -1,0 +1,18 @@
+ENTER Krailin
+ENTER Rui
+Krailin, annoyed: Oh, come on. It's another junk. Why do I even bother coming out here?
+Rui, annoyed: More and more I watch your 'fishing' hobby, more I think you are just making up excuses to avoid work.
+Krailin, laugh: That's the beauty of it! Well, Rui, it is all about luck. Sometimes you catch something good, sometimes you don't.
+Rui, confused: Hmm, but sometimes it doesn't look like luck. You seem to catch more junk than anything else.
+Rui: When do you decide to call it a day? After all, there could be nothing in the pool.
+Rui: Have you heard of that story about a guy who mined a diamond in a coal mine? After that, he kept mining coal hoping to find another diamond, but never did.
+Krailin, smile: Haha, well, I worked as a miner for a long time before I got this director job. So, I know a thing or two about mining.
+Krailin: The thing about mining is that you never know when you will strike gold. You just have to keep trying.
+Rui, confused: Did you make a lot of money as a miner?
+Krailin, smile: Not really. Mining is a tough job. But I survived long enough to get promoted to director. None of my old mining buddies made it that far.
+Krailin: Even last week, I visited the cemetery where my old mining friends are left in ash. It was a sobering experience.
+Rui, confused: I'm sorry to hear that.
+Krailin, smile: Don't be. That's just how life is sometimes. Now you, Rui, may think that fortune is like digging a diamond in a coal mine. Or going to a good school and having affluent parents.
+Rui, embarrassed: Hmm, I guess that's true to some extent.
+Krailin, smile: But let me tell you this. For me, none of that was even in the horizon of my imagination. You can't consider yourself unfortunate of not having stuff that you never had a chance to think about.
+Krailin: To me, fortune is being able to come out here and fish in peace, remembering my old friends, and being grateful for what I have now.

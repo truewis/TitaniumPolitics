@@ -37,7 +37,7 @@ class EventSystem : GameStateElement() {
     fun newGame() {
         add(Event_PrologueAlinaAccident())
         add(Event_DelayRepair1())
-        add(Event_BribeDoctor1())
+        add(Event_YuhoaIntro())
         add(Event_BoyFindingMom())
         //dataBase.add(Event_ObserverIntro())
         add(Event_AlinaIllTheory1())

@@ -1,0 +1,20 @@
+ENTER Krailin
+ENTER Rui
+Rui, annoyed: What are you doing here, Krailin? Shouldn't you be working?
+Krailin, smile: Oh, come on, Rui. Even directors need a break sometimes.
+Rui, annoyed: A break? Here, in a middle of nowhere? All you can see here is water and pitch black sky.
+Krailin, laugh: That's the beauty of it! Out here, away from the chaos of the facility, I can actually think clearly.
+Rui, confused: Huh, I guess we have more in common than I thought. I also like to come here when I need to clear my head.
+Rui, annoyed: (Now I will have to find a new spot...)
+Krailin, smile: So, Rui, how is your work going? Is Salvor still giving you a hard time?
+Rui, annoyed: Ugh, don't remind me. Salvor is always on my case about something.
+Rui: Sorry, I shouldn't backstab my colleagues like that.
+Krailin, laugh: Well, for this case, I think it's justified. Salvor can be quite the pain sometimes.
+Rui, confused: What are you doing with that stick and string? You are corrupting the drinking water supply, you know.
+Krailin, smile: Oh, this? Young fellas like you might not know about this, but it's called fishing.
+Krailin: Back in my day, before all this fancy technology, people used to fish like this in this reservoir for random scrap and trash, which they would then recycle for money.
+Krailin: But hey, it wasn't all trash. I still remember the day I fished a phosphorite ampule once. That was a 10g ampule I think?
+Rui, surprised: Wow, you just made a month's salary in one go? Does fishing still work like that?
+Krailin, smile: Haha, not really. We did a too good job with new recycling tech. Now you can only fish out scraps and low value items.
+Krailin: But hey, it's still a fun hobby. You should try it sometime.
+Rui, confused: I don't think I have the patience for that.

@@ -6,16 +6,15 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 
 @Serializable
-class Event_KrailinDrunk1 : EventObject("Rambling of Krailin", true) {
+class Event_KrailinHobby2 : EventObject("Rambling of Krailin", true) {
 
     override fun exec(a: Int, b: Int) {
-        if (parent.player.place.name == "tavern" && parent.player.currentMeeting?.currentCharacters?.containsAll(
+        if (parent.player.place.name == "reservoirEast" && parent.player.currentMeeting?.currentCharacters?.containsAll(
                 listOf("Krailin", "Rui")
             )
             ?: false
         ) {
-            onPlayDialogue("KrailinDrunk")
-            parent.eventSystem.add(Event_KrailinHobby1())
+            onPlayDialogue("KrailinHobby2")
             deactivate()
         }
     }

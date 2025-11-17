@@ -4,7 +4,7 @@ import com.titaniumPolitics.game.ui.widget.SpeechUI
 import kotlinx.serialization.Serializable
 
 @Serializable
-class Event_BribeDoctor1 : EventObject("Illness of Sylvia.", true) {
+class Event_BribeDoctor0 : EventObject("Illness of Sylvia.", true) {
 
     override fun exec(a: Int, b: Int) {
         if (parent.hour == 10 && parent.day in 5..8 && parent.player.currentMeeting != null
@@ -13,7 +13,7 @@ class Event_BribeDoctor1 : EventObject("Illness of Sylvia.", true) {
                     listOf("Yuhoa")
                 )
             ) {
-                onPlayDialogue("BribeDoctor1")
+                onPlayDialogue("BribeDoctor0")
                 parent.eventSystem.add(Event_BribeDoctor2())
                 deactivate()
 
