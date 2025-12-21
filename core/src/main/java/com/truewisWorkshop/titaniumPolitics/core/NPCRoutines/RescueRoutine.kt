@@ -26,7 +26,7 @@ class RescueRoutine(val rescuee: String) : Routine() {
     override fun onSubroutineFail(subroutine: Routine) {
         if (subroutine is FindCharacterRoutine) {
             //Find Character routine failed, meaning that the character is not reachable.
-            //Delegation attempt counter has already been incremented in newRoutineCondition, so just return.
+            failed()
             return
         } else
             super.onSubroutineFail(subroutine)

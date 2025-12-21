@@ -13,8 +13,8 @@ class Event_PrologueAlinaAccident2 : EventObject("Interrogation", true) {
     override fun exec(a: Int, b: Int) {
         //Move Rui and Alina to rescueStationWest.
         println("Executing Event_PrologueAlinaAccident2")
-        parent.characters["Rui"]!!.forceMoveToPlace("rescueStationWest")
-        parent.characters["Alina"]!!.forceMoveToPlace("rescueStationWest")
+        //parent.characters["Rui"]!!.forceMoveToPlace("rescueStationWest")
+        //parent.characters["Alina"]!!.forceMoveToPlace("rescueStationWest")
         //Disabled due to agent routine bug.
         //parent.characters["Peiyu"]!!.forceMoveToPlace("rescueStationWest")
         //parent.characters["Astinomis"]!!.forceMoveToPlace("rescueStationWest")

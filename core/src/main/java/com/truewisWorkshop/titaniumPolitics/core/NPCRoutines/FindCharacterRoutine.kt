@@ -16,8 +16,13 @@ class FindCharacterRoutine(val character: String) : Routine() {
             return failed()
         }
 
-        if (!waitForCharacter)
-            return MoveRoutine(gState.places.values.find { it.characters.contains(character) }!!.name)
+        if (!waitForCharacter) {
+            gState.places.values.find { it.characters.contains(character) }?.let {
+                return MoveRoutine(it.name)
+            }
+            //Character not found, fail the routine.
+            return failed()
+        }
         return null
     }
 

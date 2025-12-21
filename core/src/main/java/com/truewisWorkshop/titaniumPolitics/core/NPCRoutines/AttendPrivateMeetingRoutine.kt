@@ -89,11 +89,14 @@ class AttendPrivateMeetingRoutine(
                 return if (mtPlace != place)
                     MoveRoutine(mtPlace)
                 else null //Turn to execute
+                //TODO: Convert to information handling.
             } else if (toWho != null) {
                 //Check if I am in the same place as the character to meet.
-                return if (gState.characters[toWho]!!.place.name != place)
-                    FindCharacterRoutine(toWho)
-                else null //Turn to execute
+                gState.activeCharacters[toWho]?.place?.let { mtPlace ->
+                    if (mtPlace.name == place)
+                        return null //Turn to execute
+                }
+                return FindCharacterRoutine(toWho) // If this fails, MeetingRoutine onSubroutineFail will handle it.
             }
             throw Exception("Either scheduledMeetingName or toWho must be provided.")
         }
