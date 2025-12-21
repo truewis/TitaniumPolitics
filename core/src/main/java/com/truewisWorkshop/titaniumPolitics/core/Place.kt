@@ -117,8 +117,9 @@ class Place : GameStateElement() {
      * Check if the character is authorized to enter the place.
      */
     fun isAuthorized(sbjCharacter: String): Boolean =
-        (authorizedDivisions.isEmpty() || parent.characters[sbjCharacter]!!.division?.name in authorizedDivisions)
-            && (authorizedCharacters.isEmpty() || sbjCharacter in authorizedCharacters)
+        ((authorizedDivisions.isEmpty() || parent.characters[sbjCharacter]!!.division?.name in authorizedDivisions)
+            && (authorizedCharacters.isEmpty() || sbjCharacter in authorizedCharacters))
+            || parent.characters[sbjCharacter]!!.trait.contains("robot") //Robots can enter anywhere.
 
     fun movableConnectedPlaces(sbjCharacter: String): List<String> = connectedPlaces.filter { placeTo ->
         parent.places[placeTo]!!.isAuthorized(sbjCharacter)

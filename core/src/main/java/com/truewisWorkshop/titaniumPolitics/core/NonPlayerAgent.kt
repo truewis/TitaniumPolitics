@@ -134,7 +134,7 @@ class NonPlayerAgent : Agent() {
                     Logger.LogLevel.INFO
                 )
             }
-            if (loopCounter > maxLoopCounter + 5) {
+            if (loopCounter > maxLoopCounter + 10) {
                 throw RuntimeException("Routine loop counter exceeded for $name.")
             }
             routineSettled = true
