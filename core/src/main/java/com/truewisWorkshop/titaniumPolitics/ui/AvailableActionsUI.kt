@@ -635,7 +635,8 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable 
                                         actionCallback(
                                             JoinMeeting(
                                                 gameState.playerName,
-                                                gameState.player.place.name
+                                                gameState.player.place.name,
+                                                gameState
                                             )
                                         )
                                     }
@@ -649,7 +650,8 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable 
                                         actionCallback(
                                             StartMeeting(
                                                 gameState.playerName,
-                                                gameState.player.place.name
+                                                gameState.player.place.name,
+                                                gameState
                                             )
                                         )
                                     }
