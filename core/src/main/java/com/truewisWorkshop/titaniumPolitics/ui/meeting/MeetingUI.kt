@@ -15,6 +15,7 @@ import com.titaniumPolitics.game.core.GameEngine
 import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.core.Meeting
 import com.titaniumPolitics.game.core.Party
+import com.titaniumPolitics.game.core.ReadOnly
 import com.titaniumPolitics.game.core.gameActions.Wait
 import com.titaniumPolitics.game.debugTools.Logger
 import com.titaniumPolitics.game.ui.BlockingWarningUI
@@ -139,7 +140,15 @@ class MeetingUI(var gameState: GameState) : Table(defaultSkin), KTable {
             container(this@MeetingUI.speakerPortrait) {
                 this.size(450f, 600f)
             }
-            container(this@MeetingUI.currentAttention) {
+            container(scene2d.table {
+                label(ReadOnly.prop("meeting-attention"), "docTitle") {
+                    setFontScale(0.2f)
+                    color = Color.RED
+                    setAlignment(Align.center, Align.center)
+                }
+                row()
+                add(this@MeetingUI.currentAttention)
+            }) {
                 this.padTop(300f)
             }
         }
