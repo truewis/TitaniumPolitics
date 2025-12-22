@@ -61,6 +61,7 @@
   "InterceptDuration": 5,
   "InvestigateAccidentSceneDuration": 30,
   "JoinMeetingDuration": 5,
+  "RescueDuration": 10,
   "MeetingStartTolerance": 30,
   "CommandExecuteTolerance": 60,
   "LeaveMeetingDuration": 5,

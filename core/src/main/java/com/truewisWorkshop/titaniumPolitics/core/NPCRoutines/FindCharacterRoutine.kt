@@ -12,7 +12,7 @@ class FindCharacterRoutine(val character: String) : Routine() {
         if (place == gState.places.values.find { it.characters.contains(character) }?.name)
             return success()
         //Stop if spent too much time
-        if (gState.time - routineStartTime > IDTH) {
+        if (gState.time - routineStartTime > 2 * IDTH) {
             return failed()
         }
 

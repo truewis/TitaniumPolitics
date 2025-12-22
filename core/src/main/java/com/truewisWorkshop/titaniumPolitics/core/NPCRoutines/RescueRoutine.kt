@@ -18,6 +18,10 @@ class RescueRoutine(val rescuee: String) : Routine() {
 
 
     override fun newRoutineCondition(name: String, place: String, subroutines: List<Routine>): Routine? {
+        //Check if I am in the same place as the rescuee
+        if (place == gState.characters[rescuee]!!.place.name) {
+            return null //Ready to execute rescue
+        }
         if (subroutines.none { it is FindCharacterRoutine })
             return FindCharacterRoutine(rescuee)
         return null
@@ -34,7 +38,7 @@ class RescueRoutine(val rescuee: String) : Routine() {
 
     override fun execute(name: String, place: String): GameAction {
         //Check if rescue is valid action
-        Rescue(name, place, rescuee).let {
+        Rescue(name, place, rescuee, gState).let {
             if (it.isValid()) {
                 Logger.write("$name: Rescue action is valid. Executing...", Logger.LogLevel.INFO)
                 success()

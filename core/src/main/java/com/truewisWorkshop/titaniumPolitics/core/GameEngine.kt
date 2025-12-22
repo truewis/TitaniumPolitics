@@ -839,7 +839,8 @@ class GameEngine(val gameState: GameState) {
         gameState.unconsciousCharacters.forEach { char ->
             //Unconscious characters may die from their injuries.
             if (random.nextDouble() < DT / const("UnconsciousDeathTau")) {
-                char.value.kill()
+                //Don't kill characters for now.
+                //char.value.kill()
             }
         }
         val l = gameState.activeCharacters.filter { !it.value.trait.contains("robot") }
@@ -1085,6 +1086,14 @@ class GameEngine(val gameState: GameState) {
                 ))
                 actions.add("AnnounceInfo")
             actions.add("Wait")
+            // If I have emt trait and there is an unconscious character here, I can try to rescue them.
+            if (gameState.characters[character]!!.trait.contains("emt") && placeObj.characters.any {
+                    gameState.unconsciousCharacters.containsKey(
+                        it
+                    )
+                }) {
+                actions.add("Rescue")
+            }
             if (place.contains("home")) {
                 actions.add("Sleep")
                 actions.add("Eat")

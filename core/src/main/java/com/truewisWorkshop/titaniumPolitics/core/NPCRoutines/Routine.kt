@@ -103,10 +103,10 @@ sealed class Routine() {
 
         fun isWorkCondition(name: String, place: String, workplace: String, gState: GameState): Boolean {
             return (isWorkHourWithETA(gState, name, place, workplace, IDTH)
-                    && gState.characters[name]!!.health > ReadOnly.const("CriticalHealth")
-                    && gState.characters[name]!!.hunger < ReadOnly.const("hungerThreshold")
-                    && gState.characters[name]!!.thirst < ReadOnly.const("thirstThreshold")
-                    )
+                && gState.characters[name]!!.health > ReadOnly.const("CriticalHealth")
+                && gState.characters[name]!!.hunger < ReadOnly.const("hungerThreshold")
+                && gState.characters[name]!!.thirst < ReadOnly.const("thirstThreshold")
+                )
         }
     }
 }

@@ -19,6 +19,10 @@ class AttendPrivateMeetingRoutine(
     val toWho: String? = null, val agenda: MeetingAgenda? = null,
     val scheduledMeetingName: String? = null
 ) : MeetingRoutine() {
+    init {
+        priority = PRIORITY_MEETING
+    }
+
     private var hasUnresolvedAgenda = agenda != null
     override val meetingName: String
         get() = scheduledMeetingName
@@ -96,6 +100,11 @@ class AttendPrivateMeetingRoutine(
                     if (mtPlace.name == place)
                         return null //Turn to execute
                 }
+                //If toWho is in the same place but unconscious, fail the routine.
+//                gState.unconsciousCharacters[toWho]?.place?.let { mtPlace ->
+//                    if (mtPlace.name == place)
+//                        return failed()
+//                }
                 return FindCharacterRoutine(toWho) // If this fails, MeetingRoutine onSubroutineFail will handle it.
             }
             throw Exception("Either scheduledMeetingName or toWho must be provided.")
