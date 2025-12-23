@@ -234,16 +234,22 @@ class MeetingUI(var gameState: GameState) : Table(defaultSkin), KTable {
         val arrow = MutualityArrowUI(fromPortrait, toPortrait, delta.toFloat())
         mutualityArrows.add(arrow)
         addActor(arrow)
-        if (speakerPortrait.tgtCharacter == char1) {
+        //There are gradually increasing mutuality changes that do not need speech display.
+        if (delta > 1)
             reason?.let {
-                speakerPortrait.speechUI.displaySpeech(it)
+                //Split reason by semicolon, first element is the reason key, rest are parameters.
+                val key = it.split(";")[0]
+                val params = it.split(";").drop(1)
+                val localizedReason = ReadOnly.script("response-$key").format(*params.toTypedArray())
+
+                if (speakerPortrait.tgtCharacter == char1) {
+                    speakerPortrait.speechUI.displaySpeech(localizedReason)
+                }
+                portraits.firstOrNull { portrait -> portrait.tgtCharacter == char1 }?.also { portrait ->
+                    portrait.speechUI.displaySpeech(localizedReason)
+
+                }
             }
-        }
-        portraits.firstOrNull { portrait -> portrait.tgtCharacter == char1 }?.also { portrait ->
-            reason?.let {
-                portrait.speechUI.displaySpeech(it)
-            }
-        }
 //            addAnimation(
 //                Actions.run {
 //                    arrow.addAction(
