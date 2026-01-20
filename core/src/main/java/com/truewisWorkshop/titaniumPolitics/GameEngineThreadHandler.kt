@@ -3,10 +3,12 @@ package com.titaniumPolitics.game
 import com.badlogic.gdx.Gdx
 import com.titaniumPolitics.game.core.GameEngine
 import com.titaniumPolitics.game.core.GameState
+import com.titaniumPolitics.game.debugTools.Logger
 import kotlinx.coroutines.runBlocking
 import kotlin.concurrent.thread
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
+import javax.swing.JOptionPane
 
 class GameEngineThreadHandler {
     companion object {
@@ -30,7 +32,26 @@ class GameEngineThreadHandler {
                     }
 
                 }
-                engine.startGame()
+                try {
+                    engine.startGame()
+                } catch (e: Exception) {
+                    //Error handling
+                    Logger.write(
+                        e.stackTraceToString(),
+                        Logger.LogLevel.ERROR
+                    )
+                    JOptionPane.showMessageDialog(
+                        null,
+                        "An unexpected error occurred:\n${e.localizedMessage}\n${e.stackTraceToString()}",
+                        "Game Error",
+                        JOptionPane.ERROR_MESSAGE
+                    )
+                    stopEngine()
+                    //Exit the application
+                    Gdx.app.exit()
+
+                }
+
             }
         }
 

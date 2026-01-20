@@ -52,6 +52,17 @@ class Logger {
             }
 
         }
+
+        fun close() {
+            writer.flush()
+            writer.close()
+            writer1.flush()
+            writer1.close()
+            writer2.flush()
+            writer2.close()
+            writer3.flush()
+            writer3.close()
+        }
     }
 
     enum class LogLevel {

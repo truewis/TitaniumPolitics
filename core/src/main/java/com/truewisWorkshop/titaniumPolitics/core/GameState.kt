@@ -751,6 +751,7 @@ class GameState {
     fun destroy() {
         //Destroy the game state, clear all data.
         gdh.close()
+        Logger.close()
     }
 
     companion object {
