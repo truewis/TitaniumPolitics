@@ -1,0 +1,20 @@
+ENTER Rui
+ENTER Salvor
+Salvor: Hey, there.
+Rui, surprised: Me?
+Salvor, annoyed: Yes, what was your name again?
+Rui: Rui. Well, I do remember you from the meeting, Salvor. You are the director of the recycling facilities, aren't you?
+Salvor, smile: As you probably should!
+Rui, annoyed: (He seems like a rather difficult person to work with...)
+Rui, smile: Well, Salvor, how can I help you?
+Salvor, annoyed: How can {SHAKE}YOU{ENDSHAKE} help me? Well,  probably not much. A better question you should ask is, what should I do immediately if I don't want to get fired like the previous director!
+Rui, annoyed: (Oh, man......)
+Rui, smile: Thank you for being so considerate about the directorate of which you are not even charge of, Salvor.
+Salvor, annoyed: Rui, the east barrier directorate is no joke. The triumvirate has been paying constant attention to the barirer's health.
+Salvor: It is not something a new director can deal it by herself. Did you even get the required materials for beam recovery delivered?
+Rui, angry: (......!)
+Salvor: You gotta answer my question, Rui. And it should be yes or no, not some bullshit like "it is being discussed" or anything.
+Rui, annoyed: Okay, hear me out. I couldn't find the industry division leader, and when I finally could talk to him, he was not happy about it.
+Salvor, angry: Goddammit, Rui! That is exactly the problem of this fucking station, and you are doing nothing but contributing to the problem!
+Salvor: Get the materials delivered immediately, or be the person who is responsible of the extinction of humanity.
+
