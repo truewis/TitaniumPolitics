@@ -5,7 +5,7 @@ apply plugin: 'org.jetbrains.kotlin.jvm'
 java.sourceCompatibility = 15
 java.targetCompatibility = 15
 if (JavaVersion.current().isJava9Compatible()) {
-        compileJava.options.release.set(15)
+  compileJava.options.release.set(15)
 }
 kotlin.compilerOptions.jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_15)
 
@@ -18,6 +18,10 @@ dependencies {
   implementation "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-desktop"
   implementation "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
   implementation project(':core')
+}
+
+run {
+  workingDir = rootProject.file('assets').path
 }
 
 jar {
