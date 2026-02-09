@@ -17,41 +17,48 @@ class AssistantUI(gameState: GameState) : Table(defaultSkin) {
     val buttonYGap = 70f
     val buttonXGap = -7f
     val mapUI = MapUI(gameState)
-    val mapButton = CabinetWindowContainerUI(
+    val mapButton = addCabinetButton(
         title = "MAP",
         content = mapUI,
-        xOffset = buttonXGap,
-        yOffset = 0f,
         openAction = { mapUI.refresh() }
     )
     val infoUI = InformationViewUI(gameState)
-    val informationButton =
-        CabinetWindowContainerUI(
-            title = "INFORMATION",
-            content = infoUI,
-            xOffset = buttonXGap,
-            yOffset = buttonYGap,
-            openAction = { infoUI.refresh("creationTime") }
-        )
+    val informationButton = addCabinetButton(
+        title = "INFORMATION",
+        content = infoUI,
+        openAction = { infoUI.refresh("creationTime") }
+    )
 
     val calendarUI = CalendarUI(gameState)
-    val calendarButton =
-        CabinetWindowContainerUI(
-            title = "CALENDAR",
-            content = calendarUI,
-            xOffset = 2 * buttonXGap,
-            yOffset = 2 * buttonYGap,
-            openAction = { calendarUI.refresh() }
-        )
+    val calendarButton = addCabinetButton(
+        title = "CALENDAR",
+        content = calendarUI,
+        openAction = { calendarUI.refresh() }
+    )
 
     val politiciansUI = PoliticiansInfoUI(gameState)
-    val politiciansInfoButton = CabinetWindowContainerUI(
-        title = "POLITICS",
+    val politiciansInfoButton = addCabinetButton(
+        title = "POLITICIANS",
         content = politiciansUI,
-        xOffset = 3 * buttonXGap,
-        yOffset = 3 * buttonYGap,
         openAction = { politiciansUI.refresh() }
     )
+
+    var numCurrentCabinetButtons = 0
+    fun addCabinetButton(title: String, content: Table, openAction: () -> Unit): CabinetWindowContainerUI {
+        val newButton = CabinetWindowContainerUI(
+            title = title,
+            content = content,
+            xOffset = (numCurrentCabinetButtons) * buttonXGap,
+            yOffset = (numCurrentCabinetButtons) * buttonYGap,
+            openAction = openAction
+        )
+        addActor(newButton)
+        cabinetWindowUIs.add(newButton)
+        newButton.setSize(buttonWidth, buttonHeight + 10f)
+        newButton.setPosition((numCurrentCabinetButtons) * buttonXGap, (numCurrentCabinetButtons) * buttonYGap)
+        numCurrentCabinetButtons++
+        return newButton
+    }
 
     init {
         instance = this
@@ -61,25 +68,6 @@ class AssistantUI(gameState: GameState) : Table(defaultSkin) {
         mapUI.currentPlaceMarkerWindow.onClose += {
             mapButton.changeOpenState(false)
         }
-        addActor(mapButton)
-        cabinetWindowUIs.add(mapButton)
-        mapButton.setSize(buttonWidth, buttonHeight + 10f)
-        mapButton.setPosition(0f, 0f)
-
-        addActor(informationButton)
-        cabinetWindowUIs.add(informationButton)
-        informationButton.setSize(buttonWidth, buttonHeight + 10f)
-        informationButton.setPosition(buttonXGap, buttonYGap)
-
-        addActor(calendarButton)
-        cabinetWindowUIs.add(calendarButton)
-        calendarButton.setSize(buttonWidth, buttonHeight + 10f)
-        calendarButton.setPosition(2 * buttonXGap, 2 * buttonYGap)
-
-        addActor(politiciansInfoButton)
-        cabinetWindowUIs.add(politiciansInfoButton)
-        politiciansInfoButton.setSize(buttonWidth, buttonHeight + 10f)
-        politiciansInfoButton.setPosition(3 * buttonXGap, 3 * buttonYGap)
 
 
         //Mark the calendar button When new meeting is scheduled within the next 5 days.
@@ -104,6 +92,9 @@ class AssistantUI(gameState: GameState) : Table(defaultSkin) {
                 }
             }
         }
+        calendarButton.isVisible = false
+        politiciansInfoButton.isVisible = false
+        informationButton.isVisible = false
     }
 
     companion object {
