@@ -7,7 +7,7 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 
 @Serializable
-class Event_PaySalary(val partyKey: String) : EventObject("Pay Salary: $partyKey", true), IQuestEventObject {
+class Event_PaySalary(val partyKey: String) : EventObject(ReadOnly.questProp("PaySalary-name").format(partyKey), true), IQuestEventObject {
     val party
         get() = parent.parties[partyKey]!!
     val partyName
@@ -17,8 +17,8 @@ class Event_PaySalary(val partyKey: String) : EventObject("Pay Salary: $partyKey
     override val quest
             by lazy {
                 Quest(
-                    "Salary of %s is not paid yet.".format(partyName),
-                    description = "Pay the salary in the daily meeting.",
+                    ReadOnly.questProp("PaySalary-title").format(partyName),
+                    description = ReadOnly.questProp("PaySalary-desc"),
                     tgtPlace = party.home
                 )
             }

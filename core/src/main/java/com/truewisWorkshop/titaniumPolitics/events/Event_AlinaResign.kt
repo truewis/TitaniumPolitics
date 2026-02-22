@@ -1,11 +1,12 @@
 package com.titaniumPolitics.game.events
 
+import com.titaniumPolitics.game.core.ReadOnly
 import com.titaniumPolitics.game.core.Request
 import com.titaniumPolitics.game.core.gameActions.Resign
 import kotlinx.serialization.Serializable
 
 @Serializable
-class Event_AlinaResign : EventObject("Introduction of Alina.", true) {
+class Event_AlinaResign : EventObject(ReadOnly.questProp("AlinaResign-name"), true) {
 
     override fun exec(a: Int, b: Int) {
         if (parent.day > 1 && parent.player.currentMeeting != null && parent.parties["infrastructure"]!!.leader == "Alina" && parent.player.currentMeeting!!.currentSpeaker == "Alina"

@@ -9,7 +9,7 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 
 @Serializable
-class Event_ImprovePartyIntegrity(val partyKey: String) : EventObject("Improve Party Integrity: $partyKey", true),
+class Event_ImprovePartyIntegrity(val partyKey: String) : EventObject(ReadOnly.questProp("ImprovePartyIntegrity-name").format(partyKey), true),
     IQuestEventObject {
     val party get() = parent.parties[partyKey]!!
     val partyName
@@ -19,8 +19,8 @@ class Event_ImprovePartyIntegrity(val partyKey: String) : EventObject("Improve P
     override val quest
             by lazy {
                 Quest(
-                    "Members of %s are not getting along.".format(partyName),
-                    description = "You must improve the integrity of %s".format(partyName),
+                    ReadOnly.questProp("ImprovePartyIntegrity-title").format(partyName),
+                    description = ReadOnly.questProp("ImprovePartyIntegrity-desc").format(partyName),
                     tgtPlace = party.home,
                     display = {
                         with(it) {

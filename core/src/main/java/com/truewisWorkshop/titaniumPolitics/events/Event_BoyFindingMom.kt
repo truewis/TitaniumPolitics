@@ -1,11 +1,12 @@
 package com.titaniumPolitics.game.events
 
+import com.titaniumPolitics.game.core.ReadOnly
 import com.titaniumPolitics.game.core.Request
 import com.titaniumPolitics.game.core.gameActions.Talk
 import kotlinx.serialization.Serializable
 
 @Serializable
-class Event_BoyFindingMom : EventObject("A boy with a box.", true) {
+class Event_BoyFindingMom : EventObject(ReadOnly.questProp("BoyFindingMom-name"), true) {
 
     override fun exec(a: Int, b: Int) {
         if (parent.hour in 9..12 && parent.player.currentMeeting == null && parent.player.place.name == "market" &&

@@ -1,9 +1,10 @@
 package com.titaniumPolitics.game.events
 
+import com.titaniumPolitics.game.core.ReadOnly
 import kotlinx.serialization.Serializable
 
 @Serializable
-class Event_BoyFindingMom2 : EventObject("A boy with a box.", true) {
+class Event_BoyFindingMom2 : EventObject(ReadOnly.questProp("BoyFindingMom2-name"), true) {
 
     override fun exec(a: Int, b: Int) {
         if (parent.player.currentMeeting != null && parent.player.currentMeeting!!.currentCharacters.contains("Mom")
