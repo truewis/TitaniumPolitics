@@ -8,14 +8,14 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 
 @Serializable
-class Event_ElectionApproaching(val tgtMeeting: String) : EventObject("The election is approaching.", true),
+class Event_ElectionApproaching(val tgtMeeting: String) : EventObject(ReadOnly.questProp("ElectionApproaching-name"), true),
     IQuestEventObject {
 
     override val quest
             by lazy {
                 Quest(
-                    "The election is approaching.",
-                    description = "",
+                    ReadOnly.questProp("ElectionApproaching-title"),
+                    description = ReadOnly.questProp("ElectionApproaching-desc"),
                     tgtMeeting = tgtMeeting
                 )
             }

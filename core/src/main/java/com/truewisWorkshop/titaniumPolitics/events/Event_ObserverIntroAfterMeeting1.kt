@@ -1,16 +1,17 @@
 package com.titaniumPolitics.game.events
 
+import com.titaniumPolitics.game.core.ReadOnly
 import com.titaniumPolitics.game.ui.Quest
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 
 @Serializable
-class Event_ObserverIntroAfterMeeting1 : EventObject("Mysterious orders from the Observer.", true), IQuestEventObject {
+class Event_ObserverIntroAfterMeeting1 : EventObject(ReadOnly.questProp("ObserverIntroAfterMeeting1-name"), true), IQuestEventObject {
 
     @Transient
     override val quest = Quest(
-        "Mysterious orders from the Observer",
-        "The Observer has told you to pay a visit to the Observatory.",
+        ReadOnly.questProp("ObserverIntroAfterMeeting1-title"),
+        ReadOnly.questProp("ObserverIntroAfterMeeting1-desc"),
         "observatory"
     )
 

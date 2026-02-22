@@ -8,7 +8,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 class Event_HatefulDirectReport(val charNames: List<String>, val partyKey: String) :
-    EventObject("A direct report hates you: $partyKey", true),
+    EventObject(ReadOnly.questProp("HatefulDirectReport-name").format(partyKey), true),
     IQuestEventObject {
     val party get() = parent.parties[partyKey]!!
     val partyName
@@ -18,8 +18,8 @@ class Event_HatefulDirectReport(val charNames: List<String>, val partyKey: Strin
     override val quest
             by lazy {
                 Quest(
-                    "Your authority is being questioned in %s.".format(partyName),
-                    description = "Improve relations with your direct reports",
+                    ReadOnly.questProp("HatefulDirectReport-title").format(partyName),
+                    description = ReadOnly.questProp("HatefulDirectReport-desc"),
                     tgtCharacters = charNames,
                     getTooltip = {
                         SimpleTextTooltipUI(charNames.joinToString {

@@ -1,12 +1,13 @@
 package com.titaniumPolitics.game.events
 
 import com.titaniumPolitics.game.core.InformationType
+import com.titaniumPolitics.game.core.ReadOnly
 import com.titaniumPolitics.game.core.Resources
 import com.titaniumPolitics.game.core.gameActions.UnofficialResourceTransfer
 import kotlinx.serialization.Serializable
 
 @Serializable
-class Event_BribeDoctor4(var searchFrom: Int) : EventObject("Talking with Dr Paik.", true) {
+class Event_BribeDoctor4(var searchFrom: Int) : EventObject(ReadOnly.questProp("BribeDoctor4-name"), true) {
 
     override fun exec(a: Int, b: Int) {
         if (
