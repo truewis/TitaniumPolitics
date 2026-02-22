@@ -8,7 +8,7 @@ import com.titaniumPolitics.game.ui.widget.SimpleTextTooltipUI
 import kotlinx.serialization.Serializable
 
 @Serializable
-class Event_ExpiredWorkplaceInformation(val place: String) : EventObject("Expired Workplace Information: $place", true),
+class Event_ExpiredWorkplaceInformation(val place: String) : EventObject(ReadOnly.questProp("ExpiredWorkplaceInformation-name").format(place), true),
     IQuestEventObject {
     val unPreparedRelevantInfos
         get() =
@@ -24,8 +24,8 @@ class Event_ExpiredWorkplaceInformation(val place: String) : EventObject("Expire
 
     override val quest by lazy {
         Quest(
-            "You must be kept updated on situations of %s".format(ReadOnly.placeProp(place)),
-            description = "Examine it yourself or request your employees to do so.",
+            ReadOnly.questProp("ExpiredWorkplaceInformation-title").format(ReadOnly.placeProp(place)),
+            description = ReadOnly.questProp("ExpiredWorkplaceInformation-desc"),
             tgtPlace = place,
             getTooltip = {
                 SimpleTextTooltipUI(

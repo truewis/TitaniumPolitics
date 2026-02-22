@@ -6,7 +6,7 @@ import com.titaniumPolitics.game.ui.widget.SimpleTextTooltipUI
 import kotlinx.serialization.Serializable
 
 @Serializable
-class Event_GenuineRequest(val requestKey: String) : EventObject("A reasonable request: $requestKey", true),
+class Event_GenuineRequest(val requestKey: String) : EventObject(ReadOnly.questProp("GenuineRequest-name").format(requestKey), true),
     IQuestEventObject {
     val request get() = parent.requests[requestKey]!!
 
@@ -23,8 +23,8 @@ class Event_GenuineRequest(val requestKey: String) : EventObject("A reasonable r
     override val quest
             by lazy {
                 Quest(
-                    "Request from %s".format(ReadOnly.charProp(request.issuedBy.firstOrNull() ?: "Someone")),
-                    description = "You were requested to work on %s".format(ReadOnly.prop(request.action::class.simpleName!!)),
+                    ReadOnly.questProp("GenuineRequest-title").format(ReadOnly.charProp(request.issuedBy.firstOrNull() ?: "Someone")),
+                    description = ReadOnly.questProp("GenuineRequest-desc").format(ReadOnly.prop(request.action::class.simpleName!!)),
                     tgtPlace = request.action.tgtPlace,
                     getTooltip = {
                         SimpleTextTooltipUI(

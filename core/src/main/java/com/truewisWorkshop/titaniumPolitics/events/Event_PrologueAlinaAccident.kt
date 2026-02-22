@@ -1,13 +1,14 @@
 package com.titaniumPolitics.game.events
 
 import com.titaniumPolitics.game.core.Party
+import com.titaniumPolitics.game.core.ReadOnly
 import com.titaniumPolitics.game.ui.Quest
 import com.titaniumPolitics.game.ui.widget.SpeechUI
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 
 @Serializable
-class Event_PrologueAlinaAccident : EventObject("Introduction of Alina.", true) {
+class Event_PrologueAlinaAccident : EventObject(ReadOnly.questProp("PrologueAlinaAccident-name"), true) {
 
 
     override fun exec(a: Int, b: Int) {

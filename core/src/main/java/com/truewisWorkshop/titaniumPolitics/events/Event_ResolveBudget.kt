@@ -7,7 +7,7 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 
 @Serializable
-class Event_ResolveBudget(val budgetMeeting: String) : EventObject("Resolve Budget: $budgetMeeting", true),
+class Event_ResolveBudget(val budgetMeeting: String) : EventObject(ReadOnly.questProp("ResolveBudget-name").format(budgetMeeting), true),
     IQuestEventObject {
     val party
         get() = parent.parties[parent.scheduledMeetings[budgetMeeting]!!
@@ -19,8 +19,8 @@ class Event_ResolveBudget(val budgetMeeting: String) : EventObject("Resolve Budg
     override val quest
             by lazy {
                 Quest(
-                    "Quarterly budget of %s is not resolved yet.".format(partyName),
-                    description = "Attend the budget resolution meeting.",
+                    ReadOnly.questProp("ResolveBudget-title").format(partyName),
+                    description = ReadOnly.questProp("ResolveBudget-desc"),
                     tgtMeeting = budgetMeeting
                 )
             }

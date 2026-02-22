@@ -1,19 +1,20 @@
 package com.titaniumPolitics.game.events
 
 import com.titaniumPolitics.game.core.Party
+import com.titaniumPolitics.game.core.ReadOnly
 import com.titaniumPolitics.game.ui.Quest
 import com.titaniumPolitics.game.ui.widget.SpeechUI
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 
 @Serializable
-class Event_PrologueAlinaSpeech : EventObject("Introduction of Alina.", true), IQuestEventObject {
+class Event_PrologueAlinaSpeech : EventObject(ReadOnly.questProp("PrologueAlinaSpeech-name"), true), IQuestEventObject {
 
 
     @Transient
     override val quest = Quest(
-        "Alina's speech",
-        "Alina is giving a speech to the Infrastructure Division.",
+        ReadOnly.questProp("PrologueAlinaSpeech-title"),
+        ReadOnly.questProp("PrologueAlinaSpeech-desc"),
         tgtMeeting = "conference-outerBarrierWest-1980",
         tgtPlace = "infrastructureHeadquarters"
     )

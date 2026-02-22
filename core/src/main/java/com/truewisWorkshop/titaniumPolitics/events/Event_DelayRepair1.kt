@@ -1,6 +1,7 @@
 package com.titaniumPolitics.game.events
 
 import com.titaniumPolitics.game.core.Meeting
+import com.titaniumPolitics.game.core.ReadOnly
 import com.titaniumPolitics.game.core.Request
 import com.titaniumPolitics.game.core.gameActions.Resign
 import com.titaniumPolitics.game.core.gameActions.Talk
@@ -9,7 +10,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 class Event_DelayRepair1 :
-    EventObject("Agros comes by and asks to delay repairing the ammonia production system.", true) {
+    EventObject(ReadOnly.questProp("DelayRepair1-name"), true) {
     var targetApparatusID: String? = null
     var requestIssued = false
     override fun exec(a: Int, b: Int) {

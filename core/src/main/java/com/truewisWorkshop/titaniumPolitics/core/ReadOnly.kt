@@ -34,7 +34,8 @@ object ReadOnly {
     // List of base names for all property files
     private val PROPERTY_BASE_NAMES = listOf(
         "ui", "apparatus", "place", "character", "resources", "DefaultCharacter",
-        "maleNames", "femaleNames", "nameModifier" // ADDED for name generation
+        "maleNames", "femaleNames", "nameModifier", // ADDED for name generation
+        "quests"
     )
 
     // --- JSON Loading (No change, as JSON is typically non-localized) ---
@@ -192,6 +193,7 @@ object ReadOnly {
     fun charProp(key: String, obj: Any? = null): String = getLocalizedProp("character", key, obj)
     fun itemProp(key: String, obj: Any? = null): String = getLocalizedProp("resources", key, obj)
     fun script(key: String, obj: Any? = null): String = getLocalizedProp("DefaultCharacter", key, obj)
+    fun questProp(key: String, obj: Any? = null): String = getLocalizedProp("quests", key, obj)
     fun charName(charId: String): String = charProp(charId)
 
     // --- Constant/Time Utilities (No functional change) ---
