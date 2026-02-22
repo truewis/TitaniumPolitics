@@ -64,6 +64,7 @@ class CapsuleStage(val gameState: GameState) : Stage(FitViewport(1920F, 1080F)) 
                     "angry.png",
                     "surprised.png",
                     "confused.png",
+                    "annoyed.png"
                     //"determined.png"
                 )
                 emotions.forEach { emotionImage ->
