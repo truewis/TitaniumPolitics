@@ -1,0 +1,15 @@
+ENTER Rui
+ENTER Alina
+Rui, surprised: Minister, are you alright? Were you hurt anywhere?
+Alina: I am fine, Rui. Just a little muscle strain. Though that ladder is probably completely ruined. I will not be able to use that one anymore.
+Alina: It was my favorite ladder. Just the right weight, and just the right length for one person to carry.
+Rui, surprised: Minister, I am amazed you are worrying about a ladder at a time like this.
+Alina: You are right. There is a more important matter at hand. What shall we do about that barrier section? They used to call it the graveyard of directors, and yesterday it nearly became my own.
+Rui, surprised: Yes, the barrier has completely collapsed. I do not think we will be able to enter that section for a while.
+Alina: No, that cannot be allowed to stand. The honor of the infrastructure division is at stake. The barrier is what we stand for.
+Alina: That is why I want you to become the director responsible for restoring that barrier section.
+Rui, surprised: Pardon me?
+Alina: That would make you the youngest director in the infrastructure division. Ha. They say heroes emerge in times of crisis. You will be that hero.
+Rui, surprised: Minister, could you give me some time to think it over? I do feel a sense of responsibility for this accident, but I am not sure I can make a rational decision right now.
+Alina, smile: Think it over until 9 o'clock tomorrow morning. Then come to headquarters for your first morning briefing as the new director.
+Rui, surprised: {SLOW}(Good heavens......){ENDSLOW} As you command, Minister.

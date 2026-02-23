@@ -15,7 +15,7 @@ class Event_BribeDoctor0 : EventObject(ReadOnly.questProp("BribeDoctor0-name"), 
                 )
             ) {
                 onPlayDialogue("BribeDoctor0")
-                parent.eventSystem.add(Event_BribeDoctor2())
+                parent.eventSystem.add(Event_BribeDoctor01())
                 deactivate()
 
             }

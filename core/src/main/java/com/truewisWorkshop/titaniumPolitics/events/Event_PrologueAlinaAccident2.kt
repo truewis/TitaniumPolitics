@@ -20,7 +20,7 @@ class Event_PrologueAlinaAccident2 : EventObject(ReadOnly.questProp("PrologueAli
         //parent.characters["Peiyu"]!!.forceMoveToPlace("rescueStationWest")
         //parent.characters["Astinomis"]!!.forceMoveToPlace("rescueStationWest")
         onPlayDialogue("Prologue2")
-        parent.eventSystem.add(Event_PrologueAlinaSpeech())
+        parent.eventSystem.add(Event_PrologueGoHome())
         deactivate()
 
     }
