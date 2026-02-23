@@ -43,7 +43,8 @@ class GameOverUI(val gameState: GameState) : WindowUI("GameOversUITitle") {
                         "TheAlters1.mp3",
                         "Capsule_old_lighthouse_loop.mp3",
                         "mainMenu.mp3",
-                        "NierAutomataTheSoundOfTheEnd.mp3"
+                        "NierAutomataTheSoundOfTheEnd.mp3",
+                        "None"
                     ).toTypedArray()
                 )
                 addListener(object : ChangeListener() {

@@ -39,7 +39,8 @@ class SystemUI(val gameState: GameState) : WindowUI("SystemUITitle") {
                         "Capsule_old_lighthouse_loop.mp3",
                         "mainMenu.mp3",
                         "NierAutomataTheSoundOfTheEnd.mp3",
-                        "touhou_FaithTransient.mp3"
+                        "touhou_FaithTransient.mp3",
+                        "None"
                     ).toTypedArray()
                 )
                 addListener(object : ChangeListener() {

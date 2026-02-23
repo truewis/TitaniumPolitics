@@ -29,12 +29,23 @@ class SimplePortraitUI(character: String, scale: Float, interactable: Boolean) :
             baseImagePath
         }
 
-        portrait.drawable = TextureRegionDrawable(
-            CapsuleStage.instance.assetManager.get(
-                emotionImagePath,
-                Texture::class.java
-            )!!
-        )
+        try {
+            portrait.drawable = TextureRegionDrawable(
+                CapsuleStage.instance.assetManager.get(
+                    emotionImagePath,
+                    Texture::class.java
+                )!!
+            )
+        } catch (e: Exception) {
+            Logger.write("Emotion Image Error: $emotionImagePath", Logger.LogLevel.INFO)
+            // If emotion image loading fails, fallback to idle image.
+            portrait.drawable = TextureRegionDrawable(
+                CapsuleStage.instance.assetManager.get(
+                    baseImagePath,
+                    Texture::class.java
+                )!!
+            )
+        }
     }
 
     init {

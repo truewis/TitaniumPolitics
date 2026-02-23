@@ -28,9 +28,13 @@ class SoundEngine {
             if (music?.isPlaying ?: false)
                 music!!.stop() // Stop any currently playing music before starting new one
             if (soundEnabled) {
-                music = Gdx.audio.newMusic(Gdx.files.internal("data/music/$musicName"))
-                music!!.isLooping = true
-                music!!.play()
+                try {
+                    music = Gdx.audio.newMusic(Gdx.files.internal("data/music/$musicName"))
+                    music!!.isLooping = true
+                    music!!.play()
+                } catch (e: Exception) {
+                    println("Error playing music: $e")
+                }
             }
         }
 
