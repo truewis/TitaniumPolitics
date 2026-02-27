@@ -30,6 +30,7 @@ class Event_PrologueAlinaSpeech : EventObject(ReadOnly.questProp("PrologueAlinaS
             onPlayDialogue("PrologueInfDivLeaderSpeech")
             parent.eventSystem.add(Event_AlinaResign())
             parent.eventSystem.add(Event_ObserverIntroAfterMeeting1())
+            parent.eventSystem.add(Event_FirstWorkplaceMeeting())
             deactivate()
         }
     }

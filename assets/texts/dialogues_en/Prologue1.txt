@@ -1,0 +1,9 @@
+ENTER Rui
+ENTER ctrler
+ctrler: Hello, Rui. You look desperate. What is going on?
+Rui, surprised: Controller, we serve for the sake of humanity. This is an emergency.
+Rui, surprised: Part of the barrier collapsed and the minister fell through. She is still there, I can hear her voice!
+ctrler: That is terrible. We must send a rescue team. Can you tell me exactly where she fell?
+Rui, surprised: Yes, it is the section the minister was inspecting. You should be able to find it from there.
+ctrler: Understood. A rescue team from the security headquarters will arrive shortly. Keep checking on Alina's condition until then!
+Rui, surprised: Yes, Controller.

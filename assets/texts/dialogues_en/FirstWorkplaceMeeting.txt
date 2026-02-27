@@ -1,0 +1,23 @@
+ENTER Rui
+Rui, smile: Good morning, everyone! I am Rui, the new director of the East Barrier section.
+Barry, confused: ...Hello? You are the new director?
+Rui, confused: (Hm?)
+Abdul, annoyed: Barry, pull yourself together.
+Abdul, smile: Good morning, Director! It is a pleasure to meet you. I am Abdul. I am glad to be working with you.
+Rui, smile: Good morning, Abdul! I am glad to be working with you as well. Could I receive the most recently filed report on the state of the sector?
+Barry, confused: A report? I have not written any report.
+Cameron, annoyed: Barry, writing the report is your responsibility. If you do not write it, then I will have to do it myself.
+Rui, confused: Hmm... I see. Were you not given instructions to write an investigation report following this week's accident?
+Barry, confused: An accident? What accident?
+Rui, annoyed: (Oh, for heaven's sake.)
+Rui, annoyed: Barry, can you tell me why that pillar over there is broken? You can see it clearly even sitting in the office all day. And I am not sure if you heard that the minister was injured in the accident.
+Abdul, annoyed: Director, this is entirely my fault. I will do my best to resolve the matter quickly.
+Rui, smile: Thank you for saying that, Abdul.
+Rui, annoyed: (I need to stay calm. I am here to solve problems, not to blame employees.)
+Rui, smile: Barry, my top priority is to quickly recover from the damage caused by this accident. Let us work together with Abdul to address this.
+Barry, annoyed: Yes... understood.
+Rui, smile: Thank you, Barry. Could you check the most recent department inventory and help us secure the necessary resources?
+Barry, annoyed: Director, I am not sure I fully understand the instructions. What inventory am I supposed to check?
+Rui, annoyed: (Oh no... what should I do in this situation?)
+Rui, annoyed: (It is too naive to expect employees to fully understand my directions just from verbal explanations.)
+Rui, annoyed: (I need to find a way to address this clearly in the meeting.)

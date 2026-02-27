@@ -17,7 +17,7 @@ class Event_PrologueAlinaAccident : EventObject(ReadOnly.questProp("PrologueAlin
         parent.characters["Alina"]!!.forceMoveToPlace("outerBarrierEast")
         parent.characters["Alina"]!!.health = 0.0 //Alina is unconscious.
         onPlayDialogue("Prologue")
-        parent.eventSystem.add(Event_PrologueAlinaAccident2())
+        parent.eventSystem.add(Event_PrologueCtrlerCall())
         deactivate()
 
     }

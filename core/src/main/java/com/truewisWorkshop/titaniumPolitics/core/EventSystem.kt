@@ -39,6 +39,8 @@ class EventSystem : GameStateElement() {
         add(Event_DelayRepair1())
         add(Event_YuhoaIntro())
         add(Event_BoyFindingMom())
+        add(Event_BefreindTheBoy())
+        add(Event_Salvor1())
         //dataBase.add(Event_ObserverIntro())
         add(Event_AlinaIllTheory1())
         add(Event_SalvorElection())
