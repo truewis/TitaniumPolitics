@@ -6,8 +6,8 @@
   },
   "Astinomis": {
     "name": "Astinomis",
-    "image": "portraits/default.png",
-    "headImage": "portraits/defaultHead.png"
+    "image": "portraits/Astinomis/idle.png",
+    "headImage": "portraits/Astinomis/head.png"
   },
   "Peiyu": {
     "name": "Peiyu",
@@ -21,8 +21,8 @@
   },
   "Maisarah": {
     "name": "Maisarah",
-    "image": "portraits/default.png",
-    "headImage": "portraits/defaultHead.png"
+    "image": "portraits/Maisarah/idle.png",
+    "headImage": "portraits/Maisarah/head.png"
   },
   "Eugene": {
     "name": "Eugene",
@@ -32,7 +32,7 @@
   "Rui": {
     "name": "Rui",
     "image": "portraits/Rui/idle.png",
-    "headImage": "portraits/Rui/RuiHead.png"
+    "headImage": "portraits/Rui/head.png"
   },
   "Hiroshi": {
     "name": "Hiroshi",
@@ -46,6 +46,21 @@
   },
   "Evan": {
     "name": "Evan",
+    "image": "portraits/default.png",
+    "headImage": "portraits/defaultHead.png"
+  },
+  "Hans": {
+    "name": "Hans",
+    "image": "portraits/default.png",
+    "headImage": "portraits/defaultHead.png"
+  },
+  "Lynn": {
+    "name": "Lynn",
+    "image": "portraits/default.png",
+    "headImage": "portraits/defaultHead.png"
+  },
+  "Sasha": {
+    "name": "Sasha",
     "image": "portraits/default.png",
     "headImage": "portraits/defaultHead.png"
   },
@@ -66,8 +81,8 @@
   },
   "Salvor": {
     "name": "Salvor",
-    "image": "portraits/default.png",
-    "headImage": "portraits/defaultHead.png"
+    "image": "portraits/Salvor/idle.png",
+    "headImage": "portraits/Salvor/head.png"
   },
   "Metros": {
     "name": "Metros",

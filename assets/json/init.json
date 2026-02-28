@@ -98,6 +98,45 @@
       "health": 80,
       "livingBy": "market"
     },
+    "Sasha": {
+      "type": "EMPLOYEE",
+      "trait": [
+        "bargainer"
+      ],
+      "stats": {
+        "logos": 10,
+        "ethos": 10,
+        "pathos": 10
+      },
+      "health": 80,
+      "livingBy": "market"
+    },
+    "Hans": {
+      "type": "EMPLOYEE",
+      "trait": [
+        "bargainer"
+      ],
+      "stats": {
+        "logos": 10,
+        "ethos": 10,
+        "pathos": 10
+      },
+      "health": 80,
+      "livingBy": "market"
+    },
+    "Lynn": {
+      "type": "EMPLOYEE",
+      "trait": [
+        "bargainer"
+      ],
+      "stats": {
+        "logos": 10,
+        "ethos": 10,
+        "pathos": 10
+      },
+      "health": 80,
+      "livingBy": "market"
+    },
     "Peiyu": {
       "trait": [
         "workaholic",
@@ -2855,6 +2894,20 @@
         "engineerIncentive",
         "lockoutExperiments",
         "noTitles"
+      ]
+    },
+    "workplace_outerBarrierEast": {
+      "leader": "Alina",
+      "administrator": "Sasha",
+      "treasurer": "Lynn",
+      "overseer": "Hans",
+      "type": "WORKPLACE",
+      "home": "outerBarrierEast",
+      "_members": [
+        "Sasha",
+        "Hans",
+        "Lynn",
+        "Alina"
       ]
     }
   },

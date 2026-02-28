@@ -283,48 +283,53 @@ class GameState {
 
         //Create workplace party for each workplace.
         places.forEach { place ->
-            parties["workplace_${place.key}"] = Party().apply {
-                injectParent(this@GameState)
-                place.value.responsibleDivision?.run {
-                    if (place.key.contains("Headquarters")) {
-                        val division = parties[place.value.responsibleDivision]!!
-                        addMember(division.leader!!, Role.NONE)
-                        changeLeader(division.leader!!)
-                    } else {
-                        val randomDirector =
-                            (parties[this]!!.directorMembers - playerName).random()//Player is not a director of any workplace when starting a new game. Usually they must be assigned by events.
-                        addMember(randomDirector, Role.NONE)
-                        changeLeader(randomDirector)
+            //If a party already exists for the workplace, skip it. This is for loading existing games, where workplaces and parties are already created.
+            if (!parties.containsKey("workplace_${place.key}")) {
+                parties["workplace_${place.key}"] = Party().apply {
+                    injectParent(this@GameState)
+                    place.value.responsibleDivision?.run {
+                        if (place.key.contains("Headquarters")) {
+                            val division = parties[place.value.responsibleDivision]!!
+                            addMember(division.leader!!, Role.NONE)
+                            changeLeader(division.leader!!)
+                        } else {
+                            val randomDirector =
+                                (parties[this]!!.directorMembers - playerName).random()//Player is not a director of any workplace when starting a new game. Usually they must be assigned by events.
+                            addMember(randomDirector, Role.NONE)
+                            changeLeader(randomDirector)
+                        }
                     }
+                    type = Party.Type.WORKPLACE
+                    home = place.key
                 }
-                type = Party.Type.WORKPLACE
-                home = place.key
             }
-
         }
 
 
         //Generate lower level managers for each workplace.
         parties.filter { it.value.type == Party.Type.WORKPLACE }.forEach { party ->
             listOf(Role.ADMINISTRATOR, Role.TREASURER, Role.OVERSEER).forEach { role ->
-                val name = CharacterGenerator.generateName(listOf(true, false).random())
-                characters[name] = Character().apply {
-                    this.injectParent(this@GameState)
-                    type = Character.Type.EMPLOYEE
-                    this.livingBy = Place.publicPlaces.random()
+                // If the role is already filled, skip it. This is for loading existing games, where some lower level managers may already be created.
+                if (party.value.members.none { party.value.getRole(it) == role }) {
+                    val name = CharacterGenerator.generateName(listOf(true, false).random())
+                    characters[name] = Character().apply {
+                        this.injectParent(this@GameState)
+                        type = Character.Type.EMPLOYEE
+                        this.livingBy = Place.publicPlaces.random()
 
-                    this.health = 100.0
+                        this.health = 100.0
+                    }
+                    nonPlayerAgents[name] = NonPlayerAgent().also {
+                        it.injectParent(this)
+                    }
+                    places[party.value.home]?.responsibleDivision?.let { div ->
+                        parties[div]!!.addMember(
+                            name,
+                            Role.NONE
+                        )//Add the lower level manager to the division party. These people have two parties at least.
+                    }
+                    party.value.addMember(name, role)
                 }
-                nonPlayerAgents[name] = NonPlayerAgent().also {
-                    it.injectParent(this)
-                }
-                places[party.value.home]?.responsibleDivision?.let { div ->
-                    parties[div]!!.addMember(
-                        name,
-                        Role.NONE
-                    )//Add the lower level manager to the division party. These people have two parties at least.
-                }
-                party.value.addMember(name, role)
             }
 
 
