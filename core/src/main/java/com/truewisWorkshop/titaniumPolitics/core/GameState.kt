@@ -273,6 +273,61 @@ class GameState {
         Logger.writer.flush()
         injectDependency()
 
+        //Create corridors for each connection between places.
+        val corridorVolume = 200f
+        val corridorInitialDurability = 95.0
+        val volumeRatio = corridorVolume / 1e4f
+        val processedConnections = mutableSetOf<Pair<String, String>>()
+        places.keys.toList().forEach { aName ->
+            places[aName]!!.connectedPlaces.toList().forEach { bName ->
+                val key = if (aName < bName) aName to bName else bName to aName
+                if (key in processedConnections) return@forEach
+                processedConnections.add(key)
+
+                val (sortedA, sortedB) = key
+                val aCoords = places[sortedA]!!.coordinates
+                val bCoords = places[sortedB]!!.coordinates
+                val diff = bCoords - aCoords
+                val t1Coords = aCoords + (diff * 2) / 10
+                val t2Coords = aCoords + (diff * 8) / 10
+                val t1Name = "corridor_${sortedA}_${sortedB}_1"
+                val t2Name = "corridor_${sortedA}_${sortedB}_2"
+
+                places[t1Name] = Place().apply {
+                    this.injectParent(this@GameState)
+                    coordinates = t1Coords
+                    volume = corridorVolume
+                    connectedPlaces.add(sortedA)
+                    connectedPlaces.add(t2Name)
+                    apparatuses.add(Apparatus().apply { name = "corridor"; durability = corridorInitialDurability })
+                    gasResources = Resources(
+                        "oxygen" to 3000.0 * volumeRatio,
+                        "carbonDioxide" to 15.0 * volumeRatio,
+                        "nitrogen" to 9000.0 * volumeRatio
+                    ).apply { positive = true }
+                }
+
+                places[t2Name] = Place().apply {
+                    this.injectParent(this@GameState)
+                    coordinates = t2Coords
+                    volume = corridorVolume
+                    connectedPlaces.add(t1Name)
+                    connectedPlaces.add(sortedB)
+                    apparatuses.add(Apparatus().apply { name = "corridor"; durability = corridorInitialDurability })
+                    gasResources = Resources(
+                        "oxygen" to 3000.0 * volumeRatio,
+                        "carbonDioxide" to 15.0 * volumeRatio,
+                        "nitrogen" to 9000.0 * volumeRatio
+                    ).apply { positive = true }
+                }
+
+                places[sortedA]!!.connectedPlaces.remove(sortedB)
+                places[sortedA]!!.connectedPlaces.add(t1Name)
+                places[sortedB]!!.connectedPlaces.remove(sortedA)
+                places[sortedB]!!.connectedPlaces.add(t2Name)
+            }
+        }
+
         //Create NonPlayerAgents for predefined characters.
         characters.forEach { char ->
             if (char.key == playerName || char.value.type == Character.Type.ANON) return@forEach //Skip player character and anon characters.
