@@ -1171,9 +1171,6 @@ class GameEngine(val gameState: GameState) {
                 if (place == "tavern") {
                     actions.add("BuyDrink")
                 }
-                if (placeObj.workplaceParty?.leader == character && placeObj.responsibleDivision == null) {
-                    actions.add("ProcessResource")
-                }
 
             }
             return actions

@@ -498,7 +498,6 @@
     "Chef": {
       "type": "EMPLOYEE",
       "trait": [
-        "cook",
         "bargainer"
       ],
       "stats": {
@@ -538,7 +537,6 @@
     "Jeweler": {
       "type": "EMPLOYEE",
       "trait": [
-        "jeweler",
         "bargainer"
       ],
       "stats": {
@@ -578,7 +576,6 @@
     "Chemist": {
       "type": "EMPLOYEE",
       "trait": [
-        "chemist",
         "bargainer"
       ],
       "stats": {
@@ -2649,6 +2646,10 @@
       ],
       "apparatuses": [
         {
+          "name": "kitchen",
+          "durability": 95
+        },
+        {
           "name": "rationStorage",
           "durability": 95
         },
@@ -2685,6 +2686,10 @@
       ],
       "apparatuses": [
         {
+          "name": "jewelcutting",
+          "durability": 95
+        },
+        {
           "name": "componentStorage",
           "durability": 95
         },
@@ -2717,6 +2722,10 @@
         "squareSouth"
       ],
       "apparatuses": [
+        {
+          "name": "miniAmmoniaProduction",
+          "durability": 95
+        },
         {
           "name": "waterStorage",
           "durability": 95
@@ -3142,7 +3151,6 @@
       "leader": "Chef",
       "administrator": "RstSupplier",
       "treasurer": "RstServer",
-      "overseer": "Chef",
       "type": "WORKPLACE",
       "home": "restaurant",
       "_members": [
@@ -3155,7 +3163,6 @@
       "leader": "Jeweler",
       "administrator": "JwlSupplier",
       "treasurer": "JwlServer",
-      "overseer": "Jeweler",
       "type": "WORKPLACE",
       "home": "jewelryShop",
       "_members": [
@@ -3168,7 +3175,6 @@
       "leader": "Chemist",
       "administrator": "AmmSupplier",
       "treasurer": "AmmServer",
-      "overseer": "Chemist",
       "type": "WORKPLACE",
       "home": "ammoniaShop",
       "_members": [

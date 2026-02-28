@@ -51,7 +51,6 @@
   "AddInfoDuration": 10,
   "HireManagerDuration": 30,
   "BuyDrinkDuration": 20,
-  "ProcessResourceDuration": 720,
   "ClearAccidentSceneDuration": 90,
   "SetWorkersDuration": 30,
   "SetWorkHoursDuration": 20,

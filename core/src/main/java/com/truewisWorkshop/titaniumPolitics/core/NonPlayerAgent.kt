@@ -231,10 +231,6 @@ class NonPlayerAgent : Agent() {
                     routines.add(WorkAnonRoutine(wkplace.name).also {
                         it.routineStartTime = parent.time
                     })
-                } else if (wkplace.responsibleDivision == null && StoreWorkRoutine.isPrivateStore(wkplace.name)) {
-                    routines.add(StoreWorkRoutine(wkplace.name).also {
-                        it.routineStartTime = parent.time
-                    })
                 } else {
                     routines.add(WorkRoutine(wkplace.name).also {
                         it.routineStartTime = parent.time
