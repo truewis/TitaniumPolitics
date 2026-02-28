@@ -457,5 +457,35 @@
       0,
       0.4
     ]
+  },
+  "restaurant": {
+    "image": "data/testimage.png",
+    "sound": "data/sounds/market.mp3",
+    "light": [
+      0,
+      0,
+      0,
+      0.4
+    ]
+  },
+  "jewelryShop": {
+    "image": "data/testimage.png",
+    "sound": "data/sounds/market.mp3",
+    "light": [
+      0,
+      0,
+      0,
+      0.4
+    ]
+  },
+  "ammoniaShop": {
+    "image": "data/testimage.png",
+    "sound": "data/sounds/market.mp3",
+    "light": [
+      0,
+      0,
+      0,
+      0.4
+    ]
   }
 }
