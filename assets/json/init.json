@@ -506,7 +506,7 @@
         "pathos": 10
       },
       "health": 100,
-      "livingBy": "restaurant"
+      "livingBy": "fineFoodStore-1"
     },
     "RstSupplier": {
       "type": "EMPLOYEE",
@@ -532,7 +532,7 @@
         "pathos": 10
       },
       "health": 100,
-      "livingBy": "restaurant"
+      "livingBy": "fineFoodStore-1"
     },
     "Jeweler": {
       "type": "EMPLOYEE",
@@ -545,7 +545,7 @@
         "pathos": 10
       },
       "health": 100,
-      "livingBy": "jewelryShop"
+      "livingBy": "diamondShop"
     },
     "JwlSupplier": {
       "type": "EMPLOYEE",
@@ -571,7 +571,7 @@
         "pathos": 10
       },
       "health": 100,
-      "livingBy": "jewelryShop"
+      "livingBy": "diamondShop"
     },
     "Chemist": {
       "type": "EMPLOYEE",
@@ -2606,7 +2606,7 @@
       },
       "connectedPlaces": [
         "market",
-        "restaurant"
+        "fineFoodStore-1"
       ],
       "apparatuses": [
         {
@@ -2628,7 +2628,7 @@
       "workHoursStart": 16,
       "workHoursEnd": 24
     },
-    "restaurant": {
+    "fineFoodStore-1": {
       "coordinates": {
         "x": 4,
         "y": 0,
@@ -2669,7 +2669,7 @@
       "workHoursStart": 10,
       "workHoursEnd": 22
     },
-    "jewelryShop": {
+    "diamondShop": {
       "coordinates": {
         "x": 5,
         "y": 0,
@@ -2807,7 +2807,7 @@
         "miningSchool",
         "electrolysisStationSouth",
         "securityCheckCenter",
-        "jewelryShop",
+        "diamondShop",
         "ammoniaShop"
       ],
       "apparatuses": [
@@ -3147,24 +3147,24 @@
         "Alina"
       ]
     },
-    "workplace_restaurant": {
+    "workplace_fineFoodStore-1": {
       "leader": "Chef",
       "administrator": "RstSupplier",
       "treasurer": "RstServer",
       "type": "WORKPLACE",
-      "home": "restaurant",
+      "home": "fineFoodStore-1",
       "_members": [
         "Chef",
         "RstSupplier",
         "RstServer"
       ]
     },
-    "workplace_jewelryShop": {
+    "workplace_diamondShop": {
       "leader": "Jeweler",
       "administrator": "JwlSupplier",
       "treasurer": "JwlServer",
       "type": "WORKPLACE",
-      "home": "jewelryShop",
+      "home": "diamondShop",
       "_members": [
         "Jeweler",
         "JwlSupplier",
