@@ -91,6 +91,40 @@
       "storageAmount": 3e4
     }
   },
+  "manway": {
+    "image": "defaultApparatus.png",
+    "durabilityTau": 8.64e7,
+    "baseDanger": 3.0E-4,
+    "accidentType": [
+      "FLOODING",
+      "COLLAPSE"
+    ],
+    "maxTemp": 473,
+    "minTemp": 73,
+    "requiredResourcePerRepair": [
+      {
+        "_resources": {
+          "structure": 100
+        }
+      },
+      {
+        "_resources": {
+          "structure": 100
+        }
+      },
+      {
+        "_resources": {
+          "structure": 200,
+          "plumbing": 200
+        }
+      }
+    ],
+    "idealWorker": 5,
+    "variables": {
+      "storageType": "water",
+      "storageAmount": 3e4
+    }
+  },
   "barrier": {
     "image": "defaultApparatus.png",
     "durabilityTau": 8.64e6,

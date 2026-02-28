@@ -122,7 +122,10 @@ class Place : GameStateElement() {
             || parent.characters[sbjCharacter]!!.trait.contains("robot") //Robots can enter anywhere.
 
     fun movableConnectedPlaces(sbjCharacter: String): List<String> = connectedPlaces.filter { placeTo ->
-        parent.places[placeTo]!!.isAuthorized(sbjCharacter)
+        parent.places[placeTo]!!.isAuthorized(sbjCharacter) &&
+            (!name.contains("corridor") || apparatuses.any {
+                it.name == "manway" && it.durability > 0.0
+            })
     }
 
     val plannedWorker: Int
