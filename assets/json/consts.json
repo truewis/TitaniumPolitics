@@ -55,6 +55,7 @@
   "SetWorkersDuration": 30,
   "SetWorkHoursDuration": 20,
   "EatDuration": 30,
+  "FeastDuration": 20,
   "EndMeetingDuration": 5,
   "EndSpeechDuration": 10,
   "ExamineDuration": 60,

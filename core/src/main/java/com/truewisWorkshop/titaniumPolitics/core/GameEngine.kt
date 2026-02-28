@@ -1059,6 +1059,7 @@ class GameEngine(val gameState: GameState) {
                     actions.add("AddInfo")
                     actions.add("EndMeeting")
                     actions.add("EndSpeech")
+                    actions.add("Feast")
                 } else {
                     actions.add("Wait")
                     actions.add("Intercept")
