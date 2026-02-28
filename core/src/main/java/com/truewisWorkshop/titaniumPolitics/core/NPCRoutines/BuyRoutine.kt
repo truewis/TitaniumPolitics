@@ -18,6 +18,17 @@ class BuyRoutine(val buyResource: String, val buyAmount: Double) : Routine() {
         //Try to trade for resources
         //Select a character to trade with, based on the information known to the character.
 
+        // For luxury resources, prefer the server (treasurer) at the appropriate private store.
+        val storeServer = gState.parties.values.firstOrNull { party ->
+            party.type == com.titaniumPolitics.game.core.Party.Type.WORKPLACE &&
+                party.treasurer != null &&
+                party.treasurer != name &&
+                party.home != null &&
+                gState.places.containsKey(party.home) &&
+                gState.places[party.home]!!.responsibleDivision == null &&
+                StoreWorkRoutine.storeProduct(party.home!!) == buyResource
+        }?.treasurer
+
         val info = gState.informations.values.filter {
             it.type == InformationType.RESOURCES && it.tgtCharacter != null && it.tgtCharacter != name && it.resources.containsKey(
                 buyResource
@@ -25,11 +36,12 @@ class BuyRoutine(val buyResource: String, val buyAmount: Double) : Routine() {
                 name
             )
         }
-        tradeCharacter = if (info.isNotEmpty()) {//If this character knows a character with the resource
-            info.random().tgtCharacter!!
-        } else
-            gState.activeCharacters.keys.filter { it != name && gState.characters[it]!!.type != Character.Type.ANON }
+        tradeCharacter = when {
+            storeServer != null -> storeServer // Prefer store server for this luxury resource
+            info.isNotEmpty() -> info.random().tgtCharacter!! // Otherwise use known information
+            else -> gState.activeCharacters.keys.filter { it != name && gState.characters[it]!!.type != Character.Type.ANON }
                 .random()
+        }
 
         //FindCharacter
         // if the character is not in the same place.

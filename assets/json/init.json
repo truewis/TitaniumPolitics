@@ -494,6 +494,126 @@
       },
       "health": 100,
       "livingBy": "observatory"
+    },
+    "Chef": {
+      "type": "EMPLOYEE",
+      "trait": [
+        "cook",
+        "bargainer"
+      ],
+      "stats": {
+        "logos": 10,
+        "ethos": 10,
+        "pathos": 10
+      },
+      "health": 100,
+      "livingBy": "restaurant"
+    },
+    "RstSupplier": {
+      "type": "EMPLOYEE",
+      "trait": [
+        "bargainer"
+      ],
+      "stats": {
+        "logos": 10,
+        "ethos": 10,
+        "pathos": 10
+      },
+      "health": 100,
+      "livingBy": "tavern"
+    },
+    "RstServer": {
+      "type": "EMPLOYEE",
+      "trait": [
+        "bargainer"
+      ],
+      "stats": {
+        "logos": 10,
+        "ethos": 10,
+        "pathos": 10
+      },
+      "health": 100,
+      "livingBy": "restaurant"
+    },
+    "Jeweler": {
+      "type": "EMPLOYEE",
+      "trait": [
+        "jeweler",
+        "bargainer"
+      ],
+      "stats": {
+        "logos": 10,
+        "ethos": 10,
+        "pathos": 10
+      },
+      "health": 100,
+      "livingBy": "jewelryShop"
+    },
+    "JwlSupplier": {
+      "type": "EMPLOYEE",
+      "trait": [
+        "bargainer"
+      ],
+      "stats": {
+        "logos": 10,
+        "ethos": 10,
+        "pathos": 10
+      },
+      "health": 100,
+      "livingBy": "squareSouth"
+    },
+    "JwlServer": {
+      "type": "EMPLOYEE",
+      "trait": [
+        "bargainer"
+      ],
+      "stats": {
+        "logos": 10,
+        "ethos": 10,
+        "pathos": 10
+      },
+      "health": 100,
+      "livingBy": "jewelryShop"
+    },
+    "Chemist": {
+      "type": "EMPLOYEE",
+      "trait": [
+        "chemist",
+        "bargainer"
+      ],
+      "stats": {
+        "logos": 10,
+        "ethos": 10,
+        "pathos": 10
+      },
+      "health": 100,
+      "livingBy": "ammoniaShop"
+    },
+    "AmmSupplier": {
+      "type": "EMPLOYEE",
+      "trait": [
+        "bargainer"
+      ],
+      "stats": {
+        "logos": 10,
+        "ethos": 10,
+        "pathos": 10
+      },
+      "health": 100,
+      "livingBy": "squareSouth"
+    },
+    "AmmServer": {
+      "type": "EMPLOYEE",
+      "trait": [
+        "bargainer"
+      ],
+      "stats": {
+        "logos": 10,
+        "ethos": 10,
+        "pathos": 10
+      },
+      "health": 100,
+      "livingBy": "ammoniaShop"
     }
   },
   "places": {
@@ -2488,7 +2608,8 @@
         }
       },
       "connectedPlaces": [
-        "market"
+        "market",
+        "restaurant"
       ],
       "apparatuses": [
         {
@@ -2509,6 +2630,108 @@
       "isBuildingIn": "market",
       "workHoursStart": 16,
       "workHoursEnd": 24
+    },
+    "restaurant": {
+      "coordinates": {
+        "x": 4,
+        "y": 0,
+        "z": 8
+      },
+      "resources": {
+        "_resources": {
+          "water": 200,
+          "ration": 30,
+          "fineFood": 5
+        }
+      },
+      "connectedPlaces": [
+        "tavern"
+      ],
+      "apparatuses": [
+        {
+          "name": "rationStorage",
+          "durability": 95
+        },
+        {
+          "name": "waterStorage",
+          "durability": 95
+        },
+        {
+          "name": "energyStorage",
+          "durability": 95
+        }
+      ],
+      "characters": [
+        "Chef"
+      ],
+      "isBuildingIn": "tavern",
+      "workHoursStart": 10,
+      "workHoursEnd": 22
+    },
+    "jewelryShop": {
+      "coordinates": {
+        "x": 5,
+        "y": 0,
+        "z": -2
+      },
+      "resources": {
+        "_resources": {
+          "rareMetal": 0.05,
+          "diamond": 0.003
+        }
+      },
+      "connectedPlaces": [
+        "squareSouth"
+      ],
+      "apparatuses": [
+        {
+          "name": "componentStorage",
+          "durability": 95
+        },
+        {
+          "name": "energyStorage",
+          "durability": 95
+        }
+      ],
+      "characters": [
+        "Jeweler"
+      ],
+      "isBuildingIn": "squareSouth",
+      "workHoursStart": 9,
+      "workHoursEnd": 17
+    },
+    "ammoniaShop": {
+      "coordinates": {
+        "x": 5,
+        "y": 0,
+        "z": -3
+      },
+      "resources": {
+        "_resources": {
+          "water": 500,
+          "hydrogen": 10,
+          "ammonia": 5
+        }
+      },
+      "connectedPlaces": [
+        "squareSouth"
+      ],
+      "apparatuses": [
+        {
+          "name": "waterStorage",
+          "durability": 95
+        },
+        {
+          "name": "energyStorage",
+          "durability": 95
+        }
+      ],
+      "characters": [
+        "Chemist"
+      ],
+      "isBuildingIn": "squareSouth",
+      "workHoursStart": 9,
+      "workHoursEnd": 17
     },
     "squareNorth": {
       "coordinates": {
@@ -2574,7 +2797,9 @@
         "rescueStationSouth",
         "miningSchool",
         "electrolysisStationSouth",
-        "securityCheckCenter"
+        "securityCheckCenter",
+        "jewelryShop",
+        "ammoniaShop"
       ],
       "apparatuses": [
         {
@@ -2911,6 +3136,45 @@
         "Hans",
         "Lynn",
         "Alina"
+      ]
+    },
+    "workplace_restaurant": {
+      "leader": "Chef",
+      "administrator": "RstSupplier",
+      "treasurer": "RstServer",
+      "overseer": "Chef",
+      "type": "WORKPLACE",
+      "home": "restaurant",
+      "_members": [
+        "Chef",
+        "RstSupplier",
+        "RstServer"
+      ]
+    },
+    "workplace_jewelryShop": {
+      "leader": "Jeweler",
+      "administrator": "JwlSupplier",
+      "treasurer": "JwlServer",
+      "overseer": "Jeweler",
+      "type": "WORKPLACE",
+      "home": "jewelryShop",
+      "_members": [
+        "Jeweler",
+        "JwlSupplier",
+        "JwlServer"
+      ]
+    },
+    "workplace_ammoniaShop": {
+      "leader": "Chemist",
+      "administrator": "AmmSupplier",
+      "treasurer": "AmmServer",
+      "overseer": "Chemist",
+      "type": "WORKPLACE",
+      "home": "ammoniaShop",
+      "_members": [
+        "Chemist",
+        "AmmSupplier",
+        "AmmServer"
       ]
     }
   },
