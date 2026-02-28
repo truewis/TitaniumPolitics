@@ -23,6 +23,10 @@
     "image": "AppleGrunge",
     "sound": "data/sounds/eat.mp3"
   },
+  "Feast": {
+    "image": "AppleGrunge",
+    "sound": "data/sounds/eat.mp3"
+  },
   "Repair": {
     "image": "CogGrunge",
     "sound": "data/repair.mp3"
