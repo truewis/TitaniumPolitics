@@ -4,9 +4,9 @@ import kotlinx.serialization.Serializable
 import kotlin.math.sqrt
 
 @Serializable
-data class Coordinate3D(var x: Int, var y: Int, var z: Int) {
+data class Coordinate3D(var x: Double, var y: Double, var z: Double) {
     val amplitude: Double
-        get() = sqrt((x * x + y * y + z * z).toDouble())
+        get() = sqrt((x * x + y * y + z * z))
 
     override fun toString(): String {
         return "($x, $y, $z)"
@@ -20,7 +20,7 @@ data class Coordinate3D(var x: Int, var y: Int, var z: Int) {
         return Coordinate3D(x - other.x, y - other.y, z - other.z)
     }
 
-    operator fun times(scalar: Int): Coordinate3D {
+    operator fun times(scalar: Double): Coordinate3D {
         return Coordinate3D(x * scalar, y * scalar, z * scalar)
     }
 

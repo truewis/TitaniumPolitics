@@ -123,15 +123,19 @@ class Place : GameStateElement() {
 
     fun movableConnectedPlaces(sbjCharacter: String): List<String> = connectedPlaces.filter { placeTo ->
         parent.places[placeTo]!!.isAuthorized(sbjCharacter) &&
-            (!name.contains("corridor") || apparatuses.any {
-                it.name == "manway" && it.durability > 0.0
+            // If this place is a corridor, you can move to any place connected to the corridor.
+            // If this place is a building, you can move to the place it is in.
+            // If this place is connected to a building, you can move to the building.
+            // If this place is not a corridor, you can only move to corridors or manways with durability > 0.
+            (name.contains("corridor") || isBuildingIn == placeTo || parent.places[placeTo]?.isBuildingIn == name || apparatuses.any {
+                it.name == "manway" && it.ID == "manway_$placeTo" && it.durability > 0.0
             })
     }
 
     val plannedWorker: Int
         get() =
             apparatuses.sumOf { it.plannedWorker }
-    var coordinates = Coordinate3D(0, 0, 0)
+    var coordinates = Coordinate3D(0.0, 0.0, 0.0)
 
     /**
      * Ambient temperature of the place in Kelvin.

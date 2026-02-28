@@ -109,10 +109,10 @@ open class MapUI(val gameState: GameState) : Table(defaultSkin) {
 
     open fun refresh() {
         //Calculate the bounds.
-        minX = gameState.places.minOf { it.value.coordinates.x }
-        minY = gameState.places.minOf { it.value.coordinates.z }
-        maxX = gameState.places.maxOf { it.value.coordinates.x }
-        maxY = gameState.places.maxOf { it.value.coordinates.z }
+        minX = gameState.places.minOf { it.value.coordinates.x }.toInt()
+        minY = gameState.places.minOf { it.value.coordinates.z }.toInt()
+        maxX = gameState.places.maxOf { it.value.coordinates.x }.toInt()
+        maxY = gameState.places.maxOf { it.value.coordinates.z }.toInt()
 
         //Background size is determined by the extent of the markers.
         dataTable.cells[0].size(

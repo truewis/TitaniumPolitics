@@ -93,7 +93,7 @@ data class Talk(
         //Can't talk to oneself.
         if (sbjCharacter == who)
             throw Exception("Invalid Talk action: subject and object are the same.")
-
+        if (tgtPlace.contains("corridor")) return false //Cannot talk in corridor.
         if (parent.characters[who]!!.currentMeeting == null)
             return tgtPlaceObj.characters.contains(who)
         else {

@@ -1069,7 +1069,9 @@ class GameEngine(val gameState: GameState) {
                 return actions
             }
             ////////////////////////////////////////////////////MEETING ACTIONS//////////////////////////////////////////////////////////
-            actions.add("Talk") //if (placeObj.realCharacters.count() > 1), but this condition is temporal.
+            if (!place.contains("corridor"))
+            // Cannot talk in corridors.
+                actions.add("Talk") //if (placeObj.realCharacters.count() > 1), but this condition is temporal.
             if (placeObj.isAccidentScene) {
                 if (placeObj.responsibleDivision != null && gameState.parties[placeObj.responsibleDivision]!!.members.contains(
                         character
@@ -1079,7 +1081,9 @@ class GameEngine(val gameState: GameState) {
                 actions.add("InvestigateAccidentScene")
             }
             actions.add("Move")
-            actions.add("Examine")
+            if (!place.contains("corridor"))
+            // Cannot examine in corridors.
+                actions.add("Examine")
             //actions.add("radio")
             if (placeObj.apparatuses.any { it.name == "wiredBroadcastDevice" } && gameState.parties["interior"]!!.directorMembers.contains(
                     character

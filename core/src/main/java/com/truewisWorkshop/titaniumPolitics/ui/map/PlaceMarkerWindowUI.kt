@@ -260,9 +260,20 @@ class PlaceMarkerWindowUI(var gameState: GameState, var owner: MapUI) : Table() 
 
     }
 
+    fun generateCorridorSuffix(placeName: String): String {
+        //Generate four digit hex code based on the place name, using some hash function. This is to differentiate different corridors while still keeping the name generic.
+        val hash = placeName.hashCode()
+        val hex = Integer.toHexString(hash).takeLast(4).padStart(4, '0')
+        return hex
+    }
+
     fun refresh(placeName: String) {
         //setPosition(x + XOFFSET, y + YOFFSET)
-        val txt = ReadOnly.placeProp(placeName)
+        //Set the title of the window. If the place is a corridor, use the generic "Corridor" property instead of the specific place name, since corridors do not have unique properties.
+        val txt =
+            if (!placeName.contains("corridor")) ReadOnly.placeProp(placeName) else ReadOnly.placeProp("corridor") + generateCorridorSuffix(
+                placeName
+            )
         this.titleLabel.label.setText(txt)
         if (txt.length > 27)
             this.titleLabel.label.setFontScale(0.4f) //TODO: This is a temporary fix, should be replaced with Issue #124
@@ -291,11 +302,16 @@ class PlaceMarkerWindowUI(var gameState: GameState, var owner: MapUI) : Table() 
             add(managementInformation).fillX().expandX()
             row()
             add(scene2d.stack {
-                add(DescriptionLabel(ReadOnly.placeProp("$placeDisplayed-desc")).apply {
-                    with(label) {
-                        color = Color.LIGHT_GRAY
-                    }
-                })
+                add(
+                    DescriptionLabel(
+                        if (!placeName.contains("corridor")) ReadOnly.placeProp("$placeDisplayed-desc") else ReadOnly.placeProp(
+                            "corridor-desc"
+                        )
+                    ).apply {
+                        with(label) {
+                            color = Color.LIGHT_GRAY
+                        }
+                    })
 
                 gameState.places[this@PlaceMarkerWindowUI.placeDisplayed]!!.responsibleDivision?.let { div ->
                     container(DivisionBannerUI(gameState.parties[div]!!)) {

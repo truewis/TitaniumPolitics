@@ -107,11 +107,12 @@ data class Examine(override val sbjCharacter: String, override val tgtPlace: Str
 
     override fun isValid(): Boolean {
         if (sbjCharObj.currentMeeting != null) return false //Cannot examine when in a meeting.
+        if (tgtPlace.contains("corridor")) return false //Cannot examine corridor.
         tgtPlaceObj.responsibleDivision?.let {
             if (!reason(
                     it == (sbjCharObj.division?.name
                         ?: false),
-                    "examine-division"
+                    "examine-]"
                 )
             ) return false//If there is a responsible division which I am not in, they will prevent me from examining.
         }

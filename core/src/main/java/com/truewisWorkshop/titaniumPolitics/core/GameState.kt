@@ -414,11 +414,76 @@ class GameState {
             )
                 knownCharactersToPlayer += it.key //Add characters to the known characters of the player.
         }
-
+        createCorridors()
         randomize()
         addFactions()
         eventSystem.newGame()
         Logger.write("Game state initialized successfully.", Logger.LogLevel.INFO)
+    }
+
+    fun createCorridors() {
+        //Create corridors for each connection between places.
+        val corridorVolume = 20000f
+        val corridorInitialDurability = 95.0
+        val volumeRatio = corridorVolume / 1e4f
+        val processedConnections = mutableSetOf<Pair<String, String>>()
+        places.keys.toList().forEach { aName ->
+            places[aName]!!.connectedPlaces.toList().forEach { bName ->
+                val key = if (aName < bName) aName to bName else bName to aName
+                if (key in processedConnections) return@forEach
+                //We do not create corridors for connections that already have corridors, to avoid duplication. This is for loading existing games, where corridors are already created.
+                if (aName.contains("corridor") || bName.contains("corridor")) return@forEach
+                //If one place is building in another, we do not create corridor between them, as they are already connected by the building structure.
+                if (places[aName]!!.isBuildingIn == bName || places[bName]!!.isBuildingIn == aName) return@forEach
+                processedConnections.add(key)
+
+                val (sortedA, sortedB) = key
+                val aCoords = places[sortedA]!!.coordinates
+                val bCoords = places[sortedB]!!.coordinates
+                val diff = bCoords - aCoords
+                val t1Coords = aCoords + (diff * 2.0) / 10
+                val t2Coords = aCoords + (diff * 8.0) / 10
+                val t1Name = "corridor_${sortedA}_${sortedB}"
+                val t2Name = "corridor_${sortedB}_${sortedA}"
+                //We are creating corridors as buildings instead.
+                places[sortedA]!!.apparatuses.add(Apparatus().apply {
+                    name = "manway"; durability = corridorInitialDurability; ID = "manway_$t1Name"
+                })
+                places[sortedB]!!.apparatuses.add(Apparatus().apply {
+                    name = "manway"; durability = corridorInitialDurability; ID = "manway_$t2Name"
+                })
+                places[t1Name] = Place().apply {
+                    this.injectParent(this@GameState)
+                    coordinates = t1Coords
+                    volume = corridorVolume
+                    connectedPlaces.add(sortedA)
+                    connectedPlaces.add(t2Name)
+                    gasResources = Resources(
+                        "oxygen" to 3000.0 * volumeRatio,
+                        "carbonDioxide" to 15.0 * volumeRatio,
+                        "nitrogen" to 9000.0 * volumeRatio
+                    ).apply { positive = true }
+                }
+
+                places[t2Name] = Place().apply {
+                    this.injectParent(this@GameState)
+                    coordinates = t2Coords
+                    volume = corridorVolume
+                    connectedPlaces.add(t1Name)
+                    connectedPlaces.add(sortedB)
+                    gasResources = Resources(
+                        "oxygen" to 3000.0 * volumeRatio,
+                        "carbonDioxide" to 15.0 * volumeRatio,
+                        "nitrogen" to 9000.0 * volumeRatio
+                    ).apply { positive = true }
+                }
+
+                places[sortedA]!!.connectedPlaces.remove(sortedB)
+                places[sortedA]!!.connectedPlaces.add(t1Name)
+                places[sortedB]!!.connectedPlaces.remove(sortedA)
+                places[sortedB]!!.connectedPlaces.add(t2Name)
+            }
+        }
     }
 
     fun randomize() {

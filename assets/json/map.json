@@ -89,6 +89,16 @@
       0.4
     ]
   },
+  "corridor": {
+    "image": "data/home.png",
+    "sound": "data/sounds/home.mp3",
+    "light": [
+      0,
+      0,
+      0,
+      0.4
+    ]
+  },
   "securityCheckWest": {
     "image": "data/securityCheck.png",
     "ind": "capsuleMapIndPortAftPlane",

@@ -68,6 +68,7 @@ class TestEntryClass : ApplicationAdapter() {
             File(fName).readText()
         ).also {
             it.injectDependency()
+            Logger.gState = it
             Logger.write("Reloading test complete.", Logger.LogLevel.INFO)
         }
         val engine2 = GameEngine(gState)

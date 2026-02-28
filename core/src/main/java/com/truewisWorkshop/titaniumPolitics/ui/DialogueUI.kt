@@ -214,7 +214,8 @@ class DialogueUI(val gameState: GameState) : Table(defaultSkin), KTable {
         isVisible = true
 
         val placeName = gameState.player.place.name
-        val imageKey = if (placeName.contains("home")) "home" else placeName
+        val imageKey =
+            if (placeName.contains("home")) "home" else if (placeName.contains("corridor")) "corridor" else placeName
         val imagePath = ReadOnly.mapJson[imageKey]!!
             .jsonObject["image"]!!
             .jsonPrimitive.content
