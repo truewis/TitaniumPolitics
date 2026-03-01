@@ -64,6 +64,26 @@ class AssistantUI(gameState: GameState) : Table(defaultSkin) {
         instance = this
         padLeft(-20f)
 
+        // Add PPS cabinet after all other cabinets are set up
+        val ppsIndex = cabinetWindowUIs.size
+        val ppsWindowUI = PPSWindowUI(gameState)
+        val ppsHandleUI = PPSHandleUI(
+            ppsWindow = ppsWindowUI,
+            xOffset = ppsIndex * buttonXGap,
+            yOffset = ppsIndex * buttonYGap
+        )
+        addActor(ppsHandleUI)
+        cabinetWindowUIs.add(ppsHandleUI)
+        ppsHandleUI.setSize(buttonWidth, buttonHeight + 10f)
+        ppsHandleUI.setPosition(ppsIndex * buttonXGap, ppsIndex * buttonYGap)
+
+        // Refresh PPS status markers whenever the game state updates
+        gameState.updateUI += {
+            Gdx.app.postRunnable {
+                ppsWindowUI.refresh()
+            }
+        }
+
         // Close the map window when the move button is clicked
         mapUI.currentPlaceMarkerWindow.onClose += {
             mapButton.changeOpenState(false)
