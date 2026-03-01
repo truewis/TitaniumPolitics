@@ -29,7 +29,7 @@ import ktx.scene2d.scene2d
  */
 class PPSHandleUI(
     private val ppsWindow: PPSWindowUI,
-    xOffset: Float,
+    override var xOffset: Float, // Start with the handle offset to the right, so it can slide in when conditions worsen
     yOffset: Float
 ) : CabinetWindowContainerUI(
     title = "PPS",
@@ -42,25 +42,28 @@ class PPSHandleUI(
     private val gasMarker: Image
     private val temperatureMarker: Image
     private val powerMarker: Image
+    private val radiationMarker: Image
 
     init {
         // Add three status badge markers to the handle at vertical offsets
-        gasMarker = addStatusMarker("PPSGasMarker", Color.GREEN, 35f, 440f)
-        temperatureMarker = addStatusMarker("PPSTempMarker", Color.GREEN, 35f, 370f)
-        powerMarker = addStatusMarker("PPSPowerMarker", Color.GREEN, 35f, 300f)
+        gasMarker = addStatusMarker("PPSGasMarker", Color.GREEN, 145f, 310f)
+        temperatureMarker = addStatusMarker("PPSTempMarker", Color.GREEN, 145f, 280f)
+        powerMarker = addStatusMarker("PPSPowerMarker", Color.GREEN, 145f, 250f)
+        radiationMarker = addStatusMarker("PPSRadiationMarker", Color.GREEN, 145f, 220f)
 
         // Small rotated text labels beside each badge
-        addStatusLabel(ReadOnly.prop("PPSHandleUI-Gas"), 65f, 440f)
-        addStatusLabel(ReadOnly.prop("PPSHandleUI-Temperature"), 65f, 370f)
-        addStatusLabel(ReadOnly.prop("PPSHandleUI-Power"), 65f, 300f)
+//        addStatusLabel(ReadOnly.prop("PPSHandleUI-Gas"), 65f, 440f)
+//        addStatusLabel(ReadOnly.prop("PPSHandleUI-Temperature"), 65f, 370f)
+//        addStatusLabel(ReadOnly.prop("PPSHandleUI-Power"), 65f, 300f)
 
         // Update markers whenever the window refreshes
-        ppsWindow.onStatusChanged += { gas, temp, power ->
-            updateConditions(gas, temp, power)
+        ppsWindow.onStatusChanged += { gas, temp, power, radiation ->
+            updateConditions(gas, temp, power, radiation)
         }
 
         // Start near-invisible — all conditions default to GREEN
-        color.a = 0.15f
+        //We don't want alpha action, just move it around, it looks better that way.
+        //color.a = 0.15f
 
         // Hover: reveal handle temporarily when all is green
         titleLabel.addListener(object : ClickListener() {
@@ -71,7 +74,8 @@ class PPSHandleUI(
                 pointer: Int,
                 fromActor: com.badlogic.gdx.scenes.scene2d.Actor?
             ) {
-                this@PPSHandleUI.addAction(Actions.fadeIn(0.25f))
+                //We don't want alpha action, just move it around, it looks better that way.
+                //this@PPSHandleUI.addAction(Actions.fadeIn(0.25f))
                 super.enter(event, x, y, pointer, fromActor)
             }
 
@@ -87,7 +91,8 @@ class PPSHandleUI(
                         ppsWindow.temperatureStatus == PPSWindowUI.ConditionStatus.GREEN &&
                         ppsWindow.powerStatus == PPSWindowUI.ConditionStatus.GREEN
                 if (allGreen && !isOpen) {
-                    this@PPSHandleUI.addAction(Actions.fadeOut(0.5f))
+                    //We don't want alpha action, just move it around, it looks better that way.
+                    //this@PPSHandleUI.addAction(Actions.fadeOut(0.5f))
                 }
                 super.exit(event, x, y, pointer, toActor)
             }
@@ -132,29 +137,43 @@ class PPSHandleUI(
     fun updateConditions(
         gas: PPSWindowUI.ConditionStatus,
         temperature: PPSWindowUI.ConditionStatus,
-        power: PPSWindowUI.ConditionStatus
+        power: PPSWindowUI.ConditionStatus,
+        radiation: PPSWindowUI.ConditionStatus
     ) {
         applyMarkerColor(gasMarker, gas)
         applyMarkerColor(temperatureMarker, temperature)
         applyMarkerColor(powerMarker, power)
+        applyMarkerColor(radiationMarker, radiation)
 
         val allGreen = gas == PPSWindowUI.ConditionStatus.GREEN &&
             temperature == PPSWindowUI.ConditionStatus.GREEN &&
-            power == PPSWindowUI.ConditionStatus.GREEN
+            power == PPSWindowUI.ConditionStatus.GREEN &&
+            radiation == PPSWindowUI.ConditionStatus.GREEN
 
         if (!allGreen) {
             addAction(Actions.fadeIn(0.3f))
             if (gas != PPSWindowUI.ConditionStatus.GREEN) startBlink(gasMarker)
             if (temperature != PPSWindowUI.ConditionStatus.GREEN) startBlink(temperatureMarker)
             if (power != PPSWindowUI.ConditionStatus.GREEN) startBlink(powerMarker)
-        } else if (!isOpen) {
-            gasMarker.clearActions()
-            temperatureMarker.clearActions()
-            powerMarker.clearActions()
-            gasMarker.color.a = 1f
-            temperatureMarker.color.a = 1f
-            powerMarker.color.a = 1f
-            addAction(Actions.fadeOut(1.0f))
+            if (radiation != PPSWindowUI.ConditionStatus.GREEN) startBlink(radiationMarker)
+            xOffset = -130f
+            if (!isOpen) {
+                x = xOffset
+            }
+        } else {
+            xOffset = -160f
+            if (!isOpen) {
+                gasMarker.clearActions()
+                temperatureMarker.clearActions()
+                powerMarker.clearActions()
+                radiationMarker.clearActions()
+                gasMarker.color.a = 1f
+                temperatureMarker.color.a = 1f
+                powerMarker.color.a = 1f
+                radiationMarker.color.a = 1f
+                //addAction(Actions.fadeOut(1.0f))
+                x = xOffset
+            }
         }
     }
 

@@ -92,6 +92,7 @@ class GraphScreen(private var data: Map<Int, Float>, yDataType: DataType) : Tabl
 
     val effWidth get() = width - 2 * axesPadding
     val effHeight get() = height - 2 * axesPadding
+    var hasToDraw = false
 
     init {
         val pixmap = Pixmap(1, 1, Pixmap.Format.RGBA8888)
@@ -101,30 +102,53 @@ class GraphScreen(private var data: Map<Int, Float>, yDataType: DataType) : Tabl
         //pixmap.dispose()
         pixelTexture = TextureRegion(texture, 0, 0, 1, 1)
         generateAxisLabels()
+        hasToDraw = true
     }
 
     override fun draw(batch: Batch?, parentAlpha: Float) {
         super.draw(batch, parentAlpha)
         if (batch == null) return
+        if (hasToDraw) {
+            hasToDraw = false
+        } else {
+            return
+        }
         if (!::drawer.isInitialized) {
             drawer = ShapeDrawer(batch, pixelTexture)
         }
 
         val sorted = data.toSortedMap()
-
+        val screenX = x
+        val screenY = y
 
         // Axes
         //drawer.color = Color.BLACK
-        drawer.line(axesPadding, axesPadding, axesPadding, effHeight + axesPadding) // Y-axis
-        drawer.line(axesPadding, axesPadding, effWidth + axesPadding, axesPadding) // X-axis
+        drawer.line(
+            screenX + axesPadding,
+            screenY + axesPadding,
+            screenX + axesPadding,
+            screenY + effHeight + axesPadding
+        ) // Y-axis
+        drawer.line(
+            screenX + axesPadding,
+            screenY + axesPadding,
+            screenX + effWidth + axesPadding,
+            screenY + axesPadding
+        ) // X-axis
 
         // Horizontal lines
         yLines.forEach { (key, attr) ->
             val y = attr.y.map(minY, maxY, axesPadding, effHeight + axesPadding)
             drawer.setColor(attr.color)
-            drawer.line(axesPadding, y, effWidth + axesPadding, y, attr.thickness)
+            drawer.line(
+                screenX + axesPadding,
+                screenY + y,
+                screenX + effWidth + axesPadding,
+                screenY + y,
+                attr.thickness
+            )
             cache.color = attr.color
-            cache.draw(batch, key, effWidth - axesPadding, y + 15)
+            cache.draw(batch, key, screenX + effWidth - axesPadding, screenY + y + 15)
         }
         // Vertical lines
         xLines.forEach { (key, attr) ->
@@ -134,10 +158,10 @@ class GraphScreen(private var data: Map<Int, Float>, yDataType: DataType) : Tabl
             )
             drawer.setColor(attr.color)
             drawer.line(
-                x, axesPadding, x, effHeight + axesPadding, attr.thickness
+                screenX + x, screenY + axesPadding, screenX + x, screenY + effHeight + axesPadding, attr.thickness
             )
             cache.color = attr.color
-            cache.draw(batch, key, x + 15, effHeight - axesPadding)
+            cache.draw(batch, key, screenX + x + 15, screenY + effHeight - axesPadding)
         }
         drawer.setColor(Color.WHITE)
         cache.color = Color.WHITE
@@ -151,18 +175,17 @@ class GraphScreen(private var data: Map<Int, Float>, yDataType: DataType) : Tabl
             val px = x.toFloat().map(minX.toFloat(), maxX.toFloat(), axesPadding, effWidth + axesPadding)
             val py = y.toFloat().map(minY.toFloat(), maxY.toFloat(), axesPadding, effHeight + axesPadding)
 
-            drawer.filledCircle(px, py, 4f)
+            drawer.filledCircle(screenX + px, screenY + py, 4f)
             if (prevX != null && prevY != null) {
-                drawer.line(prevX!!, prevY!!, px, py, 2f)
+                drawer.line(screenX + prevX!!, screenY + prevY!!, screenX + px, screenY + py, 2f)
             }
             prevX = px
             prevY = py
         }
 
         // Legend
-        drawer.filledCircle(width - 100, height + 30, 5f)
-        cache.draw(batch, "Legend:", width - 90, height + 45)
-        cache.draw(batch, "Data Point", width - 90, height + 30)
+        drawer.filledCircle(screenX + width - 100, screenY + height + 30, 5f)
+        cache.draw(batch, "Legend:", screenX + width - 90, screenY + height + 45)
     }
 
 
@@ -177,16 +200,18 @@ class GraphScreen(private var data: Map<Int, Float>, yDataType: DataType) : Tabl
         generateAxisLabels()
         vertices.forEach { it.value.forEach { v -> v.remove() } }
         vertices.clear()
-        data.forEach {
-            createVertex("default", it.key.toFloat(), it.value)
-        }
+//        data.forEach {
+//            createVertex("default", it.key.toFloat(), it.value)
+//        }
+        hasToDraw = true
     }
+
 
     fun refresh(new: Map<Int, Float>, yDataType: DataType = this.yDataType) {
         data = new
         this.yDataType = yDataType
-        print(data)
         invalidate()
+        hasToDraw = true
     }
 
     private fun generateLegend() {
@@ -319,7 +344,6 @@ class GraphScreen(private var data: Map<Int, Float>, yDataType: DataType) : Tabl
                 )
             )//TODO: does not work currently. Why?
             this.layout()
-            this.debug()
         }
     }
 

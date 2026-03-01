@@ -40,4 +40,8 @@ class GraphWidget(
     fun removeVerticalLine(key: String) {
         graphScreen.removeVerticalLine(key)
     }
+
+    fun setYAxisTitle(title: String) {
+        graphScreen.yAxisTitleText = title
+    }
 }

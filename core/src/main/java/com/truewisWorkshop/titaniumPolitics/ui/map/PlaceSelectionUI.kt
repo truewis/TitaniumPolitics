@@ -15,7 +15,7 @@ class PlaceSelectionUI(gameState: GameState) : WindowUI("PlaceSelectionTitle") {
     var selectedPlaceCallback: (String) -> Unit = {}
     fun refresh() {
         map.refresh()
-        map.currentPlaceMarkerWindow.mode = "PlaceSelection"
+        map.currentPlaceMarkerWindow.mode = PlaceMarkerWindowUI.MODE_PLACE_SELECTION
     }
 
     companion object {

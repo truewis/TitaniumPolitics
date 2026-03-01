@@ -69,18 +69,19 @@ class AssistantUI(gameState: GameState) : Table(defaultSkin) {
         val ppsWindowUI = PPSWindowUI(gameState)
         val ppsHandleUI = PPSHandleUI(
             ppsWindow = ppsWindowUI,
-            xOffset = ppsIndex * buttonXGap,
+            xOffset = -160f,//ppsIndex * buttonXGap, //Controlled by PPSHandleUI itself, so it can slide in and out smoothly
             yOffset = ppsIndex * buttonYGap
         )
         addActor(ppsHandleUI)
         cabinetWindowUIs.add(ppsHandleUI)
         ppsHandleUI.setSize(buttonWidth, buttonHeight + 10f)
-        ppsHandleUI.setPosition(ppsIndex * buttonXGap, ppsIndex * buttonYGap)
+        ppsHandleUI.setPosition(ppsHandleUI.xOffset, ppsIndex * buttonYGap)
 
         // Refresh PPS status markers whenever the game state updates
         gameState.updateUI += {
             Gdx.app.postRunnable {
                 ppsWindowUI.refresh()
+                println("PPS Refreshed.")
             }
         }
 

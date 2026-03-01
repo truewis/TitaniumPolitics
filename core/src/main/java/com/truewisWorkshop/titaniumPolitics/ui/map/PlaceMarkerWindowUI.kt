@@ -32,7 +32,7 @@ class PlaceMarkerWindowUI(var gameState: GameState, var owner: MapUI) : Table() 
     val distance
         get() = (gameState.player.place.shortestPathAndTimeTo(placeDisplayed, gameState.playerName)?.second
             ?: 0) * ReadOnly.DT / 60
-    var mode = ""
+    var mode = MODE_DEFAULT
     var selectedCharacter = ""
     var interrupted =
         true//Only used in move mode. Initially true to prevent any interruption handling before move starts.
@@ -288,7 +288,7 @@ class PlaceMarkerWindowUI(var gameState: GameState, var owner: MapUI) : Table() 
             top()
             clear()
             //If place selection mode is active, add the selection button and nothing else.
-            if (mode == "PlaceSelection") {
+            if (mode == MODE_PLACE_SELECTION) {
                 add(selectButton).size(400f, 75f).fill()
                 row()
             } else if (mode == PlaceMarkerWindowUI.MODE_TIMELINE) {
@@ -304,21 +304,26 @@ class PlaceMarkerWindowUI(var gameState: GameState, var owner: MapUI) : Table() 
                 val sightingTable = scene2d.table {
                     top()
                     if (sightings.isEmpty()) {
-                        add(label(ReadOnly.prop("TimelineUI-NoSightings"), "description") {
+                        label(ReadOnly.prop("TimelineUI-NoSightings"), "description") {
                             setFontScale(0.25f)
                             setAlignment(Align.left)
                             color = Color.LIGHT_GRAY
-                        }).fillX().padTop(10f)
-                        row()
+                            it.fillX().padTop(10f)
+                        }
                     } else {
                         sightings.forEach { info ->
                             val actionName = info.action?.let {
-                                try { ReadOnly.prop(it::class.simpleName!!) } catch (e: Exception) {
-                                    Logger.write("TimelineUI: missing localization key for action ${it::class.simpleName}", Logger.LogLevel.INFO)
+                                try {
+                                    ReadOnly.prop(it::class.simpleName!!)
+                                } catch (e: Exception) {
+                                    Logger.write(
+                                        "TimelineUI: missing localization key for action ${it::class.simpleName}",
+                                        Logger.LogLevel.INFO
+                                    )
                                     it::class.simpleName ?: "?"
                                 }
                             } ?: "?"
-                            add(label(
+                            label(
                                 ReadOnly.prop("TimelineUI-SightingEntry")
                                     .format(GameState.formatTime(info.tgtTime), actionName),
                                 "description"
@@ -327,12 +332,13 @@ class PlaceMarkerWindowUI(var gameState: GameState, var owner: MapUI) : Table() 
                                 setAlignment(Align.left)
                                 color = Color.WHITE
                                 wrap = true
-                            }).fillX().padTop(4f)
-                            row()
+                                it.fillX().padTop(4f)
+                            }
                         }
                     }
                 }
-                add(ScrollPane(sightingTable).also { it.setScrollingDisabled(true, false) }).fillX().expandX().height(300f)
+                add(ScrollPane(sightingTable).also { it.setScrollingDisabled(true, false) }).fillX().expandX()
+                    .height(300f)
                 row()
             } else {
                 moveTimeLabel.setText(ReadOnly.prop("PlaceMarkerWindowUI-TimeToDest").format(distance))
@@ -376,5 +382,7 @@ class PlaceMarkerWindowUI(var gameState: GameState, var owner: MapUI) : Table() 
 
     companion object {
         const val MODE_TIMELINE = "Timeline"
+        const val MODE_PLACE_SELECTION = "PlaceSelection"
+        const val MODE_DEFAULT = ""
     }
 }

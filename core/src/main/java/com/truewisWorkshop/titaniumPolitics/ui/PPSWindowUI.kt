@@ -40,23 +40,34 @@ class PPSWindowUI(val gameState: GameState) : Table(defaultSkin), KTable {
         private set
     var powerStatus = ConditionStatus.GREEN
         private set
+    var radiationStatus = ConditionStatus.GREEN
+        private set
 
     /** Invoked after every successful [refresh] with the latest statuses. */
-    val onStatusChanged = arrayListOf<(ConditionStatus, ConditionStatus, ConditionStatus) -> Unit>()
+    val onStatusChanged = arrayListOf<(ConditionStatus, ConditionStatus, ConditionStatus, ConditionStatus) -> Unit>()
 
     // ── Tab root tables (visibility toggled on tab switch) ──────────────────
     private val gasRootTable = Table()
     private val temperatureRootTable = Table()
     private val powerRootTable = Table()
+    private val radiationRootTable = Table()
 
     // ── History buffers for the 24-hr graphs ───────────────────────────────
     private val temperatureHistory = LinkedHashMap<Int, Float>()
     private val energyHistory = LinkedHashMap<Int, Float>()
+    private val radiationHistory = LinkedHashMap<Int, Float>()
     private val maxHistorySize get() = ReadOnly.IDTH * 24  // 24 in-game hours
 
     // ── Reusable graph widgets (created once, refreshed each update) ────────
-    private val temperatureGraph = GraphWidget(mapOf(0 to 300f), GraphScreen.DataType.COUNT)
-    private val powerGraph = GraphWidget(mapOf(0 to 0f), GraphScreen.DataType.COUNT)
+    private val temperatureGraph = GraphWidget(mapOf(0 to 300f), GraphScreen.DataType.COUNT).also {
+        it.setYAxisTitle(ReadOnly.prop("PPSWindowUI-CurrentTemp"))
+    }
+    private val powerGraph = GraphWidget(mapOf(0 to 0f), GraphScreen.DataType.COUNT).also {
+        it.setYAxisTitle(ReadOnly.prop("PPSWindowUI-Consumption"))
+    }
+    private val radiationGraph = GraphWidget(mapOf(0 to 0f), GraphScreen.DataType.COUNT).also {
+        it.setYAxisTitle(ReadOnly.prop("PPSWindowUI-RadiationLevel"))
+    }
 
     init {
         refresh()
@@ -81,7 +92,7 @@ class PPSWindowUI(val gameState: GameState) : Table(defaultSkin), KTable {
 
         private const val ENERGY_RED_FRACTION = 0.10f
         private const val ENERGY_ORANGE_FRACTION = 0.25f
-        private const val TEMP_WARNING_MARGIN = 0.10f  // fraction of safe range
+        private const val TEMP_WARNING_MARGIN = 10f  // Degrees
     }
 
     // ── Status evaluation ───────────────────────────────────────────────────
@@ -94,7 +105,9 @@ class PPSWindowUI(val gameState: GameState) : Table(defaultSkin), KTable {
 
         for ((gas, redThreshold) in HARMFUL_GAS_RED) {
             val orangeThreshold = HARMFUL_GAS_ORANGE[gas] ?: continue
-            val pressure = try { place.gasPressure(gas).toFloat() } catch (e: Exception) {
+            val pressure = try {
+                place.gasPressure(gas).toFloat()
+            } catch (e: Exception) {
                 Logger.write("PPS: could not get pressure for $gas: ${e.message}", Logger.LogLevel.WARNING)
                 continue
             }
@@ -112,15 +125,27 @@ class PPSWindowUI(val gameState: GameState) : Table(defaultSkin), KTable {
             val maxT = app.maxTemp.toFloat()
             val range = (maxT - minT).coerceAtLeast(1f)
             when {
-                temp > maxT || temp < minT -> return ConditionStatus.RED
-                temp > maxT - range * TEMP_WARNING_MARGIN ||
-                    temp < minT + range * TEMP_WARNING_MARGIN -> worst = ConditionStatus.ORANGE
+                temp !in minT..maxT -> return ConditionStatus.RED
+                temp > maxT - TEMP_WARNING_MARGIN ||
+                    temp < minT + TEMP_WARNING_MARGIN -> worst = ConditionStatus.ORANGE
             }
         }
         return worst
     }
 
     private fun evaluatePowerStatus(place: Place): ConditionStatus {
+        val maxEnergy = place.maxResources["energy"].toFloat()
+        if (maxEnergy <= 0f) return ConditionStatus.GREEN
+        val fraction = place.resources["energy"].toFloat() / maxEnergy
+        return when {
+            fraction < ENERGY_RED_FRACTION -> ConditionStatus.RED
+            fraction < ENERGY_ORANGE_FRACTION -> ConditionStatus.ORANGE
+            else -> ConditionStatus.GREEN
+        }
+    }
+
+    private fun evaluateRadiationStatus(place: Place): ConditionStatus {
+        //TODO
         val maxEnergy = place.maxResources["energy"].toFloat()
         if (maxEnergy <= 0f) return ConditionStatus.GREEN
         val fraction = place.resources["energy"].toFloat() / maxEnergy
@@ -149,7 +174,9 @@ class PPSWindowUI(val gameState: GameState) : Table(defaultSkin), KTable {
                 else -> Color.GREEN
             }
         }
-        val pressure = try { place.gasPressure(gasName).toFloat() } catch (e: Exception) {
+        val pressure = try {
+            place.gasPressure(gasName).toFloat()
+        } catch (e: Exception) {
             Logger.write("PPS: could not get pressure for $gasName: ${e.message}", Logger.LogLevel.WARNING)
             return Color.WHITE
         }
@@ -168,8 +195,9 @@ class PPSWindowUI(val gameState: GameState) : Table(defaultSkin), KTable {
         val range = (maxT - minT).coerceAtLeast(1f)
         return when {
             currentTemp > maxT || currentTemp < minT -> Color.RED
-            currentTemp > maxT - range * TEMP_WARNING_MARGIN ||
-                currentTemp < minT + range * TEMP_WARNING_MARGIN -> Color.ORANGE
+            currentTemp > maxT - TEMP_WARNING_MARGIN ||
+                currentTemp < minT + TEMP_WARNING_MARGIN -> Color.ORANGE
+
             else -> Color.WHITE
         }
     }
@@ -179,13 +207,17 @@ class PPSWindowUI(val gameState: GameState) : Table(defaultSkin), KTable {
     private fun buildGasTab(place: Place) {
         gasRootTable.clear()
         val dataTable = Table()
-        dataTable.add(Label(ReadOnly.prop("PPSWindowUI-GasName"), defaultSkin, "docTitle")
-            .apply { setFontScale(0.45f) }).width(400f).left()
-        dataTable.add(Label(ReadOnly.prop("PPSWindowUI-Pressure"), defaultSkin, "docTitle")
-            .apply { setFontScale(0.45f) }).width(500f).left()
+        dataTable.add(
+            Label(ReadOnly.prop("PPSWindowUI-GasName"), defaultSkin, "docTitle")
+                .apply { setFontScale(0.45f) }).width(400f).left()
+        dataTable.add(
+            Label(ReadOnly.prop("PPSWindowUI-Pressure"), defaultSkin, "docTitle")
+                .apply { setFontScale(0.45f) }).width(500f).left()
         dataTable.row()
         for (gasName in place.gasResources.keys) {
-            val pressure = try { place.gasPressure(gasName) } catch (e: Exception) {
+            val pressure = try {
+                place.gasPressure(gasName)
+            } catch (e: Exception) {
                 Logger.write("PPS: could not get pressure for $gasName: ${e.message}", Logger.LogLevel.WARNING)
                 continue
             }
@@ -206,14 +238,18 @@ class PPSWindowUI(val gameState: GameState) : Table(defaultSkin), KTable {
         temperatureRootTable.add(temperatureGraph).grow().minHeight(220f)
         temperatureRootTable.row()
         val appTable = Table()
-        appTable.add(Label(ReadOnly.prop("PPSWindowUI-ApparatusName"), defaultSkin, "docTitle")
-            .apply { setFontScale(0.4f) }).width(400f).left()
-        appTable.add(Label(ReadOnly.prop("PPSWindowUI-MinTemp"), defaultSkin, "docTitle")
-            .apply { setFontScale(0.4f) }).width(300f).left()
-        appTable.add(Label(ReadOnly.prop("PPSWindowUI-MaxTemp"), defaultSkin, "docTitle")
-            .apply { setFontScale(0.4f) }).width(300f).left()
-        appTable.add(Label(ReadOnly.prop("PPSWindowUI-CurrentTemp"), defaultSkin, "docTitle")
-            .apply { setFontScale(0.4f) }).width(300f).left()
+        appTable.add(
+            Label(ReadOnly.prop("PPSWindowUI-ApparatusName"), defaultSkin, "docTitle")
+                .apply { setFontScale(0.4f) }).width(400f).left()
+        appTable.add(
+            Label(ReadOnly.prop("PPSWindowUI-MinTemp"), defaultSkin, "docTitle")
+                .apply { setFontScale(0.4f) }).width(300f).left()
+        appTable.add(
+            Label(ReadOnly.prop("PPSWindowUI-MaxTemp"), defaultSkin, "docTitle")
+                .apply { setFontScale(0.4f) }).width(300f).left()
+        appTable.add(
+            Label(ReadOnly.prop("PPSWindowUI-CurrentTemp"), defaultSkin, "docTitle")
+                .apply { setFontScale(0.4f) }).width(300f).left()
         appTable.row()
         val currentTemp = place.temperature.toFloat()
         for (app in place.apparatuses) {
@@ -240,10 +276,46 @@ class PPSWindowUI(val gameState: GameState) : Table(defaultSkin), KTable {
         powerRootTable.add(powerGraph).grow().minHeight(220f)
         powerRootTable.row()
         val appTable = Table()
-        appTable.add(Label(ReadOnly.prop("PPSWindowUI-ApparatusName"), defaultSkin, "docTitle")
-            .apply { setFontScale(0.4f) }).width(400f).left()
-        appTable.add(Label(ReadOnly.prop("PPSWindowUI-Consumption"), defaultSkin, "docTitle")
-            .apply { setFontScale(0.4f) }).width(400f).left()
+        appTable.add(
+            Label(ReadOnly.prop("PPSWindowUI-ApparatusName"), defaultSkin, "docTitle")
+                .apply { setFontScale(0.4f) }).width(400f).left()
+        appTable.add(
+            Label(ReadOnly.prop("PPSWindowUI-Consumption"), defaultSkin, "docTitle")
+                .apply { setFontScale(0.4f) }).width(400f).left()
+        appTable.row()
+        val maxEnergy = place.maxResources["energy"].toFloat()
+        for (app in place.apparatuses) {
+            val rowColor: Color = if (maxEnergy > 0f) {
+                val fraction = place.resources["energy"].toFloat() / maxEnergy
+                when {
+                    fraction < ENERGY_RED_FRACTION -> Color.RED
+                    fraction < ENERGY_ORANGE_FRACTION -> Color.ORANGE
+                    else -> Color.WHITE
+                }
+            } else Color.WHITE
+            val consumption = app.hourlyOperationResource["energy"].toFloat() / 3.600 //Kilo-Watts
+            appTable.add(Label(app.name, defaultSkin, "docTitle").apply {
+                setFontScale(0.35f); color = rowColor; setAlignment(Align.left)
+            }).width(400f).left()
+            appTable.add(Label("%.2f / hr".format(consumption), defaultSkin, "docTitle").apply {
+                setFontScale(0.35f); color = rowColor; setAlignment(Align.left)
+            }).width(400f).left()
+            appTable.row()
+        }
+        powerRootTable.add(ScrollPane(appTable)).growX().top()
+    }
+
+    private fun buildRadiationTab(place: Place) {
+        radiationRootTable.clear()
+        radiationRootTable.add(radiationGraph).grow().minHeight(220f)
+        radiationRootTable.row()
+        val appTable = Table()
+        appTable.add(
+            Label(ReadOnly.prop("PPSWindowUI-ApparatusName"), defaultSkin, "docTitle")
+                .apply { setFontScale(0.4f) }).width(400f).left()
+        appTable.add(
+            Label(ReadOnly.prop("PPSWindowUI-Consumption"), defaultSkin, "docTitle")
+                .apply { setFontScale(0.4f) }).width(400f).left()
         appTable.row()
         val maxEnergy = place.maxResources["energy"].toFloat()
         for (app in place.apparatuses) {
@@ -264,7 +336,7 @@ class PPSWindowUI(val gameState: GameState) : Table(defaultSkin), KTable {
             }).width(400f).left()
             appTable.row()
         }
-        powerRootTable.add(ScrollPane(appTable)).growX().top()
+        radiationRootTable.add(ScrollPane(appTable)).growX().top()
     }
 
     // ── History management ──────────────────────────────────────────────────
@@ -280,7 +352,9 @@ class PPSWindowUI(val gameState: GameState) : Table(defaultSkin), KTable {
     // ── Main refresh ────────────────────────────────────────────────────────
 
     fun refresh() {
-        val place = try { gameState.player.place } catch (e: Exception) {
+        val place = try {
+            gameState.player.place
+        } catch (e: Exception) {
             Logger.write("PPS: player place not yet available: ${e.message}", Logger.LogLevel.INFO)
             return
         }
@@ -290,19 +364,17 @@ class PPSWindowUI(val gameState: GameState) : Table(defaultSkin), KTable {
         gasStatus = evaluateGasStatus(place)
         temperatureStatus = evaluateTemperatureStatus(place)
         powerStatus = evaluatePowerStatus(place)
+        radiationStatus = evaluateRadiationStatus(place)
 
         buildGasTab(place)
         buildTemperatureTab(place)
         buildPowerTab(place)
+        buildRadiationTab(place)
 
-        if (temperatureHistory.isNotEmpty())
-            temperatureGraph.refresh(temperatureHistory, GraphScreen.DataType.COUNT)
-        if (energyHistory.isNotEmpty())
-            powerGraph.refresh(energyHistory, GraphScreen.DataType.COUNT)
 
         buildLayout()
 
-        onStatusChanged.forEach { it(gasStatus, temperatureStatus, powerStatus) }
+        onStatusChanged.forEach { it(gasStatus, temperatureStatus, powerStatus, radiationStatus) }
     }
 
     // ── Layout builder (called on every refresh so tab colours stay current) ─
@@ -323,6 +395,7 @@ class PPSWindowUI(val gameState: GameState) : Table(defaultSkin), KTable {
                         this@PPSWindowUI.gasRootTable.isVisible = true
                         this@PPSWindowUI.temperatureRootTable.isVisible = false
                         this@PPSWindowUI.powerRootTable.isVisible = false
+                        this@PPSWindowUI.radiationRootTable.isVisible = false
                     }
                 })
             }).size(300f, 100f).fill()
@@ -335,9 +408,14 @@ class PPSWindowUI(val gameState: GameState) : Table(defaultSkin), KTable {
                 addListener(object : com.badlogic.gdx.scenes.scene2d.utils.ChangeListener() {
                     override fun changed(event: ChangeEvent?, actor: Actor?) {
                         if (!isChecked) return
+                        if (this@PPSWindowUI.temperatureHistory.isNotEmpty())
+                            this@PPSWindowUI.temperatureGraph.refresh(
+                                this@PPSWindowUI.temperatureHistory, GraphScreen.DataType.COUNT
+                            )
                         this@PPSWindowUI.gasRootTable.isVisible = false
                         this@PPSWindowUI.temperatureRootTable.isVisible = true
                         this@PPSWindowUI.powerRootTable.isVisible = false
+                        this@PPSWindowUI.radiationRootTable.isVisible = false
                     }
                 })
             }).size(300f, 100f).fill()
@@ -350,9 +428,36 @@ class PPSWindowUI(val gameState: GameState) : Table(defaultSkin), KTable {
                 addListener(object : com.badlogic.gdx.scenes.scene2d.utils.ChangeListener() {
                     override fun changed(event: ChangeEvent?, actor: Actor?) {
                         if (!isChecked) return
+                        if (this@PPSWindowUI.energyHistory.isNotEmpty())
+                            this@PPSWindowUI.powerGraph.refresh(
+                                this@PPSWindowUI.energyHistory,
+                                GraphScreen.DataType.COUNT
+                            )
                         this@PPSWindowUI.gasRootTable.isVisible = false
                         this@PPSWindowUI.temperatureRootTable.isVisible = false
                         this@PPSWindowUI.powerRootTable.isVisible = true
+                        this@PPSWindowUI.radiationRootTable.isVisible = false
+                    }
+                })
+            }).size(300f, 100f).fill()
+
+            bg.add(scene2d.button {
+                label(ReadOnly.prop("PPSWindowUI-RadiationTab"), "docTitle").apply {
+                    setFontScale(0.5f)
+                    color = this@PPSWindowUI.statusColor(this@PPSWindowUI.powerStatus)
+                }
+                addListener(object : com.badlogic.gdx.scenes.scene2d.utils.ChangeListener() {
+                    override fun changed(event: ChangeEvent?, actor: Actor?) {
+                        if (!isChecked) return
+                        if (this@PPSWindowUI.radiationHistory.isNotEmpty())
+                            this@PPSWindowUI.radiationGraph.refresh(
+                                this@PPSWindowUI.radiationHistory,
+                                GraphScreen.DataType.COUNT
+                            )
+                        this@PPSWindowUI.gasRootTable.isVisible = false
+                        this@PPSWindowUI.temperatureRootTable.isVisible = false
+                        this@PPSWindowUI.powerRootTable.isVisible = false
+                        this@PPSWindowUI.radiationRootTable.isVisible = true
                     }
                 })
             }).size(300f, 100f).fill()

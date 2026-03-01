@@ -19,7 +19,7 @@ import ktx.scene2d.*
 open class CabinetWindowContainerUI(
     val title: String,
     val content: Actor,
-    val xOffset: Float,
+    open val xOffset: Float,
     val yOffset: Float,
     val openAction: () -> Unit = {}
 ) :
