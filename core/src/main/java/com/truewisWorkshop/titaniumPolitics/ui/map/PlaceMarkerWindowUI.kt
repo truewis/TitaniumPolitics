@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.Color.BLACK
 import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.ui.Label
+import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.utils.Align
 import com.titaniumPolitics.game.core.*
@@ -32,6 +33,7 @@ class PlaceMarkerWindowUI(var gameState: GameState, var owner: MapUI) : Table() 
         get() = (gameState.player.place.shortestPathAndTimeTo(placeDisplayed, gameState.playerName)?.second
             ?: 0) * ReadOnly.DT / 60
     var mode = ""
+    var selectedCharacter = ""
     var interrupted =
         true//Only used in move mode. Initially true to prevent any interruption handling before move starts.
     var tgtDestination = ""//Only used in move mode.
@@ -289,6 +291,46 @@ class PlaceMarkerWindowUI(var gameState: GameState, var owner: MapUI) : Table() 
             if (mode == "PlaceSelection") {
                 add(selectButton).size(400f, 75f).fill()
                 row()
+            } else if (mode == "Timeline") {
+                // Show character sightings at this place
+                val sightings = gameState.informations.values
+                    .filter {
+                        it.type == InformationType.ACTION &&
+                            it.tgtCharacter == selectedCharacter &&
+                            it.tgtPlace == placeName &&
+                            it.knownTo.contains(gameState.playerName)
+                    }
+                    .sortedByDescending { it.tgtTime }
+                val sightingTable = scene2d.table {
+                    top()
+                    if (sightings.isEmpty()) {
+                        add(label(ReadOnly.prop("TimelineUI-NoSightings"), "description") {
+                            setFontScale(0.25f)
+                            setAlignment(Align.left)
+                            color = Color.LIGHT_GRAY
+                        }).fillX().padTop(10f)
+                        row()
+                    } else {
+                        sightings.forEach { info ->
+                            val actionName = info.action?.let {
+                                try { ReadOnly.prop(it::class.simpleName!!) } catch (e: Exception) { it::class.simpleName ?: "?" }
+                            } ?: "?"
+                            add(label(
+                                ReadOnly.prop("TimelineUI-SightingEntry")
+                                    .format(GameState.formatTime(info.tgtTime), actionName),
+                                "description"
+                            ) {
+                                setFontScale(0.25f)
+                                setAlignment(Align.left)
+                                color = Color.WHITE
+                                wrap = true
+                            }).fillX().padTop(4f)
+                            row()
+                        }
+                    }
+                }
+                add(ScrollPane(sightingTable).also { it.setScrollingDisabled(true, false) }).fillX().expandX().height(300f)
+                row()
             } else {
                 moveTimeLabel.setText(ReadOnly.prop("PlaceMarkerWindowUI-TimeToDest").format(distance))
                 //Disable the button if the player is already in the place. Calling place property will throw an exception when the game is first loaded.
@@ -297,30 +339,32 @@ class PlaceMarkerWindowUI(var gameState: GameState, var owner: MapUI) : Table() 
                     row()
                 }
             }
-            add(resourceInformation).fillX().expandX()
-            row()
-            add(managementInformation).fillX().expandX()
-            row()
-            add(scene2d.stack {
-                add(
-                    DescriptionLabel(
-                        if (!placeName.contains("corridor")) ReadOnly.placeProp("$placeDisplayed-desc") else ReadOnly.placeProp(
-                            "corridor-desc"
-                        )
-                    ).apply {
-                        with(label) {
-                            color = Color.LIGHT_GRAY
+            if (mode != "Timeline") {
+                add(resourceInformation).fillX().expandX()
+                row()
+                add(managementInformation).fillX().expandX()
+                row()
+                add(scene2d.stack {
+                    add(
+                        DescriptionLabel(
+                            if (!placeName.contains("corridor")) ReadOnly.placeProp("$placeDisplayed-desc") else ReadOnly.placeProp(
+                                "corridor-desc"
+                            )
+                        ).apply {
+                            with(label) {
+                                color = Color.LIGHT_GRAY
+                            }
+                        })
+
+                    gameState.places[this@PlaceMarkerWindowUI.placeDisplayed]!!.responsibleDivision?.let { div ->
+                        container(DivisionBannerUI(gameState.parties[div]!!)) {
+                            align(Align.center)
+                            alpha = 0.2f
                         }
-                    })
-
-                gameState.places[this@PlaceMarkerWindowUI.placeDisplayed]!!.responsibleDivision?.let { div ->
-                    container(DivisionBannerUI(gameState.parties[div]!!)) {
-                        align(Align.center)
-                        alpha = 0.2f
                     }
-                }
 
-            }).growX().height(200f).fill().padTop(50f)
+                }).growX().height(200f).fill().padTop(50f)
+            }
         }
         setSize(350f, 50f + content.prefHeight)
         //Update the resource information and management information tables.

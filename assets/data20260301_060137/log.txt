@@ -1,0 +1,1118 @@
+[1380::0:23:00]INFO: Logger initialized.
+[1380::0:23:00]INFO: Initializing property bundles for locale: ko
+[1380::0:23:00]INFO: Loaded localized properties for ui: texts/ui_ko.properties
+[1380::0:23:00]INFO: Loaded default properties for ui: texts/ui.properties
+[1380::0:23:00]INFO: Loaded localized properties for apparatus: texts/apparatus_ko.properties
+[1380::0:23:00]INFO: Loaded default properties for apparatus: texts/apparatus.properties
+[1380::0:23:00]INFO: Loaded localized properties for place: texts/place_ko.properties
+[1380::0:23:00]INFO: Loaded default properties for place: texts/place.properties
+[1380::0:23:00]INFO: Loaded localized properties for character: texts/character_ko.properties
+[1380::0:23:00]INFO: Loaded default properties for character: texts/character.properties
+[1380::0:23:00]INFO: Loaded localized properties for resources: texts/resources_ko.properties
+[1380::0:23:00]INFO: Loaded default properties for resources: texts/resources.properties
+[1380::0:23:00]INFO: Loaded localized properties for DefaultCharacter: texts/DefaultCharacter_ko.properties
+[1380::0:23:00]INFO: Loaded default properties for DefaultCharacter: texts/DefaultCharacter.properties
+[1380::0:23:00]INFO: Loaded localized properties for maleNames: texts/maleNames_ko.properties
+[1380::0:23:00]INFO: Loaded default properties for maleNames: texts/maleNames.properties
+[1380::0:23:00]INFO: Loaded localized properties for femaleNames: texts/femaleNames_ko.properties
+[1380::0:23:00]INFO: Loaded default properties for femaleNames: texts/femaleNames.properties
+[1380::0:23:00]INFO: Loaded localized properties for nameModifier: texts/nameModifier_ko.properties
+[1380::0:23:00]INFO: Loaded default properties for nameModifier: texts/nameModifier.properties
+[1380::0:23:00]INFO: Loaded localized properties for quests: texts/quests_ko.properties
+[1380::0:23:00]INFO: Loaded default properties for quests: texts/quests.properties
+[1380::0:23:00]INFO: Locale successfully set to: ko
+[1380::0:23:00]INFO: Initializing game state...
+[1380::0:23:00]INFO: GameState injected successfully.
+[1380::0:23:00]INFO: Game state initialized successfully.
+[1380::0:23:00]INFO: Game started. Time: 1380. Starting main loop.
+[1381::0:23:01]WARNING: Rui is force moved from home_Rui to outerBarrierEast.
+[1381::0:23:01]WARNING: Alina is force moved from home_Alina to outerBarrierEast.
+[1381::0:23:01]INFO: Alina has fallen unconscious.
+[1383::0:23:03]INFO: c25 left the meeting TALK-squareSouth-1383
+[1418::0:23:38]INFO: c57 left the meeting TALK-squareSouth-1383
+[1418::0:23:38]INFO: Ending meeting TALK-squareSouth-1383
+[1443::1:00:03]INFO: c15 left the meeting TALK-squareSouth-1418
+[1458::1:00:18]INFO: c57 left the meeting TALK-squareSouth-1418
+[1458::1:00:18]INFO: Ending meeting TALK-squareSouth-1418
+[1459::1:00:19]INFO: c4 ending meeting TALK-market-1419
+[1485::1:00:45]INFO: c100 left the meeting TALK-market-1484
+[1485::1:00:45]INFO: Ending meeting TALK-market-1484
+[1489::1:00:49]INFO: Krailin left the meeting TALK-electrolysisStationSouth-1464
+[1498::1:00:58]INFO: c15 ending meeting TALK-squareSouth-1463
+[1509::1:01:09]INFO: Salvor ending meeting TALK-electrolysisStationSouth-1464
+[1517::1:01:17]INFO: c25 ending meeting TALK-squareNorth-1469
+[1528::1:01:28]INFO: c15 ending meeting TALK-squareSouth-1503
+[1538::1:01:38]INFO: Yuhoa left the meeting TALK-squareSouth-1533
+[1538::1:01:38]INFO: Ending meeting TALK-squareSouth-1533
+[1538::1:01:38]INFO: Vaeme left the meeting TALK-squareSouth-1532
+[1538::1:01:38]INFO: Ending meeting TALK-squareSouth-1532
+[1574::1:02:14]INFO: Kasem ending meeting TALK-squareNorth-1534
+[1631::1:03:11]INFO: c4 ending meeting TALK-squareNorth-1583
+[1740::1:05:00]INFO: !Catastrophic accident occurred at: waterStorage
+[1740::1:05:00]INFO: Killed 1 reliant of infrastructure-Anon-reservoirEast at reservoirEast. Now has 39 reliant.
+[1743::1:05:03]INFO: c124 left the meeting TALK-squareSouth-1742
+[1743::1:05:03]INFO: Ending meeting TALK-squareSouth-1742
+[1743::1:05:03]INFO: c119 left the meeting TALK-squareNorth-1743
+[1743::1:05:03]INFO: Ending meeting TALK-squareNorth-1743
+[1743::1:05:03]INFO: c113 left the meeting TALK-squareSouth-1743
+[1743::1:05:03]INFO: Ending meeting TALK-squareSouth-1743
+[1748::1:05:08]INFO: c124 left the meeting TALK-squareSouth-1743
+[1748::1:05:08]INFO: Ending meeting TALK-squareSouth-1743
+[1748::1:05:08]INFO: c119 left the meeting TALK-squareNorth-1744
+[1748::1:05:08]INFO: Ending meeting TALK-squareNorth-1744
+[1783::1:05:43]INFO: c47 left the meeting TALK-squareSouth-1782
+[1783::1:05:43]INFO: Ending meeting TALK-squareSouth-1782
+[1851::1:06:51]INFO: Resources: {component=100.0, ration=62.8657828625348, lightMetal=50.0, water=299962.8657828628}
+[1861::1:07:01]INFO: HR: 39/40, 0-24, infrastructure
+[1902::1:07:42]WARNING: Routine Control Flow warning: failed called for an already successful routine: InvestigateAndClearAccidentRoutine(routineStartTime=1740, variables={})
+[1911::1:07:51]INFO: Resources: {component=100.0, ration=50.7974160601194, lightMetal=50.0, water=299950.7974160605}
+[1920::1:08:00]INFO: !Catastrophic accident occurred at: waterStorage
+[1920::1:08:00]INFO: Killed 2 reliant of infrastructure-Anon-reservoirEast at reservoirEast. Now has 37 reliant.
+[1927::1:08:07]INFO: Hiroshi left the meeting TALK-squareSouth-1922
+[1951::1:08:31]INFO: HR: 0/40, 0-24, infrastructure
+[1952::1:08:32]INFO: Interrupt: Kae is forced to join by Muos starting the meeting.
+[1952::1:08:32]INFO: Meeting BUDGET_PROPOSAL-safetyHeadquarters-1980 started by Muos at 1952 in safetyHeadquarters.
+[1960::1:08:40]INFO: Interrupt: Charles is forced to join by Boulos starting the meeting.
+[1960::1:08:40]INFO: Meeting BUDGET_PROPOSAL-interiorHeadquarters-1980 started by Boulos at 1960 in interiorHeadquarters.
+[1965::1:08:45]INFO: Agros: Cannot move to squareSouth to execute the request Talk(sbjCharacter=Agros, tgtPlace=squareSouth, who=Rui). Terminating the routine......
+[1968::1:08:48]INFO: c57 ending meeting TALK-squareSouth-1922
+[1971::1:08:51]INFO: Resources: {component=100.0, ration=38.729049257704006, lightMetal=50.0, water=299938.7290492582}
+[1980::1:09:00]INFO: !Accident occurred at: waterStorage
+[1980::1:09:00]INFO: Killed 1 reliant of infrastructure-Anon-reservoirEast at reservoirEast. Now has 36 reliant.
+[1981::1:09:01]INFO: Interrupt: Metros is forced to join by Maisarah starting the meeting.
+[1981::1:09:01]INFO: Meeting BUDGET_PROPOSAL-miningHeadquarters-1980 started by Maisarah at 1981 in miningHeadquarters.
+[1981::1:09:01]INFO: Interrupt: Jan is forced to join by Eugene starting the meeting.
+[1981::1:09:01]INFO: Interrupt: teacher2 is forced to join by Eugene starting the meeting.
+[1981::1:09:01]INFO: Meeting BUDGET_PROPOSAL-educationHeadquarters-1980 started by Eugene at 1981 in educationHeadquarters.
+[1985::1:09:05]INFO: Interrupt: DrPaik is forced to join by Evan starting the meeting.
+[1985::1:09:05]INFO: Meeting BUDGET_PROPOSAL-bioengineeringHeadquarters-1980 started by Evan at 1985 in bioengineeringHeadquarters.
+[1993::1:09:13]INFO: c108 left the meeting TALK-squareSouth-1992
+[1993::1:09:13]INFO: Ending meeting TALK-squareSouth-1992
+[1995::1:09:15]INFO: Interrupt: Krailin is forced to join by Yuhoa starting the meeting.
+[1995::1:09:15]INFO: Interrupt: Alina is forced to join by Yuhoa starting the meeting.
+[1995::1:09:15]INFO: Interrupt: Salvor is forced to join by Yuhoa starting the meeting.
+[1995::1:09:15]INFO: Interrupt: Vaeme is forced to join by Yuhoa starting the meeting.
+[1995::1:09:15]INFO: Meeting BUDGET_PROPOSAL-infrastructureHeadquarters-1980 started by Yuhoa at 1995 in infrastructureHeadquarters.
+[1996::1:09:16]WARNING: Error updating quest for event 예산 제안: BUDGET_PROPOSAL-infrastructureHeadquarters-1980: null
+[2002::1:09:22]INFO: Muos ending meeting BUDGET_PROPOSAL-safetyHeadquarters-1980
+[2006::1:09:26]INFO: Interrupt: Hiroshi is forced to join by Indu starting the meeting.
+[2006::1:09:26]INFO: Meeting BUDGET_PROPOSAL-industryHeadquarters-1980 started by Indu at 2006 in industryHeadquarters.
+[2010::1:09:30]INFO: Boulos ending meeting BUDGET_PROPOSAL-interiorHeadquarters-1980
+[2011::1:09:31]INFO: HR: 0/40, 0-24, infrastructure
+[2014::1:09:34]INFO: Jeweler left the meeting TALK-squareSouth-2012
+[2014::1:09:34]INFO: Ending meeting TALK-squareSouth-2012
+[2027::1:09:47]INFO: teacher2 ending meeting BUDGET_PROPOSAL-educationHeadquarters-1980
+[2028::1:09:48]INFO: c14 left the meeting TALK-squareSouth-2027
+[2028::1:09:48]INFO: Ending meeting TALK-squareSouth-2027
+[2031::1:09:51]INFO: Resources: {component=100.0, ration=27.280212232289184, lightMetal=50.0, water=299927.2802122328}
+[2031::1:09:51]INFO: Maisarah ending meeting BUDGET_PROPOSAL-miningHeadquarters-1980
+[2035::1:09:55]INFO: Evan ending meeting BUDGET_PROPOSAL-bioengineeringHeadquarters-1980
+[2035::1:09:55]INFO: Salvor left the meeting BUDGET_PROPOSAL-infrastructureHeadquarters-1980
+[2035::1:09:55]INFO: Krailin left the meeting BUDGET_PROPOSAL-infrastructureHeadquarters-1980
+[2040::1:10:00]INFO: Yuhoa left the meeting BUDGET_PROPOSAL-infrastructureHeadquarters-1980
+[2040::1:10:00]INFO: Vaeme ending meeting BUDGET_PROPOSAL-infrastructureHeadquarters-1980
+[2041::1:10:01]WARNING: Routine Control Flow warning: failed called for an already successful routine: InvestigateAndClearAccidentRoutine(routineStartTime=1921, variables={})
+[2043::1:10:03]INFO: c70 left the meeting TALK-squareSouth-2042
+[2043::1:10:03]INFO: Ending meeting TALK-squareSouth-2042
+[2046::1:10:06]INFO: Indu ending meeting BUDGET_PROPOSAL-industryHeadquarters-1980
+[2053::1:10:13]INFO: c3 left the meeting TALK-squareSouth-2052
+[2053::1:10:13]INFO: Ending meeting TALK-squareSouth-2052
+[2063::1:10:23]INFO: c8 left the meeting TALK-squareSouth-2062
+[2063::1:10:23]INFO: Ending meeting TALK-squareSouth-2062
+[2071::1:10:31]INFO: HR: 36/40, 0-24, infrastructure
+[2073::1:10:33]INFO: c56 left the meeting TALK-squareSouth-2072
+[2073::1:10:33]INFO: Ending meeting TALK-squareSouth-2072
+[2085::1:10:45]INFO: c36 left the meeting TALK-squareSouth-2082
+[2085::1:10:45]INFO: Ending meeting TALK-squareSouth-2082
+[2088::1:10:48]INFO: c94 left the meeting TALK-squareSouth-2087
+[2088::1:10:48]INFO: Ending meeting TALK-squareSouth-2087
+[2091::1:10:51]INFO: Resources: {component=100.0, ration=16.140948394132387, lightMetal=50.0, water=299916.1409483949}
+[2098::1:10:58]INFO: AmmSupplier left the meeting TALK-squareSouth-2097
+[2098::1:10:58]INFO: Ending meeting TALK-squareSouth-2097
+[2100::1:11:00]INFO: !Accident occurred at: waterStorage
+[2100::1:11:00]INFO: Killed 1 reliant of infrastructure-Anon-reservoirEast at reservoirEast. Now has 35 reliant.
+[2103::1:11:03]INFO: c106 left the meeting TALK-squareSouth-2102
+[2103::1:11:03]INFO: Ending meeting TALK-squareSouth-2102
+[2130::1:11:30]INFO: Interrupt: Muos is forced to join by c36 starting the meeting.
+[2130::1:11:30]INFO: Interrupt: c38 is forced to join by c36 starting the meeting.
+[2130::1:11:30]INFO: Interrupt: c37 is forced to join by c36 starting the meeting.
+[2130::1:11:30]INFO: Meeting DIVISION_DAILY_CONFERENCE-rescueStationSouth-2160 started by c36 at 2130 in rescueStationSouth.
+[2130::1:11:30]INFO: Interrupt: c41 is forced to join by c39 starting the meeting.
+[2130::1:11:30]INFO: Interrupt: Agros is forced to join by c39 starting the meeting.
+[2130::1:11:30]INFO: Interrupt: c40 is forced to join by c39 starting the meeting.
+[2130::1:11:30]INFO: Meeting DIVISION_DAILY_CONFERENCE-squareNorth-2160 started by c39 at 2130 in squareNorth.
+[2130::1:11:30]INFO: Interrupt: c0 is forced to join by c1 starting the meeting.
+[2130::1:11:30]INFO: Interrupt: c2 is forced to join by c1 starting the meeting.
+[2130::1:11:30]INFO: Meeting DIVISION_DAILY_CONFERENCE-securityCheckCenter-2160 started by c1 at 2130 in securityCheckCenter.
+[2130::1:11:30]INFO: Interrupt: Jeweler is forced to join by c55 starting the meeting.
+[2130::1:11:30]INFO: Interrupt: JwlServer is forced to join by c55 starting the meeting.
+[2130::1:11:30]INFO: Interrupt: JwlSupplier is forced to join by c55 starting the meeting.
+[2130::1:11:30]INFO: Meeting DIVISION_DAILY_CONFERENCE-diamondShop-2160 started by c55 at 2130 in diamondShop.
+[2130::1:11:30]INFO: Interrupt: c85 is forced to join by Boulos starting the meeting.
+[2130::1:11:30]INFO: Interrupt: c84 is forced to join by Boulos starting the meeting.
+[2130::1:11:30]INFO: Interrupt: c83 is forced to join by Boulos starting the meeting.
+[2130::1:11:30]INFO: Meeting DIVISION_DAILY_CONFERENCE-cemetery-2160 started by Boulos at 2130 in cemetery.
+[2130::1:11:30]INFO: Interrupt: c73 is forced to join by c71 starting the meeting.
+[2130::1:11:30]INFO: Meeting DIVISION_DAILY_CONFERENCE-observatory-2160 started by c71 at 2130 in observatory.
+[2130::1:11:30]INFO: Interrupt: c68 is forced to join by c70 starting the meeting.
+[2130::1:11:30]INFO: Interrupt: c69 is forced to join by c70 starting the meeting.
+[2130::1:11:30]INFO: Meeting DIVISION_DAILY_CONFERENCE-constructionYardNorth-2160 started by c70 at 2130 in constructionYardNorth.
+[2130::1:11:30]INFO: Interrupt: c77 is forced to join by c78 starting the meeting.
+[2130::1:11:30]INFO: Interrupt: c79 is forced to join by c78 starting the meeting.
+[2130::1:11:30]INFO: Meeting DIVISION_DAILY_CONFERENCE-securityCheckEast-2160 started by c78 at 2130 in securityCheckEast.
+[2130::1:11:30]INFO: Interrupt: c91 is forced to join by c89 starting the meeting.
+[2130::1:11:30]INFO: Interrupt: c90 is forced to join by c89 starting the meeting.
+[2130::1:11:30]INFO: Meeting DIVISION_DAILY_CONFERENCE-market-2160 started by c89 at 2130 in market.
+[2130::1:11:30]INFO: Interrupt: c97 is forced to join by c95 starting the meeting.
+[2130::1:11:30]INFO: Interrupt: c96 is forced to join by c95 starting the meeting.
+[2130::1:11:30]INFO: Meeting DIVISION_DAILY_CONFERENCE-outerBarrierWest-2160 started by c95 at 2130 in outerBarrierWest.
+[2130::1:11:30]INFO: Interrupt: c27 is forced to join by c28 starting the meeting.
+[2130::1:11:30]INFO: Interrupt: c29 is forced to join by c28 starting the meeting.
+[2130::1:11:30]INFO: Meeting DIVISION_DAILY_CONFERENCE-electrolysisStationNorth-2160 started by c28 at 2130 in electrolysisStationNorth.
+[2131::1:11:31]INFO: Interrupt: c33 is forced to join by c35 starting the meeting.
+[2131::1:11:31]INFO: Interrupt: DrPaik is forced to join by c35 starting the meeting.
+[2131::1:11:31]INFO: Interrupt: c34 is forced to join by c35 starting the meeting.
+[2131::1:11:31]INFO: Meeting DIVISION_DAILY_CONFERENCE-welfareStationEast-2160 started by c35 at 2131 in welfareStationEast.
+[2131::1:11:31]INFO: Interrupt: c11 is forced to join by c9 starting the meeting.
+[2131::1:11:31]INFO: Interrupt: c10 is forced to join by c9 starting the meeting.
+[2131::1:11:31]INFO: Meeting DIVISION_DAILY_CONFERENCE-recycleFacilityWest-2160 started by c9 at 2131 in recycleFacilityWest.
+[2131::1:11:31]INFO: Interrupt: c57 is forced to join by c58 starting the meeting.
+[2131::1:11:31]INFO: Interrupt: c56 is forced to join by c58 starting the meeting.
+[2131::1:11:31]INFO: Meeting DIVISION_DAILY_CONFERENCE-techSchool-2160 started by c58 at 2131 in techSchool.
+[2131::1:11:31]INFO: Interrupt: c110 is forced to join by c108 starting the meeting.
+[2131::1:11:31]INFO: Interrupt: c109 is forced to join by c108 starting the meeting.
+[2131::1:11:31]INFO: Interrupt: Kae is forced to join by c108 starting the meeting.
+[2131::1:11:31]INFO: Meeting DIVISION_DAILY_CONFERENCE-securityCheckWest-2160 started by c108 at 2131 in securityCheckWest.
+[2131::1:11:31]INFO: Interrupt: c93 is forced to join by c92 starting the meeting.
+[2131::1:11:31]INFO: Interrupt: c94 is forced to join by c92 starting the meeting.
+[2131::1:11:31]INFO: Meeting DIVISION_DAILY_CONFERENCE-miningSchool-2160 started by c92 at 2131 in miningSchool.
+[2131::1:11:31]INFO: Interrupt: c111 is forced to join by c112 starting the meeting.
+[2131::1:11:31]INFO: Interrupt: c113 is forced to join by c112 starting the meeting.
+[2131::1:11:31]INFO: Meeting DIVISION_DAILY_CONFERENCE-theEngine-2160 started by c112 at 2131 in theEngine.
+[2131::1:11:31]INFO: Interrupt: RstServer is forced to join by RstSupplier starting the meeting.
+[2131::1:11:31]INFO: Interrupt: c98 is forced to join by RstSupplier starting the meeting.
+[2131::1:11:31]INFO: Interrupt: Chef is forced to join by RstSupplier starting the meeting.
+[2131::1:11:31]INFO: Meeting DIVISION_DAILY_CONFERENCE-fineFoodStore-1-2160 started by RstSupplier at 2131 in fineFoodStore-1.
+[2131::1:11:31]INFO: Interrupt: c118 is forced to join by c119 starting the meeting.
+[2131::1:11:31]INFO: Interrupt: c117 is forced to join by c119 starting the meeting.
+[2131::1:11:31]INFO: Meeting DIVISION_DAILY_CONFERENCE-reservoirEast-2160 started by c119 at 2131 in reservoirEast.
+[2132::1:11:32]INFO: Interrupt: c30 is forced to join by c31 starting the meeting.
+[2132::1:11:32]INFO: Interrupt: c32 is forced to join by c31 starting the meeting.
+[2132::1:11:32]INFO: Meeting DIVISION_DAILY_CONFERENCE-mainControlRoom-2160 started by c31 at 2132 in mainControlRoom.
+[2132::1:11:32]INFO: Interrupt: AmmServer is forced to join by Chemist starting the meeting.
+[2132::1:11:32]INFO: Interrupt: AmmSupplier is forced to join by Chemist starting the meeting.
+[2132::1:11:32]INFO: Interrupt: c51 is forced to join by Chemist starting the meeting.
+[2132::1:11:32]INFO: Meeting DIVISION_DAILY_CONFERENCE-ammoniaShop-2160 started by Chemist at 2132 in ammoniaShop.
+[2132::1:11:32]INFO: Interrupt: c7 is forced to join by c6 starting the meeting.
+[2132::1:11:32]INFO: Interrupt: c8 is forced to join by c6 starting the meeting.
+[2132::1:11:32]INFO: Meeting DIVISION_DAILY_CONFERENCE-excavationShaftB-2160 started by c6 at 2132 in excavationShaftB.
+[2132::1:11:32]INFO: Interrupt: c60 is forced to join by c59 starting the meeting.
+[2132::1:11:32]INFO: Interrupt: c61 is forced to join by c59 starting the meeting.
+[2132::1:11:32]INFO: Meeting DIVISION_DAILY_CONFERENCE-reservoirWest-2160 started by c59 at 2132 in reservoirWest.
+[2132::1:11:32]INFO: Interrupt: c64 is forced to join by c62 starting the meeting.
+[2132::1:11:32]INFO: Interrupt: c63 is forced to join by c62 starting the meeting.
+[2132::1:11:32]INFO: Meeting DIVISION_DAILY_CONFERENCE-outerBarrierCenter-2160 started by c62 at 2132 in outerBarrierCenter.
+[2132::1:11:32]INFO: Interrupt: Sasha is forced to join by Alina starting the meeting.
+[2132::1:11:32]INFO: Interrupt: Lynn is forced to join by Alina starting the meeting.
+[2132::1:11:32]INFO: Interrupt: Hans is forced to join by Alina starting the meeting.
+[2132::1:11:32]INFO: Meeting DIVISION_DAILY_CONFERENCE-outerBarrierEast-2160 started by Alina at 2132 in outerBarrierEast.
+[2132::1:11:32]INFO: Interrupt: c76 is forced to join by c75 starting the meeting.
+[2132::1:11:32]INFO: Meeting DIVISION_DAILY_CONFERENCE-recycleFacilityEast-2160 started by c75 at 2132 in recycleFacilityEast.
+[2132::1:11:32]INFO: Interrupt: c102 is forced to join by c103 starting the meeting.
+[2132::1:11:32]INFO: Interrupt: c104 is forced to join by c103 starting the meeting.
+[2132::1:11:32]INFO: Meeting DIVISION_DAILY_CONFERENCE-welfareStationWest-2160 started by c103 at 2132 in welfareStationWest.
+[2132::1:11:32]INFO: Interrupt: c107 is forced to join by c105 starting the meeting.
+[2132::1:11:32]INFO: Interrupt: Charles is forced to join by c105 starting the meeting.
+[2132::1:11:32]INFO: Interrupt: c106 is forced to join by c105 starting the meeting.
+[2132::1:11:32]INFO: Meeting DIVISION_DAILY_CONFERENCE-squareSouth-2160 started by c105 at 2132 in squareSouth.
+[2132::1:11:32]INFO: Interrupt: c123 is forced to join by c124 starting the meeting.
+[2132::1:11:32]INFO: Interrupt: c125 is forced to join by c124 starting the meeting.
+[2132::1:11:32]INFO: Meeting DIVISION_DAILY_CONFERENCE-electrolysisStationSouth-2160 started by c124 at 2132 in electrolysisStationSouth.
+[2132::1:11:32]INFO: Interrupt: c17 is forced to join by c15 starting the meeting.
+[2132::1:11:32]INFO: Interrupt: c16 is forced to join by c15 starting the meeting.
+[2132::1:11:32]INFO: Meeting DIVISION_DAILY_CONFERENCE-asteroidMine-2160 started by c15 at 2132 in asteroidMine.
+[2132::1:11:32]INFO: Interrupt: c20 is forced to join by c19 starting the meeting.
+[2132::1:11:32]INFO: Interrupt: c18 is forced to join by c19 starting the meeting.
+[2132::1:11:32]INFO: Meeting DIVISION_DAILY_CONFERENCE-rescueStationNorth-2160 started by c19 at 2132 in rescueStationNorth.
+[2133::1:11:33]INFO: Interrupt: c44 is forced to join by c42 starting the meeting.
+[2133::1:11:33]INFO: Interrupt: c43 is forced to join by c42 starting the meeting.
+[2133::1:11:33]INFO: Meeting DIVISION_DAILY_CONFERENCE-constructionYardSouth-2160 started by c42 at 2133 in constructionYardSouth.
+[2133::1:11:33]INFO: Interrupt: c3 is forced to join by c5 starting the meeting.
+[2133::1:11:33]INFO: Interrupt: c4 is forced to join by c5 starting the meeting.
+[2133::1:11:33]INFO: Meeting DIVISION_DAILY_CONFERENCE-farm-2160 started by c5 at 2133 in farm.
+[2133::1:11:33]INFO: Interrupt: c12 is forced to join by c13 starting the meeting.
+[2133::1:11:33]INFO: Interrupt: c14 is forced to join by c13 starting the meeting.
+[2133::1:11:33]INFO: Meeting DIVISION_DAILY_CONFERENCE-excavationShaftA-2160 started by c13 at 2133 in excavationShaftA.
+[2134::1:11:34]INFO: Interrupt: Yuhoa is forced to join by c45 starting the meeting.
+[2134::1:11:34]INFO: Interrupt: c47 is forced to join by c45 starting the meeting.
+[2134::1:11:34]INFO: Meeting DIVISION_DAILY_CONFERENCE-spacePort-2160 started by c45 at 2134 in spacePort.
+[2134::1:11:34]INFO: Interrupt: c52 is forced to join by c53 starting the meeting.
+[2134::1:11:34]INFO: Interrupt: c54 is forced to join by c53 starting the meeting.
+[2134::1:11:34]INFO: Meeting DIVISION_DAILY_CONFERENCE-tankArray-2160 started by c53 at 2134 in tankArray.
+[2134::1:11:34]INFO: Interrupt: c21 is forced to join by c22 starting the meeting.
+[2134::1:11:34]INFO: Interrupt: c23 is forced to join by c22 starting the meeting.
+[2134::1:11:34]INFO: Interrupt: Astinomis is forced to join by c22 starting the meeting.
+[2134::1:11:34]INFO: Meeting DIVISION_DAILY_CONFERENCE-rescueStationWest-2160 started by c22 at 2134 in rescueStationWest.
+[2146::1:11:46]INFO: c68 ending meeting DIVISION_DAILY_CONFERENCE-constructionYardNorth-2160
+[2146::1:11:46]INFO: Resources: {ceramic=0.0, glassClothes=0.0, component=200.0, glass=0.0, plastic=0.0, ration=0.0, cottonClothes=0.0, lightMetal=100.0, water=15000.0, organics=0.0, energy=2.4707552934949196E10}
+[2147::1:11:47]INFO: c117 ending meeting DIVISION_DAILY_CONFERENCE-reservoirEast-2160
+[2151::1:11:51]INFO: c58 left the meeting DIVISION_DAILY_CONFERENCE-techSchool-2160
+[2151::1:11:51]INFO: HR: 35/40, 0-24, infrastructure
+[2152::1:11:52]INFO: c57 ending meeting DIVISION_DAILY_CONFERENCE-techSchool-2160
+[2152::1:11:52]INFO: c17 left the meeting DIVISION_DAILY_CONFERENCE-asteroidMine-2160
+[2155::1:11:55]INFO: c2 ending meeting DIVISION_DAILY_CONFERENCE-securityCheckCenter-2160
+[2155::1:11:55]INFO: HR: 50/50, 9-17, industry
+[2155::1:11:55]INFO: c78 ending meeting DIVISION_DAILY_CONFERENCE-securityCheckEast-2160
+[2155::1:11:55]INFO: c90 left the meeting DIVISION_DAILY_CONFERENCE-market-2160
+[2156::1:11:56]INFO: HR: 120/120, 9-17, education
+[2156::1:11:56]INFO: HR: 38/38, 0-24, safety
+[2156::1:11:56]INFO: c111 ending meeting DIVISION_DAILY_CONFERENCE-theEngine-2160
+[2156::1:11:56]INFO: HR: 100/100, 0-24, infrastructure
+[2157::1:11:57]INFO: Resources: {ration=425.73824107895473, oxygen=50.0, water=1425.738241078955, energy=2.4707552934949196E10}
+[2157::1:11:57]INFO: c59 ending meeting DIVISION_DAILY_CONFERENCE-reservoirWest-2160
+[2157::1:11:57]INFO: Resources: {component=100.0, ration=2.21468834515153, lightMetal=50.0, water=14902.214688345179}
+[2157::1:11:57]INFO: HR: 0/40, 0-24, infrastructure
+[2157::1:11:57]INFO: c64 left the meeting DIVISION_DAILY_CONFERENCE-outerBarrierCenter-2160
+[2157::1:11:57]INFO: c63 ending meeting DIVISION_DAILY_CONFERENCE-outerBarrierCenter-2160
+[2157::1:11:57]INFO: c103 left the meeting DIVISION_DAILY_CONFERENCE-welfareStationWest-2160
+[2157::1:11:57]INFO: c102 ending meeting DIVISION_DAILY_CONFERENCE-welfareStationWest-2160
+[2157::1:11:57]INFO: c93 ending meeting DIVISION_DAILY_CONFERENCE-miningSchool-2160
+[2157::1:11:57]INFO: Resources: {component=100.0, ration=5.0018124705577165, lightMetal=50.0, water=299905.0018124715}
+[2157::1:11:57]INFO: c15 ending meeting DIVISION_DAILY_CONFERENCE-asteroidMine-2160
+[2157::1:11:57]INFO: HR: 525/525, 9-17, mining
+[2157::1:11:57]INFO: Resources: {component=50.0, glass=0.0, diamond=0.0, ration=299.49325091317775, metal=100.0, lightMetal=0.0, oxygen=50.0, water=1299.4932509131781, rareMetal=0.0, heavyMetal=0.0, organics=360.0, energy=2.653047078446782E10}
+[2158::1:11:58]INFO: c42 left the meeting DIVISION_DAILY_CONFERENCE-constructionYardSouth-2160
+[2158::1:11:58]INFO: c43 ending meeting DIVISION_DAILY_CONFERENCE-constructionYardSouth-2160
+[2158::1:11:58]INFO: c5 ending meeting DIVISION_DAILY_CONFERENCE-farm-2160
+[2158::1:11:58]INFO: c125 left the meeting DIVISION_DAILY_CONFERENCE-electrolysisStationSouth-2160
+[2159::1:11:59]INFO: Resources: {ration=582.2776060691212, ammonia=20.0, oxygen=100.0, water=1082.2776060691212, phosphorus=5.0, energy=1.482453176096952E11}
+[2159::1:11:59]INFO: c53 ending meeting DIVISION_DAILY_CONFERENCE-tankArray-2160
+[2159::1:11:59]INFO: HR: 40/40, 0-24, infrastructure
+[2160::1:12:00]INFO: !Accident occurred at: manway
+[2160::1:12:00]INFO: Killed 1 reliant of infrastructure-Anon-reservoirEast at reservoirEast. Now has 34 reliant.
+[2160::1:12:00]INFO: HR: 38/38, 0-24, safety
+[2160::1:12:00]INFO: Resources: {ration=847.1356408293367, oxygen=100.0, water=1347.1356408293364, energy=4.7556271199969406E10}
+[2160::1:12:00]INFO: Resources: {ceramic=0.0, glassClothes=0.0, plastic=0.0, ration=931.9267210988471, water=1431.926721098847, energy=2.3778135599984703E10}
+[2160::1:12:00]INFO: c95 left the meeting DIVISION_DAILY_CONFERENCE-outerBarrierWest-2160
+[2160::1:12:00]INFO: c97 ending meeting DIVISION_DAILY_CONFERENCE-outerBarrierWest-2160
+[2160::1:12:00]INFO: c27 left the meeting DIVISION_DAILY_CONFERENCE-electrolysisStationNorth-2160
+[2161::1:12:01]INFO: c9 left the meeting DIVISION_DAILY_CONFERENCE-recycleFacilityWest-2160
+[2161::1:12:01]INFO: HR: 120/120, 9-17, education
+[2162::1:12:02]INFO: Resources: {ration=221.50295802846188, oxygen=50.0, water=1221.5029580284606, energy=4.7556271199969406E10}
+[2162::1:12:02]INFO: HR: 75/75, 0-24, bioengineering
+[2162::1:12:02]INFO: Resources: {ration=388.60821438231244, oxygen=50.0, water=1388.6082143823141, energy=2.3778135599984703E10}
+[2163::1:12:03]INFO: HR: 535/535, 9-17, industry
+[2163::1:12:03]INFO: Resources: {component=100.0, electronics=0.0, ration=0.0, lightMetal=50.0, water=15000.0, plumbing=0.0, rareMetal=0.0, heavyMetal=0.0, structure=0.0, energy=2.3778135599984703E10}
+[2163::1:12:03]INFO: HR: 675/675, 9-17, bioengineering
+[2165::1:12:05]INFO: Resources: {ration=847.1356408293367, oxygen=100.0, water=1347.1356408293364, energy=4.7556271199969406E10}
+[2165::1:12:05]INFO: c71 ending meeting DIVISION_DAILY_CONFERENCE-observatory-2160
+[2165::1:12:05]INFO: c89 ending meeting DIVISION_DAILY_CONFERENCE-market-2160
+[2165::1:12:05]INFO: HR: 325/325, 9-17, interior
+[2165::1:12:05]INFO: c28 ending meeting DIVISION_DAILY_CONFERENCE-electrolysisStationNorth-2160
+[2166::1:12:06]INFO: c11 ending meeting DIVISION_DAILY_CONFERENCE-recycleFacilityWest-2160
+[2167::1:12:07]INFO: c8 left the meeting DIVISION_DAILY_CONFERENCE-excavationShaftB-2160
+[2167::1:12:07]INFO: c75 ending meeting DIVISION_DAILY_CONFERENCE-recycleFacilityEast-2160
+[2167::1:12:07]INFO: c109 left the meeting DIVISION_DAILY_CONFERENCE-securityCheckWest-2160
+[2167::1:12:07]INFO: c124 ending meeting DIVISION_DAILY_CONFERENCE-electrolysisStationSouth-2160
+[2167::1:12:07]INFO: c20 left the meeting DIVISION_DAILY_CONFERENCE-rescueStationNorth-2160
+[2168::1:12:08]INFO: c12 left the meeting DIVISION_DAILY_CONFERENCE-excavationShaftA-2160
+[2168::1:12:08]INFO: c14 ending meeting DIVISION_DAILY_CONFERENCE-excavationShaftA-2160
+[2170::1:12:10]INFO: c38 left the meeting DIVISION_DAILY_CONFERENCE-rescueStationSouth-2160
+[2172::1:12:12]INFO: c31 left the meeting DIVISION_DAILY_CONFERENCE-mainControlRoom-2160
+[2172::1:12:12]INFO: c30 ending meeting DIVISION_DAILY_CONFERENCE-mainControlRoom-2160
+[2172::1:12:12]INFO: HR: 525/525, 9-17, mining
+[2172::1:12:12]INFO: Resources: {ration=847.1356408293371, oxygen=100.0, water=1347.1356408293361, energy=4.7556271199969406E10}
+[2172::1:12:12]INFO: HR: 80/80, 0-24, safety
+[2173::1:12:13]INFO: HR: 525/525, 9-17, mining
+[2175::1:12:15]INFO: HR: 80/80, 0-24, safety
+[2176::1:12:16]INFO: c34 left the meeting DIVISION_DAILY_CONFERENCE-welfareStationEast-2160
+[2176::1:12:16]INFO: c37 left the meeting DIVISION_DAILY_CONFERENCE-rescueStationSouth-2160
+[2176::1:12:16]INFO: c108 ending meeting DIVISION_DAILY_CONFERENCE-securityCheckWest-2160
+[2176::1:12:16]INFO: HR: 38/38, 0-24, safety
+[2177::1:12:17]INFO: Resources: {ration=601.7481168974842, oxygen=100.0, water=1101.7481168974848, phosphorus=10.0, energy=4.7556271199969406E10}
+[2177::1:12:17]INFO: HR: 99/99, 0-24, interior
+[2177::1:12:17]INFO: c6 ending meeting DIVISION_DAILY_CONFERENCE-excavationShaftB-2160
+[2177::1:12:17]INFO: Resources: {component=50.0, glass=0.0, diamond=0.0, ration=42.04918324165297, lightMetal=100.0, oxygen=50.0, water=1042.049183241654, rareMetal=0.0, organics=0.0, heavyMetal=0.0, energy=1.5082653907794952E9}
+[2177::1:12:17]INFO: c98 left the meeting DIVISION_DAILY_CONFERENCE-fineFoodStore-1-2160
+[2177::1:12:17]INFO: c19 ending meeting DIVISION_DAILY_CONFERENCE-rescueStationNorth-2160
+[2178::1:12:18]INFO: Resources: {component=50.0, glass=0.0, diamond=0.0, ration=40.81150857873256, metal=100.0, lightMetal=0.0, oxygen=50.0, water=1040.8115085787333, rareMetal=0.0, heavyMetal=0.0, organics=0.0, energy=1.3364917250547775E10}
+[2179::1:12:19]INFO: Maisarah ending meeting TALK-market-2133
+[2180::1:12:20]INFO: c36 left the meeting DIVISION_DAILY_CONFERENCE-rescueStationSouth-2160
+[2180::1:12:20]INFO: Ending meeting DIVISION_DAILY_CONFERENCE-rescueStationSouth-2160
+[2181::1:12:21]INFO: c35 left the meeting DIVISION_DAILY_CONFERENCE-welfareStationEast-2160
+[2181::1:12:21]INFO: c34: The request Examine(sbjCharacter=c33, tgtPlace=welfareStationEast, what=RESOURCES) is valid. Executing...
+[2181::1:12:21]INFO: Resources: {ration=202.93648856369254, oxygen=50.0, water=1202.936488563692, energy=4.7556271199969406E10}
+[2181::1:12:21]INFO: c37: The request Examine(sbjCharacter=c37, tgtPlace=rescueStationSouth, what=RESOURCES) is valid. Executing...
+[2181::1:12:21]INFO: Resources: {ration=678.1802964828157, oxygen=100.0, water=1178.180296482817, energy=4.7556271199969406E10}
+[2182::1:12:22]INFO: c33 left the meeting DIVISION_DAILY_CONFERENCE-welfareStationEast-2160
+[2182::1:12:22]INFO: Ending meeting DIVISION_DAILY_CONFERENCE-welfareStationEast-2160
+[2182::1:12:22]INFO: HR: 0/25, 10-22, null
+[2182::1:12:22]INFO: AmmSupplier ending meeting DIVISION_DAILY_CONFERENCE-ammoniaShop-2160
+[2182::1:12:22]INFO: Resources: {ration=702.9364885636924, oxygen=100.0, water=1202.9364885636928, energy=4.7556271199969406E10}
+[2183::1:12:23]INFO: c107 left the meeting DIVISION_DAILY_CONFERENCE-squareSouth-2160
+[2183::1:12:23]INFO: c106 left the meeting DIVISION_DAILY_CONFERENCE-squareSouth-2160
+[2184::1:12:24]INFO: c45 left the meeting DIVISION_DAILY_CONFERENCE-spacePort-2160
+[2184::1:12:24]INFO: c47 left the meeting DIVISION_DAILY_CONFERENCE-spacePort-2160
+[2184::1:12:24]INFO: Ending meeting DIVISION_DAILY_CONFERENCE-spacePort-2160
+[2185::1:12:25]INFO: c40 left the meeting DIVISION_DAILY_CONFERENCE-squareNorth-2160
+[2185::1:12:25]INFO: c41 left the meeting DIVISION_DAILY_CONFERENCE-squareNorth-2160
+[2186::1:12:26]INFO: RstSupplier left the meeting DIVISION_DAILY_CONFERENCE-fineFoodStore-1-2160
+[2187::1:12:27]INFO: RstServer left the meeting DIVISION_DAILY_CONFERENCE-fineFoodStore-1-2160
+[2187::1:12:27]INFO: Ending meeting DIVISION_DAILY_CONFERENCE-fineFoodStore-1-2160
+[2187::1:12:27]INFO: c105 left the meeting DIVISION_DAILY_CONFERENCE-squareSouth-2160
+[2187::1:12:27]INFO: Ending meeting DIVISION_DAILY_CONFERENCE-squareSouth-2160
+[2187::1:12:27]INFO: Sasha left the meeting DIVISION_DAILY_CONFERENCE-outerBarrierEast-2160
+[2187::1:12:27]INFO: AmmServer: The request Examine(sbjCharacter=AmmServer, tgtPlace=ammoniaShop, what=RESOURCES) is valid. Executing...
+[2187::1:12:27]INFO: Resources: {ammonia=5.0, hydrogen=10.0, water=500.0, energy=2.3778135599984703E10}
+[2188::1:12:28]INFO: c106: The request Examine(sbjCharacter=c107, tgtPlace=squareSouth, what=RESOURCES) is valid. Executing...
+[2188::1:12:28]INFO: Resources: {glassClothes=0.0, Ammonia=0.0, diamond=0.0, ration=492.5446481914028, cleanWater=0.0, water=992.5446481914038}
+[2190::1:12:30]INFO: c39 ending meeting DIVISION_DAILY_CONFERENCE-squareNorth-2160
+[2190::1:12:30]INFO: c40: The request Examine(sbjCharacter=c41, tgtPlace=squareNorth, what=RESOURCES) is valid. Executing...
+[2190::1:12:30]INFO: Resources: {ceramic=0.0, glassClothes=0.0, plastic=0.0, ration=616.3208551138364, water=1116.3208551138375}
+[2190::1:12:30]INFO: c83 left the meeting DIVISION_DAILY_CONFERENCE-cemetery-2160
+[2190::1:12:30]INFO: Jeweler ending meeting DIVISION_DAILY_CONFERENCE-diamondShop-2160
+[2192::1:12:32]INFO: RstServer: The request Examine(sbjCharacter=RstSupplier, tgtPlace=fineFoodStore-1, what=RESOURCES) is valid. Executing...
+[2192::1:12:32]INFO: Resources: {fineFood=5.0, ration=30.0, water=200.0, energy=2.3778135599984703E10}
+[2192::1:12:32]INFO: Hans ending meeting DIVISION_DAILY_CONFERENCE-outerBarrierEast-2160
+[2193::1:12:33]INFO: Resources: {ration=0.0, oxygen=50.0, water=15000.0, energy=2.2532299178518574E10}
+[2195::1:12:35]INFO: c85 ending meeting DIVISION_DAILY_CONFERENCE-cemetery-2160
+[2195::1:12:35]INFO: JwlServer: The request Examine(sbjCharacter=c55, tgtPlace=diamondShop, what=RESOURCES) is valid. Executing...
+[2195::1:12:35]INFO: Resources: {diamond=0.003, rareMetal=0.05, energy=2.3778135599984703E10}
+[2197::1:12:37]INFO: HR: 60/60, 0-24, infrastructure
+[2199::1:12:39]INFO: c22 left the meeting DIVISION_DAILY_CONFERENCE-rescueStationWest-2160
+[2199::1:12:39]INFO: c21 left the meeting DIVISION_DAILY_CONFERENCE-rescueStationWest-2160
+[2199::1:12:39]INFO: c23 left the meeting DIVISION_DAILY_CONFERENCE-rescueStationWest-2160
+[2199::1:12:39]INFO: Ending meeting DIVISION_DAILY_CONFERENCE-rescueStationWest-2160
+[2200::1:12:40]INFO: Resources: {component=10.0, ration=0.0, water=0.0}
+[2204::1:12:44]INFO: c22: The request Examine(sbjCharacter=c22, tgtPlace=rescueStationWest, what=RESOURCES) is valid. Executing...
+[2204::1:12:44]INFO: Resources: {ration=702.9364885636918, oxygen=100.0, water=1202.936488563693, energy=4.7556271199969406E10}
+[2206::1:12:46]INFO: Resources: {ceramic=0.0, glassClothes=0.0, component=200.0, glass=0.0, plastic=0.0, ration=0.0, cottonClothes=0.0, lightMetal=100.0, water=15000.0, organics=0.0, energy=2.3778135599984703E10}
+[2211::1:12:51]INFO: HR: 34/40, 0-24, infrastructure
+[2212::1:12:52]INFO: Peiyu left the meeting TALK-squareSouth-2177
+[2212::1:12:52]INFO: Ending meeting TALK-squareSouth-2177
+[2215::1:12:55]INFO: HR: 50/50, 9-17, industry
+[2216::1:12:56]INFO: HR: 120/120, 9-17, education
+[2216::1:12:56]INFO: HR: 38/38, 0-24, safety
+[2216::1:12:56]INFO: HR: 100/100, 0-24, infrastructure
+[2217::1:12:57]INFO: Resources: {ration=388.60821438231284, oxygen=50.0, water=1388.6082143823132, energy=2.3778135599984703E10}
+[2217::1:12:57]INFO: Resources: {component=100.0, ration=2.21468834515153, lightMetal=50.0, water=14902.214688345179}
+[2217::1:12:57]INFO: HR: 0/40, 0-24, infrastructure
+[2217::1:12:57]INFO: Resources: {component=100.0, ration=1.2888098008935316, lightMetal=50.0, water=299901.28880980186}
+[2217::1:12:57]INFO: HR: 525/525, 9-17, mining
+[2217::1:12:57]INFO: Resources: {component=50.0, glass=0.0, diamond=0.0, ration=261.43497354911983, metal=100.0, lightMetal=0.0, oxygen=50.0, water=1261.4349735491205, rareMetal=0.0, heavyMetal=0.0, organics=360.0, energy=3.4011166412303745E10}
+[2219::1:12:59]INFO: Resources: {ration=373.4212059005108, ammonia=20.0, oxygen=100.0, water=873.4212059005107, phosphorus=5.0, energy=1.4266881359990823E11}
+[2219::1:12:59]INFO: HR: 40/40, 0-24, infrastructure
+[2220::1:13:00]INFO: HR: 38/38, 0-24, safety
+[2220::1:13:00]INFO: Resources: {ration=835.3780691598594, oxygen=100.0, water=1335.3780691598593, energy=4.570510931718824E10}
+[2220::1:13:00]INFO: HR: 0/0, 9-17, interior
+[2220::1:13:00]INFO: Resources: {ceramic=0.0, glassClothes=0.0, plastic=0.0, ration=914.9091831561828, water=1414.9091831561823, energy=2.285255465859412E10}
+[2221::1:13:01]WARNING: Routine Control Flow warning: failed called for an already successful routine: InvestigateAndClearAccidentRoutine(routineStartTime=2101, variables={})
+[2221::1:13:01]INFO: HR: 120/120, 9-17, education
+[2222::1:13:02]INFO: Resources: {ration=198.29722447028308, oxygen=50.0, water=1198.2972244702821, energy=4.570510931718824E10}
+[2222::1:13:02]INFO: HR: 75/75, 0-24, bioengineering
+[2222::1:13:02]INFO: Resources: {ration=351.4790406892263, oxygen=50.0, water=1351.4790406892287, energy=2.285255465859412E10}
+[2223::1:13:03]INFO: HR: 535/535, 9-17, industry
+[2223::1:13:03]INFO: Resources: {component=100.0, electronics=0.0, ration=0.0, lightMetal=50.0, water=15000.0, plumbing=0.0, rareMetal=0.0, heavyMetal=0.0, structure=0.0, energy=2.285255465859412E10}
+[2223::1:13:03]INFO: HR: 675/675, 9-17, bioengineering
+[2225::1:13:05]INFO: Resources: {ration=835.3780691598594, oxygen=100.0, water=1335.3780691598593, energy=4.570510931718824E10}
+[2225::1:13:05]INFO: HR: 325/325, 9-17, interior
+[2226::1:13:06]INFO: HR: 80/80, 0-24, bioengineering
+[2232::1:13:12]INFO: HR: 525/525, 9-17, mining
+[2232::1:13:12]INFO: HR: 0/20, 9-17, null
+[2232::1:13:12]INFO: Resources: {ration=835.3780691598598, oxygen=100.0, water=1335.3780691598588, energy=4.570510931718824E10}
+[2232::1:13:12]INFO: HR: 80/80, 0-24, safety
+[2233::1:13:13]INFO: HR: 525/525, 9-17, mining
+[2235::1:13:15]INFO: HR: 80/80, 0-24, safety
+[2236::1:13:16]INFO: HR: 38/38, 0-24, safety
+[2237::1:13:17]INFO: Resources: {ration=571.116548600688, oxygen=100.0, water=1071.1165486006894, phosphorus=10.0, energy=4.570510931718824E10}
+[2237::1:13:17]INFO: HR: 99/99, 0-24, interior
+[2237::1:13:17]INFO: Resources: {component=50.0, glass=0.0, diamond=0.0, ration=31.838660476054322, lightMetal=100.0, oxygen=50.0, water=1031.8386604760558, rareMetal=0.0, organics=0.0, heavyMetal=0.0, energy=2.8547316542263184E9}
+[2238::1:13:18]INFO: Resources: {component=50.0, glass=0.0, diamond=0.0, ration=29.67275647080676, metal=100.0, lightMetal=0.0, oxygen=50.0, water=1029.672756470808, rareMetal=0.0, heavyMetal=0.0, organics=0.0, energy=4.548560304276749E9}
+[2240::1:13:20]INFO: Eugene ending meeting TALK-market-2183
+[2241::1:13:21]INFO: Resources: {ration=178.18370610163518, oxygen=50.0, water=1178.183706101635, energy=4.570510931718824E10}
+[2241::1:13:21]INFO: Resources: {ration=653.427514020758, oxygen=100.0, water=1153.42751402076, energy=4.570510931718824E10}
+[2242::1:13:22]INFO: HR: 0/25, 10-22, null
+[2242::1:13:22]INFO: Resources: {ration=678.1837061016348, oxygen=100.0, water=1178.1837061016356, energy=4.570510931718824E10}
+[2244::1:13:24]INFO: HR: 80/80, 0-24, safety
+[2247::1:13:27]INFO: Resources: {ammonia=5.0, hydrogen=10.0, water=500.0, energy=2.285255465859412E10}
+[2248::1:13:28]INFO: HR: 410/410, 9-17, interior
+[2250::1:13:30]INFO: Resources: {ceramic=0.0, glassClothes=0.0, plastic=0.0, ration=520.4038230733639, water=1020.4038230733655}
+[2250::1:13:30]INFO: HR: 310/310, 9-17, interior
+[2252::1:13:32]INFO: Resources: {fineFood=5.0, ration=30.0, water=200.0, energy=2.285255465859412E10}
+[2253::1:13:33]INFO: Resources: {ration=0.0, oxygen=50.0, water=15000.0, energy=2.2055219348855797E10}
+[2255::1:13:35]INFO: HR: 0/20, 9-17, null
+[2255::1:13:35]INFO: Resources: {diamond=0.003, rareMetal=0.05, energy=2.285255465859412E10}
+[2257::1:13:37]INFO: HR: 60/60, 0-24, infrastructure
+[2260::1:13:40]INFO: Resources: {component=10.0, ration=0.0, water=0.0}
+[2264::1:13:44]INFO: Resources: {ration=678.1837061016342, oxygen=100.0, water=1178.183706101636, energy=4.570510931718824E10}
+[2266::1:13:46]INFO: Resources: {ceramic=0.0, glassClothes=0.0, component=200.0, glass=0.0, plastic=0.0, ration=0.0, cottonClothes=0.0, lightMetal=100.0, water=15000.0, organics=0.0, energy=2.285255465859412E10}
+[2271::1:13:51]INFO: HR: 34/40, 0-24, infrastructure
+[2275::1:13:55]INFO: HR: 50/50, 9-17, industry
+[2276::1:13:56]INFO: HR: 120/120, 9-17, education
+[2276::1:13:56]INFO: HR: 38/38, 0-24, safety
+[2276::1:13:56]INFO: HR: 100/100, 0-24, infrastructure
+[2277::1:13:57]INFO: Resources: {ration=351.4790406892268, oxygen=50.0, water=1351.4790406892275, energy=2.285255465859412E10}
+[2277::1:13:57]INFO: Resources: {component=100.0, ration=2.21468834515153, lightMetal=50.0, water=14902.214688345179}
+[2277::1:13:57]INFO: HR: 0/40, 0-24, infrastructure
+[2277::1:13:57]INFO: Resources: {component=100.0, ration=1.2888098008935316, lightMetal=50.0, water=299901.28880980186}
+[2277::1:13:57]INFO: HR: 525/525, 9-17, mining
+[2277::1:13:57]INFO: Resources: {component=50.0, glass=0.0, diamond=0.0, ration=223.37757051370667, metal=100.0, lightMetal=0.0, oxygen=50.0, water=1223.3775705137077, rareMetal=0.0, heavyMetal=0.0, organics=360.0, energy=3.830111100944409E10}
+[2279::1:13:59]INFO: Resources: {ration=164.56960387690205, ammonia=20.0, oxygen=100.0, water=664.5696038769014, phosphorus=5.0, energy=1.3711532795156473E11}
+[2279::1:13:59]INFO: HR: 40/40, 0-24, infrastructure
+[2279::1:13:59]INFO: c100 ending meeting TALK-squareSouth-2214
+[2280::1:14:00]INFO: HR: 38/38, 0-24, safety
+[2280::1:14:00]INFO: Resources: {ration=823.620497490382, oxygen=100.0, water=1323.6204974903821, energy=4.388594993767346E10}
+[2280::1:14:00]INFO: HR: 0/0, 9-17, interior
+[2280::1:14:00]INFO: Resources: {ceramic=0.0, glassClothes=0.0, plastic=0.0, ration=897.8916452135186, water=1397.8916452135174, energy=2.194297496883673E10}
+[2280::1:14:00]WARNING: Routine Control Flow warning: failed called for an already successful routine: InvestigateAndClearAccidentRoutine(routineStartTime=2160, variables={})
+[2281::1:14:01]INFO: HR: 120/120, 9-17, education
+[2282::1:14:02]INFO: Resources: {ration=175.0914909121043, oxygen=50.0, water=1175.0914909121036, energy=4.388594993767346E10}
+[2282::1:14:02]INFO: HR: 75/75, 0-24, bioengineering
+[2282::1:14:02]INFO: Resources: {ration=314.3498669961401, oxygen=50.0, water=1314.3498669961432, energy=2.194297496883673E10}
+[2283::1:14:03]INFO: HR: 535/535, 9-17, industry
+[2283::1:14:03]INFO: Resources: {component=100.0, electronics=0.0, ration=0.0, lightMetal=50.0, water=15000.0, plumbing=0.0, rareMetal=0.0, heavyMetal=0.0, structure=0.0, energy=2.194297496883673E10}
+[2283::1:14:03]INFO: HR: 675/675, 9-17, bioengineering
+[2283::1:14:03]INFO: Kasem ending meeting TALK-market-2243
+[2285::1:14:05]INFO: Resources: {ration=823.620497490382, oxygen=100.0, water=1323.6204974903821, energy=4.388594993767346E10}
+[2285::1:14:05]INFO: HR: 325/325, 9-17, interior
+[2286::1:14:06]INFO: HR: 80/80, 0-24, bioengineering
+[2288::1:14:08]INFO: Resources: {glassClothes=0.0, Ammonia=0.0, diamond=0.0, ration=238.82862795531483, cleanWater=0.0, water=738.8286279553153}
+[2292::1:14:12]INFO: HR: 525/525, 9-17, mining
+[2292::1:14:12]INFO: HR: 0/20, 9-17, null
+[2292::1:14:12]INFO: Resources: {ration=823.6204974903825, oxygen=100.0, water=1323.6204974903815, energy=4.388594993767346E10}
+[2292::1:14:12]INFO: HR: 80/80, 0-24, safety
+[2293::1:14:13]INFO: HR: 525/525, 9-17, mining
+[2295::1:14:15]INFO: HR: 80/80, 0-24, safety
+[2296::1:14:16]INFO: HR: 38/38, 0-24, safety
+[2297::1:14:17]INFO: Resources: {ration=540.4849803038918, oxygen=100.0, water=1040.484980303894, phosphorus=10.0, energy=4.388594993767346E10}
+[2297::1:14:17]INFO: HR: 99/99, 0-24, interior
+[2297::1:14:17]INFO: Resources: {component=50.0, glass=0.0, diamond=0.0, ration=21.628137710455675, lightMetal=100.0, oxygen=50.0, water=1021.6281377104576, rareMetal=0.0, organics=0.0, heavyMetal=0.0, energy=3.8884626494362373E9}
+[2298::1:14:18]INFO: Resources: {component=50.0, glass=0.0, diamond=0.0, ration=18.534004362880964, metal=100.0, lightMetal=0.0, oxygen=50.0, water=1018.5340043628826, rareMetal=0.0, heavyMetal=0.0, organics=0.0, energy=1.519461450430687E9}
+[2301::1:14:21]INFO: Resources: {ration=153.43092363957783, oxygen=50.0, water=1153.430923639578, energy=4.388594993767346E10}
+[2301::1:14:21]INFO: Resources: {ration=628.6747315587004, oxygen=100.0, water=1128.6747315587031, energy=4.388594993767346E10}
+[2302::1:14:22]INFO: HR: 0/25, 10-22, null
+[2302::1:14:22]INFO: Resources: {ration=653.4309236395773, oxygen=100.0, water=1153.4309236395784, energy=4.388594993767346E10}
+[2304::1:14:24]INFO: HR: 80/80, 0-24, safety
+[2307::1:14:27]INFO: Resources: {ammonia=5.0, hydrogen=10.0, water=500.0, energy=2.194297496883673E10}
+[2308::1:14:28]INFO: HR: 410/410, 9-17, interior
+[2310::1:14:30]INFO: Resources: {ceramic=0.0, glassClothes=0.0, plastic=0.0, ration=424.48679103289163, water=924.486791032893}
+[2310::1:14:30]INFO: HR: 310/310, 9-17, interior
+[2311::1:14:31]INFO: Interrupt: observer is forced to join by ctrler starting the meeting.
+[2311::1:14:31]INFO: Meeting TRIUMVIRATE_DAILY_CONFERENCE-mainControlRoom-2340 started by ctrler at 2311 in mainControlRoom.
+[2312::1:14:32]INFO: Resources: {fineFood=5.0, ration=30.0, water=200.0, energy=2.194297496883673E10}
+[2313::1:14:33]INFO: Resources: {ration=0.0, oxygen=50.0, water=15000.0, energy=2.1432680370604206E10}
+[2313::1:14:33]INFO: Interrupt: Maisarah is forced to join by Evan starting the meeting.
+[2313::1:14:33]INFO: Interrupt: Charles is forced to join by Evan starting the meeting.
+[2313::1:14:33]INFO: Interrupt: Astinomis is forced to join by Evan starting the meeting.
+[2313::1:14:33]INFO: Interrupt: Eugene is forced to join by Evan starting the meeting.
+[2313::1:14:33]INFO: Interrupt: Hiroshi is forced to join by Evan starting the meeting.
+[2313::1:14:33]INFO: Meeting BUDGET_PROPOSAL-mainControlRoom-2340 started by Evan at 2313 in mainControlRoom.
+[2315::1:14:35]INFO: HR: 0/20, 9-17, null
+[2315::1:14:35]INFO: Resources: {diamond=0.003, rareMetal=0.05, energy=2.194297496883673E10}
+[2317::1:14:37]INFO: HR: 60/60, 0-24, infrastructure
+[2320::1:14:40]INFO: Resources: {component=10.0, ration=0.0, water=0.0}
+[2324::1:14:44]INFO: Resources: {ration=653.4309236395767, oxygen=100.0, water=1153.430923639579, energy=4.388594993767346E10}
+[2326::1:14:46]INFO: Resources: {ceramic=0.0, glassClothes=0.0, component=200.0, glass=0.0, plastic=0.0, ration=0.0, cottonClothes=0.0, lightMetal=100.0, water=15000.0, organics=0.0, energy=2.194297496883673E10}
+[2335::1:14:55]INFO: HR: 50/50, 9-17, industry
+[2336::1:14:56]INFO: HR: 120/120, 9-17, education
+[2336::1:14:56]INFO: HR: 38/38, 0-24, safety
+[2336::1:14:56]INFO: HR: 100/100, 0-24, infrastructure
+[2337::1:14:57]INFO: Resources: {ration=314.34986699614075, oxygen=50.0, water=1314.3498669961418, energy=2.194297496883673E10}
+[2337::1:14:57]INFO: Resources: {component=100.0, ration=2.21468834515153, lightMetal=50.0, water=14902.214688345179}
+[2337::1:14:57]INFO: HR: 0/40, 0-24, infrastructure
+[2337::1:14:57]INFO: HR: 525/525, 9-17, mining
+[2337::1:14:57]INFO: Resources: {component=50.0, glass=0.0, diamond=0.0, ration=60.93743560645539, metal=100.0, lightMetal=0.0, oxygen=50.0, water=1060.9374356064566, rareMetal=0.0, heavyMetal=0.0, organics=720.0, energy=4.34857640172364E9}
+[2338::1:14:58]INFO: Boulos left the meeting TALK-market-2288
+[2338::1:14:58]INFO: Ending meeting TALK-market-2288
+[2339::1:14:59]INFO: Resources: {ration=16.98113844688519, ammonia=20.0, oxygen=100.0, water=516.9811384468841, phosphorus=5.0, energy=1.316578498130204E11}
+[2339::1:14:59]INFO: HR: 40/40, 0-24, infrastructure
+[2340::1:15:00]INFO: HR: 38/38, 0-24, safety
+[2340::1:15:00]INFO: Resources: {ration=811.8629258209047, oxygen=100.0, water=1311.862925820905, energy=4.176150638200574E10}
+[2340::1:15:00]INFO: HR: 0/0, 9-17, interior
+[2340::1:15:00]INFO: Resources: {ceramic=0.0, glassClothes=0.0, plastic=0.0, ration=880.8741072708543, water=1380.8741072708526, energy=2.088075319100287E10}
+[2341::1:15:01]INFO: HR: 120/120, 9-17, education
+[2342::1:15:02]INFO: Resources: {ration=151.8857573539255, oxygen=50.0, water=1151.885757353925, energy=4.176150638200574E10}
+[2342::1:15:02]INFO: HR: 75/75, 0-24, bioengineering
+[2342::1:15:02]INFO: Resources: {ration=277.22069330305396, oxygen=50.0, water=1277.2206933030577, energy=2.088075319100287E10}
+[2343::1:15:03]INFO: HR: 535/535, 9-17, industry
+[2343::1:15:03]INFO: Resources: {component=100.0, electronics=0.0, ration=0.0, lightMetal=50.0, water=15000.0, plumbing=0.0, rareMetal=0.0, heavyMetal=0.0, structure=0.0, energy=2.088075319100287E10}
+[2343::1:15:03]INFO: HR: 675/675, 9-17, bioengineering
+[2345::1:15:05]INFO: c45 left the meeting TALK-market-2343
+[2345::1:15:05]INFO: Ending meeting TALK-market-2343
+[2345::1:15:05]INFO: Resources: {ration=811.8629258209047, oxygen=100.0, water=1311.862925820905, energy=4.176150638200574E10}
+[2345::1:15:05]INFO: HR: 325/325, 9-17, interior
+[2346::1:15:06]INFO: HR: 80/80, 0-24, bioengineering
+[2346::1:15:06]INFO: ctrler ending meeting TRIUMVIRATE_DAILY_CONFERENCE-mainControlRoom-2340
+[2348::1:15:08]INFO: Resources: {glassClothes=0.0, Ammonia=0.0, diamond=0.0, ration=111.970617837271, cleanWater=0.0, water=611.970617837271}
+[2352::1:15:12]INFO: HR: 525/525, 9-17, mining
+[2352::1:15:12]INFO: HR: 0/20, 9-17, null
+[2352::1:15:12]INFO: Resources: {ration=811.8629258209052, oxygen=100.0, water=1311.8629258209041, energy=4.176150638200574E10}
+[2352::1:15:12]INFO: HR: 80/80, 0-24, safety
+[2353::1:15:13]INFO: HR: 525/525, 9-17, mining
+[2355::1:15:15]INFO: HR: 80/80, 0-24, safety
+[2356::1:15:16]INFO: HR: 38/38, 0-24, safety
+[2357::1:15:17]INFO: Resources: {ration=509.8534120070955, oxygen=100.0, water=1009.8534120070983, phosphorus=10.0, energy=4.176150638200574E10}
+[2357::1:15:17]INFO: HR: 99/99, 0-24, interior
+[2357::1:15:17]INFO: Resources: {component=50.0, glass=0.0, diamond=0.0, ration=21.628137710455675, lightMetal=100.0, oxygen=50.0, water=1021.6281377104576, rareMetal=0.0, organics=0.0, heavyMetal=0.0, energy=3.933547562030258E9}
+[2358::1:15:18]INFO: Maisarah left the meeting BUDGET_PROPOSAL-mainControlRoom-2340
+[2358::1:15:18]INFO: Charles left the meeting BUDGET_PROPOSAL-mainControlRoom-2340
+[2358::1:15:18]INFO: Eugene left the meeting BUDGET_PROPOSAL-mainControlRoom-2340
+[2358::1:15:18]INFO: Resources: {component=50.0, glass=0.0, diamond=0.0, ration=18.534004362880964, metal=100.0, lightMetal=0.0, oxygen=50.0, water=1018.5340043628826, rareMetal=0.0, heavyMetal=0.0, organics=0.0, energy=9.150854957322044E8}
+[2359::1:15:19]INFO: Astinomis left the meeting BUDGET_PROPOSAL-mainControlRoom-2340
+[2361::1:15:21]INFO: Resources: {ration=128.67814117752047, oxygen=50.0, water=1128.678141177521, energy=4.176150638200574E10}
+[2361::1:15:21]INFO: Resources: {ration=603.9219490966427, oxygen=100.0, water=1103.9219490966461, energy=4.176150638200574E10}
+[2362::1:15:22]INFO: HR: 0/25, 10-22, null
+[2362::1:15:22]INFO: Resources: {ration=628.6781411775197, oxygen=100.0, water=1128.6781411775212, energy=4.176150638200574E10}
+[2363::1:15:23]INFO: Evan ending meeting BUDGET_PROPOSAL-mainControlRoom-2340
+[2364::1:15:24]INFO: HR: 80/80, 0-24, safety
+[2367::1:15:27]INFO: Resources: {ammonia=5.0, hydrogen=10.0, water=500.0, energy=2.088075319100287E10}
+[2368::1:15:28]INFO: HR: 410/410, 9-17, interior
+[2370::1:15:30]INFO: Resources: {ceramic=0.0, glassClothes=0.0, plastic=0.0, ration=328.56975899241934, water=828.5697589924206}
+[2370::1:15:30]INFO: HR: 310/310, 9-17, interior
+[2372::1:15:32]INFO: Resources: {fineFood=5.0, ration=30.0, water=200.0, energy=2.088075319100287E10}
+[2373::1:15:33]INFO: Resources: {ration=0.0, oxygen=50.0, water=15000.0, energy=2.0554164648134052E10}
+[2375::1:15:35]INFO: HR: 0/20, 9-17, null
+[2375::1:15:35]INFO: Resources: {diamond=0.003, rareMetal=0.05, energy=2.088075319100287E10}
+[2377::1:15:37]INFO: HR: 60/60, 0-24, infrastructure
+[2380::1:15:40]INFO: Resources: {component=10.0, ration=0.0, water=0.0}
+[2384::1:15:44]INFO: Resources: {ration=628.6781411775191, oxygen=100.0, water=1128.678141177522, energy=4.176150638200574E10}
+[2386::1:15:46]INFO: Resources: {ceramic=0.0, glassClothes=0.0, component=200.0, glass=0.0, plastic=0.0, ration=0.0, cottonClothes=0.0, lightMetal=100.0, water=15000.0, organics=0.0, energy=2.088075319100287E10}
+[2395::1:15:55]INFO: HR: 50/50, 9-17, industry
+[2396::1:15:56]INFO: HR: 120/120, 9-17, education
+[2396::1:15:56]INFO: HR: 38/38, 0-24, safety
+[2396::1:15:56]INFO: HR: 100/100, 0-24, infrastructure
+[2397::1:15:57]INFO: Resources: {ration=277.2206933030547, oxygen=50.0, water=1277.2206933030561, energy=2.088075319100287E10}
+[2397::1:15:57]INFO: Resources: {component=100.0, ration=2.21468834515153, lightMetal=50.0, water=14902.214688345179}
+[2397::1:15:57]INFO: HR: 0/40, 0-24, infrastructure
+[2397::1:15:57]INFO: c119 left the meeting TALK-market-2393
+[2397::1:15:57]INFO: Ending meeting TALK-market-2393
+[2397::1:15:57]INFO: HR: 525/525, 9-17, mining
+[2397::1:15:57]INFO: Resources: {component=50.0, glass=0.0, diamond=0.0, ration=54.74923999094106, metal=100.0, lightMetal=0.0, oxygen=50.0, water=1054.7492399909427, rareMetal=0.0, heavyMetal=0.0, organics=720.0, energy=1.2494327143292274E10}
+[2399::1:15:59]INFO: Resources: {ration=16.98113844688519, ammonia=20.0, oxygen=100.0, water=516.9811384468841, phosphorus=5.0, energy=1.2528451914601721E11}
+[2399::1:15:59]INFO: HR: 40/40, 0-24, infrastructure
+[2400::1:16:00]INFO: HR: 38/38, 0-24, safety
+[2400::1:16:00]INFO: Resources: {ration=800.1053541514274, oxygen=100.0, water=1300.105354151428, energy=3.981440374300707E10}
+[2400::1:16:00]INFO: HR: 0/0, 9-17, interior
+[2400::1:16:00]INFO: Resources: {ceramic=0.0, glassClothes=0.0, plastic=0.0, ration=863.8565693281901, water=1363.8565693281878, energy=1.9907201871503536E10}
+[2401::1:16:01]INFO: HR: 120/120, 9-17, education
+[2402::1:16:02]INFO: Resources: {ration=128.6800237957467, oxygen=50.0, water=1128.6800237957466, energy=3.981440374300707E10}
+[2402::1:16:02]INFO: HR: 75/75, 0-24, bioengineering
+[2402::1:16:02]INFO: Resources: {ration=240.0915196099678, oxygen=50.0, water=1240.0915196099722, energy=1.9907201871503536E10}
+[2403::1:16:03]INFO: HR: 535/535, 9-17, industry
+[2403::1:16:03]INFO: Resources: {component=100.0, electronics=0.0, ration=0.0, lightMetal=50.0, water=15000.0, plumbing=0.0, rareMetal=0.0, heavyMetal=0.0, structure=0.0, energy=1.9907201871503536E10}
+[2403::1:16:03]INFO: HR: 675/675, 9-17, bioengineering
+[2403::1:16:03]INFO: Astinomis left the meeting TALK-market-2398
+[2403::1:16:03]INFO: Ending meeting TALK-market-2398
+[2405::1:16:05]INFO: Resources: {ration=800.1053541514274, oxygen=100.0, water=1300.105354151428, energy=3.981440374300707E10}
+[2405::1:16:05]INFO: HR: 325/325, 9-17, interior
+[2406::1:16:06]INFO: HR: 80/80, 0-24, bioengineering
+[2408::1:16:08]INFO: Resources: {glassClothes=0.0, Ammonia=0.0, diamond=0.0, ration=42.66282694351046, cleanWater=0.0, water=542.6628269435101}
+[2412::1:16:12]INFO: HR: 525/525, 9-17, mining
+[2412::1:16:12]INFO: HR: 0/20, 9-17, null
+[2412::1:16:12]INFO: Resources: {ration=800.1053541514278, oxygen=100.0, water=1300.1053541514268, energy=3.981440374300707E10}
+[2412::1:16:12]INFO: HR: 80/80, 0-24, safety
+[2413::1:16:13]INFO: HR: 525/525, 9-17, mining
+[2415::1:16:15]INFO: HR: 80/80, 0-24, safety
+[2416::1:16:16]INFO: HR: 38/38, 0-24, safety
+[2417::1:16:17]INFO: Resources: {ration=479.22184371029937, oxygen=100.0, water=979.2218437103021, phosphorus=10.0, energy=3.981440374300707E10}
+[2417::1:16:17]INFO: HR: 99/99, 0-24, interior
+[2417::1:16:17]INFO: Resources: {component=50.0, glass=0.0, diamond=0.0, ration=21.628137710455675, lightMetal=100.0, oxygen=50.0, water=1021.6281377104576, rareMetal=0.0, organics=0.0, heavyMetal=0.0, energy=3.6989036735776825E9}
+[2418::1:16:18]INFO: Resources: {component=50.0, glass=0.0, diamond=0.0, ration=18.534004362880964, metal=100.0, lightMetal=0.0, oxygen=50.0, water=1018.5340043628826, rareMetal=0.0, heavyMetal=0.0, organics=0.0, energy=1.538408111139164E9}
+[2421::1:16:21]INFO: Resources: {ration=103.92535871546313, oxygen=50.0, water=1103.925358715464, energy=3.981440374300707E10}
+[2421::1:16:21]INFO: Resources: {ration=579.169166634585, oxygen=100.0, water=1079.1691666345891, energy=3.981440374300707E10}
+[2422::1:16:22]INFO: HR: 0/25, 10-22, null
+[2422::1:16:22]INFO: Resources: {ration=603.9253587154622, oxygen=100.0, water=1103.925358715464, energy=3.981440374300707E10}
+[2424::1:16:24]INFO: HR: 80/80, 0-24, safety
+[2427::1:16:27]INFO: Resources: {ammonia=5.0, hydrogen=10.0, water=500.0, energy=1.9907201871503536E10}
+[2428::1:16:28]INFO: HR: 410/410, 9-17, interior
+[2430::1:16:30]INFO: Resources: {ceramic=0.0, glassClothes=0.0, plastic=0.0, ration=232.65272695194707, water=732.6527269519481}
+[2430::1:16:30]INFO: HR: 310/310, 9-17, interior
+[2432::1:16:32]INFO: Resources: {fineFood=5.0, ration=30.0, water=200.0, energy=1.9907201871503536E10}
+[2433::1:16:33]INFO: Resources: {ration=0.0, oxygen=50.0, water=15000.0, energy=1.9698185204067497E10}
+[2435::1:16:35]INFO: HR: 0/20, 9-17, null
+[2435::1:16:35]INFO: Resources: {diamond=0.003, rareMetal=0.05, energy=1.9907201871503536E10}
+[2437::1:16:37]INFO: HR: 60/60, 0-24, infrastructure
+[2440::1:16:40]INFO: Resources: {component=10.0, ration=0.0, water=0.0}
+[2444::1:16:44]INFO: Resources: {ration=603.9253587154616, oxygen=100.0, water=1103.925358715465, energy=3.981440374300707E10}
+[2446::1:16:46]INFO: Resources: {ceramic=0.0, glassClothes=0.0, component=200.0, glass=0.0, plastic=0.0, ration=0.0, cottonClothes=0.0, lightMetal=100.0, water=15000.0, organics=0.0, energy=1.9907201871503536E10}
+[2455::1:16:55]INFO: HR: 50/50, 9-17, industry
+[2456::1:16:56]INFO: HR: 120/120, 9-17, education
+[2456::1:16:56]INFO: HR: 38/38, 0-24, safety
+[2456::1:16:56]INFO: HR: 100/100, 0-24, infrastructure
+[2457::1:16:57]INFO: Resources: {ration=240.0915196099687, oxygen=50.0, water=1240.0915196099704, energy=1.9907201871503536E10}
+[2457::1:16:57]INFO: Resources: {component=100.0, ration=2.21468834515153, lightMetal=50.0, water=14902.214688345179}
+[2457::1:16:57]INFO: HR: 0/40, 0-24, infrastructure
+[2457::1:16:57]INFO: HR: 525/525, 9-17, mining
+[2457::1:16:57]INFO: Resources: {component=50.0, glass=0.0, diamond=0.0, ration=48.561044375426725, metal=100.0, lightMetal=0.0, oxygen=50.0, water=1048.5610443754288, rareMetal=0.0, heavyMetal=0.0, organics=720.0, energy=2.104536335143821E10}
+[2459::1:16:59]INFO: Resources: {ration=16.98113844688519, ammonia=20.0, oxygen=100.0, water=516.9811384468841, phosphorus=5.0, energy=1.1944321122902122E11}
+[2459::1:16:59]INFO: HR: 40/40, 0-24, infrastructure
+[2460::1:17:00]INFO: HR: 38/38, 0-24, safety
+[2460::1:17:00]INFO: Resources: {ration=788.34778248195, oxygen=100.0, water=1288.3477824819508, energy=3.8054603176686966E10}
+[2460::1:17:00]INFO: HR: 0/0, 9-17, interior
+[2460::1:17:00]INFO: Resources: {ceramic=0.0, glassClothes=0.0, plastic=0.0, ration=846.8390313855258, water=1346.839031385523, energy=1.9027301588343483E10}
+[2461::1:17:01]INFO: HR: 120/120, 9-17, education
+[2462::1:17:02]INFO: Resources: {ration=105.47429023756796, oxygen=50.0, water=1105.474290237568, energy=3.8054603176686966E10}
+[2462::1:17:02]INFO: HR: 75/75, 0-24, bioengineering
+[2462::1:17:02]INFO: Resources: {ration=202.96234591688182, oxygen=50.0, water=1202.9623459168868, energy=1.9027301588343483E10}
+[2463::1:17:03]INFO: HR: 535/535, 9-17, industry
+[2463::1:17:03]INFO: Resources: {component=100.0, electronics=0.0, ration=0.0, lightMetal=50.0, water=15000.0, plumbing=0.0, rareMetal=0.0, heavyMetal=0.0, structure=0.0, energy=1.9027301588343483E10}
+[2463::1:17:03]INFO: HR: 675/675, 9-17, bioengineering
+[2465::1:17:05]INFO: Resources: {ration=788.34778248195, oxygen=100.0, water=1288.3477824819508, energy=3.8054603176686966E10}
+[2465::1:17:05]INFO: HR: 325/325, 9-17, interior
+[2466::1:17:06]INFO: HR: 80/80, 0-24, bioengineering
+[2468::1:17:08]INFO: Resources: {glassClothes=0.0, Ammonia=0.0, diamond=0.0, ration=30.90525527403323, cleanWater=0.0, water=530.9052552740327}
+[2472::1:17:12]INFO: HR: 525/525, 9-17, mining
+[2472::1:17:12]INFO: HR: 0/20, 9-17, null
+[2472::1:17:12]INFO: Resources: {ration=788.3477824819505, oxygen=100.0, water=1288.3477824819495, energy=3.8054603176686966E10}
+[2472::1:17:12]INFO: HR: 80/80, 0-24, safety
+[2473::1:17:13]INFO: HR: 525/525, 9-17, mining
+[2475::1:17:15]INFO: HR: 80/80, 0-24, safety
+[2476::1:17:16]INFO: HR: 38/38, 0-24, safety
+[2477::1:17:17]INFO: Resources: {ration=448.5902754135032, oxygen=100.0, water=948.5902754135059, phosphorus=10.0, energy=3.8054603176686966E10}
+[2477::1:17:17]INFO: HR: 99/99, 0-24, interior
+[2477::1:17:17]INFO: Resources: {component=50.0, glass=0.0, diamond=0.0, ration=21.628137710455675, lightMetal=100.0, oxygen=50.0, water=1021.6281377104576, rareMetal=0.0, organics=0.0, heavyMetal=0.0, energy=3.268728110464466E9}
+[2478::1:17:18]INFO: Resources: {component=50.0, glass=0.0, diamond=0.0, ration=18.534004362880964, metal=100.0, lightMetal=0.0, oxygen=50.0, water=1018.5340043628826, rareMetal=0.0, heavyMetal=0.0, organics=0.0, energy=2.5958944562836723E9}
+[2481::1:17:21]INFO: Resources: {ration=79.1725762534058, oxygen=50.0, water=1079.172576253407, energy=3.8054603176686966E10}
+[2481::1:17:21]INFO: Resources: {ration=554.4163841725274, oxygen=100.0, water=1054.4163841725322, energy=3.8054603176686966E10}
+[2482::1:17:22]INFO: HR: 0/25, 10-22, null
+[2482::1:17:22]INFO: Resources: {ration=579.1725762534046, oxygen=100.0, water=1079.1725762534068, energy=3.8054603176686966E10}
+[2484::1:17:24]INFO: HR: 80/80, 0-24, safety
+[2487::1:17:27]INFO: Resources: {ammonia=5.0, hydrogen=10.0, water=500.0, energy=1.9027301588343483E10}
+[2488::1:17:28]INFO: HR: 410/410, 9-17, interior
+[2490::1:17:30]INFO: Resources: {ceramic=0.0, glassClothes=0.0, plastic=0.0, ration=136.73569491147492, water=636.7356949114757}
+[2490::1:17:30]INFO: HR: 310/310, 9-17, interior
+[2492::1:17:32]INFO: Resources: {fineFood=5.0, ration=30.0, water=200.0, energy=1.9027301588343483E10}
+[2493::1:17:33]INFO: Resources: {ration=0.0, oxygen=50.0, water=15000.0, energy=1.8893530921184418E10}
+[2495::1:17:35]INFO: HR: 0/20, 9-17, null
+[2495::1:17:35]INFO: Resources: {diamond=0.003, rareMetal=0.05, energy=1.9027301588343483E10}
+[2497::1:17:37]INFO: HR: 60/60, 0-24, infrastructure
+[2500::1:17:40]INFO: Resources: {component=10.0, ration=0.0, water=0.0}
+[2504::1:17:44]INFO: Resources: {ration=579.172576253404, oxygen=100.0, water=1079.1725762534081, energy=3.8054603176686966E10}
+[2506::1:17:46]INFO: Resources: {ceramic=0.0, glassClothes=0.0, component=200.0, glass=0.0, plastic=0.0, ration=0.0, cottonClothes=0.0, lightMetal=100.0, water=15000.0, organics=0.0, energy=1.9027301588343483E10}
+[2515::1:17:55]INFO: HR: 50/50, 9-17, industry
+[2516::1:17:56]INFO: HR: 120/120, 9-17, education
+[2516::1:17:56]INFO: HR: 38/38, 0-24, safety
+[2516::1:17:56]INFO: HR: 100/100, 0-24, infrastructure
+[2517::1:17:57]INFO: Resources: {ration=202.9623459168827, oxygen=50.0, water=1202.9623459168847, energy=1.9027301588343483E10}
+[2517::1:17:57]INFO: Resources: {component=100.0, ration=2.21468834515153, lightMetal=50.0, water=14902.214688345179}
+[2517::1:17:57]INFO: HR: 0/40, 0-24, infrastructure
+[2517::1:17:57]INFO: HR: 525/525, 9-17, mining
+[2517::1:17:57]INFO: Resources: {component=50.0, glass=0.0, diamond=0.0, ration=42.372848759912394, metal=100.0, lightMetal=0.0, oxygen=50.0, water=1042.3728487599149, rareMetal=0.0, heavyMetal=0.0, organics=720.0, energy=2.6277395911843063E10}
+[2519::1:17:59]INFO: Resources: {ration=16.98113844688519, ammonia=20.0, oxygen=100.0, water=516.9811384468841, phosphorus=5.0, energy=1.141638095300609E11}
+[2519::1:17:59]INFO: HR: 40/40, 0-24, infrastructure
+[2520::1:18:00]INFO: HR: 38/38, 0-24, safety
+[2520::1:18:00]INFO: Resources: {ration=776.5902108124727, oxygen=100.0, water=1276.5902108124737, energy=3.6442683528041725E10}
+[2520::1:18:00]INFO: HR: 0/0, 9-17, interior
+[2520::1:18:00]INFO: Resources: {ceramic=0.0, glassClothes=0.0, plastic=0.0, ration=829.8214934428615, water=1329.8214934428581, energy=1.8221341764020863E10}
+[2522::1:18:02]INFO: Resources: {ration=82.2685566793892, oxygen=50.0, water=1082.2685566793896, energy=3.6442683528041725E10}
+[2522::1:18:02]INFO: HR: 75/75, 0-24, bioengineering
+[2525::1:18:05]INFO: Resources: {ration=776.5902108124727, oxygen=100.0, water=1276.5902108124737, energy=3.6442683528041725E10}
+[2526::1:18:06]INFO: HR: 80/80, 0-24, bioengineering
+[2532::1:18:12]INFO: Resources: {ration=776.5902108124732, oxygen=100.0, water=1276.5902108124722, energy=3.6442683528041725E10}
+[2532::1:18:12]INFO: HR: 80/80, 0-24, safety
+[2535::1:18:15]INFO: HR: 80/80, 0-24, safety
+[2536::1:18:16]INFO: c68 left the meeting TALK-market-2533
+[2536::1:18:16]INFO: Ending meeting TALK-market-2533
+[2536::1:18:16]INFO: HR: 38/38, 0-24, safety
+[2537::1:18:17]INFO: Resources: {ration=417.95870711670705, oxygen=100.0, water=917.9587071167097, phosphorus=10.0, energy=3.6442683528041725E10}
+[2537::1:18:17]INFO: HR: 99/99, 0-24, interior
+[2541::1:18:21]INFO: Resources: {ration=54.41979379134846, oxygen=50.0, water=1054.41979379135, energy=3.6442683528041725E10}
+[2541::1:18:21]INFO: Resources: {ration=529.6636017104697, oxygen=100.0, water=1029.6636017104752, energy=3.6442683528041725E10}
+[2542::1:18:22]INFO: HR: 0/25, 10-22, null
+[2542::1:18:22]INFO: Resources: {ration=554.419793791347, oxygen=100.0, water=1054.4197937913495, energy=3.6442683528041725E10}
+[2544::1:18:24]INFO: HR: 80/80, 0-24, safety
+[2552::1:18:32]INFO: Resources: {fineFood=5.0, ration=30.0, water=200.0, energy=1.8221341764020863E10}
+[2553::1:18:33]INFO: Resources: {ration=0.0, oxygen=50.0, water=15000.0, energy=1.8135728537039062E10}
+[2557::1:18:37]INFO: HR: 60/60, 0-24, infrastructure
+[2564::1:18:44]INFO: Resources: {ration=554.4197937913465, oxygen=100.0, water=1054.4197937913511, energy=3.6442683528041725E10}
+[2586::1:19:06]INFO: HR: 80/80, 0-24, bioengineering
+[2604::1:19:24]INFO: HR: 80/80, 0-24, safety
+[2612::1:19:32]INFO: teacher2 ending meeting TALK-market-2587
+[2662::1:20:22]INFO: c4 left the meeting TALK-market-2636
+[2667::1:20:27]INFO: teacher2 left the meeting TALK-market-2617
+[2667::1:20:27]INFO: Ending meeting TALK-market-2617
+[2671::1:20:31]INFO: Salvor ending meeting TALK-market-2643
+[2682::1:20:42]INFO: c4 left the meeting TALK-market-2667
+[2682::1:20:42]INFO: Ending meeting TALK-market-2667
+[2682::1:20:42]INFO: Muos ending meeting TALK-market-2636
+[2690::1:20:50]INFO: c22 left the meeting TALK-market-2688
+[2690::1:20:50]INFO: Ending meeting TALK-market-2688
+[2707::1:21:07]INFO: teacher2 ending meeting TALK-market-2672
+[2746::1:21:46]INFO: c25 left the meeting TALK-market-2743
+[2746::1:21:46]INFO: Ending meeting TALK-market-2743
+[2747::1:21:47]INFO: c24 left the meeting TALK-market-2742
+[2763::1:22:03]INFO: c17 left the meeting TALK-market-2763
+[2763::1:22:03]INFO: Ending meeting TALK-market-2763
+[2787::1:22:27]INFO: teacher2 ending meeting TALK-market-2742
+[2827::1:23:07]INFO: teacher2 ending meeting TALK-market-2792
+[2842::1:23:22]INFO: c4 left the meeting TALK-market-2797
+[2842::1:23:22]INFO: Ending meeting TALK-market-2797
+[2854::1:23:34]INFO: c46 left the meeting TALK-squareNorth-2848
+[2854::1:23:34]INFO: Ending meeting TALK-squareNorth-2848
+[2877::1:23:57]INFO: teacher2 left the meeting TALK-market-2827
+[2878::1:23:58]INFO: c57 ending meeting TALK-market-2843
+[2880::2:00:00]INFO: GameState injected successfully.
+[2880::2:00:00]INFO: Reloading test complete.
+[2880::2:00:00]INFO: Game started. Time: 2880. Starting main loop.
+[2882::2:00:02]INFO: Chef left the meeting TALK-market-2827
+[2882::2:00:02]INFO: Ending meeting TALK-market-2827
+[2917::2:00:37]INFO: teacher2 ending meeting TALK-market-2882
+[2922::2:00:42]INFO: Chef ending meeting TALK-market-2887
+[2929::2:00:49]INFO: c100 ending meeting TALK-squareNorth-2883
+[2978::2:01:38]INFO: c57 left the meeting TALK-market-2933
+[2978::2:01:38]INFO: Ending meeting TALK-market-2933
+[2979::2:01:39]INFO: c100 left the meeting TALK-squareNorth-2934
+[2979::2:01:39]INFO: Ending meeting TALK-squareNorth-2934
+[3029::2:02:29]INFO: c100 ending meeting TALK-squareNorth-2983
+[3035::2:02:35]INFO: Kasem left the meeting TALK-market-2980
+[3035::2:02:35]INFO: Ending meeting TALK-market-2980
+[3082::2:03:22]INFO: c4 left the meeting TALK-market-3037
+[3082::2:03:22]INFO: Ending meeting TALK-market-3037
+[3093::2:03:33]INFO: c57 left the meeting TALK-market-3040
+[3096::2:03:36]INFO: c31 ending meeting TALK-market-3040
+[3132::2:04:12]INFO: c4 left the meeting TALK-market-3087
+[3132::2:04:12]INFO: Ending meeting TALK-market-3087
+[3147::2:04:27]INFO: Muos ending meeting TALK-market-3098
+[3340::2:07:40]INFO: Kasem left the meeting TALK-market-3300
+[3348::2:07:48]INFO: c57 ending meeting TALK-market-3300
+[3354::2:07:54]INFO: c17 left the meeting TALK-market-3352
+[3354::2:07:54]INFO: Ending meeting TALK-market-3352
+[3367::2:08:07]INFO: Hans left the meeting TALK-market-3365
+[3367::2:08:07]INFO: Ending meeting TALK-market-3365
+[3378::2:08:18]INFO: Agros left the meeting TALK-market-3375
+[3378::2:08:18]INFO: Ending meeting TALK-market-3375
+[3388::2:08:28]INFO: c47 left the meeting TALK-market-3385
+[3388::2:08:28]INFO: Ending meeting TALK-market-3385
+[3390::2:08:30]INFO: Interrupt: Krailin is forced to join by Yuhoa starting the meeting.
+[3390::2:08:30]INFO: Interrupt: Salvor is forced to join by Yuhoa starting the meeting.
+[3390::2:08:30]INFO: Interrupt: Vaeme is forced to join by Yuhoa starting the meeting.
+[3390::2:08:30]INFO: Meeting BUDGET_RESOLUTION-infrastructureHeadquarters-3420 started by Yuhoa at 3390 in infrastructureHeadquarters.
+[3391::2:08:31]WARNING: Error updating quest for event 예산 해결: BUDGET_RESOLUTION-infrastructureHeadquarters-3420: null
+[3392::2:08:32]INFO: Interrupt: Kae is forced to join by Muos starting the meeting.
+[3392::2:08:32]INFO: Meeting BUDGET_RESOLUTION-safetyHeadquarters-3420 started by Muos at 3392 in safetyHeadquarters.
+[3400::2:08:40]INFO: Interrupt: Boulos is forced to join by Charles starting the meeting.
+[3400::2:08:40]INFO: Meeting BUDGET_RESOLUTION-interiorHeadquarters-3420 started by Charles at 3400 in interiorHeadquarters.
+[3404::2:08:44]INFO: Agros: Cannot move to squareSouth to execute the request Talk(sbjCharacter=Agros, tgtPlace=squareSouth, who=Rui). Terminating the routine......
+[3411::2:08:51]INFO: c64 left the meeting TALK-market-3405
+[3411::2:08:51]INFO: Ending meeting TALK-market-3405
+[3420::2:09:00]INFO: !Accident occurred at: manway
+[3420::2:09:00]INFO: Killed 1 reliant of education-Anon-miningSchool at miningSchool. Now has 119 reliant.
+[3420::2:09:00]INFO: Vaeme left the meeting BUDGET_RESOLUTION-infrastructureHeadquarters-3420
+[3420::2:09:00]INFO: Salvor left the meeting BUDGET_RESOLUTION-infrastructureHeadquarters-3420
+[3420::2:09:00]INFO: Krailin ending meeting BUDGET_RESOLUTION-infrastructureHeadquarters-3420
+[3420::2:09:00]INFO: The budget of the party infrastructure is not resolved. Proposed budgets are cleared, and party integrity is decreased.
+[3421::2:09:01]INFO: Interrupt: Eugene is forced to join by Jan starting the meeting.
+[3421::2:09:01]INFO: Meeting BUDGET_RESOLUTION-educationHeadquarters-3420 started by Jan at 3421 in educationHeadquarters.
+[3424::2:09:04]INFO: Interrupt: DrPaik is forced to join by Evan starting the meeting.
+[3424::2:09:04]INFO: Meeting BUDGET_RESOLUTION-bioengineeringHeadquarters-3420 started by Evan at 3424 in bioengineeringHeadquarters.
+[3427::2:09:07]INFO: Muos ending meeting BUDGET_RESOLUTION-safetyHeadquarters-3420
+[3427::2:09:07]INFO: The budget of the party safety is not resolved. Proposed budgets are cleared, and party integrity is decreased.
+[3435::2:09:15]INFO: Charles ending meeting BUDGET_RESOLUTION-interiorHeadquarters-3420
+[3439::2:09:19]INFO: c73 left the meeting TALK-market-3435
+[3439::2:09:19]INFO: Ending meeting TALK-market-3435
+[3441::2:09:21]INFO: Interrupt: Metros is forced to join by Maisarah starting the meeting.
+[3441::2:09:21]INFO: Meeting BUDGET_RESOLUTION-miningHeadquarters-3420 started by Maisarah at 3441 in miningHeadquarters.
+[3445::2:09:25]INFO: Interrupt: Indu is forced to join by Hiroshi starting the meeting.
+[3445::2:09:25]INFO: Meeting BUDGET_RESOLUTION-industryHeadquarters-3420 started by Hiroshi at 3445 in industryHeadquarters.
+[3452::2:09:32]INFO: c95 left the meeting TALK-market-3450
+[3452::2:09:32]INFO: Ending meeting TALK-market-3450
+[3461::2:09:41]INFO: Jan ending meeting BUDGET_RESOLUTION-educationHeadquarters-3420
+[3469::2:09:49]INFO: DrPaik ending meeting BUDGET_RESOLUTION-bioengineeringHeadquarters-3420
+[3474::2:09:54]INFO: c11 left the meeting TALK-market-3470
+[3474::2:09:54]INFO: Ending meeting TALK-market-3470
+[3475::2:09:55]INFO: Resources: {ration=175.19973860804294, oxygen=50.0, water=1175.1997386080484, energy=1.04930268640786E10, phosphorus=0.03}
+[3478::2:09:58]INFO: Boulos left the meeting TALK-market-3475
+[3478::2:09:58]INFO: Ending meeting TALK-market-3475
+[3480::2:10:00]INFO: Hiroshi ending meeting BUDGET_RESOLUTION-industryHeadquarters-3420
+[3482::2:10:02]INFO: HR: 119/145, 9-17, education
+[3486::2:10:06]INFO: Maisarah ending meeting BUDGET_RESOLUTION-miningHeadquarters-3420
+[3490::2:10:10]INFO: c52 left the meeting TALK-market-3485
+[3490::2:10:10]INFO: Ending meeting TALK-market-3485
+[3501::2:10:21]INFO: c75 left the meeting TALK-market-3495
+[3501::2:10:21]INFO: Ending meeting TALK-market-3495
+[3517::2:10:37]INFO: c2 left the meeting TALK-market-3515
+[3517::2:10:37]INFO: Ending meeting TALK-market-3515
+[3527::2:10:47]INFO: c69 left the meeting TALK-market-3525
+[3527::2:10:47]INFO: Ending meeting TALK-market-3525
+[3535::2:10:55]INFO: Resources: {ration=138.3808208287034, oxygen=50.0, water=1138.3808208287091, energy=1.0157728709567848E10, phosphorus=0.03}
+[3536::2:10:56]INFO: Eugene left the meeting TALK-market-3535
+[3536::2:10:56]INFO: Ending meeting TALK-market-3535
+[3540::2:11:00]INFO: c39 left the meeting TALK-squareNorth-3535
+[3540::2:11:00]INFO: Ending meeting TALK-squareNorth-3535
+[3558::2:11:18]WARNING: Routine Control Flow warning: failed called for an already successful routine: InvestigateAndClearAccidentRoutine(routineStartTime=3420, variables={})
+[3560::2:11:20]INFO: Evan left the meeting TALK-market-3555
+[3560::2:11:20]INFO: Ending meeting TALK-market-3555
+[3570::2:11:30]INFO: Interrupt: c30 is forced to join by c31 starting the meeting.
+[3570::2:11:30]INFO: Interrupt: c32 is forced to join by c31 starting the meeting.
+[3570::2:11:30]INFO: Meeting DIVISION_DAILY_CONFERENCE-mainControlRoom-3600 started by c31 at 3570 in mainControlRoom.
+[3570::2:11:30]INFO: Interrupt: c33 is forced to join by c34 starting the meeting.
+[3570::2:11:30]INFO: Interrupt: c35 is forced to join by c34 starting the meeting.
+[3570::2:11:30]INFO: Meeting DIVISION_DAILY_CONFERENCE-welfareStationEast-3600 started by c34 at 3570 in welfareStationEast.
+[3570::2:11:30]INFO: Interrupt: c37 is forced to join by c36 starting the meeting.
+[3570::2:11:30]INFO: Interrupt: Muos is forced to join by c36 starting the meeting.
+[3570::2:11:30]INFO: Interrupt: c38 is forced to join by c36 starting the meeting.
+[3570::2:11:30]INFO: Meeting DIVISION_DAILY_CONFERENCE-rescueStationSouth-3600 started by c36 at 3570 in rescueStationSouth.
+[3570::2:11:30]INFO: Interrupt: c41 is forced to join by c39 starting the meeting.
+[3570::2:11:30]INFO: Interrupt: Agros is forced to join by c39 starting the meeting.
+[3570::2:11:30]INFO: Interrupt: c40 is forced to join by c39 starting the meeting.
+[3570::2:11:30]INFO: Meeting DIVISION_DAILY_CONFERENCE-squareNorth-3600 started by c39 at 3570 in squareNorth.
+[3570::2:11:30]INFO: Interrupt: c0 is forced to join by c1 starting the meeting.
+[3570::2:11:30]INFO: Interrupt: c2 is forced to join by c1 starting the meeting.
+[3570::2:11:30]INFO: Meeting DIVISION_DAILY_CONFERENCE-securityCheckCenter-3600 started by c1 at 3570 in securityCheckCenter.
+[3570::2:11:30]INFO: Interrupt: c3 is forced to join by c4 starting the meeting.
+[3570::2:11:30]INFO: Interrupt: c5 is forced to join by c4 starting the meeting.
+[3570::2:11:30]INFO: Meeting DIVISION_DAILY_CONFERENCE-farm-3600 started by c4 at 3570 in farm.
+[3570::2:11:30]INFO: Interrupt: c11 is forced to join by c9 starting the meeting.
+[3570::2:11:30]INFO: Interrupt: c10 is forced to join by c9 starting the meeting.
+[3570::2:11:30]INFO: Meeting DIVISION_DAILY_CONFERENCE-recycleFacilityWest-3600 started by c9 at 3570 in recycleFacilityWest.
+[3570::2:11:30]INFO: Interrupt: Jeweler is forced to join by c55 starting the meeting.
+[3570::2:11:30]INFO: Interrupt: JwlServer is forced to join by c55 starting the meeting.
+[3570::2:11:30]INFO: Interrupt: JwlSupplier is forced to join by c55 starting the meeting.
+[3570::2:11:30]INFO: Meeting DIVISION_DAILY_CONFERENCE-diamondShop-3600 started by c55 at 3570 in diamondShop.
+[3570::2:11:30]INFO: Interrupt: c68 is forced to join by c70 starting the meeting.
+[3570::2:11:30]INFO: Interrupt: c69 is forced to join by c70 starting the meeting.
+[3570::2:11:30]INFO: Meeting DIVISION_DAILY_CONFERENCE-constructionYardNorth-3600 started by c70 at 3570 in constructionYardNorth.
+[3570::2:11:30]INFO: Interrupt: c77 is forced to join by c78 starting the meeting.
+[3570::2:11:30]INFO: Interrupt: c79 is forced to join by c78 starting the meeting.
+[3570::2:11:30]INFO: Meeting DIVISION_DAILY_CONFERENCE-securityCheckEast-3600 started by c78 at 3570 in securityCheckEast.
+[3570::2:11:30]INFO: Interrupt: c91 is forced to join by c89 starting the meeting.
+[3570::2:11:30]INFO: Interrupt: c90 is forced to join by c89 starting the meeting.
+[3570::2:11:30]INFO: Meeting DIVISION_DAILY_CONFERENCE-market-3600 started by c89 at 3570 in market.
+[3570::2:11:30]INFO: Interrupt: Chef is forced to join by c98 starting the meeting.
+[3570::2:11:30]INFO: Interrupt: RstSupplier is forced to join by c98 starting the meeting.
+[3570::2:11:30]INFO: Interrupt: RstServer is forced to join by c98 starting the meeting.
+[3570::2:11:30]INFO: Meeting DIVISION_DAILY_CONFERENCE-fineFoodStore-1-3600 started by c98 at 3570 in fineFoodStore-1.
+[3570::2:11:30]INFO: Interrupt: c111 is forced to join by c112 starting the meeting.
+[3570::2:11:30]INFO: Interrupt: c113 is forced to join by c112 starting the meeting.
+[3570::2:11:30]INFO: Meeting DIVISION_DAILY_CONFERENCE-theEngine-3600 started by c112 at 3570 in theEngine.
+[3570::2:11:30]INFO: Interrupt: c75 is forced to join by Vaeme starting the meeting.
+[3570::2:11:30]INFO: Interrupt: c74 is forced to join by Vaeme starting the meeting.
+[3570::2:11:30]INFO: Interrupt: c76 is forced to join by Vaeme starting the meeting.
+[3570::2:11:30]INFO: Meeting DIVISION_DAILY_CONFERENCE-recycleFacilityEast-3600 started by Vaeme at 3570 in recycleFacilityEast.
+[3570::2:11:30]INFO: Interrupt: Chemist is forced to join by AmmSupplier starting the meeting.
+[3570::2:11:30]INFO: Interrupt: AmmServer is forced to join by AmmSupplier starting the meeting.
+[3570::2:11:30]INFO: Interrupt: c51 is forced to join by AmmSupplier starting the meeting.
+[3570::2:11:30]INFO: Meeting DIVISION_DAILY_CONFERENCE-ammoniaShop-3600 started by AmmSupplier at 3570 in ammoniaShop.
+[3570::2:11:30]INFO: Interrupt: c16 is forced to join by c17 starting the meeting.
+[3570::2:11:30]INFO: Meeting DIVISION_DAILY_CONFERENCE-asteroidMine-3600 started by c17 at 3570 in asteroidMine.
+[3571::2:11:31]INFO: Interrupt: c42 is forced to join by c43 starting the meeting.
+[3571::2:11:31]INFO: Interrupt: c44 is forced to join by c43 starting the meeting.
+[3571::2:11:31]INFO: Meeting DIVISION_DAILY_CONFERENCE-constructionYardSouth-3600 started by c43 at 3571 in constructionYardSouth.
+[3571::2:11:31]INFO: Interrupt: c7 is forced to join by c6 starting the meeting.
+[3571::2:11:31]INFO: Interrupt: c8 is forced to join by c6 starting the meeting.
+[3571::2:11:31]INFO: Meeting DIVISION_DAILY_CONFERENCE-excavationShaftB-3600 started by c6 at 3571 in excavationShaftB.
+[3571::2:11:31]INFO: Interrupt: c56 is forced to join by c57 starting the meeting.
+[3571::2:11:31]INFO: Interrupt: c58 is forced to join by c57 starting the meeting.
+[3571::2:11:31]INFO: Meeting DIVISION_DAILY_CONFERENCE-techSchool-3600 started by c57 at 3571 in techSchool.
+[3571::2:11:31]INFO: Interrupt: c85 is forced to join by Boulos starting the meeting.
+[3571::2:11:31]INFO: Interrupt: c84 is forced to join by Boulos starting the meeting.
+[3571::2:11:31]INFO: Interrupt: c83 is forced to join by Boulos starting the meeting.
+[3571::2:11:31]INFO: Meeting DIVISION_DAILY_CONFERENCE-cemetery-3600 started by Boulos at 3571 in cemetery.
+[3571::2:11:31]INFO: Interrupt: c97 is forced to join by Alina starting the meeting.
+[3571::2:11:31]INFO: Interrupt: c96 is forced to join by Alina starting the meeting.
+[3571::2:11:31]INFO: Interrupt: c95 is forced to join by Alina starting the meeting.
+[3571::2:11:31]INFO: Meeting DIVISION_DAILY_CONFERENCE-outerBarrierWest-3600 started by Alina at 3571 in outerBarrierWest.
+[3571::2:11:31]INFO: Interrupt: c73 is forced to join by c71 starting the meeting.
+[3571::2:11:31]INFO: Interrupt: c72 is forced to join by c71 starting the meeting.
+[3571::2:11:31]INFO: Meeting DIVISION_DAILY_CONFERENCE-observatory-3600 started by c71 at 3571 in observatory.
+[3571::2:11:31]INFO: Interrupt: c110 is forced to join by c109 starting the meeting.
+[3571::2:11:31]INFO: Interrupt: c108 is forced to join by c109 starting the meeting.
+[3571::2:11:31]INFO: Interrupt: Kae is forced to join by c109 starting the meeting.
+[3571::2:11:31]INFO: Meeting DIVISION_DAILY_CONFERENCE-securityCheckWest-3600 started by c109 at 3571 in securityCheckWest.
+[3571::2:11:31]INFO: Interrupt: Charles is forced to join by c105 starting the meeting.
+[3571::2:11:31]INFO: Interrupt: c107 is forced to join by c105 starting the meeting.
+[3571::2:11:31]INFO: Interrupt: c106 is forced to join by c105 starting the meeting.
+[3571::2:11:31]INFO: Meeting DIVISION_DAILY_CONFERENCE-squareSouth-3600 started by c105 at 3571 in squareSouth.
+[3571::2:11:31]INFO: Interrupt: c103 is forced to join by c104 starting the meeting.
+[3571::2:11:31]INFO: Interrupt: c102 is forced to join by c104 starting the meeting.
+[3571::2:11:31]INFO: Meeting DIVISION_DAILY_CONFERENCE-welfareStationWest-3600 started by c104 at 3571 in welfareStationWest.
+[3571::2:11:31]INFO: Interrupt: Sasha is forced to join by Hans starting the meeting.
+[3571::2:11:31]INFO: Interrupt: Lynn is forced to join by Hans starting the meeting.
+[3571::2:11:31]INFO: Meeting DIVISION_DAILY_CONFERENCE-outerBarrierEast-3600 started by Hans at 3571 in outerBarrierEast.
+[3571::2:11:31]INFO: Interrupt: c59 is forced to join by Krailin starting the meeting.
+[3571::2:11:31]INFO: Interrupt: c60 is forced to join by Krailin starting the meeting.
+[3571::2:11:31]INFO: Interrupt: c61 is forced to join by Krailin starting the meeting.
+[3571::2:11:31]INFO: Meeting DIVISION_DAILY_CONFERENCE-reservoirWest-3600 started by Krailin at 3571 in reservoirWest.
+[3571::2:11:31]INFO: Interrupt: c19 is forced to join by c20 starting the meeting.
+[3571::2:11:31]INFO: Interrupt: c18 is forced to join by c20 starting the meeting.
+[3571::2:11:31]INFO: Meeting DIVISION_DAILY_CONFERENCE-rescueStationNorth-3600 started by c20 at 3571 in rescueStationNorth.
+[3572::2:11:32]INFO: Interrupt: c93 is forced to join by c94 starting the meeting.
+[3572::2:11:32]INFO: Interrupt: c92 is forced to join by c94 starting the meeting.
+[3572::2:11:32]INFO: Meeting DIVISION_DAILY_CONFERENCE-miningSchool-3600 started by c94 at 3572 in miningSchool.
+[3572::2:11:32]INFO: Interrupt: c123 is forced to join by c124 starting the meeting.
+[3572::2:11:32]INFO: Interrupt: c125 is forced to join by c124 starting the meeting.
+[3572::2:11:32]INFO: Meeting DIVISION_DAILY_CONFERENCE-electrolysisStationSouth-3600 started by c124 at 3572 in electrolysisStationSouth.
+[3572::2:11:32]INFO: Interrupt: c118 is forced to join by c117 starting the meeting.
+[3572::2:11:32]INFO: Interrupt: c119 is forced to join by c117 starting the meeting.
+[3572::2:11:32]INFO: Meeting DIVISION_DAILY_CONFERENCE-reservoirEast-3600 started by c117 at 3572 in reservoirEast.
+[3572::2:11:32]INFO: Interrupt: c53 is forced to join by Salvor starting the meeting.
+[3572::2:11:32]INFO: Interrupt: c52 is forced to join by Salvor starting the meeting.
+[3572::2:11:32]INFO: Interrupt: c54 is forced to join by Salvor starting the meeting.
+[3572::2:11:32]INFO: Meeting DIVISION_DAILY_CONFERENCE-tankArray-3600 started by Salvor at 3572 in tankArray.
+[3572::2:11:32]INFO: Interrupt: c21 is forced to join by c22 starting the meeting.
+[3572::2:11:32]INFO: Interrupt: c23 is forced to join by c22 starting the meeting.
+[3572::2:11:32]INFO: Meeting DIVISION_DAILY_CONFERENCE-rescueStationWest-3600 started by c22 at 3572 in rescueStationWest.
+[3572::2:11:32]INFO: Interrupt: c27 is forced to join by c28 starting the meeting.
+[3572::2:11:32]INFO: Interrupt: c29 is forced to join by c28 starting the meeting.
+[3572::2:11:32]INFO: Meeting DIVISION_DAILY_CONFERENCE-electrolysisStationNorth-3600 started by c28 at 3572 in electrolysisStationNorth.
+[3573::2:11:33]INFO: Interrupt: c64 is forced to join by c62 starting the meeting.
+[3573::2:11:33]INFO: Interrupt: c63 is forced to join by c62 starting the meeting.
+[3573::2:11:33]INFO: Meeting DIVISION_DAILY_CONFERENCE-outerBarrierCenter-3600 started by c62 at 3573 in outerBarrierCenter.
+[3574::2:11:34]INFO: Interrupt: c45 is forced to join by c46 starting the meeting.
+[3574::2:11:34]INFO: Interrupt: c47 is forced to join by c46 starting the meeting.
+[3574::2:11:34]INFO: Meeting DIVISION_DAILY_CONFERENCE-spacePort-3600 started by c46 at 3574 in spacePort.
+[3574::2:11:34]INFO: Interrupt: c12 is forced to join by c13 starting the meeting.
+[3574::2:11:34]INFO: Interrupt: c14 is forced to join by c13 starting the meeting.
+[3574::2:11:34]INFO: Meeting DIVISION_DAILY_CONFERENCE-excavationShaftA-3600 started by c13 at 3574 in excavationShaftA.
+[3579::2:11:39]INFO: Metros left the meeting TALK-market-3574
+[3585::2:11:45]INFO: c34 ending meeting DIVISION_DAILY_CONFERENCE-welfareStationEast-3600
+[3585::2:11:45]INFO: c1 left the meeting DIVISION_DAILY_CONFERENCE-securityCheckCenter-3600
+[3585::2:11:45]INFO: c2 ending meeting DIVISION_DAILY_CONFERENCE-securityCheckCenter-3600
+[3586::2:11:46]INFO: HR: 80/90, 0-24, bioengineering
+[3586::2:11:46]INFO: c68 ending meeting DIVISION_DAILY_CONFERENCE-constructionYardNorth-3600
+[3586::2:11:46]INFO: Resources: {ceramic=0.0, glassClothes=0.0, component=272.0, glass=0.0, plastic=0.0, ration=14.678595158285484, cottonClothes=0.0, lightMetal=28.0, water=15014.678595158277, organics=0.0, energy=9.26086676964393E9, phosphorus=0.03}
+[3586::2:11:46]INFO: c79 ending meeting DIVISION_DAILY_CONFERENCE-securityCheckEast-3600
+[3586::2:11:46]INFO: c104 left the meeting DIVISION_DAILY_CONFERENCE-welfareStationWest-3600
+[3587::2:11:47]INFO: c102 ending meeting DIVISION_DAILY_CONFERENCE-welfareStationWest-3600
+[3587::2:11:47]INFO: c18 ending meeting DIVISION_DAILY_CONFERENCE-rescueStationNorth-3600
+[3587::2:11:47]INFO: c21 left the meeting DIVISION_DAILY_CONFERENCE-rescueStationWest-3600
+[3587::2:11:47]INFO: c23 ending meeting DIVISION_DAILY_CONFERENCE-rescueStationWest-3600
+[3590::2:11:50]INFO: Resources: {ration=3.194681499757303, oxygen=50.0, water=1003.1946814997592, energy=1.970253353928786E10, phosphorus=0.03}
+[3590::2:11:50]INFO: Resources: {ration=576.7123030125229, oxygen=100.0, water=1076.7123030125274, energy=1.970253353928786E10}
+[3590::2:11:50]INFO: HR: 38/53, 0-24, safety
+[3591::2:11:51]INFO: HR: 38/53, 0-24, safety
+[3591::2:11:51]INFO: c109 left the meeting DIVISION_DAILY_CONFERENCE-securityCheckWest-3600
+[3591::2:11:51]INFO: Speaker is now Kae
+[3591::2:11:51]INFO: HR: 75/80, 0-24, bioengineering
+[3591::2:11:51]INFO: Sasha left the meeting DIVISION_DAILY_CONFERENCE-outerBarrierEast-3600
+[3591::2:11:51]INFO: HR: 80/95, 0-24, safety
+[3592::2:11:52]INFO: Resources: {ration=5.981159722256118, oxygen=50.0, water=1005.981159722257, energy=1.970253353928786E10, phosphorus=0.03}
+[3592::2:11:52]INFO: c119 left the meeting DIVISION_DAILY_CONFERENCE-reservoirEast-3600
+[3592::2:11:52]INFO: HR: 80/90, 0-24, safety
+[3593::2:11:53]INFO: c64 left the meeting DIVISION_DAILY_CONFERENCE-outerBarrierCenter-3600
+[3593::2:11:53]INFO: c93 ending meeting DIVISION_DAILY_CONFERENCE-miningSchool-3600
+[3595::2:11:55]INFO: c4 ending meeting DIVISION_DAILY_CONFERENCE-farm-3600
+[3595::2:11:55]INFO: HR: 50/60, 9-17, industry
+[3595::2:11:55]INFO: Resources: {ration=576.7120328188013, oxygen=100.0, water=1076.712032818806, energy=1.970253353928786E10}
+[3595::2:11:55]INFO: c90 left the meeting DIVISION_DAILY_CONFERENCE-market-3600
+[3595::2:11:55]INFO: c111 ending meeting DIVISION_DAILY_CONFERENCE-theEngine-3600
+[3595::2:11:55]INFO: HR: 100/105, 0-24, infrastructure
+[3595::2:11:55]INFO: c16 ending meeting DIVISION_DAILY_CONFERENCE-asteroidMine-3600
+[3596::2:11:56]INFO: c56 ending meeting DIVISION_DAILY_CONFERENCE-techSchool-3600
+[3596::2:11:56]INFO: HR: 120/130, 9-17, education
+[3596::2:11:56]INFO: c73 left the meeting DIVISION_DAILY_CONFERENCE-observatory-3600
+[3596::2:11:56]INFO: c72 ending meeting DIVISION_DAILY_CONFERENCE-observatory-3600
+[3596::2:11:56]INFO: Hans ending meeting DIVISION_DAILY_CONFERENCE-outerBarrierEast-3600
+[3597::2:11:57]INFO: Resources: {ration=0.0, oxygen=50.0, water=15000.0, energy=9.851223358580503E9}
+[3597::2:11:57]INFO: HR: 119/145, 9-17, education
+[3597::2:11:57]INFO: c117 ending meeting DIVISION_DAILY_CONFERENCE-reservoirEast-3600
+[3597::2:11:57]INFO: HR: 34/55, 0-24, infrastructure
+[3597::2:11:57]INFO: Resources: {ration=133.62419842303436, oxygen=100.0, water=633.6241984230369, energy=1.970253353928786E10}
+[3597::2:11:57]INFO: Resources: {ration=133.62419842303441, oxygen=100.0, water=633.6241984230384, energy=1.970253353928786E10}
+[3597::2:11:57]INFO: c27 left the meeting DIVISION_DAILY_CONFERENCE-electrolysisStationNorth-3600
+[3597::2:11:57]INFO: c29 ending meeting DIVISION_DAILY_CONFERENCE-electrolysisStationNorth-3600
+[3598::2:11:58]INFO: c62 ending meeting DIVISION_DAILY_CONFERENCE-outerBarrierCenter-3600
+[3598::2:11:58]INFO: HR: 60/75, 0-24, infrastructure
+[3598::2:11:58]INFO: Resources: {oxygen=50.0, water=15000.0, energy=9.85126676964393E9}
+[3598::2:11:58]INFO: Resources: {ration=101.56190304936399, oxygen=50.0, water=1101.56190304937, energy=9.85126676964393E9, phosphorus=0.03}
+[3598::2:11:58]INFO: c125 left the meeting DIVISION_DAILY_CONFERENCE-electrolysisStationSouth-3600
+[3598::2:11:58]INFO: Resources: {component=100.0, ration=1.2888098008935316, lightMetal=50.0, water=299901.28880980186}
+[3600::2:12:00]INFO: Resources: {ration=34.96061629841174, ammonia=20.0, oxygen=100.0, water=534.9606162984103, phosphorus=5.0372, energy=5.738698219889551E10}
+[3600::2:12:00]INFO: HR: 675/680, 9-17, bioengineering
+[3600::2:12:00]INFO: c9 left the meeting DIVISION_DAILY_CONFERENCE-recycleFacilityWest-3600
+[3600::2:12:00]INFO: Resources: {ceramic=0.0, glassClothes=0.0, plastic=0.0, ration=810.2599527147415, water=1310.2599527147363, energy=9.564497033149252E9, phosphorus=0.03}
+[3600::2:12:00]INFO: Kasem left the meeting TALK-market-3574
+[3600::2:12:00]INFO: Ending meeting TALK-market-3574
+[3600::2:12:00]INFO: Resources: {glass=0.0, metal=100.0, water=1053.854586178219, heavyMetal=0.0, component=50.0, diamond=0.0, ration=53.854586178215236, lightMetal=0.0, oxygen=50.0, rareMetal=0.0, organics=720.0, energy=1.634203345735463E10, phosphorus=0.03}
+[3601::2:12:01]INFO: c37 left the meeting DIVISION_DAILY_CONFERENCE-rescueStationSouth-3600
+[3601::2:12:01]INFO: Speaker is now Muos
+[3601::2:12:01]INFO: HR: 10/15, 0-24, infrastructure
+[3601::2:12:01]INFO: Resources: {ration=0.0, oxygen=50.0, water=15000.0, energy=9.564497033149252E9}
+[3601::2:12:01]INFO: HR: 60/70, 0-24, infrastructure
+[3602::2:12:02]INFO: HR: 50/55, 0-24, infrastructure
+[3603::2:12:03]INFO: HR: 0/60, 0-24, infrastructure
+[3604::2:12:04]INFO: c46 left the meeting DIVISION_DAILY_CONFERENCE-spacePort-3600
+[3605::2:12:05]INFO: c89 ending meeting DIVISION_DAILY_CONFERENCE-market-3600
+[3605::2:12:05]INFO: HR: 325/340, 9-17, interior
+[3605::2:12:05]INFO: Resources: {component=200.0, ration=0.0, lightMetal=100.0, water=15000.0, oxygen=10000.0, energy=6.68708923676197E10}
+[3605::2:12:05]INFO: c11 ending meeting DIVISION_DAILY_CONFERENCE-recycleFacilityWest-3600
+[3605::2:12:05]INFO: Resources: {component=100.0, ration=1.5959256663996344, lightMetal=50.0, water=1.5959256663996344, energy=9.564497033149252E9}
+[3605::2:12:05]INFO: HR: 525/530, 9-17, mining
+[3606::2:12:06]INFO: c8 left the meeting DIVISION_DAILY_CONFERENCE-excavationShaftB-3600
+[3606::2:12:06]INFO: Resources: {ration=100.78907897398668, oxygen=50.0, water=1100.7890789739897, energy=9.564497033149252E9, phosphorus=0.03}
+[3607::2:12:07]INFO: c42 left the meeting DIVISION_DAILY_CONFERENCE-constructionYardSouth-3600
+[3607::2:12:07]INFO: c44 ending meeting DIVISION_DAILY_CONFERENCE-constructionYardSouth-3600
+[3607::2:12:07]INFO: c124 ending meeting DIVISION_DAILY_CONFERENCE-electrolysisStationSouth-3600
+[3607::2:12:07]INFO: Resources: {component=100.0, ration=0.0, hydrogen=0.0, lightMetal=50.0, water=15000.0, oxygen=0.0, energy=1.9128994066298504E10}
+[3609::2:12:09]INFO: Resources: {component=100.0, ration=0.0, lightMetal=50.0, water=15000.0, energy=9.564497033149252E9}
+[3609::2:12:09]INFO: c45 ending meeting DIVISION_DAILY_CONFERENCE-spacePort-3600
+[3609::2:12:09]INFO: HR: 30/35, 9-17, infrastructure
+[3609::2:12:09]INFO: c12 left the meeting DIVISION_DAILY_CONFERENCE-excavationShaftA-3600
+[3609::2:12:09]INFO: c14 ending meeting DIVISION_DAILY_CONFERENCE-excavationShaftA-3600
+[3610::2:12:10]INFO: c31 left the meeting DIVISION_DAILY_CONFERENCE-mainControlRoom-3600
+[3610::2:12:10]INFO: c30 ending meeting DIVISION_DAILY_CONFERENCE-mainControlRoom-3600
+[3610::2:12:10]INFO: HR: 30/45, 0-24, infrastructure
+[3611::2:12:11]INFO: HR: 525/540, 9-17, mining
+[3612::2:12:12]INFO: HR: 535/545, 9-17, industry
+[3612::2:12:12]INFO: Astinomis left the meeting TALK-market-3610
+[3612::2:12:12]INFO: Ending meeting TALK-market-3610
+[3612::2:12:12]INFO: Resources: {component=100.0, ration=0.0, hydrogen=0.0, lightMetal=50.0, water=15000.0, oxygen=0.0, energy=1.9128994066298504E10}
+[3614::2:12:14]INFO: HR: 525/545, 9-17, mining
+[3615::2:12:15]INFO: Resources: {ration=4.073924800647488, oxygen=100.0, water=504.0739248006474, phosphorus=10.03, energy=1.9128994066298504E10}
+[3615::2:12:15]INFO: HR: 99/119, 0-24, interior
+[3616::2:12:16]INFO: Resources: {component=100.0, electronics=0.0, ration=31.128834348874904, lightMetal=50.0, water=15031.12883434887, plumbing=0.0, rareMetal=0.0, heavyMetal=0.0, structure=0.0, energy=9.564497033149252E9, phosphorus=0.03}
+[3616::2:12:16]INFO: c6 ending meeting DIVISION_DAILY_CONFERENCE-excavationShaftB-3600
+[3616::2:12:16]INFO: Resources: {component=50.0, glass=0.0, diamond=0.0, ration=18.98063819686594, lightMetal=100.0, oxygen=50.0, water=1018.9806381968682, rareMetal=0.0, organics=0.0, heavyMetal=0.0, energy=2.509733335442927E10, phosphorus=0.03}
+[3618::2:12:18]INFO: c52 left the meeting DIVISION_DAILY_CONFERENCE-tankArray-3600
+[3618::2:12:18]INFO: c54 ending meeting DIVISION_DAILY_CONFERENCE-tankArray-3600
+[3619::2:12:19]INFO: Resources: {glass=0.0, metal=100.0, water=1019.0321034034189, heavyMetal=0.0, component=50.0, diamond=0.0, ration=19.032103403416343, lightMetal=0.0, oxygen=50.0, rareMetal=0.0, organics=0.0, energy=3.465996099711918E9, phosphorus=0.03}
+[3621::2:12:21]INFO: c75 ending meeting DIVISION_DAILY_CONFERENCE-recycleFacilityEast-3600
+[3623::2:12:23]INFO: HR: 40/45, 0-24, infrastructure
+[3625::2:12:25]INFO: c40 left the meeting DIVISION_DAILY_CONFERENCE-squareNorth-3600
+[3625::2:12:25]INFO: c41 left the meeting DIVISION_DAILY_CONFERENCE-squareNorth-3600
+[3625::2:12:25]INFO: AmmServer ending meeting DIVISION_DAILY_CONFERENCE-ammoniaShop-3600
+[3626::2:12:26]INFO: HR: 0/20, 9-17, null
+[3626::2:12:26]INFO: Resources: {component=100.0, ration=1.596706757992175, lightMetal=50.0, water=1.596706757992175, corpse=0.0, energy=9.564497033149252E9, phosphorus=0.0}
+[3626::2:12:26]INFO: HR: 35/45, 0-24, infrastructure
+[3626::2:12:26]INFO: c95 left the meeting DIVISION_DAILY_CONFERENCE-outerBarrierWest-3600
+[3626::2:12:26]INFO: c96 ending meeting DIVISION_DAILY_CONFERENCE-outerBarrierWest-3600
+[3627::2:12:27]INFO: c59 ending meeting DIVISION_DAILY_CONFERENCE-reservoirWest-3600
+[3627::2:12:27]INFO: Resources: {component=100.0, ration=2.21468834515153, lightMetal=50.0, water=14902.214688345179}
+[3627::2:12:27]INFO: HR: 0/45, 0-24, infrastructure
+[3628::2:12:28]INFO: Resources: {component=100.0, ration=0.0, lightMetal=50.0, water=0.0}
+[3630::2:12:30]INFO: c39 ending meeting DIVISION_DAILY_CONFERENCE-squareNorth-3600
+[3630::2:12:30]INFO: c38 left the meeting DIVISION_DAILY_CONFERENCE-rescueStationSouth-3600
+[3630::2:12:30]INFO: c40: The request Examine(sbjCharacter=c41, tgtPlace=squareNorth, what=RESOURCES) is valid. Executing...
+[3630::2:12:30]INFO: Resources: {ceramic=0.0, glassClothes=0.0, plastic=0.0, ration=25.485454864201046, water=525.4854548642016, phosphorus=0.03}
+[3630::2:12:30]INFO: c98 left the meeting DIVISION_DAILY_CONFERENCE-fineFoodStore-1-3600
+[3630::2:12:30]INFO: RstSupplier left the meeting DIVISION_DAILY_CONFERENCE-fineFoodStore-1-3600
+[3630::2:12:30]INFO: Resources: {ammonia=5.0, hydrogen=10.0, water=500.0, energy=9.564497033149252E9}
+[3631::2:12:31]INFO: c83 left the meeting DIVISION_DAILY_CONFERENCE-cemetery-3600
+[3631::2:12:31]INFO: HR: 0/75, 0-24, infrastructure
+[3631::2:12:31]INFO: Resources: {oxygen=50.0, water=15000.0, energy=9.564497033149252E9}
+[3635::2:12:35]INFO: HR: 80/100, 0-24, safety
+[3635::2:12:35]INFO: c55 left the meeting DIVISION_DAILY_CONFERENCE-diamondShop-3600
+[3635::2:12:35]INFO: Chef ending meeting DIVISION_DAILY_CONFERENCE-fineFoodStore-1-3600
+[3636::2:12:36]INFO: RstServer: The request Examine(sbjCharacter=c98, tgtPlace=fineFoodStore-1, what=RESOURCES) is valid. Executing...
+[3636::2:12:36]INFO: Resources: {fineFood=5.0, ration=30.0, water=200.0, energy=9.564497033149252E9}
+[3636::2:12:36]INFO: c85 ending meeting DIVISION_DAILY_CONFERENCE-cemetery-3600
+[3640::2:12:40]INFO: c36 ending meeting DIVISION_DAILY_CONFERENCE-rescueStationSouth-3600
+[3640::2:12:40]INFO: JwlSupplier ending meeting DIVISION_DAILY_CONFERENCE-diamondShop-3600
+[3640::2:12:40]INFO: Resources: {diamond=0.003, rareMetal=0.05, energy=9.564497033149252E9}
+[3641::2:12:41]INFO: c108 ending meeting DIVISION_DAILY_CONFERENCE-securityCheckWest-3600
+[3641::2:12:41]INFO: Resources: {component=10.0, ration=45.05157421710434, water=45.05157421710434, phosphorus=0.03}
+[3641::2:12:41]INFO: HR: 0/5, 9-17, interior
+[3641::2:12:41]INFO: HR: 38/48, 0-24, safety
+[3646::2:12:46]INFO: Resources: {ceramic=0.0, glassClothes=0.0, component=272.0, glass=0.0, plastic=0.0, ration=1.9930856712861837, cottonClothes=0.0, lightMetal=28.0, water=15001.993085671273, organics=0.0, energy=9.186641033149252E9, phosphorus=0.03}
+[3650::2:12:50]INFO: Resources: {ration=564.9550015367671, oxygen=100.0, water=1064.9550015367718, energy=1.9128994066298504E10}
+[3655::2:12:55]INFO: HR: 50/60, 9-17, industry
+[3655::2:12:55]INFO: Resources: {ration=564.9547313430455, oxygen=100.0, water=1064.9547313430503, energy=1.9128994066298504E10}
+[3656::2:12:56]INFO: HR: 120/130, 9-17, education
+[3657::2:12:57]INFO: HR: 119/145, 9-17, education
+[3657::2:12:57]INFO: HR: 34/55, 0-24, infrastructure
+[3657::2:12:57]INFO: Resources: {ration=108.87198478986501, oxygen=100.0, water=608.8719847898677, energy=1.9128994066298504E10}
+[3658::2:12:58]INFO: HR: 60/75, 0-24, infrastructure
+[3658::2:12:58]INFO: Resources: {oxygen=50.0, water=15000.0, energy=9.564497033149252E9}
+[3658::2:12:58]INFO: Resources: {ration=64.74298527002459, oxygen=50.0, water=1064.7429852700307, energy=9.564497033149252E9, phosphorus=0.03}
+[3658::2:12:58]INFO: Resources: {component=100.0, ration=1.2888098008935316, lightMetal=50.0, water=299901.28880980186}
+[3660::2:13:00]INFO: Resources: {ration=28.772562890119396, ammonia=20.0, oxygen=100.0, water=528.7725628901178
