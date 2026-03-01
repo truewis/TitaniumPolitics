@@ -45,6 +45,17 @@ class EventSystem : GameStateElement() {
         add(Event_AlinaIllTheory1())
         add(Event_SalvorElection())
         add(Event_SecureOuterBarrierEast())
+        // Party drama events – permanent, continuously monitor all workplace parties
+        add(Event_Drama_CreditTheft())
+        add(Event_Drama_Gossip())
+        add(Event_Drama_Bullying())
+        add(Event_Drama_Favoritism())
+        add(Event_Drama_Overwork())
+        add(Event_Drama_Jealousy())
+        add(Event_Drama_Blame())
+        add(Event_Drama_Exclusion())
+        add(Event_Drama_Rivalry())
+        add(Event_Drama_Undermining())
     }
 
     fun updateQuest(event: IQuestEventObject, quest: Quest) {
