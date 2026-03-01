@@ -22,7 +22,7 @@ class TimelineUI(val gameState: GameState) : WindowUI("TimelineTitle") {
     val characterSelectButton = CharacterSelectButton(availableCharacters = null, callback = { charName ->
         selectedCharacterName = charName
         map.currentPlaceMarkerWindow.selectedCharacter = charName
-        map.currentPlaceMarkerWindow.mode = "Timeline"
+        map.currentPlaceMarkerWindow.mode = PlaceMarkerWindowUI.MODE_TIMELINE
         map.refreshTimeline(charName)
     })
 
@@ -42,7 +42,7 @@ class TimelineUI(val gameState: GameState) : WindowUI("TimelineTitle") {
         characterSelectButton.charPortrait.tgtCharacter = characterName
         map.refresh()
         map.currentPlaceMarkerWindow.selectedCharacter = characterName
-        map.currentPlaceMarkerWindow.mode = "Timeline"
+        map.currentPlaceMarkerWindow.mode = PlaceMarkerWindowUI.MODE_TIMELINE
         map.refreshTimeline(characterName)
     }
 

@@ -291,7 +291,7 @@ class PlaceMarkerWindowUI(var gameState: GameState, var owner: MapUI) : Table() 
             if (mode == "PlaceSelection") {
                 add(selectButton).size(400f, 75f).fill()
                 row()
-            } else if (mode == "Timeline") {
+            } else if (mode == PlaceMarkerWindowUI.MODE_TIMELINE) {
                 // Show character sightings at this place
                 val sightings = gameState.informations.values
                     .filter {
@@ -313,7 +313,10 @@ class PlaceMarkerWindowUI(var gameState: GameState, var owner: MapUI) : Table() 
                     } else {
                         sightings.forEach { info ->
                             val actionName = info.action?.let {
-                                try { ReadOnly.prop(it::class.simpleName!!) } catch (e: Exception) { it::class.simpleName ?: "?" }
+                                try { ReadOnly.prop(it::class.simpleName!!) } catch (e: Exception) {
+                                    Logger.write("TimelineUI: missing localization key for action ${it::class.simpleName}", Logger.LogLevel.INFO)
+                                    it::class.simpleName ?: "?"
+                                }
                             } ?: "?"
                             add(label(
                                 ReadOnly.prop("TimelineUI-SightingEntry")
@@ -339,7 +342,7 @@ class PlaceMarkerWindowUI(var gameState: GameState, var owner: MapUI) : Table() 
                     row()
                 }
             }
-            if (mode != "Timeline") {
+            if (mode != PlaceMarkerWindowUI.MODE_TIMELINE) {
                 add(resourceInformation).fillX().expandX()
                 row()
                 add(managementInformation).fillX().expandX()
@@ -369,5 +372,9 @@ class PlaceMarkerWindowUI(var gameState: GameState, var owner: MapUI) : Table() 
         setSize(350f, 50f + content.prefHeight)
         //Update the resource information and management information tables.
         onRefresh.forEach { it() }
+    }
+
+    companion object {
+        const val MODE_TIMELINE = "Timeline"
     }
 }
