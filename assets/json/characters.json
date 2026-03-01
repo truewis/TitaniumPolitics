@@ -17,12 +17,14 @@
   "Alina": {
     "name": "Alina",
     "image": "portraits/Alina/idle.png",
-    "headImage": "portraits/Alina/AlinaHead.png"
+    "headImage": "portraits/Alina/AlinaHead.png",
+    "scale": 0.8
   },
   "Maisarah": {
     "name": "Maisarah",
     "image": "portraits/Maisarah/idle.png",
-    "headImage": "portraits/Maisarah/head.png"
+    "headImage": "portraits/Maisarah/head.png",
+    "scale": 0.9
   },
   "Eugene": {
     "name": "Eugene",
@@ -32,7 +34,8 @@
   "Rui": {
     "name": "Rui",
     "image": "portraits/Rui/idle.png",
-    "headImage": "portraits/Rui/head.png"
+    "headImage": "portraits/Rui/head.png",
+    "scale": 0.7
   },
   "Hiroshi": {
     "name": "Hiroshi",
@@ -67,7 +70,8 @@
   "Krailin": {
     "name": "Krailin",
     "image": "portraits/Krailin.png",
-    "headImage": "portraits/KrailinHead.png"
+    "headImage": "portraits/KrailinHead.png",
+    "scale": 0.8
   },
   "Vaeme": {
     "name": "Vaeme",
@@ -82,7 +86,8 @@
   "Salvor": {
     "name": "Salvor",
     "image": "portraits/Salvor/idle.png",
-    "headImage": "portraits/Salvor/head.png"
+    "headImage": "portraits/Salvor/head.png",
+    "scale": 0.8
   },
   "Metros": {
     "name": "Metros",
@@ -122,11 +127,13 @@
   "ctrler": {
     "name": "The Controller",
     "image": "portraits/ctrler/idle.png",
-    "headImage": "portraits/ctrler/ctrlerHead.png"
+    "headImage": "portraits/ctrler/ctrlerHead.png",
+    "scale": 0.6
   },
   "observer": {
     "name": "The Observer",
     "image": "portraits/observer.png",
-    "headImage": "portraits/observerHead.png"
+    "headImage": "portraits/observerHead.png",
+    "scale": 0.6
   }
 }

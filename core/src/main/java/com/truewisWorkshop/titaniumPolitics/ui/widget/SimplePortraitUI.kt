@@ -7,10 +7,12 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable
+import com.badlogic.gdx.utils.Align
 import com.titaniumPolitics.game.core.ReadOnly
 import com.titaniumPolitics.game.debugTools.Logger
 import com.titaniumPolitics.game.ui.CapsuleStage
 import com.titaniumPolitics.game.ui.CharacterInteractionWindowUI
+import kotlinx.serialization.json.float
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
 import ktx.scene2d.KTable
@@ -18,7 +20,7 @@ import ktx.scene2d.Scene2DSkin
 import ktx.scene2d.image
 import ktx.scene2d.scene2d
 
-class SimplePortraitUI(character: String, scale: Float, interactable: Boolean) : Table(Scene2DSkin.defaultSkin),
+class SimplePortraitUI(character: String, interactable: Boolean) : Table(Scene2DSkin.defaultSkin),
     KTable {
     fun setEmotion(emotion: String) {
         val baseImagePath =
@@ -95,6 +97,7 @@ class SimplePortraitUI(character: String, scale: Float, interactable: Boolean) :
 
     init {
         tgtCharacter = character
-        add(portrait).size(500f * scale, 1000f * scale).fill()
+        val scale = ReadOnly.charJson[tgtCharacter]?.jsonObject["scale"]?.jsonPrimitive?.float ?: 1f
+        add(portrait).size(500f * scale, 1000f * scale).fill().align(Align.bottom)
     }
 }

@@ -10,7 +10,7 @@ import ktx.scene2d.*
 import ktx.scene2d.Scene2DSkin.defaultSkin
 
 class PortraitUI(character: String, var gameState: GameState) : Table(defaultSkin), KTable {
-    val portrait = SimplePortraitUI(character, 1f, true)
+    val portrait = SimplePortraitUI(character, true)
     val speechUI = SpeechUI()
     var tgtCharacter = character
         set(value) {

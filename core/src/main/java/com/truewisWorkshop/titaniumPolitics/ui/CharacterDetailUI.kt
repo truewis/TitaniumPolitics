@@ -65,7 +65,7 @@ class CharacterDetailUI : WindowUI("CharacterInfoTitle") {
                 character.division?.let { div ->
                     add(DivisionBannerUI(div))
                 }
-                add(SimplePortraitUI(character.name, scale = 1f, interactable = false))
+                add(SimplePortraitUI(character.name, interactable = false))
             }
         }
 

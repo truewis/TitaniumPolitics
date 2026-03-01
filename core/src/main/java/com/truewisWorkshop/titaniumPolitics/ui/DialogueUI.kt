@@ -368,7 +368,7 @@ class DialogueUI(val gameState: GameState) : Table(defaultSkin), KTable {
     /** Adds a portrait to the scene */
     private fun addPortrait(name: String) {
         if (activePortraits.containsKey(name)) return
-        val portrait = SimplePortraitUI(name, 1f, false).apply {
+        val portrait = SimplePortraitUI(name, false).apply {
             color.a = 0f // Start transparent, fade in
             addAction(Actions.fadeIn(0.3f))
         }
