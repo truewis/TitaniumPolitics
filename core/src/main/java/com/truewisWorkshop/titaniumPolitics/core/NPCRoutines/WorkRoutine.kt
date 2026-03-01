@@ -357,7 +357,22 @@ class WorkRoutine(var workplace: String) : Routine() {
                 }
             }
         }
-        //8. Hire a new employee if there is a vacancy in the party.
+        //8. Campaign for election if one is scheduled for the character's division and their stats support it.
+        character.division?.let { division ->
+            if (gState.scheduledMeetings.values.any {
+                    it.type == Meeting.MeetingType.DIVISION_LEADER_ELECTION && it.involvedParty == division.name
+                }
+            ) {
+                val campaignScore = character.stats.pScale + character.stats.rScale
+                if ((campaignScore > 1.5 || "charismatic" in character.trait) &&
+                    subroutines.none { it is CampaignRoutine }
+                ) {
+                    return CampaignRoutine(division.name)
+                }
+            }
+        }
+
+        //9. Hire a new employee if there is a vacancy in the party.
         gState.parties.values.filter { party ->
             party.leader == name
         }.forEach { party ->
@@ -384,9 +399,6 @@ class WorkRoutine(var workplace: String) : Routine() {
             }
 
         }
-
-//
-//        //8. If there is nothing above to do, move to a place that is the home of one of the parties of the character.
 //        //If already at home, wait.
 //        if (gState.parties.values.any { party -> party.home == place && party.members.contains(name) }) {
 //        } else
