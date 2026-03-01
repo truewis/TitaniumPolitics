@@ -11,6 +11,7 @@ import com.titaniumPolitics.game.core.gameActions.Rescue
 import com.titaniumPolitics.game.core.gameActions.Talk
 import com.titaniumPolitics.game.ui.actions.ResourceTransferUI
 import com.titaniumPolitics.game.ui.map.PlaceSelectionUI
+import com.titaniumPolitics.game.ui.map.TimelineUI
 import ktx.scene2d.button
 import ktx.scene2d.label
 import ktx.scene2d.scene2d
@@ -106,6 +107,21 @@ class CharacterInteractionWindowUI(var gameState: GameState) :
         )
     }
 
+    private val timelineButton = scene2d.button {
+        label(ReadOnly.prop("characterInteractionWindowUI-timeline"), "description") {
+            setFontScale(0.3f)
+        }
+
+        addListener(object : com.badlogic.gdx.scenes.scene2d.utils.ClickListener() {
+            override fun clicked(event: com.badlogic.gdx.scenes.scene2d.InputEvent?, x: Float, y: Float) {
+                this@CharacterInteractionWindowUI.isVisible = false
+                TimelineUI.instance.refresh(this@CharacterInteractionWindowUI.characterDisplayed)
+                TimelineUI.instance.isVisible = true
+            }
+        }
+        )
+    }
+
 
     init {
         instance = this
@@ -171,6 +187,8 @@ class CharacterInteractionWindowUI(var gameState: GameState) :
                 }
             }
             add(descButton).fill().size(200f, 50f)
+            row()
+            add(timelineButton).fill().size(200f, 50f)
             row()
             add(closeButton).fill().size(200f, 50f)
 

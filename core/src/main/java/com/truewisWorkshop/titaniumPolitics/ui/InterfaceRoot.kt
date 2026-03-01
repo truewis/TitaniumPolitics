@@ -7,6 +7,7 @@ import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.core.ReadOnly
 import com.titaniumPolitics.game.debugTools.Logger
 import com.titaniumPolitics.game.ui.map.PlaceSelectionUI
+import com.titaniumPolitics.game.ui.map.TimelineUI
 import com.titaniumPolitics.game.ui.meeting.MeetingUI
 import com.titaniumPolitics.game.ui.widget.ActionSelectUI
 import com.titaniumPolitics.game.ui.widget.CharacterSelectUI
@@ -110,6 +111,7 @@ class InterfaceRoot(val gameState: GameState) : Table(defaultSkin), KTable {
             //ActionSelectUI may use PlaceSelection and CharacterSelectUI, so we add it before them.
             //We draw the following UIs above any other UIs, as they have to appear on top of everything else.
             add(PlaceSelectionUI(this@InterfaceRoot.gameState))
+            add(TimelineUI(this@InterfaceRoot.gameState))
             add(CharacterSelectUI(this@InterfaceRoot.gameState))
             add(BlockingWarningUI(this@InterfaceRoot.gameState))
             //We draw the following UIs above any other UIs.
