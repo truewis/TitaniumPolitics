@@ -9,7 +9,7 @@ Always reference these instructions first and fallback to search or bash command
   - `chmod +x gradlew` (if needed)  
   - `./gradlew build` -- takes 15-45 seconds to complete. NEVER CANCEL. Set timeout to 90+ seconds.
 - Run tests:
-  - `./gradlew test` -- takes 1-2 seconds (no tests currently exist in project)
+  - `./gradlew :headless:run` -- test session which runs as long as the game does not crash.
 - Verify compilation:
   - `./gradlew classes` -- compiles all classes without full packaging (about 20 seconds)
   - `./gradlew desktop:classes` -- compiles just the desktop module (faster incremental)
@@ -48,8 +48,8 @@ Always reference these instructions first and fallback to search or bash command
 
 ## Validation
 - Always run `./gradlew build` before committing changes
+- For logic changes, run './gradlew :headless:run'. Ignore warnings unless it is clearly created by the change.
 - Check for new compilation errors or warnings
-- The application cannot be functionally tested in headless environments due to LibGDX/LWJGL graphics requirements
 - Test JSON configuration changes by ensuring the game still compiles after asset modifications
 
 ## Common Tasks
@@ -74,7 +74,7 @@ settings.gradle  # Module configuration
 build - Assembles and tests this project (15-45 seconds, NEVER CANCEL)
 classes - Assembles main classes (faster than full build)
 clean - Deletes the build directory
-test - Runs tests (currently none exist)
+:headless:run - Runs a test session
 desktop:run - Attempts to run desktop app (fails in headless environment)
 desktop:dist - Creates distributable JAR
 ```
