@@ -27,6 +27,18 @@ class DowntimeRoutine(var workplace: String? = null) : Routine() {
             }
         }
         val char = gState.characters[name]!!
+        // Campaign for election during downtime if one is scheduled for a party the character belongs to.
+        gState.scheduledMeetings.values.firstOrNull {
+            it.type == Meeting.MeetingType.DIVISION_LEADER_ELECTION &&
+                it.involvedParty != null &&
+                gState.parties[it.involvedParty]?.members?.contains(name) == true
+        }?.also { election ->
+            val campaignDrive = char.stats.pScale + if ("extrovert" in char.trait) 0.5 else 0.0
+            if (campaignDrive > 0.8 && subroutines.none { it is CampaignRoutine }) {
+                return CampaignRoutine(election.involvedParty!!)
+            }
+        }
+
         if (char.trait.contains("extrovert")) {
             if (place !in Place.publicPlaces)
                 return MoveRoutine((Place.publicPlaces + "tavern").random())//Add a move routine with higher priority.
