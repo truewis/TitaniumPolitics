@@ -37,12 +37,14 @@ class BuyRoutine(val buyResource: String, val buyAmount: Double) : Routine() {
                 //Name contains buyResource, i.e. fineFoodStore
                 gState.places[party.home]!!.name.contains(buyResource)
         }?.treasurer
-        
-            tradeCharacter = when {
+
+        tradeCharacter = when {
             storeServer != null -> storeServer // Prefer store server for this luxury resource
             info.isNotEmpty() -> info.random().tgtCharacter!! // Otherwise use known information
             else -> gState.activeCharacters.keys.filter { it != name && gState.characters[it]!!.type != Character.Type.ANON }
                 .random()
+        }
+
 
         //FindCharacter
         // if the character is not in the same place.

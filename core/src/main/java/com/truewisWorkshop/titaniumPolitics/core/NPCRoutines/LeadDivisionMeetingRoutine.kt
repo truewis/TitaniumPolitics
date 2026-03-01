@@ -141,7 +141,7 @@ class LeadDivisionMeetingRoutine(override val meetingName: String) : MeetingRout
                 }
             //6. If the world is short of resources and we have an apparatus producing that, increase the production. //TODO: this decision must depend on a personal parameter
             if (meeting.involvedParty!!.contains("workplace"))
-                adjustResourceProd(name, place)?.also { return it }
+                adjustWorkplaceResourceProd(name, place)?.also { return it }
             //Adjust resource production request is only issued in workplace meetings.
             //In director meetings, the resource production request is not issued, as the director does not manage resources.s
 
@@ -165,13 +165,13 @@ class LeadDivisionMeetingRoutine(override val meetingName: String) : MeetingRout
         return gState.characters[toWhom]!!.itemValue(apparatus.currentProduction) / apparatus.currentWorker
     }
 
-    fun adjustResourceProd(name: String, place: String): GameAction? {
+    fun adjustWorkplaceResourceProd(name: String, place: String): GameAction? {
         val charObj = gState.characters[name]!!
+        val workplace = gState.parties[meeting.involvedParty]!!.workplace
         //1. If the party is short of workers, reduce the production of the section which has the minimum productivity per worker hour
-        val minProdApp = charObj
-            .division!!.divisionPlaces.flatMap { it.apparatuses }.filter { it.currentWorker != 0 }.minByOrNull {
-                productivity(name, it)
-            }
+        val minProdApp = workplace.apparatuses.filter { it.currentWorker != 0 }.minByOrNull {
+            productivity(name, it)
+        }
         if (minProdApp != null)
             if (productivity(name, minProdApp) < gState.laborValuePerHour) {
                 val reductionAmount = max(minProdApp.plannedWorker / 5, 1)
@@ -204,10 +204,9 @@ class LeadDivisionMeetingRoutine(override val meetingName: String) : MeetingRout
             }
 
         //2. Increase the production of the section which has the maximum productivity per worker hour. The productivity must be higher than the labor cost.
-        val maxProdApp = charObj
-            .division!!.divisionPlaces.flatMap { it.apparatuses }.filter { it.currentWorker != 0 }.maxByOrNull {
-                productivity(name, it)
-            }
+        val maxProdApp = workplace.apparatuses.filter { it.currentWorker != 0 }.maxByOrNull {
+            productivity(name, it)
+        }
         if (maxProdApp != null)
             if (productivity(name, maxProdApp) > gState.laborValuePerHour) {
                 val increaseAmount = max(maxProdApp.plannedWorker / 5, 1)
