@@ -22,5 +22,8 @@
   },
   "argon": {
     "density": 1.784
+  },
+  "ammonia": {
+    "density": 0.756
   }
 }

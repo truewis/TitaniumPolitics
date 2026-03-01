@@ -61,30 +61,66 @@ object ReadOnly {
      */
     private fun loadLocalizedProperties(baseName: String, locale: Locale): Properties {
         // Base path for default file: texts/ui.properties
-        val defaultPath = Gdx.files.internal("texts/$baseName.properties")
+        if (Gdx.files != null) {
+            val defaultPath = Gdx.files.internal("texts/$baseName.properties")
 
-        // Localized path: texts/ui_fr.properties (simple language matching)
-        val localeTag = if (locale.language.isEmpty()) "" else "_${locale.language}"
-        val localizedPath = Gdx.files.internal("texts/$baseName$localeTag.properties")
+            // Localized path: texts/ui_fr.properties (simple language matching)
+            val localeTag = if (locale.language.isEmpty()) "" else "_${locale.language}"
+            val localizedPath = Gdx.files.internal("texts/$baseName$localeTag.properties")
 
-        val defaultContent = defaultPath.reader("UTF-8")
-        val localizedContent = localizedPath.reader("UTF-8")
+            val defaultContent = defaultPath.reader("UTF-8")
+            val localizedContent = localizedPath.reader("UTF-8")
 
-        val mergedProps = Properties()
+            val mergedProps = Properties()
 
-        // 1. Load default properties (the base) with UTF-8 encoding
-        mergedProps.load(defaultContent)
+            // 1. Load default properties (the base) with UTF-8 encoding
+            mergedProps.load(defaultContent)
 
-        // 2. Overwrite/merge with localized properties if they exist and are not the default path
-        if (localizedPath != defaultPath) {
-            val localizedProps =
-                Properties().apply { load(localizedContent) }
-            localizedProps.forEach { (k, v) -> mergedProps.setProperty(k.toString(), v.toString()) }
-            Logger.write("Loaded localized properties for $baseName: $localizedPath", Logger.LogLevel.INFO)
+            // 2. Overwrite/merge with localized properties if they exist and are not the default path
+            if (localizedPath != defaultPath) {
+                val localizedProps =
+                    Properties().apply { load(localizedContent) }
+                localizedProps.forEach { (k, v) -> mergedProps.setProperty(k.toString(), v.toString()) }
+                Logger.write("Loaded localized properties for $baseName: $localizedPath", Logger.LogLevel.INFO)
+            }
+
+            Logger.write("Loaded default properties for $baseName: $defaultPath", Logger.LogLevel.INFO)
+            return mergedProps
+        } else {
+            // Fallback for non-Gdx environments (e.g., testing), using standard file I/O
+            val defaultFile = File("../assets/texts/$baseName.properties")
+            val localeTag = if (locale.language.isEmpty()) "" else "_${locale.language}"
+            val localizedFile = File("../assets/texts/$baseName$localeTag.properties")
+
+            val mergedProps = Properties()
+            // 1. Load default properties (the base) with UTF-8 encoding
+            if (defaultFile.exists()) {
+                defaultFile.reader(StandardCharsets.UTF_8).use { mergedProps.load(it) }
+                Logger.write("Loaded default properties for $baseName: ${defaultFile.path}", Logger.LogLevel.INFO)
+            } else {
+                Logger.write(
+                    "Default properties file not found for $baseName: ${defaultFile.path}",
+                    Logger.LogLevel.WARNING
+                )
+            }
+
+            // 2. Overwrite/merge with localized properties if they exist and are not the default file
+            if (localizedFile.exists() && localizedFile.path != defaultFile.path) {
+                val localizedProps =
+                    Properties().apply { localizedFile.reader(StandardCharsets.UTF_8).use { load(it) } }
+                localizedProps.forEach { (k, v) -> mergedProps.setProperty(k.toString(), v.toString()) }
+                Logger.write("Loaded localized properties for $baseName: ${localizedFile.path}", Logger.LogLevel.INFO)
+            } else {
+                Logger.write(
+                    "Localized properties file not found for $baseName and locale $locale: ${localizedFile.path}",
+                    Logger.LogLevel.INFO
+                )
+            }
+
+            return mergedProps
+
         }
 
-        Logger.write("Loaded default properties for $baseName: $defaultPath", Logger.LogLevel.INFO)
-        return mergedProps
     }
 
     /**

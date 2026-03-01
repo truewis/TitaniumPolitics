@@ -1,0 +1,18 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="IntegratedTest" type="JUnit" factoryName="JUnit">
+    <module name="TitaniumPolitics.core.test" />
+    <extension name="coverage">
+      <pattern>
+        <option name="PATTERN" value="com.truewisWorkshop.titaniumPolitics.core.*" />
+        <option name="ENABLED" value="true" />
+      </pattern>
+    </extension>
+    <option name="PACKAGE_NAME" value="com.titaniumPolitics.game" />
+    <option name="MAIN_CLASS_NAME" value="com.titaniumPolitics.game.IntegratedTest" />
+    <option name="METHOD_NAME" value="" />
+    <option name="TEST_OBJECT" value="class" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>
