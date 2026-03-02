@@ -410,6 +410,7 @@ class Character : GameStateElement() {
                         //Otherwise, if firing my friend, dislike.
                         else return parent.getMutNorm(name, action.agenda.subjectParams["character"]!!) * -20.0
                     }
+                    AgendaType.PROMISE -> return 0.0 // Promises made by others have neutral action value
                 }
             }
 

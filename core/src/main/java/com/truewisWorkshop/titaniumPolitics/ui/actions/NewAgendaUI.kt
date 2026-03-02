@@ -44,6 +44,20 @@ class NewAgendaUI(val gameState: GameState, actionCallback: (GameAction) -> Unit
         }
     }
 
+    private val promiseSelButton = ActionSelectButton(this::setPromiseAction)
+    fun setPromiseAction(action: GameAction) {
+        // For a PROMISE: issuedTo = {author} (the promiser commits to performing the action),
+        // issuedBy = the audience (meeting participants who witness and benefit from the promise).
+        agenda = MeetingAgenda(AgendaType.PROMISE, subject).apply {
+            attachedRequest = Request(
+                action.copyRef(subject, action.tgtPlace),
+                issuedTo = hashSetOf(subject),
+                issuedBy = sbjChar.currentMeeting?.currentCharacters?.filter { it != subject }?.toHashSet()
+                    ?: hashSetOf()
+            )
+        }
+    }
+
     private var agendaSelectBox: Table
     private val proofOfWorkTable = scene2d.table {
         add(TitleLabel(ReadOnly.prop("NewAgendaUI-proofOfWork"))).growX()
@@ -161,6 +175,20 @@ class NewAgendaUI(val gameState: GameState, actionCallback: (GameAction) -> Unit
         //Select Action
         add(this@NewAgendaUI.actionSelButton).size(300f, 150f)
     }
+    private val promiseTable = scene2d.table {
+        add(TitleLabel(ReadOnly.prop("NewAgendaUI-promise"))).growX()
+        row()
+        label(ReadOnly.prop("NewAgendaUI-promise-desc"), "docTitle") {
+            color = Color.BLACK; setFontScale(0.3f); wrap = true; it.fill()
+        }
+        row()
+        add(PlaceSelectButton({
+            this@NewAgendaUI.promiseSelButton.changeTgtPlace(it)
+        })).size(300f, 150f)
+        row()
+        //Select Action to promise to perform.
+        add(this@NewAgendaUI.promiseSelButton).size(300f, 150f)
+    }
     private val fireTable = scene2d.table {
         add(TitleLabel(ReadOnly.prop("NewAgendaUI-fireManager"))).growX()
         row()
@@ -223,6 +251,7 @@ class NewAgendaUI(val gameState: GameState, actionCallback: (GameAction) -> Unit
                 add(this@NewAgendaUI.praisePartyTable)
                 add(this@NewAgendaUI.denouncePartyTable)
                 add(this@NewAgendaUI.requestTable)
+                add(this@NewAgendaUI.promiseTable)
                 add(this@NewAgendaUI.fireTable)
                 add(this@NewAgendaUI.budgetProposalTable)
                 add(this@NewAgendaUI.budgetResolutionTable)
@@ -263,6 +292,7 @@ class NewAgendaUI(val gameState: GameState, actionCallback: (GameAction) -> Unit
         praisePartyTable.isVisible = false
         denouncePartyTable.isVisible = false
         requestTable.isVisible = false
+        promiseTable.isVisible = false
         fireTable.isVisible = false
         budgetProposalTable.isVisible = false
         budgetResolutionTable.isVisible = false
@@ -286,6 +316,22 @@ class NewAgendaUI(val gameState: GameState, actionCallback: (GameAction) -> Unit
                 "ClearAccidentScene"
             )
         )
+        promiseSelButton.also {
+            it.changeSubject(subject)
+            it.refreshList(
+                listOf(
+                    "Examine",
+                    "UnofficialResourceTransfer",
+                    "OfficialResourceTransfer",
+                    "Repair",
+                    "Salary",
+                    "SetWorkers",
+                    "SetWorkHours",
+                    "InvestigateAccidentScene",
+                    "ClearAccidentScene"
+                )
+            )
+        }
         availableAgendas.forEach { tobj ->
             val t = scene2d.button("check") {
                 //TODO:Agenda Tooltip addListener(ActionTooltipUI(tobj))
@@ -344,9 +390,6 @@ class NewAgendaUI(val gameState: GameState, actionCallback: (GameAction) -> Unit
 
                             AgendaType.PRAISE -> {
                                 this.setDrawable(defaultSkin, "icon_gesture_1")
-                                this@button.isChecked = true
-                                this@NewAgendaUI.hideAllAgendaDetailsTable()
-                                this@NewAgendaUI.praiseTable.isVisible = true
                                 this@button.addListener(object : ClickListener() {
                                     override fun clicked(
                                         event: InputEvent?,
@@ -454,6 +497,20 @@ class NewAgendaUI(val gameState: GameState, actionCallback: (GameAction) -> Unit
                                 })
                             }
 
+                            AgendaType.PROMISE -> {
+                                this.setDrawable(defaultSkin, "icon_gesture_58")
+                                this@button.addListener(object : ClickListener() {
+                                    override fun clicked(
+                                        event: InputEvent?,
+                                        x: Float,
+                                        y: Float
+                                    ) {
+                                        this@NewAgendaUI.hideAllAgendaDetailsTable()
+                                        this@NewAgendaUI.promiseTable.isVisible = true
+                                    }
+                                })
+                            }
+
                             else -> {
                                 this.setDrawable(defaultSkin, "Help")
 
@@ -476,6 +533,7 @@ class NewAgendaUI(val gameState: GameState, actionCallback: (GameAction) -> Unit
                 AgendaType.PRAISE_PARTY,
                 AgendaType.DENOUNCE_PARTY,
                 AgendaType.REQUEST,
+                AgendaType.PROMISE,
                 AgendaType.APPOINT_MEETING,
             )
         if (this@NewAgendaUI.sbjChar.currentMeeting == null)

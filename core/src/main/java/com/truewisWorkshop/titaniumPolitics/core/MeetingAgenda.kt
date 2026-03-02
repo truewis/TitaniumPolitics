@@ -82,6 +82,11 @@ data class MeetingAgenda(
                 ) * sbjCharObj.stats.pScale, "FireManager"
             )
 
+            AgendaType.PROMISE -> return if (info.tgtPlace == attachedRequest!!.action.tgtPlace) Pair(
+                10.0,
+                "Promise"
+            ) else Pair(0.0, "")
+
             else -> return Pair(0.0, "")
         }
         return Pair(0.0, "")
@@ -90,5 +95,5 @@ data class MeetingAgenda(
 
 @Serializable
 enum class AgendaType {
-    PROOF_OF_WORK, NOMINATE, REQUEST, PRAISE, DENOUNCE, PRAISE_PARTY, DENOUNCE_PARTY, BUDGET_PROPOSAL, BUDGET_RESOLUTION, APPOINT_MEETING, FIRE_MANAGER
+    PROOF_OF_WORK, NOMINATE, REQUEST, PROMISE, PRAISE, DENOUNCE, PRAISE_PARTY, DENOUNCE_PARTY, BUDGET_PROPOSAL, BUDGET_RESOLUTION, APPOINT_MEETING, FIRE_MANAGER
 }

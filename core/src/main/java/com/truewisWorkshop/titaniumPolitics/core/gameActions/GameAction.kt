@@ -141,6 +141,13 @@ sealed class GameAction() {
                         ), this.agenda.attachedRequest!!.issuedTo.first()
                     )
 
+                    AgendaType.PROMISE -> text = ReadOnly.script("NewAgenda-Promise").format(
+                        ReadOnly.prop(
+                            this.agenda.attachedRequest!!
+                                .action::class.simpleName!!
+                        )
+                    )
+
                     AgendaType.PRAISE -> text =
                         ReadOnly.script("NewAgenda-Praise")
                             .format(ReadOnly.charProp(this.agenda.subjectParams["character"]!!))
