@@ -22,8 +22,8 @@ class Event_Drama_Rivalry : EventObject("PartyDrama_Rivalry", false) {
             val rivalA = ambitious[0]
             val rivalB = ambitious[1]
 
-            parent.setMutuality(rivalA, rivalB, -0.4, "drama-rivalry")
-            parent.setMutuality(rivalB, rivalA, -0.4, "drama-rivalry")
+            parent.setMutuality(rivalA, rivalB, -4.0, "drama-rivalry")
+            parent.setMutuality(rivalB, rivalA, -4.0, "drama-rivalry")
             PartyDramaUtils.checkMembersLeaving(party, parent)
         }
     }

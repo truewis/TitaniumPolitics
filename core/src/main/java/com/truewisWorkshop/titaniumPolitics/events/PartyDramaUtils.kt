@@ -14,7 +14,7 @@ import com.titaniumPolitics.game.debugTools.Logger
 internal object PartyDramaUtils {
 
     /** Normalised will threshold below which an EMPLOYEE character will resign from their workplace party. */
-    const val LEAVE_THRESHOLD = -0.8
+    const val LEAVE_THRESHOLD = -0.7
 
     /**
      * Issues a system resign request (like Event_AlinaResign) for each EMPLOYEE member whose

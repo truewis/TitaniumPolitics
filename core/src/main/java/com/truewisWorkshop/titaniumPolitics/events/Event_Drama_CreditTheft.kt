@@ -20,9 +20,9 @@ class Event_Drama_CreditTheft : EventObject("PartyDrama_CreditTheft", false) {
                 it != thief && it != party.leader
             } ?: return@forEach
 
-            parent.setMutuality(thief, thief, 0.3, "drama-creditTheft")
-            parent.setMutuality(victim, victim, -0.5, "drama-creditTheft")
-            parent.setMutuality(victim, thief, -0.5, "drama-creditTheft")
+            parent.setMutuality(thief, thief, 3.0, "drama-creditTheft")
+            parent.setMutuality(victim, victim, -5.0, "drama-creditTheft")
+            parent.setMutuality(victim, thief, -5.0, "drama-creditTheft")
             PartyDramaUtils.checkMembersLeaving(party, parent)
         }
     }

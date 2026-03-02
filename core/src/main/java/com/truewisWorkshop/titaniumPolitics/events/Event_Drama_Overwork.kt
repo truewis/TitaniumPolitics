@@ -22,8 +22,8 @@ class Event_Drama_Overwork : EventObject("PartyDrama_Overwork", false) {
                 it != hardWorker && parent.characters[it]!!.stats.logos < 8
             } ?: return@forEach
 
-            parent.setMutuality(hardWorker, slacker, -0.4, "drama-overwork")
-            parent.setMutuality(slacker, slacker, -0.4, "drama-overwork")
+            parent.setMutuality(hardWorker, slacker, -4.0, "drama-overwork")
+            parent.setMutuality(slacker, slacker, -4.0, "drama-overwork")
             PartyDramaUtils.checkMembersLeaving(party, parent)
         }
     }

@@ -23,8 +23,8 @@ class Event_Drama_Jealousy : EventObject("PartyDrama_Jealousy", false) {
                     parent.getMutNorm(it, it) - parent.getMutNorm(jealous, jealous) > 0.3
             } ?: return@forEach
 
-            parent.setMutuality(jealous, envied, -0.5, "drama-jealousy")
-            parent.setMutuality(jealous, jealous, -0.3, "drama-jealousy")
+            parent.setMutuality(jealous, envied, -5.0, "drama-jealousy")
+            parent.setMutuality(jealous, jealous, -3.0, "drama-jealousy")
             PartyDramaUtils.checkMembersLeaving(party, parent)
         }
     }

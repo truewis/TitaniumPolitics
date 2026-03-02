@@ -30,9 +30,9 @@ class Event_Drama_Exclusion : EventObject("PartyDrama_Exclusion", false) {
                 ?: return@forEach
 
             inGroup.forEach { member ->
-                parent.setMutuality(member, excluded, -0.3, "drama-exclusion")
+                parent.setMutuality(member, excluded, -3.0, "drama-exclusion")
             }
-            parent.setMutuality(excluded, excluded, -0.5, "drama-exclusion")
+            parent.setMutuality(excluded, excluded, -5.0, "drama-exclusion")
             PartyDramaUtils.checkMembersLeaving(party, parent)
         }
     }

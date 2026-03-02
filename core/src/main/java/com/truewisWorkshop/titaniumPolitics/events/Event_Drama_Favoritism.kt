@@ -27,8 +27,8 @@ class Event_Drama_Favoritism : EventObject("PartyDrama_Favoritism", false) {
             if (favoured.isEmpty() || unfavoured.isEmpty()) return@forEach
 
             unfavoured.forEach { char ->
-                parent.setMutuality(char, leaderName, -0.4, "drama-favoritism")
-                parent.setMutuality(char, char, -0.3, "drama-favoritism")
+                parent.setMutuality(char, leaderName, -4.0, "drama-favoritism")
+                parent.setMutuality(char, char, -3.0, "drama-favoritism")
             }
             PartyDramaUtils.checkMembersLeaving(party, parent)
         }

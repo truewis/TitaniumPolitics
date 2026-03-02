@@ -24,9 +24,9 @@ class Event_Drama_Gossip : EventObject("PartyDrama_Gossip", false) {
                 it != gossiper && parent.getMutNorm(gossiper, it) < -0.2
             } ?: return@forEach
 
-            parent.setMutuality(target, target, -0.5, "drama-gossip")
+            parent.setMutuality(target, target, -5.0, "drama-gossip")
             party.realMembers.filter { it != gossiper && it != target }.forEach { bystander ->
-                parent.setMutuality(bystander, target, -0.3, "drama-gossip")
+                parent.setMutuality(bystander, target, -3.0, "drama-gossip")
             }
             PartyDramaUtils.checkMembersLeaving(party, parent)
         }

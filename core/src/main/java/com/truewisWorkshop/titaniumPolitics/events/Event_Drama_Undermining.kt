@@ -19,10 +19,10 @@ class Event_Drama_Undermining : EventObject("PartyDrama_Undermining", false) {
             if (underminer == leaderName) return@forEach
 
             party.realMembers.filter { it != underminer && it != leaderName }.forEach { member ->
-                parent.setMutuality(member, leaderName, -0.3, "drama-undermining")
+                parent.setMutuality(member, leaderName, -3.0, "drama-undermining")
             }
-            parent.setMutuality(leaderName, leaderName, -0.4, "drama-undermining")
-            parent.setMutuality(leaderName, underminer, -0.3, "drama-undermining")
+            parent.setMutuality(leaderName, leaderName, -4.0, "drama-undermining")
+            parent.setMutuality(leaderName, underminer, -3.0, "drama-undermining")
             PartyDramaUtils.checkMembersLeaving(party, parent)
         }
     }

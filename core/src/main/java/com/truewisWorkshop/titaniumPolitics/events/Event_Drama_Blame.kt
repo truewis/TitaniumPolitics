@@ -21,9 +21,9 @@ class Event_Drama_Blame : EventObject("PartyDrama_Blame", false) {
             val blamer = shuffled[0]
             val blamed = shuffled[1]
 
-            parent.setMutuality(blamer, blamed, -0.5, "drama-blame")
-            parent.setMutuality(blamed, blamer, -0.4, "drama-blame")
-            parent.setMutuality(blamed, blamed, -0.4, "drama-blame")
+            parent.setMutuality(blamer, blamed, -5.0, "drama-blame")
+            parent.setMutuality(blamed, blamer, -4.0, "drama-blame")
+            parent.setMutuality(blamed, blamed, -4.0, "drama-blame")
             PartyDramaUtils.checkMembersLeaving(party, parent)
         }
     }

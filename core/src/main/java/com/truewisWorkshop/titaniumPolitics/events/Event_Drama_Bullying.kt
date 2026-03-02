@@ -21,9 +21,9 @@ class Event_Drama_Bullying : EventObject("PartyDrama_Bullying", false) {
                 it != bully && parent.characters[it]!!.stats.riskTaking < 7
             } ?: return@forEach
 
-            parent.setMutuality(bully, bully, 0.3, "drama-bullying")
-            parent.setMutuality(victim, victim, -0.6, "drama-bullying")
-            parent.setMutuality(victim, bully, -0.5, "drama-bullying")
+            parent.setMutuality(bully, bully, 3.0, "drama-bullying")
+            parent.setMutuality(victim, victim, -6.0, "drama-bullying")
+            parent.setMutuality(victim, bully, -5.0, "drama-bullying")
             PartyDramaUtils.checkMembersLeaving(party, parent)
         }
     }
