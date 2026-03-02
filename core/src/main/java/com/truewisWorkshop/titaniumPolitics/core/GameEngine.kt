@@ -238,7 +238,10 @@ class GameEngine(val gameState: GameState) {
             gameState.setMutuality(it.a, it.b, delta = it.value, reasonKey = it.reasonKey)
         }
         action.execute()
-
+        // Fire the meeting-action hook if the acting character is in an ongoing meeting.
+        if (gameState.ongoingMeetings.values.any { char.name in it.currentCharacters }) {
+            gameState.onMeetingAction.forEach { it(action) }
+        }
     }
 
     private fun calculateMutuality() {

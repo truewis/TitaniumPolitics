@@ -1,5 +1,6 @@
 package com.titaniumPolitics.game.events
 
+import com.titaniumPolitics.game.core.Meeting
 import com.titaniumPolitics.game.core.Party
 import kotlinx.serialization.Serializable
 
@@ -12,13 +13,16 @@ import kotlinx.serialization.Serializable
 @Serializable
 class Event_Drama_Overwork : EventObject("PartyDrama_Overwork", false) {
 
-    override fun exec(a: Int, b: Int) {
-        if (!PartyDramaUtils.isNewDay(a, b)) return
+    override fun exec(a: Int, b: Int) {}
+
+    override fun execInMeeting(meeting: Meeting) {
         parent.parties.values.filter { it.type == Party.Type.WORKPLACE }.forEach { party ->
-            val hardWorker = party.realMembers.firstOrNull {
+            val inMeeting = party.realMembers.filter { it in meeting.currentCharacters }
+            if (inMeeting.size < 2) return@forEach
+            val hardWorker = inMeeting.firstOrNull {
                 parent.characters[it]!!.stats.logos > 12
             } ?: return@forEach
-            val slacker = party.realMembers.firstOrNull {
+            val slacker = inMeeting.firstOrNull {
                 it != hardWorker && parent.characters[it]!!.stats.logos < 8
             } ?: return@forEach
 

@@ -1,5 +1,6 @@
 package com.titaniumPolitics.game.events
 
+import com.titaniumPolitics.game.core.Meeting
 import com.titaniumPolitics.game.core.Party
 import kotlinx.serialization.Serializable
 
@@ -11,15 +12,16 @@ import kotlinx.serialization.Serializable
 @Serializable
 class Event_Drama_Blame : EventObject("PartyDrama_Blame", false) {
 
-    override fun exec(a: Int, b: Int) {
-        if (!PartyDramaUtils.isNewDay(a, b)) return
+    override fun exec(a: Int, b: Int) {}
+
+    override fun execInMeeting(meeting: Meeting) {
         parent.parties.values.filter { it.type == Party.Type.WORKPLACE }.forEach { party ->
             if (party.integrityNorm >= -0.3) return@forEach
-            val shuffled = party.realMembers.shuffled()
-            if (shuffled.size < 2) return@forEach
+            val inMeeting = party.realMembers.filter { it in meeting.currentCharacters }.shuffled()
+            if (inMeeting.size < 2) return@forEach
 
-            val blamer = shuffled[0]
-            val blamed = shuffled[1]
+            val blamer = inMeeting[0]
+            val blamed = inMeeting[1]
 
             parent.setMutuality(blamer, blamed, -5.0, "drama-blame")
             parent.setMutuality(blamed, blamer, -4.0, "drama-blame")

@@ -1,5 +1,6 @@
 package com.titaniumPolitics.game.events
 
+import com.titaniumPolitics.game.core.Meeting
 import com.titaniumPolitics.game.core.Party
 import kotlinx.serialization.Serializable
 
@@ -11,13 +12,14 @@ import kotlinx.serialization.Serializable
 @Serializable
 class Event_Drama_Exclusion : EventObject("PartyDrama_Exclusion", false) {
 
-    override fun exec(a: Int, b: Int) {
-        if (!PartyDramaUtils.isNewDay(a, b)) return
-        parent.parties.values.filter { it.type == Party.Type.WORKPLACE }.forEach { party ->
-            val members = party.realMembers.toList()
-            if (members.size < 3) return@forEach
+    override fun exec(a: Int, b: Int) {}
 
-            val dominantTrait = members
+    override fun execInMeeting(meeting: Meeting) {
+        parent.parties.values.filter { it.type == Party.Type.WORKPLACE }.forEach { party ->
+            val inMeeting = party.realMembers.filter { it in meeting.currentCharacters }
+            if (inMeeting.size < 3) return@forEach
+
+            val dominantTrait = inMeeting
                 .flatMap { parent.characters[it]!!.trait }
                 .groupingBy { it }
                 .eachCount()
@@ -25,8 +27,8 @@ class Event_Drama_Exclusion : EventObject("PartyDrama_Exclusion", false) {
                 ?.takeIf { it.value >= 2 }
                 ?.key ?: return@forEach
 
-            val inGroup = members.filter { dominantTrait in parent.characters[it]!!.trait }
-            val excluded = members.firstOrNull { dominantTrait !in parent.characters[it]!!.trait }
+            val inGroup = inMeeting.filter { dominantTrait in parent.characters[it]!!.trait }
+            val excluded = inMeeting.firstOrNull { dominantTrait !in parent.characters[it]!!.trait }
                 ?: return@forEach
 
             inGroup.forEach { member ->
