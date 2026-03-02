@@ -229,6 +229,14 @@ object ReadOnly {
     fun charProp(key: String, obj: Any? = null): String = getLocalizedProp("character", key, obj)
     fun itemProp(key: String, obj: Any? = null): String = getLocalizedProp("resources", key, obj)
     fun script(key: String, obj: Any? = null): String = getLocalizedProp("DefaultCharacter", key, obj)
+
+    //Script is different from other props in that some speech lines are optional, so we want a way to check if they exist without throwing an error.
+    //If the script line doesn't exist, the dialogue system can decide to skip it.
+    fun hasScript(key: String): Boolean {
+        ensureBundlesLoaded()
+        return propertyBundles["DefaultCharacter"]?.getProperty(key) != null
+    }
+
     fun questProp(key: String, obj: Any? = null): String = getLocalizedProp("quests", key, obj)
     fun charName(charId: String): String = charProp(charId)
 

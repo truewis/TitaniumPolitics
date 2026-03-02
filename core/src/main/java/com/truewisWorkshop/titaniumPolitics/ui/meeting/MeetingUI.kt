@@ -249,6 +249,16 @@ class MeetingUI(var gameState: GameState) : Table(defaultSkin), KTable {
                     portrait.speechUI.displaySpeech(localizedReason)
 
                 }
+                if (ReadOnly.hasScript("response2-$key")) {
+                    val localizedReason2 = ReadOnly.script("response2-$key").format(*params.toTypedArray())
+                    if (speakerPortrait.tgtCharacter == char2) {
+                        speakerPortrait.speechUI.displaySpeech(localizedReason2)
+                    }
+                    portraits.firstOrNull { portrait -> portrait.tgtCharacter == char2 }?.also { portrait ->
+                        portrait.speechUI.displaySpeech(localizedReason2)
+
+                    }
+                }
             }
 //            addAnimation(
 //                Actions.run {
