@@ -6,6 +6,7 @@ import com.titaniumPolitics.game.ui.Quest
 import com.titaniumPolitics.game.ui.widget.SpeechUI
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
+import kotlin.random.Random
 
 
 //Events are quests that never expire. Some can be triggered many times, some only once.
@@ -143,6 +144,15 @@ class EventSystem : GameStateElement() {
                 if (it.integrity < -0.25)
                     add(Event_ImprovePartyIntegrity(it.name))
 
+            }
+        }
+        // Register a listener to trigger party dramas from meeting actions (~5% chance per action).
+        gameState.onMeetingAction += { action ->
+            if (Random.nextDouble() < 0.05) {
+                gameState.ongoingMeetings.values.firstOrNull { action.sbjCharacter in it.currentCharacters }
+                    ?.let { meeting ->
+                        dataBase.filter { it.active }.forEach { event -> event.execInMeeting(meeting) }
+                    }
             }
         }
 

@@ -1,5 +1,6 @@
 package com.titaniumPolitics.game.events
 
+import com.titaniumPolitics.game.core.Meeting
 import com.titaniumPolitics.game.core.Party
 import kotlinx.serialization.Serializable
 
@@ -11,12 +12,15 @@ import kotlinx.serialization.Serializable
 @Serializable
 class Event_Drama_CreditTheft : EventObject("PartyDrama_CreditTheft", false) {
 
-    override fun exec(a: Int, b: Int) {
-        if (!PartyDramaUtils.isNewDay(a, b)) return
+    override fun exec(a: Int, b: Int) {}
+
+    override fun execInMeeting(meeting: Meeting) {
         parent.parties.values.filter { it.type == Party.Type.WORKPLACE }.forEach { party ->
-            val thief = party.realMembers.firstOrNull { "thief" in parent.characters[it]!!.trait }
+            val inMeeting = party.realMembers.filter { it in meeting.currentCharacters }
+            if (inMeeting.size < 2) return@forEach
+            val thief = inMeeting.firstOrNull { "thief" in parent.characters[it]!!.trait }
                 ?: return@forEach
-            val victim = party.realMembers.firstOrNull {
+            val victim = inMeeting.firstOrNull {
                 it != thief && it != party.leader
             } ?: return@forEach
 

@@ -2,6 +2,7 @@ package com.titaniumPolitics.game.events
 
 import com.titaniumPolitics.game.core.EventSystem
 import com.titaniumPolitics.game.core.GameState
+import com.titaniumPolitics.game.core.Meeting
 import com.titaniumPolitics.game.debugTools.Logger
 import com.titaniumPolitics.game.ui.widget.SpeechUI
 import kotlinx.serialization.Serializable
@@ -32,6 +33,8 @@ sealed class EventObject(var name: String, val oneTime: Boolean) {
 
     abstract fun exec(a: Int, b: Int)
 
+    /** Called for each action performed during an ongoing meeting. Drama events override this. */
+    open fun execInMeeting(meeting: Meeting) {}
 
     //This event will not be triggered by the game. Unsubscribe from events here.
     fun deactivate(success: Boolean = true) {

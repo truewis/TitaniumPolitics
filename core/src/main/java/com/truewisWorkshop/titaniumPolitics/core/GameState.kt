@@ -4,6 +4,7 @@ import com.badlogic.gdx.math.MathUtils.clamp
 import com.titaniumPolitics.game.core.Party.Role
 import com.titaniumPolitics.game.core.ReadOnly.IDTH
 import com.titaniumPolitics.game.core.ReadOnly.constInt
+import com.titaniumPolitics.game.core.gameActions.GameAction
 import com.titaniumPolitics.game.debugTools.Logger
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.Serializable
@@ -65,6 +66,9 @@ class GameState {
 
     @Transient
     val onPlayerAction = arrayListOf<() -> Unit>() //This is called when the player ends their turn.
+
+    @Transient
+    val onMeetingAction = arrayListOf<(GameAction) -> Unit>() //Called for every action performed by a character who is currently in an ongoing meeting.
     val pop: Int
         get() = places.values.sumOf { it.currentTotalPop }
     val totalAnonPop: Int

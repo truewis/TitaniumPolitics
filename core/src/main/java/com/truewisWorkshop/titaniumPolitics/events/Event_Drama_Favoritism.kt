@@ -1,5 +1,6 @@
 package com.titaniumPolitics.game.events
 
+import com.titaniumPolitics.game.core.Meeting
 import com.titaniumPolitics.game.core.Party
 import kotlinx.serialization.Serializable
 
@@ -11,19 +12,19 @@ import kotlinx.serialization.Serializable
 @Serializable
 class Event_Drama_Favoritism : EventObject("PartyDrama_Favoritism", false) {
 
-    override fun exec(a: Int, b: Int) {
-        if (!PartyDramaUtils.isNewDay(a, b)) return
+    override fun exec(a: Int, b: Int) {}
+
+    override fun execInMeeting(meeting: Meeting) {
         parent.parties.values.filter { it.type == Party.Type.WORKPLACE }.forEach { party ->
+            val inMeeting = party.realMembers.filter { it in meeting.currentCharacters }
+            if (inMeeting.size < 2) return@forEach
             val leaderName = party.leader ?: return@forEach
+            if (leaderName !in meeting.currentCharacters) return@forEach
             val leaderTraits = parent.characters[leaderName]!!.trait
             if (leaderTraits.isEmpty()) return@forEach
 
-            val favoured = party.realMembers.filter { char ->
-                char != leaderName && parent.characters[char]!!.trait.any { it in leaderTraits }
-            }
-            val unfavoured = party.realMembers.filter { char ->
-                char != leaderName && parent.characters[char]!!.trait.none { it in leaderTraits }
-            }
+            val (favoured, unfavoured) = inMeeting.filter { it != leaderName }
+                .partition { parent.characters[it]!!.trait.any { t -> t in leaderTraits } }
             if (favoured.isEmpty() || unfavoured.isEmpty()) return@forEach
 
             unfavoured.forEach { char ->
