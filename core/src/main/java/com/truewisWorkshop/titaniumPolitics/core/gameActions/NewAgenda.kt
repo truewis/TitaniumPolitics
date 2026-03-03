@@ -123,6 +123,9 @@ data class NewAgenda(override val sbjCharacter: String, override val tgtPlace: S
                         ).isEmpty()
                     }
 
+            AgendaType.PROMISE -> return agenda.attachedRequest != null &&
+                    agenda.attachedRequest!!.issuedTo.singleOrNull() == sbjCharacter
+
             AgendaType.NOMINATE -> return mt.type == Meeting.MeetingType.DIVISION_LEADER_ELECTION && agenda.subjectParams["character"]!! in parent.parties[mt.involvedParty]!!.members
             //You can choose the person to request, and one of the actions that the person can do. The command is issued immediately, and other people can opt in.
             //The below actions are executed by the leader. Party members can request the leader to do these actions.
@@ -197,6 +200,15 @@ data class NewAgenda(override val sbjCharacter: String, override val tgtPlace: S
                     sbjCharacter,
                     (agenda.attachedRequest!!.issuedTo).first()
                 ), ""
+            )
+
+            //With high ethos, making a promise to people you care about feels meaningful.
+            //With high pathos, you are more reluctant to commit publicly.
+            AgendaType.PROMISE -> w.addWill(
+                sbjCharacter,
+                meeting.currentCharacters.filter { it != sbjCharacter }
+                    .sumOf { parent.getMutNorm(sbjCharacter, it) } * 5.0 * sbjCharObj.stats.eScale
+                        - 5.0 * sbjCharObj.stats.pScale, ""
             )
 
             else -> {}
@@ -329,6 +341,19 @@ data class NewAgenda(override val sbjCharacter: String, override val tgtPlace: S
                         )
                     }
                 }
+
+                PROMISE -> {
+                    // Listeners gain mutuality toward the promiser; those the promise was made to gain more.
+                    val attendees = agenda.attachedRequest!!.issuedBy
+                    val isDirectlyAddressed = listener in attendees || attendees.isEmpty()
+                    val base = if (isDirectlyAddressed) 10.0 else 3.0
+                    w.addMutuality(
+                        listener,
+                        sbjCharacter,
+                        base * effectivity,
+                        "Promise;$sbjCharacter"
+                    )
+                }
             }
         }
 
@@ -343,6 +368,11 @@ data class NewAgenda(override val sbjCharacter: String, override val tgtPlace: S
                 }
 
                 AgendaType.REQUEST -> {
+                    agenda.attachedRequest!!.also { parent.requests[it.generateName()] = it }
+                }
+
+                AgendaType.PROMISE -> {
+                    // Register the promise as a request with the author as the one who must fulfill it.
                     agenda.attachedRequest!!.also { parent.requests[it.generateName()] = it }
                 }
 

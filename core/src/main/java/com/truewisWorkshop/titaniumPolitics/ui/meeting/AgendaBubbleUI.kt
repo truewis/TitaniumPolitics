@@ -33,6 +33,10 @@ class AgendaBubbleUI(val agenda: MeetingAgenda) : Table(), KTable {
                         image("icon_gesture_58")
                     }
 
+                    AgendaType.PROMISE -> {
+                        image("icon_gesture_58")
+                    }
+
                     AgendaType.PRAISE -> {
                         image("icon_gesture_1")
                     }
