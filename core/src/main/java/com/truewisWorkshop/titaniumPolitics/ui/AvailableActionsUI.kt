@@ -13,6 +13,7 @@ import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.core.ReadOnly
 import com.titaniumPolitics.game.core.gameActions.*
 import com.titaniumPolitics.game.ui.actions.AddInfoUI
+import com.titaniumPolitics.game.ui.actions.ChangePolicyUI
 import com.titaniumPolitics.game.ui.actions.EndSpeechUI
 import com.titaniumPolitics.game.ui.actions.ExamineUI
 import com.titaniumPolitics.game.ui.actions.HireManagerUI
@@ -512,6 +513,34 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable 
                                             actionCallback
                                         )
                                         setActionSheet(hireManagerUI)
+                                    }
+                                })
+                            }
+
+                            "ChangePolicy" -> {
+                                if (checkValidity) {
+                                    val meeting = gameState.player.currentMeeting
+                                    val party = meeting?.involvedParty?.let { gameState.parties[it] }
+                                    when {
+                                        party == null || party.leader != gameState.playerName ->
+                                            tooltip.displayInvalidReason(ReadOnly.prop("changePolicy-notLeader")).also {
+                                                this@button.isDisabled = true
+                                            }
+                                        meeting.currentAttention < ReadOnly.constInt("ChangePolicyMinAttention") ->
+                                            tooltip.displayInvalidReason(ReadOnly.prop("changePolicy-attention")).also {
+                                                this@button.isDisabled = true
+                                            }
+                                        party.home == null || gameState.places[party.home]!!.resources["phosphorus"] < ReadOnly.const("ChangePolicyCost") ->
+                                            tooltip.displayInvalidReason(ReadOnly.prop("changePolicy-resources")).also {
+                                                this@button.isDisabled = true
+                                            }
+                                    }
+                                }
+                                this@button.addListener(object : ChangeListener() {
+                                    override fun changed(event: ChangeEvent, actor: Actor) {
+                                        if (!this@button.isChecked) return
+                                        val changePolicyUI = ChangePolicyUI(gameState, actionCallback)
+                                        setActionSheet(changePolicyUI)
                                     }
                                 })
                             }

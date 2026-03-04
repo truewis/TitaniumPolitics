@@ -98,5 +98,9 @@
   "NewAgenda": {
     "image": "PlusGrunge",
     "sound": "data/repair.mp3"
+  },
+  "ChangePolicy": {
+    "image": "PlusGrunge",
+    "sound": "data/repair.mp3"
   }
 }
