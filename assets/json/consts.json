@@ -97,5 +97,8 @@
   "GasDiffusionTau": 10000,
   "TemperatureDiffusionTau": 10000,
   "MutualityReinforcementTau": 864000,
-  "MutualityFromInfoTau": 864000
+  "MutualityFromInfoTau": 864000,
+  "ChangePolicyDuration": 30,
+  "ChangePolicyCost": 1.0,
+  "ChangePolicyMinAttention": 100
 }
