@@ -124,8 +124,12 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable 
 
                                 }
                             row()
+                            val placeName = this@AvailableActionsUI.gameState.player.place.name
                             this@AvailableActionsUI.placeLabel =
-                                label(ReadOnly.prop(this@AvailableActionsUI.gameState.player.place.name), "docTitle") {
+                                label(
+                                    ReadOnly.placeProp(if (placeName.contains("corridor")) "corridor" else placeName),
+                                    "docTitle"
+                                ) {
                                     it.right()
                                     it.fill()
                                     it.expandX
@@ -162,7 +166,8 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable 
         docList.clear()
         dateLabel.setText(gameState.formatDate())
         timeLabel.setText(gameState.formatClock())
-        placeLabel.setText(ReadOnly.placeProp(gameState.player.place.name))
+        val placeName = this@AvailableActionsUI.gameState.player.place.name
+        placeLabel.setText(ReadOnly.placeProp(if (placeName.contains("corridor")) "corridor" else placeName))
         GameEngine.availableActions(
             gameState,
             gameState.player.place.name,
@@ -526,11 +531,15 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable 
                                             tooltip.displayInvalidReason(ReadOnly.prop("changePolicy-notLeader")).also {
                                                 this@button.isDisabled = true
                                             }
+
                                         meeting.currentAttention < ReadOnly.constInt("ChangePolicyMinAttention") ->
                                             tooltip.displayInvalidReason(ReadOnly.prop("changePolicy-attention")).also {
                                                 this@button.isDisabled = true
                                             }
-                                        party.home == null || gameState.places[party.home]!!.resources["phosphorus"] < ReadOnly.const("ChangePolicyCost") ->
+
+                                        party.home == null || gameState.places[party.home]!!.resources["phosphorus"] < ReadOnly.const(
+                                            "ChangePolicyCost"
+                                        ) ->
                                             tooltip.displayInvalidReason(ReadOnly.prop("changePolicy-resources")).also {
                                                 this@button.isDisabled = true
                                             }
