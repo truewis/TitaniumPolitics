@@ -124,10 +124,9 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable 
 
                                 }
                             row()
-                            val placeName = this@AvailableActionsUI.gameState.player.place.name
                             this@AvailableActionsUI.placeLabel =
                                 label(
-                                    ReadOnly.placeProp(if (placeName.contains("corridor")) "corridor" else placeName),
+                                    ReadOnly.placeProp(this@AvailableActionsUI.gameState.player.place.name),
                                     "docTitle"
                                 ) {
                                     it.right()
@@ -166,8 +165,7 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable 
         docList.clear()
         dateLabel.setText(gameState.formatDate())
         timeLabel.setText(gameState.formatClock())
-        val placeName = this@AvailableActionsUI.gameState.player.place.name
-        placeLabel.setText(ReadOnly.placeProp(if (placeName.contains("corridor")) "corridor" else placeName))
+        placeLabel.setText(ReadOnly.placeProp(this@AvailableActionsUI.gameState.player.place.name))
         GameEngine.availableActions(
             gameState,
             gameState.player.place.name,

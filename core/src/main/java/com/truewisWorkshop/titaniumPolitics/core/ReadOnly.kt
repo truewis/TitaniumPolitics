@@ -223,6 +223,12 @@ object ReadOnly {
             else
                 getLocalizedProp("place", "home").format(key.substringAfter("home_"))
         }
+        if (key.startsWith("corridor_")) {
+            return if (key.contains("desc"))
+                getLocalizedProp("place", "corridor-desc")
+            else
+                getLocalizedProp("place", "corridor").format(key.substringAfter("corridor_"))
+        }
         return getLocalizedProp("place", key, obj)
     }
 
