@@ -20,7 +20,7 @@ class PlaceSelectButton(callback: (String) -> Unit) : Button(Scene2DSkin.default
                 PlaceSelectionUI.instance.refresh()
                 PlaceSelectionUI.instance.selectedPlaceCallback = {
                     PlaceSelectionUI.instance.isVisible = false
-                    placeLabel.setText(ReadOnly.prop(it))
+                    placeLabel.setText(ReadOnly.placeProp(it))
                     callback(it)
                 }
             }
