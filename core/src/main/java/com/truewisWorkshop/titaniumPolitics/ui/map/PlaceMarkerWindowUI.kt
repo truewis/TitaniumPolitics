@@ -289,8 +289,10 @@ class PlaceMarkerWindowUI(var gameState: GameState, var owner: MapUI) : Table() 
             clear()
             //If place selection mode is active, add the selection button and nothing else.
             if (mode == MODE_PLACE_SELECTION) {
-                add(selectButton).size(400f, 75f).fill()
-                row()
+                if (!placeDisplayed.contains("corridor")) {
+                    add(selectButton).size(400f, 75f).fill()
+                    row()
+                }
             } else if (mode == PlaceMarkerWindowUI.MODE_TIMELINE) {
                 // Show character sightings at this place
                 val sightings = gameState.informations.values
@@ -356,7 +358,7 @@ class PlaceMarkerWindowUI(var gameState: GameState, var owner: MapUI) : Table() 
                 add(scene2d.stack {
                     add(
                         DescriptionLabel(
-                            if (!placeName.contains("corridor")) ReadOnly.placeProp("$placeDisplayed-desc") else ReadOnly.placeProp(
+                            if (!placeDisplayed.contains("corridor")) ReadOnly.placeProp("$placeDisplayed-desc") else ReadOnly.placeProp(
                                 "corridor-desc"
                             )
                         ).apply {
