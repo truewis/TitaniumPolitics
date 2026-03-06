@@ -78,11 +78,12 @@ class AlertUI(var gameState: GameState) : Table(defaultSkin) {
                         //Do nothing.
                     } else if (info.action is Move) //If the action is a move, show the dedicated alert.
                     {
+                        val placeName = (info.action as Move).placeTo
                         addAlert(
                             "moved",
                             params = arrayOf(
                                 ReadOnly.charProp(info.tgtCharacter ?: "Someone"),
-                                ReadOnly.placeProp((info.action as Move).placeTo)
+                                ReadOnly.placeProp(if (placeName.contains("corridor")) "corridor" else placeName)
                             )
                         ) {
                             AssistantUI.instance.informationButton.changeOpenState(true)
