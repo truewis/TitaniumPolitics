@@ -495,7 +495,7 @@
       "health": 100,
       "livingBy": "observatory"
     },
-    "Chef": {
+    "ChefKu": {
       "type": "EMPLOYEE",
       "trait": [
         "bargainer"
@@ -2553,7 +2553,8 @@
         "rescueStationNorth",
         "securityCheckCenter",
         "constructionYardNorth",
-        "tavern"
+        "tavern",
+        "fineFoodStore-1"
       ],
       "apparatuses": [
         {
@@ -2605,8 +2606,7 @@
         }
       },
       "connectedPlaces": [
-        "market",
-        "fineFoodStore-1"
+        "market"
       ],
       "apparatuses": [
         {
@@ -2642,7 +2642,7 @@
         }
       },
       "connectedPlaces": [
-        "tavern"
+        "market"
       ],
       "apparatuses": [
         {
@@ -2663,9 +2663,9 @@
         }
       ],
       "characters": [
-        "Chef"
+        "ChefKu"
       ],
-      "isBuildingIn": "tavern",
+      "isBuildingIn": "market",
       "workHoursStart": 10,
       "workHoursEnd": 22
     },
@@ -3148,13 +3148,13 @@
       ]
     },
     "workplace_fineFoodStore-1": {
-      "leader": "Chef",
+      "leader": "ChefKu",
       "administrator": "RstSupplier",
       "treasurer": "RstServer",
       "type": "WORKPLACE",
       "home": "fineFoodStore-1",
       "_members": [
-        "Chef",
+        "ChefKu",
         "RstSupplier",
         "RstServer"
       ]

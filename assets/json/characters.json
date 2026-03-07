@@ -52,6 +52,11 @@
     "image": "portraits/default.png",
     "headImage": "portraits/defaultHead.png"
   },
+  "ChefKu": {
+    "name": "Chef Ku",
+    "image": "portraits/default.png",
+    "headImage": "portraits/defaultHead.png"
+  },
   "Hans": {
     "name": "Hans",
     "image": "portraits/default.png",

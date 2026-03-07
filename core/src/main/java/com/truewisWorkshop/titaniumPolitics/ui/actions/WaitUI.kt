@@ -155,7 +155,7 @@ class WaitUI(val gameState: GameState, actionCallback: (GameAction) -> Unit) :
         if (info.tgtPlace == gameState.player.place.name && info.tgtCharacter != gameState.playerName &&
             info.knownTo.contains(gameState.playerName) && info.action is StartMeeting
         ) {
-            AlertUI.Companion.instance.addAlert("interrupted", ReadOnly.prop(info.tgtCharacter ?: "Someone"))
+            AlertUI.Companion.instance.addAlert("interrupted", ReadOnly.charProp(info.tgtCharacter ?: "Someone"))
             interrupted = true
             Logger.write("WaitUI: Wait interrupted by ${info.author} at ${info.tgtPlace}", Logger.LogLevel.INFO)
         }
@@ -169,7 +169,7 @@ class WaitUI(val gameState: GameState, actionCallback: (GameAction) -> Unit) :
             info.action !is Wait && info.action !is Move && info.knownTo.contains(gameState.playerName)
         ) {
 
-            AlertUI.Companion.instance.addAlert("interrupted", ReadOnly.prop(info.tgtCharacter ?: "Someone"))
+            AlertUI.Companion.instance.addAlert("interrupted", ReadOnly.charProp(info.tgtCharacter ?: "Someone"))
             interrupted = true
             Logger.write("WaitUI: Wait interrupted by ${info.author} at ${info.tgtPlace}", Logger.LogLevel.INFO)
         }
