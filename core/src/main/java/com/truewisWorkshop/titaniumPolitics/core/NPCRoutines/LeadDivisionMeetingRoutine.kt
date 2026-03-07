@@ -28,6 +28,19 @@ class LeadDivisionMeetingRoutine(override val meetingName: String) : MeetingRout
                 it.injectParent(gState)
                 if (it.isValid()) return it
             }
+            //1.5. Provide a feast to boost party morale and integrity if the leader's ethos, traits, and
+            //     low party integrity score motivate it.
+            run {
+                val feastScore = character.stats.eScale +
+                    (if ("gourmand" in character.trait) 0.5 else 0.0) +
+                    (if ("charismatic" in character.trait) 0.3 else 0.0) +
+                    (1.0 - party.integrityNorm).coerceIn(0.0, 1.0) * 0.6
+                if (feastScore > ReadOnly.const("FeastWillingnessThreshold")) {
+                    Feast(name, place, gState).also {
+                        if (it.isValid()) return it
+                    }
+                }
+            }
             //2. request information about the commands issued today, by putting ProofOfWork agenda forward.
             proposeProofOfWork(name, place)?.let { return it }
 

@@ -2,6 +2,7 @@ package com.titaniumPolitics.game.core.NPCRoutines
 
 import com.titaniumPolitics.game.core.*
 import com.titaniumPolitics.game.core.gameActions.GameAction
+import com.titaniumPolitics.game.core.gameActions.UnofficialResourceTransfer
 import com.titaniumPolitics.game.core.gameActions.Wait
 import kotlinx.serialization.Serializable
 
@@ -17,6 +18,9 @@ class CampaignRoutine(val electionParty: String) : Routine() {
     }
 
     val triedTalkingTo = mutableSetOf<String>()
+
+    /**Tracks voters who have already received a present during this campaign, to avoid double-gifting.*/
+    val givenPresentsTo = mutableSetOf<String>()
 
     /**
      * Returns the candidate this character most wants to support (highest mutual affinity),
@@ -78,6 +82,13 @@ class CampaignRoutine(val electionParty: String) : Routine() {
         val char = gState.characters[name]!!
         val party = gState.parties[electionParty]!!
 
+        // Acquire fineFood for presents if the character doesn't have enough and isn't already acquiring.
+        if (char.resources["fineFood"] < 1.0 && subroutines.none { it is BuyRoutine || it is StealRoutine }) {
+            val needed = 1.0 - char.resources["fineFood"]
+            return if ("thief" in char.trait) StealRoutine("fineFood", needed)
+            else BuyRoutine("fineFood", needed)
+        }
+
         // If currently in a talk meeting, attend it and seize the moment to campaign.
         char.currentMeeting?.let { meeting ->
             if (meeting.type == Meeting.MeetingType.TALK) {
@@ -121,6 +132,24 @@ class CampaignRoutine(val electionParty: String) : Routine() {
     }
 
     override fun execute(name: String, place: String): GameAction {
+        val char = gState.characters[name]!!
+        val party = gState.parties[electionParty] ?: return Wait(name, place)
+        // Give a small fineFood present to uncontacted voters sharing the same public place.
+        if (place in Place.publicPlaces && char.resources["fineFood"] >= 1.0) {
+            val uncontactedVoter = gState.places[place]!!.characters.firstOrNull {
+                it != name && it in party.members && it !in givenPresentsTo
+            }
+            if (uncontactedVoter != null) {
+                val gift = UnofficialResourceTransfer(
+                    name, "home_$name", "home_$uncontactedVoter", true,
+                    Resources("fineFood" to 1.0), gState
+                )
+                if (gift.isValid()) {
+                    givenPresentsTo.add(uncontactedVoter)
+                    return gift
+                }
+            }
+        }
         return Wait(name, place)
     }
 }

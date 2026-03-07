@@ -16,6 +16,7 @@ import com.titaniumPolitics.game.core.gameActions.GameAction
 import com.titaniumPolitics.game.core.gameActions.OfficialResourceTransfer
 import com.titaniumPolitics.game.core.gameActions.PrepareInfo
 import com.titaniumPolitics.game.core.gameActions.Repair
+import com.titaniumPolitics.game.core.gameActions.UnofficialResourceTransfer
 import com.titaniumPolitics.game.core.gameActions.Wait
 import com.titaniumPolitics.game.debugTools.Logger
 import kotlinx.serialization.Serializable
@@ -24,6 +25,11 @@ import kotlin.math.max
 @Serializable
 class WorkRoutine(var workplace: String) : Routine() {
     var corruptionTimer = 0
+
+    /**
+     * Timer to limit how often the character acquires luxury resources (fineFood) for feasts and presents.
+     */
+    var luxuryAcquisitionTimer = 0
 
     /**
      * Timer to limit how often the character will transfer resource to places that are short of it.
@@ -126,6 +132,64 @@ class WorkRoutine(var workplace: String) : Routine() {
                     )
                 }
             }
+        //4.5. Acquire luxury resources (fineFood) for feasts and campaign presents if needed.
+        //Only attempted periodically.
+        if (gState.time - luxuryAcquisitionTimer > ReadOnly.constInt("CorruptionTau") / ReadOnly.DT) {
+            // (a) Pre-feast acquisition: division leader with upcoming meeting wants to provide a feast
+            val leaderParty = gState.parties.values.find { it.leader == name && it.type == Party.Type.DIVISION }
+            if (leaderParty != null) {
+                val upcomingMeeting = gState.scheduledMeetings.values.firstOrNull {
+                    it.involvedParty == leaderParty.name && name in it.scheduledCharacters
+                }
+                if (upcomingMeeting != null) {
+                    val feastScore = character.stats.eScale +
+                        (if ("gourmand" in character.trait) 0.5 else 0.0) +
+                        (if ("charismatic" in character.trait) 0.3 else 0.0) +
+                        (1.0 - leaderParty.integrityNorm).coerceIn(0.0, 1.0) * 0.6
+                    if (feastScore > ReadOnly.const("FeastWillingnessThreshold")) {
+                        val neededFineFood =
+                            upcomingMeeting.scheduledCharacters.size.toDouble() - character.resources["fineFood"]
+                        if (neededFineFood > 0 && subroutines.none { it is BuyRoutine || it is StealRoutine }) {
+                            luxuryAcquisitionTimer = gState.time
+                            return if ("thief" in character.trait) StealRoutine("fineFood", neededFineFood)
+                            else BuyRoutine("fineFood", neededFineFood)
+                        }
+                    }
+                }
+            }
+            // (b) Campaign present acquisition: character is involved in a division election campaign
+            character.division?.let { division ->
+                if (gState.scheduledMeetings.values.any {
+                        it.type == Meeting.MeetingType.DIVISION_LEADER_ELECTION && it.involvedParty == division.name
+                    } && subroutines.none { it is BuyRoutine || it is StealRoutine }
+                ) {
+                    val neededFineFood = 3.0 - character.resources["fineFood"]
+                    if (neededFineFood > 0) {
+                        luxuryAcquisitionTimer = gState.time
+                        return if ("thief" in character.trait) StealRoutine("fineFood", neededFineFood)
+                        else BuyRoutine("fineFood", neededFineFood)
+                    }
+                }
+            }
+        }
+        // (c) Acquire resources for pending requests toward this character that require resources they lack.
+        gState.requests.values.firstOrNull { req ->
+            name in req.issuedTo && !req.completed && req.name !in failedRequests &&
+                req.action is UnofficialResourceTransfer &&
+                (req.action as UnofficialResourceTransfer).fromHome &&
+                !gState.characters[name]!!.resources.contains((req.action as UnofficialResourceTransfer).resources)
+        }?.also { req ->
+            if (subroutines.none { it is BuyRoutine || it is StealRoutine }) {
+                val action = req.action as UnofficialResourceTransfer
+                action.resources.toHashMap().entries.firstOrNull { entry ->
+                    character.resources[entry.key] < entry.value
+                }?.let { entry ->
+                    val deficit = entry.value - character.resources[entry.key]
+                    return if ("thief" in character.trait) StealRoutine(entry.key, deficit)
+                    else BuyRoutine(entry.key, deficit)
+                }
+            }
+        }
         //5. Execute a command if there is any. Here, we can move to the place actively if the command is not in the current place.
         //If there is a command that is within the set time window, issued party is trusted enough, and seems to be executable at some place(AvailableActions), start execution routine.
         //Note that the command may not be valid even if it in AvailableActions list. For example, if the character is already at the place, move command is not valid.
