@@ -19,7 +19,8 @@ import kotlin.coroutines.suspendCoroutine
 class CharactersInPlaceUI(var gameState: GameState) : Table(defaultSkin) {
     private val portraits = arrayListOf<PortraitUI>()
     private val portraitContainer = Table().apply {
-        add().size(1920f * 2, 300f).padLeft(-1920f / 2).fill()  //Make the container wide enough to hold many portraits.
+        add().size(1920f * 2, 300f).padLeft(-1920f / 2).fill()
+            .center()  //Make the container wide enough to hold many portraits.
     }
     private val scrollPane = ScrollPane(portraitContainer).apply {
         setScrollingDisabled(false, true)
@@ -122,6 +123,13 @@ class CharactersInPlaceUI(var gameState: GameState) : Table(defaultSkin) {
                 it.speechUI.displayActionEmoji(lastAction.split(';').first())
             }
         }
+        //This causes screen shake when characters are moving, so we will not scroll to the first portrait for now. The player can scroll manually if they want to see the portraits.
+//        //Scroll to the first portrait.
+//        if (portraits.isNotEmpty()) {
+//            scrollPane.scrollTo(
+//                portraits.first().x, portraits.first().y, portraits.first().width, portraits.first().height
+//            )
+//        }
     }
 
     private fun addCharacterPortrait(characterName: String) {
@@ -137,7 +145,7 @@ class CharactersInPlaceUI(var gameState: GameState) : Table(defaultSkin) {
         //Place portraits across the screen so they are not on top of each other.
         portraits.forEach {
             it.setPosition(
-                (portraits.indexOf(it) + 0.5f) * CapsuleStage.instance.width / portraits.size + it.width / 2,
+                (portraits.indexOf(it) + 0.5f) * portraitContainer.width / portraits.size + it.width / 2,
                 500f
             )
         }

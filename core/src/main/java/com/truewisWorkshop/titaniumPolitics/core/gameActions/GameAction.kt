@@ -175,7 +175,7 @@ sealed class GameAction() {
 
             is AddInfo -> {
                 text = ReadOnly.script(this.effectivityReason)
-                    .format(ReadOnly.charProp(this.agenda.subjectParams["character"]!!))
+                    .format(ReadOnly.charProp(this.agenda.author))
             }
 
             is EndSpeech -> {
