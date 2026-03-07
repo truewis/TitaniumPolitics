@@ -6,6 +6,7 @@ import com.titaniumPolitics.game.core.GameEngine
 import com.titaniumPolitics.game.core.InformationType
 import com.titaniumPolitics.game.core.Meeting
 import com.titaniumPolitics.game.core.MeetingAgenda
+import com.titaniumPolitics.game.core.NonPlayerAgent
 import com.titaniumPolitics.game.core.Party
 import com.titaniumPolitics.game.core.ReadOnly
 import com.titaniumPolitics.game.core.Request
@@ -163,11 +164,18 @@ class WorkRoutine(var workplace: String) : Routine() {
                         it.type == Meeting.MeetingType.DIVISION_LEADER_ELECTION && it.involvedParty == division.name
                     } && subroutines.none { it is BuyRoutine || it is StealRoutine }
                 ) {
-                    val neededFineFood = 3.0 - character.resources["fineFood"]
-                    if (neededFineFood > 0) {
-                        luxuryAcquisitionTimer = gState.time
-                        return if ("thief" in character.trait) StealRoutine("fineFood", neededFineFood)
-                        else BuyRoutine("fineFood", neededFineFood)
+                    // Availability: the resource exists somewhere accessible for acquisition.
+                    val chosen = NonPlayerAgent.chooseLuxuryResource(character) { res ->
+                        gState.publicPlaces.values.any { it.resources[res] > 0 }
+                    }
+                    if (chosen != null) {
+                        // Target is 3 gifts worth of the chosen resource.
+                        val needed = chosen.giftAmount * 3.0 - character.resources[chosen.resourceName]
+                        if (needed > 0) {
+                            luxuryAcquisitionTimer = gState.time
+                            return if ("thief" in character.trait) StealRoutine(chosen.resourceName, needed)
+                            else BuyRoutine(chosen.resourceName, needed)
+                        }
                     }
                 }
             }
