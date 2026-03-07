@@ -611,6 +611,84 @@
       },
       "health": 100,
       "livingBy": "ammoniaShop"
+    },
+    "Winemaker": {
+      "type": "EMPLOYEE",
+      "trait": [
+        "bargainer"
+      ],
+      "stats": {
+        "logos": 10,
+        "ethos": 10,
+        "pathos": 10
+      },
+      "health": 100,
+      "livingBy": "winery"
+    },
+    "WnSupplier": {
+      "type": "EMPLOYEE",
+      "trait": [
+        "bargainer"
+      ],
+      "stats": {
+        "logos": 10,
+        "ethos": 10,
+        "pathos": 10
+      },
+      "health": 100,
+      "livingBy": "squareSouth"
+    },
+    "WnServer": {
+      "type": "EMPLOYEE",
+      "trait": [
+        "bargainer"
+      ],
+      "stats": {
+        "logos": 10,
+        "ethos": 10,
+        "pathos": 10
+      },
+      "health": 100,
+      "livingBy": "winery"
+    },
+    "Brewer": {
+      "type": "EMPLOYEE",
+      "trait": [
+        "bargainer"
+      ],
+      "stats": {
+        "logos": 10,
+        "ethos": 10,
+        "pathos": 10
+      },
+      "health": 100,
+      "livingBy": "cloverBrewery"
+    },
+    "BrwSupplier": {
+      "type": "EMPLOYEE",
+      "trait": [
+        "bargainer"
+      ],
+      "stats": {
+        "logos": 10,
+        "ethos": 10,
+        "pathos": 10
+      },
+      "health": 100,
+      "livingBy": "squareSouth"
+    },
+    "BrwServer": {
+      "type": "EMPLOYEE",
+      "trait": [
+        "bargainer"
+      ],
+      "stats": {
+        "logos": 10,
+        "ethos": 10,
+        "pathos": 10
+      },
+      "health": 100,
+      "livingBy": "cloverBrewery"
     }
   },
   "places": {
@@ -2742,6 +2820,90 @@
       "workHoursStart": 9,
       "workHoursEnd": 17
     },
+    "winery": {
+      "coordinates": {
+        "x": 5,
+        "y": 0,
+        "z": -4
+      },
+      "resources": {
+        "_resources": {
+          "water": 300,
+          "ration": 20,
+          "organics": 10,
+          "wine": 5
+        }
+      },
+      "connectedPlaces": [
+        "squareSouth"
+      ],
+      "apparatuses": [
+        {
+          "name": "fermentationVat",
+          "durability": 95
+        },
+        {
+          "name": "rationStorage",
+          "durability": 95
+        },
+        {
+          "name": "waterStorage",
+          "durability": 95
+        },
+        {
+          "name": "energyStorage",
+          "durability": 95
+        }
+      ],
+      "characters": [
+        "Winemaker"
+      ],
+      "isBuildingIn": "squareSouth",
+      "workHoursStart": 10,
+      "workHoursEnd": 22
+    },
+    "cloverBrewery": {
+      "coordinates": {
+        "x": 5,
+        "y": 0,
+        "z": -5
+      },
+      "resources": {
+        "_resources": {
+          "water": 300,
+          "ration": 20,
+          "phosphorus": 1.0,
+          "clover": 5
+        }
+      },
+      "connectedPlaces": [
+        "squareSouth"
+      ],
+      "apparatuses": [
+        {
+          "name": "brewingTank",
+          "durability": 95
+        },
+        {
+          "name": "rationStorage",
+          "durability": 95
+        },
+        {
+          "name": "waterStorage",
+          "durability": 95
+        },
+        {
+          "name": "energyStorage",
+          "durability": 95
+        }
+      ],
+      "characters": [
+        "Brewer"
+      ],
+      "isBuildingIn": "squareSouth",
+      "workHoursStart": 10,
+      "workHoursEnd": 22
+    },
     "squareNorth": {
       "coordinates": {
         "x": -7,
@@ -2808,7 +2970,9 @@
         "electrolysisStationSouth",
         "securityCheckCenter",
         "diamondShop",
-        "ammoniaShop"
+        "ammoniaShop",
+        "winery",
+        "cloverBrewery"
       ],
       "apparatuses": [
         {
@@ -3181,6 +3345,30 @@
         "Chemist",
         "AmmSupplier",
         "AmmServer"
+      ]
+    },
+    "workplace_winery": {
+      "leader": "Winemaker",
+      "administrator": "WnSupplier",
+      "treasurer": "WnServer",
+      "type": "WORKPLACE",
+      "home": "winery",
+      "_members": [
+        "Winemaker",
+        "WnSupplier",
+        "WnServer"
+      ]
+    },
+    "workplace_cloverBrewery": {
+      "leader": "Brewer",
+      "administrator": "BrwSupplier",
+      "treasurer": "BrwServer",
+      "type": "WORKPLACE",
+      "home": "cloverBrewery",
+      "_members": [
+        "Brewer",
+        "BrwSupplier",
+        "BrwServer"
       ]
     }
   },
