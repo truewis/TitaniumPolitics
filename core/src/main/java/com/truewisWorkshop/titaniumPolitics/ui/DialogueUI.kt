@@ -211,6 +211,9 @@ class DialogueUI(val gameState: GameState) : Table(defaultSkin), KTable {
     }
 
     fun playDialogue(dialogueKey: String) {
+        System.getenv("SKIP_DIALOGUES")?.also {
+            return
+        }
         isVisible = true
 
         val placeName = gameState.player.place.name
