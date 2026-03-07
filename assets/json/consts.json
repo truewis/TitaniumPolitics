@@ -100,5 +100,6 @@
   "MutualityFromInfoTau": 864000,
   "ChangePolicyDuration": 30,
   "ChangePolicyCost": 1.0,
-  "ChangePolicyMinAttention": 100
+  "ChangePolicyMinAttention": 100,
+  "FeastWillingnessThreshold": 1.2
 }

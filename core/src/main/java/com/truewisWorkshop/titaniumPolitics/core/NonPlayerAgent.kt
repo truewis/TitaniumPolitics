@@ -263,5 +263,89 @@ class NonPlayerAgent : Agent() {
         ) - 50) * (valuea - valuea2) * friendlinessFactor / 100
     }
 
+    companion object LuxuryResources {
+        /**
+         * Defines a luxury resource that can be given as a present.
+         *
+         * @param resourceName The resource key used in [Resources].
+         * @param traitBonuses Map of character trait to score bonus.  Higher score = stronger preference.
+         * @param giftAmount The amount of this resource that constitutes one gift unit (kg).
+         *                   This is the "weight" used for tie-breaking: smaller value is preferred.
+         */
+        data class LuxuryResourceDef(
+            val resourceName: String,
+            val traitBonuses: Map<String, Double>,
+            val giftAmount: Double
+        )
+
+        /**
+         * Ordered list of all luxury resources.
+         * Trait preferences determine which resource a character naturally wants to give.
+         * Gift amount (weight) is the tiebreaker when trait preferences are equal.
+         */
+        val ALL_LUXURY_RESOURCES: List<LuxuryResourceDef> = listOf(
+            LuxuryResourceDef(
+                "fineFood",
+                mapOf("gourmand" to 1.0, "charismatic" to 0.5, "extrovert" to 0.3),
+                1.0
+            ),
+            LuxuryResourceDef(
+                "wine",
+                mapOf("gourmand" to 0.8, "charismatic" to 0.8, "extrovert" to 0.5),
+                0.75
+            ),
+            LuxuryResourceDef(
+                "clover",
+                mapOf("spiritualist" to 1.0, "psychopath" to 0.6, "introvert" to 0.4),
+                0.1
+            ),
+            LuxuryResourceDef(
+                "diamond",
+                mapOf("artificialist" to 1.0, "psychopath" to 0.4),
+                0.01
+            ),
+            LuxuryResourceDef(
+                "phosphorus",
+                mapOf(),
+                0.1
+            ),
+            LuxuryResourceDef(
+                "cottonClothes",
+                mapOf("artificialist" to 0.6, "introvert" to 0.3),
+                1.0
+            )
+        )
+
+        /**
+         * Selects the best luxury resource for a character to give as a present.
+         *
+         * Selection priority:
+         * 1. Availability — resources for which [isAvailable] returns true are preferred.
+         * 2. Trait preference — highest sum of trait bonuses for the character's traits wins.
+         * 3. Smallest gift amount (weight) — lighter resources are preferred as a tiebreaker.
+         * 4. Random — final tiebreaker among resources with identical preference and weight.
+         *
+         * @param character The character choosing a resource.
+         * @param isAvailable Predicate returning true if the resource can be obtained or is already held.
+         * @return The chosen [LuxuryResourceDef], or null if the list is empty.
+         */
+        fun chooseLuxuryResource(
+            character: Character,
+            isAvailable: (String) -> Boolean
+        ): LuxuryResourceDef? {
+            val available = ALL_LUXURY_RESOURCES.filter { isAvailable(it.resourceName) }
+            val candidates = available.ifEmpty { ALL_LUXURY_RESOURCES }
+            return candidates
+                .shuffled() // random final tiebreaker (stable sort preserves shuffle order within ties)
+                .sortedWith(
+                    compareByDescending<LuxuryResourceDef> { def ->
+                        def.traitBonuses.entries.sumOf { (trait, bonus) ->
+                            if (trait in character.trait) bonus else 0.0
+                        }
+                    }.thenBy { it.giftAmount }
+                )
+                .firstOrNull()
+        }
+    }
 
 }

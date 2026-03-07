@@ -2,6 +2,7 @@ package com.titaniumPolitics.game.core.NPCRoutines
 
 import com.titaniumPolitics.game.core.*
 import com.titaniumPolitics.game.core.gameActions.GameAction
+import com.titaniumPolitics.game.core.gameActions.UnofficialResourceTransfer
 import com.titaniumPolitics.game.core.gameActions.Wait
 import kotlinx.serialization.Serializable
 
@@ -17,6 +18,15 @@ class CampaignRoutine(val electionParty: String) : Routine() {
     }
 
     val triedTalkingTo = mutableSetOf<String>()
+
+    /**Tracks voters who have already received a present during this campaign, to avoid double-gifting.*/
+    val givenPresentsTo = mutableSetOf<String>()
+
+    /**
+     * The luxury resource chosen for giving presents during this campaign session.
+     * Cached so that the character doesn't switch resources mid-campaign.
+     */
+    var chosenPresentResource: String? = null
 
     /**
      * Returns the candidate this character most wants to support (highest mutual affinity),
@@ -78,6 +88,26 @@ class CampaignRoutine(val electionParty: String) : Routine() {
         val char = gState.characters[name]!!
         val party = gState.parties[electionParty]!!
 
+        // Resolve (or refresh) which luxury resource to use for presents.
+        val presentDef = chosenPresentResource
+            ?.let { NonPlayerAgent.ALL_LUXURY_RESOURCES.firstOrNull { def -> def.resourceName == it } }
+            ?: NonPlayerAgent.chooseLuxuryResource(char) { res ->
+                gState.publicPlaces.values.any { it.resources[res] > 0 }
+            }
+        if (presentDef != null && chosenPresentResource == null) {
+            chosenPresentResource = presentDef.resourceName
+        }
+
+        // Acquire the chosen luxury resource for presents if the character doesn't have enough.
+        if (presentDef != null &&
+            char.resources[presentDef.resourceName] < presentDef.giftAmount &&
+            subroutines.none { it is BuyRoutine || it is StealRoutine }
+        ) {
+            val needed = presentDef.giftAmount - char.resources[presentDef.resourceName]
+            return if ("thief" in char.trait) StealRoutine(presentDef.resourceName, needed)
+            else BuyRoutine(presentDef.resourceName, needed)
+        }
+
         // If currently in a talk meeting, attend it and seize the moment to campaign.
         char.currentMeeting?.let { meeting ->
             if (meeting.type == Meeting.MeetingType.TALK) {
@@ -121,6 +151,27 @@ class CampaignRoutine(val electionParty: String) : Routine() {
     }
 
     override fun execute(name: String, place: String): GameAction {
+        val char = gState.characters[name]!!
+        val party = gState.parties[electionParty] ?: return Wait(name, place)
+        // Give a luxury resource present to uncontacted voters sharing the same public place.
+        val presentDef = chosenPresentResource
+            ?.let { NonPlayerAgent.ALL_LUXURY_RESOURCES.firstOrNull { def -> def.resourceName == it } }
+            ?: return Wait(name, place)
+        if (place in Place.publicPlaces && char.resources[presentDef.resourceName] >= presentDef.giftAmount) {
+            val uncontactedVoter = gState.places[place]!!.characters.firstOrNull {
+                it != name && it in party.members && it !in givenPresentsTo
+            }
+            if (uncontactedVoter != null) {
+                val gift = UnofficialResourceTransfer(
+                    name, "home_$name", "home_$uncontactedVoter", true,
+                    Resources(presentDef.resourceName to presentDef.giftAmount), gState
+                )
+                if (gift.isValid()) {
+                    givenPresentsTo.add(uncontactedVoter)
+                    return gift
+                }
+            }
+        }
         return Wait(name, place)
     }
 }
