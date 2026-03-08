@@ -2,6 +2,7 @@ package com.titaniumPolitics.game.core
 
 import java.io.BufferedWriter
 import java.io.File
+import java.io.FileOutputStream
 import java.nio.file.Files
 import java.nio.file.Paths
 
@@ -106,7 +107,7 @@ class GameDataHandler(val directoryName: String) {
 
 data class GameDataFrame(var fName: String) {
     private var file: File = File(fName)
-    private var writer: BufferedWriter = file.bufferedWriter()
+    private lateinit var writer: BufferedWriter//Don't remove lateinit, writer might lock the file and cause problems when we try to read it in the same time. We will initialize it in the init block, after we read the existing data.
 
     var numRows = 0
     var allKeys = arrayListOf<String>()
@@ -127,6 +128,7 @@ data class GameDataFrame(var fName: String) {
                 arrayListOf()
             }
         }
+        writer = FileOutputStream(file, true).bufferedWriter()
     }
 //    operator fun get(time: Int): HashMap<String, Float>
 //    {

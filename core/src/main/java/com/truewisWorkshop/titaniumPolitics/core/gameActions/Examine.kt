@@ -70,7 +70,7 @@ data class Examine(override val sbjCharacter: String, override val tgtPlace: Str
             InformationType.RESOURCES -> {
                 if (tgtPlace.contains("home")) {//Home is the exception; character's resources are shown instead.
                     Logger.write(
-                        "$sbjCharacter examined Resources of $tgtPlace: ${parent.characters[sbjCharacter]!!.resources}",
+                        "$sbjCharacter examined Resources of $sbjCharacter: ${parent.characters[sbjCharacter]!!.resources}",
                         Logger.LogLevel.ACTION_VERBOSE
                     )
                     //Acquire resources information of this character.
@@ -88,7 +88,10 @@ data class Examine(override val sbjCharacter: String, override val tgtPlace: Str
                     }
 
                 } else {
-                    Logger.write("Resources: ${parent.places[tgtPlace]!!.resources}", Logger.LogLevel.INFO)
+                    Logger.write(
+                        "$sbjCharacter examined Resources of $tgtPlace: ${parent.places[tgtPlace]!!.resources}",
+                        Logger.LogLevel.ACTION_VERBOSE
+                    )
                     //Acquire resources information of this place.
                     Information(
                         author = sbjCharacter,

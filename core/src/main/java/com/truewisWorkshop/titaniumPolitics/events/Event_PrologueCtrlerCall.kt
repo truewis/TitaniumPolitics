@@ -7,9 +7,15 @@ import kotlinx.serialization.Serializable
 class Event_PrologueCtrlerCall : EventObject(ReadOnly.questProp("PrologueCtrlerCall-name"), true) {
 
     override fun exec(a: Int, b: Int) {
-        onPlayDialogue("Prologue1")
-        parent.eventSystem.add(Event_PrologueAlinaAccident2())
-        deactivate()
+        if (parent.player.currentMeeting?.currentCharacters?.containsAll(
+                listOf("Ctrler", "Rui")
+            )
+                ?: false
+        ) {
+            onPlayDialogue("Prologue1")
+            parent.eventSystem.add(Event_PrologueAlinaAccident2())
+            deactivate()
+        }
     }
 
 }
