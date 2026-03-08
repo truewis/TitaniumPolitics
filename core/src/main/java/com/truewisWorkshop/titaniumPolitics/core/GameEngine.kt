@@ -104,6 +104,7 @@ class GameEngine(val gameState: GameState) {
         ageInformationHourly()
         spreadPublicInfo()
         checkMarketResourcesHourly()
+        checkGasReactions()
         cancelMeetings()
         adjustPartyMutualities()
     }
@@ -666,6 +667,55 @@ class GameEngine(val gameState: GameState) {
 
     }
 
+    /**
+     * Checks for hazardous gas reactions in each place and triggers explosions when methane
+     * concentration combined with sufficient oxygen exceeds the reaction threshold.
+     * Consumes methane and oxygen, generating CO2, CO, and heat.
+     */
+    fun checkGasReactions() {
+        val reactionThreshold = const("MethaneReactionThresholdPa")
+        val reactionTau = const("MethaneReactionTau")
+        gameState.places.forEach { (placeName, place) ->
+            val methanePressure = try { place.gasPressure("methane") } catch (e: Exception) { 0.0 }
+            val oxygenPressure = try { place.gasPressure("oxygen") } catch (e: Exception) { 0.0 }
+            if (methanePressure > reactionThreshold && oxygenPressure > const("CriticalOxygenPressure") * 2) {
+                // Hourly reaction probability: normalize methane to atmospheric pressure,
+                // scale by seconds/hour, divide by reaction time constant (tau).
+                val reactionProb = methanePressure / 101325.0 * S_PER_HR / reactionTau
+                if (random.nextDouble() < reactionProb) {
+                    Logger.write("!Gas reaction: methane combustion at $placeName", Logger.LogLevel.INFO)
+                    //Consume methane and oxygen, produce CO2, CO, and heat.
+                    val methaneConsumed = place.gasResources["methane"] * 0.8
+                    // 2 mol O2 per mol CH4; mass ratio = 2×32/16 = 4:1
+                    val oxygenNeeded = methaneConsumed * 4.0
+                    val oxygenConsumed = minOf(oxygenNeeded, place.gasResources["oxygen"] * 0.8)
+                    place.gasResources["methane"] -= methaneConsumed
+                    place.gasResources["oxygen"] -= oxygenConsumed
+                    //CO2 from complete combustion, CO from incomplete combustion.
+                    place.gasResources["carbonDioxide"] += methaneConsumed * 44 / 16 * COMPLETE_COMBUSTION_FRACTION
+                    place.gasResources["carbonMonoxide"] += methaneConsumed * 28 / 16 * INCOMPLETE_COMBUSTION_FRACTION
+                    //Combustion heat: ~890 kJ/mol methane = 55625 kJ/kg.
+                    place.addHeat(METHANE_HEAT_OF_COMBUSTION_J_PER_KG * methaneConsumed)
+                    //Explosion wave damages apparatuses.
+                    place.apparatuses.forEach { it.durability -= METHANE_EXPLOSION_APPARATUS_DAMAGE }
+                    place.isAccidentScene = true
+                    //Generate accident information.
+                    Information(
+                        author = null,
+                        creationTime = gameState.time,
+                        type = InformationType.ACCIDENT,
+                        tgtPlace = placeName,
+                        description = "GAS_REACTION"
+                    ).also {
+                        it.knownTo.addAll(place.characters)
+                        place.accidentInformationKeys += it.name
+                        gameState.addInformation(it)
+                    }
+                }
+            }
+        }
+    }
+
     fun cancelMeetings() {
         val missedMeetings = hashSetOf<String>()
 
@@ -928,6 +978,15 @@ class GameEngine(val gameState: GameState) {
             ArrayList<(GameAction) -> Unit>()//Character and Action, used for UI animation between player turns.
 
         class AcquireParams(val type: String, val variables: HashMap<String, Any>)
+
+        /** Fraction of CH4 converted to CO2 during methane combustion (complete combustion path). */
+        const val COMPLETE_COMBUSTION_FRACTION = 0.7
+        /** Fraction of CH4 converted to CO during methane combustion (incomplete combustion path). */
+        const val INCOMPLETE_COMBUSTION_FRACTION = 0.3
+        /** Heat of combustion of methane: ~890 kJ/mol ÷ 0.016 kg/mol = 55625 kJ/kg, in J/kg. */
+        const val METHANE_HEAT_OF_COMBUSTION_J_PER_KG = 55_625_000.0
+        /** Apparatus durability lost from a methane explosion pressure wave. */
+        const val METHANE_EXPLOSION_APPARATUS_DAMAGE = 20.0
 
 
         fun acquire(choices: List<String>): String = runBlocking {

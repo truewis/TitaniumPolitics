@@ -81,13 +81,19 @@ class PPSWindowUI(val gameState: GameState) : Table(defaultSkin), KTable {
             "carbonDioxide" to 3000f,
             "hydrogen" to 500f,
             "methane" to 500f,
-            "ammonia" to 300f
+            "ammonia" to 300f,
+            "carbonMonoxide" to 50f,
+            "sulfurDioxide" to 200f,
+            "hydrogenFluoride" to 50f
         )
         private val HARMFUL_GAS_RED = mapOf(
             "carbonDioxide" to 8000f,
             "hydrogen" to 2000f,
             "methane" to 2000f,
-            "ammonia" to 1500f
+            "ammonia" to 1500f,
+            "carbonMonoxide" to 350f,
+            "sulfurDioxide" to 1000f,
+            "hydrogenFluoride" to 250f
         )
 
         private const val ENERGY_RED_FRACTION = 0.10f

@@ -482,6 +482,10 @@
       "energy": 10000000.0
     },
     "idealHeatProduction": 10000000.0,
+    "gasGeneration": {
+      "carbonMonoxide": 2e-6,
+      "sulfurDioxide": 5e-8
+    },
     "requiredResourcePerRepair": [
       {
         "_resources": {
@@ -644,6 +648,9 @@
       "energy": 1000000.0
     },
     "idealHeatProduction": 1000000.0,
+    "gasGeneration": {
+      "carbonMonoxide": 5e-7
+    },
     "requiredResourcePerRepair": [
       {
         "_resources": {
@@ -956,6 +963,9 @@
       "ammonia": 5e-05
     },
     "idealHeatProduction": 8000000.0,
+    "gasGeneration": {
+      "methane": 2e-6
+    },
     "requiredResourcePerRepair": [
       {
         "_resources": {
@@ -1273,6 +1283,7 @@
       "ammonia": 0.000158
     },
     "idealHeatProduction": 0,
+    "leakGas": "ammonia",
     "requiredResourcePerRepair": [
       {
         "_resources": {
@@ -1635,6 +1646,9 @@
       "energy": 10000.0
     },
     "idealHeatProduction": 10000.0,
+    "gasGeneration": {
+      "carbonMonoxide": 5e-8
+    },
     "requiredResourcePerRepair": [
       {
         "_resources": {
@@ -1719,6 +1733,7 @@
       "ammonia": 1.58e-05
     },
     "idealHeatProduction": 0,
+    "leakGas": "ammonia",
     "requiredResourcePerRepair": [
       {
         "_resources": {
@@ -1759,6 +1774,9 @@
       "energy": 8000.0
     },
     "idealHeatProduction": 5000.0,
+    "gasGeneration": {
+      "methane": 1e-6
+    },
     "requiredResourcePerRepair": [
       {
         "_resources": {

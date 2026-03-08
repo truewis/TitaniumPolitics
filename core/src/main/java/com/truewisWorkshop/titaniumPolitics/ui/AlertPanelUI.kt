@@ -86,6 +86,10 @@ class AlertPanelUI(var type: String, action: () -> Unit, val docList: Group, var
                         it.size(36f).fill()
                     }
 
+                    "ppsFlammableGas", "ppsCorrosiveGas", "ppsGasLeak", "ppsReactionRisk" -> image("CogGrunge") {
+                        it.size(36f).fill()
+                    }
+
                     else -> image("Help") {
                         it.size(36f).fill()
                     }
@@ -127,6 +131,21 @@ class AlertPanelUI(var type: String, action: () -> Unit, val docList: Group, var
                                     )
                                 )
                             )
+                        }
+
+                    "ppsFlammableGas", "ppsCorrosiveGas", "ppsGasLeak", "ppsReactionRisk" ->
+                        label(ReadOnly.prop("AlertPanelUI-" + this@AlertPanelUI.type).format(*params), "description") {
+                            it.growX()
+                            setFontScale(0.25f)
+                            wrap = true
+                            color = Color.ORANGE
+                            this@label.addListener(object : ClickListener() {
+                                override fun clicked(event: InputEvent?, x: Float, y: Float) {
+                                    super.clicked(event, x, y)
+                                    action()
+                                }
+                            })
+                            this@AlertPanelUI.color = Color.ORANGE
                         }
 
                     "interrupted" -> {

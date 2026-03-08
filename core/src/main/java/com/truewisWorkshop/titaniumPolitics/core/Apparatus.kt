@@ -110,6 +110,17 @@ class Apparatus {
 
             return res
         }
+    private val idealGasGeneration: Resources
+        get() = Resources(
+            HashMap(
+                Json.decodeFromString(
+                    MapSerializer<String, Double>(String.serializer(), Double.serializer()),
+                    (jsonData.jsonObject["gasGeneration"]?.toString() ?: "{}")
+                )
+            )
+        )
+    private val leakGas: String?
+        get() = jsonData.jsonObject["leakGas"]?.jsonPrimitive?.content
     private val idealAbsorption: Resources
         get() = Resources(
             HashMap(
@@ -177,6 +188,8 @@ class Apparatus {
         )
     val currentAbsorption: Resources
         get() = idealAbsorption * netEfficiency
+    val currentGasGeneration: Resources
+        get() = idealGasGeneration * netEfficiency
     val currentDistribution: Resources
         get() = idealDistribution * netEfficiency + Resources("ration" to currentWages, "water" to currentWages)
     val currentHeatProduction: Double
@@ -192,7 +205,17 @@ class Apparatus {
         if (type !in accidentTypes) return 0.0
         var typeFactor = 1.0
         when (type) {
-            AccidentType.FIRE -> typeFactor *= place.gasPressure("oxygen") / 101325 * 4
+            AccidentType.FIRE -> {
+                typeFactor *= place.gasPressure("oxygen") / 101325 * 4
+                //Flammable gases also increase fire danger.
+                place.gasResources.keys.forEach { gasName ->
+                    val gasData = ReadOnly.gasJson[gasName]?.jsonObject ?: return@forEach
+                    if (gasData["fireHazard"]?.jsonPrimitive?.boolean == true) {
+                        val factor = gasData["fireHazardFactor"]?.jsonPrimitive?.double ?: 1.0
+                        typeFactor *= (1 + place.gasPressure(gasName) / 101325 * factor)
+                    }
+                }
+            }
             AccidentType.COLLAPSE -> {
                 //Scales with durability of the apparatus.
                 typeFactor *= (const("DurabilityMax") - durability) / const("DurabilityMax")
@@ -201,6 +224,14 @@ class Apparatus {
             AccidentType.EXPLOSION -> {
                 //Scales with durability of the apparatus.
                 typeFactor *= (const("DurabilityMax") - durability) / const("DurabilityMax")
+                //Flammable gases also increase explosion danger.
+                place.gasResources.keys.forEach { gasName ->
+                    val gasData = ReadOnly.gasJson[gasName]?.jsonObject ?: return@forEach
+                    if (gasData["fireHazard"]?.jsonPrimitive?.boolean == true) {
+                        val factor = gasData["fireHazardFactor"]?.jsonPrimitive?.double ?: 1.0
+                        typeFactor *= (1 + place.gasPressure(gasName) / 101325 * factor)
+                    }
+                }
             }
 
             AccidentType.FLOODING -> {
@@ -228,7 +259,17 @@ class Apparatus {
         if (type !in accidentTypes) return 0.0
         var typeFactor = 1.0
         when (type) {
-            AccidentType.FIRE -> typeFactor *= place.gasPressure("oxygen") / 101325 * 4
+            AccidentType.FIRE -> {
+                typeFactor *= place.gasPressure("oxygen") / 101325 * 4
+                //Flammable gases also increase fire danger.
+                place.gasResources.keys.forEach { gasName ->
+                    val gasData = ReadOnly.gasJson[gasName]?.jsonObject ?: return@forEach
+                    if (gasData["fireHazard"]?.jsonPrimitive?.boolean == true) {
+                        val factor = gasData["fireHazardFactor"]?.jsonPrimitive?.double ?: 1.0
+                        typeFactor *= (1 + place.gasPressure(gasName) / 101325 * factor)
+                    }
+                }
+            }
             AccidentType.COLLAPSE -> {
                 //Scales with durability of the apparatus.
                 typeFactor *= (const("DurabilityMax") - durability) / const("DurabilityMax")
@@ -237,6 +278,14 @@ class Apparatus {
             AccidentType.EXPLOSION -> {
                 //Scales with durability of the apparatus.
                 typeFactor *= (const("DurabilityMax") - durability) / const("DurabilityMax")
+                //Flammable gases also increase explosion danger.
+                place.gasResources.keys.forEach { gasName ->
+                    val gasData = ReadOnly.gasJson[gasName]?.jsonObject ?: return@forEach
+                    if (gasData["fireHazard"]?.jsonPrimitive?.boolean == true) {
+                        val factor = gasData["fireHazardFactor"]?.jsonPrimitive?.double ?: 1.0
+                        typeFactor *= (1 + place.gasPressure(gasName) / 101325 * factor)
+                    }
+                }
             }
 
             AccidentType.FLOODING -> {
@@ -329,6 +378,30 @@ class Apparatus {
         }
         currentAbsorption.forEach {
             place.gasResources[it.key] -= it.value * S_PER_HR
+        }
+        //Generate gases from this apparatus (e.g., combustion byproducts, organic decomposition).
+        currentGasGeneration.forEach {
+            place.gasResources[it.key] += it.value * S_PER_HR
+        }
+        //Corrosive gas damage to apparatus durability.
+        place.gasResources.keys.forEach { gasName ->
+            val gasData = ReadOnly.gasJson[gasName]?.jsonObject ?: return@forEach
+            val corrosionRate = if (gasData["corrosive"]?.jsonPrimitive?.boolean == true)
+                gasData["corrosionRate"]?.jsonPrimitive?.double ?: 0.0
+            else 0.0
+            if (corrosionRate > 0.0) {
+                val pressure = try { place.gasPressure(gasName) } catch (e: Exception) { 0.0 }
+                durability -= pressure * corrosionRate * S_PER_HR
+            }
+        }
+        //Damaged apparatus leaks its associated gas into the environment.
+        leakGas?.let { gasName ->
+            if (durability < const("DurabilityMax") * 0.5 && durability > 0.0) {
+                val damageFraction = (const("DurabilityMax") - durability) / const("DurabilityMax")
+                val leakAmount = damageFraction * const("GasLeakBaseRate") * S_PER_HR
+                place.gasResources[gasName] += leakAmount
+                Logger.write("$name is leaking $gasName (damage fraction: %.2f)".format(damageFraction), Logger.LogLevel.APPARATUS_VERBOSE)
+            }
         }
         place.addHeat(currentHeatProduction * S_PER_HR)
 
