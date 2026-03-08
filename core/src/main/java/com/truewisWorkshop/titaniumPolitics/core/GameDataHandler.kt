@@ -57,10 +57,10 @@ class GameDataHandler(val directoryName: String) {
 
         resourceMap["currentWorkerPerPlace"]!![gState.time] = hashMapOf(*(gState.places.map { (pName, place) ->
             pName to place.currentWorker.toFloat()
-        }.filter { !it.first.contains("home") }.toTypedArray()))
+        }.filter { !it.first.contains("home") && !it.first.contains("corridor") }.toTypedArray()))
         resourceMap["plannedWorkerPerPlace"]!![gState.time] = hashMapOf(*(gState.places.map { (pName, place) ->
             pName to place.plannedWorker.toFloat()
-        }.filter { !it.first.contains("home") }.toTypedArray()))
+        }.filter { !it.first.contains("home") && !it.first.contains("corridor") }.toTypedArray()))
 
         resourceMap["currentWorkerPerParty"]!![gState.time] =
             hashMapOf(*(gState.parties.filter { it.value.type == Party.Type.DIVISION }.map { (pName, party) ->
@@ -74,7 +74,7 @@ class GameDataHandler(val directoryName: String) {
 
         resourceMap["currentPop"]!![gState.time] = hashMapOf(*(gState.places.map { (pName, place) ->
             pName to place.currentTotalPop.toFloat() + place.connectedHomes.sumOf { gState.places[it]!!.currentTotalPop }
-        }.filter { !it.first.contains("home") }.toTypedArray()))
+        }.filter { !it.first.contains("home") && !it.first.contains("corridor") }.toTypedArray()))
         //For the current pop display, we add the population of all homes in the place.
 
         resourceMap["apparatusDurability"]!![gState.time] = hashMapOf(*(gState.places.flatMap { (pName, place) ->
@@ -116,9 +116,11 @@ data class GameDataFrame(var fName: String) {
 //    }
 
     operator fun set(time: Int = numRows, datum: HashMap<String, Float>) {
+        //Write the total sum to the first column after time, and the rest of the data in the following columns. If there are new keys, add a new line for the keys.
+
         if (!allKeys.containsAll(datum.keys)) {
 
-            writer.write("keys")
+            writer.write("keys, total") // The first column is for keys, the second column is for total sum, and the rest of the columns are for individual data.
             allKeys.addAll(datum.keys - allKeys)
 
             allKeys.forEach {
@@ -129,6 +131,10 @@ data class GameDataFrame(var fName: String) {
 
 
         writer.write(time.toString())
+
+        //Total sum is written in the first column after time, and the rest of the data is written in the following columns. If a key is missing, write 0.
+        writer.write("," + datum.values.sum())
+
         allKeys.forEach {
             writer.write("," + (datum[it] ?: .0))
         }
