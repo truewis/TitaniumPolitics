@@ -110,6 +110,24 @@ data class GameDataFrame(var fName: String) {
 
     var numRows = 0
     var allKeys = arrayListOf<String>()
+
+    init {
+        //If the file already exists, read the existing keys and number of rows.
+        if (file.exists()) {
+            val s = file.readText()
+            val rows = s.split('\n')
+            //Count the rows that starts with "keys", which indicates the start of a new key row. The number of rows is total number of lines minus the number of key rows.
+            numRows = rows.size - rows.count { it.startsWith("keys") }
+            //Read the last key row to get the existing keys.
+            val lastKeyRow = rows.lastIndexOf("keys")
+            allKeys = if (lastKeyRow != -1) {
+                rows[lastKeyRow].split(',').takeLast(rows[lastKeyRow].split(',').size - 2)
+                    .toMutableList() as ArrayList<String>
+            } else {
+                arrayListOf()
+            }
+        }
+    }
 //    operator fun get(time: Int): HashMap<String, Float>
 //    {
 //        return data[time] ?: hashMapOf()

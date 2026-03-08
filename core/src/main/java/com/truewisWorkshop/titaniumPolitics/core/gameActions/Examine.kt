@@ -34,8 +34,8 @@ data class Examine(override val sbjCharacter: String, override val tgtPlace: Str
             InformationType.HUMAN_RESOURCES -> {
                 //Acquire HR information
                 Logger.write(
-                    "HR: ${parent.places[tgtPlace]!!.currentWorker}/${parent.places[tgtPlace]!!.plannedWorker}, ${parent.places[tgtPlace]!!.workHoursStart}-${parent.places[tgtPlace]!!.workHoursEnd}, ${parent.places[tgtPlace]!!.responsibleDivision}",
-                    Logger.LogLevel.INFO
+                    "$sbjCharacter examined HR of $tgtPlace: ${parent.places[tgtPlace]!!.currentWorker}/${parent.places[tgtPlace]!!.plannedWorker}, ${parent.places[tgtPlace]!!.workHoursStart}-${parent.places[tgtPlace]!!.workHoursEnd}, ${parent.places[tgtPlace]!!.responsibleDivision}",
+                    Logger.LogLevel.ACTION_VERBOSE
                 )
                 with(parent.places[tgtPlace]!!) {
                     Information(
@@ -53,7 +53,10 @@ data class Examine(override val sbjCharacter: String, override val tgtPlace: Str
             }
 
             InformationType.APPARATUS -> {
-                Logger.write("Apparatus: ${parent.places[tgtPlace]!!.apparatuses}", Logger.LogLevel.INFO)
+                Logger.write(
+                    "$sbjCharacter examined Apparatus of $tgtPlace: ${parent.places[tgtPlace]!!.apparatuses}",
+                    Logger.LogLevel.ACTION_VERBOSE
+                )
 
                 //Acquire apparatus information.
                 parent.places[tgtPlace]!!.apparatuses.forEach { entry ->
@@ -66,7 +69,10 @@ data class Examine(override val sbjCharacter: String, override val tgtPlace: Str
 
             InformationType.RESOURCES -> {
                 if (tgtPlace.contains("home")) {//Home is the exception; character's resources are shown instead.
-                    Logger.write("Resources: ${parent.characters[sbjCharacter]!!.resources}", Logger.LogLevel.INFO)
+                    Logger.write(
+                        "$sbjCharacter examined Resources of $tgtPlace: ${parent.characters[sbjCharacter]!!.resources}",
+                        Logger.LogLevel.ACTION_VERBOSE
+                    )
                     //Acquire resources information of this character.
                     parent.characters[sbjCharacter]!!.resources
                     Information(

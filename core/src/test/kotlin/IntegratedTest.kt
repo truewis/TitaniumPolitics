@@ -30,7 +30,7 @@ class IntegratedTest {
     @Test
     fun runFor2Days() {
         println("Working Directory = " + System.getProperty("user.dir"))
-        gState = Json.Default.decodeFromString(
+        gState = Json.decodeFromString(
             GameState.serializer(), File("../assets/json/init.json").readText()
         ).also {
             //To run tests, control the player character with an agent.

@@ -24,16 +24,6 @@ import kotlin.math.sqrt
 @Serializable
 class GameState {
     var workingDirectory = ""
-        set(value) {
-            field = value
-            gdh = GameDataHandler(value)
-            gdh.initializeColumns()
-            timeChanged += { old, new ->
-                if (new % IDTH == 0) {
-                    gdh.writeEveryTurn(this)
-                }
-            }
-        }
 
     @Transient
     lateinit var gdh:
@@ -68,7 +58,8 @@ class GameState {
     val onPlayerAction = arrayListOf<() -> Unit>() //This is called when the player ends their turn.
 
     @Transient
-    val onMeetingAction = arrayListOf<(GameAction) -> Unit>() //Called for every action performed by a character who is currently in an ongoing meeting.
+    val onMeetingAction =
+        arrayListOf<(GameAction) -> Unit>() //Called for every action performed by a character who is currently in an ongoing meeting.
     val pop: Int
         get() = places.values.sumOf { it.currentTotalPop }
     val totalAnonPop: Int
@@ -723,8 +714,13 @@ class GameState {
 
     //Injects the parent gameState to all elements in the gameState. This function should be called exactly once after the gameState is created.
     fun injectDependency() {
-        workingDirectory =
-            workingDirectory //This will initialize the gdh. Sometimes gdh is initialized twice, but it does not matter.
+        gdh = GameDataHandler(workingDirectory)
+        gdh.initializeColumns()
+        timeChanged += { old, new ->
+            if (new % IDTH == 0) {
+                gdh.writeEveryTurn(this)
+            }
+        }
         log.injectParent(this)
         places.forEach { it.value.injectParent(this) }
         characters.forEach { it.value.injectParent(this) }
