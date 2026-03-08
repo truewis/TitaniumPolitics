@@ -487,5 +487,25 @@
       0,
       0.4
     ]
+  },
+  "winery": {
+    "image": "data/testimage.png",
+    "sound": "data/sounds/market.mp3",
+    "light": [
+      0,
+      0,
+      0,
+      0.4
+    ]
+  },
+  "cloverBrewery": {
+    "image": "data/testimage.png",
+    "sound": "data/sounds/market.mp3",
+    "light": [
+      0,
+      0,
+      0,
+      0.4
+    ]
   }
 }
