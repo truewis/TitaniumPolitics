@@ -4,7 +4,9 @@ import com.badlogic.gdx.scenes.scene2d.Touchable
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.ui.Tooltip
 import com.badlogic.gdx.utils.Align
+import com.titaniumPolitics.game.core.AgendaType
 import com.titaniumPolitics.game.core.MeetingAgenda
+import com.titaniumPolitics.game.core.ReadOnly
 import com.titaniumPolitics.game.ui.widget.BudgetDisplayUI
 import ktx.scene2d.*
 
@@ -40,27 +42,79 @@ class AgendaTooltipUI(agenda: MeetingAgenda) : Tooltip<Table>(scene2d.table {
                 }
             }
             row()
-            label(agenda.subjectParams.toString()) {
-                it.size(350f, 150f)
-                setFontScale(2f)
-                setAlignment(Align.topLeft)
-                wrap = true
-            }
             if (agenda.attachedRequest != null) {
-                row()
-                label(agenda.attachedRequest!!.toString(), "docTitle") {
+                val req = agenda.attachedRequest!!
+                table {
+                    it.size(350f, 300f)
+                    defaults().left().pad(2f)
+                    label(ReadOnly.prop("AgendaTooltipUI-action"), "docTitle") {
+                        setFontScale(0.2f)
+                    }
+                    label(ReadOnly.prop(req.action::class.simpleName ?: ""), "docTitle") {
+                        setFontScale(0.2f)
+                        it.growX()
+                    }
+                    row()
+                    label(ReadOnly.prop("AgendaTooltipUI-character"), "docTitle") {
+                        setFontScale(0.2f)
+                    }
+                    label(ReadOnly.charProp(req.action.sbjCharacter), "docTitle") {
+                        setFontScale(0.2f)
+                        it.growX()
+                    }
+                    row()
+                    label(ReadOnly.prop("AgendaTooltipUI-place"), "docTitle") {
+                        setFontScale(0.2f)
+                    }
+                    label(ReadOnly.placeProp(req.action.tgtPlace), "docTitle") {
+                        setFontScale(0.2f)
+                        it.growX()
+                    }
+                    row()
+                    label(ReadOnly.prop("AgendaTooltipUI-issuedBy"), "docTitle") {
+                        setFontScale(0.2f)
+                    }
+                    label(req.issuedBy.joinToString { ReadOnly.charProp(it) }, "docTitle") {
+                        setFontScale(0.2f)
+                        wrap = true
+                        it.growX()
+                    }
+                    row()
+                    label(ReadOnly.prop("AgendaTooltipUI-issuedTo"), "docTitle") {
+                        setFontScale(0.2f)
+                    }
+                    label(req.issuedTo.joinToString { ReadOnly.charProp(it) }, "docTitle") {
+                        setFontScale(0.2f)
+                        wrap = true
+                        it.growX()
+                    }
+                }
+            } else if (agenda.attachedBudget != null) {
+                table {
+                    it.size(350f, 300f)
+                    label(
+                        ReadOnly.prop(
+                            if (agenda.type == AgendaType.BUDGET_RESOLUTION)
+                                "NewAgendaUI-budgetResolution-desc"
+                            else
+                                "NewAgendaUI-budgetProposal-desc"
+                        ), "docTitle"
+                    ) {
+                        setFontScale(0.2f)
+                        wrap = true
+                        it.growX()
+                    }
+                    row()
+                    add(BudgetDisplayUI(budget = agenda.attachedBudget)).size(300f, 250f)
+                }
+            } else {
+                label(agenda.subjectParams.toString()) {
                     it.size(350f, 150f)
-                    setFontScale(0.2f)
+                    setFontScale(2f)
                     setAlignment(Align.topLeft)
                     wrap = true
                 }
             }
-            if (agenda.attachedBudget != null) {
-                row()
-                add(BudgetDisplayUI(budget = agenda.attachedBudget)).size(300f, 150f)
-            }
-
-
         }
     }
 
