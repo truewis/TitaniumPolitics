@@ -9,6 +9,9 @@ import com.titaniumPolitics.game.core.InformationType
 import com.titaniumPolitics.game.core.ReadOnly
 import com.titaniumPolitics.game.core.gameActions.Move
 import com.titaniumPolitics.game.core.gameActions.Wait
+import kotlinx.serialization.json.boolean
+import kotlinx.serialization.json.jsonObject
+import kotlinx.serialization.json.jsonPrimitive
 import ktx.scene2d.Scene2DSkin.defaultSkin
 
 class AlertUI(var gameState: GameState) : Table(defaultSkin) {
@@ -33,11 +36,12 @@ class AlertUI(var gameState: GameState) : Table(defaultSkin) {
 
     fun addAlert(type: String, vararg params: String, action: () -> Unit = {}) {
         Gdx.app.postRunnable {//This function is often called from the main thread, so we need to post it to the UI thread.
-            if (type in listOf("vital", "hunger", "thirst", "will") && docList.children.none {
+            val singletonTypes = listOf("vital", "hunger", "thirst", "will", "ppsFlammableGas", "ppsCorrosiveGas", "ppsGasLeak", "ppsReactionRisk")
+            if (type in singletonTypes && docList.children.none {
                     (it as AlertPanelUI).type == type
                 })//Only one alert of each type is visible at a time.
                 docList.addActor(AlertPanelUI(type, action, docList, *params))
-            else if (type !in listOf("vital", "hunger", "thirst", "will"))
+            else if (type !in singletonTypes)
                 docList.addActor(AlertPanelUI(type, action, docList, *params))
             if (!isVisible)
                 isVisible = true
@@ -118,6 +122,39 @@ class AlertUI(var gameState: GameState) : Table(defaultSkin) {
             addAlert("vital")
         if (gameState.player.will < ReadOnly.const("CriticalWill"))
             addAlert("will")
+
+        //PPS gas hazard alerts for the four gas dangers
+        val playerPlace = try { gameState.player.place } catch (e: Exception) { null }
+        playerPlace?.let { place ->
+            //1. Flammable gas (increases fire danger) alert
+            place.gasResources.keys.forEach { gasName ->
+                val gasData = ReadOnly.gasJson[gasName]?.jsonObject
+                if (gasData?.get("fireHazard")?.jsonPrimitive?.boolean == true) {
+                    val pressure = try { place.gasPressure(gasName).toFloat() } catch (e: Exception) { 0f }
+                    if (pressure > 500f)
+                        addAlert("ppsFlammableGas", gasName)
+                }
+            }
+            //2. Corrosive gas (damages apparatus) alert
+            place.gasResources.keys.forEach { gasName ->
+                val gasData = ReadOnly.gasJson[gasName]?.jsonObject
+                if (gasData?.get("corrosive")?.jsonPrimitive?.boolean == true) {
+                    val pressure = try { place.gasPressure(gasName).toFloat() } catch (e: Exception) { 0f }
+                    if (pressure > 100f)
+                        addAlert("ppsCorrosiveGas", gasName)
+                }
+            }
+            //3. Gas leak alert (damaged apparatus leaking)
+            place.apparatuses.forEach { app ->
+                val leakGasName = ReadOnly.appJson[app.name]?.jsonObject?.get("leakGas")?.jsonPrimitive?.content
+                if (leakGasName != null && app.durability < ReadOnly.const("DurabilityMax") * 0.5 && app.durability > 0.0)
+                    addAlert("ppsGasLeak", leakGasName, app.name)
+            }
+            //4. Gas reaction risk (high methane concentration)
+            val methanePressure = try { place.gasPressure("methane").toFloat() } catch (e: Exception) { 0f }
+            if (methanePressure > ReadOnly.const("MethaneReactionThresholdPa").toFloat() * 0.5f)
+                addAlert("ppsReactionRisk")
+        }
 
         newInformation.clear()
 
