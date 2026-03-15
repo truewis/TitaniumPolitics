@@ -43,6 +43,15 @@ class PPSWindowUI(val gameState: GameState) : Table(defaultSkin), KTable {
     var radiationStatus = ConditionStatus.GREEN
         private set
 
+    val overallStatus
+        get() = listOf(gasStatus, temperatureStatus, powerStatus, radiationStatus).maxByOrNull {
+            when (it) {
+                ConditionStatus.GREEN -> 0
+                ConditionStatus.ORANGE -> 1
+                ConditionStatus.RED -> 2
+            }
+        } ?: ConditionStatus.GREEN
+
     /** Invoked after every successful [refresh] with the latest statuses. */
     val onStatusChanged = arrayListOf<(ConditionStatus, ConditionStatus, ConditionStatus, ConditionStatus) -> Unit>()
 

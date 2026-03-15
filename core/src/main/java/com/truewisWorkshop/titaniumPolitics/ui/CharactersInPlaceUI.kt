@@ -69,6 +69,13 @@ class CharactersInPlaceUI(var gameState: GameState) : Table(defaultSkin) {
         )
     }
 
+    fun setPortraitsColor(color: com.badlogic.gdx.graphics.Color) {
+        portraits.forEach {
+            it.portrait.portrait.color = color //I know, the object depth is a bit much here, but it is what it is.
+
+        }
+    }
+
     init {
         instance = this
         add(scrollPane).grow()

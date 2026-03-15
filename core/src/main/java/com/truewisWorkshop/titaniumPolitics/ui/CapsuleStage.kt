@@ -18,8 +18,6 @@ import com.titaniumPolitics.game.core.ReadOnly
 import com.titaniumPolitics.game.debugTools.Logger
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
-import java.util.Locale
-import kotlin.io.path.Path
 
 class CapsuleStage(val gameState: GameState) : Stage(FitViewport(1920F, 1080F)) {
     var background = Image()
@@ -119,12 +117,12 @@ class CapsuleStage(val gameState: GameState) : Stage(FitViewport(1920F, 1080F)) 
             val ppsWindow = hud.assistantUI.ppsWindowUI
             val tintColor = when {
                 maxEnergy > 0f && place.resources["energy"].toFloat() == 0f -> Color.BLACK
-                ppsWindow.powerStatus == PPSWindowUI.ConditionStatus.RED -> Color.RED
-                ppsWindow.powerStatus == PPSWindowUI.ConditionStatus.ORANGE -> Color.ORANGE
+                ppsWindow.overallStatus == PPSWindowUI.ConditionStatus.RED -> Color.RED
+                ppsWindow.overallStatus == PPSWindowUI.ConditionStatus.ORANGE -> Color.ORANGE
                 else -> Color.WHITE
             }
             background.color = tintColor
-            hud.charactersView.color = tintColor
+            hud.charactersView.setPortraitsColor(tintColor)
         }
         Logger.write("Starting Audio...", Logger.LogLevel.INFO)
         playMusic()
