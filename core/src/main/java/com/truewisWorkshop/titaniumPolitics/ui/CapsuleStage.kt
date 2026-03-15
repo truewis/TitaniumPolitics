@@ -5,6 +5,7 @@ import com.badlogic.gdx.Input
 import com.badlogic.gdx.assets.AssetManager
 import com.badlogic.gdx.assets.loaders.TextureLoader
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver
+import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.actions.Actions
@@ -113,6 +114,17 @@ class CapsuleStage(val gameState: GameState) : Stage(FitViewport(1920F, 1080F)) 
                 prevPlace = it.player.place.name
                 roomChanged(it.player.place.name)
             }
+            val place = it.player.place
+            val maxEnergy = place.maxResources["energy"].toFloat()
+            val ppsWindow = hud.assistantUI.ppsWindowUI
+            val tintColor = when {
+                maxEnergy > 0f && place.resources["energy"].toFloat() == 0f -> Color.BLACK
+                ppsWindow.powerStatus == PPSWindowUI.ConditionStatus.RED -> Color.RED
+                ppsWindow.powerStatus == PPSWindowUI.ConditionStatus.ORANGE -> Color.ORANGE
+                else -> Color.WHITE
+            }
+            background.color = tintColor
+            hud.charactersView.color = tintColor
         }
         Logger.write("Starting Audio...", Logger.LogLevel.INFO)
         playMusic()
