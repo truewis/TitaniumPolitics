@@ -44,6 +44,8 @@ class AssistantUI(gameState: GameState) : Table(defaultSkin) {
     )
 
     var numCurrentCabinetButtons = 0
+    val ppsWindowUI = PPSWindowUI(gameState)
+
     fun addCabinetButton(title: String, content: Table, openAction: () -> Unit): CabinetWindowContainerUI {
         val newButton = CabinetWindowContainerUI(
             title = title,
@@ -66,7 +68,6 @@ class AssistantUI(gameState: GameState) : Table(defaultSkin) {
 
         // Add PPS cabinet after all other cabinets are set up
         val ppsIndex = cabinetWindowUIs.size
-        val ppsWindowUI = PPSWindowUI(gameState)
         val ppsHandleUI = PPSHandleUI(
             ppsWindow = ppsWindowUI,
             xOffset = -160f,//ppsIndex * buttonXGap, //Controlled by PPSHandleUI itself, so it can slide in and out smoothly
