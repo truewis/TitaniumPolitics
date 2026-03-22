@@ -839,8 +839,7 @@
           "durability": 95
         }
       ],
-      "characters": [
-      ],
+      "characters": [],
       "responsibleDivision": "bioengineering",
       "workHoursStart": 0,
       "workHoursEnd": 24
@@ -896,8 +895,7 @@
           "durability": 95
         }
       ],
-      "characters": [
-      ],
+      "characters": [],
       "responsibleDivision": "bioengineering",
       "workHoursStart": 0,
       "workHoursEnd": 24
@@ -921,8 +919,9 @@
         "reservoirWest",
         "securityCheckWest",
         "rescueStationWest",
-        "theEngine",
-        "miningHeadquarters"
+        "miningHeadquarters",
+        "mineVerticalA5",
+        "theEngine"
       ],
       "apparatuses": [
         {
@@ -966,8 +965,7 @@
           "durability": 95
         }
       ],
-      "characters": [
-      ],
+      "characters": [],
       "responsibleDivision": "mining",
       "workHoursStart": 9,
       "workHoursEnd": 17
@@ -1033,7 +1031,8 @@
       "connectedPlaces": [
         "miningSchool",
         "constructionYardSouth",
-        "rescueStationSouth"
+        "rescueStationSouth",
+        "mineVerticalB5"
       ],
       "apparatuses": [
         {
@@ -1077,8 +1076,7 @@
           "durability": 95
         }
       ],
-      "characters": [
-      ],
+      "characters": [],
       "responsibleDivision": "mining",
       "workHoursStart": 9,
       "workHoursEnd": 17
@@ -1143,8 +1141,7 @@
           "durability": 95
         }
       ],
-      "characters": [
-      ],
+      "characters": [],
       "responsibleDivision": "mining",
       "workHoursStart": 9,
       "workHoursEnd": 17
@@ -1381,8 +1378,7 @@
           "durability": 95
         }
       ],
-      "characters": [
-      ],
+      "characters": [],
       "responsibleDivision": "industry",
       "workHoursStart": 9,
       "workHoursEnd": 17
@@ -1451,8 +1447,7 @@
           "durability": 95
         }
       ],
-      "characters": [
-      ],
+      "characters": [],
       "responsibleDivision": "interior",
       "workHoursStart": 9,
       "workHoursEnd": 17
@@ -1499,8 +1494,7 @@
           "durability": 0
         }
       ],
-      "characters": [
-      ],
+      "characters": [],
       "responsibleDivision": "infrastructure",
       "workHoursStart": 9,
       "workHoursEnd": 17
@@ -1555,8 +1549,7 @@
           "durability": 95
         }
       ],
-      "characters": [
-      ],
+      "characters": [],
       "responsibleDivision": "infrastructure",
       "workHoursStart": 0,
       "workHoursEnd": 24
@@ -1682,8 +1675,7 @@
           "durability": 95
         }
       ],
-      "characters": [
-      ],
+      "characters": [],
       "responsibleDivision": "infrastructure",
       "workHoursStart": 0,
       "workHoursEnd": 24
@@ -1772,8 +1764,7 @@
           "durability": 95
         }
       ],
-      "characters": [
-      ],
+      "characters": [],
       "responsibleDivision": "infrastructure",
       "workHoursStart": 0,
       "workHoursEnd": 24
@@ -1834,8 +1825,7 @@
           "durability": 95
         }
       ],
-      "characters": [
-      ],
+      "characters": [],
       "responsibleDivision": "infrastructure",
       "workHoursStart": 0,
       "workHoursEnd": 24
@@ -1895,8 +1885,7 @@
           "durability": 95
         }
       ],
-      "characters": [
-      ],
+      "characters": [],
       "responsibleDivision": "infrastructure",
       "workHoursStart": 0,
       "workHoursEnd": 24
@@ -1954,8 +1943,7 @@
           "durability": 95
         }
       ],
-      "characters": [
-      ],
+      "characters": [],
       "responsibleDivision": "infrastructure",
       "workHoursStart": 0,
       "workHoursEnd": 24
@@ -2011,8 +1999,7 @@
           "durability": 95
         }
       ],
-      "characters": [
-      ],
+      "characters": [],
       "responsibleDivision": "infrastructure",
       "workHoursStart": 0,
       "workHoursEnd": 24
@@ -2059,8 +2046,7 @@
           "durability": 95
         }
       ],
-      "characters": [
-      ],
+      "characters": [],
       "responsibleDivision": "education",
       "workHoursStart": 9,
       "workHoursEnd": 17
@@ -2105,8 +2091,7 @@
           "durability": 95
         }
       ],
-      "characters": [
-      ],
+      "characters": [],
       "responsibleDivision": "education",
       "workHoursStart": 9,
       "workHoursEnd": 17
@@ -2235,8 +2220,7 @@
           "durability": 95
         }
       ],
-      "characters": [
-      ],
+      "characters": [],
       "responsibleDivision": "bioengineering",
       "workHoursStart": 9,
       "workHoursEnd": 17
@@ -2329,8 +2313,7 @@
           "durability": 95
         }
       ],
-      "characters": [
-      ],
+      "characters": [],
       "responsibleDivision": "safety",
       "workHoursStart": 0,
       "workHoursEnd": 24
@@ -2423,8 +2406,7 @@
           "durability": 95
         }
       ],
-      "characters": [
-      ],
+      "characters": [],
       "responsibleDivision": "safety",
       "workHoursStart": 0,
       "workHoursEnd": 24
@@ -2472,8 +2454,7 @@
           "durability": 95
         }
       ],
-      "characters": [
-      ],
+      "characters": [],
       "responsibleDivision": "safety",
       "workHoursStart": 0,
       "workHoursEnd": 24
@@ -2517,8 +2498,7 @@
           "durability": 95
         }
       ],
-      "characters": [
-      ],
+      "characters": [],
       "responsibleDivision": "safety",
       "workHoursStart": 0,
       "workHoursEnd": 24
@@ -2563,8 +2543,7 @@
           "durability": 95
         }
       ],
-      "characters": [
-      ],
+      "characters": [],
       "responsibleDivision": "safety",
       "workHoursStart": 0,
       "workHoursEnd": 24
@@ -2609,8 +2588,7 @@
           "durability": 95
         }
       ],
-      "characters": [
-      ],
+      "characters": [],
       "responsibleDivision": "safety",
       "workHoursStart": 0,
       "workHoursEnd": 24
@@ -2664,8 +2642,7 @@
           "durability": 95
         }
       ],
-      "characters": [
-      ],
+      "characters": [],
       "responsibleDivision": "interior",
       "workHoursStart": 9,
       "workHoursEnd": 17
@@ -2700,8 +2677,7 @@
           "durability": 95
         }
       ],
-      "characters": [
-      ],
+      "characters": [],
       "isBuildingIn": "market",
       "workHoursStart": 16,
       "workHoursEnd": 24
@@ -2944,8 +2920,7 @@
           "durability": 95
         }
       ],
-      "characters": [
-      ],
+      "characters": [],
       "responsibleDivision": "interior",
       "workHoursStart": 9,
       "workHoursEnd": 17
@@ -3000,8 +2975,7 @@
           "durability": 95
         }
       ],
-      "characters": [
-      ],
+      "characters": [],
       "responsibleDivision": "interior",
       "workHoursStart": 9,
       "workHoursEnd": 17
@@ -3061,8 +3035,7 @@
           "durability": 95
         }
       ],
-      "characters": [
-      ],
+      "characters": [],
       "responsibleDivision": "industry",
       "workHoursStart": 9,
       "workHoursEnd": 17
@@ -3079,10 +3052,11 @@
           "component": 200,
           "water": 15000,
           "oxygen": 10000,
-          "energy": 1e12
+          "energy": 1000000000000.0
         }
       },
       "connectedPlaces": [
+        "mineHorizontalA15",
         "excavationShaftA"
       ],
       "apparatuses": [
@@ -3147,11 +3121,1049 @@
           "durability": 95
         }
       ],
-      "characters": [
-      ],
+      "characters": [],
       "responsibleDivision": "infrastructure",
       "workHoursStart": 0,
       "workHoursEnd": 24
+    },
+    "mineVerticalA5": {
+      "coordinates": {
+        "x": -10,
+        "y": 0,
+        "z": -15
+      },
+      "resources": {
+        "_resources": {}
+      },
+      "connectedPlaces": [
+        "excavationShaftA",
+        "mineVerticalA10",
+        "mineHorizontalA5"
+      ],
+      "apparatuses": [
+        {
+          "name": "co2Recycle",
+          "durability": 95
+        }
+      ],
+      "characters": [],
+      "authorizedDivisions": [
+        "mining"
+      ],
+      "workHoursStart": 9,
+      "workHoursEnd": 17
+    },
+    "mineHorizontalA5": {
+      "coordinates": {
+        "x": -15,
+        "y": 0,
+        "z": -15
+      },
+      "resources": {
+        "_resources": {}
+      },
+      "connectedPlaces": [
+        "mineVerticalA5"
+      ],
+      "apparatuses": [
+        {
+          "name": "co2Recycle",
+          "durability": 95
+        }
+      ],
+      "characters": [],
+      "authorizedDivisions": [
+        "mining"
+      ],
+      "workHoursStart": 9,
+      "workHoursEnd": 17
+    },
+    "mineVerticalA10": {
+      "coordinates": {
+        "x": -10,
+        "y": 0,
+        "z": -20
+      },
+      "resources": {
+        "_resources": {}
+      },
+      "connectedPlaces": [
+        "mineVerticalA5",
+        "mineVerticalA15",
+        "mineHorizontalA10"
+      ],
+      "apparatuses": [
+        {
+          "name": "co2Recycle",
+          "durability": 95
+        }
+      ],
+      "characters": [],
+      "authorizedDivisions": [
+        "mining"
+      ],
+      "workHoursStart": 9,
+      "workHoursEnd": 17
+    },
+    "mineHorizontalA10": {
+      "coordinates": {
+        "x": -15,
+        "y": 0,
+        "z": -20
+      },
+      "resources": {
+        "_resources": {}
+      },
+      "connectedPlaces": [
+        "mineVerticalA10"
+      ],
+      "apparatuses": [
+        {
+          "name": "co2Recycle",
+          "durability": 95
+        }
+      ],
+      "characters": [],
+      "authorizedDivisions": [
+        "mining"
+      ],
+      "workHoursStart": 9,
+      "workHoursEnd": 17
+    },
+    "mineVerticalA15": {
+      "coordinates": {
+        "x": -10,
+        "y": 0,
+        "z": -25
+      },
+      "resources": {
+        "_resources": {}
+      },
+      "connectedPlaces": [
+        "mineVerticalA10",
+        "mineVerticalA20",
+        "mineHorizontalA15"
+      ],
+      "apparatuses": [
+        {
+          "name": "co2Recycle",
+          "durability": 95
+        }
+      ],
+      "characters": [],
+      "authorizedDivisions": [
+        "mining"
+      ],
+      "workHoursStart": 9,
+      "workHoursEnd": 17
+    },
+    "mineHorizontalA15": {
+      "coordinates": {
+        "x": -15,
+        "y": 0,
+        "z": -25
+      },
+      "resources": {
+        "_resources": {}
+      },
+      "connectedPlaces": [
+        "mineVerticalA15",
+        "theEngine"
+      ],
+      "apparatuses": [
+        {
+          "name": "co2Recycle",
+          "durability": 95
+        }
+      ],
+      "characters": [],
+      "authorizedDivisions": [
+        "mining"
+      ],
+      "workHoursStart": 9,
+      "workHoursEnd": 17
+    },
+    "mineVerticalA20": {
+      "coordinates": {
+        "x": -10,
+        "y": 0,
+        "z": -30
+      },
+      "resources": {
+        "_resources": {}
+      },
+      "connectedPlaces": [
+        "mineVerticalA15",
+        "mineVerticalA25",
+        "mineHorizontalA20"
+      ],
+      "apparatuses": [
+        {
+          "name": "co2Recycle",
+          "durability": 95
+        }
+      ],
+      "characters": [],
+      "authorizedDivisions": [
+        "mining"
+      ],
+      "workHoursStart": 9,
+      "workHoursEnd": 17
+    },
+    "mineHorizontalA20": {
+      "coordinates": {
+        "x": -15,
+        "y": 0,
+        "z": -30
+      },
+      "resources": {
+        "_resources": {}
+      },
+      "connectedPlaces": [
+        "mineVerticalA20"
+      ],
+      "apparatuses": [
+        {
+          "name": "co2Recycle",
+          "durability": 95
+        }
+      ],
+      "characters": [],
+      "authorizedDivisions": [
+        "mining"
+      ],
+      "workHoursStart": 9,
+      "workHoursEnd": 17
+    },
+    "mineVerticalA25": {
+      "coordinates": {
+        "x": -10,
+        "y": 0,
+        "z": -35
+      },
+      "resources": {
+        "_resources": {}
+      },
+      "connectedPlaces": [
+        "mineVerticalA20",
+        "mineVerticalA30",
+        "mineHorizontalA25"
+      ],
+      "apparatuses": [
+        {
+          "name": "co2Recycle",
+          "durability": 95
+        }
+      ],
+      "characters": [],
+      "authorizedDivisions": [
+        "mining"
+      ],
+      "workHoursStart": 9,
+      "workHoursEnd": 17
+    },
+    "mineHorizontalA25": {
+      "coordinates": {
+        "x": -15,
+        "y": 0,
+        "z": -35
+      },
+      "resources": {
+        "_resources": {}
+      },
+      "connectedPlaces": [
+        "mineVerticalA25"
+      ],
+      "apparatuses": [
+        {
+          "name": "co2Recycle",
+          "durability": 95
+        }
+      ],
+      "characters": [],
+      "authorizedDivisions": [
+        "mining"
+      ],
+      "workHoursStart": 9,
+      "workHoursEnd": 17
+    },
+    "mineVerticalA30": {
+      "coordinates": {
+        "x": -10,
+        "y": 0,
+        "z": -40
+      },
+      "resources": {
+        "_resources": {}
+      },
+      "connectedPlaces": [
+        "mineVerticalA25",
+        "mineVerticalA35",
+        "mineHorizontalA30"
+      ],
+      "apparatuses": [
+        {
+          "name": "co2Recycle",
+          "durability": 95
+        }
+      ],
+      "characters": [],
+      "authorizedDivisions": [
+        "mining"
+      ],
+      "workHoursStart": 9,
+      "workHoursEnd": 17
+    },
+    "mineHorizontalA30": {
+      "coordinates": {
+        "x": -15,
+        "y": 0,
+        "z": -40
+      },
+      "resources": {
+        "_resources": {}
+      },
+      "connectedPlaces": [
+        "mineVerticalA30"
+      ],
+      "apparatuses": [
+        {
+          "name": "co2Recycle",
+          "durability": 95
+        }
+      ],
+      "characters": [],
+      "authorizedDivisions": [
+        "mining"
+      ],
+      "workHoursStart": 9,
+      "workHoursEnd": 17
+    },
+    "mineVerticalA35": {
+      "coordinates": {
+        "x": -10,
+        "y": 0,
+        "z": -45
+      },
+      "resources": {
+        "_resources": {}
+      },
+      "connectedPlaces": [
+        "mineVerticalA30",
+        "mineVerticalA40",
+        "mineHorizontalA35"
+      ],
+      "apparatuses": [
+        {
+          "name": "co2Recycle",
+          "durability": 95
+        }
+      ],
+      "characters": [],
+      "authorizedDivisions": [
+        "mining"
+      ],
+      "workHoursStart": 9,
+      "workHoursEnd": 17
+    },
+    "mineHorizontalA35": {
+      "coordinates": {
+        "x": -15,
+        "y": 0,
+        "z": -45
+      },
+      "resources": {
+        "_resources": {}
+      },
+      "connectedPlaces": [
+        "mineVerticalA35"
+      ],
+      "apparatuses": [
+        {
+          "name": "co2Recycle",
+          "durability": 95
+        }
+      ],
+      "characters": [],
+      "authorizedDivisions": [
+        "mining"
+      ],
+      "workHoursStart": 9,
+      "workHoursEnd": 17
+    },
+    "mineVerticalA40": {
+      "coordinates": {
+        "x": -10,
+        "y": 0,
+        "z": -50
+      },
+      "resources": {
+        "_resources": {}
+      },
+      "connectedPlaces": [
+        "mineVerticalA35",
+        "mineVerticalA45",
+        "mineHorizontalA40"
+      ],
+      "apparatuses": [
+        {
+          "name": "co2Recycle",
+          "durability": 95
+        }
+      ],
+      "characters": [],
+      "authorizedDivisions": [
+        "mining"
+      ],
+      "workHoursStart": 9,
+      "workHoursEnd": 17
+    },
+    "mineHorizontalA40": {
+      "coordinates": {
+        "x": -15,
+        "y": 0,
+        "z": -50
+      },
+      "resources": {
+        "_resources": {}
+      },
+      "connectedPlaces": [
+        "mineVerticalA40"
+      ],
+      "apparatuses": [
+        {
+          "name": "co2Recycle",
+          "durability": 95
+        }
+      ],
+      "characters": [],
+      "authorizedDivisions": [
+        "mining"
+      ],
+      "workHoursStart": 9,
+      "workHoursEnd": 17
+    },
+    "mineVerticalA45": {
+      "coordinates": {
+        "x": -10,
+        "y": 0,
+        "z": -55
+      },
+      "resources": {
+        "_resources": {}
+      },
+      "connectedPlaces": [
+        "mineVerticalA40",
+        "mineVerticalA50",
+        "mineHorizontalA45"
+      ],
+      "apparatuses": [
+        {
+          "name": "co2Recycle",
+          "durability": 95
+        }
+      ],
+      "characters": [],
+      "authorizedDivisions": [
+        "mining"
+      ],
+      "workHoursStart": 9,
+      "workHoursEnd": 17
+    },
+    "mineHorizontalA45": {
+      "coordinates": {
+        "x": -15,
+        "y": 0,
+        "z": -55
+      },
+      "resources": {
+        "_resources": {}
+      },
+      "connectedPlaces": [
+        "mineVerticalA45"
+      ],
+      "apparatuses": [
+        {
+          "name": "co2Recycle",
+          "durability": 95
+        }
+      ],
+      "characters": [],
+      "authorizedDivisions": [
+        "mining"
+      ],
+      "workHoursStart": 9,
+      "workHoursEnd": 17
+    },
+    "mineVerticalA50": {
+      "coordinates": {
+        "x": -10,
+        "y": 0,
+        "z": -60
+      },
+      "resources": {
+        "_resources": {}
+      },
+      "connectedPlaces": [
+        "mineVerticalA45",
+        "mineHorizontalA50"
+      ],
+      "apparatuses": [
+        {
+          "name": "co2Recycle",
+          "durability": 95
+        }
+      ],
+      "characters": [],
+      "authorizedDivisions": [
+        "mining"
+      ],
+      "workHoursStart": 9,
+      "workHoursEnd": 17
+    },
+    "mineHorizontalA50": {
+      "coordinates": {
+        "x": -15,
+        "y": 0,
+        "z": -60
+      },
+      "resources": {
+        "_resources": {}
+      },
+      "connectedPlaces": [
+        "mineVerticalA50"
+      ],
+      "apparatuses": [
+        {
+          "name": "co2Recycle",
+          "durability": 95
+        }
+      ],
+      "characters": [],
+      "authorizedDivisions": [
+        "mining"
+      ],
+      "workHoursStart": 9,
+      "workHoursEnd": 17
+    },
+    "mineVerticalB5": {
+      "coordinates": {
+        "x": 10,
+        "y": 0,
+        "z": -15
+      },
+      "resources": {
+        "_resources": {}
+      },
+      "connectedPlaces": [
+        "excavationShaftB",
+        "mineVerticalB10",
+        "mineHorizontalB5"
+      ],
+      "apparatuses": [
+        {
+          "name": "co2Recycle",
+          "durability": 95
+        }
+      ],
+      "characters": [],
+      "authorizedDivisions": [
+        "mining"
+      ],
+      "workHoursStart": 9,
+      "workHoursEnd": 17
+    },
+    "mineHorizontalB5": {
+      "coordinates": {
+        "x": 15,
+        "y": 0,
+        "z": -15
+      },
+      "resources": {
+        "_resources": {}
+      },
+      "connectedPlaces": [
+        "mineVerticalB5"
+      ],
+      "apparatuses": [
+        {
+          "name": "co2Recycle",
+          "durability": 95
+        }
+      ],
+      "characters": [],
+      "authorizedDivisions": [
+        "mining"
+      ],
+      "workHoursStart": 9,
+      "workHoursEnd": 17
+    },
+    "mineVerticalB10": {
+      "coordinates": {
+        "x": 10,
+        "y": 0,
+        "z": -20
+      },
+      "resources": {
+        "_resources": {}
+      },
+      "connectedPlaces": [
+        "mineVerticalB5",
+        "mineVerticalB15",
+        "mineHorizontalB10"
+      ],
+      "apparatuses": [
+        {
+          "name": "co2Recycle",
+          "durability": 95
+        }
+      ],
+      "characters": [],
+      "authorizedDivisions": [
+        "mining"
+      ],
+      "workHoursStart": 9,
+      "workHoursEnd": 17
+    },
+    "mineHorizontalB10": {
+      "coordinates": {
+        "x": 15,
+        "y": 0,
+        "z": -20
+      },
+      "resources": {
+        "_resources": {}
+      },
+      "connectedPlaces": [
+        "mineVerticalB10"
+      ],
+      "apparatuses": [
+        {
+          "name": "co2Recycle",
+          "durability": 95
+        }
+      ],
+      "characters": [],
+      "authorizedDivisions": [
+        "mining"
+      ],
+      "workHoursStart": 9,
+      "workHoursEnd": 17
+    },
+    "mineVerticalB15": {
+      "coordinates": {
+        "x": 10,
+        "y": 0,
+        "z": -25
+      },
+      "resources": {
+        "_resources": {}
+      },
+      "connectedPlaces": [
+        "mineVerticalB10",
+        "mineVerticalB20",
+        "mineHorizontalB15"
+      ],
+      "apparatuses": [
+        {
+          "name": "co2Recycle",
+          "durability": 95
+        }
+      ],
+      "characters": [],
+      "authorizedDivisions": [
+        "mining"
+      ],
+      "workHoursStart": 9,
+      "workHoursEnd": 17
+    },
+    "mineHorizontalB15": {
+      "coordinates": {
+        "x": 15,
+        "y": 0,
+        "z": -25
+      },
+      "resources": {
+        "_resources": {}
+      },
+      "connectedPlaces": [
+        "mineVerticalB15"
+      ],
+      "apparatuses": [
+        {
+          "name": "co2Recycle",
+          "durability": 95
+        }
+      ],
+      "characters": [],
+      "authorizedDivisions": [
+        "mining"
+      ],
+      "workHoursStart": 9,
+      "workHoursEnd": 17
+    },
+    "mineVerticalB20": {
+      "coordinates": {
+        "x": 10,
+        "y": 0,
+        "z": -30
+      },
+      "resources": {
+        "_resources": {}
+      },
+      "connectedPlaces": [
+        "mineVerticalB15",
+        "mineVerticalB25",
+        "mineHorizontalB20"
+      ],
+      "apparatuses": [
+        {
+          "name": "co2Recycle",
+          "durability": 95
+        }
+      ],
+      "characters": [],
+      "authorizedDivisions": [
+        "mining"
+      ],
+      "workHoursStart": 9,
+      "workHoursEnd": 17
+    },
+    "mineHorizontalB20": {
+      "coordinates": {
+        "x": 15,
+        "y": 0,
+        "z": -30
+      },
+      "resources": {
+        "_resources": {}
+      },
+      "connectedPlaces": [
+        "mineVerticalB20"
+      ],
+      "apparatuses": [
+        {
+          "name": "co2Recycle",
+          "durability": 95
+        }
+      ],
+      "characters": [],
+      "authorizedDivisions": [
+        "mining"
+      ],
+      "workHoursStart": 9,
+      "workHoursEnd": 17
+    },
+    "mineVerticalB25": {
+      "coordinates": {
+        "x": 10,
+        "y": 0,
+        "z": -35
+      },
+      "resources": {
+        "_resources": {}
+      },
+      "connectedPlaces": [
+        "mineVerticalB20",
+        "mineVerticalB30",
+        "mineHorizontalB25"
+      ],
+      "apparatuses": [
+        {
+          "name": "co2Recycle",
+          "durability": 95
+        }
+      ],
+      "characters": [],
+      "authorizedDivisions": [
+        "mining"
+      ],
+      "workHoursStart": 9,
+      "workHoursEnd": 17
+    },
+    "mineHorizontalB25": {
+      "coordinates": {
+        "x": 15,
+        "y": 0,
+        "z": -35
+      },
+      "resources": {
+        "_resources": {}
+      },
+      "connectedPlaces": [
+        "mineVerticalB25"
+      ],
+      "apparatuses": [
+        {
+          "name": "co2Recycle",
+          "durability": 95
+        }
+      ],
+      "characters": [],
+      "authorizedDivisions": [
+        "mining"
+      ],
+      "workHoursStart": 9,
+      "workHoursEnd": 17
+    },
+    "mineVerticalB30": {
+      "coordinates": {
+        "x": 10,
+        "y": 0,
+        "z": -40
+      },
+      "resources": {
+        "_resources": {}
+      },
+      "connectedPlaces": [
+        "mineVerticalB25",
+        "mineVerticalB35",
+        "mineHorizontalB30"
+      ],
+      "apparatuses": [
+        {
+          "name": "co2Recycle",
+          "durability": 95
+        }
+      ],
+      "characters": [],
+      "authorizedDivisions": [
+        "mining"
+      ],
+      "workHoursStart": 9,
+      "workHoursEnd": 17
+    },
+    "mineHorizontalB30": {
+      "coordinates": {
+        "x": 15,
+        "y": 0,
+        "z": -40
+      },
+      "resources": {
+        "_resources": {}
+      },
+      "connectedPlaces": [
+        "mineVerticalB30"
+      ],
+      "apparatuses": [
+        {
+          "name": "co2Recycle",
+          "durability": 95
+        }
+      ],
+      "characters": [],
+      "authorizedDivisions": [
+        "mining"
+      ],
+      "workHoursStart": 9,
+      "workHoursEnd": 17
+    },
+    "mineVerticalB35": {
+      "coordinates": {
+        "x": 10,
+        "y": 0,
+        "z": -45
+      },
+      "resources": {
+        "_resources": {}
+      },
+      "connectedPlaces": [
+        "mineVerticalB30",
+        "mineVerticalB40",
+        "mineHorizontalB35"
+      ],
+      "apparatuses": [
+        {
+          "name": "co2Recycle",
+          "durability": 95
+        }
+      ],
+      "characters": [],
+      "authorizedDivisions": [
+        "mining"
+      ],
+      "workHoursStart": 9,
+      "workHoursEnd": 17
+    },
+    "mineHorizontalB35": {
+      "coordinates": {
+        "x": 15,
+        "y": 0,
+        "z": -45
+      },
+      "resources": {
+        "_resources": {}
+      },
+      "connectedPlaces": [
+        "mineVerticalB35"
+      ],
+      "apparatuses": [
+        {
+          "name": "co2Recycle",
+          "durability": 95
+        }
+      ],
+      "characters": [],
+      "authorizedDivisions": [
+        "mining"
+      ],
+      "workHoursStart": 9,
+      "workHoursEnd": 17
+    },
+    "mineVerticalB40": {
+      "coordinates": {
+        "x": 10,
+        "y": 0,
+        "z": -50
+      },
+      "resources": {
+        "_resources": {}
+      },
+      "connectedPlaces": [
+        "mineVerticalB35",
+        "mineVerticalB45",
+        "mineHorizontalB40"
+      ],
+      "apparatuses": [
+        {
+          "name": "co2Recycle",
+          "durability": 95
+        }
+      ],
+      "characters": [],
+      "authorizedDivisions": [
+        "mining"
+      ],
+      "workHoursStart": 9,
+      "workHoursEnd": 17
+    },
+    "mineHorizontalB40": {
+      "coordinates": {
+        "x": 15,
+        "y": 0,
+        "z": -50
+      },
+      "resources": {
+        "_resources": {}
+      },
+      "connectedPlaces": [
+        "mineVerticalB40"
+      ],
+      "apparatuses": [
+        {
+          "name": "co2Recycle",
+          "durability": 95
+        }
+      ],
+      "characters": [],
+      "authorizedDivisions": [
+        "mining"
+      ],
+      "workHoursStart": 9,
+      "workHoursEnd": 17
+    },
+    "mineVerticalB45": {
+      "coordinates": {
+        "x": 10,
+        "y": 0,
+        "z": -55
+      },
+      "resources": {
+        "_resources": {}
+      },
+      "connectedPlaces": [
+        "mineVerticalB40",
+        "mineVerticalB50",
+        "mineHorizontalB45"
+      ],
+      "apparatuses": [
+        {
+          "name": "co2Recycle",
+          "durability": 95
+        }
+      ],
+      "characters": [],
+      "authorizedDivisions": [
+        "mining"
+      ],
+      "workHoursStart": 9,
+      "workHoursEnd": 17
+    },
+    "mineHorizontalB45": {
+      "coordinates": {
+        "x": 15,
+        "y": 0,
+        "z": -55
+      },
+      "resources": {
+        "_resources": {}
+      },
+      "connectedPlaces": [
+        "mineVerticalB45"
+      ],
+      "apparatuses": [
+        {
+          "name": "co2Recycle",
+          "durability": 95
+        }
+      ],
+      "characters": [],
+      "authorizedDivisions": [
+        "mining"
+      ],
+      "workHoursStart": 9,
+      "workHoursEnd": 17
+    },
+    "mineVerticalB50": {
+      "coordinates": {
+        "x": 10,
+        "y": 0,
+        "z": -60
+      },
+      "resources": {
+        "_resources": {}
+      },
+      "connectedPlaces": [
+        "mineVerticalB45",
+        "mineHorizontalB50"
+      ],
+      "apparatuses": [
+        {
+          "name": "co2Recycle",
+          "durability": 95
+        }
+      ],
+      "characters": [],
+      "authorizedDivisions": [
+        "mining"
+      ],
+      "workHoursStart": 9,
+      "workHoursEnd": 17
+    },
+    "mineHorizontalB50": {
+      "coordinates": {
+        "x": 15,
+        "y": 0,
+        "z": -60
+      },
+      "resources": {
+        "_resources": {}
+      },
+      "connectedPlaces": [
+        "mineVerticalB50"
+      ],
+      "apparatuses": [
+        {
+          "name": "co2Recycle",
+          "durability": 95
+        }
+      ],
+      "characters": [],
+      "authorizedDivisions": [
+        "mining"
+      ],
+      "workHoursStart": 9,
+      "workHoursEnd": 17
     }
   },
   "parties": {
@@ -3373,7 +4385,6 @@
     }
   },
   "eventSystem": {
-    "dataBase": [
-    ]
+    "dataBase": []
   }
 }
