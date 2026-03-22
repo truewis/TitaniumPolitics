@@ -1,5 +1,6 @@
 package com.titaniumPolitics.game.core.NPCRoutines
 
+import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.core.Place
 import com.titaniumPolitics.game.core.Resources
 import com.titaniumPolitics.game.core.gameActions.GameAction
@@ -14,32 +15,47 @@ class StealRoutine(
     val stealAmount: Double,
     val stealFor: String? = null /*If null, steal for myself.*/
 ) : Routine() {
-    fun findResource(name: String): Place? {
+    val triedPlaces = arrayListOf<String>()
+    var currentTargetPlace: String = ""
+    fun findResource(name: String, currentPlace: String): Place? {
         return gState.publicPlaces.values.filter {
-            it.workplaceParty?.treasurer == null ||
-                    it.workplaceParty?.treasurer == name //If the character is the treasurer of the party, they can steal from any place.
-        }.maxByOrNull { it.resources[stealResource] }
+            !triedPlaces.contains(it.name) && (
+                it.workplaceParty?.treasurer == null ||
+                    it.workplaceParty?.treasurer == name) //If the character is the treasurer of the party, they can steal from any place.
+        }.maxByOrNull {
+            it.resources[stealResource] / ((it.distanceTo(currentPlace) ?: (Int.MAX_VALUE / 2)) + 1)
+            // Prefer places with more resources and closer distance. Add 1 to avoid division by zero.
+
+        }?.also {
+            triedPlaces.add(it.name)
+        }
     }
 
     override fun newRoutineCondition(name: String, place: String, subroutines: List<Routine>): Routine? {
-
-        val resplace = findResource(name)?.name
-        if (resplace == null) {
+        if (triedPlaces.size > 5) {
+            // Tried too many times.
             return failed()
         }
-        if (place != resplace) {
-            if (subroutines.none { it is MoveRoutine })
-                return MoveRoutine(resplace)//Add a move routine with higher priority.
+
+        if (place != currentTargetPlace) {
+            if (subroutines.none { it is MoveRoutine }) {
+                currentTargetPlace = findResource(name, place)?.name ?: return failed()
+                return MoveRoutine(currentTargetPlace)//Add a move routine with higher priority.
+            }
         }
         return null
     }
 
     override fun execute(name: String, place: String): GameAction {
-        val resplace = gState.places[place]!!
-        gState.characters[name]!!
-        if (resplace.resources[stealResource] < stealAmount) {
-            //Not enough resource to steal, the routine ends.
-            failed()
+        val placeObj = gState.places[place]!!
+        if (placeObj.resources[stealResource] < stealAmount) {
+            //Not enough resource to steal.
+            currentTargetPlace = findResource(name, place)?.name ?: run {
+                //No place to steal from.
+                failed()
+                return Wait(name, place)
+            }
+            //Wait and move on to next place.
             return Wait(name, place)
         }
         UnofficialResourceTransfer(
@@ -51,12 +67,17 @@ class StealRoutine(
         ).also {
             if (it.isValid()) {
                 success()
-                Logger.write("$name is stealing ${it.resources} from ${resplace.name}!", Logger.LogLevel.INFO)
+                Logger.write("$name is stealing ${it.resources} from ${placeObj.name}!", Logger.LogLevel.INFO)
                 return it
             }
         }
         //UnofficialResourceTransfer is invalid.
-        failed()
+        currentTargetPlace = findResource(name, place)?.name ?: run {
+            //No place to steal from.
+            failed()
+            return Wait(name, place)
+        }
+        //Wait and move on to next place.
         return Wait(name, place)
 
     }
