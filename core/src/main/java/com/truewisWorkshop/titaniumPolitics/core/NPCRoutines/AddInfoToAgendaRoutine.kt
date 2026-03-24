@@ -11,6 +11,11 @@ import kotlinx.serialization.Serializable
 class AddInfoToAgendaRoutine(val agendaIndex: Int, val support: Boolean) : Routine(),
     IMeetingRoutine {
     override fun newRoutineCondition(name: String, place: String, subroutines: List<Routine>): Routine? {
+        val character = gState.characters[name]!!
+        print("")
+        val conf =
+            character.currentMeeting!!
+        conf.agendas[agendaIndex]
         return null
     }
 

@@ -121,8 +121,6 @@ class NonPlayerAgent : Agent() {
 
     //This is a recursive function. It returns the action to be executed.
     private fun executeRoutine(): GameAction {
-        routines.sortByDescending { it.priority }
-
         var routineSettled = false
         var loopCounter = 0
         var maxLoopCounter = 20
@@ -138,21 +136,25 @@ class NonPlayerAgent : Agent() {
                 throw RuntimeException("Routine loop counter exceeded for $name.")
             }
             routineSettled = true
+            sortRoutine()
             routines.forEach {
                 it.injectParent(parent)
             }
-            routines.forEach {
-                it.newRoutineCondition(name, place, it.subroutines.map { routines.first { rt -> rt.ID == it } })
-                    ?.let { v ->
-                        if (!it.subroutines.isEmpty()) return@let//Only support one subroutine for now.
-                        v.routineStartTime = parent.time
-                        v.priority = it.priority + 10 //Set the priority to be higher than the current routine.
-                        it.subroutines += v.ID
-                        addList += v
-                        if (loopCounter > maxLoopCounter)
-                            Logger.write("Adding new routine $v from $it", Logger.LogLevel.INFO)
-                        routineSettled = false
-                    }
+            run {
+                routines.forEach {
+                    it.newRoutineCondition(name, place, it.subroutines.map { routines.first { rt -> rt.ID == it } })
+                        ?.let { v ->
+                            if (!it.subroutines.isEmpty()) return@let//Only support one subroutine for now.
+                            v.routineStartTime = parent.time
+                            v.priority = it.priority + 10 //Set the priority to be higher than the current routine.
+                            it.subroutines += v.ID
+                            addList += v
+                            if (loopCounter > maxLoopCounter)
+                                Logger.write("Adding new routine $v from $it", Logger.LogLevel.INFO)
+                            routineSettled = false
+                        }
+                    if (it.success || it.failed) return@run
+                }
             }
             routines += addList
             addList.clear()
@@ -188,10 +190,32 @@ class NonPlayerAgent : Agent() {
         routines.forEach {
             it.injectParent(parent)
         }
-        routines.sortByDescending { routine -> routine.priority }//WARNING: Soring must be done here, after the routines are updated and before the blockExecution.
+        sortRoutine()
         blockExecution(routines)?.also { return it }
-        return routines[0].execute(name, place)
+        return routines.last().execute(name, place) //The last routine is the smallest subroutine.
 
+    }
+
+    fun sortRoutine() {
+        // Sort by subroutine chain: root routine first, then descendants (shallowest first).
+        routines.sortWith(Comparator { a, b ->
+            fun rootAndDepth(r: Routine): Pair<String, Int> {
+                var cur = r
+                var depthUp = 0
+                while (true) {
+                    val parent = routines.firstOrNull { p -> p.subroutines.contains(cur.ID) } ?: break
+                    cur = parent
+                    depthUp++
+                }
+                return Pair(cur.ID, depthUp)
+            }
+            val (rootA, depthA) = rootAndDepth(a)
+            val (rootB, depthB) = rootAndDepth(b)
+            val rootCmp = rootA.compareTo(rootB)
+            if (rootCmp != 0) return@Comparator rootCmp
+            if (depthA != depthB) return@Comparator depthA - depthB
+            return@Comparator b.priority - a.priority
+        })
     }
 
     /**Recursively stop the routine and all its subroutines.

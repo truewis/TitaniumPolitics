@@ -54,27 +54,32 @@ class GameEngine(val gameState: GameState) {
     }
 
     fun gameLoop() {
-        gameState.activeCharacters.values.sortedByDescending { if (it == gameState.player) 1 else 0 }.forEach {
-            if (it.frozen > 0) {
-                it.frozen--
-                if (!it.trait.contains("robot")) {//Robots don't need to eat.
-                    it.health -= DT / const("HealthConsumptionTau") * const("HealthMax")
-                    it.hunger += DT / const("HungerConsumptionTau") * const("HungerMax")
-                    it.thirst += DT / const("ThirstConsumptionTau") * const("ThirstMax")
-                    if (it.hunger > const("hungerThreshold")) it.health -= DT / const("HealthConsumptionTau") * const(
-                        "HealthMax"
-                    )
-                    if (it.thirst > const("thirstThreshold")) it.health -= DT / const("HealthConsumptionTau") * const(
-                        "HealthMax"
-                    )
+        gameState.characters.filter { it.value.alive }.values.sortedByDescending { if (it == gameState.player) 1 else 0 }
+            .forEach {
+                if (it.frozen > 0) {
+                    it.frozen--
+                    if (!it.trait.contains("robot")) {//Robots don't need to eat.
+                        it.health -= DT / const("HealthConsumptionTau") * const("HealthMax")
+                        it.hunger += DT / const("HungerConsumptionTau") * const("HungerMax")
+                        it.thirst += DT / const("ThirstConsumptionTau") * const("ThirstMax")
+                        if (it.hunger > const("hungerThreshold")) it.health -= DT / const("HealthConsumptionTau") * const(
+                            "HealthMax"
+                        )
+                        if (it.thirst > const("thirstThreshold")) it.health -= DT / const("HealthConsumptionTau") * const(
+                            "HealthMax"
+                        )
 
+                    }
+                }
+                // unconscious characters are frozen.
+                // characters may fall unconscious in the loop, so the condition should be checked for every character before it starts the turn.
+                if (it.health <= 0 && it.frozen <= 0)
+                    it.frozen++
+                while (it.frozen == 0) {
+                    performAction(it)
+                    //if the action took any amount of time, exit the loop.
                 }
             }
-            while (it.frozen == 0) {
-                performAction(it)
-                //if the action took any amount of time, exit the loop.
-            }
-        }
         progression()
 
         if (gameState.time % (constInt("lengthOfDay") / 24) == 0)//Every hour
@@ -676,8 +681,16 @@ class GameEngine(val gameState: GameState) {
         val reactionThreshold = const("MethaneReactionThresholdPa")
         val reactionTau = const("MethaneReactionTau")
         gameState.places.forEach { (placeName, place) ->
-            val methanePressure = try { place.gasPressure("methane") } catch (e: Exception) { 0.0 }
-            val oxygenPressure = try { place.gasPressure("oxygen") } catch (e: Exception) { 0.0 }
+            val methanePressure = try {
+                place.gasPressure("methane")
+            } catch (e: Exception) {
+                0.0
+            }
+            val oxygenPressure = try {
+                place.gasPressure("oxygen")
+            } catch (e: Exception) {
+                0.0
+            }
             if (methanePressure > reactionThreshold && oxygenPressure > const("CriticalOxygenPressure") * 2) {
                 // Hourly reaction probability: normalize methane to atmospheric pressure,
                 // scale by seconds/hour, divide by reaction time constant (tau).
@@ -981,10 +994,13 @@ class GameEngine(val gameState: GameState) {
 
         /** Fraction of CH4 converted to CO2 during methane combustion (complete combustion path). */
         const val COMPLETE_COMBUSTION_FRACTION = 0.7
+
         /** Fraction of CH4 converted to CO during methane combustion (incomplete combustion path). */
         const val INCOMPLETE_COMBUSTION_FRACTION = 0.3
+
         /** Heat of combustion of methane: ~890 kJ/mol ÷ 0.016 kg/mol = 55625 kJ/kg, in J/kg. */
         const val METHANE_HEAT_OF_COMBUSTION_J_PER_KG = 55_625_000.0
+
         /** Apparatus durability lost from a methane explosion pressure wave. */
         const val METHANE_EXPLOSION_APPARATUS_DAMAGE = 20.0
 

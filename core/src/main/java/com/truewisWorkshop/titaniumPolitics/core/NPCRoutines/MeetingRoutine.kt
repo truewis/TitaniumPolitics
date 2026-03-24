@@ -134,10 +134,10 @@ sealed class MeetingRoutine : Routine() {
                 //If the agenda is already proposed, and we have a supporting information, support it.
                 try_support_proofOfWork += 1
                 return (
-                        AddInfoToAgendaRoutine(
-                            meeting.agendas.indexOfFirst { it.type == AgendaType.PROOF_OF_WORK },
-                            support = true
-                        ))//Add a routine, priority higher than work.
+                    AddInfoToAgendaRoutine(
+                        meeting.agendas.indexOfFirst { it.type == AgendaType.PROOF_OF_WORK },
+                        support = true
+                    ))//Add a routine, priority higher than work.
             }
         }
         return null
@@ -150,9 +150,9 @@ sealed class MeetingRoutine : Routine() {
         gState.requests.values.firstOrNull {
             name in it.issuedBy && it.issuedTo.intersect(meeting.currentCharacters)
                 .isNotEmpty() && !it.completed &&
-                    (it.executeTime == null ||
-                            it.executeTime!! <= gState.time + 24 * IDTH)
-                    && it.name !in tried_proposeProofOfWork
+                (it.executeTime == null ||
+                    it.executeTime!! <= gState.time + 24 * IDTH)
+                && it.name !in tried_proposeProofOfWork
             /*Do not demand the request submitted in this meeting to be proved right away.
             * Wait at least one day to execute the request, so that the issuer has time to execute it.
             * */
@@ -310,13 +310,16 @@ sealed class MeetingRoutine : Routine() {
 
     fun meetingRoutineEndCondition(name: String): Boolean {
         if (meetingName in gState.scheduledMeetings) {
+            println("$meetingName is already in scheduledMeetings")
             return false //The meeting has not started yet.
         }
         if (gState.ongoingMeetings[meetingName] == null) {
+            println("Meeting routine end condition met because the meeting is not ongoing.")
             return true //The meeting has ended, so the routine should end.
         }
         val mt = gState.characters[name]!!.currentMeeting
         if (mt != meeting) {
+            println("Meeting routine end condition met because the character is not in the meeting anymore.")
             return true //The character has been transferred to another meeting.
         }
         //Now, given that we are in the correct meeting, check if the meeting is over.
