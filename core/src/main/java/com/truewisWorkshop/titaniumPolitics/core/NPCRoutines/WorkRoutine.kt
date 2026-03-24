@@ -42,6 +42,12 @@ class WorkRoutine(var workplace: String) : Routine() {
     val meetingsAttended = hashSetOf<String>()
     val failedRequests = hashSetOf<String>()
 
+    /**
+     * Tracks the simple class names of subroutine types that have previously failed during this
+     * WorkRoutine's lifetime. Failed subroutine types will not be retried.
+     */
+    val failedSubroutineTypes = hashSetOf<String>()
+
     init {
         priority = PRIORITY_WORK
     }
@@ -53,87 +59,185 @@ class WorkRoutine(var workplace: String) : Routine() {
             return success()
         val character = gState.characters[name]!!
 
-        //These routines will start even if the character is in a meeting./////////////////////////////////////////////////////////////////////////////////
-
-        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-        //I am forced into a meeting. Pick a meeting routine. Do not attend the meeting if it is already attended.
+        // Mandatory: already forced into a meeting - handle immediately outside the priority queue.
         if (character.currentMeeting != null) {
             if (subroutines.none {
                     it is MeetingRoutine && it.meetingName == gState.meetingName(character.currentMeeting!!)
-                }
-            //&& gState.meetingName(character.currentMeeting!!) !in meetingsAttended
-            //I am already in the meeting, so no need to check if I have attended it already. In fact, I am obliged to create meeting routine again.
-            )
+                })
                 return pickMeetingRoutine(name, character.currentMeeting!!).apply {
-                    priority = PRIORITY_MEETING //Higher priority than work.
+                    priority = PRIORITY_MEETING
                 }
         }
-        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        // Build a priority queue of candidate subroutines.
+        // Each entry is a lazy factory paired with an urgency score; only the winning factory is invoked.
+        val candidates = mutableListOf<Pair<() -> Routine, Int>>()
+
         //1. If an accident happened in the place of my control, investigate and clear it.
-        gState.places.values.firstOrNull {
-            it.responsibleDivision != null && gState.parties[it.responsibleDivision]!!.members.contains(
-                name
-            ) && it.isAccidentScene
-        }?.also { place ->
-            if (subroutines.none { it is InvestigateAndClearAccidentRoutine && it.investigatePlace == place.name }) {
-                //If there is no routine to investigate and clear the accident in this place, create a new one.
-                return InvestigateAndClearAccidentRoutine(place.name).apply {
-                    priority = PRIORITY_WORK + 10000 //Highest priority
-                }
-            }
-        }
-
-        //2. If missed a conference
-        val missingMeeting = gState.ongoingMeetings.values
-            .firstOrNull { it.scheduledCharacters.contains(name) && !it.currentCharacters.contains(name) }
-
-        //Do not attend the meeting if it is already attended.
-        if (missingMeeting != null && gState.meetingName(missingMeeting) !in meetingsAttended) {
-            return pickMeetingRoutine(name, missingMeeting).apply {
-                priority = PRIORITY_MEETING //Higher priority than work.
-            }
-        }
-
-        //3. If a conference is scheduled
-        gState.scheduledMeetings.values.firstOrNull {
-            if (!it.scheduledCharacters.contains(name)) return@firstOrNull false //If I am not scheduled to attend this meeting, skip it.
-            val eta = gState.places[it.place]!!.shortestPathAndTimeTo(place, name)?.second ?: return@firstOrNull false
-            return@firstOrNull it.isValidTimeToStart(gState.time + eta) || it.isValidTimeToStart(gState.time + eta + 30)
-        }?.also { conf ->
-            //----------------------------------------------------------------------------------Move to the Meeting
-            return pickMeetingRoutine(name, conf).apply {
-                priority = PRIORITY_MEETING //Higher priority than work.
-            }
-        }
-
-        //4. Corruption for power: If the character is the leader of a party, and a party member is short of resources, steal resources from workplace to party member's home
-        //Only attempted once a day or once a work, whichever is shorter.
-        if (gState.time - corruptionTimer > ReadOnly.constInt("CorruptionTau") / ReadOnly.DT)
-            if (gState.parties.values.any { it.leader == name }) {
-                val party = gState.parties.values.find { it.leader == name }!!
-                val rationThreshold =
-                    ReadOnly.const("StealAmountMultiplier")//TODO: threshold change depending on member's trait and need
-                val waterThreshold = ReadOnly.const("StealAmountMultiplier")
-                val member = party.members.find {
-                    gState.characters[it]!!.resources["ration"] <= rationThreshold * (gState.characters[it]!!.reliant) || gState.characters[it]!!.resources["water"] <= waterThreshold * (gState.characters[it]!!.reliant)
-                }
-                if (member != null && subroutines.none { it is StealRoutine }) {
-                    //The resource to steal is what the member is short of, either ration or water.
-                    val wantedResource =
-                        if (character.resources["ration"] <= rationThreshold * (character.reliant)
-                        ) "ration" else "water"
-                    corruptionTimer = gState.time
-                    return StealRoutine(
-                        wantedResource,
-                        (gState.characters[member]!!.reliant + 1/*Numerically incorrect for anon agents, but ensure non zero value.*/) * ReadOnly.const(
-                            "StealAmountMultiplier"
-                        ),
-                        member
+        if (!failedSubroutineTypes.contains(InvestigateAndClearAccidentRoutine::class.java.simpleName)) {
+            gState.places.values.firstOrNull {
+                it.responsibleDivision != null && gState.parties[it.responsibleDivision]!!.members.contains(
+                    name
+                ) && it.isAccidentScene
+            }?.also { accidentPlace ->
+                if (subroutines.none { it is InvestigateAndClearAccidentRoutine && it.investigatePlace == accidentPlace.name }) {
+                    candidates += Pair(
+                        { InvestigateAndClearAccidentRoutine(accidentPlace.name) },
+                        PRIORITY_WORK + 10000
                     )
                 }
             }
-        //4.5. Acquire luxury resources (fineFood) for feasts and campaign presents if needed.
+        }
+
+        //2. Rescue people - only if I am in the safety division and has emt trait
+        if (character.division?.name == "safety" && "emt" in character.trait) {
+            if (!failedSubroutineTypes.contains(RescueRoutine::class.java.simpleName)) {
+                gState.places.values.firstOrNull {
+                    it.characters.any { charName -> gState.characters[charName]!!.isUnconscious }
+                }?.also { place1 ->
+                    val charToRescueName = place1.characters.first { charName ->
+                        gState.characters[charName]!!.isUnconscious
+                    }
+                    if (subroutines.none { it is RescueRoutine && it.rescuee == charToRescueName }) {
+                        Logger.write(
+                            "$name is going to rescue $charToRescueName at ${place1.name}",
+                            Logger.LogLevel.ACTION_VERBOSE
+                        )
+                        candidates += Pair({ RescueRoutine(charToRescueName) }, PRIORITY_WORK + 8000)
+                    }
+                }
+            }
+        }
+
+        //3. If missed a conference - urgency is high because the meeting is already happening
+        if (subroutines.none { it is MeetingRoutine }) {
+            val missingMeeting = gState.ongoingMeetings.values
+                .firstOrNull { it.scheduledCharacters.contains(name) && !it.currentCharacters.contains(name) }
+            if (missingMeeting != null && gState.meetingName(missingMeeting) !in meetingsAttended) {
+                candidates += Pair(
+                    { pickMeetingRoutine(name, missingMeeting).apply { priority = PRIORITY_MEETING } },
+                    PRIORITY_MEETING + 500
+                )
+            }
+        }
+
+        //4. If a conference is scheduled - urgency rises as start time approaches
+        if (subroutines.none { it is MeetingRoutine }) {
+            gState.scheduledMeetings.values.firstOrNull {
+                if (!it.scheduledCharacters.contains(name)) return@firstOrNull false
+                val eta = gState.places[it.place]!!.shortestPathAndTimeTo(place, name)?.second
+                    ?: return@firstOrNull false
+                return@firstOrNull it.isValidTimeToStart(gState.time + eta) || it.isValidTimeToStart(gState.time + eta + 30)
+            }?.also { conf ->
+                val timeUntil = maxOf(0, conf.time - gState.time)
+                val meetingUrgency = PRIORITY_MEETING + maxOf(0, ReadOnly.IDTH - timeUntil)
+                candidates += Pair(
+                    { pickMeetingRoutine(name, conf).apply { priority = PRIORITY_MEETING } },
+                    meetingUrgency
+                )
+            }
+        }
+
+        //5. Execute a command if there is any.
+        gState.requests.values.firstOrNull {
+            if (name !in it.issuedTo) return@firstOrNull false
+            if (it.name in failedRequests) return@firstOrNull false
+            val eta =
+                gState.places[it.action.tgtPlace]!!.shortestPathAndTimeTo(place, name)?.second
+                    ?: return@firstOrNull false
+            return@firstOrNull (it.executeTime in gState.time - ReadOnly.constInt("CommandExecuteTolerance") + eta..gState.time + ReadOnly.constInt(
+                "CommandExecuteTolerance"
+            ) + eta || it.executeTime == null) && (it.issuedBy.isEmpty() || it.issuedBy.sumOf {
+                gState.getMutuality(name, it)
+            } / it.issuedBy.size > it.difficulty(gState)) && GameEngine.availableActions(
+                gState, it.action.tgtPlace, name
+            ).contains(it.action.javaClass.simpleName)
+        }?.also { request ->
+            if (subroutines.none { it is ExecuteRequestRoutine && it.variables["request"] == request.name })
+                candidates += Pair(
+                    {
+                        ExecuteRequestRoutine().also {
+                            it.variables["request"] = request.name
+                            it.priority = PRIORITY_WORK + 400
+                        }
+                    },
+                    PRIORITY_WORK + 400
+                )
+        }
+
+        // (c) Acquire resources for pending requests toward this character that require resources they lack.
+        gState.requests.values.firstOrNull { req ->
+            name in req.issuedTo && !req.completed && req.name !in failedRequests &&
+                req.action is UnofficialResourceTransfer &&
+                (req.action as UnofficialResourceTransfer).fromHome &&
+                !gState.characters[name]!!.resources.contains((req.action as UnofficialResourceTransfer).resources)
+        }?.also { req ->
+            if (subroutines.none { it is BuyRoutine || it is StealRoutine }) {
+                val action = req.action as UnofficialResourceTransfer
+                action.resources.toHashMap().entries.firstOrNull { entry ->
+                    character.resources[entry.key] < entry.value
+                }?.let { entry ->
+                    val isThief = "thief" in character.trait
+                    val routineTypeName =
+                        if (isThief) StealRoutine::class.java.simpleName else BuyRoutine::class.java.simpleName
+                    if (!failedSubroutineTypes.contains(routineTypeName)) {
+                        val deficit = entry.value - character.resources[entry.key]
+                        candidates += Pair(
+                            {
+                                if (isThief) StealRoutine(entry.key, deficit)
+                                else BuyRoutine(entry.key, deficit)
+                            },
+                            PRIORITY_WORK + 300
+                        )
+                    }
+                }
+            }
+        }
+
+        //6. Corruption for power: steal resources from workplace to party member's home
+        //Only attempted once a day or once a work, whichever is shorter.
+        if (gState.time - corruptionTimer > ReadOnly.constInt("CorruptionTau") / ReadOnly.DT) {
+            if (!failedSubroutineTypes.contains(StealRoutine::class.java.simpleName)) {
+                if (gState.parties.values.any { it.leader == name }) {
+                    val party = gState.parties.values.find { it.leader == name }!!
+                    val rationThreshold = ReadOnly.const("StealAmountMultiplier")
+                    val waterThreshold = ReadOnly.const("StealAmountMultiplier")
+                    val member = party.members.find {
+                        gState.characters[it]!!.resources["ration"] <= rationThreshold * (gState.characters[it]!!.reliant) || gState.characters[it]!!.resources["water"] <= waterThreshold * (gState.characters[it]!!.reliant)
+                    }
+                    if (member != null && subroutines.none { it is StealRoutine }) {
+                        val wantedResource =
+                            if (character.resources["ration"] <= rationThreshold * (character.reliant)
+                            ) "ration" else "water"
+                        val memberChar = gState.characters[member]!!
+                        // Urgency increases as the member's resources drop further below threshold.
+                        // Use a small minimum to avoid division by zero when reliant is 0.
+                        val minReliant = 0.001
+                        val normalizedResource = minOf(
+                            memberChar.resources["ration"] / maxOf(memberChar.reliant.toDouble(), minReliant),
+                            memberChar.resources["water"] / maxOf(memberChar.reliant.toDouble(), minReliant)
+                        ).coerceIn(0.0, 1.0)
+                        val corruptionUrgency = PRIORITY_WORK + 200 + ((1.0 - normalizedResource) * 100).toInt()
+                        val capturedMember = member
+                        candidates += Pair(
+                            {
+                                corruptionTimer = gState.time
+                                StealRoutine(
+                                    wantedResource,
+                                    (gState.characters[capturedMember]!!.reliant + 1) * ReadOnly.const(
+                                        "StealAmountMultiplier"
+                                    ),
+                                    capturedMember
+                                )
+                            },
+                            corruptionUrgency
+                        )
+                    }
+                }
+            }
+        }
+
+        //6.5. Acquire luxury resources (fineFood) for feasts and campaign presents if needed.
         //Only attempted periodically.
         if (gState.time - luxuryAcquisitionTimer > ReadOnly.constInt("CorruptionTau") / ReadOnly.DT) {
             // (a) Pre-feast acquisition: division leader with upcoming meeting wants to provide a feast
@@ -151,9 +255,20 @@ class WorkRoutine(var workplace: String) : Routine() {
                         val neededFineFood =
                             upcomingMeeting.scheduledCharacters.size.toDouble() - character.resources["fineFood"]
                         if (neededFineFood > 0 && subroutines.none { it is BuyRoutine || it is StealRoutine }) {
-                            luxuryAcquisitionTimer = gState.time
-                            return if ("thief" in character.trait) StealRoutine("fineFood", neededFineFood)
-                            else BuyRoutine("fineFood", neededFineFood)
+                            val isThief = "thief" in character.trait
+                            val routineTypeName =
+                                if (isThief) StealRoutine::class.java.simpleName else BuyRoutine::class.java.simpleName
+                            if (!failedSubroutineTypes.contains(routineTypeName)) {
+                                val capturedNeeded = neededFineFood
+                                candidates += Pair(
+                                    {
+                                        luxuryAcquisitionTimer = gState.time
+                                        if (isThief) StealRoutine("fineFood", capturedNeeded)
+                                        else BuyRoutine("fineFood", capturedNeeded)
+                                    },
+                                    PRIORITY_WORK + 150
+                                )
+                            }
                         }
                     }
                 }
@@ -164,248 +279,197 @@ class WorkRoutine(var workplace: String) : Routine() {
                         it.type == Meeting.MeetingType.DIVISION_LEADER_ELECTION && it.involvedParty == division.name
                     } && subroutines.none { it is BuyRoutine || it is StealRoutine }
                 ) {
-                    // Availability: the resource exists somewhere accessible for acquisition.
                     val chosen = NonPlayerAgent.chooseLuxuryResource(character) { res ->
                         gState.publicPlaces.values.any { it.resources[res] > 0 }
                     }
                     if (chosen != null) {
-                        // Target is 3 gifts worth of the chosen resource.
                         val needed = chosen.giftAmount * 3.0 - character.resources[chosen.resourceName]
                         if (needed > 0) {
-                            luxuryAcquisitionTimer = gState.time
-                            return if ("thief" in character.trait) StealRoutine(chosen.resourceName, needed)
-                            else BuyRoutine(chosen.resourceName, needed)
-                        }
-                    }
-                }
-            }
-        }
-        // (c) Acquire resources for pending requests toward this character that require resources they lack.
-        gState.requests.values.firstOrNull { req ->
-            name in req.issuedTo && !req.completed && req.name !in failedRequests &&
-                req.action is UnofficialResourceTransfer &&
-                (req.action as UnofficialResourceTransfer).fromHome &&
-                !gState.characters[name]!!.resources.contains((req.action as UnofficialResourceTransfer).resources)
-        }?.also { req ->
-            if (subroutines.none { it is BuyRoutine || it is StealRoutine }) {
-                val action = req.action as UnofficialResourceTransfer
-                action.resources.toHashMap().entries.firstOrNull { entry ->
-                    character.resources[entry.key] < entry.value
-                }?.let { entry ->
-                    val deficit = entry.value - character.resources[entry.key]
-                    return if ("thief" in character.trait) StealRoutine(entry.key, deficit)
-                    else BuyRoutine(entry.key, deficit)
-                }
-            }
-        }
-        //5. Execute a command if there is any. Here, we can move to the place actively if the command is not in the current place.
-        //If there is a command that is within the set time window, issued party is trusted enough, and seems to be executable at some place(AvailableActions), start execution routine.
-        //Note that the command may not be valid even if it in AvailableActions list. For example, if the character is already at the place, move command is not valid.
-
-        gState.requests.values.firstOrNull {
-            if (name !in it.issuedTo) return@firstOrNull false
-            if (it.name in failedRequests) return@firstOrNull false //If I have already failed to execute this request, do not try again.
-            val eta =
-                gState.places[it.action.tgtPlace]!!.shortestPathAndTimeTo(place, name)?.second
-                    ?: return@firstOrNull false
-            return@firstOrNull (it.executeTime in gState.time - ReadOnly.constInt("CommandExecuteTolerance") + eta..gState.time + ReadOnly.constInt(
-                "CommandExecuteTolerance"
-            ) + eta || it.executeTime == null) && (it.issuedBy.isEmpty() /*System request must be executed regardless of mutualities.*/ || it.issuedBy.sumOf {
-                gState.getMutuality(
-                    name,
-                    it
-                )
-            } / it.issuedBy.size > it.difficulty(gState)) && GameEngine.availableActions(
-                gState,
-                it.action.tgtPlace,
-                name
-            )
-                .contains(it.action.javaClass.simpleName) //If the character is not in a meeting, we can move to other places to execute the command, so we do not check if the place is here.
-
-        }?.also { request ->
-            if (subroutines.none { it is ExecuteRequestRoutine && it.variables["request"] == request.name })
-                return ExecuteRequestRoutine().also {
-                    it.variables["request"] = request.name
-                    it.priority =
-                        PRIORITY_WORK + 400
-                }
-        }
-        //6. Supply resource
-        //only if I am director
-        if (character.type == Character.Type.DIRECTOR
-            &&
-            gState.time - transferResourceTimer > 60
-        ) {
-            character.division?.divisionPlaces?.forEach { place1 ->
-                place1.apparatuses.forEach { apparatus ->
-                    val res = place1.resourceShortOfHourly(apparatus) //Type of resource that is short of.
-                    if (res != null)
-                    //if there is a place with the resource
-                    {
-                        val resplace =
-                            gState.places.values.filter {
-                                it.manager != null && it.shortestPathAndTimeTo(place, name) != null
-                            }
-                                .maxByOrNull { it.resources[res] }
-                        if (resplace != null && place1.name != resplace.name && resplace.manager != name)
-                        //Check if there is a request already
-                            if (gState.requests.values.none {
-                                    !it.completed &&
-                                        name in it.issuedBy
-                                        && it.action.let {
-                                        it is OfficialResourceTransfer &&
-                                            it.toWhere == place1.name
-                                    }
-                                })
-                            //start new routine if there is a place with all the conditions met.
-                            //If the place with the resource has enough resource to supply apparatus for ten hours, and there is no existing transfer routine
-                                if (resplace.resources[res] > apparatus.hourlyOperationResource[res] * 10) {
-                                    transferResourceTimer = gState.time
-                                    return AttendPrivateMeetingRoutine(
-                                        resplace.manager!!,
-                                        //To reduce the overhead, it is rational to transfer more resource than immediately needed if possible.
-                                        MeetingAgenda(
-                                            AgendaType.REQUEST, name, attachedRequest = Request(
-                                                OfficialResourceTransfer(
-                                                    resplace.manager!!, resplace.name, place1.name, Resources(
-                                                        res to max(
-                                                            apparatus.hourlyOperationResource[res] * 10,
-                                                            resplace.resources[res] * 0.3
-                                                        )
-                                                    ), gState
-                                                ),
-                                                issuedTo = hashSetOf(resplace.manager!!),
-                                                issuedBy = hashSetOf(name)
-                                            )
-                                        )
-                                    )
-                                }
-
-                    }
-                }
-            }
-        }
-        //6. Rescue people
-        //only if I am in the safety division and has emt trait
-        if (character.division?.name == "safety" && "emt" in character.trait) {
-            gState.places.values.firstOrNull {
-                it.characters.any { charName ->
-                    gState.characters[charName]!!.isUnconscious
-                }
-            }?.also { place1 ->
-                val charToRescueName = place1.characters.first { charName ->
-                    gState.characters[charName]!!.isUnconscious
-                }
-                if (subroutines.none { it is RescueRoutine && it.rescuee == charToRescueName }) {
-                    Logger.write(
-                        "$name is going to rescue $charToRescueName at ${place1.name}",
-                        Logger.LogLevel.ACTION_VERBOSE
-                    )
-                    return RescueRoutine(charToRescueName)
-                }
-            }
-        }
-
-        //6. Repair Apparatus
-        //only if I am director
-        if (character.type == Character.Type.DIRECTOR
-            &&
-            gState.time - repairApparatusTimer > 60
-        ) {
-            character.division?.divisionPlaces?.forEach { place1 ->
-                place1.apparatuses.forEach { apparatus ->
-                    if (apparatus.durability < 70f)
-                    //If I am engineer myself, repair directly.
-                        if ("engineer" in character.trait) {
-                            repairApparatusTimer = gState.time
-                            return RepairApparatusRoutine(apparatus.ID)
-                        } else
-                        //Pick an engineer with the highest mutuality
-                        {
-                            gState.characters.values.filter {
-                                "engineer" in it.trait && it.name != name
-                            }.maxByOrNull { gState.getMutuality(name, it.name) }?.run {
-                                //Check if there is a request already
-                                if (gState.requests.values.none {
-                                        !it.completed &&
-                                            name in it.issuedBy
-                                            && it.action.let {
-                                            it is Repair &&
-                                                it.apparatusID == apparatus.ID
-                                        }
-                                    }) {
-                                    repairApparatusTimer = gState.time
-                                    return AttendPrivateMeetingRoutine(
-                                        this.name,
-                                        MeetingAgenda(
-                                            AgendaType.REQUEST, name, attachedRequest = Request(
-                                                Repair(this.name, place1.name, apparatus.ID, gState),
-                                                issuedTo = hashSetOf(this.name),
-                                                issuedBy = hashSetOf(name)
-                                            )
-                                        )
-                                    )
-                                }
-                            }
-
-                        }
-                }
-            }
-        }
-
-        //7.0 Announce Information
-        //Only if I am cabinet member.
-        if (character.name in gState.parties["cabinet"]!!.members
-            &&
-            gState.time - announceInfoTimer > 60
-        ) {
-            gState.informations.values.firstOrNull {
-                character.name in it.knownTo &&
-                    AnnounceInfo.isAnnounceable(it)
-            }?.let { info ->
-                //If I am able to announce it myself, announce it directly.
-                if (character.name in gState.parties["interior"]!!.directorMembers) {
-                    announceInfoTimer = gState.time
-                    return AnnounceInfoRoutine(info.name)
-                } else
-                //Pick an announcer with the highest mutuality
-                {
-                    gState.characters.values.filter {
-                        it.name in gState.parties["interior"]!!.directorMembers
-                    }.maxByOrNull { gState.getMutuality(name, it.name) }?.run {
-                        //Check if there is a request already
-                        if (gState.requests.values.none {
-                                !it.completed &&
-                                    name in it.issuedBy
-                                    && it.action.let {
-                                    it is AnnounceInfo &&
-                                        it.infoKey == info.name
-                                }
-                            }) {
-                            announceInfoTimer = gState.time
-                            AnnounceInfoRoutine.nearestPlaceWithApparatus(place, gState)?.let { announcePl ->
-                                return AttendPrivateMeetingRoutine(
-                                    this.name,
-                                    MeetingAgenda(
-                                        AgendaType.REQUEST, name, attachedRequest = Request(
-                                            AnnounceInfo(this.name, announcePl, info.name, gState),
-                                            issuedTo = hashSetOf(this.name),
-                                            issuedBy = hashSetOf(name)
-                                        )
-                                    )
+                            val isThief = "thief" in character.trait
+                            val routineTypeName =
+                                if (isThief) StealRoutine::class.java.simpleName else BuyRoutine::class.java.simpleName
+                            if (!failedSubroutineTypes.contains(routineTypeName)) {
+                                val capturedChosen = chosen
+                                val capturedNeeded = needed
+                                candidates += Pair(
+                                    {
+                                        luxuryAcquisitionTimer = gState.time
+                                        if (isThief) StealRoutine(capturedChosen.resourceName, capturedNeeded)
+                                        else BuyRoutine(capturedChosen.resourceName, capturedNeeded)
+                                    },
+                                    PRIORITY_WORK + 150
                                 )
                             }
-
                         }
                     }
-
                 }
             }
-
-
         }
 
-        //7. If there is some time, prepare information
+        //7. Supply resource - only if I am director
+        if (character.type == Character.Type.DIRECTOR && gState.time - transferResourceTimer > 60) {
+            var supplyFactory: (() -> Routine)? = null
+            var supplyUrgency = 0
+            character.division?.divisionPlaces?.forEach { place1 ->
+                place1.apparatuses.forEach { apparatus ->
+                    val res = place1.resourceShortOfHourly(apparatus) ?: return@forEach
+                    val resplace = gState.places.values.filter {
+                        it.manager != null && it.shortestPathAndTimeTo(place, name) != null
+                    }.maxByOrNull { it.resources[res] }
+                    if (resplace != null && place1.name != resplace.name && resplace.manager != name) {
+                        if (gState.requests.values.none {
+                                !it.completed && name in it.issuedBy && it.action.let {
+                                    it is OfficialResourceTransfer && it.toWhere == place1.name
+                                }
+                            }) {
+                            if (resplace.resources[res] > apparatus.hourlyOperationResource[res] * 10) {
+                                // Urgency rises as the apparatus runs lower on resources.
+                                // Use a large sentinel when consumption is zero (effectively infinite hours left).
+                                val infiniteHoursLeftSentinel = 1000.0
+                                val hoursLeft =
+                                    if (apparatus.hourlyOperationResource[res] > 0)
+                                        place1.resources[res] / apparatus.hourlyOperationResource[res]
+                                    else infiniteHoursLeftSentinel
+                                val urgency = PRIORITY_WORK + 100 + maxOf(0, (100 - hoursLeft.toInt())).coerceAtMost(99)
+                                if (urgency > supplyUrgency) {
+                                    supplyUrgency = urgency
+                                    val capturedResplace = resplace
+                                    val capturedPlace1 = place1
+                                    val capturedRes = res
+                                    val capturedApparatus = apparatus
+                                    supplyFactory = {
+                                        transferResourceTimer = gState.time
+                                        AttendPrivateMeetingRoutine(
+                                            capturedResplace.manager!!,
+                                            MeetingAgenda(
+                                                AgendaType.REQUEST, name, attachedRequest = Request(
+                                                    OfficialResourceTransfer(
+                                                        capturedResplace.manager!!, capturedResplace.name,
+                                                        capturedPlace1.name, Resources(
+                                                            capturedRes to max(
+                                                                capturedApparatus.hourlyOperationResource[capturedRes] * 10,
+                                                                capturedResplace.resources[capturedRes] * 0.3
+                                                            )
+                                                        ), gState
+                                                    ),
+                                                    issuedTo = hashSetOf(capturedResplace.manager!!),
+                                                    issuedBy = hashSetOf(name)
+                                                )
+                                            )
+                                        )
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            supplyFactory?.let { factory -> candidates += Pair(factory, supplyUrgency) }
+        }
+
+        //8. Repair Apparatus - only if I am director
+        if (character.type == Character.Type.DIRECTOR && gState.time - repairApparatusTimer > 60) {
+            var repairFactory: (() -> Routine)? = null
+            var repairUrgency = 0
+            character.division?.divisionPlaces?.forEach { place1 ->
+                place1.apparatuses.forEach { apparatus ->
+                    if (apparatus.durability < 70f) {
+                        // Urgency rises as durability drops further below the threshold.
+                        val urgency = PRIORITY_WORK + 50 + (70 - apparatus.durability).toInt()
+                        if (urgency > repairUrgency) {
+                            repairUrgency = urgency
+                            val capturedApparatus = apparatus
+                            val capturedPlace1 = place1
+                            repairFactory = if ("engineer" in character.trait) {
+                                {
+                                    repairApparatusTimer = gState.time
+                                    RepairApparatusRoutine(capturedApparatus.ID)
+                                }
+                            } else {
+                                val engineer = gState.characters.values.filter {
+                                    "engineer" in it.trait && it.name != name
+                                }.maxByOrNull { gState.getMutuality(name, it.name) }
+                                if (engineer != null && gState.requests.values.none {
+                                        !it.completed && name in it.issuedBy && it.action.let {
+                                            it is Repair && it.apparatusID == capturedApparatus.ID
+                                        }
+                                    }) {
+                                    val capturedEngineer = engineer
+                                    {
+                                        repairApparatusTimer = gState.time
+                                        AttendPrivateMeetingRoutine(
+                                            capturedEngineer.name,
+                                            MeetingAgenda(
+                                                AgendaType.REQUEST, name, attachedRequest = Request(
+                                                    Repair(
+                                                        capturedEngineer.name, capturedPlace1.name,
+                                                        capturedApparatus.ID, gState
+                                                    ),
+                                                    issuedTo = hashSetOf(capturedEngineer.name),
+                                                    issuedBy = hashSetOf(name)
+                                                )
+                                            )
+                                        )
+                                    }
+                                } else null
+                            }
+                        }
+                    }
+                }
+            }
+            repairFactory?.let { factory -> candidates += Pair(factory, repairUrgency) }
+        }
+
+        //9.0 Announce Information - only if I am cabinet member.
+        if (character.name in gState.parties["cabinet"]!!.members && gState.time - announceInfoTimer > 60) {
+            if (!failedSubroutineTypes.contains(AnnounceInfoRoutine::class.java.simpleName)) {
+                gState.informations.values.firstOrNull {
+                    character.name in it.knownTo && AnnounceInfo.isAnnounceable(it)
+                }?.let { info ->
+                    if (character.name in gState.parties["interior"]!!.directorMembers) {
+                        candidates += Pair(
+                            {
+                                announceInfoTimer = gState.time
+                                AnnounceInfoRoutine(info.name)
+                            },
+                            PRIORITY_WORK + 80
+                        )
+                    } else {
+                        gState.characters.values.filter {
+                            it.name in gState.parties["interior"]!!.directorMembers
+                        }.maxByOrNull { gState.getMutuality(name, it.name) }?.run {
+                            if (gState.requests.values.none {
+                                    !it.completed && name in it.issuedBy && it.action.let {
+                                        it is AnnounceInfo && it.infoKey == info.name
+                                    }
+                                }) {
+                                AnnounceInfoRoutine.nearestPlaceWithApparatus(place, gState)?.let { announcePl ->
+                                    val announcer = this
+                                    candidates += Pair(
+                                        {
+                                            announceInfoTimer = gState.time
+                                            AttendPrivateMeetingRoutine(
+                                                announcer.name,
+                                                MeetingAgenda(
+                                                    AgendaType.REQUEST, name, attachedRequest = Request(
+                                                        AnnounceInfo(announcer.name, announcePl, info.name, gState),
+                                                        issuedTo = hashSetOf(announcer.name),
+                                                        issuedBy = hashSetOf(name)
+                                                    )
+                                                )
+                                            )
+                                        },
+                                        PRIORITY_WORK + 80
+                                    )
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        //9. If there is some time, prepare information
         if (subroutines.none { it is PrepareInfoRoutine }) {
             if (gState.scheduledMeetings.none {
                     val eta =
@@ -414,22 +478,25 @@ class WorkRoutine(var workplace: String) : Routine() {
                         it.value.isValidTimeToStart(gState.time + eta)
                 })//If a Meeting is not soon
             {
-                //If we haven't prapared info recently
+                //If we haven't prepared info recently
                 if (gState.informations.none { (_, information) ->
                         information.author == character.name && information.type == InformationType.ACTION && information.action is PrepareInfo
                             && gState.time - information.creationTime > ReadOnly.constInt("lengthOfDay") * 2
                     }) {
-                    //If we haven't tried this branch in the current routine
-                    if (try_prepare_info == 0) {
-                        try_prepare_info += 1
-                        return PrepareInfoRoutine().apply {
-                            priority = PRIORITY_WORK + 70 //Higher priority than work.
-                        }
+                    if (!failedSubroutineTypes.contains(PrepareInfoRoutine::class.java.simpleName) && try_prepare_info == 0) {
+                        candidates += Pair(
+                            {
+                                try_prepare_info += 1
+                                PrepareInfoRoutine().apply { priority = PRIORITY_WORK + 70 }
+                            },
+                            PRIORITY_WORK + 70
+                        )
                     }
                 }
             }
         }
-        //8. Campaign for election if one is scheduled for the character's division and their stats support it.
+
+        //10. Campaign for election if one is scheduled for the character's division and their stats support it.
         character.division?.let { division ->
             if (gState.scheduledMeetings.values.any {
                     it.type == Meeting.MeetingType.DIVISION_LEADER_ELECTION && it.involvedParty == division.name
@@ -437,64 +504,51 @@ class WorkRoutine(var workplace: String) : Routine() {
             ) {
                 val campaignScore = character.stats.pScale + character.stats.rScale
                 if ((campaignScore > 1.5 || "charismatic" in character.trait) &&
-                    subroutines.none { it is CampaignRoutine }
+                    subroutines.none { it is CampaignRoutine } &&
+                    !failedSubroutineTypes.contains(CampaignRoutine::class.java.simpleName)
                 ) {
-                    return CampaignRoutine(division.name)
+                    candidates += Pair({ CampaignRoutine(division.name) }, PRIORITY_WORK + 60)
                 }
             }
         }
 
-        //9. Hire a new employee if there is a vacancy in the party.
-        gState.parties.values.filter { party ->
-            party.leader == name
-        }.forEach { party ->
-            when (party.type) {
-                Party.Type.WORKPLACE -> {
-                    party.vacancyRole()?.let { role ->
-                        if (subroutines.none { it is HireRoutine }) {
-                            return HireRoutine(party = party.name, role = role, null)
+        //11. Hire a new employee if there is a vacancy in the party.
+        if (!failedSubroutineTypes.contains(HireRoutine::class.java.simpleName)) {
+            gState.parties.values.filter { party ->
+                party.leader == name
+            }.forEach { party ->
+                when (party.type) {
+                    Party.Type.WORKPLACE -> {
+                        party.vacancyRole()?.let { role ->
+                            if (subroutines.none { it is HireRoutine }) {
+                                candidates += Pair(
+                                    { HireRoutine(party = party.name, role = role, null) },
+                                    PRIORITY_WORK + 50
+                                )
+                            }
                         }
                     }
-                }
 
-                Party.Type.DIVISION -> {
-                    party.divisionPlaces.firstOrNull {
-                        it.manager == null
-                    }?.let { place ->
-                        if (subroutines.none { it is HireRoutine }) {
-                            return HireRoutine(party = party.name, role = null, place.name)
+                    Party.Type.DIVISION -> {
+                        party.divisionPlaces.firstOrNull {
+                            it.manager == null
+                        }?.let { vacantPlace ->
+                            if (subroutines.none { it is HireRoutine }) {
+                                candidates += Pair(
+                                    { HireRoutine(party = party.name, role = null, vacantPlace.name) },
+                                    PRIORITY_WORK + 50
+                                )
+                            }
                         }
                     }
+                    //Cabinet members are not hired, they are elected within their division.
+                    else -> {}
                 }
-                //Cabinet members are not hired, they are elected within their division.
-                else -> {}
             }
-
         }
-//        //If already at home, wait.
-//        if (gState.parties.values.any { party -> party.home == place && party.members.contains(name) }) {
-//        } else
-//        //Move to a place that is the home of one of the parties of the character.
-//        {
-//            if (subroutines.none { it is MoveRoutine })
-//                try {
-//                    return MoveRoutine().apply {
-//                        gState = this@WorkRoutine.gState
-//                        variables["movePlace"] = gState.places.values.filter { place ->
-//                            gState.parties.values.any { party ->
-//                                party.home == place.name && party.members.contains(
-//                                    name
-//                                )
-//                            }
-//                        }.random().name
-//                    }
-//                } catch (e: NoSuchElementException) {
-//                    Logger.write("Warning: No place to commute found for $name", Logger.LogLevel.INFO)
-//                }
-//
-//
-//        }
-        return null
+
+        // Select and invoke the highest-urgency candidate.
+        return candidates.maxByOrNull { it.second }?.first?.invoke()
     }
 
     //TODO: move name to class parameter
@@ -581,9 +635,20 @@ class WorkRoutine(var workplace: String) : Routine() {
     }
 
     override fun onSubroutineFail(subroutine: Routine) {
-        if (subroutine is ExecuteRequestRoutine) {
-            val requestName = subroutine.variables["request"]!!
-            failedRequests += requestName
+        when (subroutine) {
+            is ExecuteRequestRoutine -> {
+                // Track the specific failed request so other requests can still be executed.
+                val requestName = subroutine.variables["request"]!!
+                failedRequests += requestName
+            }
+            is MeetingRoutine -> {
+                // Meeting failures are handled via meetingsAttended; do not block all meeting subroutines.
+            }
+            else -> {
+                // For all other subroutine types, record the failure so WorkRoutine does not retry
+                // them for its lifetime.
+                failedSubroutineTypes += subroutine::class.java.simpleName
+            }
         }
         //Never fail the work routine itself.
     }
