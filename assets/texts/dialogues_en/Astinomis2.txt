@@ -1,0 +1,14 @@
+ENTER Astinomis
+ENTER Rui
+Rui: Astinomis. I reviewed the enforcement records from two years ago, before you became division leader.
+Astinomis: And?
+Rui: The number of confrontations was lower. So was the average severity.
+Astinomis: Station population has increased. Mining operations have expanded. Proportionality in enforcement has remained consistent.
+Rui, confused: I'm not challenging the numbers. I'm asking why you think it's changed.
+Astinomis: It hasn't changed. Enforcement has scaled with operational scope.
+Rui: Can I ask you something else? Why did you become safety division leader?
+Astinomis: Because I was qualified.
+Rui, confused: There were other qualified candidates. Why you specifically?
+Astinomis: I requested the position.
+Rui: Why?
+Astinomis: ...My daughter lives on this station.

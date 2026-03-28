@@ -1258,10 +1258,10 @@ class GameEngine(val gameState: GameState) {
                 val progressionGates = mapOf(
                     "Examine" to "Examine",
                     "PrepareInfo" to "Examine",
-                    "InvestigateAccidentScene" to "Examine",
-                    "ClearAccidentScene" to "Examine",
+                    "InvestigateAccidentScene" to "InvestigateAccident",
+                    "ClearAccidentScene" to "InvestigateAccident",
                     "UnofficialResourceTransfer" to "UnofficialResourceTransfer",
-                    "OfficialResourceTransfer" to "UnofficialResourceTransfer",
+                    "OfficialResourceTransfer" to "OfficialResourceTransfer",
                     "SetWorkers" to "Management",
                     "SetWorkHours" to "Management",
                     "HireManager" to "Management",

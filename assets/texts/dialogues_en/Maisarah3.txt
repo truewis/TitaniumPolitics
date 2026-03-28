@@ -1,0 +1,13 @@
+ENTER Maisarah
+ENTER Rui
+Maisarah: Director. I want to speak carefully about what I said last time.
+Rui: I'm listening.
+Maisarah, annoyed: Two of the seven confrontations involved injuries to miners. One required medical treatment. Neither is in the official safety report as an injury — they're listed as "compliance incidents."
+Rui, confused: Compliance incidents.
+Maisarah: That's Astinomis's classification system. I've seen the actual footage. One miner was struck with a baton after he had already stopped resisting.
+Rui: Did you report it?
+Maisarah, annoyed: To who? Astinomis manages his own officers. Station administration defers to division leaders on internal discipline matters.
+Rui: So you're the mining division leader, you have injured miners, and there's no one above you to report to.
+Maisarah: There's you. Theoretically. But I've been told my job is production targets and labor relations. Not cross-division discipline.
+Rui, confused: Who told you that?
+Maisarah: Everyone who briefed me when I took this position.

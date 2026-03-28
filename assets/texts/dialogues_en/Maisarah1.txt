@@ -1,0 +1,13 @@
+ENTER Maisarah
+ENTER Rui
+Maisarah, smile: Director Rui! Welcome to mining headquarters. I was hoping we'd get a chance to meet.
+Rui: Thank you. I wanted to see the operation directly.
+Maisarah, smile: Of course! It's important for division leaders to maintain visibility with each other. We should be doing this more often.
+Rui, confused: How long have you been leading the mining division?
+Maisarah, smile: Fourteen months. It's been a wonderful challenge. The team here is very dedicated.
+Rui: Any concerns about operations?
+Maisarah, smile: Nothing that we're not actively managing. Productivity is within target range, safety metrics are being reviewed—
+Rui, confused: "Being reviewed"? Does that mean there are issues?
+Maisarah, smile: All divisions have things under review, Director. It's part of running a complex operation.
+Rui: Right. I'd still like to understand the specifics.
+Maisarah: ...Let me schedule a proper briefing for you.

@@ -1,0 +1,12 @@
+ENTER Vaeme
+ENTER Rui
+Vaeme, smile: You came back. I wasn't sure you would.
+Rui, annoyed: I came back for the actual lesson. Not for your paperwork.
+Vaeme, smile: Fair enough. The official resource transfer system — let me actually show you this time.
+Rui, confused: You're going to teach me for real?
+Vaeme, smile: Even I have to do it myself sometimes. TR-7 through TR-12, approval routing, cross-division reconciliation. It's honestly tedious.
+Rui: Then why bother with this whole mentorship act?
+Vaeme, laugh: Because if you understand the system, you're useful to me. And if you're useful to me, I'm useful to you. That's just how things work here.
+Rui, confused: That's... actually honest.
+Vaeme, smile: Don't spread it around. Now, TR-7. Pay attention this time.
+Rui: Understood.

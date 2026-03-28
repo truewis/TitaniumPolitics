@@ -1,0 +1,12 @@
+ENTER Hans
+ENTER Rui
+Rui: Hans. Can I ask you something outside the training?
+Hans: Sir?
+Rui: Why did you leave the police force?
+Hans: I was... asked to leave, sir. Excessive force findings. The official record is clear on that.
+Rui, confused: And you're telling me this because...?
+Hans: Because you'd find out anyway, sir. And because I'd rather you hear it from me.
+Rui: Fair enough. Do you think your methods here are different from then?
+Hans, annoyed: No, sir. I haven't changed. But here, the people I'm protecting aren't criminals. They're workers.
+Rui, confused: Does that make a difference to you?
+Hans: It does, sir. When I investigate an accident here, I'm trying to make sure it doesn't kill one of ours. That's different from what I used to do.

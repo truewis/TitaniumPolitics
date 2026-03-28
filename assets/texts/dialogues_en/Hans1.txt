@@ -1,0 +1,11 @@
+ENTER Hans
+ENTER Rui
+Hans: Director Rui. Sir. I apologize for taking your time.
+Rui: What happened at the outer barrier?
+Hans: Pressure seal failure at junction G-4. Two workers were caught in the decompression zone. Minor injuries, contained.
+Rui, confused: And you came to me because...?
+Hans: Protocol, sir. Any incident involving the barrier requires division leadership review. I've been assigned to walk you through the investigation procedure.
+Rui: I see. And you used to handle these kinds of things in the police force?
+Hans: I... yes, sir. I have experience with incident review. I understand procedure.
+Rui: Alright. Walk me through it.
+Hans: Yes, sir. With respect. First, the scene must be preserved before anyone touches it.

@@ -1,0 +1,14 @@
+ENTER Maisarah
+ENTER Rui
+Maisarah, smile: Director. I have the productivity figures you requested.
+Rui: Thank you. I've also been reading the incident reports. There have been seven confrontations between safety officers and miners in the past three cycles.
+Maisarah, confused: Safety enforcement is Astinomis's jurisdiction.
+Rui: The miners are yours.
+Maisarah, smile: The safety division has the authority to enforce compliance on all workers in any shared zone.
+Rui, annoyed: I know what the protocol says. I'm asking what you think about it.
+Maisarah: I... think the protocols exist for good reasons.
+Rui, confused: You don't look like you believe that.
+Maisarah: I believe that some of the confrontations were... more than necessary.
+Rui: That's more honest.
+Maisarah, smile: The official position is that safety enforcement is within protocol parameters.
+Rui: I know. Tell me what your position is.

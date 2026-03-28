@@ -1,0 +1,14 @@
+ENTER Jan
+ENTER Rui
+Rui: Jan, how do you measure whether a student has learned something?
+Jan: Officially? Test scores. Quarterly assessments, tracked by the administration.
+Rui, confused: And unofficially?
+Jan, smile: Whether they ask a question I haven't been asked before.
+Rui: Does that happen often?
+Jan, annoyed: Less than it should. The curriculum is old. It was designed before a quarter of these facilities even existed. I teach a standard atmospheric systems module and half the equipment described in it has been replaced twice.
+Rui: Have you proposed updates?
+Jan: Twice. Got told the curriculum review committee meets every five years.
+Rui, confused: When's the next meeting?
+Jan: Three years ago. It keeps getting postponed.
+Rui: Does Eugene know?
+Jan, smile: Eugene thinks inspiration transcends the curriculum. He's not entirely wrong. But it helps to have accurate materials too.

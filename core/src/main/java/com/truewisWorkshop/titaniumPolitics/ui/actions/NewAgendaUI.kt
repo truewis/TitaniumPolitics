@@ -308,12 +308,12 @@ class NewAgendaUI(val gameState: GameState, actionCallback: (GameAction) -> Unit
         val requestProgressionGates = mapOf(
             "Examine" to "Examine",
             "UnofficialResourceTransfer" to "UnofficialResourceTransfer",
-            "OfficialResourceTransfer" to "UnofficialResourceTransfer",
+            "OfficialResourceTransfer" to "OfficialResourceTransfer",
             "Salary" to "Management",
             "SetWorkers" to "Management",
             "SetWorkHours" to "Management",
-            "InvestigateAccidentScene" to "Examine",
-            "ClearAccidentScene" to "Examine",
+            "InvestigateAccidentScene" to "InvestigateAccident",
+            "ClearAccidentScene" to "InvestigateAccident",
         )
         val unlockedRequestActions = listOf(
             "Examine",

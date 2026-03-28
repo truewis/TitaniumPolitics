@@ -1,0 +1,12 @@
+ENTER Jan
+ENTER Rui
+Rui: Jan. Eugene speaks very highly of your work here.
+Jan, smile: That's kind of him. Eugene sees the best in his staff.
+Rui: And what do you see?
+Jan: Students who didn't choose to be here. Parents who send them because the education division is free childcare.
+Rui, confused: That's... not exactly an inspiring view.
+Jan, annoyed: It's an accurate one. The inspiring view is Eugene's job. My job is to actually teach them.
+Rui: And do you? Teach them?
+Jan, smile: Some of them. The ones who wake up during a lesson about the station's power grid or who ask what happens if the atmospheric recyclers fail. Those ones I can reach.
+Rui: By making it relevant to where they live.
+Jan: Eugene would call it applied education. I just call it not being boring.
