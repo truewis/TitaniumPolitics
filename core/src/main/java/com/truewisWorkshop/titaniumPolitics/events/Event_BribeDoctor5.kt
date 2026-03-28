@@ -14,6 +14,7 @@ class Event_BribeDoctor5 : EventObject(ReadOnly.questProp("BribeDoctor5-name"), 
                 )
             ) {
                 onPlayDialogue("BribeDoctor5")
+                parent.progression.add("UnofficialResourceTransfer")
                 deactivate()
 
             }

@@ -124,6 +124,13 @@ class GameState {
      */
     val knownCharactersToPlayer = hashSetOf<String>() //
 
+    /**
+     * Set of unlocked progression identifiers for the player.
+     * Controls which Actions, Agendas, and Requests are available.
+     * Grows as the player completes questlines.
+     */
+    var progression = hashSetOf<String>()
+
     val player get() = characters[playerName]!!
     var log = Log()
     val parties = hashMapOf<String, Party>()
@@ -563,6 +570,8 @@ class GameState {
         setMutuality("Alina", "Krailin", -15.0, "Hardcoded")
         setMutuality("Krailin", "Alina", -15.0, "Hardcoded")
         setMutuality("Rui", "Vaeme", -15.0, "Hardcoded")
+        setMutuality("Eugene", "Rui", 20.0, "Hardcoded")
+        setMutuality("Rui", "Eugene", 20.0, "Hardcoded")
     }
 
     fun getMutuality(a: String, b: String = a): Double {

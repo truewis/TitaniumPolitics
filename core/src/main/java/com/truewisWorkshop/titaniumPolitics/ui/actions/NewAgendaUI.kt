@@ -303,34 +303,36 @@ class NewAgendaUI(val gameState: GameState, actionCallback: (GameAction) -> Unit
     fun refresh(gameState: GameState) {
         agendaSelectBox.clear()
         refreshAvailableAgendaList(gameState)
-        actionSelButton.refreshList(
-            listOf(
-                "Examine",
-                "UnofficialResourceTransfer",
-                "OfficialResourceTransfer",
-                "Repair",
-                "Salary",
-                "SetWorkers",
-                "SetWorkHours",
-                "InvestigateAccidentScene",
-                "ClearAccidentScene"
-            )
+        // Maps requestable action names to the progression required to unlock them.
+        // "Repair" is intentionally ungated: it is a basic engineering duty always available to request.
+        val requestProgressionGates = mapOf(
+            "Examine" to "Examine",
+            "UnofficialResourceTransfer" to "UnofficialResourceTransfer",
+            "OfficialResourceTransfer" to "UnofficialResourceTransfer",
+            "Salary" to "Management",
+            "SetWorkers" to "Management",
+            "SetWorkHours" to "Management",
+            "InvestigateAccidentScene" to "Examine",
+            "ClearAccidentScene" to "Examine",
         )
+        val unlockedRequestActions = listOf(
+            "Examine",
+            "UnofficialResourceTransfer",
+            "OfficialResourceTransfer",
+            "Repair",
+            "Salary",
+            "SetWorkers",
+            "SetWorkHours",
+            "InvestigateAccidentScene",
+            "ClearAccidentScene"
+        ).filter { action ->
+            val required = requestProgressionGates[action]
+            required == null || gameState.progression.contains(required)
+        }
+        actionSelButton.refreshList(unlockedRequestActions)
         promiseSelButton.also {
             it.changeSubject(subject)
-            it.refreshList(
-                listOf(
-                    "Examine",
-                    "UnofficialResourceTransfer",
-                    "OfficialResourceTransfer",
-                    "Repair",
-                    "Salary",
-                    "SetWorkers",
-                    "SetWorkHours",
-                    "InvestigateAccidentScene",
-                    "ClearAccidentScene"
-                )
-            )
+            it.refreshList(unlockedRequestActions)
         }
         availableAgendas.forEach { tobj ->
             val t = scene2d.button("check") {
@@ -525,30 +527,32 @@ class NewAgendaUI(val gameState: GameState, actionCallback: (GameAction) -> Unit
     }
 
     fun refreshAvailableAgendaList(gameState: GameState) {
-        availableAgendas =
-            arrayOf(
-                AgendaType.PROOF_OF_WORK,
-                AgendaType.PRAISE,
-                AgendaType.DENOUNCE,
-                AgendaType.PRAISE_PARTY,
-                AgendaType.DENOUNCE_PARTY,
-                AgendaType.REQUEST,
-                AgendaType.PROMISE,
-                AgendaType.APPOINT_MEETING,
-            )
+        // Start with PRAISE, then unlock others based on player progression.
+        availableAgendas = arrayOf(AgendaType.PRAISE)
+        if (gameState.progression.contains("Management")) {
+            availableAgendas += AgendaType.REQUEST
+        }
+        if (gameState.progression.contains("NewAgenda")) {
+            availableAgendas += AgendaType.PROOF_OF_WORK
+            availableAgendas += AgendaType.DENOUNCE
+            availableAgendas += AgendaType.PRAISE_PARTY
+            availableAgendas += AgendaType.DENOUNCE_PARTY
+            availableAgendas += AgendaType.PROMISE
+            availableAgendas += AgendaType.APPOINT_MEETING
+        }
         if (this@NewAgendaUI.sbjChar.currentMeeting == null)
             throw Exception("Player is not in a meeting.")
         val mt = this@NewAgendaUI.sbjChar.currentMeeting!!
 
         val party = gameState.parties[mt.involvedParty]
-        if (mt.type == Meeting.MeetingType.DIVISION_LEADER_ELECTION)
+        if (mt.type == Meeting.MeetingType.DIVISION_LEADER_ELECTION && gameState.progression.contains("NewAgenda"))
             availableAgendas += AgendaType.NOMINATE
-        if (mt.involvedParty in listOf("cabinet", "division") && !party!!.isBudgetProposed)
+        if (mt.involvedParty in listOf("cabinet", "division") && !party!!.isBudgetProposed && gameState.progression.contains("Management"))
             availableAgendas += AgendaType.BUDGET_PROPOSAL
-        if (mt.involvedParty in listOf("triumvirate", "division") && !party!!.isBudgetResolved)
+        if (mt.involvedParty in listOf("triumvirate", "division") && !party!!.isBudgetResolved && gameState.progression.contains("Management"))
             availableAgendas += AgendaType.BUDGET_RESOLUTION
         //If the player is a division leader, they can fire managers.
-        if (mt.type == Meeting.MeetingType.DIVISION_DAILY_CONFERENCE && gameState.parties[mt.involvedParty]!!.leader == subject)
+        if (mt.type == Meeting.MeetingType.DIVISION_DAILY_CONFERENCE && gameState.parties[mt.involvedParty]!!.leader == subject && gameState.progression.contains("Management"))
             availableAgendas += AgendaType.FIRE_MANAGER
         //TODO: Also update NewAgenda.kt
     }

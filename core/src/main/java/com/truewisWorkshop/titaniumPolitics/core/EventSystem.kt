@@ -46,6 +46,7 @@ class EventSystem : GameStateElement() {
         add(Event_AlinaIllTheory1())
         add(Event_SalvorElection())
         add(Event_SecureOuterBarrierEast())
+        add(Event_EugeneIntro())
         // Party drama events – permanent, continuously monitor all workplace parties
         add(Event_Drama_CreditTheft())
         add(Event_Drama_Gossip())

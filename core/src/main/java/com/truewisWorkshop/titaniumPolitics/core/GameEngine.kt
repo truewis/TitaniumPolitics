@@ -1253,6 +1253,32 @@ class GameEngine(val gameState: GameState) {
                 }
 
             }
+            // Filter actions for the player based on unlocked progressions.
+            if (character == gameState.playerName) {
+                val progressionGates = mapOf(
+                    "Examine" to "Examine",
+                    "PrepareInfo" to "Examine",
+                    "InvestigateAccidentScene" to "Examine",
+                    "ClearAccidentScene" to "Examine",
+                    "UnofficialResourceTransfer" to "UnofficialResourceTransfer",
+                    "OfficialResourceTransfer" to "UnofficialResourceTransfer",
+                    "SetWorkers" to "Management",
+                    "SetWorkHours" to "Management",
+                    "HireManager" to "Management",
+                    "HireDirector" to "Management",
+                    "Salary" to "Management",
+                    "Resign" to "Management",
+                    "NewAgenda" to "NewAgenda",
+                    "AddInfo" to "NewAgenda",
+                    "Feast" to "NewAgenda",
+                    "ChangePolicy" to "NewAgenda",
+                    "AnnounceInfo" to "NewAgenda",
+                )
+                actions.removeIf { action ->
+                    val required = progressionGates[action]
+                    required != null && !gameState.progression.contains(required)
+                }
+            }
             return actions
         }
 
