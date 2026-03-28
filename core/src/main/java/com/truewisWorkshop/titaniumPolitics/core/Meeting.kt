@@ -6,6 +6,7 @@ import com.titaniumPolitics.game.core.ReadOnly.DT
 import com.titaniumPolitics.game.debugTools.Logger
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
+import java.util.UUID
 import kotlin.collections.get
 
 /*
@@ -22,6 +23,7 @@ class Meeting(
     var place: String,
     var currentCharacters: HashSet<String> = hashSetOf()
 ) {
+    val ID = UUID.randomUUID().toString()
     var startTime = 0 //The time when the meeting actually starts.
     var involvedParty: String? = null
     var currentSpeaker: String? = null

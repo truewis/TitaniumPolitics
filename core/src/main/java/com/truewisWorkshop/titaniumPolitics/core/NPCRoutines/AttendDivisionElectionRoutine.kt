@@ -42,11 +42,10 @@ class AttendDivisionElectionRoutine(override val meetingName: String) : MeetingR
                 val otherNominees =
                     gState.characters.keys.filter { it != name && it != nominee && meeting.agendas.any { it.type == AgendaType.NOMINATE && it.subjectParams["character"] == nominee } }
                 if (otherNominees.isNotEmpty()) {
-                    return (
-                            AddInfoToAgendaRoutine(
-                                meeting.agendas.indexOfFirst { it.type == AgendaType.NOMINATE && it.subjectParams["character"] == nominee },
-                                false
-                            ))//Add a routine, priority higher than work.
+                    return AddInfoToAgendaRoutine(
+                        meeting.agendas.indexOfFirst { it.type == AgendaType.NOMINATE && it.subjectParams["character"] == nominee },
+                        false
+                    )//Add a routine, priority higher than work.
 
                 }
             }

@@ -1,5 +1,6 @@
 package com.titaniumPolitics.game.core.NPCRoutines
 
+import com.titaniumPolitics.game.core.NonPlayerAgent
 import com.titaniumPolitics.game.core.gameActions.AddInfo
 import com.titaniumPolitics.game.core.gameActions.EndMeeting
 import com.titaniumPolitics.game.core.gameActions.EndSpeech
@@ -8,14 +9,26 @@ import com.titaniumPolitics.game.core.gameActions.Wait
 import kotlinx.serialization.Serializable
 
 @Serializable
-class AddInfoToAgendaRoutine(val agendaIndex: Int, val support: Boolean) : Routine(),
+class AddInfoToAgendaRoutine(val agendaIndex: Int, val support: Boolean, val meetingName: String = "") : Routine(),
     IMeetingRoutine {
     override fun newRoutineCondition(name: String, place: String, subroutines: List<Routine>): Routine? {
         val character = gState.characters[name]!!
-        print("")
-        val conf =
-            character.currentMeeting!!
-        conf.agendas[agendaIndex]
+        try {
+            val conf =
+                character.currentMeeting!!
+            conf.agendas[agendaIndex]
+        } catch (e: Exception) {
+            //Not in a meeting or agenda index is out of range.
+            val agent = gState.nonPlayerAgents[name]!! as NonPlayerAgent
+            println(name)
+            println(agent.routines)
+            println(meetingName)
+            println(character.currentMeeting!!)
+            println(character.currentMeeting!!.ID)
+            println((agent.routines.first { it is AttendPrivateMeetingRoutine } as AttendPrivateMeetingRoutine).meetingName)
+            println((agent.routines.first { it is AttendPrivateMeetingRoutine } as AttendPrivateMeetingRoutine).scheduledMeetingName)
+            throw e
+        }
         return null
     }
 

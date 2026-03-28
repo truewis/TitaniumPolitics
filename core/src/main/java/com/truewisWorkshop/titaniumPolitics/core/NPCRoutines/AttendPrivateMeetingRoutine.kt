@@ -24,6 +24,10 @@ class AttendPrivateMeetingRoutine(
     }
 
     private var hasUnresolvedAgenda = agenda != null
+    // Store the meeting name when this routine becomes active. If the meeting name
+    // changes afterwards, the routine should terminate.
+    @kotlinx.serialization.Transient
+    private var initialMeetingName: String? = null
     override val meetingName: String
         get() = scheduledMeetingName
             ?: gState.ongoingMeetings.filter { toWho in it.value.currentCharacters }.keys.firstOrNull()
@@ -51,7 +55,8 @@ class AttendPrivateMeetingRoutine(
                 tryAddInfoAgenda[index] = true
                 return AddInfoToAgendaRoutine(
                     index,
-                    support = gState.getMutNorm(name, this.author) > 0.1
+                    support = gState.getMutNorm(name, this.author) > 0.1,
+                    meetingName = gState.meetingName(meeting)
                 )
             }
         }
@@ -60,6 +65,8 @@ class AttendPrivateMeetingRoutine(
 
     private fun condition(name: String): Boolean {
         val currentMeeting = gState.characters[name]!!.currentMeeting
+        // If the meetingName has changed since this routine started, terminate.
+        if (initialMeetingName != null && meetingName != initialMeetingName) return true
         if (currentMeeting == null) {
             return hasAttended //The routine should end iff the meeting has finished.
         } else {
@@ -76,6 +83,9 @@ class AttendPrivateMeetingRoutine(
     }
 
     override fun meetingControl(name: String, place: String): Routine? {
+        // Record the meeting name when this routine first starts so we can detect
+        // later if the meeting name changes and terminate the routine.
+        if (initialMeetingName == null) initialMeetingName = meetingName
         //////////////////////Routine End Condition Check/////////////////////////
         if (condition(name)) {
             if (hasAttended && !hasUnresolvedAgenda) return success() else return failed()

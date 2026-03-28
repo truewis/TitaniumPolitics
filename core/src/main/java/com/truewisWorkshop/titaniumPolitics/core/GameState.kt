@@ -153,7 +153,7 @@ class GameState {
                 }) {
                 throw Exception("Scheduled meeting ${meeting.type} with party ${meeting.involvedParty} at time ${meeting.time} conflicts with existing meeting.")
             }
-        _scheduledMeetings["${meeting.type}-${meeting.place}-${meeting.time}"] = meeting
+        _scheduledMeetings[meeting.ID] = meeting
         onAddScheduledMeeting.forEach { it(meeting) }
     }
 
@@ -165,9 +165,7 @@ class GameState {
     }
 
     fun meetingName(mt: Meeting): String {
-        return ongoingMeetings.filter { it.value == mt }.keys.firstOrNull()
-            ?: scheduledMeetings.filter { it.value == mt }.keys.firstOrNull()
-            ?: throw Exception("Meeting $mt not found in ongoing or scheduled meetings.")
+        return mt.ID
     }
 
     private var _ongoingMeetings = hashMapOf<String, Meeting>()
@@ -179,7 +177,7 @@ class GameState {
         meeting: Meeting
     ) {
         if (_ongoingMeetings.containsValue(meeting)) throw Exception("Ongoing meeting $meeting already exists.")
-        _ongoingMeetings["${meeting.type}-${meeting.place}-${meeting.time}"] = meeting
+        _ongoingMeetings[meeting.ID] = meeting
         onAddOngoingMeeting.forEach { it(meeting) }
     }
 
