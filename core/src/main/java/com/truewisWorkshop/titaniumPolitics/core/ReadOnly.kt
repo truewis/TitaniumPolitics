@@ -45,7 +45,19 @@ object ReadOnly {
         return Json.parseToJsonElement(content).jsonObject
     }
 
+    @Deprecated("Use getMapData function instead for better encapsulation and potential future dynamic generation.")
     val mapJson = loadJson("json/map.json")
+
+    /**
+     * Get map data for a given place name. Handles homes, corridors, etc.
+     */
+    fun getMapData(placeName: String): JsonElement {
+        val key =
+            if (placeName.contains("home")) "home" else if (placeName.contains("corridor")) "corridor" else placeName
+        return mapJson[key]!!
+
+    }
+
     val charJson get() = generatedCharJson
     val actionJson = loadJson("json/action.json")
     val constJson = loadJson("json/consts.json")

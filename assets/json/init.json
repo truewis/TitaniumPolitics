@@ -1191,7 +1191,8 @@
       "resources": {
         "_resources": {
           "oxygen": 50,
-          "water": 15000
+          "water": 15000,
+          "structure": 6000
         }
       },
       "connectedPlaces": [
@@ -1340,6 +1341,7 @@
         "_resources": {
           "lightMetal": 50,
           "component": 100,
+          "structure": 6000,
           "water": 15000
         }
       },

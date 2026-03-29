@@ -90,7 +90,7 @@
     ]
   },
   "corridor": {
-    "image": "data/home.png",
+    "image": "data/corridor.png",
     "sound": "data/sounds/home.mp3",
     "light": [
       0,

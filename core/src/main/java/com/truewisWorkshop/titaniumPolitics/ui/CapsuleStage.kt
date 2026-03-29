@@ -141,7 +141,7 @@ class CapsuleStage(val gameState: GameState) : Stage(FitViewport(1920F, 1080F)) 
                     try {
                         background.drawable = TextureRegionDrawable(
                             assetManager.get(
-                                ReadOnly.mapJson[if (name.contains("home")) "home" else name]!!.jsonObject["image"]!!.jsonPrimitive.content,
+                                ReadOnly.getMapData(name).jsonObject["image"]!!.jsonPrimitive.content,
                                 Texture::class.java
                             )!!
                         )
@@ -150,7 +150,7 @@ class CapsuleStage(val gameState: GameState) : Stage(FitViewport(1920F, 1080F)) 
                     }
                     try {
                         val sound =
-                            Gdx.audio.newSound(Gdx.files.internal(ReadOnly.mapJson[if (name.contains("home")) "home" else name]!!.jsonObject["sound"]!!.jsonPrimitive.content))
+                            Gdx.audio.newSound(Gdx.files.internal(ReadOnly.getMapData(name).jsonObject["sound"]!!.jsonPrimitive.content))
                         sound.play()//TODO: use SoundEngine.
                     } catch (e: Exception) {
                         Logger.write("Background Sound Error: $e", Logger.LogLevel.INFO)
