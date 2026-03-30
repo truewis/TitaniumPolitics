@@ -18,9 +18,11 @@ class Event_Sasha4 : EventObject(ReadOnly.questProp("Sasha4-name"), true), IQues
 
     override fun exec(a: Int, b: Int) {
         if (parent.player.place.name == "outerBarrierEast" &&
-            parent.player.currentMeeting?.currentCharacters?.contains("Sasha") == true
+            parent.player.currentMeeting?.currentCharacters?.contains("Sasha") == true &&
+            parent.getMutuality("Sasha", parent.playerName) >= 30.0
         ) {
             onPlayDialogue("Sasha4")
+            parent.progression.add("Management")
             deactivate()
         }
     }

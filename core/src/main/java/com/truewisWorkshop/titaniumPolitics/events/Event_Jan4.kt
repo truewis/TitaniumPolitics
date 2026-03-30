@@ -18,9 +18,11 @@ class Event_Jan4 : EventObject(ReadOnly.questProp("Jan4-name"), true), IQuestEve
 
     override fun exec(a: Int, b: Int) {
         if (parent.player.place.name == "educationHeadquarters" &&
-            parent.player.currentMeeting?.currentCharacters?.contains("Jan") == true
+            parent.player.currentMeeting?.currentCharacters?.contains("Jan") == true &&
+            parent.getMutuality("Jan", parent.playerName) >= 20.0
         ) {
             onPlayDialogue("Jan4")
+            parent.progression.add("Examine")
             deactivate()
         }
     }

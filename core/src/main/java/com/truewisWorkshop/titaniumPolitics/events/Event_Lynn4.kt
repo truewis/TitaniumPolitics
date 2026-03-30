@@ -18,9 +18,11 @@ class Event_Lynn4 : EventObject(ReadOnly.questProp("Lynn4-name"), true), IQuestE
 
     override fun exec(a: Int, b: Int) {
         if (parent.player.place.name == "outerBarrierEast" &&
-            parent.player.currentMeeting?.currentCharacters?.contains("Lynn") == true
+            parent.player.currentMeeting?.currentCharacters?.contains("Lynn") == true &&
+            parent.getMutuality("Lynn", parent.playerName) >= 30.0
         ) {
             onPlayDialogue("Lynn4")
+            parent.progression.add("UnofficialResourceTransfer")
             deactivate()
         }
     }

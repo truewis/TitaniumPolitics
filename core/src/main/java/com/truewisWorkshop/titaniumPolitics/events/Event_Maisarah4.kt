@@ -18,9 +18,11 @@ class Event_Maisarah4 : EventObject(ReadOnly.questProp("Maisarah4-name"), true),
 
     override fun exec(a: Int, b: Int) {
         if (parent.player.place.name == "miningHeadquarters" &&
-            parent.player.currentMeeting?.currentCharacters?.contains("Maisarah") == true
+            parent.player.currentMeeting?.currentCharacters?.contains("Maisarah") == true &&
+            parent.getMutuality("Maisarah", parent.playerName) >= 40.0
         ) {
             onPlayDialogue("Maisarah4")
+            parent.progression.add("NewAgenda")
             deactivate()
         }
     }

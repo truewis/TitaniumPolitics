@@ -18,9 +18,11 @@ class Event_Astinomis4 : EventObject(ReadOnly.questProp("Astinomis4-name"), true
 
     override fun exec(a: Int, b: Int) {
         if (parent.player.place.name == "safetyHeadquarters" &&
-            parent.player.currentMeeting?.currentCharacters?.contains("Astinomis") == true
+            parent.player.currentMeeting?.currentCharacters?.contains("Astinomis") == true &&
+            parent.getMutuality("Astinomis", parent.playerName) >= 50.0
         ) {
             onPlayDialogue("Astinomis4")
+            parent.progression.add("InvestigateAccident")
             deactivate()
         }
     }
