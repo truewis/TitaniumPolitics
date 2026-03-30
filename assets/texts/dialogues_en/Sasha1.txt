@@ -1,0 +1,14 @@
+ENTER Sasha
+ENTER Rui
+Rui: Sasha. This stack of documents on your desk — are these worker petitions?
+Sasha, confused: I — yes. They're in the queue.
+Rui: This one is dated six cycles ago.
+Sasha: The review process has steps. Each step has a waiting period.
+Rui, confused: The regulation says petitions must receive acknowledgment within two cycles.
+Sasha: They have acknowledgments. The acknowledgment is here, see? This stamp says "Received."
+Rui: And then nothing for six cycles.
+Sasha, annoyed: The review board meets quarterly. These are in line for the quarterly review.
+Rui: That's a four-cycle wait built into the system.
+Sasha: That's the procedure, Director. I don't make the procedure.
+Rui, confused: No. But who processes the petitions once the quarterly review approves them?
+Sasha: ...I do.

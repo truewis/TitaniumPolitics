@@ -1,0 +1,12 @@
+ENTER Lynn
+ENTER Rui
+Rui: Lynn. These logistics reports — the resource intake numbers don't match the distribution records.
+Lynn: Reporting errors happen. The forms are old.
+Rui, confused: It's a consistent gap. Every cycle, about three percent of incoming supplies is unaccounted for.
+Lynn: Could be spoilage. Could be miscounting at the intake end.
+Rui: Could be a lot of things.
+Lynn, annoyed: Director, I've been managing logistics here for six years. You're looking at one month of data.
+Rui: You're right. I'm looking at one month of data. I'd like to understand the full picture.
+Lynn: I'll get you the annual summary.
+Rui, confused: That's not quite what I mean. I'd like to talk with you. Not review documents.
+Lynn: ...Fine. Same time tomorrow.

@@ -1,0 +1,17 @@
+ENTER Astinomis
+ENTER Rui
+Astinomis: Director. You've been asking questions across divisions. I've heard.
+Rui: I have.
+Astinomis: There was a reason I left the military.
+Rui, confused: You resigned?
+Astinomis: My unit was deployed to a station that had experienced a civil breakdown. Food supply failure, authority collapse. By the time we arrived, there was no longer a station to stabilize.
+Rui: What happened to the people there?
+Astinomis: Most did not survive. The ones who did were the ones who had maintained order in their immediate area. Small groups. Discipline. Rules that were enforced.
+Rui, confused: Your family?
+Astinomis: My wife and son were on that station. I was not.
+Rui: I'm sorry.
+Astinomis: My daughter was not yet born. She is here. She will remain safe. I have made certain of that.
+Rui: That's why you enforce.
+Astinomis: Disorder is not theoretical for me, Director. It is a memory. The rules exist because without them, the people I care about die.
+Rui: I understand. I don't agree with every method. But I understand why.
+Astinomis: That is all I ask.

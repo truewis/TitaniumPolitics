@@ -1,0 +1,12 @@
+ENTER Hans
+ENTER Rui
+Hans: Director. Final session. I want to show you the full incident report from junction G-4.
+Rui: You completed it already?
+Hans: Last night, sir. Every measurement, every witness statement, the failure timeline. I've submitted it to infrastructure review.
+Rui: This is... thorough. More thorough than the standard form requires.
+Hans: The standard form is a minimum, sir. It's designed so nobody gets blamed. This report is designed so the failure doesn't happen again.
+Rui, confused: You put in extra work on something that doesn't benefit you directly.
+Hans: The workers at this barrier are my responsibility, sir. That's all.
+Rui: I understand now why the training mattered to you.
+Hans: If you know how to investigate an accident properly, you'll know what to look for before it happens. That's the real lesson, sir.
+Rui: Thank you, Hans.

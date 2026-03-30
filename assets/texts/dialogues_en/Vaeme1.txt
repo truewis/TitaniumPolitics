@@ -1,0 +1,11 @@
+ENTER Vaeme
+ENTER Rui
+Vaeme, smile: Rui! Just the person I was looking for. You know, running infrastructure is more than just fixing pipes.
+Rui: Is it?
+Vaeme, smile: Of course. The real work is in the paperwork. Official resource transfers, allocation reports — the engine of everything.
+Rui, confused: I thought the engine of everything was the actual infrastructure.
+Vaeme, laugh: Ha! You have spirit. That's why I like you. Listen, I've been thinking — I should mentor you. Resource management, officially speaking.
+Rui: You want to teach me?
+Vaeme, smile: Think of it as collaboration between colleagues. I help you grow, you get the experience. Everyone wins.
+Rui, annoyed: When you say everyone wins, you mean you too, somehow.
+Vaeme, smile: Naturally. Come find me here and we'll get started.

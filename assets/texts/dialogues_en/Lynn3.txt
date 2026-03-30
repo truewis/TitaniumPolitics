@@ -1,0 +1,13 @@
+ENTER Lynn
+ENTER Rui
+Lynn: You want to know about the eye.
+Rui: Only if you want to tell me.
+Lynn: Forklift loader failure. The safety system didn't trigger because the sensor had a false calibration reading for three weeks. Everyone knew.
+Rui, confused: The maintenance team knew?
+Lynn: Reported twice. Logged. Never repaired. It wasn't urgent enough.
+Rui: And then the accident happened.
+Lynn: And then the accident happened. I got a medical exemption form, a condolence note from section administration, and a one-week paid leave.
+Rui, annoyed: That's all?
+Lynn: That's all, Director. The form said the accident was within acceptable operational parameters. So no compensation claim was valid.
+Rui: I'm sorry.
+Lynn: Don't be. I learned how the system works. That was worth something.

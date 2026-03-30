@@ -16,6 +16,7 @@ class Event_KrailinHobby2 : EventObject(ReadOnly.questProp("KrailinHobby2-name")
             ?: false
         ) {
             onPlayDialogue("KrailinHobby2")
+            parent.progression.add("Examine")
             deactivate()
         }
     }

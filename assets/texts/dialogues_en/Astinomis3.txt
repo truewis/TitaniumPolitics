@@ -1,0 +1,14 @@
+ENTER Astinomis
+ENTER Rui
+Rui: Astinomis. You mentioned your daughter last time.
+Astinomis: I did.
+Rui: You said that like it explained everything.
+Astinomis: It explains the relevant parts.
+Rui, confused: Can you help me understand which parts those are?
+Astinomis: Safety is not an abstraction on a space station. There is no outside. There is no emergency evacuation to a surface. A catastrophic failure here means the end. There is no margin.
+Rui: And your daughter—
+Astinomis: Is seven years old. She attends the education program. She is the reason I am here and not somewhere else.
+Rui, confused: Then why do the enforcement methods — the confrontations, the force — why does that feel like the priority over, say, preventive maintenance?
+Astinomis: Because people are unpredictable. Systems can be maintained. People make choices that cannot be predicted or prevented. Only contained.
+Rui: You're afraid of people. Not systems.
+Astinomis: I am afraid of what happens when people decide the rules don't apply to them.

@@ -1,0 +1,12 @@
+ENTER Jan
+ENTER Rui
+Rui: Do you think Eugene's approach works?
+Jan, smile: For some students. Eugene is... Eugene is the kind of person who makes you want to be better. That's rare.
+Rui: But?
+Jan, annoyed: But wanting to be better doesn't fix a faulty pressure valve or calculate the right recycler ratio. At some point, they need to know the actual thing.
+Rui, confused: You think he's too focused on values over skills?
+Jan: I think he doesn't have to deal with the test score reports. I do. And when a student scores poorly, it's my record, not his.
+Rui: That sounds frustrating.
+Jan, smile: It is. But I'm not here because of the test scores. I'm here because one of those kids is going to grow up and run something important on this station.
+Rui: And you want to be the reason they do it right.
+Jan: I want to be one of the reasons. That's enough for me.

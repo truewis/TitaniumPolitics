@@ -1,0 +1,15 @@
+ENTER Astinomis
+ENTER Rui
+Astinomis: Director Rui. You wanted to meet.
+Rui: I did. Thank you for making time.
+Astinomis: Twelve hundred hours. Thirty minutes allocated. Ask what you came to ask.
+Rui, confused: Alright. I've been looking at the safety division's enforcement activity over the past quarter.
+Astinomis: The reports are public record. If you have specific queries, state them.
+Rui: Seven confrontations with miners. Two injuries. Classification as compliance incidents rather than injuries.
+Astinomis: Correct.
+Rui, confused: You're not going to explain the classification?
+Astinomis: The classification reflects the regulatory framework. Injuries occurring during active resistance to enforcement are categorized as compliance incidents. It is standard.
+Rui: I see. Is that the full explanation?
+Astinomis: It is accurate. Whether it is full depends on what you're looking for.
+Rui: I'm looking for your judgment. Not the framework.
+Astinomis: My judgment is that the classification is appropriate.

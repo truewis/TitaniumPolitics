@@ -1,0 +1,14 @@
+ENTER Sasha
+ENTER Rui
+Rui: Sasha. I've been looking at the petition backlog. About forty of these are time-sensitive — housing conditions, medical access, safety concerns.
+Sasha, annoyed: Director, the review board—
+Rui: I'm the division leader. I can authorize emergency processing outside the standard queue.
+Sasha, confused: That would require your signature on each petition, a written justification, and a liability declaration.
+Rui: I'll sign them. Can you prepare the paperwork?
+Sasha: I... yes. But if this goes wrong—
+Rui: Then it goes wrong. These people submitted formal requests through the correct channels. They deserve actual responses.
+Sasha: That's forty petitions. It will take time.
+Rui: Take the time. Process them properly.
+Sasha, confused: You're serious.
+Rui: I am.
+Sasha: ...Alright. I'll start with the medical ones.

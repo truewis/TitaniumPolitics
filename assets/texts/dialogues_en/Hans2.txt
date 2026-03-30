@@ -1,0 +1,12 @@
+ENTER Hans
+ENTER Rui
+Hans: Director. Today: documentation of the scene before any cleanup is authorized.
+Rui, confused: Why does cleanup need authorization?
+Hans: Evidence, sir. The position of debris, the breach pattern, the safety equipment — everything tells a story about what failed and when.
+Rui: You sound like you've done this before.
+Hans: Hundreds of times, sir. In the force, we called it scene integrity. First responders don't touch anything until the senior officer clears it.
+Rui: The workers didn't follow that procedure?
+Hans, annoyed: Workers never do, sir. With respect. They want to fix things. They don't understand that fixing before documenting destroys the investigation.
+Rui: And the investigation matters because...?
+Hans: Because without it, the same accident happens again. Sir.
+Rui: Right. Continue.

@@ -1,0 +1,14 @@
+ENTER Sasha
+ENTER Rui
+Rui: Sasha. What happens to a petition that complains about the petition process itself?
+Sasha, confused: That would be filed under administrative feedback. Different form. Different queue.
+Rui: Longer queue?
+Sasha, annoyed: Yes.
+Rui: How did this happen?
+Sasha: Slowly, Director. Every procedure started with a good reason. The quarterly review was added because daily reviews created inconsistency. The priority queue was added because everything was being marked urgent.
+Rui: So every fix created a new bottleneck.
+Sasha: And then someone fixed the bottleneck and created another one. By the time I started this job, it was already like this.
+Rui, confused: Did you ever consider just... processing them anyway?
+Sasha: Once. My supervisor at the time said if I bypassed the queue, I'd be liable for any outcome.
+Rui: So you stopped.
+Sasha: I have a daughter in the education program here. I can't lose this job.
