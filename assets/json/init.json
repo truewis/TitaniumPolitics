@@ -329,7 +329,7 @@
         "pathos": 10
       },
       "health": 80,
-      "livingBy": "constructionYardNorth"
+      "livingBy": "techSchool"
     },
     "Krailin": {
       "trait": [
@@ -2069,7 +2069,8 @@
       "connectedPlaces": [
         "miningSchool",
         "constructionYardSouth",
-        "educationHeadquarters"
+        "educationHeadquarters",
+        "outerBarrierEast"
       ],
       "apparatuses": [
         {

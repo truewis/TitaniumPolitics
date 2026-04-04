@@ -127,8 +127,10 @@ class Place : GameStateElement() {
             // If this place is a building, you can move to the place it is in.
             // If this place is connected to a building, you can move to the building.
             // If this place is not a corridor, you can only move to corridors or manways with durability > 0.
+            // Elevator corridors are only accessible when the elevator apparatus has energy and durability > 0.
             (name.contains("corridor") || isBuildingIn == placeTo || parent.places[placeTo]?.isBuildingIn == name || apparatuses.any {
-                it.name == "manway" && it.ID == "manway_$placeTo" && it.durability > 0.0
+                (it.name == "manway" && it.ID == "manway_$placeTo" && it.durability > 0.0) ||
+                    (it.name == "elevator" && it.ID == "elevator_$placeTo" && it.durability > 0.0 && resourceShortOfHourly(it) == null)
             })
     }
 
@@ -159,10 +161,11 @@ class Place : GameStateElement() {
     var volume = 1e4f
     val currentWorker: Int get() = apparatuses.sumOf { it.currentWorker }
     val currentAvailableLabor: Int
-        get() = characters.filter {
-            parent.characters[it]!!.type == Character.Type.ANON && it in workplaceParty!!.members
-        }
-            .sumOf { parent.characters[it]!!.reliant }
+        get() = workplaceParty?.let { wp ->
+            characters.filter {
+                parent.characters[it]!!.type == Character.Type.ANON && it in wp.members
+            }.sumOf { parent.characters[it]!!.reliant }
+        } ?: 0
     val workers
         get() = workplaceParty?.members?.filter { parent.characters[it]!!.type == Character.Type.ANON }
             ?.map { parent.characters[it]!! }

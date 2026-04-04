@@ -125,6 +125,12 @@ class GameState {
     val knownCharactersToPlayer = hashSetOf<String>() //
 
     /**
+     * Set of place names known to the player.
+     * Most places are initially unknown. Adjacent places are revealed when the player enters a place.
+     */
+    val knownPlacesToPlayer = hashSetOf<String>()
+
+    /**
      * Set of unlocked progression identifiers for the player.
      * Controls which Actions, Agendas, and Requests are available.
      * Grows as the player completes questlines.
@@ -415,10 +421,31 @@ class GameState {
                 knownCharactersToPlayer += it.key //Add characters to the known characters of the player.
         }
         createCorridors()
+        initializeKnownPlaces()
         randomize()
         addFactions()
         eventSystem.newGame()
         Logger.write("Game state initialized successfully.", Logger.LogLevel.INFO)
+    }
+
+    /**
+     * Reveal a place and all of its adjacent places to the player.
+     */
+    fun discoverPlacesAdjacentTo(placeName: String) {
+        knownPlacesToPlayer.add(placeName)
+        places[placeName]?.connectedPlaces?.forEach { knownPlacesToPlayer.add(it) }
+    }
+
+    /**
+     * Initialize the set of places known to the player at game start.
+     * The three outer barriers and techSchool are known. Their adjacent places are also revealed.
+     */
+    fun initializeKnownPlaces() {
+        listOf("outerBarrierEast", "outerBarrierWest", "outerBarrierCenter", "techSchool").forEach {
+            discoverPlacesAdjacentTo(it)
+        }
+        // Also reveal neighbors of the player's starting place.
+        discoverPlacesAdjacentTo(player.place.name)
     }
 
     fun createCorridors() {
@@ -445,12 +472,16 @@ class GameState {
                 val t2Coords = aCoords + (diff * 8.0) / 10
                 val t1Name = "corridor_${sortedA}_${sortedB}"
                 val t2Name = "corridor_${sortedB}_${sortedA}"
-                //We are creating corridors as buildings instead.
+                // Use elevator apparatus for the outerBarrierEast-techSchool connection.
+                val isElevatorConnection =
+                    (sortedA == "outerBarrierEast" && sortedB == "techSchool") ||
+                            (sortedA == "techSchool" && sortedB == "outerBarrierEast")
+                val apparatusName = if (isElevatorConnection) "elevator" else "manway"
                 places[sortedA]!!.apparatuses.add(Apparatus().apply {
-                    name = "manway"; durability = corridorInitialDurability; ID = "manway_$t1Name"
+                    name = apparatusName; durability = corridorInitialDurability; ID = "${apparatusName}_$t1Name"
                 })
                 places[sortedB]!!.apparatuses.add(Apparatus().apply {
-                    name = "manway"; durability = corridorInitialDurability; ID = "manway_$t2Name"
+                    name = apparatusName; durability = corridorInitialDurability; ID = "${apparatusName}_$t2Name"
                 })
                 places[t1Name] = Place().apply {
                     this.injectParent(this@GameState)
@@ -482,6 +513,44 @@ class GameState {
                 places[sortedA]!!.connectedPlaces.add(t1Name)
                 places[sortedB]!!.connectedPlaces.remove(sortedA)
                 places[sortedB]!!.connectedPlaces.add(t2Name)
+            }
+        }
+        // Generate fake corridors: for each place (including corridors), 0-2 dead-end corridors
+        // are created, connected only to the originating place. Average 0.3 per place.
+        val fakeCorrIdxCounter = hashMapOf<String, Int>()
+        places.keys.toList().forEach { sourceName ->
+            val r = Math.random()
+            val fakeCorrCount = when {
+                r < 0.73 -> 0  // 73%
+                r < 0.97 -> 1  // 24%
+                else -> 2       // 3%
+            }
+            repeat(fakeCorrCount) {
+                val idx = fakeCorrIdxCounter.getOrDefault(sourceName, 0)
+                fakeCorrIdxCounter[sourceName] = idx + 1
+                val fakeName = "corridor_fake_${sourceName}_$idx"
+                val sourceCoords = places[sourceName]!!.coordinates
+                // Place the fake corridor nearby but offset slightly.
+                val fakeCoords = sourceCoords + Coordinate3D(
+                    (Math.random() - 0.5) * 0.5,
+                    0.0,
+                    (Math.random() - 0.5) * 0.5
+                )
+                places[fakeName] = Place().apply {
+                    this.injectParent(this@GameState)
+                    coordinates = fakeCoords
+                    volume = corridorVolume
+                    connectedPlaces.add(sourceName)
+                    gasResources = Resources(
+                        "oxygen" to 3000.0 * volumeRatio,
+                        "carbonDioxide" to 15.0 * volumeRatio,
+                        "nitrogen" to 9000.0 * volumeRatio
+                    ).apply { positive = true }
+                }
+                places[sourceName]!!.connectedPlaces.add(fakeName)
+                places[sourceName]!!.apparatuses.add(Apparatus().apply {
+                    name = "manway"; durability = corridorInitialDurability; ID = "manway_$fakeName"
+                })
             }
         }
     }

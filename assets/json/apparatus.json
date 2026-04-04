@@ -125,6 +125,43 @@
       "storageAmount": 30000.0
     }
   },
+  "elevator": {
+    "image": "defaultApparatus.png",
+    "durabilityTau": 86400000.0,
+    "baseDanger": 0.0003,
+    "accidentType": [
+      "FLOODING",
+      "COLLAPSE"
+    ],
+    "maxTemp": 473,
+    "minTemp": 73,
+    "requiredResourcePerRepair": [
+      {
+        "_resources": {
+          "structure": 100
+        }
+      },
+      {
+        "_resources": {
+          "structure": 100
+        }
+      },
+      {
+        "_resources": {
+          "structure": 200,
+          "plumbing": 200
+        }
+      }
+    ],
+    "idealWorker": 5,
+    "idealConsumption": {
+      "energy": 10000.0
+    },
+    "variables": {
+      "storageType": "water",
+      "storageAmount": 30000.0
+    }
+  },
   "barrier": {
     "image": "defaultApparatus.png",
     "durabilityTau": 8640000.0,
