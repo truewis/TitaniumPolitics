@@ -517,13 +517,14 @@ class GameState {
         }
         // Generate fake corridors: for each place (including corridors), 0-2 dead-end corridors
         // are created, connected only to the originating place. Average 0.3 per place.
+        // Distribution: P(0)=73%, P(1)=24%, P(2)=3% → mean = 0*0.73 + 1*0.24 + 2*0.03 = 0.30
         val fakeCorrIdxCounter = hashMapOf<String, Int>()
         places.keys.toList().forEach { sourceName ->
             val r = Math.random()
             val fakeCorrCount = when {
-                r < 0.73 -> 0  // 73%
-                r < 0.97 -> 1  // 24%
-                else -> 2       // 3%
+                r < 0.73 -> 0  // 73% chance: no fake corridor
+                r < 0.97 -> 1  // 24% chance: one fake corridor
+                else -> 2       // 3% chance: two fake corridors
             }
             repeat(fakeCorrCount) {
                 val idx = fakeCorrIdxCounter.getOrDefault(sourceName, 0)
