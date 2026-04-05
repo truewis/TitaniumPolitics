@@ -102,5 +102,9 @@
   "ChangePolicy": {
     "image": "PlusGrunge",
     "sound": "data/repair.mp3"
+  },
+  "Arrest": {
+    "image": "UserGrunge",
+    "sound": "data/move.mp3"
   }
 }

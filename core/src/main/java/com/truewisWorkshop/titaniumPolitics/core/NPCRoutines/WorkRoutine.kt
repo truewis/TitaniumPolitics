@@ -11,6 +11,7 @@ import com.titaniumPolitics.game.core.Party
 import com.titaniumPolitics.game.core.ReadOnly
 import com.titaniumPolitics.game.core.Request
 import com.titaniumPolitics.game.core.Resources
+import com.titaniumPolitics.game.core.ReadOnly.constInt
 import com.titaniumPolitics.game.core.gameActions.AnnounceInfo
 import com.titaniumPolitics.game.core.gameActions.Examine
 import com.titaniumPolitics.game.core.gameActions.GameAction
@@ -105,6 +106,38 @@ class WorkRoutine(var workplace: String) : Routine() {
                         )
                         candidates += Pair({ RescueRoutine(charToRescueName) }, PRIORITY_WORK + 8000)
                     }
+                }
+            }
+        }
+
+        //2b. Arrest criminals - only if I am in the safety division and has soldier trait
+        if (character.division?.name == "safety" && "soldier" in character.trait) {
+            if (!failedSubroutineTypes.contains(ArrestRoutine::class.java.simpleName)) {
+                val safetyMembers = gState.parties["safety"]?.members ?: emptySet()
+                val hatedThreshold = constInt("ArrestHatedThreshold").toDouble()
+                val suspectName = gState.characters.values
+                    .filter { suspect ->
+                        !suspect.isUnconscious &&
+                            suspect.name != name &&
+                            suspect.name !in safetyMembers
+                    }
+                    .firstOrNull { suspect ->
+                        val hasIllegalInfo = gState.informations.values.any { info ->
+                            name in info.knownTo &&
+                                info.action is UnofficialResourceTransfer &&
+                                info.tgtCharacter == suspect.name
+                        }
+                        val isHatedByDivision = safetyMembers.isNotEmpty() &&
+                            safetyMembers.map { member -> gState.getMutuality(member, suspect.name) }
+                                .average() < hatedThreshold
+                        hasIllegalInfo || isHatedByDivision
+                    }?.name
+                if (suspectName != null && subroutines.none { it is ArrestRoutine && it.suspect == suspectName }) {
+                    Logger.write(
+                        "$name is going to arrest $suspectName",
+                        Logger.LogLevel.ACTION_VERBOSE
+                    )
+                    candidates += Pair({ ArrestRoutine(suspectName) }, PRIORITY_WORK + 7000)
                 }
             }
         }
