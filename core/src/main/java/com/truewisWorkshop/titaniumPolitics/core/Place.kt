@@ -121,8 +121,31 @@ class Place : GameStateElement() {
             && (authorizedCharacters.isEmpty() || sbjCharacter in authorizedCharacters))
             || parent.characters[sbjCharacter]!!.trait.contains("robot") //Robots can enter anywhere.
 
+    /**
+     * Check if the character is authorized to pass through a security checkpoint.
+     * Authorization requires:
+     * - The character has the "engineer", "emt", or "soldier" trait, AND
+     * - The character's division home is in the upper station (z > this checkpoint's z).
+     * This check is disabled (returns true) when the pressureDoor apparatus is not working.
+     * Characters with no division, or whose division home is not in the places map, are denied.
+     */
+    fun isSecurityCheckpointAuthorized(sbjCharacter: String): Boolean {
+        val pressureDoor = apparatuses.find { it.name == SECURITY_CHECKPOINT_APPARATUS }
+        if (pressureDoor == null || pressureDoor.durability <= 0.0) return true // Disabled when broken
+        val char = parent.characters[sbjCharacter]!!
+        if (char.trait.contains("robot")) return true // Robots can enter anywhere
+        val isQualifiedRole = char.trait.any { it in SECURITY_CHECKPOINT_AUTHORIZED_ROLES }
+        val divisionHomeZ = char.division?.home?.let { parent.places[it]?.coordinates?.z } ?: return false
+        return isQualifiedRole && divisionHomeZ > coordinates.z
+    }
+
     fun movableConnectedPlaces(sbjCharacter: String): List<String> = connectedPlaces.filter { placeTo ->
         parent.places[placeTo]!!.isAuthorized(sbjCharacter) &&
+            // Security checkpoint: only engineers/emts/soldiers assigned to the upper station can enter
+            // from a lower-z place. Check is disabled when the pressureDoor apparatus is broken.
+            (placeTo !in SECURITY_CHECKPOINT_NAMES ||
+                coordinates.z >= parent.places[placeTo]!!.coordinates.z ||
+                parent.places[placeTo]!!.isSecurityCheckpointAuthorized(sbjCharacter)) &&
             // If this place is a corridor, you can move to any place connected to the corridor.
             // If this place is a building, you can move to the place it is in.
             // If this place is connected to a building, you can move to the building.
@@ -409,6 +432,15 @@ class Place : GameStateElement() {
 
     companion object {
         val publicPlaces = setOf<String>("market", "squareNorth", "squareSouth")
+
+        /** The names of the three security checkpoints that restrict access to the upper station. */
+        val SECURITY_CHECKPOINT_NAMES = setOf("securityCheckWest", "securityCheckEast", "securityCheckCenter")
+
+        /** The apparatus name used to control access at security checkpoints. */
+        const val SECURITY_CHECKPOINT_APPARATUS = "pressureDoor"
+
+        /** The character roles (traits) authorized to pass through security checkpoints (when assigned to the upper station). */
+        val SECURITY_CHECKPOINT_AUTHORIZED_ROLES = setOf("engineer", "emt", "soldier")
 
         fun whoseHome(place: String): String? {
             if (place.contains("home_"))
