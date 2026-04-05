@@ -124,10 +124,17 @@ open class MapUI(val gameState: GameState) : Table(defaultSkin) {
         currentMarkers.clear()
         //Draw markers for places
         gameState.places.forEach { (placeName, plObj) ->
-            if (plObj.isAuthorized(gameState.playerName)) {
+            if (placeName in gameState.knownPlacesToPlayer && plObj.isAuthorized(gameState.playerName)) {
                 if (plObj.isBuildingIn == null)
                     PlaceMarker(gameState, this, placeName).also {
                         currentMarkers.add(it)
+                        // Places that are known but physically inaccessible appear half-transparent and red.
+                        val isInaccessible =
+                            gameState.player.place.shortestPathAndTimeTo(placeName, gameState.playerName) == null &&
+                                gameState.player.place.name != placeName
+                        if (isInaccessible) {
+                            it.color = Color(1f, 0f, 0f, 0.5f)
+                        }
                         it.onClick += {
                             currentMarkers.forEach {
                                 if (it != currentMarkers.first { it.place == placeName } && it.isBuildingVisible) {
