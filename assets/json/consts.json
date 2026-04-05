@@ -63,6 +63,8 @@
   "InvestigateAccidentSceneDuration": 30,
   "JoinMeetingDuration": 5,
   "RescueDuration": 10,
+  "ArrestDuration": 3,
+  "ArrestHatedThreshold": 20,
   "MeetingStartTolerance": 30,
   "CommandExecuteTolerance": 60,
   "LeaveMeetingDuration": 5,

@@ -7,6 +7,7 @@ import com.titaniumPolitics.game.core.Character
 import com.titaniumPolitics.game.core.GameEngine
 import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.core.ReadOnly
+import com.titaniumPolitics.game.core.gameActions.Arrest
 import com.titaniumPolitics.game.core.gameActions.Rescue
 import com.titaniumPolitics.game.core.gameActions.Talk
 import com.titaniumPolitics.game.ui.actions.ResourceTransferUI
@@ -68,13 +69,32 @@ class CharacterInteractionWindowUI(var gameState: GameState) :
         addListener(object : com.badlogic.gdx.scenes.scene2d.utils.ClickListener() {
             override fun clicked(event: com.badlogic.gdx.scenes.scene2d.InputEvent?, x: Float, y: Float) {
                 this@CharacterInteractionWindowUI.isVisible = false
-                val resUI = ResourceTransferUI(this@CharacterInteractionWindowUI.gameState, GameEngine.acquireCallback)
-                resUI.toWhere = "home_${this@CharacterInteractionWindowUI.characterDisplayed}"
-                resUI.refresh(
-                    "private"
+                val rescueAction = Rescue(
+                    this@CharacterInteractionWindowUI.gameState.playerName,
+                    this@CharacterInteractionWindowUI.gameState.player.place.name,
+                    this@CharacterInteractionWindowUI.characterDisplayed,
+                    this@CharacterInteractionWindowUI.gameState
                 )
-                InterfaceRoot.instance.avAUI.setActionSheet(resUI)
+                GameEngine.acquireCallback(rescueAction)
+            }
+        })
+    }
 
+    private val arrestButton = scene2d.button {
+        label(ReadOnly.prop("characterInteractionWindowUI-arrest"), "description") {
+            setFontScale(0.3f)
+        }
+
+        addListener(object : com.badlogic.gdx.scenes.scene2d.utils.ClickListener() {
+            override fun clicked(event: com.badlogic.gdx.scenes.scene2d.InputEvent?, x: Float, y: Float) {
+                this@CharacterInteractionWindowUI.isVisible = false
+                val arrestAction = Arrest(
+                    this@CharacterInteractionWindowUI.gameState.playerName,
+                    this@CharacterInteractionWindowUI.gameState.player.place.name,
+                    this@CharacterInteractionWindowUI.characterDisplayed,
+                    this@CharacterInteractionWindowUI.gameState
+                )
+                GameEngine.acquireCallback(arrestAction)
             }
         })
     }
@@ -182,6 +202,15 @@ class CharacterInteractionWindowUI(var gameState: GameState) :
                         add(talkButton).fill().size(200f, 50f)
                         row()
                         add(giveResourceButton).fill().size(200f, 50f)
+                        row()
+                    }
+                    if ("Arrest" in GameEngine.availableActions(
+                            gameState,
+                            gameState.player.place.name,
+                            gameState.playerName
+                        )
+                    ) {
+                        add(arrestButton).fill().size(200f, 50f)
                         row()
                     }
                 }
