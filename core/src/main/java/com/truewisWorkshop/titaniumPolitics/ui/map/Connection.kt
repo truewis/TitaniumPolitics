@@ -1,6 +1,7 @@
 package com.titaniumPolitics.game.ui.map
 
 import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.scenes.scene2d.ui.Image
 import com.titaniumPolitics.game.core.GameState
 import ktx.scene2d.Scene2DSkin.defaultSkin
@@ -12,7 +13,8 @@ class Connection(var gameState: GameState, val owner: MapUI, startPlace: String,
         touchable = com.badlogic.gdx.scenes.scene2d.Touchable.disabled
         owner.dataTable.addActor(this)
         //Fetch default drawable from skin.
-        drawable = defaultSkin.getDrawable("BlackPx")
+        drawable = defaultSkin.getDrawable("icon_simpleshape_10")
+        color = Color(0f, 0f, 0f, 0.5f)
         try {
 
             val start: Pair<Float, Float> = owner.convertToScreenCoords(
@@ -30,7 +32,7 @@ class Connection(var gameState: GameState, val owner: MapUI, startPlace: String,
             //Set the size of the connection to the length of the line.
             setSize(
                 sqrt((end.first - start.first) * (end.first - start.first) + (end.second - start.second) * (end.second - start.second)),
-                5f
+                10f
             )
             //Set the rotation of the connection to the angle of the line.
             rotation =

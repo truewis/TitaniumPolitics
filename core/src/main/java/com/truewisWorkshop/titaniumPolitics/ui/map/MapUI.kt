@@ -156,7 +156,6 @@ open class MapUI(val gameState: GameState) : Table(defaultSkin) {
                 place.movableConnectedPlaces(gameState.playerName).forEach { connection ->
                     if (!connection.contains("home")) {
                         Connection(gameState, this, placeName, connection).also {
-                            it.color = Color.RED
                             currentConnections.add(it)
                         }
                     }
