@@ -19,6 +19,8 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.math.abs
 import kotlin.math.absoluteValue
+import kotlin.math.cos
+import kotlin.math.sin
 import kotlin.math.sqrt
 
 @Serializable
@@ -475,7 +477,7 @@ class GameState {
                 // Use elevator apparatus for the outerBarrierEast-techSchool connection.
                 val isElevatorConnection =
                     (sortedA == "outerBarrierEast" && sortedB == "techSchool") ||
-                            (sortedA == "techSchool" && sortedB == "outerBarrierEast")
+                        (sortedA == "techSchool" && sortedB == "outerBarrierEast")
                 val apparatusName = if (isElevatorConnection) "elevator" else "manway"
                 places[sortedA]!!.apparatuses.add(Apparatus().apply {
                     name = apparatusName; durability = corridorInitialDurability; ID = "${apparatusName}_$t1Name"
@@ -532,10 +534,12 @@ class GameState {
                 val fakeName = "corridor_fake_${sourceName}_$idx"
                 val sourceCoords = places[sourceName]!!.coordinates
                 // Place the fake corridor nearby but offset slightly.
+                val radius = 2 + Math.random() * 3
+                val theta = Math.random() * 2 * Math.PI
                 val fakeCoords = sourceCoords + Coordinate3D(
-                    (Math.random() - 0.5) * 0.5,
+                    radius * cos(theta),
                     0.0,
-                    (Math.random() - 0.5) * 0.5
+                    radius * sin(theta)
                 )
                 places[fakeName] = Place().apply {
                     this.injectParent(this@GameState)
