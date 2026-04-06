@@ -36,9 +36,8 @@ data class UnofficialResourceTransfer(
             parent.places[toWhere]!!.resources += resources
         }
         super.execute()
-        // Add logistics overhead: moving more resources takes longer unless the place has enough logistics capacity.
-        val logisticsCapacity = if (fromHome) ReadOnly.const("LogisticsBaseCapacityPerWorker")
-        else tgtPlaceObj.logisticsCapacity
+        // Unofficial transfer always uses 1-worker throughput (no infrastructure benefit).
+        val logisticsCapacity = ReadOnly.const("LogisticsBaseCapacityPerWorker")
         val logisticsOverhead = logisticsOverhead(logisticsCapacity)
         if (logisticsOverhead > 0) sbjCharObj.frozen += logisticsOverhead
 

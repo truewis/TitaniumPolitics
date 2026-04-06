@@ -1916,5 +1916,337 @@
     "variables": {
       "logisticsCapacity": 40.0
     }
+  },
+  "manwayI": {
+    "image": "defaultApparatus.png",
+    "durabilityTau": 86400000.0,
+    "baseDanger": 0.0003,
+    "accidentType": ["FLOODING", "COLLAPSE"],
+    "maxTemp": 473,
+    "minTemp": 73,
+    "requiredResourcePerRepair": [
+      { "_resources": { "structure": 100 } },
+      { "_resources": { "structure": 100 } },
+      { "_resources": { "structure": 200, "plumbing": 100 } }
+    ],
+    "idealWorker": 2,
+    "variables": { "corridorRadius": 2.0, "transportType": "manway" }
+  },
+  "manwayII": {
+    "image": "defaultApparatus.png",
+    "durabilityTau": 86400000.0,
+    "baseDanger": 0.0003,
+    "accidentType": ["FLOODING", "COLLAPSE"],
+    "maxTemp": 473,
+    "minTemp": 73,
+    "requiredResourcePerRepair": [
+      { "_resources": { "structure": 200 } },
+      { "_resources": { "structure": 300, "plumbing": 100 } },
+      { "_resources": { "structure": 500, "plumbing": 200 } }
+    ],
+    "idealWorker": 5,
+    "variables": { "corridorRadius": 4.0, "transportType": "manway" }
+  },
+  "manwayIII": {
+    "image": "defaultApparatus.png",
+    "durabilityTau": 86400000.0,
+    "baseDanger": 0.0003,
+    "accidentType": ["FLOODING", "COLLAPSE"],
+    "maxTemp": 473,
+    "minTemp": 73,
+    "requiredResourcePerRepair": [
+      { "_resources": { "structure": 400, "plumbing": 100 } },
+      { "_resources": { "structure": 600, "plumbing": 200 } },
+      { "_resources": { "structure": 1000, "plumbing": 400 } }
+    ],
+    "idealWorker": 10,
+    "variables": { "corridorRadius": 6.0, "transportType": "manway" }
+  },
+  "powerLineI": {
+    "image": "defaultApparatus.png",
+    "durabilityTau": 86400000.0,
+    "baseDanger": 0.0001,
+    "accidentType": ["FIRE"],
+    "maxTemp": 373,
+    "minTemp": 73,
+    "requiredResourcePerRepair": [
+      { "_resources": { "electronics": 1 } },
+      { "_resources": { "electronics": 2 } },
+      { "_resources": { "electronics": 3, "component": 1 } }
+    ],
+    "idealWorker": 0,
+    "variables": {
+      "transportType": "powerLine",
+      "spaceConsumption": 0.1,
+      "resourceFilter": "energy",
+      "baseThroughput": 500000.0,
+      "powerRating": "low"
+    }
+  },
+  "powerLineII": {
+    "image": "defaultApparatus.png",
+    "durabilityTau": 86400000.0,
+    "baseDanger": 0.0001,
+    "accidentType": ["FIRE"],
+    "maxTemp": 373,
+    "minTemp": 73,
+    "requiredResourcePerRepair": [
+      { "_resources": { "electronics": 3 } },
+      { "_resources": { "electronics": 5, "component": 1 } },
+      { "_resources": { "electronics": 8, "component": 2 } }
+    ],
+    "idealWorker": 0,
+    "variables": {
+      "transportType": "powerLine",
+      "spaceConsumption": 0.2,
+      "resourceFilter": "energy",
+      "baseThroughput": 2000000.0,
+      "powerRating": "medium"
+    }
+  },
+  "powerLineIII": {
+    "image": "defaultApparatus.png",
+    "durabilityTau": 86400000.0,
+    "baseDanger": 0.0002,
+    "accidentType": ["FIRE", "EXPLOSION"],
+    "maxTemp": 373,
+    "minTemp": 73,
+    "requiredResourcePerRepair": [
+      { "_resources": { "electronics": 8, "component": 2 } },
+      { "_resources": { "electronics": 15, "component": 5 } },
+      { "_resources": { "electronics": 25, "component": 10 } }
+    ],
+    "idealWorker": 0,
+    "variables": {
+      "transportType": "powerLine",
+      "spaceConsumption": 0.4,
+      "resourceFilter": "energy",
+      "baseThroughput": 10000000.0,
+      "powerRating": "high"
+    }
+  },
+  "liquidPipeI": {
+    "image": "defaultApparatus.png",
+    "durabilityTau": 86400000.0,
+    "baseDanger": 0.0002,
+    "accidentType": ["FLOODING"],
+    "requiredResourcePerRepair": [
+      { "_resources": { "plumbing": 5 } },
+      { "_resources": { "plumbing": 10 } },
+      { "_resources": { "plumbing": 20, "component": 5 } }
+    ],
+    "idealWorker": 0,
+    "variables": {
+      "transportType": "liquidPipe",
+      "spaceConsumption": 0.2,
+      "pressureRating": "low",
+      "corrosionRating": "low",
+      "baseThroughput": 500.0
+    }
+  },
+  "liquidPipeII": {
+    "image": "defaultApparatus.png",
+    "durabilityTau": 86400000.0,
+    "baseDanger": 0.0002,
+    "accidentType": ["FLOODING"],
+    "requiredResourcePerRepair": [
+      { "_resources": { "plumbing": 15 } },
+      { "_resources": { "plumbing": 30, "component": 5 } },
+      { "_resources": { "plumbing": 60, "component": 15 } }
+    ],
+    "idealWorker": 0,
+    "variables": {
+      "transportType": "liquidPipe",
+      "spaceConsumption": 0.6,
+      "pressureRating": "medium",
+      "corrosionRating": "medium",
+      "baseThroughput": 2000.0
+    }
+  },
+  "liquidPipeIII": {
+    "image": "defaultApparatus.png",
+    "durabilityTau": 86400000.0,
+    "baseDanger": 0.0003,
+    "accidentType": ["FLOODING"],
+    "requiredResourcePerRepair": [
+      { "_resources": { "plumbing": 40, "component": 10 } },
+      { "_resources": { "plumbing": 80, "component": 25 } },
+      { "_resources": { "plumbing": 150, "component": 50 } }
+    ],
+    "idealWorker": 0,
+    "variables": {
+      "transportType": "liquidPipe",
+      "spaceConsumption": 1.0,
+      "pressureRating": "high",
+      "corrosionRating": "high",
+      "baseThroughput": 8000.0
+    }
+  },
+  "gasPipeI": {
+    "image": "defaultApparatus.png",
+    "durabilityTau": 86400000.0,
+    "baseDanger": 0.0003,
+    "accidentType": ["EXPLOSION", "FIRE"],
+    "requiredResourcePerRepair": [
+      { "_resources": { "plumbing": 5 } },
+      { "_resources": { "plumbing": 10 } },
+      { "_resources": { "plumbing": 20, "component": 5 } }
+    ],
+    "idealWorker": 0,
+    "variables": {
+      "transportType": "gasPipe",
+      "spaceConsumption": 0.2,
+      "pressureRating": "low",
+      "corrosionRating": "low",
+      "baseThroughput": 5.0
+    }
+  },
+  "gasPipeII": {
+    "image": "defaultApparatus.png",
+    "durabilityTau": 86400000.0,
+    "baseDanger": 0.0003,
+    "accidentType": ["EXPLOSION", "FIRE"],
+    "requiredResourcePerRepair": [
+      { "_resources": { "plumbing": 15 } },
+      { "_resources": { "plumbing": 30, "component": 5 } },
+      { "_resources": { "plumbing": 60, "component": 15 } }
+    ],
+    "idealWorker": 0,
+    "variables": {
+      "transportType": "gasPipe",
+      "spaceConsumption": 0.6,
+      "pressureRating": "medium",
+      "corrosionRating": "medium",
+      "baseThroughput": 20.0
+    }
+  },
+  "gasPipeIII": {
+    "image": "defaultApparatus.png",
+    "durabilityTau": 86400000.0,
+    "baseDanger": 0.0004,
+    "accidentType": ["EXPLOSION", "FIRE"],
+    "requiredResourcePerRepair": [
+      { "_resources": { "plumbing": 40, "component": 10 } },
+      { "_resources": { "plumbing": 80, "component": 25 } },
+      { "_resources": { "plumbing": 150, "component": 50 } }
+    ],
+    "idealWorker": 0,
+    "variables": {
+      "transportType": "gasPipe",
+      "spaceConsumption": 1.0,
+      "pressureRating": "high",
+      "corrosionRating": "high",
+      "baseThroughput": 80.0
+    }
+  },
+  "pressurizer": {
+    "image": "defaultApparatus.png",
+    "durabilityTau": 86400000.0,
+    "baseDanger": 0.0002,
+    "accidentType": ["EXPLOSION"],
+    "idealConsumption": { "energy": 50000.0 },
+    "requiredResourcePerRepair": [
+      { "_resources": { "component": 5 } },
+      { "_resources": { "component": 10, "electronics": 5 } },
+      { "_resources": { "component": 20, "electronics": 10 } }
+    ],
+    "idealWorker": 2,
+    "variables": {
+      "transportType": "pressurizer",
+      "spaceConsumption": 0.5,
+      "maxHeightDiff": 20.0
+    }
+  },
+  "pneumaticTube": {
+    "image": "defaultApparatus.png",
+    "durabilityTau": 86400000.0,
+    "baseDanger": 0.0001,
+    "accidentType": ["EXPLOSION"],
+    "idealConsumption": { "energy": 200000.0 },
+    "requiredResourcePerRepair": [
+      { "_resources": { "component": 10, "electronics": 5 } },
+      { "_resources": { "component": 20, "electronics": 10 } },
+      { "_resources": { "component": 40, "electronics": 20, "plumbing": 10 } }
+    ],
+    "idealWorker": 1,
+    "variables": {
+      "transportType": "pneumaticTube",
+      "spaceConsumption": 0.1,
+      "baseThroughput": 50.0,
+      "endpointOnly": true
+    }
+  },
+  "railway": {
+    "image": "defaultApparatus.png",
+    "durabilityTau": 86400000.0,
+    "baseDanger": 0.0002,
+    "accidentType": ["COLLAPSE", "FIRE"],
+    "idealConsumption": { "energy": 1000000.0 },
+    "requiredResourcePerRepair": [
+      { "_resources": { "structure": 500 } },
+      { "_resources": { "structure": 1000, "component": 100 } },
+      { "_resources": { "structure": 2000, "component": 200, "electronics": 50 } }
+    ],
+    "idealWorker": 10,
+    "variables": {
+      "transportType": "railway",
+      "spaceConsumption": 3.0,
+      "baseThroughput": 5000.0,
+      "maxSlopePct": 0.15
+    }
+  },
+  "warehouse": {
+    "image": "defaultApparatus.png",
+    "durabilityTau": 86400000.0,
+    "baseDanger": 0.0001,
+    "accidentType": ["COLLAPSE"],
+    "requiredResourcePerRepair": [
+      { "_resources": { "structure": 100 } },
+      { "_resources": { "structure": 200 } },
+      { "_resources": { "structure": 400, "component": 50 } }
+    ],
+    "idealWorker": 10,
+    "variables": {
+      "transportType": "warehouse",
+      "throughputPerWorker": 50.0,
+      "manpowerOnly": true
+    }
+  },
+  "cartPath": {
+    "image": "defaultApparatus.png",
+    "durabilityTau": 86400000.0,
+    "baseDanger": 0.0002,
+    "accidentType": ["COLLAPSE"],
+    "requiredResourcePerRepair": [
+      { "_resources": { "structure": 50 } },
+      { "_resources": { "structure": 100 } },
+      { "_resources": { "structure": 200, "component": 20 } }
+    ],
+    "idealWorker": 5,
+    "variables": {
+      "transportType": "cartPath",
+      "spaceConsumption": 1.0,
+      "throughputPerWorker": 30.0,
+      "maxSlopePct": 0.20,
+      "requiresMinRadius": 4.0
+    }
+  },
+  "elevatorCrane": {
+    "image": "defaultApparatus.png",
+    "durabilityTau": 86400000.0,
+    "baseDanger": 0.0002,
+    "accidentType": ["COLLAPSE", "FRAGMENTS"],
+    "idealConsumption": { "energy": 200000.0 },
+    "requiredResourcePerRepair": [
+      { "_resources": { "structure": 200, "electronics": 20 } },
+      { "_resources": { "component": 100, "structure": 400, "electronics": 50 } },
+      { "_resources": { "component": 200, "structure": 800, "electronics": 100 } }
+    ],
+    "idealWorker": 3,
+    "variables": {
+      "transportType": "elevatorCrane",
+      "spaceConsumption": 1.0,
+      "baseThroughput": 500.0
+    }
   }
 }

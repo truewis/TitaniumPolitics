@@ -50,16 +50,28 @@ data class OfficialResourceTransfer(
             }
         }
         super.execute()
-        // Add logistics overhead: moving more resources takes longer unless the place has enough logistics capacity.
-        val logisticsOverhead = logisticsOverhead(tgtPlaceObj.logisticsCapacity)
+        // Logistics overhead based on transport route throughput.
+        val logisticsOverhead = routeBasedOverhead()
         if (logisticsOverhead > 0) sbjCharObj.frozen += logisticsOverhead
 
     }
 
-    private fun logisticsOverhead(logisticsCapacity: Double): Int {
-        val totalAmount = resources.keys.sumOf { resources[it] }
-        val capacity = max(1.0, logisticsCapacity)
-        return (max(0.0, totalAmount - capacity) / capacity * ReadOnly.constInt("OfficialResourceTransferDuration")).toInt()
+    /**
+     * Computes logistics overhead (in minutes) based on the best available transport route.
+     * For each resource type, the bottleneck throughput of the optimal route determines how
+     * long it takes to physically move that amount of material.
+     * Overhead = Σ (amount / bottleneckThroughput) × OfficialResourceTransferDuration
+     */
+    private fun routeBasedOverhead(): Int {
+        val baseDuration = ReadOnly.constInt("OfficialResourceTransferDuration")
+        var totalOverhead = 0.0
+        resources.forEach { (key, amount) ->
+            if (amount <= 0.0) return@forEach
+            val route = parent.findOptimalTransportRoute(tgtPlace, toWhere, key)
+            val throughput = max(1.0, route?.bottleneckThroughput ?: tgtPlaceObj.logisticsCapacity)
+            totalOverhead += (amount / throughput) * baseDuration
+        }
+        return totalOverhead.toInt()
     }
 
     override fun isValid(): Boolean {

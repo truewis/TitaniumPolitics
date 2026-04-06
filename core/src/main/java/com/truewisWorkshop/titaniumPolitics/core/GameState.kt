@@ -452,17 +452,48 @@ class GameState {
 
     fun createCorridors() {
         //Create corridors for each connection between places.
-        val corridorVolume = 20000f
         val corridorInitialDurability = 95.0
-        val volumeRatio = corridorVolume / 1e4f
+        val corridorVolumeBase = 20000f
         val processedConnections = mutableSetOf<Pair<String, String>>()
+
+        // Pre-compute connectivity score for each non-corridor place (for manway tier selection).
+        val connectionCount = hashMapOf<String, Int>()
+        places.keys.filter { !it.contains("corridor") }.forEach { name ->
+            connectionCount[name] = places[name]!!.connectedPlaces.count { !it.contains("corridor") }
+        }
+
+        // Helper: collect which gas/liquid resources a place's apparatus array produces or needs.
+        fun Place.producedGasLiquidResources(): Set<String> {
+            val result = mutableSetOf<String>()
+            apparatuses.forEach { app ->
+                val appData = ReadOnly.appJson[app.name]?.jsonObject ?: return@forEach
+                appData["gasGeneration"]?.jsonObject?.keys?.forEach { result.add(it) }
+                appData["idealProduction"]?.jsonObject?.keys
+                    ?.filter { it in ReadOnly.gasJson.keys || it in Apparatus.LIQUID_RESOURCE_KEYS }
+                    ?.forEach { result.add(it) }
+            }
+            return result
+        }
+
+        fun Place.consumedGasLiquidResources(): Set<String> {
+            val result = mutableSetOf<String>()
+            apparatuses.forEach { app ->
+                val appData = ReadOnly.appJson[app.name]?.jsonObject ?: return@forEach
+                appData["idealAbsorption"]?.jsonObject?.keys?.forEach { result.add(it) }
+                appData["idealConsumption"]?.jsonObject?.keys
+                    ?.filter { it in ReadOnly.gasJson.keys || it in Apparatus.LIQUID_RESOURCE_KEYS }
+                    ?.forEach { result.add(it) }
+            }
+            return result
+        }
+
         places.keys.toList().forEach { aName ->
             places[aName]!!.connectedPlaces.toList().forEach { bName ->
                 val key = if (aName < bName) aName to bName else bName to aName
                 if (key in processedConnections) return@forEach
-                //We do not create corridors for connections that already have corridors, to avoid duplication. This is for loading existing games, where corridors are already created.
+                //We do not create corridors for connections that already have corridors, to avoid duplication.
                 if (aName.contains("corridor") || bName.contains("corridor")) return@forEach
-                //If one place is building in another, we do not create corridor between them, as they are already connected by the building structure.
+                //If one place is building in another, we do not create corridor between them.
                 if (places[aName]!!.isBuildingIn == bName || places[bName]!!.isBuildingIn == aName) return@forEach
                 processedConnections.add(key)
 
@@ -474,66 +505,174 @@ class GameState {
                 val t2Coords = aCoords + (diff * 8.0) / 10
                 val t1Name = "corridor_${sortedA}_${sortedB}"
                 val t2Name = "corridor_${sortedB}_${sortedA}"
-                // Use elevator apparatus for the outerBarrierEast-techSchool connection.
+
+                // ---- Manway tier selection ----
                 val isElevatorConnection =
                     (sortedA == "outerBarrierEast" && sortedB == "techSchool") ||
                         (sortedA == "techSchool" && sortedB == "outerBarrierEast")
-                val apparatusName = if (isElevatorConnection) "elevator" else "manway"
-                places[sortedA]!!.apparatuses.add(Apparatus().apply {
-                    name = apparatusName; durability = corridorInitialDurability; ID = "${apparatusName}_$t1Name"
-                })
-                places[sortedB]!!.apparatuses.add(Apparatus().apply {
-                    name = apparatusName; durability = corridorInitialDurability; ID = "${apparatusName}_$t2Name"
-                })
+                if (isElevatorConnection) {
+                    // Keep legacy elevator apparatus for this special connection.
+                    places[sortedA]!!.apparatuses.add(Apparatus().apply {
+                        name = "elevator"; durability = corridorInitialDurability; ID = "elevator_$t1Name"
+                    })
+                    places[sortedB]!!.apparatuses.add(Apparatus().apply {
+                        name = "elevator"; durability = corridorInitialDurability; ID = "elevator_$t2Name"
+                    })
+                } else {
+                    val maxConn = maxOf(
+                        connectionCount[sortedA] ?: 1,
+                        connectionCount[sortedB] ?: 1
+                    )
+                    val roll = Math.random()
+                    val manwayTier = when {
+                        maxConn >= 6 -> when {
+                            roll < 0.30 -> "manwayI"
+                            roll < 0.85 -> "manwayII"
+                            else -> "manwayIII"
+                        }
+                        maxConn >= 4 -> when {
+                            roll < 0.60 -> "manwayI"
+                            roll < 0.95 -> "manwayII"
+                            else -> "manwayIII"
+                        }
+                        else -> when {
+                            roll < 0.90 -> "manwayI"
+                            roll < 0.99 -> "manwayII"
+                            else -> "manwayIII"
+                        }
+                    }
+                    places[sortedA]!!.apparatuses.add(Apparatus().apply {
+                        name = manwayTier; durability = corridorInitialDurability; ID = "${manwayTier}_$t1Name"
+                    })
+                    places[sortedB]!!.apparatuses.add(Apparatus().apply {
+                        name = manwayTier; durability = corridorInitialDurability; ID = "${manwayTier}_$t2Name"
+                    })
+                }
+
+                val corridorVolume = corridorVolumeBase
+                val volumeRatio = corridorVolume / 1e4f
+                val gasRes = { Resources(
+                    "oxygen" to 3000.0 * volumeRatio,
+                    "carbonDioxide" to 15.0 * volumeRatio,
+                    "nitrogen" to 9000.0 * volumeRatio
+                ).apply { positive = true } }
+
                 places[t1Name] = Place().apply {
                     this.injectParent(this@GameState)
                     coordinates = t1Coords
                     volume = corridorVolume
                     connectedPlaces.add(sortedA)
                     connectedPlaces.add(t2Name)
-                    gasResources = Resources(
-                        "oxygen" to 3000.0 * volumeRatio,
-                        "carbonDioxide" to 15.0 * volumeRatio,
-                        "nitrogen" to 9000.0 * volumeRatio
-                    ).apply { positive = true }
+                    gasResources = gasRes()
                 }
-
                 places[t2Name] = Place().apply {
                     this.injectParent(this@GameState)
                     coordinates = t2Coords
                     volume = corridorVolume
                     connectedPlaces.add(t1Name)
                     connectedPlaces.add(sortedB)
-                    gasResources = Resources(
-                        "oxygen" to 3000.0 * volumeRatio,
-                        "carbonDioxide" to 15.0 * volumeRatio,
-                        "nitrogen" to 9000.0 * volumeRatio
-                    ).apply { positive = true }
+                    gasResources = gasRes()
                 }
 
                 places[sortedA]!!.connectedPlaces.remove(sortedB)
                 places[sortedA]!!.connectedPlaces.add(t1Name)
                 places[sortedB]!!.connectedPlaces.remove(sortedA)
                 places[sortedB]!!.connectedPlaces.add(t2Name)
+
+                // ---- Infrastructure seeding for non-elevator corridors ----
+                if (!isElevatorConnection) {
+                    // Determine chosen manway tier's radius for space budget checks.
+                    val manwayApp = places[sortedA]!!.apparatuses
+                        .find { it.ID.endsWith("_$t1Name") && it.name in Apparatus.MANWAY_NAMES }
+                    val radius = manwayApp?.corridorRadius ?: 2.0
+                    val totalArea = kotlin.math.PI * radius * radius
+
+                    // Slope (rise/run) of this connection.
+                    val diff3 = bCoords - aCoords
+                    val horizontalDist = sqrt(diff3.x * diff3.x + diff3.y * diff3.y)
+                    val slope = if (horizontalDist < 0.001) Double.MAX_VALUE
+                                else kotlin.math.abs(diff3.z) / horizontalDist
+
+                    var usedSpace = 0.0
+
+                    fun addInfraToCorridors(infraName: String, resourceFilter: String? = null) {
+                        val app1 = Apparatus().apply {
+                            name = infraName
+                            durability = corridorInitialDurability
+                            ID = "${infraName}_$t1Name"
+                            if (resourceFilter != null) parameters["resourceFilter"] = resourceFilter
+                        }
+                        val app2 = Apparatus().apply {
+                            name = infraName
+                            durability = corridorInitialDurability
+                            ID = "${infraName}_$t2Name"
+                            if (resourceFilter != null) parameters["resourceFilter"] = resourceFilter
+                        }
+                        places[t1Name]!!.apparatuses.add(app1)
+                        places[t2Name]!!.apparatuses.add(app2)
+                        usedSpace += app1.spaceConsumption
+                    }
+
+                    // Railway: available in manwayII+ if slope is within limit.
+                    val railwayMaxSlope = 0.15
+                    var hasRailway = false
+                    if (radius >= 4.0 && slope <= railwayMaxSlope && usedSpace + 3.0 <= totalArea) {
+                        if (Math.random() < 0.40) {
+                            addInfraToCorridors("railway")
+                            // Railway always comes with a power line for its own energy.
+                            if (usedSpace + 0.2 <= totalArea) addInfraToCorridors("powerLineII")
+                            hasRailway = true
+                        }
+                    }
+
+                    // Cart path: in manwayII+ without railway, within slope limit.
+                    val cartPathMaxSlope = 0.20
+                    if (!hasRailway && radius >= 4.0 && slope <= cartPathMaxSlope && usedSpace + 1.0 <= totalArea) {
+                        if (Math.random() < 0.20) addInfraToCorridors("cartPath")
+                    }
+
+                    // Power line: if no railway power line already added.
+                    if (!hasRailway) {
+                        if (radius >= 4.0 && usedSpace + 0.2 <= totalArea && Math.random() < 0.30) {
+                            addInfraToCorridors("powerLineI")
+                        }
+                    }
+
+                    // Pipes: seed if endpoints have matching production/consumption.
+                    val aProduced = places[sortedA]!!.producedGasLiquidResources()
+                    val bConsumed = places[sortedB]!!.consumedGasLiquidResources()
+                    val bProduced = places[sortedB]!!.producedGasLiquidResources()
+                    val aConsumed = places[sortedA]!!.consumedGasLiquidResources()
+
+                    val pipeResources = (aProduced intersect bConsumed) union (bProduced intersect aConsumed)
+                    pipeResources.forEach { res ->
+                        val isGas = res in ReadOnly.gasJson.keys
+                        val pipeName = if (isGas) "gasPipeI" else "liquidPipeI"
+                        val pipeSpace = if (isGas) 0.2 else 0.2
+                        if (usedSpace + pipeSpace <= totalArea && Math.random() < 0.60) {
+                            addInfraToCorridors(pipeName, res)
+                        }
+                    }
+                }
             }
         }
-        // Generate fake corridors: for each place (including corridors), 0-2 dead-end corridors
-        // are created, connected only to the originating place. Average 0.3 per place.
-        // Distribution: P(0)=73%, P(1)=24%, P(2)=3% → mean = 0*0.73 + 1*0.24 + 2*0.03 = 0.30
+
+        // Generate fake corridors (always manwayI, smallest).
         val fakeCorrIdxCounter = hashMapOf<String, Int>()
+        val corridorVolume = corridorVolumeBase
+        val volumeRatio = corridorVolume / 1e4f
         places.keys.toList().forEach { sourceName ->
             val r = Math.random()
             val fakeCorrCount = when {
-                r < 0.73 -> 0  // 73% chance: no fake corridor
-                r < 0.97 -> 1  // 24% chance: one fake corridor
-                else -> 2       // 3% chance: two fake corridors
+                r < 0.73 -> 0
+                r < 0.97 -> 1
+                else -> 2
             }
             repeat(fakeCorrCount) {
                 val idx = fakeCorrIdxCounter.getOrDefault(sourceName, 0)
                 fakeCorrIdxCounter[sourceName] = idx + 1
                 val fakeName = "corridor_fake_${sourceName}_$idx"
                 val sourceCoords = places[sourceName]!!.coordinates
-                // Place the fake corridor nearby but offset slightly.
                 val radius = 2 + Math.random() * 3
                 val theta = Math.random() * 2 * Math.PI
                 val fakeCoords = sourceCoords + Coordinate3D(
@@ -554,7 +693,7 @@ class GameState {
                 }
                 places[sourceName]!!.connectedPlaces.add(fakeName)
                 places[sourceName]!!.apparatuses.add(Apparatus().apply {
-                    name = "manway"; durability = corridorInitialDurability; ID = "manway_$fakeName"
+                    name = "manwayI"; durability = corridorInitialDurability; ID = "manwayI_$fakeName"
                 })
             }
         }
@@ -927,5 +1066,86 @@ class GameState {
         }
     }
 
+    /**
+     * Finds the optimal transport route for [resourceKey] from place [from] to place [to].
+     *
+     * Uses a modified Dijkstra where the edge cost is 1.0 / throughput (lower = better).
+     * Falls back to raw manpower throughput on any segment with no infrastructure.
+     *
+     * If [from] has a warehouse apparatus with assigned workers, its throughput is applied
+     * as a floor for every segment that lacks other infrastructure.
+     *
+     * @return A [TransportRoute] with the best (maximum bottleneck) path, or null if [to] is unreachable.
+     */
+    fun findOptimalTransportRoute(from: String, to: String, resourceKey: String): TransportRoute? {
+        if (from == to) return TransportRoute(emptyList(), Double.MAX_VALUE)
+
+        // Warehouse throughput from the source: applies as a floor on every segment.
+        val warehouseThroughput = places[from]?.apparatuses
+            ?.filter { it.transportType == "warehouse" && it.durability > 0 }
+            ?.sumOf { it.actualThroughput } ?: 0.0
+
+        // Dijkstra — cost = sum of (1/throughput) for each hop. Lower = faster.
+        data class State(val place: String, val cost: Double)
+
+        val cost = mutableMapOf<String, Double>().withDefault { Double.MAX_VALUE }
+        val prev = mutableMapOf<String, String?>()
+        val prevThroughput = mutableMapOf<String, Double>()
+        val prevMethod = mutableMapOf<String, String>()
+        val visited = mutableSetOf<String>()
+        val queue = PriorityQueue<State>(compareBy { it.cost })
+
+        cost[from] = 0.0
+        queue.add(State(from, 0.0))
+
+        while (queue.isNotEmpty()) {
+            val (current, currentCost) = queue.poll()
+            if (current in visited) continue
+            visited.add(current)
+            if (current == to) break
+
+            val currentPlace = places[current] ?: continue
+            for (neighbor in currentPlace.connectedPlaces) {
+                if (neighbor in visited) continue
+                val neighborPlace = places[neighbor] ?: continue
+
+                // Throughput on this hop = what the corridor/neighbor can move for this resource.
+                val segThroughput = neighborPlace.throughputForResource(resourceKey, warehouseThroughput)
+                val segCost = if (segThroughput <= 0.0) Double.MAX_VALUE / 2 else 1.0 / segThroughput
+
+                val newCost = if (currentCost >= Double.MAX_VALUE / 2) Double.MAX_VALUE / 2
+                              else currentCost + segCost
+
+                if (newCost < cost.getValue(neighbor)) {
+                    cost[neighbor] = newCost
+                    prev[neighbor] = current
+                    prevThroughput[neighbor] = segThroughput
+                    val bestMethod = neighborPlace.transportInfrastructureForResource(resourceKey)
+                        .maxByOrNull { it.actualThroughput }?.name ?: "manual"
+                    prevMethod[neighbor] = bestMethod
+                    queue.add(State(neighbor, newCost))
+                }
+            }
+        }
+
+        if (cost.getValue(to) >= Double.MAX_VALUE / 2) return null
+
+        // Reconstruct path.
+        val segments = mutableListOf<TransportSegment>()
+        var current: String? = to
+        while (current != null && current != from) {
+            val p = prev[current] ?: break
+            segments.add(0, TransportSegment(
+                fromPlace = p,
+                toPlace = current,
+                methodName = prevMethod[current] ?: "manual",
+                throughput = prevThroughput[current] ?: 1.0
+            ))
+            current = p
+        }
+
+        val bottleneck = segments.minOfOrNull { it.throughput } ?: 1.0
+        return TransportRoute(segments, bottleneck)
+    }
 
 }

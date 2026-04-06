@@ -1238,6 +1238,11 @@ class GameEngine(val gameState: GameState) {
                     placeObj.apparatuses.isNotEmpty()
                 )
                     actions.add("Repair") //Infrastructure party members can repair the place.
+                if (character in gameState.parties["infrastructure"]!!.members && gameState.characters[character]!!.trait.contains(
+                        "engineer"
+                    ) && place.contains("corridor")
+                )
+                    actions.add("ConstructionProject") //Engineers can build new transport infrastructure in corridors.
                 if (character in gameState.parties["safety"]!!.members && gameState.characters[character]!!.trait.contains(
                         "soldier"
                     )

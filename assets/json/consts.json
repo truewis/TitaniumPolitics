@@ -107,5 +107,6 @@
   "FeastWillingnessThreshold": 1.2,
   "GasLeakBaseRate": 1e-5,
   "MethaneReactionThresholdPa": 5000.0,
-  "MethaneReactionTau": 360000.0
+  "MethaneReactionTau": 360000.0,
+  "ConstructionProjectDuration": 720
 }
