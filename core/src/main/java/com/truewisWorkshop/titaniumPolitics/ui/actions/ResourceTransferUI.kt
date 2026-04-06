@@ -174,7 +174,7 @@ class ResourceTransferUI(
 
         val srcPlace = sbjCharObj.place.name
         // Pick the primary resource for route lookup (largest amount, or first in map).
-        val primaryRes = target.keys.maxByOrNull { target[it] }
+        val primaryRes = target.keys.maxByOrNull { target[it] ?: 0.0 }
             ?: gameState.places[tgtPlace]?.resources?.keys?.firstOrNull()
             ?: return
 
