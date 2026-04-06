@@ -60,6 +60,11 @@ class Apparatus {
             return jsonData.jsonObject["variables"]!!.jsonObject["storageType"]!!.jsonPrimitive.toString() to
                     jsonData.jsonObject["variables"]!!.jsonObject["storageAmount"]!!.jsonPrimitive.double
         }
+    val isLogistics
+        get() = jsonData.jsonObject["variables"]?.jsonObject?.get("logisticsCapacity") != null
+    val logisticsCapacityPerWorker: Double
+        get() = if (!isLogistics) 0.0
+        else jsonData.jsonObject["variables"]!!.jsonObject["logisticsCapacity"]!!.jsonPrimitive.double
     private val jsonData
         get() = ReadOnly.appJson[name] ?: throw Exception("$name not found in apparatus file.")
     private val baseDanger

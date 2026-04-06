@@ -3,9 +3,11 @@ package com.titaniumPolitics.game.core.gameActions
 import com.badlogic.gdx.math.MathUtils.clamp
 import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.core.Information
+import com.titaniumPolitics.game.core.ReadOnly
 import com.titaniumPolitics.game.core.Resources
 import com.titaniumPolitics.game.debugTools.Logger
 import kotlinx.serialization.Serializable
+import kotlin.math.max
 
 @Serializable
 data class OfficialResourceTransfer(
@@ -48,7 +50,16 @@ data class OfficialResourceTransfer(
             }
         }
         super.execute()
+        // Add logistics overhead: moving more resources takes longer unless the place has enough logistics capacity.
+        val logisticsOverhead = logisticsOverhead(tgtPlaceObj.logisticsCapacity)
+        if (logisticsOverhead > 0) sbjCharObj.frozen += logisticsOverhead
 
+    }
+
+    private fun logisticsOverhead(logisticsCapacity: Double): Int {
+        val totalAmount = resources.keys.sumOf { resources[it] }
+        val capacity = max(1.0, logisticsCapacity)
+        return (max(0.0, totalAmount - capacity) / capacity * ReadOnly.constInt("OfficialResourceTransferDuration")).toInt()
     }
 
     override fun isValid(): Boolean {

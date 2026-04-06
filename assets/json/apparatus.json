@@ -1879,5 +1879,42 @@
         }
       }
     ]
+  },
+  "logisticsHub": {
+    "image": "defaultApparatus.png",
+    "durabilityTau": 86400000.0,
+    "baseDanger": 0.0001,
+    "accidentType": [
+      "COLLAPSE"
+    ],
+    "idealWorker": 20,
+    "idealConsumption": {
+      "energy": 500000.0
+    },
+    "idealHeatProduction": 100000.0,
+    "requiredResourcePerRepair": [
+      {
+        "_resources": {
+          "component": 10.0
+        }
+      },
+      {
+        "_resources": {
+          "component": 10.0,
+          "electronics": 5.0,
+          "structure": 10.0
+        }
+      },
+      {
+        "_resources": {
+          "component": 20.0,
+          "electronics": 10.0,
+          "structure": 20.0
+        }
+      }
+    ],
+    "variables": {
+      "logisticsCapacity": 40.0
+    }
   }
 }

@@ -189,6 +189,16 @@ class Place : GameStateElement() {
                 parent.characters[it]!!.type == Character.Type.ANON && it in wp.members
             }.sumOf { parent.characters[it]!!.reliant }
         } ?: 0
+
+    /**
+     * Logistics capacity of the place. Determines how many resource units can be transferred in the base transfer duration.
+     * Workers at the place provide base logistics capacity. A logisticsHub apparatus provides additional capacity per worker assigned to it.
+     */
+    val logisticsCapacity: Double
+        get() = currentAvailableLabor * ReadOnly.const("LogisticsBaseCapacityPerWorker") +
+                apparatuses.filter { it.isLogistics && it.durability > 0 }
+                    .sumOf { it.currentWorker * it.logisticsCapacityPerWorker * it.netEfficiency }
+
     val workers
         get() = workplaceParty?.members?.filter { parent.characters[it]!!.type == Character.Type.ANON }
             ?.map { parent.characters[it]!! }
