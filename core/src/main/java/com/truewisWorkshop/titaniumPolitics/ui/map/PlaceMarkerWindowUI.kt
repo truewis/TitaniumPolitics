@@ -355,7 +355,7 @@ class PlaceMarkerWindowUI(var gameState: GameState, var owner: MapUI) : Table() 
                 row()
                 add(managementInformation).fillX().expandX()
                 row()
-                if (placeDisplayed.contains("corridor")) {
+                if (placeDisplayed.contains("corridor") && gameState.progression.contains("OfficialResourceTransfer")) {
                     val corridorPlace = gameState.places[placeDisplayed]!!
                     val radius = corridorPlace.corridorRadius
                     val transportTypes = corridorPlace.apparatuses
@@ -366,14 +366,15 @@ class PlaceMarkerWindowUI(var gameState: GameState, var owner: MapUI) : Table() 
                         top()
                         left()
                         if (radius != null) {
-                            add(scene2d.label(
-                                ReadOnly.prop("PlaceMarkerWindowUI-CorridorSize").format(radius),
-                                "description"
-                            ) {
-                                setFontScale(0.25f)
-                                setAlignment(Align.left)
-                                color = Color.CYAN
-                            }).fillX().padTop(4f)
+                            add(
+                                scene2d.label(
+                                    ReadOnly.prop("PlaceMarkerWindowUI-CorridorSize").format(radius),
+                                    "description"
+                                ) {
+                                    setFontScale(0.25f)
+                                    setAlignment(Align.left)
+                                    color = Color.CYAN
+                                }).fillX().padTop(4f)
                             row()
                         }
                         val transportText = if (transportTypes.isEmpty())

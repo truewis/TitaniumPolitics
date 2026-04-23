@@ -31,7 +31,7 @@ class Connection(var gameState: GameState, val owner: MapUI, startPlace: String,
             ?.mapNotNull { it.transportType }
             ?.toSet()
             ?: emptySet()
-        color = when {
+        color = if (gameState.progression.contains("OfficialResourceTransfer")) when {
             "railway" in transportTypes -> Color(0.9f, 0.4f, 0.1f, 0.8f)       // warm orange
             "elevatorCrane" in transportTypes -> Color(0.2f, 0.4f, 0.9f, 0.8f) // steel blue
             "cartPath" in transportTypes -> Color(0.6f, 0.4f, 0.2f, 0.8f)      // brown
@@ -39,7 +39,7 @@ class Connection(var gameState: GameState, val owner: MapUI, startPlace: String,
                 Color(0.2f, 0.7f, 0.6f, 0.8f)                                  // teal
             "powerLine" in transportTypes -> Color(0.9f, 0.8f, 0.1f, 0.8f)     // yellow
             else -> Color(0f, 0f, 0f, 0.5f)                                     // default black
-        }
+        } else Color(0f, 0f, 0f, 0.5f)
 
         try {
             val start: Pair<Float, Float> = owner.convertToScreenCoords(
@@ -71,6 +71,7 @@ class Connection(var gameState: GameState, val owner: MapUI, startPlace: String,
     companion object {
         /** Pixels of line width per metre of corridor radius. manwayI(2m)→5px, manwayII(4m)→10px, manwayIII(6m)→15px. */
         private const val WIDTH_PER_METRE = 2.5
+
         /** Default line width used when no corridor radius information is available. */
         private const val DEFAULT_LINE_WIDTH = 5f
     }
