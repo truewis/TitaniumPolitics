@@ -355,6 +355,41 @@ class PlaceMarkerWindowUI(var gameState: GameState, var owner: MapUI) : Table() 
                 row()
                 add(managementInformation).fillX().expandX()
                 row()
+                if (placeDisplayed.contains("corridor")) {
+                    val corridorPlace = gameState.places[placeDisplayed]!!
+                    val radius = corridorPlace.corridorRadius
+                    val transportTypes = corridorPlace.apparatuses
+                        .filter { it.isTransportInfrastructure && it.transportType != "manway" && it.transportType != "pressurizer" }
+                        .mapNotNull { it.transportType }
+                        .distinct()
+                    add(scene2d.table {
+                        top()
+                        left()
+                        if (radius != null) {
+                            add(scene2d.label(
+                                ReadOnly.prop("PlaceMarkerWindowUI-CorridorSize").format(radius),
+                                "description"
+                            ) {
+                                setFontScale(0.25f)
+                                setAlignment(Align.left)
+                                color = Color.CYAN
+                            }).fillX().padTop(4f)
+                            row()
+                        }
+                        val transportText = if (transportTypes.isEmpty())
+                            ReadOnly.prop("PlaceMarkerWindowUI-NoTransport")
+                        else
+                            ReadOnly.prop("PlaceMarkerWindowUI-TransportMethods")
+                                .format(transportTypes.joinToString(", "))
+                        add(scene2d.label(transportText, "description") {
+                            setFontScale(0.25f)
+                            setAlignment(Align.left)
+                            color = Color.CYAN
+                            wrap = true
+                        }).fillX().padTop(2f)
+                    }).fillX().expandX().padBottom(8f)
+                    row()
+                }
                 add(scene2d.stack {
                     add(
                         DescriptionLabel(

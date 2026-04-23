@@ -49,10 +49,16 @@ data class OfficialResourceTransfer(
                 )
             }
         }
-        super.execute()
-        // Logistics overhead based on transport route throughput.
+        // Move the subject character to the destination.
+        parent.places[tgtPlace]!!.characters.remove(sbjCharacter)
+        parent.places[toWhere]!!.characters.add(sbjCharacter)
+        if (sbjCharacter == parent.playerName) {
+            parent.discoverPlacesAdjacentTo(toWhere)
+        }
+        // Time = max(routeBasedOverhead, travelTime from tgtPlace to toWhere).
         val logisticsOverhead = routeBasedOverhead()
-        if (logisticsOverhead > 0) sbjCharObj.frozen += logisticsOverhead
+        val travelTime = parent.places[tgtPlace]!!.shortestPathAndTimeTo(toWhere, sbjCharacter)?.second ?: 0
+        sbjCharObj.frozen += max(logisticsOverhead, travelTime)
 
     }
 
