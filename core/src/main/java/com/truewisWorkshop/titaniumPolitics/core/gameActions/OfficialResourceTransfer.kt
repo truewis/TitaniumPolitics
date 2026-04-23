@@ -3,9 +3,11 @@ package com.titaniumPolitics.game.core.gameActions
 import com.badlogic.gdx.math.MathUtils.clamp
 import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.core.Information
+import com.titaniumPolitics.game.core.ReadOnly
 import com.titaniumPolitics.game.core.Resources
 import com.titaniumPolitics.game.debugTools.Logger
 import kotlinx.serialization.Serializable
+import kotlin.math.max
 
 @Serializable
 data class OfficialResourceTransfer(
@@ -48,7 +50,28 @@ data class OfficialResourceTransfer(
             }
         }
         super.execute()
+        // Logistics overhead based on transport route throughput.
+        val logisticsOverhead = routeBasedOverhead()
+        if (logisticsOverhead > 0) sbjCharObj.frozen += logisticsOverhead
 
+    }
+
+    /**
+     * Computes logistics overhead (in minutes) based on the best available transport route.
+     * For each resource type, the bottleneck throughput of the optimal route determines how
+     * long it takes to physically move that amount of material.
+     * Overhead = Σ (amount / bottleneckThroughput) × OfficialResourceTransferDuration
+     */
+    private fun routeBasedOverhead(): Int {
+        val baseDuration = ReadOnly.constInt("OfficialResourceTransferDuration")
+        var totalOverhead = 0.0
+        resources.forEach { (key, amount) ->
+            if (amount <= 0.0) return@forEach
+            val route = parent.findOptimalTransportRoute(tgtPlace, toWhere, key)
+            val throughput = max(1.0, route?.bottleneckThroughput ?: tgtPlaceObj.logisticsCapacity)
+            totalOverhead += (amount / throughput) * baseDuration
+        }
+        return totalOverhead.toInt()
     }
 
     override fun isValid(): Boolean {

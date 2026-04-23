@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.ui.Button
 import com.badlogic.gdx.scenes.scene2d.ui.Label
+import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane
 import com.badlogic.gdx.scenes.scene2d.ui.Slider
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener
@@ -39,10 +40,14 @@ class ResourceTransferUI(
             field = value
             refresh(mode)
             refreshAction()
+            refreshRoutePanel()
         }
     var modeLabel: Label
     var placeButton: Button
     var action: GameAction? = null
+
+    /** Inner table that shows transport route info when a destination is selected. */
+    private val routePanel = Table(Scene2DSkin.defaultSkin)
 
     init {
         val st = stack {
@@ -70,6 +75,9 @@ class ResourceTransferUI(
                     .fill().colspan(2)
                 row()
                 this@ResourceTransferUI.resourceSelectTable.isVisible = false
+                row()
+                add(ScrollPane(this@ResourceTransferUI.routePanel)).size(400f, 120f).colspan(2)
+                row()
                 add(this@ResourceTransferUI.submitButton).size(400f, 75f)
                     .fill().colspan(2)
             }
@@ -153,6 +161,60 @@ class ResourceTransferUI(
         }
         action!!.injectParent(gameState)
         submitButton.refresh(action!!)
+    }
+
+    /**
+     * Rebuilds the route-info panel whenever a destination is selected.
+     * Shows the hop-by-hop transport route for the primary resource in [target], or the
+     * first available resource if [target] is empty. Displays throughput and ETA.
+     */
+    private fun refreshRoutePanel() {
+        routePanel.clear()
+        if (toWhere.isEmpty() || mode != "official") return
+
+        val srcPlace = sbjCharObj.place.name
+        // Pick the primary resource for route lookup (largest amount, or first in map).
+        val primaryRes = target.keys.maxByOrNull { target[it] ?: 0.0 }
+            ?: gameState.places[tgtPlace]?.resources?.keys?.firstOrNull()
+            ?: return
+
+        fun addLabel(text: String, scale: Float = 0.35f, color: Color = Color.DARK_GRAY) {
+            routePanel.add(
+                scene2d.label(text) { setFontScale(scale); this.color = color }
+            ).left()
+            routePanel.row()
+        }
+
+        addLabel(ReadOnly.prop("ResourceTransferUI-RouteHeader"), 0.4f, Color.DARK_GRAY)
+        val route = gameState.findOptimalTransportRoute(tgtPlace, toWhere, primaryRes)
+        if (route == null) {
+            addLabel(ReadOnly.prop("ResourceTransferUI-RouteNone"), 0.35f, Color.RED)
+        } else if (route.segments.isEmpty()) {
+            addLabel(ReadOnly.prop("ResourceTransferUI-RouteManual"), 0.35f, Color.GRAY)
+        } else {
+            route.segments.forEach { seg ->
+                addLabel(
+                    ReadOnly.prop("ResourceTransferUI-RouteSegment")
+                        .format(seg.fromPlace, seg.toPlace, seg.methodName),
+                    0.3f, Color.DARK_GRAY
+                )
+            }
+            addLabel(
+                ReadOnly.prop("ResourceTransferUI-RouteBottleneck")
+                    .format(route.bottleneckThroughput),
+                0.35f, Color.BLUE
+            )
+            val totalAmount = target.keys.sumOf { target[it] }
+            if (totalAmount > 0.0) {
+                val etaMinutes = (totalAmount / route.bottleneckThroughput) *
+                    ReadOnly.constInt("OfficialResourceTransferDuration")
+                addLabel(
+                    ReadOnly.prop("ResourceTransferUI-RouteETA")
+                        .format(totalAmount, etaMinutes),
+                    0.35f, Color.GREEN
+                )
+            }
+        }
     }
 
     class ResourceSelectTable(

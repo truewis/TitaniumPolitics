@@ -60,6 +60,95 @@ class Apparatus {
             return jsonData.jsonObject["variables"]!!.jsonObject["storageType"]!!.jsonPrimitive.toString() to
                     jsonData.jsonObject["variables"]!!.jsonObject["storageAmount"]!!.jsonPrimitive.double
         }
+    val isLogistics
+        get() = jsonData.jsonObject["variables"]?.jsonObject?.get("logisticsCapacity") != null
+    val logisticsCapacityPerWorker: Double
+        get() = if (!isLogistics) 0.0
+        else jsonData.jsonObject["variables"]!!.jsonObject["logisticsCapacity"]!!.jsonPrimitive.double
+
+    /**
+     * Per-instance parameter overrides. Used, for example, to specify which specific resource
+     * a liquid or gas pipe is dedicated to (via the "resourceFilter" key).
+     */
+    var parameters: HashMap<String, String> = hashMapOf()
+
+    /** True if this apparatus is part of the transport infrastructure system. */
+    val isTransportInfrastructure: Boolean
+        get() = jsonData.jsonObject["variables"]?.jsonObject?.containsKey("transportType") == true
+
+    /** The transport type string, e.g. "railway", "powerLine", "liquidPipe", "manway". */
+    val transportType: String?
+        get() = jsonData.jsonObject["variables"]?.jsonObject?.get("transportType")?.jsonPrimitive?.content
+
+    /** Corridor cross-sectional space consumed by this apparatus (metres). */
+    val spaceConsumption: Double
+        get() = jsonData.jsonObject["variables"]?.jsonObject?.get("spaceConsumption")?.jsonPrimitive?.double ?: 0.0
+
+    /**
+     * The resource this apparatus can transport. For pipes, the instance-level parameter
+     * "resourceFilter" takes precedence over the JSON-level variable so the same pipe type
+     * can be re-used for different specific resources.
+     */
+    val resourceFilter: String?
+        get() = parameters["resourceFilter"]
+            ?: jsonData.jsonObject["variables"]?.jsonObject?.get("resourceFilter")?.jsonPrimitive?.content
+
+    /** Maximum slope (rise/run) this transport device can operate on. Null = no limit. */
+    val maxSlopePct: Double?
+        get() = jsonData.jsonObject["variables"]?.jsonObject?.get("maxSlopePct")?.jsonPrimitive?.double
+
+    /** Corridor radius provided by a manway apparatus (metres). Null if not a manway. */
+    val corridorRadius: Double?
+        get() = jsonData.jsonObject["variables"]?.jsonObject?.get("corridorRadius")?.jsonPrimitive?.double
+
+    /** True if this transport device works on worker power only (no autonomous throughput). */
+    val manpowerOnly: Boolean
+        get() = jsonData.jsonObject["variables"]?.jsonObject?.get("manpowerOnly")?.jsonPrimitive?.boolean ?: false
+
+    /** Throughput per assigned worker for manpower-based transport (units/hr). */
+    val throughputPerWorker: Double
+        get() = jsonData.jsonObject["variables"]?.jsonObject?.get("throughputPerWorker")?.jsonPrimitive?.double ?: 0.0
+
+    /** Autonomous throughput at full efficiency for infrastructure-based transport (units/hr). */
+    val baseThroughput: Double
+        get() = jsonData.jsonObject["variables"]?.jsonObject?.get("baseThroughput")?.jsonPrimitive?.double ?: 0.0
+
+    /** Actual throughput, accounting for efficiency and worker assignment. */
+    val actualThroughput: Double
+        get() = if (durability <= 0.0) 0.0
+        else if (manpowerOnly) currentWorker * throughputPerWorker * netEfficiency
+        else baseThroughput * netEfficiency
+
+    /**
+     * Returns true if this apparatus can transport the given resource key.
+     * Gas resources are identified via ReadOnly.gasJson, liquids via a fixed set.
+     */
+    fun canCarryResource(resourceKey: String): Boolean {
+        if (!isTransportInfrastructure) return false
+        if (durability <= 0.0) return false
+        val filter = resourceFilter
+        return when (transportType) {
+            "powerLine" -> resourceKey == "energy"
+            "liquidPipe" -> if (filter != null) filter == resourceKey
+            else resourceKey in LIQUID_RESOURCE_KEYS
+            "gasPipe" -> if (filter != null) filter == resourceKey
+            else resourceKey in ReadOnly.gasJson.keys
+            "manway", "pressurizer" -> false
+            null -> false
+            else -> { // railway, warehouse, cartPath, pneumaticTube, elevatorCrane
+                if (filter != null) filter == resourceKey
+                else resourceKey !in ReadOnly.gasJson.keys && resourceKey != "energy"
+            }
+        }
+    }
+
+    companion object {
+        /** Liquid resources that can be transported by liquid pipes. */
+        val LIQUID_RESOURCE_KEYS = setOf("water", "cleanWater")
+        /** Manway apparatus name variants (all tiers plus legacy name). */
+        val MANWAY_NAMES = setOf("manway", "manwayI", "manwayII", "manwayIII")
+    }
+
     private val jsonData
         get() = ReadOnly.appJson[name] ?: throw Exception("$name not found in apparatus file.")
     private val baseDanger
@@ -427,6 +516,8 @@ class Apparatus {
     }
 
     fun depreciateHourly() {
+        // Transport infrastructure that has at least one maintenance worker does not degrade.
+        if (isTransportInfrastructure && currentWorker >= 1) return
         //Consume durability, no matter it is currently being worked or not. For storages, keep the durability if they are fully staffed.
         if (!isStorage || currentWorker >= idealWorker)
             durability -= S_PER_HR / currentDurabilityTau * const("DurabilityMax")

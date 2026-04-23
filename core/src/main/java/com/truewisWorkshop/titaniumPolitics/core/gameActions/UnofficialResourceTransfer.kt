@@ -4,8 +4,10 @@ import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.core.Information
 import com.titaniumPolitics.game.core.MutualityMatrix
 import com.titaniumPolitics.game.core.Place
+import com.titaniumPolitics.game.core.ReadOnly
 import com.titaniumPolitics.game.core.Resources
 import kotlinx.serialization.Serializable
+import kotlin.math.max
 
 @Serializable
 data class UnofficialResourceTransfer(
@@ -34,7 +36,17 @@ data class UnofficialResourceTransfer(
             parent.places[toWhere]!!.resources += resources
         }
         super.execute()
+        // Unofficial transfer always uses 1-worker throughput (no infrastructure benefit).
+        val logisticsCapacity = ReadOnly.const("LogisticsBaseCapacityPerWorker")
+        val logisticsOverhead = logisticsOverhead(logisticsCapacity)
+        if (logisticsOverhead > 0) sbjCharObj.frozen += logisticsOverhead
 
+    }
+
+    private fun logisticsOverhead(logisticsCapacity: Double): Int {
+        val totalAmount = resources.keys.sumOf { resources[it] }
+        val capacity = max(1.0, logisticsCapacity)
+        return (max(0.0, totalAmount - capacity) / capacity * ReadOnly.constInt("UnofficialResourceTransferDuration")).toInt()
     }
 
     override fun deltaWill(): MutualityMatrix {

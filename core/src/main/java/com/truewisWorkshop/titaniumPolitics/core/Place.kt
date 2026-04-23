@@ -11,8 +11,11 @@ import kotlinx.serialization.json.jsonPrimitive
 import java.util.*
 import kotlin.collections.forEach
 import kotlin.compareTo
+import kotlin.math.abs
 import kotlin.math.exp
 import kotlin.math.min
+import kotlin.math.PI
+import kotlin.math.sqrt
 import kotlin.text.get
 
 @Serializable
@@ -152,7 +155,7 @@ class Place : GameStateElement() {
             // If this place is not a corridor, you can only move to corridors or manways with durability > 0.
             // Elevator corridors are only accessible when the elevator apparatus has energy and durability > 0.
             (name.contains("corridor") || isBuildingIn == placeTo || parent.places[placeTo]?.isBuildingIn == name || apparatuses.any {
-                (it.name == "manway" && it.ID == "manway_$placeTo" && it.durability > 0.0) ||
+                (it.name in Apparatus.MANWAY_NAMES && it.ID == "${it.name}_$placeTo" && it.durability > 0.0) ||
                     (it.name == "elevator" && it.ID == "elevator_$placeTo" && it.durability > 0.0 && resourceShortOfHourly(it) == null)
             })
     }
@@ -189,6 +192,73 @@ class Place : GameStateElement() {
                 parent.characters[it]!!.type == Character.Type.ANON && it in wp.members
             }.sumOf { parent.characters[it]!!.reliant }
         } ?: 0
+
+    /**
+     * Logistics capacity of the place. Determines how many resource units can be transferred in the base transfer duration.
+     * Workers at the place provide base logistics capacity. A logisticsHub apparatus provides additional capacity per worker assigned to it.
+     */
+    val logisticsCapacity: Double
+        get() = currentAvailableLabor * ReadOnly.const("LogisticsBaseCapacityPerWorker") +
+                apparatuses.filter { it.isLogistics && it.durability > 0 }
+                    .sumOf { it.currentWorker * it.logisticsCapacityPerWorker * it.netEfficiency }
+
+    // ---- Corridor space budget ----
+
+    /**
+     * The inner radius of this corridor place in metres, derived from its manway apparatus.
+     * Null if the place has no manway apparatus (i.e. it is not a corridor).
+     */
+    val corridorRadius: Double?
+        get() = apparatuses.firstNotNullOfOrNull { it.corridorRadius }
+
+    /**
+     * Total cross-sectional space (m²) consumed by installed transport apparatus in this corridor.
+     */
+    val usedSpace: Double
+        get() = apparatuses.filter { it.isTransportInfrastructure && it.transportType != "manway" }
+            .sumOf { it.spaceConsumption }
+
+    /**
+     * Remaining cross-sectional area (m²) available for new transport apparatus in this corridor.
+     * Null if this place is not a corridor (no manway apparatus).
+     */
+    val availableSpace: Double?
+        get() = corridorRadius?.let { r -> PI * r * r - usedSpace }
+
+    // ---- Transport infrastructure queries ----
+
+    /**
+     * Returns all transport apparatus in this place that can carry the given resource and are operational.
+     */
+    fun transportInfrastructureForResource(resourceKey: String): List<Apparatus> =
+        apparatuses.filter { it.canCarryResource(resourceKey) }
+
+    /**
+     * Aggregate throughput (units/hr) of all transport apparatus in this corridor for a given resource.
+     * Falls back to manpower throughput if no dedicated infrastructure exists.
+     * The warehouse throughput at a source place can be passed in via warehouseThroughput.
+     */
+    fun throughputForResource(resourceKey: String, warehouseThroughput: Double = 0.0): Double {
+        val infra = transportInfrastructureForResource(resourceKey)
+        val infraThroughput = infra.sumOf { it.actualThroughput }
+        val manpowerFallback = maxOf(
+            warehouseThroughput,
+            currentAvailableLabor.toDouble() * ReadOnly.const("LogisticsBaseCapacityPerWorker")
+        )
+        return if (infraThroughput > 0.0) infraThroughput else manpowerFallback
+    }
+
+    /**
+     * Slope from this place to another (rise/run, unsigned).
+     */
+    fun slopeTo(other: Place): Double {
+        val dx = other.coordinates.x - coordinates.x
+        val dy = other.coordinates.y - coordinates.y
+        val dz = other.coordinates.z - coordinates.z
+        val horizontalDist = sqrt(dx * dx + dy * dy)
+        return if (horizontalDist < 0.001) Double.MAX_VALUE else abs(dz) / horizontalDist
+    }
+
     val workers
         get() = workplaceParty?.members?.filter { parent.characters[it]!!.type == Character.Type.ANON }
             ?.map { parent.characters[it]!! }
