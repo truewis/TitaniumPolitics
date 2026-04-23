@@ -35,11 +35,13 @@ data class UnofficialResourceTransfer(
             parent.places[tgtPlace]!!.resources -= resources
             parent.places[toWhere]!!.resources += resources
         }
-        super.execute()
-        // Unofficial transfer always uses 1-worker throughput (no infrastructure benefit).
+        // Move the subject character to the destination.
+        moveCharacterTo(tgtPlace, toWhere)
+        // Time = max(logisticsOverhead, travelTime from tgtPlace to toWhere).
         val logisticsCapacity = ReadOnly.const("LogisticsBaseCapacityPerWorker")
-        val logisticsOverhead = logisticsOverhead(logisticsCapacity)
-        if (logisticsOverhead > 0) sbjCharObj.frozen += logisticsOverhead
+        val overhead = logisticsOverhead(logisticsCapacity)
+        val travelTime = parent.places[tgtPlace]!!.shortestPathAndTimeTo(toWhere, sbjCharacter)?.second ?: 0
+        sbjCharObj.frozen += max(overhead, travelTime)
 
     }
 

@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.scenes.scene2d.ui.Image
 import com.titaniumPolitics.game.core.GameState
+import com.titaniumPolitics.game.core.Place
 import ktx.scene2d.Scene2DSkin.defaultSkin
 import kotlin.math.atan2
 import kotlin.math.sqrt
@@ -14,9 +15,33 @@ class Connection(var gameState: GameState, val owner: MapUI, startPlace: String,
         owner.dataTable.addActor(this)
         //Fetch default drawable from skin.
         drawable = defaultSkin.getDrawable("icon_simpleshape_10")
-        color = Color(0f, 0f, 0f, 0.5f)
-        try {
 
+        // Determine corridor properties from whichever endpoint is a corridor.
+        val corridorPlace: Place? = sequenceOf(startPlace, endPlace)
+            .mapNotNull { if (it.contains("corridor")) gameState.places[it] else null }
+            .firstOrNull()
+
+        // Width: proportional to corridor radius (manwayI=2m→5f, manwayII=4m→10f, manwayIII=6m→15f).
+        val corridorRadius = corridorPlace?.corridorRadius
+        val lineWidth = if (corridorRadius != null) (corridorRadius * WIDTH_PER_METRE).toFloat() else DEFAULT_LINE_WIDTH
+
+        // Color: based on transport methods present in the corridor.
+        val transportTypes = corridorPlace?.apparatuses
+            ?.filter { it.isTransportInfrastructure && it.transportType != "manway" && it.transportType != "pressurizer" }
+            ?.mapNotNull { it.transportType }
+            ?.toSet()
+            ?: emptySet()
+        color = when {
+            "railway" in transportTypes -> Color(0.9f, 0.4f, 0.1f, 0.8f)       // warm orange
+            "elevatorCrane" in transportTypes -> Color(0.2f, 0.4f, 0.9f, 0.8f) // steel blue
+            "cartPath" in transportTypes -> Color(0.6f, 0.4f, 0.2f, 0.8f)      // brown
+            "liquidPipe" in transportTypes || "gasPipe" in transportTypes ->
+                Color(0.2f, 0.7f, 0.6f, 0.8f)                                  // teal
+            "powerLine" in transportTypes -> Color(0.9f, 0.8f, 0.1f, 0.8f)     // yellow
+            else -> Color(0f, 0f, 0f, 0.5f)                                     // default black
+        }
+
+        try {
             val start: Pair<Float, Float> = owner.convertToScreenCoords(
                 gameState.places[startPlace]!!.coordinates.x.toFloat(),
                 gameState.places[startPlace]!!.coordinates.z.toFloat()
@@ -26,13 +51,12 @@ class Connection(var gameState: GameState, val owner: MapUI, startPlace: String,
                 gameState.places[endPlace]!!.coordinates.z.toFloat()
             )
 
-
             //Set the position of the connection to the start of the line.
             setPosition(start.first, start.second)
             //Set the size of the connection to the length of the line.
             setSize(
                 sqrt((end.first - start.first) * (end.first - start.first) + (end.second - start.second) * (end.second - start.second)),
-                10f
+                lineWidth
             )
             //Set the rotation of the connection to the angle of the line.
             rotation =
@@ -44,5 +68,10 @@ class Connection(var gameState: GameState, val owner: MapUI, startPlace: String,
 
     }
 
-
+    companion object {
+        /** Pixels of line width per metre of corridor radius. manwayI(2m)→5px, manwayII(4m)→10px, manwayIII(6m)→15px. */
+        private const val WIDTH_PER_METRE = 2.5
+        /** Default line width used when no corridor radius information is available. */
+        private const val DEFAULT_LINE_WIDTH = 5f
+    }
 }
