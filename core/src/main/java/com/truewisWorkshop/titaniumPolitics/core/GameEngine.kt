@@ -1278,6 +1278,7 @@ class GameEngine(val gameState: GameState) {
                     "Feast" to "NewAgenda",
                     "ChangePolicy" to "NewAgenda",
                     "AnnounceInfo" to "NewAgenda",
+                    "ConstructionProject" to "ConstructionProject"
                 )
                 actions.removeIf { action ->
                     val required = progressionGates[action]
