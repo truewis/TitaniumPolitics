@@ -23,7 +23,7 @@ class Connection(var gameState: GameState, val owner: MapUI, startPlace: String,
 
         // Width: proportional to corridor radius (manwayI=2m→5f, manwayII=4m→10f, manwayIII=6m→15f).
         val corridorRadius = corridorPlace?.corridorRadius
-        val lineWidth = if (corridorRadius != null) (corridorRadius / 2.0 * 5.0).toFloat() else 5f
+        val lineWidth = if (corridorRadius != null) (corridorRadius * WIDTH_PER_METRE).toFloat() else DEFAULT_LINE_WIDTH
 
         // Color: based on transport methods present in the corridor.
         val transportTypes = corridorPlace?.apparatuses
@@ -68,5 +68,10 @@ class Connection(var gameState: GameState, val owner: MapUI, startPlace: String,
 
     }
 
-
+    companion object {
+        /** Pixels of line width per metre of corridor radius. manwayI(2m)→5px, manwayII(4m)→10px, manwayIII(6m)→15px. */
+        private const val WIDTH_PER_METRE = 2.5
+        /** Default line width used when no corridor radius information is available. */
+        private const val DEFAULT_LINE_WIDTH = 5f
+    }
 }

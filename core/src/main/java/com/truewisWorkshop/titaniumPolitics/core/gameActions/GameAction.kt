@@ -100,6 +100,18 @@ sealed class GameAction() {
         sbjCharObj.frozen += expectedDuration
     }
 
+    /**
+     * Moves the subject character from [fromPlace] to [toPlace], updating character sets.
+     * Also discovers adjacent places for the player when applicable.
+     */
+    protected fun moveCharacterTo(fromPlace: String, toPlace: String) {
+        parent.places[fromPlace]!!.characters.remove(sbjCharacter)
+        parent.places[toPlace]!!.characters.add(sbjCharacter)
+        if (sbjCharacter == parent.playerName) {
+            parent.discoverPlacesAdjacentTo(toPlace)
+        }
+    }
+
     open fun deltaWill(): MutualityMatrix {
         val deltaMut = MutualityMatrix()
         return deltaMut

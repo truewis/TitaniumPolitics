@@ -50,11 +50,7 @@ data class OfficialResourceTransfer(
             }
         }
         // Move the subject character to the destination.
-        parent.places[tgtPlace]!!.characters.remove(sbjCharacter)
-        parent.places[toWhere]!!.characters.add(sbjCharacter)
-        if (sbjCharacter == parent.playerName) {
-            parent.discoverPlacesAdjacentTo(toWhere)
-        }
+        moveCharacterTo(tgtPlace, toWhere)
         // Time = max(routeBasedOverhead, travelTime from tgtPlace to toWhere).
         val logisticsOverhead = routeBasedOverhead()
         val travelTime = parent.places[tgtPlace]!!.shortestPathAndTimeTo(toWhere, sbjCharacter)?.second ?: 0

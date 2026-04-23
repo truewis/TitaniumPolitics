@@ -36,11 +36,7 @@ data class UnofficialResourceTransfer(
             parent.places[toWhere]!!.resources += resources
         }
         // Move the subject character to the destination.
-        parent.places[tgtPlace]!!.characters.remove(sbjCharacter)
-        parent.places[toWhere]!!.characters.add(sbjCharacter)
-        if (sbjCharacter == parent.playerName) {
-            parent.discoverPlacesAdjacentTo(toWhere)
-        }
+        moveCharacterTo(tgtPlace, toWhere)
         // Time = max(logisticsOverhead, travelTime from tgtPlace to toWhere).
         val logisticsCapacity = ReadOnly.const("LogisticsBaseCapacityPerWorker")
         val overhead = logisticsOverhead(logisticsCapacity)
