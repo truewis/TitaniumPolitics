@@ -20,18 +20,12 @@ data class Move(override val sbjCharacter: String, override val tgtPlace: String
     override fun isValid(): Boolean =
         tgtPlaceObj.movableConnectedPlaces(sbjCharacter)
             .contains(placeTo) && sbjCharObj.currentMeeting == null //You cannot move during meeting; you have to end meeting first.
-                && (parent.places[placeTo]!!.whoseHome?.let { it == sbjCharacter }
+            && (parent.places[placeTo]!!.whoseHome?.let { it == sbjCharacter }
             ?: true) //You can only move to your home place or places that are not home to anyone.
 
     override fun execute() {
-
-        tgtPlaceObj.characters.remove(sbjCharacter)
-        parent.places[placeTo]!!.characters.add(sbjCharacter)
         sbjCharObj.frozen += ReadOnly.constInt(this::class.simpleName!! + "Duration") * distance!!
-        // When the player moves, reveal adjacent places.
-        if (sbjCharacter == parent.playerName) {
-            parent.discoverPlacesAdjacentTo(placeTo)
-        }
+        moveCharacterTo(tgtPlace, placeTo)
     }
 
 }
