@@ -46,6 +46,13 @@ class TasksUI(var gameState: GameState) : Table(defaultSkin) {
                 left()
                 //Number label with icon
                 add(QuestMarker(quest)).size(50f)
+                    .also {
+                        it.actor.addListener(object : ClickListener() {
+                            override fun clicked(event: com.badlogic.gdx.scenes.scene2d.InputEvent?, x: Float, y: Float) {
+                                openQuestDetail(quest)
+                            }
+                        })
+                    }
                 table {
                     it.fill()
                     it.left()
@@ -72,7 +79,7 @@ class TasksUI(var gameState: GameState) : Table(defaultSkin) {
 
                 addListener(object : ClickListener() {
                     override fun clicked(event: com.badlogic.gdx.scenes.scene2d.InputEvent?, x: Float, y: Float) {
-                        quest.onClick?.invoke()
+                        openQuestDetail(quest)
                     }
                 })
                 quest.display?.run {
@@ -87,6 +94,12 @@ class TasksUI(var gameState: GameState) : Table(defaultSkin) {
             })
         }
         isVisible = quests.isNotEmpty()
+    }
+
+    private fun openQuestDetail(quest: Quest) {
+        QuestDetailUI.instance.refresh(gameState.eventSystem.activeQuests.toList(), quest)
+        QuestDetailUI.instance.isVisible = true
+        quest.onClick?.invoke()
     }
 
     class QuestMarker(val quest: Quest) : Table(defaultSkin), KTable {
