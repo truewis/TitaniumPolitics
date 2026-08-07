@@ -11,8 +11,8 @@
   },
   "Peiyu": {
     "name": "Peiyu",
-    "image": "portraits/default.png",
-    "headImage": "portraits/defaultHead.png"
+    "image": "portraits/Peiyu/idle.png",
+    "headImage": "portraits/Peiyu/head.png"
   },
   "Alina": {
     "name": "Alina",
@@ -85,8 +85,8 @@
   },
   "Yuhoa": {
     "name": "Yuhoa",
-    "image": "portraits/default.png",
-    "headImage": "portraits/defaultHead.png"
+    "image": "portraits/Yuhoa/idle.png",
+    "headImage": "portraits/Yuhoa/head.png"
   },
   "Salvor": {
     "name": "Salvor",

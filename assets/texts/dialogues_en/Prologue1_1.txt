@@ -1,12 +1,12 @@
-ENTER Kasem
-Kasem: Team 1 has arrived on-site. What is the situation?
+ENTER Peiyu
+Peiyu: Team 1 has arrived on-site. What is the situation?
 ENTER Rui
 Rui, surprised: Director, thank you for coming. The Minister fell between the bulkheads. It’s over that way.
-Kasem: Understood. The field team will begin rescue operations. Separately, however, I believe I need to investigate you. Could you explain how you ended up in this situation?
+Peiyu: Understood. The field team will begin rescue operations. Separately, however, I believe I need to investigate you. Could you explain how you ended up in this situation?
 Rui, surprised: Yes, of course. I came here for an inspection with the Minister. Suddenly, the bulkhead collapsed, and the Minister fell through the gap. I was simply trying to help with the rescue.
 Rui, annoyed: (Damn, this doesn't look good... An investigation? Is he doubting me right now?)
-Kasem: I believe you may be involved in this incident. You were with the Minister, and you were near the bulkhead when it collapsed. Therefore, I require your statement.
+Peiyu: I believe you may be involved in this incident. You were with the Minister, and you were near the bulkhead when it collapsed. Therefore, I require your statement.
 Rui, surprised: I really didn't do anything wrong! Dear Controller was also right there, and he was helping me with the rescue.
-Kasem: I am inclined to believe you are innocent, but this incident is a very serious matter. It seems I must take a further statement from you at the Security Headquarters. I expect your cooperation.
-Kasem: If Dear Controller is aware of this, it will likely end without any issues. However, the procedures of the Security Division take priority.
+Peiyu: I am inclined to believe you are innocent, but this incident is a very serious matter. It seems I must take a further statement from you at the Security Headquarters. I expect your cooperation.
+Peiyu: If Dear Controller is aware of this, it will likely end without any issues. However, the procedures of the Security Division take priority.
 Rui, surprised: Yes, I understand.
