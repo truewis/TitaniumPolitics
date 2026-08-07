@@ -530,11 +530,13 @@ class GameState {
                             roll < 0.85 -> "manwayII"
                             else -> "manwayIII"
                         }
+
                         maxConn >= 4 -> when {
                             roll < 0.60 -> "manwayI"
                             roll < 0.95 -> "manwayII"
                             else -> "manwayIII"
                         }
+
                         else -> when {
                             roll < 0.90 -> "manwayI"
                             roll < 0.99 -> "manwayII"
@@ -551,11 +553,13 @@ class GameState {
 
                 val corridorVolume = corridorVolumeBase
                 val volumeRatio = corridorVolume / 1e4f
-                val gasRes = { Resources(
-                    "oxygen" to 3000.0 * volumeRatio,
-                    "carbonDioxide" to 15.0 * volumeRatio,
-                    "nitrogen" to 9000.0 * volumeRatio
-                ).apply { positive = true } }
+                val gasRes = {
+                    Resources(
+                        "oxygen" to 3000.0 * volumeRatio,
+                        "carbonDioxide" to 15.0 * volumeRatio,
+                        "nitrogen" to 9000.0 * volumeRatio
+                    ).apply { positive = true }
+                }
 
                 places[t1Name] = Place().apply {
                     this.injectParent(this@GameState)
@@ -591,7 +595,7 @@ class GameState {
                     val diff3 = bCoords - aCoords
                     val horizontalDist = sqrt(diff3.x * diff3.x + diff3.y * diff3.y)
                     val slope = if (horizontalDist < 0.001) Double.MAX_VALUE
-                                else kotlin.math.abs(diff3.z) / horizontalDist
+                    else kotlin.math.abs(diff3.z) / horizontalDist
 
                     var usedSpace = 0.0
 
@@ -776,13 +780,22 @@ class GameState {
 
     fun setHardcodedMutuality() {
         //Set hardcoded mutualities for some characters.
+        //Check if the characters exist before setting mutuality, to avoid errors when loading existing games.
+        if (!characters.containsKey("Rui") || !characters.containsKey("Yuhoa")) return
         setMutuality("Rui", "Yuhoa", 30.0, "Hardcoded")
         setMutuality("Yuhoa", "Rui", 30.0, "Hardcoded")
+
+        if (!characters.containsKey("Rui") || !characters.containsKey("Alina")) return
         setMutuality("Alina", "Rui", 30.0, "Hardcoded")
         setMutuality("Rui", "Alina", 30.0, "Hardcoded")
+
+        if (!characters.containsKey("Krailin") || !characters.containsKey("Alina")) return
         setMutuality("Alina", "Krailin", -15.0, "Hardcoded")
         setMutuality("Krailin", "Alina", -15.0, "Hardcoded")
+        if (!characters.containsKey("Rui") || !characters.containsKey("Vaeme")) return
         setMutuality("Rui", "Vaeme", -15.0, "Hardcoded")
+
+        if (!characters.containsKey("Rui") || !characters.containsKey("Eugene")) return
         setMutuality("Eugene", "Rui", 20.0, "Hardcoded")
         setMutuality("Rui", "Eugene", 20.0, "Hardcoded")
     }
@@ -1114,7 +1127,7 @@ class GameState {
                 val segCost = if (segThroughput <= 0.0) Double.MAX_VALUE / 2 else 1.0 / segThroughput
 
                 val newCost = if (currentCost >= Double.MAX_VALUE / 2) Double.MAX_VALUE / 2
-                              else currentCost + segCost
+                else currentCost + segCost
 
                 if (newCost < cost.getValue(neighbor)) {
                     cost[neighbor] = newCost
@@ -1135,12 +1148,14 @@ class GameState {
         var current: String? = to
         while (current != null && current != from) {
             val p = prev[current] ?: break
-            segments.add(0, TransportSegment(
-                fromPlace = p,
-                toPlace = current,
-                methodName = prevMethod[current] ?: "manual",
-                throughput = prevThroughput[current] ?: 1.0
-            ))
+            segments.add(
+                0, TransportSegment(
+                    fromPlace = p,
+                    toPlace = current,
+                    methodName = prevMethod[current] ?: "manual",
+                    throughput = prevThroughput[current] ?: 1.0
+                )
+            )
             current = p
         }
 

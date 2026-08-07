@@ -122,19 +122,20 @@ class MainMenu(val entry: EntryClass) : Stage(FitViewport(1920F, 1080F)) {
     fun startGame() {
         music.stop()
         val savedGamePath = System.getenv("SAVED_GAME")
+        val initGamePath = System.getenv("INIT_GAME") ?: "json/init.json"
         var newGame: GameState
         startbutton.setText("Loading...")
         if (savedGamePath == null) {
             println("Loading init.json...")
             newGame = Json.decodeFromString(
                 GameState.serializer(),
-                Gdx.files.internal("json/init.json").readString()
+                Gdx.files.internal(initGamePath).readString()
             ).also {
-                println("Loading complete.")
                 it.workingDirectory =
                     "data" + Calendar.getInstance().time.toString("YYYYMMdd_HHmmss")//DO not put this statement when loading existing game or in initialize(); it will mess up with GameEngineTest.
                 Logger.gState = it
                 Logger.init()
+                println("Loading complete.")
                 //ReadOnly.setLocale(Locale.KOREAN)
                 it.initialize()
                 entry.stage = CapsuleStage(it)
@@ -148,6 +149,8 @@ class MainMenu(val entry: EntryClass) : Stage(FitViewport(1920F, 1080F)) {
                 GameState.serializer(),
                 Gdx.files.internal(savedGamePath).readString()
             ).also {
+                Logger.gState = it
+                Logger.init()
                 it.injectDependency()
                 println("Loading complete.")
                 entry.stage = CapsuleStage(it)
