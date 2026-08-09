@@ -1,17 +1,31 @@
 package com.titaniumPolitics.game.ui.meeting
 
+import com.badlogic.gdx.scenes.scene2d.Group
 import com.badlogic.gdx.scenes.scene2d.actions.Actions
 import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.core.Party
 import com.titaniumPolitics.game.core.ReadOnly
+import com.titaniumPolitics.game.ui.widget.VoteSupportBarUI
 import ktx.scene2d.*
 
 class ElectionUI(val gameState: GameState, val party: Party, val candidates: Set<String>) : Table(), KTable {
     val characterBases = candidates.map { CharacterBase(it) }
     val characterBubbles =
         candidates.map { CharBubble(it, party, characterBases.first { base -> base.charName == it }) }
+    val voteBars = candidates.map { VoteSupportBarUI(it) }
+
+    val refresh = { _: GameState ->
+        val support = party.getVotes(candidates)
+        val totalVotes = party.totalVotes.toFloat()
+        
+        voteBars.forEach { bar ->
+            val votes = support[bar.candidateName]?.toFloat() ?: 0f
+            val normalizedSupport = if (totalVotes > 0) votes / totalVotes else 0f
+            bar.setValue(normalizedSupport)
+        }
+    }
 
     init {
         //Do not use scrollPane, we don't want to hide candidates.
@@ -26,15 +40,24 @@ class ElectionUI(val gameState: GameState, val party: Party, val candidates: Set
         characterBubbles.forEach {
             addActor(it)
         }
-
+        
+        voteBars.forEach { bar ->
+            addActor(bar)
+        }
+        
+        gameState.updateUI += refresh
+        refresh(gameState)
     }
 
     fun refresh() {
-        characterBubbles.forEach { bubble ->
-            val support = party.getVotes(candidates)
-            bubble.refresh((support[bubble.charName]!! * 1.0 / party.totalVotes))
+        refresh(gameState)
+    }
+    
+    override fun setParent(parent: Group?) {
+        if (parent == null) {
+            gameState.updateUI -= refresh
         }
-
+        super.setParent(parent)
     }
 
     companion object {
