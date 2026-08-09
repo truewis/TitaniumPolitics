@@ -153,6 +153,55 @@ class EventSystem : GameStateElement() {
                     add(Event_ImprovePartyIntegrity(it.name))
 
             }
+            // Trigger affection events for characters who like the player
+            parent.characters.values.filter { char ->
+                parent.getMutNorm(char.name, parent.playerName) > 0.25 &&
+                        char.name != parent.playerName
+            }.forEach { char ->
+                // Check for resource-related information
+                parent.informations.values.filter { info ->
+                    info.type == InformationType.RESOURCES &&
+                            info.tgtCharacter != char.name &&
+                            info.tgtCharacter != parent.playerName &&
+                            parent.playerName in info.knownTo &&
+                            parent.time - info.tgtTime < 168 * IDTH
+                }.forEach { info ->
+                    if (!dataBase.any { it is Event_AffectionResourceRequest &&
+                            it.charName == char.name && it.infoKey == info.name }
+                    ) {
+                        add(Event_AffectionResourceRequest(char.name, info.name))
+                    }
+                }
+
+                // Check for action-related information
+                parent.informations.values.filter { info ->
+                    (info.type == InformationType.ACTION || info.type == InformationType.APPARATUS) &&
+                            parent.playerName in info.knownTo &&
+                            parent.time - info.tgtTime < 168 * IDTH
+                }.forEach { info ->
+                    if (!dataBase.any { it is Event_AffectionActionRequest &&
+                            it.charName == char.name && it.infoKey == info.name }
+                    ) {
+                        add(Event_AffectionActionRequest(char.name, info.name))
+                    }
+                }
+
+                // Check for party mutuality information
+                parent.informations.values.filter { info ->
+                    info.type == InformationType.PARTY_MUTUALITY &&
+                            parent.playerName in info.knownTo &&
+                            parent.time - info.tgtTime < 168 * IDTH &&
+                            info.amount < 0 // Only if party relationships are negative
+                }.forEach { info ->
+                    val charParty = parent.parties.values.find { it.members.contains(char.name) }
+                    if (charParty != null && !dataBase.any { it is Event_AffectionPoliticalSupport &&
+                            it.charName == char.name && it.partyKey == charParty.name && it.infoKey == info.name }
+                    ) {
+                        add(Event_AffectionPoliticalSupport(char.name, charParty.name, info.name))
+                    }
+                }
+            }
+
         }
         // Register a listener to trigger party dramas from meeting actions (~5% chance per action).
         gameState.onMeetingAction += { action ->
