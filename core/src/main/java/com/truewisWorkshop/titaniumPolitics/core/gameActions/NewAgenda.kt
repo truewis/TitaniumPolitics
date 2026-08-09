@@ -27,7 +27,6 @@ data class NewAgenda(override val sbjCharacter: String, override val tgtPlace: S
             0
         )
         super.execute()
-        agendaOneShotEffect(meeting, agenda, sbjCharacter, parent)
     }
 
 

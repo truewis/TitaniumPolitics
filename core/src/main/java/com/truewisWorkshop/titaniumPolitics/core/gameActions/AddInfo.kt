@@ -94,6 +94,8 @@ data class AddInfo(
             meeting.currentAttention + (10 * effectivity * newsDegree * sbjCharObj.will / ReadOnly.const("mutualityMax")).toInt() - 20,
             0, 100
         )
+        agenda.applyPersuasivenessDelta(sbjCharacter, effectivity)
+        meeting.resolveAgendasByPersuasiveness(parent)
         parent.informations[infoKey]!!.knownTo.addAll(meeting.currentCharacters)
         super.execute()
     }

@@ -10,10 +10,28 @@ data class MeetingAgenda(
     var subjectIntParams: HashMap<String, Int> = hashMapOf(),
     var informationKeys: ArrayList<String> = arrayListOf(),
     var attachedRequest: Request? = null,
-    var attachedBudget: Budget? = null
+    var attachedBudget: Budget? = null,
+    var persuasiveness: Double = 0.0,
+    var lastSupporter: String? = null,
+    var lastAttacker: String? = null
 
 
 ) {
+    fun applyPersuasivenessDelta(actor: String, delta: Double) {
+        if (delta > 0) {
+            lastSupporter = actor
+        } else if (delta < 0) {
+            lastAttacker = actor
+        }
+        persuasiveness = (persuasiveness + delta).coerceIn(
+            ReadOnly.const("AgendaPersuasivenessMin"),
+            ReadOnly.const("AgendaPersuasivenessMax")
+        )
+    }
+
+    fun isConstructed(): Boolean = persuasiveness >= ReadOnly.const("AgendaPersuasivenessMax")
+    fun isRejected(): Boolean = persuasiveness <= ReadOnly.const("AgendaPersuasivenessMin")
+
     /**
      * Compute the effectivity of an information for this agenda for a character in the meeting.
      * Unit: Mutuality

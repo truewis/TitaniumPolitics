@@ -3,6 +3,7 @@ package com.titaniumPolitics.game.core
 import com.titaniumPolitics.game.core.ReadOnly.const
 import com.titaniumPolitics.game.core.ReadOnly.constInt
 import com.titaniumPolitics.game.core.ReadOnly.DT
+import com.titaniumPolitics.game.core.gameActions.NewAgenda
 import com.titaniumPolitics.game.debugTools.Logger
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
@@ -132,6 +133,48 @@ class Meeting(
         } else {
             Logger.write("Meeting $this is not found in the ongoingMeetings.")
             throw IllegalStateException("Meeting $this is not found in the ongoingMeetings.")
+        }
+    }
+
+    fun resolveAgendasByPersuasiveness(gameState: GameState) {
+        val constructedWillDelta = ReadOnly.const("AgendaResolutionWillDelta")
+        val angstDelta = ReadOnly.const("AgendaResolutionAngstDelta")
+        val agendasToResolve = agendas.filter { it.isConstructed() || it.isRejected() }
+
+        agendasToResolve.forEach { agenda ->
+            if (agenda.isConstructed()) {
+                NewAgenda.agendaOneShotEffect(this, agenda, agenda.author, gameState)
+                gameState.setMutuality(
+                    agenda.author,
+                    agenda.author,
+                    constructedWillDelta,
+                    "AgendaConstructed-ProposerWill"
+                )
+                agenda.lastSupporter?.let { supporter ->
+                    gameState.setMutuality(
+                        supporter,
+                        supporter,
+                        constructedWillDelta,
+                        "AgendaConstructed-SupporterWill"
+                    )
+                }
+            } else {
+                gameState.setMutuality(
+                    agenda.author,
+                    agenda.author,
+                    -constructedWillDelta,
+                    "AgendaRejected-ProposerWill"
+                )
+                agenda.lastAttacker?.let { attacker ->
+                    gameState.setMutuality(
+                        agenda.author,
+                        attacker,
+                        angstDelta,
+                        "AgendaRejected-Angst"
+                    )
+                }
+            }
+            agendas.remove(agenda)
         }
     }
 

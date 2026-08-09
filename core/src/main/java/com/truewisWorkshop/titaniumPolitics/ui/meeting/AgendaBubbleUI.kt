@@ -1,10 +1,12 @@
 package com.titaniumPolitics.game.ui.meeting
 
 import com.badlogic.gdx.scenes.scene2d.ui.Table
+import com.badlogic.gdx.utils.Align
 import com.titaniumPolitics.game.core.AgendaType
 import com.titaniumPolitics.game.core.MeetingAgenda
 import ktx.scene2d.KTable
 import ktx.scene2d.image
+import ktx.scene2d.label
 import ktx.scene2d.stack
 
 class AgendaBubbleUI(val agenda: MeetingAgenda) : Table(), KTable {
@@ -72,6 +74,10 @@ class AgendaBubbleUI(val agenda: MeetingAgenda) : Table(), KTable {
                     else -> {
 
                     }
+                }
+                label(this@AgendaBubbleUI.agenda.persuasiveness.toInt().toString(), "docTitle") {
+                    setFontScale(0.18f)
+                    setAlignment(Align.bottomRight)
                 }
             }
         }

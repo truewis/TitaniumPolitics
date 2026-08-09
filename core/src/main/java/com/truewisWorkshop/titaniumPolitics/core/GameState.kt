@@ -105,6 +105,7 @@ class GameState {
     var places = hashMapOf<String, Place>()
     val publicPlaces get() = places.filter { it.value.whoseHome == null }
     var characters = hashMapOf<String, Character>()
+    var generatedCharacterNames = hashMapOf<String, String>()
     private var characterIndexCache =
         hashMapOf<String, Int>() //Cache for character indices to speed up mutuality calculations.
 
@@ -320,6 +321,7 @@ class GameState {
                 // If the role is already filled, skip it. This is for loading existing games, where some lower level managers may already be created.
                 if (party.value.members.none { party.value.getRole(it) == role }) {
                     val name = CharacterGenerator.generateName(listOf(true, false).random())
+                    generatedCharacterNames[name] = ReadOnly.charProp(name)
                     characters[name] = Character().apply {
                         this.injectParent(this@GameState)
                         type = Character.Type.EMPLOYEE
@@ -957,6 +959,9 @@ class GameState {
         log.injectParent(this)
         places.forEach { it.value.injectParent(this) }
         characters.forEach { it.value.injectParent(this) }
+        generatedCharacterNames.forEach { (id, displayName) ->
+            ReadOnly.setCharacterProp(id, displayName)
+        }
         parties.forEach { it.value.injectParent(this) }
         nonPlayerAgents.forEach { it.value.injectParent(this) }
         eventSystem.injectParent(this)

@@ -47,8 +47,12 @@ class IntegratedTest {
         gState.onStart.forEach { it() }
         val engine = GameEngine(gState)
         engine.runUntil(2)
+        val generatedNameSnapshot = gState.generatedCharacterNames.toMap()
+        assertTrue(generatedNameSnapshot.isNotEmpty(), "Expected generated character names after initialization.")
 
         val fName = gState.dump()
+        ReadOnly.setLocale(Locale.ENGLISH)
+        ReadOnly.setLocale(Locale.KOREAN)
         gState = Json.decodeFromString(
             GameState.serializer(),
             File(fName).readText()
@@ -56,6 +60,10 @@ class IntegratedTest {
             it.injectDependency()
             Logger.gState = it
             Logger.write("Reloading test complete.", Logger.LogLevel.INFO)
+        }
+        assertEquals(generatedNameSnapshot, gState.generatedCharacterNames)
+        generatedNameSnapshot.forEach { (id, displayName) ->
+            assertEquals(displayName, ReadOnly.charProp(id))
         }
         val engine2 = GameEngine(gState)
         engine2.runUntil(6)

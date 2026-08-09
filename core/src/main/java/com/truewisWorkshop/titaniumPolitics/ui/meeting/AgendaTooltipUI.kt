@@ -42,6 +42,21 @@ class AgendaTooltipUI(agenda: MeetingAgenda) : Tooltip<Table>(scene2d.table {
                 }
             }
             row()
+            table {
+                it.size(350f, 40f)
+                defaults().left().pad(2f)
+                label(ReadOnly.prop("AgendaTooltipUI-persuasiveness"), "docTitle") {
+                    setFontScale(0.2f)
+                }
+                label(
+                    "${agenda.persuasiveness.toInt()} / ${ReadOnly.const("AgendaPersuasivenessMax").toInt()}",
+                    "docTitle"
+                ) {
+                    setFontScale(0.2f)
+                    it.growX()
+                }
+            }
+            row()
             if (agenda.attachedRequest != null) {
                 val req = agenda.attachedRequest!!
                 table {
