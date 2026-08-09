@@ -20,6 +20,7 @@ data class NewAgenda(override val sbjCharacter: String, override val tgtPlace: S
     override fun execute() {
         val meeting = parent.characters[sbjCharacter]!!.currentMeeting!!
         meeting.agendas.add(agenda)
+        meeting.setCurrentAgenda(agenda)
 
         //Attention is consumed.
         meeting.currentAttention = max(
@@ -33,6 +34,8 @@ data class NewAgenda(override val sbjCharacter: String, override val tgtPlace: S
     override fun isValid(): Boolean {
         //People will be more interested in agendas related to their interest. However, this is handled in NPC class.
         val mt = parent.characters[sbjCharacter]!!.currentMeeting!!
+        if (!reason(mt.currentAgenda == null, "newAgenda-CurrentAgendaExists"))
+            return false
         if (!reason(mt.agendas.size < 4, "newAgenda-AgendaLimit"))
             return false //Idea Draft: A meeting can have at most 4 agendas.
         when (agenda.type) {

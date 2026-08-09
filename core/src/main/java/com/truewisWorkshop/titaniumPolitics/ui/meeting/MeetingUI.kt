@@ -78,6 +78,11 @@ class MeetingUI(var gameState: GameState) : Table(defaultSkin), KTable {
     val speakerPortrait = PortraitUI("", gameState)
     val deployedInfos = arrayListOf<InfoBubbleUI>()
     val currentAgendas = arrayListOf<AgendaBubbleUI>()
+    val currentAgendaMarker = scene2d.image("BadgeRound") {
+        setSize(110f, 110f)
+        color = Color(1f, 0.85f, 0.2f, 0.9f)
+        isVisible = false
+    }
     val currentAttention = Label("0", defaultSkin, "docTitle")
     val discussionTable: Stack
     val electionUIContainer = Container<ElectionUI>()
@@ -153,6 +158,7 @@ class MeetingUI(var gameState: GameState) : Table(defaultSkin), KTable {
             }
         }
 
+        addActor(currentAgendaMarker)
 
     }
 
@@ -404,11 +410,18 @@ class MeetingUI(var gameState: GameState) : Table(defaultSkin), KTable {
             ) // lower-left
         )
 
+        var markerPlaced = false
         agendasToPlace.forEachIndexed { index, agendaUI ->
             val (agendaX, agendaY) = positions[index]
 
             // Center the agenda at the corner position
             agendaUI.setPosition(agendaX, agendaY, Align.center)
+            if (agendaUI.agenda == gameState.player.currentMeeting?.currentAgenda) {
+                currentAgendaMarker.setPosition(agendaX, agendaY, Align.center)
+                currentAgendaMarker.isVisible = true
+                currentAgendaMarker.zIndex = maxOf(0, agendaUI.zIndex - 1)
+                markerPlaced = true
+            }
 
             // Stack associated info bubbles vertically to the right of the agenda
             val infoStartX =
@@ -421,6 +434,9 @@ class MeetingUI(var gameState: GameState) : Table(defaultSkin), KTable {
                     infoStartX,
                     infoStartY - i * infoSpacingY
                 )
+            }
+            if (!markerPlaced) {
+                currentAgendaMarker.isVisible = false
             }
         }
 
@@ -443,6 +459,7 @@ class MeetingUI(var gameState: GameState) : Table(defaultSkin), KTable {
 
         currentAgendas.clear()
         deployedInfos.clear()
+        currentAgendaMarker.isVisible = false
         //TODO: removeActor(addAgendaButton), but we are using AvailableActionsUI for now.
     }
 

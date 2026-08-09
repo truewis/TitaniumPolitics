@@ -36,6 +36,7 @@ class Meeting(
             }
         }
     var agendas = arrayListOf<MeetingAgenda>()
+    var currentAgendaIndex: Int? = null
     var voteResults = hashMapOf<String, Int>()
 
     @Transient
@@ -46,6 +47,33 @@ class Meeting(
 
     var nominationFinishedTime: Int? =
         null //This is the time when the nomination is finished. It is used to determine when the election is over.
+
+    val currentAgenda: MeetingAgenda?
+        get() = currentAgendaIndex?.let { agendas.getOrNull(it) }
+
+    fun setCurrentAgenda(agenda: MeetingAgenda) {
+        val idx = agendas.indexOf(agenda)
+        if (idx < 0) {
+            throw IllegalStateException("Cannot set current agenda: agenda not found in meeting.")
+        }
+        currentAgendaIndex = idx
+    }
+
+    fun clearCurrentAgenda() {
+        currentAgendaIndex = null
+    }
+
+    fun removeAgenda(agenda: MeetingAgenda) {
+        val idx = agendas.indexOf(agenda)
+        if (idx < 0) return
+        agendas.removeAt(idx)
+        val currentIdx = currentAgendaIndex ?: return
+        if (currentIdx == idx) {
+            currentAgendaIndex = null
+        } else if (idx < currentIdx) {
+            currentAgendaIndex = currentIdx - 1
+        }
+    }
 
     fun finishNomination() {
         //This is called when the nomination is finished.
@@ -174,7 +202,7 @@ class Meeting(
                     )
                 }
             }
-            agendas.remove(agenda)
+            removeAgenda(agenda)
         }
     }
 

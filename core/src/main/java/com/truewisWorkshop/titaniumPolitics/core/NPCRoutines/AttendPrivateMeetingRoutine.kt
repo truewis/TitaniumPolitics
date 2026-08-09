@@ -45,19 +45,19 @@ class AttendPrivateMeetingRoutine(
         if (hasUnresolvedAgenda)
             return null //until my agenda is resolved, don't engage in other topics.
         supportProofOfWork(name)?.let { return it }
-        //If there is an agenda from someone I like, try to support it.
-        //If there is an agenda from someone I dislike, try to oppose it.
-        meeting.agendas.filter {
-            gState.getMutNorm(name, it.author) > 0.1 || gState.getMutNorm(name, it.author) < -0.1
-        }.randomOrNull()?.apply {
-            val index = meeting.agendas.indexOf(this)
-            if (tryAddInfoAgenda[index] != true) {
-                tryAddInfoAgenda[index] = true
-                return AddInfoToAgendaRoutine(
-                    index,
-                    support = gState.getMutNorm(name, this.author) > 0.1,
-                    meetingName = gState.meetingName(meeting)
-                )
+        //If there is a current agenda from someone I like, try to support it.
+        //If there is a current agenda from someone I dislike, try to oppose it.
+        meeting.currentAgenda?.apply {
+            val relationToAuthor = gState.getMutNorm(name, this.author)
+            if (relationToAuthor > 0.1 || relationToAuthor < -0.1) {
+                val agendaKey = this.hashCode()
+                if (tryAddInfoAgenda[agendaKey] != true) {
+                    tryAddInfoAgenda[agendaKey] = true
+                    return AddInfoToAgendaRoutine(
+                        support = relationToAuthor > 0.1,
+                        meetingName = gState.meetingName(meeting)
+                    )
+                }
             }
         }
         return null

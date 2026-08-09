@@ -25,16 +25,13 @@ class AddInfoUI(val gameState: GameState, actionCallback: (GameAction) -> Unit) 
     lateinit var agenda: MeetingAgenda
 
     init {
-        val agendaSelectPane = ScrollPane(agendaTable)
-        agendaSelectPane.setScrollingDisabled(false, true)
-
         val infoSelectPane = ScrollPane(dataTable)
         infoSelectPane.setScrollingDisabled(true, false)
 
         val st = stack {
             it.grow()
             table {
-                add(agendaSelectPane)
+                add(this@AddInfoUI.agendaTable)
                 row()
                 add(infoSelectPane)
                 row()
@@ -47,27 +44,16 @@ class AddInfoUI(val gameState: GameState, actionCallback: (GameAction) -> Unit) 
     }
 
     fun refresh() {
-        agenda = sbjChar.currentMeeting!!.agendas.first()
+        agenda = sbjChar.currentMeeting!!.currentAgenda ?: return
         agendaTable.apply {
             clear()
-            this@AddInfoUI.sbjChar.currentMeeting?.agendas?.forEach { agenda ->
-                button("check") {
-                    isChecked = agenda == this@AddInfoUI.agenda
-                    add(AgendaBubbleUI(agenda))
-                    addListener(object : ClickListener() {
-                        override fun clicked(
-                            event: InputEvent?,
-                            x: Float,
-                            y: Float
-                        ) {
-                            this@AddInfoUI.agenda = agenda
-                            this@AddInfoUI.refreshInfoOptions()
-                        }
-                    })
-                }
+            button("check") {
+                isChecked = true
+                isDisabled = true
+                add(AgendaBubbleUI(this@AddInfoUI.agenda))
             }
         }
-        dataTable.clear()
+        refreshInfoOptions()
     }
 
     fun refreshInfoOptions() {
@@ -133,8 +119,6 @@ class AddInfoUI(val gameState: GameState, actionCallback: (GameAction) -> Unit) 
                                         this@AddInfoUI.subject,
                                         this@AddInfoUI.tgtPlace,
                                         infoKey = key,
-                                        agendaIndex =
-                                            this@AddInfoUI.gameState.player.currentMeeting!!.agendas.indexOf(this@AddInfoUI.agenda),
                                         this@AddInfoUI.gameState
                                     )
                                 )

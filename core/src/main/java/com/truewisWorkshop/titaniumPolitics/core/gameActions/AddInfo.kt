@@ -11,8 +11,15 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class AddInfo(
     override val sbjCharacter: String, override val tgtPlace: String, var infoKey: String,
-    var agendaIndex: Int
+    var agendaIndex: Int = -1
 ) : GameAction() {
+    constructor(
+        sbjCharacter: String, tgtPlace: String, infoKey: String,
+        gameState: GameState
+    ) : this(sbjCharacter, tgtPlace, infoKey, -1) {
+        injectParent(gameState)
+    }
+
     constructor(
         sbjCharacter: String, tgtPlace: String, infoKey: String,
         agendaIndex: Int, gameState: GameState
@@ -21,7 +28,7 @@ data class AddInfo(
     }
 
     val agenda
-        get() = sbjCharObj.currentMeeting!!.agendas[agendaIndex]
+        get() = meeting.currentAgenda ?: throw IllegalStateException("No current agenda in meeting.")
     val info
         get() = parent.informations[infoKey]!!
     val meeting
@@ -118,8 +125,7 @@ data class AddInfo(
     }
 
     override fun isValid(): Boolean {
-        //Array index out of bounds check.
-        if (meeting.agendas.size <= agendaIndex)
+        if (!reason(meeting.currentAgenda != null, "addInfo-noCurrentAgenda"))
             return false
         //If the information is already presented in the meeting, it cannot be presented again.
         if (meeting.agendas.any { it.informationKeys.contains(infoKey) })

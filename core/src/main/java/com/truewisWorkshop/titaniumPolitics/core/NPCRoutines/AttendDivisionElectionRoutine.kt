@@ -34,7 +34,6 @@ class AttendDivisionElectionRoutine(override val meetingName: String) : MeetingR
                     //If the agenda is already proposed, and we have a supporting information, support it.
                     try_support_nomination += 1
                     return AddInfoToAgendaRoutine(
-                        meeting.agendas.indexOfFirst { it.type == AgendaType.NOMINATE && it.subjectParams["character"] == nominee },
                         true
                     )
                 }
@@ -43,7 +42,6 @@ class AttendDivisionElectionRoutine(override val meetingName: String) : MeetingR
                     gState.characters.keys.filter { it != name && it != nominee && meeting.agendas.any { it.type == AgendaType.NOMINATE && it.subjectParams["character"] == nominee } }
                 if (otherNominees.isNotEmpty()) {
                     return AddInfoToAgendaRoutine(
-                        meeting.agendas.indexOfFirst { it.type == AgendaType.NOMINATE && it.subjectParams["character"] == nominee },
                         false
                     )//Add a routine, priority higher than work.
 

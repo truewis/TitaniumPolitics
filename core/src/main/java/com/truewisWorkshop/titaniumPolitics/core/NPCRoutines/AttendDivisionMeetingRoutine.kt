@@ -24,7 +24,7 @@ class AttendDivisionMeetingRoutine(override val meetingName: String) : MeetingRo
         //Try supporting salary request.
         if (meeting.currentSpeaker == name && !party.isSalaryPaid) {
             //Check if there is already a salary request.
-            if (meeting.agendas.none { it.type == AgendaType.REQUEST && it.attachedRequest!!.action is Salary }) {
+            if (meeting.currentAgenda?.let { it.type == AgendaType.REQUEST && it.attachedRequest!!.action is Salary } != true) {
 
             } else //If the agenda already exists, support it.
             {
@@ -33,7 +33,6 @@ class AttendDivisionMeetingRoutine(override val meetingName: String) : MeetingRo
                     try_support_salary += 1
                     //If the agenda is already proposed, and we have a supporting information, support it.
                     return AddInfoToAgendaRoutine(
-                        meeting.agendas.indexOfFirst { it.type == AgendaType.REQUEST && it.attachedRequest!!.action is Salary },
                         support = true
                     )//Add a routine, priority higher than work.
                 }

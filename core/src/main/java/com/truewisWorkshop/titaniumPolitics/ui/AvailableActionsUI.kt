@@ -443,20 +443,21 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable 
 
 
                             "AddInfo" -> {
+                                val currentMeeting = gameState.player.currentMeeting
                                 if (gameState.informations.none { (key, info) ->
                                         gameState.playerName in info.knownTo
                                     }) {
                                     this@button.isDisabled = true
                                     tooltip.displayInvalidReason(ReadOnly.prop("addInfo-noPreparedInfo"))
+                                } else if (currentMeeting?.currentAgenda == null) {
+                                    this@button.isDisabled = true
+                                    tooltip.displayInvalidReason(ReadOnly.prop("addInfo-noCurrentAgenda"))
                                 } else
                                     if ((gameState.informations.filter {
                                             it.value.knownTo.contains(gameState.playerName)
-                                        }.keys - gameState.player.currentMeeting!!.agendas.flatMap { it.informationKeys }).isEmpty()) {
+                                        }.keys - currentMeeting.agendas.flatMap { it.informationKeys }).isEmpty()) {
                                         this@button.isDisabled = true
                                         tooltip.displayInvalidReason(ReadOnly.prop("addInfo-noAdditionalInfo"))
-                                    } else if ((gameState.player.currentMeeting!!.agendas.isEmpty())) {
-                                        this@button.isDisabled = true
-                                        tooltip.displayInvalidReason(ReadOnly.prop("addInfo-noAgendas"))
                                     }
                                 this@button.addListener(object : ChangeListener() {
                                     override fun changed(event: ChangeEvent, actor: Actor) {
@@ -470,20 +471,21 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable 
                             }
 
                             "AnnounceInfo" -> {
+                                val currentMeeting = gameState.player.currentMeeting
                                 if (gameState.informations.none { (key, info) ->
                                         gameState.playerName in info.knownTo
                                     }) {
                                     this@button.isDisabled = true
                                     tooltip.displayInvalidReason(ReadOnly.prop("addInfo-noPreparedInfo"))
+                                } else if (currentMeeting?.currentAgenda == null) {
+                                    this@button.isDisabled = true
+                                    tooltip.displayInvalidReason(ReadOnly.prop("addInfo-noCurrentAgenda"))
                                 } else
                                     if ((gameState.informations.filter {
                                             it.value.knownTo.contains(gameState.playerName)
-                                        }.keys - gameState.player.currentMeeting!!.agendas.flatMap { it.informationKeys }).isEmpty()) {
+                                        }.keys - currentMeeting.agendas.flatMap { it.informationKeys }).isEmpty()) {
                                         this@button.isDisabled = true
                                         tooltip.displayInvalidReason(ReadOnly.prop("addInfo-noAdditionalInfo"))
-                                    } else if ((gameState.player.currentMeeting!!.agendas.isEmpty())) {
-                                        this@button.isDisabled = true
-                                        tooltip.displayInvalidReason(ReadOnly.prop("addInfo-noAgendas"))
                                     }
                                 this@button.addListener(object : ChangeListener() {
                                     override fun changed(event: ChangeEvent, actor: Actor) {
@@ -696,6 +698,10 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable 
 
 
                             "NewAgenda" -> {
+                                if (gameState.player.currentMeeting?.currentAgenda != null) {
+                                    this@button.isDisabled = true
+                                    tooltip.displayInvalidReason(ReadOnly.prop("newAgenda-CurrentAgendaExists"))
+                                }
                                 this@button.addListener(object : ChangeListener() {
                                     override fun changed(event: ChangeEvent, actor: Actor) {
                                         if (!this@button.isChecked) return

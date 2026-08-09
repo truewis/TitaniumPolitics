@@ -9,14 +9,14 @@ import com.titaniumPolitics.game.core.gameActions.Wait
 import kotlinx.serialization.Serializable
 
 @Serializable
-class AddInfoToAgendaRoutine(val agendaIndex: Int, val support: Boolean, val meetingName: String = "") : Routine(),
+class AddInfoToAgendaRoutine(val support: Boolean, val meetingName: String = "") : Routine(),
     IMeetingRoutine {
     override fun newRoutineCondition(name: String, place: String, subroutines: List<Routine>): Routine? {
         val character = gState.characters[name]!!
         try {
             val conf =
                 character.currentMeeting!!
-            conf.agendas[agendaIndex]
+            conf.currentAgenda ?: return failed()
         } catch (e: Exception) {
             //Not in a meeting or agenda index is out of range.
             val agent = gState.nonPlayerAgents[name]!! as NonPlayerAgent
@@ -40,16 +40,23 @@ class AddInfoToAgendaRoutine(val agendaIndex: Int, val support: Boolean, val mee
             return Wait(name, place)
         } else //If it is my turn to speak
         {
+            val currentAgenda = conf.currentAgenda ?: run {
+                failed()
+                val nextSpeaker = conf.currentCharacters.minus(name)
+                    .maxByOrNull { gState.getMutuality(name, it) }
+                    ?: return EndMeeting(name, place)
+                return EndSpeech(name, place, nextSpeaker, gState)
+            }
             //Check if I have any information to support the agenda.
             val addingInfo = gState.informations.filter { (key, value) -> name in value.knownTo }.keys.filter {
-                conf.agendas[agendaIndex].effectivity(
+                currentAgenda.effectivity(
                     gState,
                     conf,
                     gState.informations[it]!!,
                     character
                 ).first * (if (support) 1 else -1) > 0.0
             }.minByOrNull {
-                conf.agendas[agendaIndex].effectivity(
+                currentAgenda.effectivity(
                     gState,
                     conf,
                     gState.informations[it]!!,
@@ -57,7 +64,7 @@ class AddInfoToAgendaRoutine(val agendaIndex: Int, val support: Boolean, val mee
                 ).first
             }
             if (addingInfo != null) {
-                AddInfo(name, place, addingInfo, this@AddInfoToAgendaRoutine.agendaIndex, gState).also {
+                AddInfo(name, place, addingInfo, gState).also {
                     if (it.isValid()) {
                         success()
                         return it

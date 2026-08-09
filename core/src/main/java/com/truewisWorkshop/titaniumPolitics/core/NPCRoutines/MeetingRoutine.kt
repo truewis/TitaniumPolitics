@@ -123,18 +123,17 @@ sealed class MeetingRoutine : Routine() {
 
         //If speaker, try supporting proof of work if I am involved.
         //Proof of work should have corresponding request. If there is no request or no relevant information, do not propose proof of work.
-        if (meeting.agendas.any {
+        if (meeting.currentAgenda?.let {
                 it.type == AgendaType.PROOF_OF_WORK && (name in it.attachedRequest!!.issuedBy && it.attachedRequest!!.issuedTo.intersect(
                     meeting.currentCharacters
                 ).isNotEmpty())
-            }) {
+            } == true) {
 
             //If we haven't tried this branch in the current routine
             if (try_support_proofOfWork == 0) {
                 //If the agenda is already proposed, and we have a supporting information, support it.
                 try_support_proofOfWork += 1
                 return AddInfoToAgendaRoutine(
-                    meeting.agendas.indexOfFirst { it.type == AgendaType.PROOF_OF_WORK },
                     support = true
                 )//Add a routine, priority higher than work.
             }
