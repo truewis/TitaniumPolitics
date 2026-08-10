@@ -44,6 +44,8 @@
 
 ## Developer workflow
 
+- For future sessions, do not run `gradlew build` unless explicitly requested. The user will run build/test verification
+  locally because it takes too long in this environment.
 - Only Build for final testing; for iterative development, use `./gradlew classes` to compile just the changed files.
 - Compile/validate with `./gradlew build` or `./gradlew classes` for a faster check.
 - Run the desktop app with `./gradlew lwjgl3:run` only if necessary to test graphics; run the headless integration path
@@ -52,3 +54,6 @@
 - When changing simulation logic, inspect `GameState.kt`, `GameEngine.kt`, `ReadOnly.kt`, and the relevant action/UI
   files together.
 
+# Agent Notes
+
+- Keep this file updated with any workflow constraints that should be remembered across sessions.
