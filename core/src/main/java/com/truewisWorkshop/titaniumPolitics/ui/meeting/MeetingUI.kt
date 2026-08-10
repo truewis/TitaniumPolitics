@@ -83,6 +83,7 @@ class MeetingUI(var gameState: GameState) : Table(defaultSkin), KTable {
         color = Color(1f, 0.85f, 0.2f, 0.9f)
         isVisible = false
     }
+    private val currentAgendaMarkerBaseAlpha = 0.9f
     val currentAttention = Label("0", defaultSkin, "docTitle")
     val discussionTable: Stack
     val electionUIContainer = Container<ElectionUI>()
@@ -420,6 +421,7 @@ class MeetingUI(var gameState: GameState) : Table(defaultSkin), KTable {
                 currentAgendaMarker.setPosition(agendaX, agendaY, Align.center)
                 currentAgendaMarker.isVisible = true
                 currentAgendaMarker.zIndex = maxOf(0, agendaUI.zIndex - 1)
+                ensureCurrentAgendaMarkerAnimation()
                 markerPlaced = true
             }
 
@@ -446,6 +448,9 @@ class MeetingUI(var gameState: GameState) : Table(defaultSkin), KTable {
             addAgendaButton.setPosition(agendaX, agendaY, Align.center)
         }
 
+        if (!markerPlaced) {
+            hideCurrentAgendaMarker()
+        }
 
     }
 
@@ -459,8 +464,35 @@ class MeetingUI(var gameState: GameState) : Table(defaultSkin), KTable {
 
         currentAgendas.clear()
         deployedInfos.clear()
-        currentAgendaMarker.isVisible = false
+        hideCurrentAgendaMarker()
         //TODO: removeActor(addAgendaButton), but we are using AvailableActionsUI for now.
+    }
+
+    private fun ensureCurrentAgendaMarkerAnimation() {
+        if (currentAgendaMarker.actions.size > 0) return
+        currentAgendaMarker.setScale(1f)
+        currentAgendaMarker.color.a = currentAgendaMarkerBaseAlpha
+        currentAgendaMarker.addAction(
+            Actions.forever(
+                Actions.sequence(
+                    Actions.parallel(
+                        Actions.scaleTo(1.12f, 1.12f, 0.55f),
+                        Actions.alpha(0.45f, 0.55f)
+                    ),
+                    Actions.parallel(
+                        Actions.scaleTo(1f, 1f, 0.55f),
+                        Actions.alpha(currentAgendaMarkerBaseAlpha, 0.55f)
+                    )
+                )
+            )
+        )
+    }
+
+    private fun hideCurrentAgendaMarker() {
+        currentAgendaMarker.clearActions()
+        currentAgendaMarker.setScale(1f)
+        currentAgendaMarker.color.a = currentAgendaMarkerBaseAlpha
+        currentAgendaMarker.isVisible = false
     }
 
     companion object {
