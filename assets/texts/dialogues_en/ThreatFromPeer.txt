@@ -1,0 +1,5 @@
+ENTER %s
+%s, angry: I've had enough of you.
+%s, menacing: You've pushed me too far, and now we have a problem.
+%s, threatening: You better watch your step. I won't hesitate to make things very difficult for you.
+Narrator: %s's voice drips with barely contained rage. This is not an idle threat.

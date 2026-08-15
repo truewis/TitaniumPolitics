@@ -1,0 +1,5 @@
+ENTER %s
+%s, stern: I need to talk to you about your performance.
+%s, serious: It has been... disappointing. I'm beginning to question whether you're fit for this position.
+%s, harsh: If things don't improve significantly, I'll have no choice but to let you go. Are we clear?
+Narrator: Your supervisor's words hang in the air like a threat. Your job is on the line.

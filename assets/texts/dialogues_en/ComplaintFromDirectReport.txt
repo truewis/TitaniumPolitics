@@ -1,0 +1,5 @@
+ENTER %s
+%s, discouraged: I need to speak with you.
+%s, serious: Things have been... difficult. I don't feel valued or supported.
+%s, firm: I can't continue like this. We need to talk about how we move forward.
+Narrator: %s looks at you with a mixture of frustration and sadness. They're clearly at their breaking point.

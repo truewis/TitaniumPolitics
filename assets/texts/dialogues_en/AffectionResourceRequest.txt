@@ -1,0 +1,5 @@
+ENTER %s
+%s: I've been meaning to talk to you about something that's been worrying me.
+%s, concerned: Resources are running low, and I'm not sure how much longer we can manage.
+%s, grateful: But if you were able to help... it would mean a lot to me. I know you understand what we're going through.
+Narrator: %s looks at you with genuine appreciation, waiting to see if you might lend a hand.

@@ -1,0 +1,5 @@
+ENTER %s
+%s: I wanted to speak with you about %s.
+%s, thoughtful: We're facing some challenges that affect both my position and theirs.
+%s, earnest: Your voice carries weight around here. If you could offer your support... it would make all the difference.
+Narrator: %s looks at you with genuine respect, recognizing that your backing could change their party's standing.

@@ -1,0 +1,5 @@
+ENTER %s
+%s: I'm in a bind, and I could really use your help with something.
+%s, serious: There's a task that needs doing, and I trust your judgment more than anyone else's.
+%s, hopeful: Would you be willing to lend me a hand? I know it's a lot to ask, but I believe in you.
+Narrator: %s's eyes reflect both vulnerability and confidence in you. They truly need your help.
