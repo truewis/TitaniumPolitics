@@ -476,11 +476,11 @@ class MeetingUI(var gameState: GameState) : Table(defaultSkin), KTable {
             Actions.forever(
                 Actions.sequence(
                     Actions.parallel(
-                        Actions.scaleTo(1.12f, 1.12f, 0.55f),
+                        //Actions.scaleTo(1.12f, 1.12f, 0.55f),
                         Actions.alpha(0.45f, 0.55f)
                     ),
                     Actions.parallel(
-                        Actions.scaleTo(1f, 1f, 0.55f),
+                        //Actions.scaleTo(1f, 1f, 0.55f),
                         Actions.alpha(currentAgendaMarkerBaseAlpha, 0.55f)
                     )
                 )
