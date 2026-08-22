@@ -38,12 +38,18 @@ class Meeting(
     var agendas = arrayListOf<MeetingAgenda>()
     var currentAgendaIndex: Int? = null
     var voteResults = hashMapOf<String, Int>()
+    val passedAgendas = arrayListOf<MeetingAgenda>()
+    val ignoredAgendas = arrayListOf<MeetingAgenda>()
+    val deployedInformationKeys = hashSetOf<String>()
 
     @Transient
     var onCandidatesSet = ArrayList<(Set<String>) -> Unit>() //Called when the candidates for the election are set.
 
     @Transient
     var onVoteResults = ArrayList<() -> Unit>()
+
+    @Transient
+    var onMeetingEnded = ArrayList<() -> Unit>()
 
     var nominationFinishedTime: Int? =
         null //This is the time when the nomination is finished. It is used to determine when the election is over.
@@ -155,6 +161,7 @@ class Meeting(
                 }
             }
         }
+        onMeetingEnded.forEach { it() }
         //Remove the meeting from the ongoingMeetings.
         if (gameState.ongoingMeetings.containsValue(this)) {
             gameState.removeOngoingMeeting(gameState.ongoingMeetings.filter { it.value == this }.keys.first())
@@ -172,6 +179,7 @@ class Meeting(
         agendasToResolve.forEach { agenda ->
             if (agenda.isConstructed()) {
                 NewAgenda.agendaOneShotEffect(this, agenda, agenda.author, gameState)
+                passedAgendas += copyAgendaForSummary(agenda)
                 gameState.setMutuality(
                     agenda.author,
                     agenda.author,
@@ -187,6 +195,7 @@ class Meeting(
                     )
                 }
             } else {
+                ignoredAgendas += copyAgendaForSummary(agenda)
                 gameState.setMutuality(
                     agenda.author,
                     agenda.author,
@@ -204,6 +213,14 @@ class Meeting(
             }
             removeAgenda(agenda)
         }
+    }
+
+    private fun copyAgendaForSummary(agenda: MeetingAgenda): MeetingAgenda {
+        return agenda.copy(
+            subjectParams = HashMap(agenda.subjectParams),
+            subjectIntParams = HashMap(agenda.subjectIntParams),
+            informationKeys = ArrayList(agenda.informationKeys)
+        )
     }
 
 
