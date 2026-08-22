@@ -141,19 +141,19 @@ sealed class GameAction() {
         when (this) {
             is NewAgenda -> {
                 when (this.agenda.type) {
-                    AgendaType.PROOF_OF_WORK -> text = ReadOnly.script("NewAgenda-ProofOfWork")
+                    AgendaType.PROOF_OF_WORK -> text = ReadOnly.scriptForCharacter(sbjCharacter, "NewAgenda-ProofOfWork")
                     AgendaType.NOMINATE -> text =
-                        ReadOnly.script("NewAgenda-Nominate")
+                        ReadOnly.scriptForCharacter(sbjCharacter, "NewAgenda-Nominate")
                             .format(ReadOnly.charProp(this.agenda.subjectParams["character"]!!))
 
-                    AgendaType.REQUEST -> text = ReadOnly.script("NewAgenda-Request").format(
+                    AgendaType.REQUEST -> text = ReadOnly.scriptForCharacter(sbjCharacter, "NewAgenda-Request").format(
                         ReadOnly.prop(
                             this.agenda.attachedRequest!!
                                 .action::class.simpleName!!
                         ), this.agenda.attachedRequest!!.issuedTo.first()
                     )
 
-                    AgendaType.PROMISE -> text = ReadOnly.script("NewAgenda-Promise").format(
+                    AgendaType.PROMISE -> text = ReadOnly.scriptForCharacter(sbjCharacter, "NewAgenda-Promise").format(
                         ReadOnly.prop(
                             this.agenda.attachedRequest!!
                                 .action::class.simpleName!!
@@ -161,41 +161,43 @@ sealed class GameAction() {
                     )
 
                     AgendaType.PRAISE -> text =
-                        ReadOnly.script("NewAgenda-Praise")
+                        ReadOnly.scriptForCharacter(sbjCharacter, "NewAgenda-Praise")
                             .format(ReadOnly.charProp(this.agenda.subjectParams["character"]!!))
 
                     AgendaType.DENOUNCE -> text =
-                        ReadOnly.script("NewAgenda-Denounce")
+                        ReadOnly.scriptForCharacter(sbjCharacter, "NewAgenda-Denounce")
                             .format(ReadOnly.charProp(this.agenda.subjectParams["character"]!!))
 
                     AgendaType.PRAISE_PARTY -> text =
-                        ReadOnly.script("NewAgenda-PraiseParty").format(this.agenda.subjectParams["party"])
+                        ReadOnly.scriptForCharacter(sbjCharacter, "NewAgenda-PraiseParty").format(this.agenda.subjectParams["party"])
 
                     AgendaType.DENOUNCE_PARTY -> text =
-                        ReadOnly.script("NewAgenda-DenounceParty").format(this.agenda.subjectParams["party"])
+                        ReadOnly.scriptForCharacter(sbjCharacter, "NewAgenda-DenounceParty").format(this.agenda.subjectParams["party"])
 
-                    AgendaType.BUDGET_PROPOSAL -> text = ReadOnly.script("NewAgenda-BudgetProposal")
-                    AgendaType.BUDGET_RESOLUTION -> text = ReadOnly.script("NewAgenda-BudgetResolution")
+                    AgendaType.BUDGET_PROPOSAL -> text =
+                        ReadOnly.scriptForCharacter(sbjCharacter, "NewAgenda-BudgetProposal")
+                    AgendaType.BUDGET_RESOLUTION -> text =
+                        ReadOnly.scriptForCharacter(sbjCharacter, "NewAgenda-BudgetResolution")
                     AgendaType.APPOINT_MEETING -> text =
-                        ReadOnly.script("NewAgenda-AppointMeeting")
+                        ReadOnly.scriptForCharacter(sbjCharacter, "NewAgenda-AppointMeeting")
 
                     AgendaType.FIRE_MANAGER -> text =
-                        ReadOnly.script("NewAgenda-FireManager")
+                        ReadOnly.scriptForCharacter(sbjCharacter, "NewAgenda-FireManager")
                             .format(ReadOnly.charProp(this.agenda.subjectParams["character"]!!))
                 }
             }
 
             is AddInfo -> {
-                text = ReadOnly.script(this.effectivityReason)
+                text = ReadOnly.scriptForCharacter(sbjCharacter, this.effectivityReason)
                     .format(ReadOnly.charProp(this.agenda.author))
             }
 
             is EndSpeech -> {
-                text = ReadOnly.script("EndSpeech2").format(ReadOnly.charProp(this.nextSpeaker))
+                text = ReadOnly.scriptForCharacter(sbjCharacter, "EndSpeech2").format(ReadOnly.charProp(this.nextSpeaker))
             }
 
             else -> {
-                text = ReadOnly.script(this.javaClass.simpleName, this)
+                text = ReadOnly.scriptForCharacter(sbjCharacter, this.javaClass.simpleName, this)
             }
         }
         return text

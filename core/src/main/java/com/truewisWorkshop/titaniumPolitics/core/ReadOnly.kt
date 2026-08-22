@@ -34,9 +34,16 @@ object ReadOnly {
     // List of base names for all property files
     private val PROPERTY_BASE_NAMES = listOf(
         "ui", "apparatus", "place", "character", "resources", "DefaultCharacter",
+        "DefaultCharacters",
         "maleNames", "femaleNames", "nameModifier", // ADDED for name generation
         "quests"
     )
+    private val SPEECH_STYLE_FOLDERS = listOf(
+        "texts/speechStyles",
+        "texts/speechStyle",
+        "texts/characterSpeech"
+    )
+    private val speechStyleBundles = mutableMapOf<String, Properties?>()
 
     // --- JSON Loading (No change, as JSON is typically non-localized) ---
     private fun loadJson(path: String): JsonObject {
@@ -80,18 +87,23 @@ object ReadOnly {
             val localeTag = if (locale.language.isEmpty()) "" else "_${locale.language}"
             val localizedPath = Gdx.files.internal("texts/$baseName$localeTag.properties")
 
-            val defaultContent = defaultPath.reader("UTF-8")
-            val localizedContent = localizedPath.reader("UTF-8")
-
             val mergedProps = Properties()
+            if (!defaultPath.exists()) {
+                Logger.write(
+                    "Default properties file not found for $baseName: ${defaultPath.path()}",
+                    Logger.LogLevel.WARNING
+                )
+                return mergedProps
+            }
 
             // 1. Load default properties (the base) with UTF-8 encoding
-            mergedProps.load(defaultContent)
+            defaultPath.reader("UTF-8").use { mergedProps.load(it) }
 
             // 2. Overwrite/merge with localized properties if they exist and are not the default path
-            if (localizedPath != defaultPath) {
-                val localizedProps =
-                    Properties().apply { load(localizedContent) }
+            if (localizedPath.exists() && localizedPath.path() != defaultPath.path()) {
+                val localizedProps = Properties().apply {
+                    localizedPath.reader("UTF-8").use { load(it) }
+                }
                 localizedProps.forEach { (k, v) -> mergedProps.setProperty(k.toString(), v.toString()) }
                 Logger.write("Loaded localized properties for $baseName: $localizedPath", Logger.LogLevel.INFO)
             }
@@ -135,6 +147,46 @@ object ReadOnly {
 
     }
 
+    private fun loadSpeechStyleProperties(character: String, locale: Locale): Properties? {
+        val localeTag = if (locale.language.isEmpty()) "" else "_${locale.language}"
+        val mergedProps = Properties()
+        var found = false
+        if (Gdx.files != null) {
+            SPEECH_STYLE_FOLDERS.forEach { folder ->
+                val defaultPath = Gdx.files.internal("$folder/$character.properties")
+                if (defaultPath.exists()) {
+                    defaultPath.reader("UTF-8").use { mergedProps.load(it) }
+                    found = true
+                    val localizedPath = Gdx.files.internal("$folder/$character$localeTag.properties")
+                    if (localizedPath.exists() && localizedPath.path() != defaultPath.path()) {
+                        val localizedProps = Properties().apply {
+                            localizedPath.reader("UTF-8").use { load(it) }
+                        }
+                        localizedProps.forEach { (k, v) -> mergedProps.setProperty(k.toString(), v.toString()) }
+                    }
+                    return@forEach
+                }
+            }
+        } else {
+            SPEECH_STYLE_FOLDERS.forEach { folder ->
+                val defaultFile = File("../assets/$folder/$character.properties")
+                if (defaultFile.exists()) {
+                    defaultFile.reader(StandardCharsets.UTF_8).use { mergedProps.load(it) }
+                    found = true
+                    val localizedFile = File("../assets/$folder/$character$localeTag.properties")
+                    if (localizedFile.exists() && localizedFile.path != defaultFile.path) {
+                        val localizedProps = Properties().apply {
+                            localizedFile.reader(StandardCharsets.UTF_8).use { load(it) }
+                        }
+                        localizedProps.forEach { (k, v) -> mergedProps.setProperty(k.toString(), v.toString()) }
+                    }
+                    return@forEach
+                }
+            }
+        }
+        return if (found) mergedProps else null
+    }
+
     /**
      * Ensures all localized property bundles are loaded for the currentLocale.
      * Called lazily by accessor functions.
@@ -155,6 +207,7 @@ object ReadOnly {
         if (currentLocale != newLocale) {
             currentLocale = newLocale
             propertyBundles.clear() // Force reload on next access
+            speechStyleBundles.clear()
             ensureBundlesLoaded()
             Logger.write("Locale successfully set to: $newLocale", Logger.LogLevel.INFO)
         }
@@ -246,13 +299,40 @@ object ReadOnly {
 
     fun charProp(key: String, obj: Any? = null): String = getLocalizedProp("character", key, obj)
     fun itemProp(key: String, obj: Any? = null): String = getLocalizedProp("resources", key, obj)
-    fun script(key: String, obj: Any? = null): String = getLocalizedProp("DefaultCharacter", key, obj)
+    private fun scriptBundles(): List<Properties> {
+        ensureBundlesLoaded()
+        return listOfNotNull(
+            propertyBundles["DefaultCharacters"],
+            propertyBundles["DefaultCharacter"]
+        )
+    }
+
+    private fun getStyleBundle(character: String?): Properties? {
+        if (character.isNullOrBlank()) return null
+        ensureBundlesLoaded()
+        val cacheKey = "${currentLocale.language}:$character"
+        if (!speechStyleBundles.containsKey(cacheKey)) {
+            speechStyleBundles[cacheKey] = loadSpeechStyleProperties(character, currentLocale)
+        }
+        return speechStyleBundles[cacheKey]
+    }
+
+    fun scriptOrNull(key: String, speaker: String? = null, obj: Any? = null): String? {
+        val styleValue = getStyleBundle(speaker)?.getProperty(key)
+        val rawValue = styleValue ?: scriptBundles().firstNotNullOfOrNull { it.getProperty(key) }
+        return rawValue?.let { if (obj != null) it.replacePlaceholders(obj) else it }
+    }
+
+    fun scriptForCharacter(character: String?, key: String, obj: Any? = null): String {
+        return scriptOrNull(key, character, obj) ?: "Unknown property [$key]"
+    }
+
+    fun script(key: String, obj: Any? = null): String = scriptForCharacter(null, key, obj)
 
     //Script is different from other props in that some speech lines are optional, so we want a way to check if they exist without throwing an error.
     //If the script line doesn't exist, the dialogue system can decide to skip it.
-    fun hasScript(key: String): Boolean {
-        ensureBundlesLoaded()
-        return propertyBundles["DefaultCharacter"]?.getProperty(key) != null
+    fun hasScript(key: String, speaker: String? = null): Boolean {
+        return scriptOrNull(key, speaker) != null
     }
 
     fun questProp(key: String, obj: Any? = null): String = getLocalizedProp("quests", key, obj)

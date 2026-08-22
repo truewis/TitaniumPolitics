@@ -235,7 +235,7 @@ class DialogueUI(val gameState: GameState) : Table(defaultSkin), KTable {
     }
 
     fun generatePositionIntroduction(char: com.titaniumPolitics.game.core.Character): String {
-        return ReadOnly.script("NewTalk-Unknown-workplaceInfo").format(
+        return ReadOnly.scriptForCharacter(char.name, "NewTalk-Unknown-workplaceInfo").format(
             char.generatePositionText()
         )
     }
@@ -244,7 +244,7 @@ class DialogueUI(val gameState: GameState) : Table(defaultSkin), KTable {
         isVisible = true
         dialogueLines = emptyList()
         dialogueLines = listOf(
-            meeting.currentSpeaker!! + ": " + ReadOnly.script("MeetingDialogue")
+            meeting.currentSpeaker!! + ": " + ReadOnly.scriptForCharacter(meeting.currentSpeaker, "MeetingDialogue")
                 .format(gameState.meetingName(meeting))
         )
         addPortrait(meeting.currentSpeaker!!)
@@ -266,38 +266,38 @@ class DialogueUI(val gameState: GameState) : Table(defaultSkin), KTable {
             when (gameState.getMutNorm(char1.name, char2.name)) {
                 in 0.25..1.0 -> {
                     dialogueLines +=
-                        char1.name + ": " + ReadOnly.script("NewTalk-KnownPositive")
+                        char1.name + ": " + ReadOnly.scriptForCharacter(char1.name, "NewTalk-KnownPositive")
                             .format(ReadOnly.charProp(char2.name))
                 }
 
                 in -1.0..-0.25 -> {
                     dialogueLines +=
-                        char1.name + ": " + ReadOnly.script("NewTalk-KnownNegative")
+                        char1.name + ": " + ReadOnly.scriptForCharacter(char1.name, "NewTalk-KnownNegative")
                             .format(ReadOnly.charProp(char2.name))
                 }
 
                 else -> {
                     dialogueLines +=
-                        char1.name + ": " + ReadOnly.script("NewTalk-KnownNeutral")
+                        char1.name + ": " + ReadOnly.scriptForCharacter(char1.name, "NewTalk-KnownNeutral")
                             .format(ReadOnly.charProp(char2.name))
                 }
             }
             when (gameState.getMutNorm(char2.name, char1.name)) {
                 in 0.25..1.0 -> {
                     dialogueLines +=
-                        char2.name + ": " + ReadOnly.script("NewTalk-KnownPositiveResponse")
+                        char2.name + ": " + ReadOnly.scriptForCharacter(char2.name, "NewTalk-KnownPositiveResponse")
                             .format(ReadOnly.charProp(char1.name))
                 }
 
                 in -1.0..-0.25 -> {
                     dialogueLines +=
-                        char2.name + ": " + ReadOnly.script("NewTalk-KnownNegativeResponse")
+                        char2.name + ": " + ReadOnly.scriptForCharacter(char2.name, "NewTalk-KnownNegativeResponse")
                             .format(ReadOnly.charProp(char1.name))
                 }
 
                 else -> {
                     dialogueLines +=
-                        char2.name + ": " + ReadOnly.script("NewTalk-KnownNeutralResponse")
+                        char2.name + ": " + ReadOnly.scriptForCharacter(char2.name, "NewTalk-KnownNeutralResponse")
                             .format(ReadOnly.charProp(char1.name))
                 }
             }
@@ -305,16 +305,14 @@ class DialogueUI(val gameState: GameState) : Table(defaultSkin), KTable {
             val char1PositionIntroduction = generatePositionIntroduction(char1)
             val char2PositionIntroduction = generatePositionIntroduction(char2)
             dialogueLines = listOf(
-                char1.name + ": " + ReadOnly.script("NewTalk-Unknown")
-                    .format(ReadOnly.charProp(char1.name)) + " " + char1PositionIntroduction + if (hasAgenda) " " + ReadOnly.script(
-                    "NewTalk-Unknown-agenda"
-                ) else "",
-                char2.name + ": " + ReadOnly.script("NewTalk-Unknown-response").format(
+                char1.name + ": " + ReadOnly.scriptForCharacter(char1.name, "NewTalk-Unknown")
+                    .format(ReadOnly.charProp(char1.name)) + " " + char1PositionIntroduction + if (hasAgenda) " " +
+                    ReadOnly.scriptForCharacter(char1.name, "NewTalk-Unknown-agenda") else "",
+                char2.name + ": " + ReadOnly.scriptForCharacter(char2.name, "NewTalk-Unknown-response").format(
                     ReadOnly.charProp(char1.name),
                     ReadOnly.charProp(char2.name)
-                ) + " " + char2PositionIntroduction + if (hasAgenda) " " + ReadOnly.script(
-                    "NewTalk-Unknown-agendaResponse"
-                ) else ""
+                ) + " " + char2PositionIntroduction + if (hasAgenda) " " +
+                    ReadOnly.scriptForCharacter(char2.name, "NewTalk-Unknown-agendaResponse") else ""
             )
         }
         playDialogueLines()

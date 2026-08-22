@@ -16,6 +16,7 @@ import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.core.Meeting
 import com.titaniumPolitics.game.core.Party
 import com.titaniumPolitics.game.core.ReadOnly
+import com.titaniumPolitics.game.core.SpeechInterpreter
 import com.titaniumPolitics.game.core.gameActions.Wait
 import com.titaniumPolitics.game.debugTools.Logger
 import com.titaniumPolitics.game.ui.BlockingWarningUI
@@ -130,11 +131,8 @@ class MeetingUI(var gameState: GameState) : Table(defaultSkin), KTable {
                     Logger.LogLevel.INFO
                 )
                 refresh(gameState.player.currentMeeting!!)
-                if (speakerPortrait.tgtCharacter == action.sbjCharacter) {
-                    speakerPortrait.speechUI.displaySpeech(action.generateSpeech())
-                }
-                portraits.firstOrNull { portrait -> portrait.tgtCharacter == action.sbjCharacter }?.also { portrait ->
-                    portrait.speechUI.displaySpeech(action.generateSpeech())
+                SpeechInterpreter.actionLines(action, gameState, gameState.player.currentMeeting).forEach { line ->
+                    displaySpeechLine(line)
                 }
 
             }
@@ -247,23 +245,24 @@ class MeetingUI(var gameState: GameState) : Table(defaultSkin), KTable {
                 //Split reason by semicolon, first element is the reason key, rest are parameters.
                 val key = it.split(";")[0]
                 val params = it.split(";").drop(1)
-                val localizedReason = ReadOnly.script("response-$key").format(*params.toTypedArray())
-
-                if (speakerPortrait.tgtCharacter == char1) {
-                    speakerPortrait.speechUI.displaySpeech(localizedReason)
+                SpeechInterpreter.scriptedLines(
+                    primarySpeaker = char1,
+                    otherSpeaker = char2,
+                    key = "response-$key",
+                    styleSpeaker = char1,
+                    formatArgs = params.toTypedArray()
+                ).forEach { line ->
+                    displaySpeechLine(line)
                 }
-                portraits.firstOrNull { portrait -> portrait.tgtCharacter == char1 }?.also { portrait ->
-                    portrait.speechUI.displaySpeech(localizedReason)
-
-                }
-                if (ReadOnly.hasScript("response2-$key")) {
-                    val localizedReason2 = ReadOnly.script("response2-$key").format(*params.toTypedArray())
-                    if (speakerPortrait.tgtCharacter == char2) {
-                        speakerPortrait.speechUI.displaySpeech(localizedReason2)
-                    }
-                    portraits.firstOrNull { portrait -> portrait.tgtCharacter == char2 }?.also { portrait ->
-                        portrait.speechUI.displaySpeech(localizedReason2)
-
+                if (ReadOnly.hasScript("response2-$key", char2)) {
+                    SpeechInterpreter.scriptedLines(
+                        primarySpeaker = char2,
+                        otherSpeaker = char1,
+                        key = "response2-$key",
+                        styleSpeaker = char2,
+                        formatArgs = params.toTypedArray()
+                    ).forEach { line ->
+                        displaySpeechLine(line)
                     }
                 }
             }
@@ -493,6 +492,16 @@ class MeetingUI(var gameState: GameState) : Table(defaultSkin), KTable {
         currentAgendaMarker.setScale(1f)
         currentAgendaMarker.color.a = currentAgendaMarkerBaseAlpha
         currentAgendaMarker.isVisible = false
+    }
+
+    private fun displaySpeechLine(line: SpeechInterpreter.SpeechLine) {
+        if (speakerPortrait.tgtCharacter == line.speaker) {
+            speakerPortrait.speechUI.displaySpeech(line.text, line.holdSeconds)
+            return
+        }
+        portraits.firstOrNull { portrait -> portrait.tgtCharacter == line.speaker }?.also { portrait ->
+            portrait.speechUI.displaySpeech(line.text, line.holdSeconds)
+        }
     }
 
     companion object {

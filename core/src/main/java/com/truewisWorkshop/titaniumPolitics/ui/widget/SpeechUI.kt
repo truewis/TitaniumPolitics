@@ -27,6 +27,7 @@ import kotlin.coroutines.suspendCoroutine
 class SpeechUI : Table(defaultSkin), KTable {
 
     private val onSpeechEnd = arrayListOf<() -> Unit>()
+    private var holdSeconds = 1f
     private val speech = TypingLabel("", defaultSkin, "description").apply {
         setFontScale(0.4f)
         color = Color.WHITE
@@ -40,7 +41,7 @@ class SpeechUI : Table(defaultSkin), KTable {
                 if (this@apply.originalText.isEmpty()) return // If text is empty, do nothing. End event is triggered when label is initialized with empty text.
                 addAction(
                     Actions.sequence(
-                        Actions.delay(1f),
+                        Actions.delay(holdSeconds),
                         Actions.run {
                             clearSpeech()
                             onSpeechEnd.forEach { it() }
@@ -63,8 +64,9 @@ class SpeechUI : Table(defaultSkin), KTable {
     /**
      * Display speech from the engine thread.
      */
-    fun displaySpeech(text: String) {
+    fun displaySpeech(text: String, holdSeconds: Float = 1f) {
         runBlocking {
+            this@SpeechUI.holdSeconds = holdSeconds
             bubble.isVisible = true
             println("Displaying speech: $text")
             Gdx.app.postRunnable {
