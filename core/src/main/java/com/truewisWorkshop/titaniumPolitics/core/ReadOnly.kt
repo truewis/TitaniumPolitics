@@ -34,14 +34,11 @@ object ReadOnly {
     // List of base names for all property files
     private val PROPERTY_BASE_NAMES = listOf(
         "ui", "apparatus", "place", "character", "resources", "DefaultCharacter",
-        "DefaultCharacters",
         "maleNames", "femaleNames", "nameModifier", // ADDED for name generation
         "quests"
     )
     private val SPEECH_STYLE_FOLDERS = listOf(
-        "texts/speechStyles",
-        "texts/speechStyle",
-        "texts/characterSpeech"
+        "texts/speechStyles"
     )
     private val speechStyleBundles = mutableMapOf<String, Properties?>()
 
@@ -81,11 +78,16 @@ object ReadOnly {
     private fun loadLocalizedProperties(baseName: String, locale: Locale): Properties {
         // Base path for default file: texts/ui.properties
         if (Gdx.files != null) {
-            val defaultPath = Gdx.files.internal("texts/$baseName.properties")
+            var defaultPath = Gdx.files.internal("texts/$baseName.properties")
 
             // Localized path: texts/ui_fr.properties (simple language matching)
             val localeTag = if (locale.language.isEmpty()) "" else "_${locale.language}"
-            val localizedPath = Gdx.files.internal("texts/$baseName$localeTag.properties")
+            var localizedPath = Gdx.files.internal("texts/$baseName$localeTag.properties")
+
+            if (baseName == "DefaultCharacter" && !defaultPath.exists()) {
+                defaultPath = Gdx.files.internal("texts/DefaultCharacters.properties")
+                localizedPath = Gdx.files.internal("texts/DefaultCharacters$localeTag.properties")
+            }
 
             val mergedProps = Properties()
             if (!defaultPath.exists()) {
@@ -112,9 +114,13 @@ object ReadOnly {
             return mergedProps
         } else {
             // Fallback for non-Gdx environments (e.g., testing), using standard file I/O
-            val defaultFile = File("../assets/texts/$baseName.properties")
+            var defaultFile = File("../assets/texts/$baseName.properties")
             val localeTag = if (locale.language.isEmpty()) "" else "_${locale.language}"
-            val localizedFile = File("../assets/texts/$baseName$localeTag.properties")
+            var localizedFile = File("../assets/texts/$baseName$localeTag.properties")
+            if (baseName == "DefaultCharacter" && !defaultFile.exists()) {
+                defaultFile = File("../assets/texts/DefaultCharacters.properties")
+                localizedFile = File("../assets/texts/DefaultCharacters$localeTag.properties")
+            }
 
             val mergedProps = Properties()
             // 1. Load default properties (the base) with UTF-8 encoding
@@ -299,7 +305,6 @@ object ReadOnly {
     private fun scriptBundles(): List<Properties> {
         ensureBundlesLoaded()
         return listOfNotNull(
-            propertyBundles["DefaultCharacters"],
             propertyBundles["DefaultCharacter"]
         )
     }

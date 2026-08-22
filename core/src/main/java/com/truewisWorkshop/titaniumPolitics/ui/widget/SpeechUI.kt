@@ -27,6 +27,7 @@ import kotlin.coroutines.suspendCoroutine
 class SpeechUI : Table(defaultSkin), KTable {
 
     private val onSpeechEnd = arrayListOf<() -> Unit>()
+    @Volatile
     private var holdSeconds = 1f
     private val speech = TypingLabel("", defaultSkin, "description").apply {
         setFontScale(0.4f)
@@ -64,6 +65,7 @@ class SpeechUI : Table(defaultSkin), KTable {
     /**
      * Display speech from the engine thread.
      */
+    @Synchronized
     fun displaySpeech(text: String, holdSeconds: Float = 1f) {
         runBlocking {
             this@SpeechUI.holdSeconds = holdSeconds

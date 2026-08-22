@@ -121,23 +121,18 @@ object SpeechInterpreter {
         val candidates = arrayListOf<String>()
         if (!counterpart.isNullOrBlank()) {
             candidates += "$baseKey-Rare-$counterpart"
-            candidates += "$baseKey-rare-$counterpart"
         }
         val mut = counterpart?.let { mutualityLabel(gameState, speaker, it) }
         relationshipLabels(gameState, speaker, counterpart).forEach { relation ->
             if (mut != null) {
                 candidates += "$baseKey-Rare-$relation-$mut"
-                candidates += "$baseKey-rare-$relation-$mut"
             }
             candidates += "$baseKey-Rare-$relation"
-            candidates += "$baseKey-rare-$relation"
         }
         if (mut != null) {
             candidates += "$baseKey-Rare-$mut"
-            candidates += "$baseKey-rare-$mut"
         }
         candidates += "$baseKey-Rare"
-        candidates += "$baseKey-rare"
         return candidates.firstOrNull { ReadOnly.hasScript(it, speaker) }
     }
 
@@ -152,8 +147,8 @@ object SpeechInterpreter {
             labels += "sameWorkplace"
             val leader = speakerWorkplace.workplaceParty?.leader
             when {
-                leader == speaker -> labels += "directReport"
-                leader == counterpart -> labels += "manager"
+                leader == speaker -> labels += "manager"
+                leader == counterpart -> labels += "directReport"
                 else -> labels += "coworker"
             }
         }
@@ -161,8 +156,8 @@ object SpeechInterpreter {
             labels += "sameDivision"
             val leader = speakerChar.division?.leader
             when {
-                leader == speaker -> labels += "directReport"
-                leader == counterpart -> labels += "manager"
+                leader == speaker -> labels += "manager"
+                leader == counterpart -> labels += "directReport"
                 else -> labels += "coworker"
             }
         }
