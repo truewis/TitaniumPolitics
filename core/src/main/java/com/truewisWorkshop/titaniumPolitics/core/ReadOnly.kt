@@ -150,13 +150,11 @@ object ReadOnly {
     private fun loadSpeechStyleProperties(character: String, locale: Locale): Properties? {
         val localeTag = if (locale.language.isEmpty()) "" else "_${locale.language}"
         val mergedProps = Properties()
-        var found = false
         if (Gdx.files != null) {
-            SPEECH_STYLE_FOLDERS.forEach { folder ->
+            for (folder in SPEECH_STYLE_FOLDERS) {
                 val defaultPath = Gdx.files.internal("$folder/$character.properties")
                 if (defaultPath.exists()) {
                     defaultPath.reader("UTF-8").use { mergedProps.load(it) }
-                    found = true
                     val localizedPath = Gdx.files.internal("$folder/$character$localeTag.properties")
                     if (localizedPath.exists() && localizedPath.path() != defaultPath.path()) {
                         val localizedProps = Properties().apply {
@@ -164,15 +162,14 @@ object ReadOnly {
                         }
                         localizedProps.forEach { (k, v) -> mergedProps.setProperty(k.toString(), v.toString()) }
                     }
-                    return@forEach
+                    return mergedProps
                 }
             }
         } else {
-            SPEECH_STYLE_FOLDERS.forEach { folder ->
+            for (folder in SPEECH_STYLE_FOLDERS) {
                 val defaultFile = File("../assets/$folder/$character.properties")
                 if (defaultFile.exists()) {
                     defaultFile.reader(StandardCharsets.UTF_8).use { mergedProps.load(it) }
-                    found = true
                     val localizedFile = File("../assets/$folder/$character$localeTag.properties")
                     if (localizedFile.exists() && localizedFile.path != defaultFile.path) {
                         val localizedProps = Properties().apply {
@@ -180,11 +177,11 @@ object ReadOnly {
                         }
                         localizedProps.forEach { (k, v) -> mergedProps.setProperty(k.toString(), v.toString()) }
                     }
-                    return@forEach
+                    return mergedProps
                 }
             }
         }
-        return if (found) mergedProps else null
+        return null
     }
 
     /**
