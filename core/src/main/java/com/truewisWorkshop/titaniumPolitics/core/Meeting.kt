@@ -38,9 +38,12 @@ class Meeting(
     var agendas = arrayListOf<MeetingAgenda>()
     var currentAgendaIndex: Int? = null
     var voteResults = hashMapOf<String, Int>()
-    val passedAgendas = arrayListOf<MeetingAgenda>()
-    val ignoredAgendas = arrayListOf<MeetingAgenda>()
-    val deployedInformationKeys = hashSetOf<String>()
+    @Transient
+    var passedAgendas = arrayListOf<MeetingAgenda>()
+    @Transient
+    var ignoredAgendas = arrayListOf<MeetingAgenda>()
+    @Transient
+    var deployedInformationKeys = hashSetOf<String>()
 
     @Transient
     var onCandidatesSet = ArrayList<(Set<String>) -> Unit>() //Called when the candidates for the election are set.
@@ -161,7 +164,7 @@ class Meeting(
                 }
             }
         }
-        onMeetingEnded.forEach { it() }
+        resolveAgendasByPersuasiveness(gameState)
         //Remove the meeting from the ongoingMeetings.
         if (gameState.ongoingMeetings.containsValue(this)) {
             gameState.removeOngoingMeeting(gameState.ongoingMeetings.filter { it.value == this }.keys.first())
@@ -169,6 +172,7 @@ class Meeting(
             Logger.write("Meeting $this is not found in the ongoingMeetings.")
             throw IllegalStateException("Meeting $this is not found in the ongoingMeetings.")
         }
+        onMeetingEnded.forEach { it() }
     }
 
     fun resolveAgendasByPersuasiveness(gameState: GameState) {
