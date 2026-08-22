@@ -3,16 +3,26 @@ package com.titaniumPolitics.game.events
 import com.titaniumPolitics.game.core.Meeting
 import com.titaniumPolitics.game.core.ReadOnly
 import com.titaniumPolitics.game.core.Request
-import com.titaniumPolitics.game.core.gameActions.Resign
 import com.titaniumPolitics.game.core.gameActions.Talk
+import com.titaniumPolitics.game.ui.Quest
 import com.titaniumPolitics.game.ui.widget.SpeechUI
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.Transient
 
 @Serializable
 class Event_DelayRepair1 :
-    EventObject(ReadOnly.questProp("DelayRepair1-name"), true) {
+    EventObject(ReadOnly.questProp("DelayRepair1-name"), true), IQuestEventObject {
     var targetApparatusID: String? = null
     var requestIssued = false
+
+    @Transient
+    override val quest = Quest(
+        ReadOnly.questProp("DelayRepair1-title"),
+        ReadOnly.questProp("DelayRepair1-desc"),
+        tgtPlace = "squareSouth",
+        tgtCharacters = listOf("Agros"),
+    )
+
     override fun exec(a: Int, b: Int) {
         if (targetApparatusID == null)
             parent.places.forEach { pl ->
@@ -33,6 +43,9 @@ class Event_DelayRepair1 :
                 ?: false
         ) {
             onPlayDialogue("DelayRepair1")
+            targetApparatusID?.let {
+                parent.eventSystem.add(Event_DelayRepair2(it, parent.time))
+            }
             deactivate()
         }
     }

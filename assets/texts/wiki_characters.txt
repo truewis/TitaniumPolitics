@@ -1,0 +1,204 @@
+## The Controller
+<img width="600" height="800" alt="ctrler" src="https://github.com/user-attachments/assets/1b5cebb5-fe28-4538-a1ce-afeae4f52e93" />
+
+### Appearance
+A cute boy humanoid robot, inspired by The Little Prince.
+### Personality
+The Controller existed since the dawn of the station (which no living human can trace back to) to look after people in the station. It loves to play and wander around like a child and also loves to help people whenever it can. It possesses extremely high emotional intelligence but is not as knowledgeable as The Observer, as it will make lies to make people feel better and such. Its physical capabilities are also limited, not much greater than a human child. Despite this, it feels responsible to look after every human being in the station, and as a result, it often feels sad because it is not capable of resolving most human sufferings.
+### Gameplay
+It is a nonplayable character and does not compete to win.
+
+## The Observer
+<img width="600" height="800" alt="observer" src="https://github.com/user-attachments/assets/53f327f6-7a0f-4dcc-9339-dc9156c00562" />
+
+### Appearance
+A cute girl humanoid robot, inspired by The Oracle in the Matrix movie.
+### Personality
+The Observer existed since the dawn of the station (which no living human can trace back to) to record the history of the station. It mostly stays in the observatory, but welcomes whoever visits it. It possesses every knowledge that is present in the station and will willingly present any of that to whoever. It cannot lie or hide information. It possesses very little emotional intelligence as a result. Its physical capabilities are also limited, not much greater than a human child. It is interested in new information, technology, and trivia, but will not actively work on resolving problems or conflicts in the station.
+### Gameplay
+It is a nonplayable character and does not compete to win.
+
+## Alina (Infrastructure Division Leader)
+<img width="600" height="800" alt="default" src="https://github.com/user-attachments/assets/ba331b1a-650f-4592-8ca4-a5ec689d6171" />
+
+### Appearance
+
+As a proud civil engineer, she is mostly in construction worker jacket.
+
+
+### Personality
+The Division Leader is the one who advocates for the division overall; this would entail asking for funding from the government, premium access to facilities, things like that. The Division Leader tends to be the oldest former “rising star” of the division; when someone is particularly innovative, they are usually allowed to work until that creativity “dries up,” and later become the Infrastructure Division Leader, thus taking on administrative responsibilities. This is most certainly the case with the current Infrastructure Division Leader, who was lauded as someone with overwhelming potential in her youth and is now well-established and respected in the Station.
+	The current Division Leader is still an Engineer at heart, despite their responsibilities being administrative. It never really fit, but she’s trying her absolute best, and although as an administrator, she isn’t anything incredible, she certainly isn’t bad, either. However, this is through sheer effort; she spends long hours drafting messages and negotiation tactics with the other division leaders, the Mechanic, and the Controller and the Observer.
+### Gameplay
+Starts the game as the minister of infrastructure. She retires from the game early, but serves as a guide to the core gameplay mechanisms.
+
+## Rui (Playable Character)
+### Appearance
+A woman in her twenties with a medium build, wearing glasses.
+<img width="400" height="800" alt="20250720 Truewis 01 Player Rui - 01" src="https://github.com/user-attachments/assets/9dc49e57-8f48-412d-a4b6-628efe13259a" />
+### Personality
+Although she seems quiet and non-confrontational, she is actually quite arrogant, likely due to being hailed as a genius from a young age and having grown up wealthy. She has the talent to resolve the station’s impending catastrophe, but her lack of social awareness will likely frustrate the players who control her.
+
+### Gameplay
+Just recently hired into the facilities department, Rui is immediately assigned to a director thanks to her background. (In a station with a population of only ten thousand, a director is a very high-ranking position, just below the department head.) However, her abrasive personality causes all sorts of issues, and amidst the chaos, her superior, Alina, suddenly steps down.
+
+## Krailin
+<img width="1024" height="2048" alt="Krailin" src="https://github.com/user-attachments/assets/adcfbca1-e6c0-4b38-9b7a-9669f243811a" />
+
+### Appearance
+A short, muscular middle-aged man. He wears a grease-stained mechanic's jumpsuit and casually carries tools that look like they could kill someone. On top of that, he seems to be drunk for about half of his working hours...
+
+### Personality
+A living legend among the workers — someone who survived more than thirty years in the field with nothing but his own body and rose to the position of Facilities Department Manager. Despite his small stature and limited formal education, he possesses a strange charisma and a way with words that allows him to command those around him. He looks down on elite types like Rui who come from “academic” backgrounds, but he’s also a politically savvy figure who can fight all day and still drink with his rivals after work.
+
+### Gameplay
+Krailin is resented by the other managers in the Facilities Department, but he’s the oldest among them and commands overwhelming support from the workers — even Alina doesn’t treat him lightly. After Alina retires, Krailin plays the part of an old man with no ambition in front of the other managers, but in truth, he’s plotting to take over the head of the department by rallying his supporters. And so, the election day approaches...
+
+_“Well, if I’m bein’ honest, our biggest problem is the other divisions gettin’ all uppity on us and thinkin’ they’re all important and such. You think they could survive without us? The best of the best of those Industry people, you think they’d be able to keep up with us? Hm? No. No, I don’t think so. But they feel strong when they’re all together, tellin’ each other how important they are and convincin’ themselves into believin’ they don’t need us as much as we need them. Funny thing is - everyone needs us. Including ourselves.”_
+
+## Veame
+<img width="1000" height="2000" alt="Vaeme" src="https://github.com/user-attachments/assets/bf768177-2341-4393-963b-e19714ef6469" />
+
+### Appearance
+A tall man in his early 40s. He has sculpted, almost statuesque features and places great importance on maintaining a polished appearance. He wears a sharply tailored, glossy suit with squared shoulders, never bothering with any kind of safety gear. He’s particularly memorable for the distinctive smile he wears when looking down on others.
+
+### Personality
+Like Rui, he’s a graduate of the academy, but Rui has heard that during his school days, he was a notorious troublemaker who never studied. Despite that, he somehow graduated with top marks and now enjoys the fast track of the elite—prompting endless speculation and gossip. (He hails from one of the wealthiest families in the entire station.) His looks and lofty, academic tone have earned him favor among high-ranking officials, but in reality, he seems like little more than a flashy, empty shell with no real substance. If he has a weakness, it would likely be... romantic entanglements.
+
+### Gameplay
+Veame considers himself the ideal candidate for the next Head of Facilities—but of course, he would never say so openly. Despite years spent building connections with other department heads and influential politicians, he’s always been overshadowed by Alina’s accomplishments. When Alina unexpectedly resigns under mysterious circumstances, the position is finally within his reach. But just days before the election, a long-forgotten woman reappears... with a child in tow.
+
+_“Fundamentally, this is a role about collaboration and intercommunication. Truth be told, my main role in projects I have participated in or started over the past several years has revolved around ensuring effective communication between individuals and parties to maximize their efficiency and to make sure the overall vision was being well served. The transferability of those skills is paramount, and germane, in my eyes.”_
+
+## Astinomis (Safety Division Leader)
+
+### Appearance
+Middle-aged man with almost no facial expression.
+### Personality
+They have served as a safety officer for a long time and earned their position through charisma and hard work. As a result, they stick to order and hierarchy, and thus open discussion and egalitarianism are not their favorite. Out of all of the leaders, this one is perhaps the most ruthless. This Leader is a shadowy, vague figure, rarely seen in public besides official functions and meetings for the board position. They run an extremely tight ship; the members of the Safety Division are all competent, trained, and equally disciplined people because of their leader.
+The Division Leader reached this position about 10 years ago. They were a rising star in school, getting top marks, and could have chosen quite literally any division to join had they wanted to. Curiously enough, it seems at the beginning of his career, Astinomis did not have such an ambition. He just wanted a quiet engineer position, living peacefully with his family. However, a tragic incident changed his life forever. It is now out of their own desires that they ended up here.
+
+### Gameplay
+Starts the game as the safety division leader.
+
+## Nestor (Bioengineering Division Leader)
+### Appearance
+Based on Annaelle's sketch. Lab coat. In his tool belt, attached a handheld hazardous chemical detector and a gas mask bag.
+![image](https://github.com/truewis/TitaniumPolitics/assets/22466647/ebadf80e-2867-442a-ae26-57e3d1dd587f)
+![image](https://github.com/truewis/TitaniumPolitics/assets/22466647/b5e17340-d56e-45d8-878a-740853b4a961)
+
+### Personality
+A sickly-looking man in his late forties, he looks older than his age because of the immense responsibilities heaped on him. Each year, his team’s budget gets cut a little bit more, but he still has to maintain the same production of food for the Station regardless.
+Once an idealist and still a phenomenal biochemist, in the decade since he’s taken this position, he has since seen too much of human nature at its worst, but maybe that optimism in him could be revived by someone with the right vision.
+
+## Maisarah (Mining Division Leader)
+### Appearance
+A surprisingly young women for her position. Unsettling combination of a mining equipment and a business suit with skirt, really only for public relations and not practical in any way. Carries a tremendously expensive gold watch and a notebook made out of real organic paper(!) to keep track of her contracts. At one glance, anyone can tell she is extremely superficial. However, they will also tell you that she is one of the most beautiful and stylish in the entire station.
+
+### Personality
+The Division Leader is very different from the other regular members. In fact, this is the division in which there is the largest disparity between the Leader and the rest of the division. Insecurity grew from her inexperience in this inherited job, but there is absolutely no one she can confess this. Hence this leader appears to be greedy, uncaring, and just exists to organize the miners into teams for specific tasks. It’s not a particularly difficult job.
+
+### Gameplay
+Starts the game as the mining division leader. This Division Leader is the one who came into power right after the union was ended, and is, in fact, the one who came up with the idea to have overseers from the Safety Division.
+
+_“Fundamentally, this is a role about collaboration and intercommunication. Truth be told, my main role in projects I have participated in or started over the past several years has revolved around ensuring effective communication between individuals and parties to maximize their efficiency and to make sure the overall vision was being well served. The transferability of those skills is paramount, and germane, in my eyes.”_
+
+## Charles (Interior Division Leader)
+### Apperance
+In his very old gray office suit without much decoration, this guy looks quite humble.
+
+### Personality
+The Interior Division Leader is, ironically, a rather cheerful and personable figure. This is a division that doesn’t need much besides the equivalent of some skilled laborers and a few buildings here and there, and it is essentially impossible to take too much power from them because of their administrative influence. This leader is a bit of an airhead when it comes to people, but frighteningly sharp and competent with regard to legislation in relation to the Interior Division. They have tried to help out the Mining Division personally, but always got outvoted by the others, especially because the leaders of the Industry and Mining Divisions, together, make sure to only toe the line of legal boundaries when it comes to workers’ rights, or lack thereof. Nonetheless, the Interior Division Leader is still trying to work for the interests of the miners.
+
+
+## Hiroshi (Industry Division Leader)
+### Appearance
+
+He carries a heavy duty headset around his neck, safety glasses in one of the pockets of his toolbelt. He wears fancy brand-new jean apron every day to work, which signifies the irony of this character. Also wears a factory helmet, which is thinner than mining helmets and without headlight.
+![image](https://github.com/truewis/TitaniumPolitics/assets/22466647/aceb9061-2b2e-4a72-8d79-04889f71a266)
+
+### Personality
+This Division Leader is a soft pragmatist. They love comfort and luxury, while also having the intelligence of an Engineer from the Infrastructure Division, so they focus on maximizing the latent potential of the Industry Division, which is what they have done for the past 15 years in this post. They are close friends with the leader of the Mining Division, because of the overlap between their jobs, and also have a bad history with the current leader of the Infrastructure Division, but nobody is sure why. Neither one of them will say, either, but they’re clearly the most antagonistic towards each other during meetings between division leaders.
+
+## Eugene (Education Division Leader)
+
+### Appearance
+Just your favorite professor.
+
+### Personality
+The Education Division Leader is best described as the headmaster of a school. Formerly an Industry Division Leader, this person is only somewhat focused on the education of the students there, and does everything in their power to foster competition between students in order to produce the most intelligent people possible for the higher-tier divisions. The higher one scores in tests and/or grades, the better the classes they have access to, so it’s very momentum-heavy in terms of possibilities for education there.
+
+## Yuri
+<img width="1024" height="2048" alt="20250927_Truewis_Yuri_2K_00" src="https://github.com/user-attachments/assets/aeaaeed5-7757-484d-9296-13b049805109" />
+
+### Appearance
+A small boy of about ten. He has short-cropped black hair and dark eyes. He wears a cheap canvas jacket and shorts, though they’re so torn up that you can see the places his mother has patched them over and over. She must be quite handy, because despite all that, they don’t look like rags. His body is covered in half-healed scrapes from falling here and there, and though his mother dislikes seeing him running around in such a state, she at least makes homemade cloth bandages to keep sticking on him.
+
+### Personality
+He has many friends and a loud, cheeky way of speaking, probably from spending all day playing ball around the marketplace. Even when soldiers or engineers come by on inspection, he keeps on playing with his friends as if nothing is happening, often startling the nearby merchants half to death.
+
+### Gameplay
+During the day, he watches over the small mending shop tucked in a corner of the market in place of his mother, who goes off to work at the mines. But minding the shop bores him to no end, so he often abandons it to run off and play with his friends. From time to time, he thinks about his father, who hasn’t come home in years—so long that he can barely remember what the man even looks like. His mother seems unbothered by that worthless man, though perhaps that’s because he still sends home a sizable sum of money every month.
+
+## Salvor
+<img width="1024" height="2048" alt="Salvor_fin_1024x2048_00" src="https://github.com/user-attachments/assets/ebad7214-cfa9-4b06-9b4d-c9374fe90cf8" />
+
+### Appearance
+A brown man in his late twenties, with a frame that seems to have thinned from years of long nights and working meals skipped. His silver-streaked hair is always neatly combed back, and his spectacles glint like the edge of a blade whenever he turns his head. His shirts are impeccably tailored, though the elbows are faintly shiny from constant use—pragmatic, not vain. His face rarely betrays emotion, save for the faint tightening around his eyes when numbers fail to align as they should.
+
+### Personality
+Salvor speaks with measured precision, each word chosen as if it were part of a delicate transaction. He remembers every promise ever made to him and every favor he has ever granted. Though outwardly calm, he has a reputation for dismantling opponents with nothing more than patient questioning and an arched brow. He believes sentiment clouds judgment, and he carries that belief like a quiet shield. While he claims to serve the public good, one can’t help but wonder if the stability he builds is simply the foundation for his own unshakable dominion.
+
+### Gameplay
+Salvor is another director of the infrastructure division without an engineering degree. At night, he retreats to his study, where towering stacks of ledgers and reports become his battlefield. Very few people wants to work with him, but Alina has found his managing capabilities to be quite handy. His influence quietly stretches across the division.
+
+
+## Maisarah (Minister of Mining)
+### Appearance
+A woman in her thirties who looks surprisingly young for her position. Her outfit—combining a hard hat, mining gear, and a business suit with a skirt—is purely for PR purposes, looking entirely impractical and unstable. She carries around an extraordinarily expensive gold watch and a notebook made of actual organic paper (!) to record her contracts. At a glance, it's clear she is extremely superficial. Beyond that, however, people say she is one of the most beautiful individuals on the entire station.
+
+### Personality
+This minister is vastly different from the rest of her department members. In fact, this ministry harbors the largest gap between the minister and the staff. Maisarah herself knows best that she lacks the career background and ability to justify holding a position where she was essentially parachuted in as a mere figurehead. Yet, there is no one around her with whom she can open up and speak candidly. Consequently, in the eyes of her department members, Maisarah appears greedy, indifferent, and focused solely on disrupting and dividing the miners' organization—which isn't a particularly difficult task to pull off anyway.
+
+### Gameplay
+Start the game as the Minister of Mining. This minister came into power right after the labor union was disbanded, and she was the very person who proposed drafting supervisors from the Ministry of Security Planning to oversee the miners. Because of this, outbreaks of violence are never-ending...
+
+## Hans (Workplace Supervisor of the East External Bulkhead)
+### Appearance
+He wears a worn-out police vest—issued during his time at the Ministry of Security Planning—as if it were everyday clothing. Despite his bulky build, he always keeps his eyes wide open, giving him a sharp, intense expression. Being constantly pumped full of stimulants also contributes to his terrifying look. Hanging from his waist is a riot baton from his police days, though it seems to be mostly for show (workplace supervisors are not permitted to use force).
+
+### Personality
+An elderly man. He is a classic middle manager, constantly "squeezed from above and pushed back from below." He is a former police officer who was dismissed due to his frequent use of violence; perhaps to erase that past, he drives his colleagues harder than anyone else. On the other hand, he treats Louis—his nominal superior—with utmost deference.
+
+### Gameplay
+Start the game as the workplace supervisor of the East External Bulkhead, acting as Louis's direct subordinate. Due to dangerous site conditions, the workers refuse to work, placing Louis in a moment where he must decide through Hans whether to enforce forced labor accompanied by violence.
+
+## Lin (Logistics Specialist of the East External Bulkhead)
+### Appearance
+A middle-aged woman. She wears a grease-stained work shirt tied around her waist and continuously keeps a station communication headset draped over her neck. She constantly chews gum as if utterly unbothered by surrounding noise. One of her eyes was replaced with a prosthetic due to a past accident at a logistics warehouse; it occasionally fails to focus, giving off an eerie vibe.
+
+### Personality
+To Lin, ministerial speeches or the human rights of miners carry zero meaning. Her sole concern is where supplies come in from and where they "leak out" to. On the surface, she seems to be quietly organizing documents, but in reality, she is a master of ledger manipulation. Taking advantage of upper management's indifference and lower-level chaos, she siphons off essential materials and routes them to the black market to build her personal retirement fund.
+
+### Gameplay
+Proceed through the game while managing the inventory of the logistics warehouse. Being an exceptionally incompetent person, she draws Louis's ire due to her slow handling of accidents. With a keen eye, Louis discovers Lin's corruption; when specific supplies run low, you must choose whether to request them through official channels or settle matters through the "back door" by dealing with the black market. Depending on Lin's choices, the station's machinery might come to a halt—or prohibited equipment that allows workers to arm themselves might end up leaking in.
+
+## Sasha (Administrator of the East External Bulkhead)
+### Appearance
+A woman in her twenties. She always wears a shirt damp with moisture due to the station's humid air. Slouching, she spends her time buried behind mountains of paper documents. Her glasses have such a high prescription that her eyes appear abnormally large, and she constantly wears a servile smile as if perpetually apologizing to someone. Sitting on her desk is a single, withered artificial potted plant—her sole source of comfort.
+
+### Personality
+She has an extremely conflict-averse personality. While recording fatal worker accidents as "temporary defects arising during human resource reallocation," she feels pangs of conscience; nevertheless, she keeps her mouth shut out of fear that her employment contract might be terminated on the spot. Although she appears incompetent, she understands the station's complex bureaucratic system better than anyone, making her capable of legally "erasing" a person with just a single sheet of paper.
+
+### Gameplay
+Handle public grievances and petitions. She gets caught red-handed by Louis while tossing worker families' petitions directly into the trash without even shredding them. Sasha's "paperwork" shapes public opinion across the station and provides administrative justifications that could potentially ignite a riot.
+
+## Peiyu
+### Appearance
+A man in his late twenties. He wears a police officer uniform that, while frayed in places due to budget cuts, is neatly ironed in its own right. Deep dark circles have settled under his eyes from chronic shift work. Unlike Hans's riot baton, the one hanging at Feiwu's side shows frequent signs of actual use.
+
+### Personality
+A low-ranking public official caught between a sense of justice and hierarchical order. While he once genuinely believed in Astinomis's law and order, there are days when his top priority is simply surviving through the day to receive his rations. Although he turns a blind eye to the sadistic violence of his senior officer, Hans, he deeply despises him on the inside. Despite possessing his own principles like this, he harbors a weak side that sways at crucial moments due to petty gains or a lingering trace of sympathy.
+
+### Gameplay
+Dispatched to maintain order at a collapse site, he starts the game by detaining Louis. At this point, he releases Louis under Astinomis's orders. If Louis commits illegal acts after this, he might run into Feiwu on-site whenever luck runs bad; each time, flexible options such as threats, persuasion, or bribery are available to handle the situation.

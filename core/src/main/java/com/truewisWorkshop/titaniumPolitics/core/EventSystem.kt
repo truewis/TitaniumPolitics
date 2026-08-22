@@ -37,7 +37,7 @@ class EventSystem : GameStateElement() {
     //Utility function called once when a new game starts.
     fun newGame() {
         add(Event_PrologueAlinaAccident())
-        //add(Event_DelayRepair1())
+        add(Event_DelayRepair1())
         //add(Event_YuhoaIntro())
         //add(Event_BoyFindingMom())
         //add(Event_BefreindTheBoy())
@@ -48,12 +48,12 @@ class EventSystem : GameStateElement() {
         //add(Event_SecureOuterBarrierEast())
         //add(Event_EugeneIntro())
         //add(Event_Vaeme1())
-        //add(Event_Hans1())
+        add(Event_Hans1())
         //add(Event_Lynn1())
-        //add(Event_Sasha1())
+        add(Event_Sasha1())
         //add(Event_Jan1())
-        //add(Event_Maisarah1())
-        //add(Event_Astinomis1())
+        add(Event_Maisarah1())
+        add(Event_Astinomis1())
         // Party drama events – permanent, continuously monitor all workplace parties
         add(Event_Drama_CreditTheft())
         add(Event_Drama_Gossip())

@@ -1,6 +1,6 @@
 ENTER Sasha
 ENTER Rui
-Sasha: Director. About yesterday — I want to clarify that I follow procedure exactly.
+Sasha, annoyed: Director. About yesterday — I want to clarify that I follow procedure exactly.
 Rui: I know you do.
 Sasha, confused: You're not here to report a violation?
 Rui: I'm here because I want to understand what happens to these petitions after the quarterly review.
@@ -12,4 +12,4 @@ Sasha, annoyed: Eighteen months to two years for non-urgent items.
 Rui, confused: The workers submitting these petitions — do they know that?
 Sasha: They receive a confirmation notice that their petition has entered the queue.
 Rui: That's not an answer.
-Sasha: ...No. They don't know.
+Sasha, surprised: ...No. They don't know.
