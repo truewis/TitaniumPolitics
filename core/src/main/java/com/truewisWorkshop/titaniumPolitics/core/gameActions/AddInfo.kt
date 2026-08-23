@@ -91,6 +91,7 @@ data class AddInfo(
     override fun execute() {
 
         agenda.informationKeys.add(infoKey)
+        meeting.deployedInformationKeys.add(infoKey)
 
         //The amount of attention spent can be modified here.
         //Attention is consumed.

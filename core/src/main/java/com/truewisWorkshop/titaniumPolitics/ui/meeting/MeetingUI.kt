@@ -88,6 +88,9 @@ class MeetingUI(var gameState: GameState) : Table(defaultSkin), KTable {
     val currentAttention = Label("0", defaultSkin, "docTitle")
     val discussionTable: Stack
     val electionUIContainer = Container<ElectionUI>()
+    private val registeredMeetingCallbacks = hashSetOf<String>()
+    private val meetingMutualitySnapshots = hashMapOf<String, Map<Pair<String, String>, Double>>()
+    private val meetingKnownInfoSnapshots = hashMapOf<String, Set<String>>()
     val meetingInfoUI = scene2d.table {
     }
     val addAgendaButton = scene2d.button {
@@ -301,17 +304,7 @@ class MeetingUI(var gameState: GameState) : Table(defaultSkin), KTable {
     }
 
     fun displayMeeting(meeting: Meeting) {
-        //If the meeting is a division leader election, add vote results to the stage if the meeting is over.
-        if (meeting.type == Meeting.MeetingType.DIVISION_LEADER_ELECTION) {
-            meeting.onVoteResults += {
-                val voteResultsTable = VoteResultWindowUI(meeting)
-                CapsuleStage.instance.addActor(voteResultsTable)
-                voteResultsTable.setPosition(
-                    CapsuleStage.instance.width / 2 - voteResultsTable.width / 2,
-                    CapsuleStage.instance.height / 2 - voteResultsTable.height / 2
-                )
-            }
-        }
+        registerMeetingCallbacks(meeting)
 
         if (gameState.time == meeting.startTime + 1) //Only display the meeting if it's right after the starting time. This works because updateUI is called after every timestep advance.
             if (meeting.type == Meeting.MeetingType.TALK && meeting.currentCharacters.size == 2) {
@@ -492,6 +485,63 @@ class MeetingUI(var gameState: GameState) : Table(defaultSkin), KTable {
         currentAgendaMarker.setScale(1f)
         currentAgendaMarker.color.a = currentAgendaMarkerBaseAlpha
         currentAgendaMarker.isVisible = false
+    }
+
+    private fun registerMeetingCallbacks(meeting: Meeting) {
+        if (!registeredMeetingCallbacks.add(meeting.ID)) return
+        meetingMutualitySnapshots[meeting.ID] = captureMutualitySnapshot(meeting)
+        meetingKnownInfoSnapshots[meeting.ID] = playerKnownInformationSnapshot()
+
+        if (meeting.type == Meeting.MeetingType.DIVISION_LEADER_ELECTION) {
+            meeting.onVoteResults += {
+                Gdx.app.postRunnable {
+                    val voteResultsTable = VoteResultWindowUI(meeting)
+                    CapsuleStage.instance.addActor(voteResultsTable)
+                    voteResultsTable.setPosition(
+                        CapsuleStage.instance.width / 2 - voteResultsTable.width / 2,
+                        CapsuleStage.instance.height / 2 - voteResultsTable.height / 2
+                    )
+                }
+            }
+        }
+
+        meeting.onMeetingEnded += {
+            Gdx.app.postRunnable {
+                val summaryUI = MeetingSummaryWindowUI(
+                    gameState = gameState,
+                    meeting = meeting,
+                    previousMutuality = meetingMutualitySnapshots[meeting.ID].orEmpty(),
+                    knownInformationBeforeMeeting = meetingKnownInfoSnapshots[meeting.ID].orEmpty()
+                )
+                CapsuleStage.instance.addActor(summaryUI)
+                summaryUI.setPosition(
+                    CapsuleStage.instance.width / 2 - summaryUI.width / 2,
+                    CapsuleStage.instance.height / 2 - summaryUI.height / 2
+                )
+                registeredMeetingCallbacks.remove(meeting.ID)
+                meetingMutualitySnapshots.remove(meeting.ID)
+                meetingKnownInfoSnapshots.remove(meeting.ID)
+            }
+        }
+    }
+
+    private fun captureMutualitySnapshot(meeting: Meeting): Map<Pair<String, String>, Double> {
+        val snapshot = hashMapOf<Pair<String, String>, Double>()
+        meeting.currentCharacters.forEach { from ->
+            meeting.currentCharacters.forEach { to ->
+                if (from != to) {
+                    snapshot[from to to] = gameState.getMutuality(from, to)
+                }
+            }
+        }
+        return snapshot
+    }
+
+    private fun playerKnownInformationSnapshot(): Set<String> {
+        return gameState.informations.values
+            .filter { gameState.playerName in it.knownTo }
+            .map { it.name }
+            .toSet()
     }
 
     private fun displaySpeechLine(line: SpeechInterpreter.SpeechLine) {
