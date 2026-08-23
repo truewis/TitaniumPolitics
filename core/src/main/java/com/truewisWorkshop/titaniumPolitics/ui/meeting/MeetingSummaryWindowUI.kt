@@ -4,35 +4,45 @@ import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane
 import com.badlogic.gdx.scenes.scene2d.ui.Table
-import com.badlogic.gdx.scenes.scene2d.ui.Window
 import com.badlogic.gdx.utils.Align
 import com.titaniumPolitics.game.core.AgendaType
 import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.core.Meeting
 import com.titaniumPolitics.game.core.MeetingAgenda
 import com.titaniumPolitics.game.core.ReadOnly
+import com.titaniumPolitics.game.ui.widget.WindowUI
 import ktx.scene2d.Scene2DSkin
 
-class MeetingSummaryWindowUI(
-    private val gameState: GameState,
-    private val meeting: Meeting,
-    private val previousMutuality: Map<Pair<String, String>, Double>,
-    private val knownInformationBeforeMeeting: Set<String>,
-) : Window(ReadOnly.prop("MeetingSummaryUI-title"), Scene2DSkin.defaultSkin) {
+class MeetingSummaryWindowUI : WindowUI("MeetingSummaryUI-title") {
+    private val dataTable = Table(Scene2DSkin.defaultSkin)
 
     init {
-        val content = Table(Scene2DSkin.defaultSkin)
-        val pane = ScrollPane(content, Scene2DSkin.defaultSkin).apply {
+        isVisible = false
+        instance = this
+        val pane = ScrollPane(dataTable, Scene2DSkin.defaultSkin).apply {
             setScrollingDisabled(true, false)
             setFadeScrollBars(false)
         }
-        add(pane).size(1300f, 700f).pad(15f)
-        populate(content)
-        pack()
-        isMovable = true
+        content.add(pane).grow().pad(15f)
     }
 
-    private fun populate(content: Table) {
+    fun refresh(
+        gameState: GameState,
+        meeting: Meeting,
+        previousMutuality: Map<Pair<String, String>, Double>,
+        knownInformationBeforeMeeting: Set<String>,
+    ) {
+        dataTable.clear()
+        populate(dataTable, gameState, meeting, previousMutuality, knownInformationBeforeMeeting)
+    }
+
+    private fun populate(
+        content: Table,
+        gameState: GameState,
+        meeting: Meeting,
+        previousMutuality: Map<Pair<String, String>, Double>,
+        knownInformationBeforeMeeting: Set<String>,
+    ) {
         addSectionTitle(content, ReadOnly.prop("MeetingSummaryUI-mutualityChanges"), 3)
         val mutualityRows = previousMutuality.entries.mapNotNull { (pair, before) ->
             val after = gameState.getMutuality(pair.first, pair.second)
@@ -138,5 +148,9 @@ class MeetingSummaryWindowUI(
             it.color = color
             it.wrap = wrap
         }
+    }
+
+    companion object {
+        lateinit var instance: MeetingSummaryWindowUI
     }
 }

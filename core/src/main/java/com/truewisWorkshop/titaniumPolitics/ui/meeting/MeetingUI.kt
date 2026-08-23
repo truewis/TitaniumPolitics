@@ -19,6 +19,7 @@ import com.titaniumPolitics.game.core.ReadOnly
 import com.titaniumPolitics.game.core.SpeechInterpreter
 import com.titaniumPolitics.game.core.gameActions.Wait
 import com.titaniumPolitics.game.debugTools.Logger
+import com.titaniumPolitics.game.ui.AlertUI
 import com.titaniumPolitics.game.ui.BlockingWarningUI
 import com.titaniumPolitics.game.ui.CapsuleStage
 import com.titaniumPolitics.game.ui.DialogueUI
@@ -507,17 +508,16 @@ class MeetingUI(var gameState: GameState) : Table(defaultSkin), KTable {
 
         meeting.onMeetingEnded += {
             Gdx.app.postRunnable {
-                val summaryUI = MeetingSummaryWindowUI(
+                val summaryUI = MeetingSummaryWindowUI.instance
+                summaryUI.refresh(
                     gameState = gameState,
                     meeting = meeting,
                     previousMutuality = meetingMutualitySnapshots[meeting.ID].orEmpty(),
                     knownInformationBeforeMeeting = meetingKnownInfoSnapshots[meeting.ID].orEmpty()
                 )
-                CapsuleStage.instance.addActor(summaryUI)
-                summaryUI.setPosition(
-                    CapsuleStage.instance.width / 2 - summaryUI.width / 2,
-                    CapsuleStage.instance.height / 2 - summaryUI.height / 2
-                )
+                AlertUI.instance.addAlert("meetingFinished", gameState.meetingName(meeting)) {
+                    summaryUI.isVisible = true
+                }
                 registeredMeetingCallbacks.remove(meeting.ID)
                 meetingMutualitySnapshots.remove(meeting.ID)
                 meetingKnownInfoSnapshots.remove(meeting.ID)

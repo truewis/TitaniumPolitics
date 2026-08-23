@@ -8,6 +8,7 @@ import com.titaniumPolitics.game.core.ReadOnly
 import com.titaniumPolitics.game.debugTools.Logger
 import com.titaniumPolitics.game.ui.map.PlaceSelectionUI
 import com.titaniumPolitics.game.ui.map.TimelineUI
+import com.titaniumPolitics.game.ui.meeting.MeetingSummaryWindowUI
 import com.titaniumPolitics.game.ui.meeting.MeetingUI
 import com.titaniumPolitics.game.ui.widget.ActionSelectUI
 import com.titaniumPolitics.game.ui.widget.CharacterSelectUI
@@ -87,6 +88,7 @@ class InterfaceRoot(val gameState: GameState) : Table(defaultSkin), KTable {
             add(ApparatusInfoUI())
             add(CharacterDetailUI())
             add(QuestDetailUI())
+            add(MeetingSummaryWindowUI())
             add(GraphInfoUI())
 
             //TODO: Place UI here
