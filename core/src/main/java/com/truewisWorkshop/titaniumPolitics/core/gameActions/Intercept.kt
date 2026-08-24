@@ -48,10 +48,7 @@ data class Intercept(override val sbjCharacter: String, override val tgtPlace: S
             this.addMutuality(
                 meeting.currentSpeaker!!,
                 sbjCharacter,
-                parent.getMutNorm(
-                    meeting.currentSpeaker!!,
-                    sbjCharacter
-                ) * factor * parent.characters[meeting.currentSpeaker!!]!!.stats.pScale, "Intercept"
+                factor * parent.characters[meeting.currentSpeaker!!]!!.stats.pScale, "Intercept"
             )
 
         }
