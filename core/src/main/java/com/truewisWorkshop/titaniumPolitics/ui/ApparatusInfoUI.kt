@@ -14,6 +14,7 @@ import com.titaniumPolitics.game.debugTools.Logger
 import com.titaniumPolitics.game.ui.widget.DescriptionLabel
 import com.titaniumPolitics.game.ui.widget.InformationSourceUI
 import com.titaniumPolitics.game.ui.widget.WindowUI
+import kotlinx.serialization.json.jsonArray
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
 
@@ -113,6 +114,40 @@ class ApparatusInfoUI : WindowUI("ApparatusInfoTitle") {
             row()
             add(InformationSourceUI(information)).fill()
 
+            // Safety Data Sheet section
+            row()
+            label(ReadOnly.appProp("sds-title"), "description") {
+                setAlignment(Align.center)
+                setFontScale(0.5f)
+            }
+            row()
+            val accidentTypes = ReadOnly.appJson[information.tgtApparatusName]
+                ?.jsonObject?.get("accidentType")?.jsonArray
+                ?.map { it.jsonPrimitive.content }
+                ?: emptyList()
+
+            label(ReadOnly.appProp("sds-section-hazards"), "description") {
+                setAlignment(Align.left)
+                setFontScale(0.3f)
+            }
+            row()
+            if (accidentTypes.isEmpty()) {
+                add(DescriptionLabel(ReadOnly.appProp("sds-noHazard"))).size(400f, 60f).fill()
+            } else {
+                val hazardText = accidentTypes.joinToString("\n\n") { ReadOnly.appProp("sds-hazard-$it") }
+                add(DescriptionLabel(hazardText)).size(400f, (accidentTypes.size * 60).toFloat()).fill()
+            }
+            row()
+            label(ReadOnly.appProp("sds-section-prevention"), "description") {
+                setAlignment(Align.left)
+                setFontScale(0.3f)
+            }
+            row()
+            val preventionText = buildString {
+                append(ReadOnly.appProp("sds-prevention-general"))
+                accidentTypes.forEach { append("\n\n").append(ReadOnly.appProp("sds-prevention-$it")) }
+            }
+            add(DescriptionLabel(preventionText)).size(400f, ((accidentTypes.size + 1) * 60).toFloat()).fill()
         }
 
     }
