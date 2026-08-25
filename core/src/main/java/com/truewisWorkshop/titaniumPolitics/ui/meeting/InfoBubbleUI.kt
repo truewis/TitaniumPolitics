@@ -11,7 +11,7 @@ import com.titaniumPolitics.game.ui.InformationViewUI
 import com.titaniumPolitics.game.ui.ResourceInfoUI
 import ktx.scene2d.*
 
-class InfoBubbleUI(val info: Information, val onClick: (() -> Unit)) : Table(), KTable {
+class InfoBubbleUI(val info: Information, val sharedBeforePlayerJoined: Boolean = false, val onClick: (() -> Unit)) : Table(), KTable {
     init {
         with(info) {
             stack {
@@ -22,7 +22,10 @@ class InfoBubbleUI(val info: Information, val onClick: (() -> Unit)) : Table(), 
 //                    }
                 }
                 table {
-                    when (type) {
+                    if (this@InfoBubbleUI.sharedBeforePlayerJoined) {
+                        image("EnvelopeQuestionGrunge") {
+                        }
+                    } else when (type) {
                         InformationType.ACTION -> {
                             image("HelpGrunge") {
                             }

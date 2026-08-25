@@ -23,8 +23,13 @@ data class JoinMeeting(override val sbjCharacter: String, override val tgtPlace:
                 }.keys.firstOrNull()
 
     override fun execute() {
-        parent.ongoingMeetings[targetMeeting]!!.currentCharacters.add(sbjCharacter)
-        Logger.write("$sbjCharacter joined the meeting $targetMeeting", Logger.LogLevel.INFO)
+        val meetingID = targetMeeting!!
+        val meeting = parent.ongoingMeetings[meetingID]!!
+        if (sbjCharacter == parent.playerName) {
+            meeting.infoKeysBeforePlayerJoined = meeting.agendas.flatMap { it.informationKeys }.toHashSet()
+        }
+        meeting.currentCharacters.add(sbjCharacter)
+        Logger.write("$sbjCharacter joined the meeting $meetingID", Logger.LogLevel.INFO)
         super.execute()
     }
 
