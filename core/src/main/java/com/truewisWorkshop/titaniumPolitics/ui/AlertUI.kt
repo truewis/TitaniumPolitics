@@ -49,12 +49,14 @@ class AlertUI(var gameState: GameState) : Table(defaultSkin) {
     }
 
     fun displayAlerts() {
-        gameState.missedMeetingAlerts.forEach { meetingName ->
+        val missedMeetingAlertsIterator = gameState.missedMeetingAlerts.iterator()
+        while (missedMeetingAlertsIterator.hasNext()) {
+            val meetingName = missedMeetingAlertsIterator.next()
             addAlert("meetingCanceled", meetingName) {
                 AssistantUI.instance.calendarButton.changeOpenState(true)
             }
+            missedMeetingAlertsIterator.remove()
         }
-        gameState.missedMeetingAlerts.clear()
 
         newInformation.forEach {
             //Decide whether to show the alert based on the type of information.
