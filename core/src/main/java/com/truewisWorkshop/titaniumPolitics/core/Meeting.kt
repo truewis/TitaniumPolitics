@@ -45,6 +45,8 @@ class Meeting(
     @Transient
     var deployedInformationKeys = hashSetOf<String>()
 
+    var infoKeysBeforePlayerJoined: HashSet<String> = hashSetOf()
+
     @Transient
     var onCandidatesSet = ArrayList<(Set<String>) -> Unit>() //Called when the candidates for the election are set.
 

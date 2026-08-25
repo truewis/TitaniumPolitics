@@ -209,8 +209,9 @@ class MeetingUI(var gameState: GameState) : Table(defaultSkin), KTable {
                 addActor(agendaUI)
                 it.informationKeys.forEach { key ->
                     val info = gameState.informations[key]!!
-                    val infoUI = InfoBubbleUI(info) {
-                        if (gameState.playerName in info.knownTo)
+                    val preJoin = key in meeting.infoKeysBeforePlayerJoined
+                    val infoUI = InfoBubbleUI(info, preJoin) {
+                        if (!preJoin && gameState.playerName in info.knownTo)
                             InformationViewUI.displayInformation(info)
                         else
                             BlockingWarningUI.instance.display("unknownInfo", null)
