@@ -51,8 +51,8 @@ class AlertUI(var gameState: GameState) : Table(defaultSkin) {
     fun displayAlerts() {
         val missedMeetingAlertsIterator = gameState.missedMeetingAlerts.iterator()
         while (missedMeetingAlertsIterator.hasNext()) {
-            val meetingName = missedMeetingAlertsIterator.next()
-            addAlert("meetingCanceled", meetingName) {
+            val meetingId = missedMeetingAlertsIterator.next()
+            addAlert("meetingCanceled", meetingId) {
                 AssistantUI.instance.calendarButton.changeOpenState(true)
             }
             missedMeetingAlertsIterator.remove()

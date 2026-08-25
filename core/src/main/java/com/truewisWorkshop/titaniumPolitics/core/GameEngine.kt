@@ -739,7 +739,7 @@ class GameEngine(val gameState: GameState) {
                 )
             }.forEach {
                 missedMeetings.add(it.key)
-                if (it.value.scheduledCharacters.contains(playerName)) {
+                if (it.value.scheduledCharacters.contains(gameState.playerName)) {
                     gameState.missedMeetingAlerts.add(it.key)
                 }
                 Logger.write("////////////////////////////////////////////////", Logger.LogLevel.INFO)
