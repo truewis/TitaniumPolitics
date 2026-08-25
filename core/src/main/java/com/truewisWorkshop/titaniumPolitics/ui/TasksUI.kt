@@ -8,6 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.ui.VerticalGroup
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.badlogic.gdx.utils.Align
+import com.titaniumPolitics.game.core.AgendaType
 import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.core.ReadOnly
 import com.titaniumPolitics.game.events.IQuestEventObject
@@ -148,6 +149,8 @@ data class Quest(
     val tgtCharacters: List<String> = listOf(),
     val tgtMeeting: String? = null,
     val dueTime: Int? = null,
+    /** The agenda type this quest is associated with for the PrepareInfoUI priority agenda system. */
+    val agendaType: AgendaType? = null,
     @Transient
     val onClick: (() -> Unit)? = null,
     @Transient
