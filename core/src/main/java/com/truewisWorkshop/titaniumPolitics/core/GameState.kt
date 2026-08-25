@@ -101,7 +101,6 @@ class GameState {
     //This is a list of functions that will be called when the game starts.
     @Transient
     val onStart = arrayListOf<() -> Unit>()
-    @Transient
     val missedMeetingAlerts = arrayListOf<String>()
     var _alertLevel = 0
     var places = hashMapOf<String, Place>()
