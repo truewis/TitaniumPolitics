@@ -69,6 +69,32 @@ class IntegratedTest {
         engine2.runUntil(6)
     }
 
+    @Test
+    fun missedMeetingAddsPlayerAlert() {
+        gState = Json.decodeFromString(
+            GameState.serializer(), File("../assets/json/init.json").readText()
+        ).also {
+            it.workingDirectory = directory
+            ReadOnly.setLocale(Locale.ENGLISH)
+            it.initialize()
+        }
+        gState.scheduledMeetings.keys.toList().forEach { gState.removeScheduledMeeting(it) }
+
+        val meeting = Meeting(
+            time = 0,
+            type = Meeting.MeetingType.PRIVATE,
+            scheduledCharacters = hashSetOf(gState.playerName),
+            place = gState.player.place.name
+        )
+        gState.addScheduledMeeting(meeting)
+        gState.time = ReadOnly.constInt("MeetingStartTolerance") + 1
+
+        GameEngine(gState).cancelMeetings()
+
+        assertFalse(gState.scheduledMeetings.containsKey(meeting.ID))
+        assertTrue(gState.missedMeetingAlerts.contains(meeting.ID))
+    }
+
     fun GameEngine.runUntilElection() {
         //Start the game.
         Logger.write("Game started. Time: ${gameState.time}. Starting main loop.", Logger.LogLevel.INFO)
