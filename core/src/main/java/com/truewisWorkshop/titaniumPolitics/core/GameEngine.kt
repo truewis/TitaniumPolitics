@@ -739,6 +739,9 @@ class GameEngine(val gameState: GameState) {
                 )
             }.forEach {
                 missedMeetings.add(it.key)
+                if (it.value.scheduledCharacters.contains(playerName)) {
+                    missedMeetingAlerts.add(it.key)
+                }
                 Logger.write("////////////////////////////////////////////////", Logger.LogLevel.INFO)
                 Logger.write("!Missed meeting:${it.key} at ${it.value.place}.", Logger.LogLevel.INFO)
                 Logger.write("Scheduled: ${GameState.formatTime(it.value.time)}", Logger.LogLevel.INFO)
