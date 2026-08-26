@@ -58,7 +58,8 @@ class AddInfoUI(val gameState: GameState, actionCallback: (GameAction) -> Unit) 
 
     fun refreshInfoOptions() {
         val availableInfoKeys = gameState.informations.filter { (key, info) ->
-            gameState.playerName in info.knownTo &&
+            key in gameState.player.preparedInfoKeys &&
+                    gameState.playerName in info.knownTo &&
                     !sbjChar.currentMeeting!!.agendas.flatMap { it.informationKeys }
                         .contains(key) // Not presented in the current meeting
                     &&

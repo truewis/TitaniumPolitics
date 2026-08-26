@@ -262,6 +262,24 @@ class Meeting(
         return tgtTime - time in -constInt("MeetingStartTolerance")..constInt("MeetingStartTolerance")
     }
 
+    /**
+     * Returns the primary [AgendaType] that the player is expected to engage with in this meeting,
+     * based on meeting type. The player's specific role within the meeting's party may further
+     * refine this in the future, but meeting type alone is sufficient to determine the dominant
+     * agenda type for most structured meeting formats.
+     */
+    fun agendaTypeForPlayer(): AgendaType? {
+        return when (type) {
+            MeetingType.DIVISION_DAILY_CONFERENCE,
+            MeetingType.CABINET_DAILY_CONFERENCE,
+            MeetingType.TRIUMVIRATE_DAILY_CONFERENCE -> AgendaType.PROOF_OF_WORK
+            MeetingType.BUDGET_PROPOSAL -> AgendaType.BUDGET_PROPOSAL
+            MeetingType.BUDGET_RESOLUTION -> AgendaType.BUDGET_RESOLUTION
+            MeetingType.DIVISION_LEADER_ELECTION -> AgendaType.NOMINATE
+            else -> null
+        }
+    }
+
     override fun toString(): String {
         return "Meeting(type=$type, time=$time, place='$place', scheduledCharacters=$scheduledCharacters, currentCharacters=$currentCharacters, involvedParty=$involvedParty, currentSpeaker=$currentSpeaker, currentAttention=$currentAttention, agendas=$agendas, voteResults=$voteResults, nominationFinishedTime=$nominationFinishedTime)"
     }
