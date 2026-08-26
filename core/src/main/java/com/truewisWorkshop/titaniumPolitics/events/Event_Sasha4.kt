@@ -29,7 +29,7 @@ class Event_Sasha4 : EventObject(ReadOnly.questProp("Sasha4-name"), true), IQues
             parent.getMutuality("Sasha", parent.playerName) >= 30.0
         ) {
             onPlayDialogue("Sasha4")
-            parent.progression.add("Management")
+            parent.unlockProgression("Management")
             deactivate()
         }
     }

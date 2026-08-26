@@ -66,6 +66,10 @@ class AlertPanelUI(var type: String, action: () -> Unit, val docList: Group, var
                         it.size(36f).fill()
                     }
 
+                    "progressionUnlocked" -> image("StatsGrunge") {
+                        it.size(36f).fill()
+                    }
+
                     "interrupt" -> image("Help") {
                         it.size(36f).fill()
                     }

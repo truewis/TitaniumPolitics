@@ -34,7 +34,7 @@ class Event_Maisarah4(val searchFrom: Int) : EventObject(ReadOnly.questProp("Mai
             parent.getMutuality("Maisarah", parent.playerName) >= 40.0
         ) {
             onPlayDialogue("Maisarah4")
-            parent.progression.add("NewAgenda")
+            parent.unlockProgression("NewAgenda")
             deactivate()
         }
     }

@@ -49,6 +49,15 @@ class AlertUI(var gameState: GameState) : Table(defaultSkin) {
     }
 
     fun displayAlerts() {
+        val progressionNotificationsIterator = gameState.progressionUnlockNotifications.iterator()
+        while (progressionNotificationsIterator.hasNext()) {
+            val progressionKey = progressionNotificationsIterator.next()
+            progressionNotificationsIterator.remove()
+            val progressionName = localizedProgressionName(progressionKey)
+            addAlert("progressionUnlocked", progressionName)
+            BlockingWarningUI.instance.display("progressionUnlocked", null, progressionName)
+        }
+
         val missedMeetingAlertsIterator = gameState.missedMeetingAlerts.iterator()
         while (missedMeetingAlertsIterator.hasNext()) {
             val meetingId = missedMeetingAlertsIterator.next()
@@ -166,6 +175,12 @@ class AlertUI(var gameState: GameState) : Table(defaultSkin) {
 
         newInformation.clear()
 
+    }
+
+    private fun localizedProgressionName(progressionKey: String): String {
+        val propKey = "Progression-$progressionKey"
+        val localized = ReadOnly.prop(propKey)
+        return if (localized == "Unknown property [$propKey]") progressionKey else localized
     }
 
     companion object {

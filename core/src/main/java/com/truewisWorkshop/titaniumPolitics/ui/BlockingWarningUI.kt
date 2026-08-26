@@ -78,12 +78,12 @@ class BlockingWarningUI(var gameState: GameState) : Table(Scene2DSkin.defaultSki
     }
 
     //set visibility with fade in and out
-    fun display(warningKey: String, callBack: (() -> Unit)?) {
+    fun display(warningKey: String, callBack: (() -> Unit)?, vararg params: String) {
         isVisible = true
         bkg.color = Color(0f, 0f, 0f, 0.6f) // Semi-transparent black background
         addAction(Actions.fadeIn(0f))// No fade in, just show it immediately, but still need to change alpha to 1f here.
         this@BlockingWarningUI.warningKey = warningKey
-        val displayText = ReadOnly.prop("BlockingWarningUI-" + this@BlockingWarningUI.warningKey + "-desc")
+        val displayText = ReadOnly.prop("BlockingWarningUI-" + this@BlockingWarningUI.warningKey + "-desc").format(*params)
         descLabel.setText(displayText)
         titleLabel.label.setText(ReadOnly.prop("BlockingWarningUI-Warning"))
         yesButton.clearListeners()

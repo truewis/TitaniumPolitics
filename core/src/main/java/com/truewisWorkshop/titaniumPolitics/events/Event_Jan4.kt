@@ -22,7 +22,7 @@ class Event_Jan4 : EventObject(ReadOnly.questProp("Jan4-name"), true), IQuestEve
             parent.getMutuality("Jan", parent.playerName) >= 20.0
         ) {
             onPlayDialogue("Jan4")
-            parent.progression.add("Examine")
+            parent.unlockProgression("Examine")
             deactivate()
         }
     }

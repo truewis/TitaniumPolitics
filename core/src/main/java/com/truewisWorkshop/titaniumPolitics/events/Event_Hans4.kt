@@ -30,7 +30,7 @@ class Event_Hans4(val searchFrom: Int) : EventObject(ReadOnly.questProp("Hans4-n
             && parent.getMutuality("Hans", parent.playerName) >= 30.0
         ) {
             onPlayDialogue("Hans4")
-            parent.progression.add("InvestigateAccident")
+            parent.unlockProgression("InvestigateAccident")
             deactivate()
         }
     }

@@ -33,7 +33,7 @@ class Event_Astinomis4 : EventObject(ReadOnly.questProp("Astinomis4-name"), true
             recentSafetyEvidenceCount() >= 2
         ) {
             onPlayDialogue("Astinomis4")
-            parent.progression.add("InvestigateAccident")
+            parent.unlockProgression("InvestigateAccident")
             deactivate()
         }
     }

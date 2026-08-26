@@ -22,7 +22,7 @@ class Event_Lynn4 : EventObject(ReadOnly.questProp("Lynn4-name"), true), IQuestE
             parent.getMutuality("Lynn", parent.playerName) >= 30.0
         ) {
             onPlayDialogue("Lynn4")
-            parent.progression.add("UnofficialResourceTransfer")
+            parent.unlockProgression("UnofficialResourceTransfer")
             deactivate()
         }
     }

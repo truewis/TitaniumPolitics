@@ -10,7 +10,7 @@ class Event_BoyFindingMom3 : EventObject(ReadOnly.questProp("BoyFindingMom3-name
         if (parent.hour in 20..23 || parent.hour in 0..4 && parent.player.currentMeeting == null && parent.player.place.name == "squareNorth"
         ) {
             onPlayDialogue("FindMom3")
-            parent.progression.add("Management")
+            parent.unlockProgression("Management")
             deactivate()
         }
     }

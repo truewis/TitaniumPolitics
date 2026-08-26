@@ -142,7 +142,14 @@ class GameState {
      */
     var progression = hashSetOf<String>()
     @Transient
+    val progressionUnlockNotifications = arrayListOf<String>()
+    @Transient
     var debugDisableProgressionCheck = false
+    fun unlockProgression(progressionKey: String): Boolean {
+        if (!progression.add(progressionKey)) return false
+        progressionUnlockNotifications.add(progressionKey)
+        return true
+    }
 
     val player get() = characters[playerName]!!
     var log = Log()

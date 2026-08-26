@@ -28,7 +28,7 @@ class Event_EugeneLesson3 : EventObject(ReadOnly.questProp("EugeneLesson3-name")
             parent.getMutuality("Eugene", parent.playerName) >= 65.0
         ) {
             onPlayDialogue("EugeneAndPoliticalPractices3")
-            parent.progression.add("NewAgenda")
+            parent.unlockProgression("NewAgenda")
             deactivate()
         }
     }

@@ -22,7 +22,7 @@ class Event_Vaeme4 : EventObject(ReadOnly.questProp("Vaeme4-name"), true), IQues
             parent.getMutuality("Vaeme", parent.playerName) >= 50.0
         ) {
             onPlayDialogue("Vaeme4")
-            parent.progression.add("OfficialResourceTransfer")
+            parent.unlockProgression("OfficialResourceTransfer")
             deactivate()
         }
     }
