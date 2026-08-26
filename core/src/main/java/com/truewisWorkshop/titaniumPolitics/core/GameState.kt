@@ -141,6 +141,8 @@ class GameState {
      * Grows as the player completes questlines.
      */
     var progression = hashSetOf<String>()
+    @Transient
+    var debugDisableProgressionCheck = false
 
     val player get() = characters[playerName]!!
     var log = Log()

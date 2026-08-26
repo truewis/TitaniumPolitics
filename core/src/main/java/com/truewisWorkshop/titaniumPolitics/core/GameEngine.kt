@@ -1262,7 +1262,7 @@ class GameEngine(val gameState: GameState) {
 
             }
             // Filter actions for the player based on unlocked progressions.
-            if (character == gameState.playerName) {
+            if (character == gameState.playerName && !gameState.debugDisableProgressionCheck) {
                 val progressionGates = mapOf(
                     "Examine" to "Examine",
                     "PrepareInfo" to "Examine",

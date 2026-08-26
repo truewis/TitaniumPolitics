@@ -123,6 +123,8 @@ class MainMenu(val entry: EntryClass) : Stage(FitViewport(1920F, 1080F)) {
         music.stop()
         val savedGamePath = System.getenv("SAVED_GAME")
         val initGamePath = System.getenv("INIT_GAME") ?: "json/init.json"
+        val debugDisableProgressionCheck =
+            System.getenv("DEBUG_DISABLE_PROGRESSION_CHECK")?.equals("true", ignoreCase = true) == true
         var newGame: GameState
         startbutton.setText("Loading...")
         if (savedGamePath == null) {
@@ -136,6 +138,7 @@ class MainMenu(val entry: EntryClass) : Stage(FitViewport(1920F, 1080F)) {
                 Logger.gState = it
                 Logger.init()
                 println("Loading complete.")
+                it.debugDisableProgressionCheck = debugDisableProgressionCheck
                 //ReadOnly.setLocale(Locale.KOREAN)
                 it.initialize()
                 entry.stage = CapsuleStage(it)
@@ -151,6 +154,7 @@ class MainMenu(val entry: EntryClass) : Stage(FitViewport(1920F, 1080F)) {
             ).also {
                 Logger.gState = it
                 Logger.init()
+                it.debugDisableProgressionCheck = debugDisableProgressionCheck
                 it.injectDependency()
                 println("Loading complete.")
                 entry.stage = CapsuleStage(it)
