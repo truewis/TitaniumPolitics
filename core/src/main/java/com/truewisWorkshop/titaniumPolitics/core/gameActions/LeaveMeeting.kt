@@ -15,6 +15,9 @@ data class LeaveMeeting(override val sbjCharacter: String, override val tgtPlace
         val meeting = parent.characters[sbjCharacter]!!.currentMeeting!!
         val meetingName = parent.ongoingMeetings.filter { it.value == meeting }.keys.firstOrNull()
         meeting.currentCharacters.remove(sbjCharacter)
+        if (sbjCharacter == parent.playerName) {
+            parent.eventSystem.failMeetingObjectivesForMeeting(meeting)
+        }
 
         Logger.write("$sbjCharacter left the meeting $meetingName", Logger.LogLevel.INFO)
 

@@ -10,6 +10,7 @@ import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.core.Meeting
 import com.titaniumPolitics.game.core.MeetingAgenda
 import com.titaniumPolitics.game.core.ReadOnly
+import com.titaniumPolitics.game.ui.Quest
 import com.titaniumPolitics.game.ui.widget.WindowUI
 import ktx.scene2d.Scene2DSkin
 
@@ -82,6 +83,9 @@ class MeetingSummaryWindowUI : WindowUI("MeetingSummaryUI-title") {
 
         addSectionTitle(content, ReadOnly.prop("MeetingSummaryUI-ignoredAgendas"), 2)
         addAgendaRows(content, meeting.ignoredAgendas, Color(0.95f, 0.35f, 0.35f, 1f))
+
+        addSectionTitle(content, ReadOnly.prop("MeetingSummaryUI-objective"), 2)
+        addObjectiveRow(content, meeting, gameState)
     }
 
     private fun addAgendaRows(content: Table, agendas: List<MeetingAgenda>, color: Color) {
@@ -93,6 +97,44 @@ class MeetingSummaryWindowUI : WindowUI("MeetingSummaryUI-title") {
             content.add(label(agendaTitle(agenda))).growX().left().pad(4f)
             content.add(label(ReadOnly.charProp(agenda.author), false, color)).left().pad(4f)
             content.row()
+        }
+    }
+
+    private fun addObjectiveRow(content: Table, meeting: Meeting, gameState: GameState) {
+        val objective = findObjective(gameState, meeting)
+        if (objective == null) {
+            content.add(label(ReadOnly.prop("MeetingSummaryUI-objectiveNone"), true)).colspan(2).growX().left().pad(4f)
+            content.row()
+            return
+        }
+
+        content.add(label(objective.name)).growX().left().pad(4f)
+        content.add(label(objectiveStatusKey(gameState, meeting, objective), false, objectiveStatusColor(gameState, meeting, objective))).left().pad(4f)
+        content.row()
+        content.add(label(objective.description, true, Color.LIGHT_GRAY, 0.24f)).colspan(2).growX().left().pad(4f)
+        content.row()
+    }
+
+    private fun findObjective(gameState: GameState, meeting: Meeting): Quest? {
+        return gameState.eventSystem.successfulQuests.firstOrNull { it.isImprovised && it.meetingId == meeting.ID }
+            ?: gameState.eventSystem.failedQuests.firstOrNull { it.isImprovised && it.meetingId == meeting.ID }
+            ?: gameState.eventSystem.activeQuests.firstOrNull { it.isImprovised && it.meetingId == meeting.ID }
+    }
+
+    private fun objectiveStatusKey(gameState: GameState, meeting: Meeting, objective: Quest): String {
+        return when {
+            gameState.eventSystem.successfulQuests.any { it == objective } -> ReadOnly.prop("MeetingSummaryUI-objectiveMet")
+            gameState.eventSystem.failedQuests.any { it == objective } -> ReadOnly.prop("MeetingSummaryUI-objectiveFailed")
+            meeting.currentCharacters.contains(gameState.playerName) -> ReadOnly.prop("MeetingSummaryUI-objectivePending")
+            else -> ReadOnly.prop("MeetingSummaryUI-objectivePending")
+        }
+    }
+
+    private fun objectiveStatusColor(gameState: GameState, meeting: Meeting, objective: Quest): Color {
+        return when {
+            gameState.eventSystem.successfulQuests.any { it == objective } -> Color(0.3f, 0.85f, 0.3f, 1f)
+            gameState.eventSystem.failedQuests.any { it == objective } -> Color(0.95f, 0.35f, 0.35f, 1f)
+            else -> Color.LIGHT_GRAY
         }
     }
 

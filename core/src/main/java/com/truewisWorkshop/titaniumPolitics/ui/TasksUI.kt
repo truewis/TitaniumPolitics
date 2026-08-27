@@ -42,7 +42,7 @@ class TasksUI(var gameState: GameState) : Table(defaultSkin) {
     fun refreshDocList(quests: List<Quest>) {
         docList.clear()
 
-        quests.forEach { quest ->
+        quests.filter { !it.isImprovised }.forEach { quest ->
             docList.addActor(scene2d.table {
                 left()
                 //Number label with icon
@@ -74,8 +74,9 @@ class TasksUI(var gameState: GameState) : Table(defaultSkin) {
 
                 }
                 //Display due time if it exists
-                if (quest.dueTime != null) {
-                    add(TimeAmountUI(quest.dueTime - gameState.time))
+                val dueTime = quest.dueTime
+                if (dueTime != null) {
+                    add(TimeAmountUI(dueTime - gameState.time))
                 }
 
                 addListener(object : ClickListener() {
@@ -149,6 +150,8 @@ data class Quest(
     val tgtCharacters: List<String> = listOf(),
     val tgtMeeting: String? = null,
     val dueTime: Int? = null,
+    val isImprovised: Boolean = false,
+    val meetingId: String? = null,
     /** The agenda type this quest is associated with for the PrepareInfoUI priority agenda system. */
     val agendaType: AgendaType? = null,
     @Transient
@@ -178,3 +181,5 @@ data class Quest(
     var completionTime: Int? = null
 
 }
+
+typealias ImprovisedQuest = Quest

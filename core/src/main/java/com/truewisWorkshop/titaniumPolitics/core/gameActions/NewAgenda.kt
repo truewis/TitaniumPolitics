@@ -21,6 +21,9 @@ data class NewAgenda(override val sbjCharacter: String, override val tgtPlace: S
         val meeting = parent.characters[sbjCharacter]!!.currentMeeting!!
         meeting.agendas.add(agenda)
         meeting.setCurrentAgenda(agenda)
+        if (sbjCharacter == parent.playerName) {
+            parent.eventSystem.registerMeetingObjective(meeting)
+        }
 
         //Attention is consumed.
         meeting.currentAttention = max(

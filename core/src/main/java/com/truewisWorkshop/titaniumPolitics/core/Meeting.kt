@@ -167,6 +167,7 @@ class Meeting(
             }
         }
         resolveAgendasByPersuasiveness(gameState)
+        gameState.eventSystem.failMeetingObjectivesForMeeting(this)
         //Remove the meeting from the ongoingMeetings.
         if (gameState.ongoingMeetings.containsValue(this)) {
             gameState.removeOngoingMeeting(gameState.ongoingMeetings.filter { it.value == this }.keys.first())

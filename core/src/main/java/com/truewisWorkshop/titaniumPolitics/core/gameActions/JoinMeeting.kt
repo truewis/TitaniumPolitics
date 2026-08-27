@@ -30,6 +30,9 @@ data class JoinMeeting(override val sbjCharacter: String, override val tgtPlace:
         }
         meeting.currentCharacters.add(sbjCharacter)
         Logger.write("$sbjCharacter joined the meeting $meetingID", Logger.LogLevel.INFO)
+        if (sbjCharacter == parent.playerName) {
+            parent.eventSystem.registerMeetingObjective(meeting)
+        }
         super.execute()
     }
 

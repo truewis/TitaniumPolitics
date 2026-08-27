@@ -76,6 +76,20 @@ class EventSystem : GameStateElement() {
         activeQuests.add(quest)
     }
 
+    fun registerMeetingObjective(meeting: Meeting) {
+        if (parent.playerName !in meeting.currentCharacters) return
+        if (dataBase.any { it is Event_ImprovisedMeetingObjective && it.meetingId == meeting.ID && it.active }) return
+        val event = Event_ImprovisedMeetingObjective(meeting.ID)
+        event.injectParent(parent)
+        add(event)
+    }
+
+    fun failMeetingObjectivesForMeeting(meeting: Meeting) {
+        dataBase.filterIsInstance<Event_ImprovisedMeetingObjective>()
+            .filter { it.meetingId == meeting.ID && it.active }
+            .forEach { it.deactivate(false) }
+    }
+
     fun finishQuest(event: IQuestEventObject, success: Boolean = true) {
         val toRemove = arrayListOf<Quest>()
         activeQuests.filter { it.event == event }.forEach { quest ->

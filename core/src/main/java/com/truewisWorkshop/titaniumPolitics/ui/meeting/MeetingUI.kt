@@ -80,6 +80,7 @@ class MeetingUI(var gameState: GameState) : Table(defaultSkin), KTable {
     val speakerPortrait = PortraitUI("", gameState)
     val deployedInfos = arrayListOf<InfoBubbleUI>()
     val currentAgendas = arrayListOf<AgendaBubbleUI>()
+    private var improvisedQuestUI: Table? = null
     val currentAgendaMarker = scene2d.image("BadgeRound") {
         setSize(110f, 110f)
         color = Color(1f, 0.85f, 0.2f, 0.9f)
@@ -201,6 +202,7 @@ class MeetingUI(var gameState: GameState) : Table(defaultSkin), KTable {
 
 
             placeCharacterPortrait()
+            updateImprovisedQuestDisplay(meeting)
             //Remove all bubbles before placing them again.
             removeBubbles()
             meeting.agendas.forEach {
@@ -460,6 +462,55 @@ class MeetingUI(var gameState: GameState) : Table(defaultSkin), KTable {
         deployedInfos.clear()
         hideCurrentAgendaMarker()
         //TODO: removeActor(addAgendaButton), but we are using AvailableActionsUI for now.
+    }
+
+    private fun updateImprovisedQuestDisplay(meeting: Meeting) {
+        val quest = gameState.eventSystem.activeQuests.firstOrNull { it.isImprovised && it.meetingId == meeting.ID }
+        if (quest == null) {
+            improvisedQuestUI?.remove()
+            improvisedQuestUI = null
+            return
+        }
+
+        if (improvisedQuestUI == null) {
+            improvisedQuestUI = scene2d.table {
+                background = defaultSkin.newDrawable("white", Color(0.08f, 0.12f, 0.2f, 0.9f))
+                pad(12f)
+                defaults().left().pad(2f)
+                add(scene2d.label(quest.name, "docTitle") {
+                    setFontScale(0.28f)
+                    color = Color.WHITE
+                })
+                row()
+                add(scene2d.label(quest.description, "description") {
+                    setWrap(true)
+                    setFontScale(0.2f)
+                    color = Color(0.9f, 0.92f, 0.95f, 1f)
+                })
+            }
+            addActor(improvisedQuestUI)
+        }
+
+        val table = improvisedQuestUI!!
+        table.clearChildren()
+        table.background = defaultSkin.newDrawable("white", Color(0.08f, 0.12f, 0.2f, 0.9f))
+        table.pad(12f)
+        table.defaults().left().pad(2f)
+        table.add(scene2d.label(quest.name, "docTitle") {
+            setFontScale(0.28f)
+            color = Color.WHITE
+        })
+        table.row()
+        table.add(scene2d.label(quest.description, "description") {
+            setWrap(true)
+            setFontScale(0.2f)
+            color = Color(0.9f, 0.92f, 0.95f, 1f)
+        })
+        table.setSize(700f, 150f)
+        table.setPosition(discussionTable.x + discussionTable.width / 2 - table.width / 2, discussionTable.y + discussionTable.height - 180f, Align.center)
+        table.clearActions()
+        table.setScale(0.7f)
+        table.addAction(Actions.sequence(Actions.scaleTo(1f, 1f, 0.25f)))
     }
 
     private fun ensureCurrentAgendaMarkerAnimation() {
