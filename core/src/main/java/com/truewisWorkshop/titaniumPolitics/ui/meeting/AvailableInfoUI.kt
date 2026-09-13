@@ -30,12 +30,22 @@ class AvailableInfoUI(var gameState: GameState) : Table(defaultSkin) {
 
     fun refresh(meeting: Meeting) {
         docList.clear()
-        gameState.player.preparedInfoKeys.filter { key -> meeting.agendas.none { it.informationKeys.contains(key) } }
-            .forEach {
-                val infoUI = InfoCardUI(gameState)
-                infoUI.refresh(gameState.informations[it]!!)
-                docList.addActor(infoUI)
+        val infoKeys = if (meeting.type == Meeting.MeetingType.TALK) {
+            gameState.informations.filter { (key, info) ->
+                gameState.playerName in info.knownTo &&
+                        meeting.agendas.none { it.informationKeys.contains(key) }
+            }.keys
+        } else {
+            gameState.player.preparedInfoKeys.filter { key ->
+                meeting.agendas.none { it.informationKeys.contains(key) }
             }
+        }
+
+        infoKeys.forEach {
+            val infoUI = InfoCardUI(gameState)
+            infoUI.refresh(gameState.informations[it]!!)
+            docList.addActor(infoUI)
+        }
     }
 
 

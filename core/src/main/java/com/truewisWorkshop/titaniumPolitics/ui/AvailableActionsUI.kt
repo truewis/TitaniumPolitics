@@ -444,7 +444,8 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable 
 
                             "AddInfo" -> {
                                 val currentMeeting = gameState.player.currentMeeting
-                                if (gameState.informations.none { (key, info) ->
+                                val allowsUnpreparedInfo = currentMeeting?.type == com.titaniumPolitics.game.core.Meeting.MeetingType.TALK
+                                if (!allowsUnpreparedInfo && gameState.informations.none { (key, info) ->
                                         gameState.playerName in info.knownTo
                                     }) {
                                     this@button.isDisabled = true
@@ -453,7 +454,7 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable 
                                     this@button.isDisabled = true
                                     tooltip.displayInvalidReason(ReadOnly.prop("addInfo-noCurrentAgenda"))
                                 } else
-                                    if ((gameState.informations.filter {
+                                    if (!allowsUnpreparedInfo && (gameState.informations.filter {
                                             it.value.knownTo.contains(gameState.playerName)
                                         }.keys - currentMeeting.agendas.flatMap { it.informationKeys }).isEmpty()) {
                                         this@button.isDisabled = true
@@ -472,7 +473,8 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable 
 
                             "AnnounceInfo" -> {
                                 val currentMeeting = gameState.player.currentMeeting
-                                if (gameState.informations.none { (key, info) ->
+                                val allowsUnpreparedInfo = currentMeeting?.type == com.titaniumPolitics.game.core.Meeting.MeetingType.TALK
+                                if (!allowsUnpreparedInfo && gameState.informations.none { (key, info) ->
                                         gameState.playerName in info.knownTo
                                     }) {
                                     this@button.isDisabled = true
@@ -481,7 +483,7 @@ class AvailableActionsUI(var gameState: GameState) : Table(defaultSkin), KTable 
                                     this@button.isDisabled = true
                                     tooltip.displayInvalidReason(ReadOnly.prop("addInfo-noCurrentAgenda"))
                                 } else
-                                    if ((gameState.informations.filter {
+                                    if (!allowsUnpreparedInfo && (gameState.informations.filter {
                                             it.value.knownTo.contains(gameState.playerName)
                                         }.keys - currentMeeting.agendas.flatMap { it.informationKeys }).isEmpty()) {
                                         this@button.isDisabled = true

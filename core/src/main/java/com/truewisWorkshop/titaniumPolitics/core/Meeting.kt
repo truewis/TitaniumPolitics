@@ -62,6 +62,9 @@ class Meeting(
     val currentAgenda: MeetingAgenda?
         get() = currentAgendaIndex?.let { agendas.getOrNull(it) }
 
+    val isTalkWithoutSubject: Boolean
+        get() = type == MeetingType.TALK
+
     fun setCurrentAgenda(agenda: MeetingAgenda) {
         val idx = agendas.indexOf(agenda)
         if (idx < 0) {

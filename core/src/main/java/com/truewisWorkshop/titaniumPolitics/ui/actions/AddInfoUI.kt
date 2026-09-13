@@ -8,6 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.badlogic.gdx.utils.Align
 import com.titaniumPolitics.game.core.GameState
+import com.titaniumPolitics.game.core.Meeting
 import com.titaniumPolitics.game.core.MeetingAgenda
 import com.titaniumPolitics.game.core.gameActions.AddInfo
 import com.titaniumPolitics.game.core.gameActions.GameAction
@@ -56,20 +57,27 @@ class AddInfoUI(val gameState: GameState, actionCallback: (GameAction) -> Unit) 
         refreshInfoOptions()
     }
 
+    private fun allowUnpreparedInfo(): Boolean =
+        sbjChar.currentMeeting?.type == Meeting.MeetingType.TALK
+
     fun refreshInfoOptions() {
         val availableInfoKeys = gameState.informations.filter { (key, info) ->
-            key in gameState.player.preparedInfoKeys &&
-                    gameState.playerName in info.knownTo &&
-                    !sbjChar.currentMeeting!!.agendas.flatMap { it.informationKeys }
-                        .contains(key) // Not presented in the current meeting
-                    &&
-                    //has nonzero effectivity with the selected agenda
-                    agenda.effectivity(
-                        gameState,
-                        meeting = sbjChar.currentMeeting!!,
-                        info = info,
-                        sbjCharObj = sbjChar
-                    ).first != 0.0
+            val isPrepared = key in gameState.player.preparedInfoKeys
+            val isTalkUnpreparedAllowed = allowUnpreparedInfo()
+            val matchesKnownInfo = gameState.playerName in info.knownTo
+            val notPresented = !sbjChar.currentMeeting!!.agendas.flatMap { it.informationKeys }
+                .contains(key) // Not presented in the current meeting
+            val hasEffectivity = agenda.effectivity(
+                gameState,
+                meeting = sbjChar.currentMeeting!!,
+                info = info,
+                sbjCharObj = sbjChar
+            ).first != 0.0
+
+            (isPrepared || isTalkUnpreparedAllowed) &&
+                    matchesKnownInfo &&
+                    notPresented &&
+                    hasEffectivity
 
         }.keys
         dataTable.clear()

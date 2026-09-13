@@ -128,6 +128,13 @@ data class AddInfo(
     override fun isValid(): Boolean {
         if (!reason(meeting.currentAgenda != null, "addInfo-noCurrentAgenda"))
             return false
+        // A TALK meeting is created ad hoc and has no subject, so the player may add knowledge without first preparing it.
+        if (!meeting.isTalkWithoutSubject && !reason(
+                infoKey in sbjCharObj.preparedInfoKeys,
+                "addInfo-noPreparedInfo"
+            )) {
+            return false
+        }
         //If the information is already presented in the meeting, it cannot be presented again.
         if (meeting.agendas.any { it.informationKeys.contains(infoKey) })
             return false
