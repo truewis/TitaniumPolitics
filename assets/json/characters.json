@@ -17,7 +17,7 @@
   "Alina": {
     "name": "Alina",
     "image": "portraits/Alina/idle.png",
-    "headImage": "portraits/Alina/AlinaHead.png",
+    "headImage": "portraits/Alina/head.png",
     "scale": 0.8
   },
   "Maisarah": {
@@ -59,18 +59,18 @@
   },
   "Hans": {
     "name": "Hans",
-    "image": "portraits/default.png",
-    "headImage": "portraits/defaultHead.png"
+    "image": "portraits/Hans/idle.png",
+    "headImage": "portraits/Hans/head.png"
   },
   "Lynn": {
     "name": "Lynn",
-    "image": "portraits/default.png",
-    "headImage": "portraits/defaultHead.png"
+    "image": "portraits/Lynn/idle.png",
+    "headImage": "portraits/Lynn/head.png"
   },
   "Sasha": {
     "name": "Sasha",
-    "image": "portraits/default.png",
-    "headImage": "portraits/defaultHead.png"
+    "image": "portraits/Sasha/idle.png",
+    "headImage": "portraits/Sasha/head.png"
   },
   "Krailin": {
     "name": "Krailin",
@@ -80,8 +80,13 @@
   },
   "Vaeme": {
     "name": "Vaeme",
-    "image": "portraits/Vaeme.png",
-    "headImage": "portraits/VaemeHead.png"
+    "image": "portraits/Vaeme/idle.png",
+    "headImage": "portraits/Vaeme/head.png"
+  },
+  "Yuri": {
+    "name": "Yuri",
+    "image": "portraits/Yuri/idle.png",
+    "headImage": "portraits/Yuri/head.png"
   },
   "Yuhoa": {
     "name": "Yuhoa",
@@ -132,7 +137,7 @@
   "ctrler": {
     "name": "The Controller",
     "image": "portraits/ctrler/idle.png",
-    "headImage": "portraits/ctrler/ctrlerHead.png",
+    "headImage": "portraits/ctrler/head.png",
     "scale": 0.6
   },
   "observer": {
