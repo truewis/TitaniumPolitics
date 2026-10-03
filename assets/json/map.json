@@ -1,6 +1,6 @@
 {
   "infrastructureHeadquarters": {
-    "image": "data/mainControlRoom.png",
+    "image": "data/locations/mainControlRoom.png",
     "sound": "data/sounds/mainControlRoom.mp3",
     "light": [
       0,
@@ -10,7 +10,7 @@
     ]
   },
   "bioengineeringHeadquarters": {
-    "image": "data/mainControlRoom.png",
+    "image": "data/locations/mainControlRoom.png",
     "sound": "data/sounds/mainControlRoom.mp3",
     "light": [
       0,
@@ -20,7 +20,7 @@
     ]
   },
   "industryHeadquarters": {
-    "image": "data/mainControlRoom.png",
+    "image": "data/locations/mainControlRoom.png",
     "sound": "data/sounds/mainControlRoom.mp3",
     "light": [
       0,
@@ -30,7 +30,7 @@
     ]
   },
   "safetyHeadquarters": {
-    "image": "data/mainControlRoom.png",
+    "image": "data/locations/mainControlRoom.png",
     "sound": "data/sounds/mainControlRoom.mp3",
     "light": [
       0,
@@ -40,7 +40,7 @@
     ]
   },
   "miningHeadquarters": {
-    "image": "data/mainControlRoom.png",
+    "image": "data/locations/mainControlRoom.png",
     "sound": "data/sounds/mainControlRoom.mp3",
     "light": [
       0,
@@ -50,7 +50,7 @@
     ]
   },
   "educationHeadquarters": {
-    "image": "data/mainControlRoom.png",
+    "image": "data/locations/mainControlRoom.png",
     "sound": "data/sounds/mainControlRoom.mp3",
     "light": [
       0,
@@ -60,7 +60,7 @@
     ]
   },
   "interiorHeadquarters": {
-    "image": "data/mainControlRoom.png",
+    "image": "data/locations/mainControlRoom.png",
     "sound": "data/sounds/mainControlRoom.mp3",
     "light": [
       0,
@@ -70,7 +70,7 @@
     ]
   },
   "mainControlRoom": {
-    "image": "data/mainControlRoom.png",
+    "image": "data/locations/mainControlRoom.png",
     "sound": "data/sounds/mainControlRoom.mp3",
     "light": [
       0,
@@ -80,7 +80,7 @@
     ]
   },
   "home": {
-    "image": "data/home.png",
+    "image": "data/locations/home.png",
     "sound": "data/sounds/home.mp3",
     "light": [
       0,
@@ -90,7 +90,7 @@
     ]
   },
   "corridor": {
-    "image": "data/corridor.png",
+    "image": "data/locations/corridor.png",
     "sound": "data/sounds/home.mp3",
     "light": [
       0,
@@ -100,7 +100,7 @@
     ]
   },
   "securityCheckWest": {
-    "image": "data/securityCheck.png",
+    "image": "data/locations/securityCheck.png",
     "ind": "capsuleMapIndPortAftPlane",
     "light": [
       0,
@@ -110,7 +110,7 @@
     ]
   },
   "securityCheckEast": {
-    "image": "data/securityCheck.png",
+    "image": "data/locations/securityCheck.png",
     "ind": "capsuleMapIndPortAftPlane",
     "light": [
       0,
@@ -120,7 +120,7 @@
     ]
   },
   "securityCheckCenter": {
-    "image": "data/securityCheck.png",
+    "image": "data/locations/securityCheck.png",
     "ind": "capsuleMapIndPortAftPlane",
     "light": [
       0,
@@ -130,7 +130,7 @@
     ]
   },
   "asteroidMine": {
-    "image": "data/astMine.png",
+    "image": "data/locations/astMine.png",
     "ind": "capsuleMapIndPortAftPlane",
     "light": [
       0,
@@ -140,7 +140,7 @@
     ]
   },
   "welfareStationWest": {
-    "image": "data/testimage.png",
+    "image": "data/locations/testimage.png",
     "ind": "capsuleMapIndPortAftPlane",
     "light": [
       0,
@@ -150,7 +150,7 @@
     ]
   },
   "welfareStationEast": {
-    "image": "data/testimage.png",
+    "image": "data/locations/testimage.png",
     "desc": "Fore plane supported by the arm.",
     "ind": "capsuleMapIndForePlane",
     "light": [
@@ -161,7 +161,7 @@
     ]
   },
   "excavationShaftA": {
-    "image": "data/redMine.jpeg",
+    "image": "data/locations/redMine.jpeg",
     "desc": "Port-Aft frame of the hexagonal frame.",
     "ind": "capsuleMapIndPortAftFrame",
     "light": [
@@ -172,7 +172,7 @@
     ]
   },
   "excavationShaftB": {
-    "image": "data/blackMine.jpeg",
+    "image": "data/locations/blackMine.jpeg",
     "desc": "Port-Fore frame of the hexagonal frame.",
     "ind": "capsuleMapIndPortForeFrame",
     "light": [
@@ -183,7 +183,7 @@
     ]
   },
   "observatory": {
-    "image": "data/testimage.png",
+    "image": "data/locations/testimage.png",
     "desc": "Aft frame of the hexagonal frame.",
     "ind": "capsuleMapIndAftFrame",
     "light": [
@@ -194,7 +194,7 @@
     ]
   },
   "outerBarrierWest": {
-    "image": "data/outerbarrier.png",
+    "image": "data/locations/outerbarrier.png",
     "sound": "data/sounds/conYard.mp3",
     "desc": "Center of the hexagonal frame.",
     "ind": "capsuleMapIndCenter",
@@ -206,7 +206,7 @@
     ]
   },
   "outerBarrierCenter": {
-    "image": "data/outerbarrier.png",
+    "image": "data/locations/outerbarrier.png",
     "sound": "data/sounds/conYard.mp3",
     "desc": "Center of the hexagonal frame.",
     "ind": "capsuleMapIndCenter",
@@ -218,7 +218,7 @@
     ]
   },
   "outerBarrierEast": {
-    "image": "data/outerbarrier.png",
+    "image": "data/locations/outerbarrier.png",
     "sound": "data/sounds/conYard.mp3",
     "desc": "Center of the hexagonal frame.",
     "ind": "capsuleMapIndCenter",
@@ -230,7 +230,7 @@
     ]
   },
   "constructionYardNorth": {
-    "image": "data/conYard.png",
+    "image": "data/locations/conYard.png",
     "sound": "data/sounds/conYard.mp3",
     "desc": "Center of the hexagonal frame.",
     "ind": "capsuleMapIndCenter",
@@ -242,7 +242,7 @@
     ]
   },
   "constructionYardSouth": {
-    "image": "data/conYard.png",
+    "image": "data/locations/conYard.png",
     "sound": "data/sounds/conYard.mp3",
     "desc": "Starboard-Aft frame of the hexagonal frame.",
     "ind": "capsuleMapIndStarboardAftFrame",
@@ -254,7 +254,7 @@
     ]
   },
   "cemetery": {
-    "image": "data/testimage.png",
+    "image": "data/locations/testimage.png",
     "desc": "Starboard-Fore frame of the hexagonal frame.",
     "ind": "capsuleMapIndStarboardForeFrame",
     "light": [
@@ -265,7 +265,7 @@
     ]
   },
   "spacePort": {
-    "image": "data/testimage.png",
+    "image": "data/locations/testimage.png",
     "desc": "Fore arm of the station.",
     "ind": "capsuleMapIndForeArm",
     "light": [
@@ -276,7 +276,7 @@
     ]
   },
   "tankArray": {
-    "image": "data/tankArray.jpeg",
+    "image": "data/locations/tankArray.jpeg",
     "desc": "Starboard-Aft arm of the station.",
     "ind": "capsuleMapIndStarboardAftArm",
     "light": [
@@ -287,7 +287,7 @@
     ]
   },
   "recycleFacilityEast": {
-    "image": "data/testimage.png",
+    "image": "data/locations/testimage.png",
     "sound": "data/sounds/recycleFacility.mp3",
     "desc": "Starboard-Fore arm of the station.",
     "ind": "capsuleMapIndStarboardForeArm",
@@ -299,7 +299,7 @@
     ]
   },
   "recycleFacilityWest": {
-    "image": "data/testimage.png",
+    "image": "data/locations/testimage.png",
     "sound": "data/sounds/recycleFacility.mp3",
     "desc": "Starboard-Fore arm of the station.",
     "ind": "capsuleMapIndStarboardForeArm",
@@ -311,7 +311,7 @@
     ]
   },
   "electrolysisStationSouth": {
-    "image": "data/testimage.png",
+    "image": "data/locations/testimage.png",
     "desc": "Starboard-Fore arm of the station.",
     "ind": "capsuleMapIndStarboardForeArm",
     "light": [
@@ -322,7 +322,7 @@
     ]
   },
   "electrolysisStationNorth": {
-    "image": "data/testimage.png",
+    "image": "data/locations/testimage.png",
     "desc": "Starboard-Fore arm of the station.",
     "ind": "capsuleMapIndStarboardForeArm",
     "light": [
@@ -333,7 +333,7 @@
     ]
   },
   "reservoirNorth": {
-    "image": "data/reservoir.png",
+    "image": "data/locations/reservoir.png",
     "desc": "Starboard-Fore arm of the station.",
     "ind": "capsuleMapIndStarboardForeArm",
     "light": [
@@ -344,7 +344,7 @@
     ]
   },
   "reservoirSouth": {
-    "image": "data/reservoir.png",
+    "image": "data/locations/reservoir.png",
     "desc": "Starboard-Fore arm of the station.",
     "ind": "capsuleMapIndStarboardForeArm",
     "light": [
@@ -355,7 +355,7 @@
     ]
   },
   "miningSchool": {
-    "image": "data/testimage.png",
+    "image": "data/locations/testimage.png",
     "sound": "data/sounds/market.mp3",
     "desc": "Starboard-Fore arm of the station.",
     "ind": "capsuleMapIndStarboardForeArm",
@@ -367,7 +367,7 @@
     ]
   },
   "techSchool": {
-    "image": "data/testimage.png",
+    "image": "data/locations/testimage.png",
     "sound": "data/sounds/market.mp3",
     "desc": "Starboard-Fore arm of the station.",
     "ind": "capsuleMapIndStarboardForeArm",
@@ -379,7 +379,7 @@
     ]
   },
   "farm": {
-    "image": "data/farm.png",
+    "image": "data/locations/farm.png",
     "desc": "Starboard-Fore arm of the station.",
     "ind": "capsuleMapIndStarboardForeArm",
     "light": [
@@ -390,7 +390,7 @@
     ]
   },
   "rescueStationEast": {
-    "image": "data/testimage.png",
+    "image": "data/locations/testimage.png",
     "desc": "Starboard-Fore arm of the station.",
     "ind": "capsuleMapIndStarboardForeArm",
     "light": [
@@ -401,7 +401,7 @@
     ]
   },
   "rescueStationWest": {
-    "image": "data/testimage.png",
+    "image": "data/locations/testimage.png",
     "desc": "Starboard-Fore arm of the station.",
     "ind": "capsuleMapIndStarboardForeArm",
     "light": [
@@ -412,7 +412,7 @@
     ]
   },
   "rescueStationSouth": {
-    "image": "data/testimage.png",
+    "image": "data/locations/testimage.png",
     "desc": "Starboard-Fore arm of the station.",
     "ind": "capsuleMapIndStarboardForeArm",
     "light": [
@@ -423,7 +423,7 @@
     ]
   },
   "market": {
-    "image": "data/market.jpeg",
+    "image": "data/locations/market.jpeg",
     "sound": "data/sounds/market.mp3",
     "desc": "Starboard-Fore arm of the station.",
     "ind": "capsuleMapIndStarboardForeArm",
@@ -435,7 +435,7 @@
     ]
   },
   "squareNorth": {
-    "image": "data/squareNorth.jpeg",
+    "image": "data/locations/squareNorth.jpeg",
     "sound": "data/sounds/market.mp3",
     "desc": "Starboard-Fore arm of the station.",
     "ind": "capsuleMapIndStarboardForeArm",
@@ -447,7 +447,7 @@
     ]
   },
   "squareSouth": {
-    "image": "data/squareSouth.jpeg",
+    "image": "data/locations/squareSouth.jpeg",
     "sound": "data/sounds/market.mp3",
     "desc": "Starboard-Fore arm of the station.",
     "ind": "capsuleMapIndStarboardForeArm",
@@ -459,7 +459,7 @@
     ]
   },
   "restaurant": {
-    "image": "data/testimage.png",
+    "image": "data/locations/testimage.png",
     "sound": "data/sounds/market.mp3",
     "light": [
       0,
@@ -469,7 +469,7 @@
     ]
   },
   "jewelryShop": {
-    "image": "data/testimage.png",
+    "image": "data/locations/testimage.png",
     "sound": "data/sounds/market.mp3",
     "light": [
       0,
@@ -479,7 +479,7 @@
     ]
   },
   "ammoniaShop": {
-    "image": "data/testimage.png",
+    "image": "data/locations/testimage.png",
     "sound": "data/sounds/market.mp3",
     "light": [
       0,
@@ -489,7 +489,7 @@
     ]
   },
   "winery": {
-    "image": "data/testimage.png",
+    "image": "data/locations/testimage.png",
     "sound": "data/sounds/market.mp3",
     "light": [
       0,
@@ -499,7 +499,7 @@
     ]
   },
   "cloverBrewery": {
-    "image": "data/testimage.png",
+    "image": "data/locations/testimage.png",
     "sound": "data/sounds/market.mp3",
     "light": [
       0,
