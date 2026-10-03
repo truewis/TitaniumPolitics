@@ -48,62 +48,31 @@ data class NewAgenda(override val sbjCharacter: String, override val tgtPlace: S
             AgendaType.BUDGET_PROPOSAL -> return mt.type == Meeting.MeetingType.BUDGET_PROPOSAL && with(parent) {
                 //If there is already my budget proposal in the meeting, I can't propose another one.
                 if (mt.agendas.any { it.type == AgendaType.BUDGET_PROPOSAL && it.author == agenda.author }) return false
-                ////////////////////Stationwide budget proposal//////////////////
-                if (mt.involvedParty == "cabinet") {
-                    val resourceTypes = setOf("water", "ration", "phosphorus")
-                    return reason(
-                        places["reservoirEast"]!!.resources["water"] >= agenda.attachedBudget!!.sum("water")
-                                && places["farm"]!!.resources["ration"] >= agenda.attachedBudget!!.sum("ration")
-                                && places["mainControlRoom"]!!.resources["phosphorus"] >= agenda.attachedBudget!!.sum("phosphorus"),
-                        "newAgenda-BudgetProposal-resources"
-                    )
-                            &&
-                            reason(
-                                agenda.attachedBudget!!.value.values.none { resources -> resources.keys.any { resource -> resource !in resourceTypes } },
-                                "newAgenda-BudgetProposal-key"
-                            )
+                val proposed = agenda.attachedBudget ?: return false
+                val targetParty = if (mt.involvedParty == "cabinet" || mt.involvedParty == "triumvirate") {
+                    parties[mt.involvedParty]?.takeIf { it.name == "cabinet" || it.name == "triumvirate" } ?: parties["cabinet"]!!
+                } else {
+                    parties[mt.involvedParty] ?: return false
                 }
-                ////////////////////Division budget proposal//////////////////
-                else {
-                    val division = parties[mt.involvedParty]!!
-                    val resourceTypes = setOf("water", "ration", "phosphorus")
-                    return reason(
-                        places[division.home]!!.resources.contains(
-                            agenda.attachedBudget!!.sum()
-                        ), "newAgenda-BudgetProposal-resources"
-                    ) &&
-                            reason(
-                                agenda.attachedBudget!!.value.values.none { resources -> resources.keys.any { resource -> resource !in resourceTypes } },
-                                "newAgenda-BudgetProposal-key"
-                            )
+                val currentBudget = targetParty.budget
+                val resourceTypes = setOf("water", "ration", "phosphorus")
+                val budgetWithinBand = resourceTypes.all { resource ->
+                    val currentValue = currentBudget.sum(resource)
+                    val proposedValue = proposed.sum(resource)
+                    val delta = kotlin.math.abs(proposedValue - currentValue)
+                    currentValue <= 0.0 || delta <= currentValue * 0.2 + 1e-6
                 }
-            }
-
-            AgendaType.BUDGET_RESOLUTION -> return mt.type == Meeting.MeetingType.BUDGET_RESOLUTION && mt.agendas.none {
-                it.type == AgendaType.BUDGET_RESOLUTION
-            } //Only one budget resolution agenda can be proposed in a meeting.
-                    && with(parent) {
-                ////////////////////Stationwide budget resolution//////////////////
-                if (mt.involvedParty == "triumvirate") {
-                    val finalBudget =
-                        parties["cabinet"]!!.proposedBudgets[agenda.subjectParams["whoseProposal"]!!]!!
-                    return reason(
-                        places["reservoirEast"]!!.resources["water"] >= finalBudget.sum("water")
-                                && places["farm"]!!.resources["ration"] >= finalBudget.sum("ration")
-                                && places["mainControlRoom"]!!.resources["phosphorus"] >= finalBudget.sum("phosphorus"),
-                        "newAgenda-BudgetResolution-resources"
-                    )
+                val validKeys = proposed.value.values.none { resources -> resources.keys.any { resource -> resource !in resourceTypes } }
+                val hasResources = if (mt.involvedParty == "cabinet") {
+                    places["reservoirEast"]!!.resources["water"] >= proposed.sum("water")
+                            && places["farm"]!!.resources["ration"] >= proposed.sum("ration")
+                            && places["mainControlRoom"]!!.resources["phosphorus"] >= proposed.sum("phosphorus")
+                } else {
+                    places[targetParty.home]!!.resources.contains(proposed.sum())
                 }
-                ////////////////////Division budget resolution//////////////////
-                else {
-                    val division = parties[mt.involvedParty]!!
-                    val finalBudget = division.proposedBudgets[agenda.subjectParams["whoseProposal"]!!]!!
-                    return reason(
-                        places[division.home]!!.resources.contains(
-                            finalBudget.sum()
-                        ), "newAgenda-BudgetResolution-resources"
-                    )
-                }
+                reason(budgetWithinBand, "newAgenda-BudgetProposal-change") &&
+                        reason(validKeys, "newAgenda-BudgetProposal-key") &&
+                        reason(hasResources, "newAgenda-BudgetProposal-resources")
             }
 
             //Can't praise or denounce the same character or party more than once in a meeting.
@@ -328,10 +297,6 @@ data class NewAgenda(override val sbjCharacter: String, override val tgtPlace: S
 
                 }
 
-                BUDGET_RESOLUTION -> {
-
-                }
-
                 APPOINT_MEETING -> {
 
                 }
@@ -383,58 +348,35 @@ data class NewAgenda(override val sbjCharacter: String, override val tgtPlace: S
 
                 AgendaType.BUDGET_PROPOSAL -> {
                     with(parent) {
+                        val finalBudget = agenda.attachedBudget!!
                         ////////////////////Stationwide budget proposal//////////////////
                         if (meeting.involvedParty == "cabinet") {
                             //triumvirate and cabinet share the same budget.
                             parties["cabinet"]!!.isBudgetProposed = true
                             parties["triumvirate"]!!.isBudgetProposed = true
-                            parties["cabinet"]!!.proposedBudgets[agenda.author] = agenda.attachedBudget!!
-                            parties["triumvirate"]!!.proposedBudgets[agenda.author] = agenda.attachedBudget!!
-                        }
-                        ////////////////////Division budget proposal//////////////////
-                        else {
-                            val division = parties[meeting.involvedParty]!!
-                            division.isBudgetProposed = true
-                            division.proposedBudgets[agenda.author] = agenda.attachedBudget!!
-                        }
-                    }
-                }
-
-                AgendaType.BUDGET_RESOLUTION -> {
-                    with(parent) {
-                        ////////////////////Stationwide budget resolution//////////////////
-                        if (meeting.involvedParty == "triumvirate") {
-                            //triumvirate and cabinet share the same budget.
                             parties["cabinet"]!!.isBudgetResolved = true
                             parties["triumvirate"]!!.isBudgetResolved = true
-                            val finalBudget =
-                                parties["cabinet"]!!.proposedBudgets[agenda.subjectParams["whoseProposal"]!!]!!
-                            parties["cabinet"]!!.proposedBudgets.clear()
-                            parties["triumvirate"]!!.proposedBudgets.clear()
+                            parties["cabinet"]!!.proposedBudgets[agenda.author] = finalBudget
+                            parties["triumvirate"]!!.proposedBudgets[agenda.author] = finalBudget
                             parties["cabinet"]!!.budget = finalBudget
                             parties["triumvirate"]!!.budget = finalBudget
-                            //Distribute resources according to the budget plan.
                             places["reservoirEast"]!!.resources["water"] -= finalBudget.sum("water")
                             places["farm"]!!.resources["ration"] -= finalBudget.sum("ration")
                             places["mainControlRoom"]!!.resources["phosphorus"] -= finalBudget.sum("phosphorus")
-
                             finalBudget.value.forEach { budget ->
                                 val guildHall = parties[budget.key]!!.home
                                 places[guildHall]!!.resources.plusAssign(budget.value)
                             }
                         }
-                        ////////////////////Division budget resolution//////////////////
+                        ////////////////////Division budget proposal//////////////////
                         else {
                             val division = parties[meeting.involvedParty]!!
-                            val finalBudget = division.proposedBudgets[agenda.subjectParams["whoseProposal"]!!]!!
-                            division.proposedBudgets.clear()
+                            division.isBudgetProposed = true
                             division.isBudgetResolved = true
+                            division.proposedBudgets[agenda.author] = finalBudget
                             division.budget = finalBudget
-                            //Distribute resources according to the budget plan.
                             places[division.home]!!.resources -= finalBudget.sum()
                             finalBudget.value.forEach { budget ->
-
-                                //Set workplace budget. Note that this budget only consists of a single entry.
                                 parties[budget.key]!!.budget = Budget(hashMapOf(budget.key to budget.value))
                                 val workplace = parties[budget.key]!!.home
                                 places[workplace]!!.resources.plusAssign(budget.value)

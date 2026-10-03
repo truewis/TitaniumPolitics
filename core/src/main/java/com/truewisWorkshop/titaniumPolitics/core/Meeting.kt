@@ -125,22 +125,14 @@ class Meeting(
     }
 
     fun endMeeting(gameState: GameState) {
-        //If budget is not resolved in a budget resolution meeting, remove all proposed budgets, and decrease party integrity.
-        if (type == MeetingType.BUDGET_RESOLUTION) {
-            val party = gameState.parties[involvedParty]!!
-            if (!party.isBudgetResolved) {
-                party.proposedBudgets.clear()
-                party.isBudgetProposed = false
-                gameState.setPartyMutuality(
-                    party.name,
-                    weightedDelta = const("BudgetNotResolvedDeltaPartyIntegrity"), reasonKey =
-                        "mutuality-BudgetNotResolved"
-                )
-                Logger.write(
-                    "The budget of the party ${party.name} is not resolved. Proposed budgets are cleared, and party integrity is decreased.",
-                    Logger.LogLevel.INFO
-                )
-            }
+        // Unified budget meetings resolve proposal agendas inline. If no budget proposal passes,
+        // the current budget remains unchanged; stale proposal state is left intact only for the
+        // current scheduling cycle and does not silently rollback the party budget.
+        if (type == MeetingType.BUDGET_PROPOSAL) {
+            Logger.write(
+                "Budget meeting ${this.type} ended for ${involvedParty ?: "unknown party"}; preserving the previous budget unless a proposal passed.",
+                Logger.LogLevel.INFO
+            )
         }
         //If there are any unsatisfied proof of work requests, affect the mutualities.
         agendas.forEach {
@@ -278,7 +270,6 @@ class Meeting(
             MeetingType.CABINET_DAILY_CONFERENCE,
             MeetingType.TRIUMVIRATE_DAILY_CONFERENCE -> AgendaType.PROOF_OF_WORK
             MeetingType.BUDGET_PROPOSAL -> AgendaType.BUDGET_PROPOSAL
-            MeetingType.BUDGET_RESOLUTION -> AgendaType.BUDGET_RESOLUTION
             MeetingType.DIVISION_LEADER_ELECTION -> AgendaType.NOMINATE
             else -> null
         }
@@ -289,6 +280,6 @@ class Meeting(
     }
 
     enum class MeetingType {
-        TALK, DIVISION_LEADER_ELECTION, DIVISION_DAILY_CONFERENCE, BUDGET_PROPOSAL, BUDGET_RESOLUTION, CABINET_DAILY_CONFERENCE, TRIUMVIRATE_DAILY_CONFERENCE
+        TALK, DIVISION_LEADER_ELECTION, DIVISION_DAILY_CONFERENCE, BUDGET_PROPOSAL, CABINET_DAILY_CONFERENCE, TRIUMVIRATE_DAILY_CONFERENCE
     }
 }

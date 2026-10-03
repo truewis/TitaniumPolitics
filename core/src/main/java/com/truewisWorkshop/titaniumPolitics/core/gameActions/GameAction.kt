@@ -176,8 +176,6 @@ sealed class GameAction() {
 
                     AgendaType.BUDGET_PROPOSAL -> text =
                         ReadOnly.scriptForCharacter(sbjCharacter, "NewAgenda-BudgetProposal")
-                    AgendaType.BUDGET_RESOLUTION -> text =
-                        ReadOnly.scriptForCharacter(sbjCharacter, "NewAgenda-BudgetResolution")
                     AgendaType.APPOINT_MEETING -> text =
                         ReadOnly.scriptForCharacter(sbjCharacter, "NewAgenda-AppointMeeting")
 

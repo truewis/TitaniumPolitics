@@ -108,12 +108,7 @@ class AgendaTooltipUI(agenda: MeetingAgenda) : Tooltip<Table>(scene2d.table {
                 table {
                     it.size(350f, 300f)
                     label(
-                        ReadOnly.prop(
-                            if (agenda.type == AgendaType.BUDGET_RESOLUTION)
-                                "NewAgendaUI-budgetResolution-desc"
-                            else
-                                "NewAgendaUI-budgetProposal-desc"
-                        ), "docTitle"
+                        ReadOnly.prop("NewAgendaUI-budgetProposal-desc"), "docTitle"
                     ) {
                         setFontScale(0.2f)
                         wrap = true

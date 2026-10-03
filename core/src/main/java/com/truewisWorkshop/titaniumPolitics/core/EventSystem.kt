@@ -136,9 +136,6 @@ class EventSystem : GameStateElement() {
             gameState.scheduledMeetings.filter {
                 it.value.type == Meeting.MeetingType.BUDGET_PROPOSAL && gameState.playerName in it.value.scheduledCharacters
             }.keys.firstOrNull()?.let { add(Event_ProposeBudget(it)) }
-            gameState.scheduledMeetings.filter {
-                it.value.type == Meeting.MeetingType.BUDGET_RESOLUTION && gameState.playerName in it.value.scheduledCharacters
-            }.keys.firstOrNull()?.let { add(Event_ResolveBudget(it)) }
             val relevantInfos = parent.player.preparedInfoKeys.map {
                 parent.informations[it]!!
             }.filter { info ->

@@ -92,7 +92,6 @@ data class MeetingAgenda(
             }
 
             AgendaType.BUDGET_PROPOSAL -> return Pair(0.0, "")
-            AgendaType.BUDGET_RESOLUTION -> return Pair(0.0, "")
             AgendaType.APPOINT_MEETING -> return Pair(0.0, "")
             AgendaType.FIRE_MANAGER -> return Pair(
                 -parent.characters[subjectParams["character"]]!!.infoPreference(
@@ -113,5 +112,5 @@ data class MeetingAgenda(
 
 @Serializable
 enum class AgendaType {
-    PROOF_OF_WORK, NOMINATE, REQUEST, PROMISE, PRAISE, DENOUNCE, PRAISE_PARTY, DENOUNCE_PARTY, BUDGET_PROPOSAL, BUDGET_RESOLUTION, APPOINT_MEETING, FIRE_MANAGER
+    PROOF_OF_WORK, NOMINATE, REQUEST, PROMISE, PRAISE, DENOUNCE, PRAISE_PARTY, DENOUNCE_PARTY, BUDGET_PROPOSAL, APPOINT_MEETING, FIRE_MANAGER
 }

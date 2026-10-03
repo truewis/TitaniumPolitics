@@ -149,7 +149,6 @@ class MeetingSummaryWindowUI : WindowUI("MeetingSummaryUI-title") {
             AgendaType.PROMISE -> ReadOnly.prop("NewAgendaUI-promise")
             AgendaType.NOMINATE -> ReadOnly.prop("NewAgendaUI-nominate")
             AgendaType.BUDGET_PROPOSAL -> ReadOnly.prop("NewAgendaUI-budgetProposal")
-            AgendaType.BUDGET_RESOLUTION -> ReadOnly.prop("NewAgendaUI-budgetResolution")
             AgendaType.APPOINT_MEETING -> ReadOnly.prop("NewAgendaUI-scheduleMeeting")
             AgendaType.FIRE_MANAGER -> ReadOnly.prop("NewAgendaUI-fireManager")
         }

@@ -624,10 +624,6 @@ class WorkRoutine(var workplace: String) : Routine() {
                 return AttendDivisionBudgetProposalRoutine(gState.meetingName(conf))
             }
 
-            Meeting.MeetingType.BUDGET_RESOLUTION -> {
-                return AttendDivisionBudgetResolutionRoutine(gState.meetingName(conf))
-            }
-
             else -> {
                 TODO(conf.type.toString())
             }

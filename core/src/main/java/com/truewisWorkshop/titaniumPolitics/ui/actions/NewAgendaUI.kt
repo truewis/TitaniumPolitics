@@ -219,22 +219,6 @@ class NewAgendaUI(val gameState: GameState, actionCallback: (GameAction) -> Unit
                 MeetingAgenda(AgendaType.FIRE_MANAGER, this@NewAgendaUI.subject, hashMapOf("character" to char))
         }).size(180f)
     }
-    private val budgetResolutionTable = scene2d.table {
-        label(ReadOnly.prop("NewAgendaUI-budgetProposal"), "docTitle") {
-            color = Color.BLACK
-        }
-        row()
-        label(ReadOnly.prop("NewAgendaUI-budgetResolution-desc"), "docTitle") {
-            color = Color.BLACK; setFontScale(0.3f); wrap = true; it.fill()
-        }
-        //Select character to perform the request.
-        add(CharacterSelectButton(this@NewAgendaUI.sbjChar.currentMeeting!!.involvedParty?.let { partyName ->
-            (this@NewAgendaUI.gameState.parties[partyName]!!.members - this@NewAgendaUI.sbjChar.name).toSet()
-        }) { char ->
-            this@NewAgendaUI.agenda =
-                MeetingAgenda(AgendaType.FIRE_MANAGER, this@NewAgendaUI.subject, hashMapOf("character" to char))
-        }).size(180f)
-    }
     val st = scene2d.stack {
         table {
             this@NewAgendaUI.agendaSelectBox = buttonGroup(1, 1).also {
@@ -254,7 +238,6 @@ class NewAgendaUI(val gameState: GameState, actionCallback: (GameAction) -> Unit
                 add(this@NewAgendaUI.promiseTable)
                 add(this@NewAgendaUI.fireTable)
                 add(this@NewAgendaUI.budgetProposalTable)
-                add(this@NewAgendaUI.budgetResolutionTable)
                 //TODO: also make changes to NewAgenda.kt.
             }
             row()
@@ -295,7 +278,6 @@ class NewAgendaUI(val gameState: GameState, actionCallback: (GameAction) -> Unit
         promiseTable.isVisible = false
         fireTable.isVisible = false
         budgetProposalTable.isVisible = false
-        budgetResolutionTable.isVisible = false
         agenda = null
     }
 
@@ -459,19 +441,6 @@ class NewAgendaUI(val gameState: GameState, actionCallback: (GameAction) -> Unit
                                 })
                             }
 
-                            AgendaType.BUDGET_RESOLUTION -> {
-                                this.setDrawable(defaultSkin, "icon_app_105")
-                                this@button.addListener(object : ClickListener() {
-                                    override fun clicked(
-                                        event: InputEvent?,
-                                        x: Float,
-                                        y: Float
-                                    ) {
-                                        this@NewAgendaUI.hideAllAgendaDetailsTable()
-                                    }
-                                })
-                            }
-
                             AgendaType.APPOINT_MEETING -> {
                                 this.setDrawable(defaultSkin, "icon_app_18")
                                 this@button.addListener(object : ClickListener() {
@@ -549,8 +518,6 @@ class NewAgendaUI(val gameState: GameState, actionCallback: (GameAction) -> Unit
             availableAgendas += AgendaType.NOMINATE
         if (mt.involvedParty in listOf("cabinet", "division") && !party!!.isBudgetProposed && gameState.progression.contains("Management"))
             availableAgendas += AgendaType.BUDGET_PROPOSAL
-        if (mt.involvedParty in listOf("triumvirate", "division") && !party!!.isBudgetResolved && gameState.progression.contains("Management"))
-            availableAgendas += AgendaType.BUDGET_RESOLUTION
         //If the player is a division leader, they can fire managers.
         if (mt.type == Meeting.MeetingType.DIVISION_DAILY_CONFERENCE && gameState.parties[mt.involvedParty]!!.leader == subject && gameState.progression.contains("Management"))
             availableAgendas += AgendaType.FIRE_MANAGER

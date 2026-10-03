@@ -73,10 +73,6 @@ class AgendaBubbleUI(val agenda: MeetingAgenda) : Table(), KTable {
                         image("icon_app_104")
                     }
 
-                    AgendaType.BUDGET_RESOLUTION -> {
-                        image("icon_app_105")
-                    }
-
                     AgendaType.APPOINT_MEETING -> {
                         image("icon_app_18")
                     }
