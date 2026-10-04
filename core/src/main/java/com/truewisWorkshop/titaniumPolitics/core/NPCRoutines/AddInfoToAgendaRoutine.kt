@@ -47,22 +47,13 @@ class AddInfoToAgendaRoutine(val support: Boolean, val meetingName: String = "")
                     ?: return EndMeeting(name, place)
                 return EndSpeech(name, place, nextSpeaker, gState)
             }
-            //Check if I have any information to support the agenda.
-            val addingInfo = gState.informations.filter { (key, value) -> name in value.knownTo }.keys.filter {
-                currentAgenda.effectivity(
-                    gState,
-                    conf,
-                    gState.informations[it]!!,
-                    character
-                ).first * (if (support) 1 else -1) > 0.0
-            }.minByOrNull {
-                currentAgenda.effectivity(
-                    gState,
-                    conf,
-                    gState.informations[it]!!,
-                    character
-                ).first
+            val presentedInfoKeys = conf.agendas.flatMap { it.informationKeys }.toSet()
+            val effectivities = gState.informations.mapNotNull { (key, info) ->
+                if (name !in info.knownTo || key in presentedInfoKeys) return@mapNotNull null
+                if (!conf.isTalkWithoutSubject && key !in character.preparedInfoKeys) return@mapNotNull null
+                key to currentAgenda.effectivity(gState, conf, info, character).first
             }
+            val addingInfo = selectBestInformation(effectivities, support)
             if (addingInfo != null) {
                 AddInfo(name, place, addingInfo, gState).also {
                     if (it.isValid()) {
@@ -71,6 +62,7 @@ class AddInfoToAgendaRoutine(val support: Boolean, val meetingName: String = "")
                     }
                 }
             }
+
             //If there is no supporting information, end speech.
             failed()
             val nextSpeaker = conf.currentCharacters.minus(name)
@@ -79,4 +71,16 @@ class AddInfoToAgendaRoutine(val support: Boolean, val meetingName: String = "")
             return EndSpeech(name, place, nextSpeaker, gState)
         }
     }
+}
+
+internal fun selectBestInformation(effectivities: List<Pair<String, Double>>, support: Boolean): String? {
+    val candidates = effectivities.filter { (_, effectivity) ->
+        if (support) effectivity > 0.0 else effectivity < 0.0
+    }
+    val selected = if (support) {
+        candidates.maxByOrNull { it.second }
+    } else {
+        candidates.minByOrNull { it.second }
+    }
+    return selected?.first
 }
