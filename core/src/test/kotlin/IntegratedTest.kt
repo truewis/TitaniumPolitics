@@ -82,7 +82,7 @@ class IntegratedTest {
 
         val meeting = Meeting(
             time = 0,
-            type = Meeting.MeetingType.PRIVATE,
+            type = Meeting.MeetingType.TALK,
             scheduledCharacters = hashSetOf(gState.playerName),
             place = gState.player.place.name
         )

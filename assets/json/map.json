@@ -1,6 +1,6 @@
 {
   "infrastructureHeadquarters": {
-    "image": "data/locations/mainControlRoom.png",
+    "image": "data/locations/주제어실메인배경 일반 버전.png",
     "sound": "data/sounds/mainControlRoom.mp3",
     "light": [
       0,
@@ -10,7 +10,7 @@
     ]
   },
   "bioengineeringHeadquarters": {
-    "image": "data/locations/mainControlRoom.png",
+    "image": "data/locations/주제어실메인배경 일반 버전.png",
     "sound": "data/sounds/mainControlRoom.mp3",
     "light": [
       0,
@@ -20,7 +20,7 @@
     ]
   },
   "industryHeadquarters": {
-    "image": "data/locations/mainControlRoom.png",
+    "image": "data/locations/주제어실메인배경 일반 버전.png",
     "sound": "data/sounds/mainControlRoom.mp3",
     "light": [
       0,
@@ -30,7 +30,7 @@
     ]
   },
   "safetyHeadquarters": {
-    "image": "data/locations/mainControlRoom.png",
+    "image": "data/locations/주제어실메인배경 일반 버전.png",
     "sound": "data/sounds/mainControlRoom.mp3",
     "light": [
       0,
@@ -40,7 +40,7 @@
     ]
   },
   "miningHeadquarters": {
-    "image": "data/locations/mainControlRoom.png",
+    "image": "data/locations/주제어실메인배경 일반 버전.png",
     "sound": "data/sounds/mainControlRoom.mp3",
     "light": [
       0,
@@ -50,7 +50,7 @@
     ]
   },
   "educationHeadquarters": {
-    "image": "data/locations/mainControlRoom.png",
+    "image": "data/locations/주제어실메인배경 일반 버전.png",
     "sound": "data/sounds/mainControlRoom.mp3",
     "light": [
       0,
@@ -60,7 +60,7 @@
     ]
   },
   "interiorHeadquarters": {
-    "image": "data/locations/mainControlRoom.png",
+    "image": "data/locations/주제어실메인배경 일반 버전.png",
     "sound": "data/sounds/mainControlRoom.mp3",
     "light": [
       0,
@@ -70,7 +70,7 @@
     ]
   },
   "mainControlRoom": {
-    "image": "data/locations/mainControlRoom.png",
+    "image": "data/locations/주제어실메인배경 일반 버전.png",
     "sound": "data/sounds/mainControlRoom.mp3",
     "light": [
       0,
@@ -100,7 +100,7 @@
     ]
   },
   "securityCheckWest": {
-    "image": "data/locations/securityCheck.png",
+    "image": "data/locations/검문소 copy.png",
     "ind": "capsuleMapIndPortAftPlane",
     "light": [
       0,
@@ -110,7 +110,7 @@
     ]
   },
   "securityCheckEast": {
-    "image": "data/locations/securityCheck.png",
+    "image": "data/locations/검문소 copy.png",
     "ind": "capsuleMapIndPortAftPlane",
     "light": [
       0,
@@ -120,7 +120,7 @@
     ]
   },
   "securityCheckCenter": {
-    "image": "data/locations/securityCheck.png",
+    "image": "data/locations/검문소 copy.png",
     "ind": "capsuleMapIndPortAftPlane",
     "light": [
       0,
@@ -140,7 +140,7 @@
     ]
   },
   "welfareStationWest": {
-    "image": "data/locations/testimage.png",
+    "image": "data/locations/빈민광장 서비스.png",
     "ind": "capsuleMapIndPortAftPlane",
     "light": [
       0,
@@ -150,7 +150,7 @@
     ]
   },
   "welfareStationEast": {
-    "image": "data/locations/testimage.png",
+    "image": "data/locations/빈민광장 서비스.png",
     "desc": "Fore plane supported by the arm.",
     "ind": "capsuleMapIndForePlane",
     "light": [
@@ -183,7 +183,7 @@
     ]
   },
   "observatory": {
-    "image": "data/locations/testimage.png",
+    "image": "data/locations/메인천체망원경실 밝은 버전.png",
     "desc": "Aft frame of the hexagonal frame.",
     "ind": "capsuleMapIndAftFrame",
     "light": [
@@ -355,7 +355,7 @@
     ]
   },
   "miningSchool": {
-    "image": "data/locations/testimage.png",
+    "image": "data/locations/기계 교실.png",
     "sound": "data/sounds/market.mp3",
     "desc": "Starboard-Fore arm of the station.",
     "ind": "capsuleMapIndStarboardForeArm",
@@ -367,7 +367,7 @@
     ]
   },
   "techSchool": {
-    "image": "data/locations/testimage.png",
+    "image": "data/locations/기계 교실.png",
     "sound": "data/sounds/market.mp3",
     "desc": "Starboard-Fore arm of the station.",
     "ind": "capsuleMapIndStarboardForeArm",
@@ -435,7 +435,7 @@
     ]
   },
   "squareNorth": {
-    "image": "data/locations/squareNorth.jpeg",
+    "image": "data/locations/광장 디폴트.png",
     "sound": "data/sounds/market.mp3",
     "desc": "Starboard-Fore arm of the station.",
     "ind": "capsuleMapIndStarboardForeArm",
@@ -447,7 +447,7 @@
     ]
   },
   "squareSouth": {
-    "image": "data/locations/squareSouth.jpeg",
+    "image": "data/locations/광장 사람 X 버전.png",
     "sound": "data/sounds/market.mp3",
     "desc": "Starboard-Fore arm of the station.",
     "ind": "capsuleMapIndStarboardForeArm",
