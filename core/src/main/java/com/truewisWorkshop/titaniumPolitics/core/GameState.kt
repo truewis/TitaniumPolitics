@@ -891,6 +891,20 @@ class GameState {
             .map { Pair(it.second, it.first) } //Format the reason.
     }
 
+    fun getSignificantEffectivityReasons(
+        agenda: MeetingAgenda,
+        meeting: Meeting,
+        info: Information,
+        speaker: Character,
+        evaluation: AgendaEffectivityEvaluation? = null
+    ): List<AgendaEffectivityReason> {
+        val result = evaluation ?: agenda.effectivityEvaluation(this, meeting, info, speaker)
+        return result.reasons
+            .filter { it.effectivity.absoluteValue > 1e-2 }
+            .sortedByDescending { it.effectivity.absoluteValue }
+            .take(6)
+    }
+
     fun setMutuality(a: Collection<String>, b: Collection<String> = a, delta: Double, reasonKey: String? = null) {
         a.forEach { a1 ->
             b.forEach { b1 ->

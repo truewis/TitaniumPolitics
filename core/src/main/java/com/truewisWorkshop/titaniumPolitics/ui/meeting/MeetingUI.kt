@@ -474,7 +474,7 @@ class MeetingUI(var gameState: GameState) : Table(defaultSkin), KTable {
 
         if (improvisedQuestUI == null) {
             improvisedQuestUI = scene2d.table {
-                background = defaultSkin.newDrawable("white", Color(0.08f, 0.12f, 0.2f, 0.9f))
+                background = defaultSkin.newDrawable("white-pixel", Color(0.08f, 0.12f, 0.2f, 0.9f))
                 pad(12f)
                 defaults().left().pad(2f)
                 add(scene2d.label(quest.name, "docTitle") {
@@ -493,7 +493,7 @@ class MeetingUI(var gameState: GameState) : Table(defaultSkin), KTable {
 
         val table = improvisedQuestUI!!
         table.clearChildren()
-        table.background = defaultSkin.newDrawable("white", Color(0.08f, 0.12f, 0.2f, 0.9f))
+        table.background = defaultSkin.newDrawable("white-pixel", Color(0.08f, 0.12f, 0.2f, 0.9f))
         table.pad(12f)
         table.defaults().left().pad(2f)
         table.add(scene2d.label(quest.name, "docTitle") {
@@ -507,7 +507,11 @@ class MeetingUI(var gameState: GameState) : Table(defaultSkin), KTable {
             color = Color(0.9f, 0.92f, 0.95f, 1f)
         })
         table.setSize(700f, 150f)
-        table.setPosition(discussionTable.x + discussionTable.width / 2 - table.width / 2, discussionTable.y + discussionTable.height - 180f, Align.center)
+        table.setPosition(
+            discussionTable.x + discussionTable.width / 2 - table.width / 2,
+            discussionTable.y + discussionTable.height - 180f,
+            Align.center
+        )
         table.clearActions()
         table.setScale(0.7f)
         table.addAction(Actions.sequence(Actions.scaleTo(1f, 1f, 0.25f)))

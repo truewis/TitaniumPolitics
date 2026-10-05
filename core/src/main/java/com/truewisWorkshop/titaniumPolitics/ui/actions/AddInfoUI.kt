@@ -7,12 +7,14 @@ import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.badlogic.gdx.utils.Align
+import com.titaniumPolitics.game.core.AgendaEffectivityEvaluation
 import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.core.Meeting
 import com.titaniumPolitics.game.core.MeetingAgenda
 import com.titaniumPolitics.game.core.gameActions.AddInfo
 import com.titaniumPolitics.game.core.gameActions.GameAction
 import com.titaniumPolitics.game.ui.meeting.AgendaBubbleUI
+import com.titaniumPolitics.game.ui.widget.AddInfoEffectivityTooltipUI
 import com.titaniumPolitics.game.ui.widget.ActionSheetUI
 import ktx.scene2d.*
 
@@ -61,23 +63,25 @@ class AddInfoUI(val gameState: GameState, actionCallback: (GameAction) -> Unit) 
         sbjChar.currentMeeting?.type == Meeting.MeetingType.TALK
 
     fun refreshInfoOptions() {
+        val meeting = sbjChar.currentMeeting!!
+        val evaluations = hashMapOf<String, AgendaEffectivityEvaluation>()
         val availableInfoKeys = gameState.informations.filter { (key, info) ->
             val isPrepared = key in gameState.player.preparedInfoKeys
             val isTalkUnpreparedAllowed = allowUnpreparedInfo()
             val matchesKnownInfo = gameState.playerName in info.knownTo
-            val notPresented = !sbjChar.currentMeeting!!.agendas.flatMap { it.informationKeys }
+            val notPresented = !meeting.agendas.flatMap { it.informationKeys }
                 .contains(key) // Not presented in the current meeting
-            val hasEffectivity = agenda.effectivity(
-                gameState,
-                meeting = sbjChar.currentMeeting!!,
-                info = info,
-                sbjCharObj = sbjChar
-            ).first != 0.0
-
-            (isPrepared || isTalkUnpreparedAllowed) &&
-                    matchesKnownInfo &&
-                    notPresented &&
-                    hasEffectivity
+            if (!(isPrepared || isTalkUnpreparedAllowed) || !matchesKnownInfo || !notPresented) {
+                false
+            } else {
+                val evaluation = agenda.effectivityEvaluation(gameState, meeting, info, sbjChar)
+                if (evaluation.effectivity == 0.0) {
+                    false
+                } else {
+                    evaluations[key] = evaluation
+                    true
+                }
+            }
 
         }.keys
         dataTable.clear()
@@ -94,18 +98,22 @@ class AddInfoUI(val gameState: GameState, actionCallback: (GameAction) -> Unit) 
                             wrap = true
                         }
                         row()
-                        val eff = this@AddInfoUI.agenda.effectivity(
-                            this@AddInfoUI.gameState,
-                            meeting = this@AddInfoUI.sbjChar.currentMeeting!!,
-                            info = this@AddInfoUI.gameState.informations[key]!!,
-                            sbjCharObj = this@AddInfoUI.sbjChar
-                        ).first
+                        val evaluation = evaluations[key]!!
+                        val reasons = this@AddInfoUI.gameState.getSignificantEffectivityReasons(
+                            this@AddInfoUI.agenda,
+                            meeting,
+                            this@AddInfoUI.gameState.informations[key]!!,
+                            this@AddInfoUI.sbjChar,
+                            evaluation
+                        )
+                        val eff = evaluation.effectivity
                         label("%.1f %%".format(eff), "docTitle") {
                             it.size(300f, 50f)
                             setAlignment(Align.center)
                             color = Color.WHITE
                             setFontScale(0.2f)
                         }
+                        this@button.addListener(AddInfoEffectivityTooltipUI(evaluation, reasons))
                         this@button.addListener(object : ClickListener() {
                             override fun clicked(
                                 event: InputEvent?,

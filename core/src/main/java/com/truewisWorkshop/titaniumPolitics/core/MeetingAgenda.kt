@@ -4,6 +4,19 @@ import com.titaniumPolitics.game.core.gameActions.*
 import kotlinx.serialization.Serializable
 import kotlin.math.abs
 import kotlin.math.max
+import kotlin.math.roundToInt
+
+data class AgendaEffectivityReason(
+    val effectivity: Double,
+    val localizationKey: String,
+    val arguments: List<String> = emptyList()
+)
+
+data class AgendaEffectivityEvaluation(
+    val effectivity: Double,
+    val speechReason: String,
+    val reasons: List<AgendaEffectivityReason>
+)
 
 @Serializable
 data class MeetingAgenda(
@@ -44,15 +57,60 @@ data class MeetingAgenda(
         meeting: Meeting,
         info: Information,
         sbjCharObj: Character
-    ): Pair<Double, String> {
+    ): Pair<Double, String> = effectivityEvaluation(parent, meeting, info, sbjCharObj).let {
+        Pair(it.effectivity, it.speechReason)
+    }
+
+    fun effectivityEvaluation(
+        parent: GameState,
+        meeting: Meeting,
+        info: Information,
+        sbjCharObj: Character
+    ): AgendaEffectivityEvaluation {
         val rawEffectivity = calculateEffectivity(parent, meeting, info, sbjCharObj)
-        if (rawEffectivity.first == 0.0) return rawEffectivity
+        if (rawEffectivity.first == 0.0) {
+            return AgendaEffectivityEvaluation(0.0, rawEffectivity.second, emptyList())
+        }
 
         val confidence = sourceConfidence(parent, meeting, info)
         val freshness = informationFreshness(info)
-        val repetition = repetitionFactor(parent, info)
+        val repetitions = repetitionCount(parent, info)
+        val repetition = repetitionFactor(repetitions)
         val score = rawEffectivity.first * confidence * freshness * repetition
-        return if (score == 0.0) Pair(0.0, "") else Pair(score, rawEffectivity.second)
+        if (score == 0.0) return AgendaEffectivityEvaluation(0.0, "", emptyList())
+
+        val reasons = arrayListOf(
+            AgendaEffectivityReason(
+                score,
+                effectivityExplanationKey(parent, info)
+            )
+        )
+        if (confidence < 1.0) {
+            val sourceName = info.author?.let {
+                if (parent.characters.containsKey(it)) ReadOnly.charProp(it)
+                else ReadOnly.prop("AddInfoEffectivityTooltipUI-UnknownSource")
+            } ?: ReadOnly.prop("AddInfoEffectivityTooltipUI-UnknownSource")
+            reasons += AgendaEffectivityReason(
+                score,
+                "AddInfoEffectivityTooltipUI-SourceTrust",
+                listOf(sourceName, (confidence * 100).roundToInt().toString())
+            )
+        }
+        if (freshness < 1.0) {
+            reasons += AgendaEffectivityReason(
+                score,
+                "AddInfoEffectivityTooltipUI-Freshness",
+                listOf((freshness * 100).roundToInt().toString())
+            )
+        }
+        if (repetitions > 0) {
+            reasons += AgendaEffectivityReason(
+                score,
+                "AddInfoEffectivityTooltipUI-Repetition",
+                listOf(repetitions.toString(), (repetition * 100).roundToInt().toString())
+            )
+        }
+        return AgendaEffectivityEvaluation(score, rawEffectivity.second, reasons)
     }
 
     private fun calculateEffectivity(
@@ -127,10 +185,54 @@ data class MeetingAgenda(
         return (info.life / lifetime).coerceIn(0.0, 1.0)
     }
 
-    private fun repetitionFactor(parent: GameState, info: Information): Double {
-        val repetitions = informationKeys.mapNotNull { parent.informations[it] }
+    private fun repetitionCount(parent: GameState, info: Information): Int =
+        informationKeys.mapNotNull { parent.informations[it] }
             .count { sameEvidenceScope(it, info) }
-        return 1.0 / (1.0 + repetitions * 0.5)
+
+    private fun repetitionFactor(repetitions: Int): Double = 1.0 / (1.0 + repetitions * 0.5)
+
+    private fun effectivityExplanationKey(
+        parent: GameState,
+        info: Information
+    ): String = when (type) {
+        AgendaType.PROOF_OF_WORK -> "AddInfoEffectivityTooltipUI-ProofOfWork"
+        AgendaType.NOMINATE -> if (info.type == InformationType.MUTUALITY)
+            "AddInfoEffectivityTooltipUI-NomineeRelationship"
+        else "AddInfoEffectivityTooltipUI-CandidatePerformance"
+        AgendaType.PRAISE, AgendaType.DENOUNCE -> "AddInfoEffectivityTooltipUI-PersonPerformance"
+        AgendaType.PRAISE_PARTY, AgendaType.DENOUNCE_PARTY -> if (info.type == InformationType.PARTY_MUTUALITY)
+            "AddInfoEffectivityTooltipUI-PartyRelationship"
+        else "AddInfoEffectivityTooltipUI-PartyPerformance"
+        AgendaType.FIRE_MANAGER -> "AddInfoEffectivityTooltipUI-ManagerPerformance"
+        AgendaType.REQUEST -> requestExplanationKey()
+        AgendaType.PROMISE -> {
+            val pastPromise = info.action as? NewAgenda
+            if (pastPromise?.agenda?.type == AgendaType.PROMISE &&
+                pastPromise.agenda.author == author &&
+                pastPromise.agenda.attachedRequest?.action?.let {
+                    attachedRequest?.action?.let { promised -> actionsAreSimilar(it, promised) }
+                } == true &&
+                pastPromiseWasCompleted(parent, pastPromise)
+            ) "AddInfoEffectivityTooltipUI-PromiseHistory"
+            else "AddInfoEffectivityTooltipUI-PromiseAction"
+        }
+        AgendaType.BUDGET_PROPOSAL -> if (info.type == InformationType.RESOURCES)
+            "AddInfoEffectivityTooltipUI-BudgetResources"
+        else "AddInfoEffectivityTooltipUI-BudgetWorkforce"
+        AgendaType.APPOINT_MEETING -> "AddInfoEffectivityTooltipUI-GeneralEvidence"
+    }
+
+    private fun requestExplanationKey(): String = when (attachedRequest?.action) {
+        is Examine -> "AddInfoEffectivityTooltipUI-RequestExamine"
+        is OfficialResourceTransfer, is UnofficialResourceTransfer ->
+            "AddInfoEffectivityTooltipUI-RequestTransfer"
+        is Repair -> "AddInfoEffectivityTooltipUI-RequestRepair"
+        is SetWorkers -> "AddInfoEffectivityTooltipUI-RequestWorkers"
+        is Salary -> "AddInfoEffectivityTooltipUI-RequestSalary"
+        is InvestigateAccidentScene, is ClearAccidentScene ->
+            "AddInfoEffectivityTooltipUI-RequestAccident"
+        is AnnounceInfo -> "AddInfoEffectivityTooltipUI-RequestAnnouncement"
+        else -> "AddInfoEffectivityTooltipUI-RequestGeneral"
     }
 
     private fun sameEvidenceScope(first: Information, second: Information): Boolean {
