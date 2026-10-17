@@ -1,6 +1,7 @@
 package com.titaniumPolitics.game.core.NPCRoutines
 
 import com.titaniumPolitics.game.core.AgendaType
+import com.titaniumPolitics.game.core.AgendaSupportPlanner
 import com.titaniumPolitics.game.core.Character
 import com.titaniumPolitics.game.core.GameEngine
 import com.titaniumPolitics.game.core.InformationType
@@ -173,14 +174,15 @@ class WorkRoutine(var workplace: String) : Routine() {
 
         //5. Execute a command if there is any.
         gState.requests.values.firstOrNull {
-            if (name !in it.issuedTo) return@firstOrNull false
+            if (!it.isPendingFor(name)) return@firstOrNull false
             if (it.name in failedRequests) return@firstOrNull false
             val eta =
                 gState.places[it.action.tgtPlace]!!.shortestPathAndTimeTo(place, name)?.second
                     ?: return@firstOrNull false
-            return@firstOrNull (it.executeTime in gState.time - ReadOnly.constInt("CommandExecuteTolerance") + eta..gState.time + ReadOnly.constInt(
-                "CommandExecuteTolerance"
-            ) + eta || it.executeTime == null) && (it.issuedBy.isEmpty() || it.issuedBy.sumOf {
+            return@firstOrNull it.matchesExecutionTime(
+                gState.time + eta,
+                ReadOnly.constInt("CommandExecuteTolerance")
+            ) && (it.issuedBy.isEmpty() || it.issuedBy.sumOf {
                 gState.getMutuality(name, it)
             } / it.issuedBy.size > it.difficulty(gState)) && GameEngine.availableActions(
                 gState, it.action.tgtPlace, name
@@ -200,7 +202,7 @@ class WorkRoutine(var workplace: String) : Routine() {
 
         // (c) Acquire resources for pending requests toward this character that require resources they lack.
         gState.requests.values.firstOrNull { req ->
-            name in req.issuedTo && !req.completed && req.name !in failedRequests &&
+            req.isPendingFor(name) && req.name !in failedRequests &&
                 req.action is UnofficialResourceTransfer &&
                 (req.action as UnofficialResourceTransfer).fromHome &&
                 !gState.characters[name]!!.resources.contains((req.action as UnofficialResourceTransfer).resources)
@@ -502,30 +504,54 @@ class WorkRoutine(var workplace: String) : Routine() {
             }
         }
 
-        //9. If there is some time, prepare information
+        //9. Collect evidence that a report can use for a likely upcoming agenda.
+        if (subroutines.none { it is CollectAgendaEvidenceRoutine } &&
+            !failedSubroutineTypes.contains(CollectAgendaEvidenceRoutine::class.java.simpleName)
+        ) {
+            AgendaSupportPlanner.nextInformationNeed(gState, name)?.let { need ->
+                candidates += Pair(
+                    {
+                        CollectAgendaEvidenceRoutine(need.targetPlace, need.informationType).apply {
+                            priority = PRIORITY_WORK + 120
+                        }
+                    },
+                    PRIORITY_WORK + 120
+                )
+            }
+        }
+
+        //10. Prepare likely agenda evidence before an upcoming meeting.
         if (subroutines.none { it is PrepareInfoRoutine }) {
-            if (gState.scheduledMeetings.none {
-                    val eta =
-                        gState.places[it.value.place]!!.shortestPathAndTimeTo(place, name)?.second ?: return@none false
-                    it.value.scheduledCharacters.contains(name) &&
-                        it.value.isValidTimeToStart(gState.time + eta)
-                })//If a Meeting is not soon
-            {
-                //If we haven't prepared info recently
-                if (gState.informations.none { (_, information) ->
-                        information.author == character.name && information.type == InformationType.ACTION && information.action is PrepareInfo
-                            && gState.time - information.creationTime > ReadOnly.constInt("lengthOfDay") * 2
-                    }) {
-                    if (!failedSubroutineTypes.contains(PrepareInfoRoutine::class.java.simpleName) && try_prepare_info == 0) {
-                        candidates += Pair(
-                            {
-                                try_prepare_info += 1
-                                PrepareInfoRoutine().apply { priority = PRIORITY_WORK + 70 }
-                            },
-                            PRIORITY_WORK + 70
-                        )
-                    }
+            val predictedInfoKeys = AgendaSupportPlanner.recommendInformationKeys(gState, name)
+            val agendaEvidenceNeedsPreparation =
+                predictedInfoKeys.any { it !in character.preparedInfoKeys }
+            val lastPreparedAt = gState.informations.values
+                .filter {
+                    it.author == character.name &&
+                        it.type == InformationType.ACTION &&
+                        it.action is PrepareInfo
                 }
+                .maxOfOrNull { it.creationTime }
+            val periodicPreparationDue = lastPreparedAt == null ||
+                gState.time - lastPreparedAt >= 2 * ReadOnly.constInt("lengthOfDay")
+            val meetingIsStarting = gState.scheduledMeetings.values.any {
+                val eta = gState.places[it.place]!!.shortestPathAndTimeTo(place, name)?.second
+                    ?: return@any false
+                name in it.scheduledCharacters && it.isValidTimeToStart(gState.time + eta)
+            }
+            val shouldPrepare = agendaEvidenceNeedsPreparation ||
+                (periodicPreparationDue && !meetingIsStarting && try_prepare_info == 0)
+
+            if (shouldPrepare &&
+                !failedSubroutineTypes.contains(PrepareInfoRoutine::class.java.simpleName)
+            ) {
+                candidates += Pair(
+                    {
+                        try_prepare_info += 1
+                        PrepareInfoRoutine().apply { priority = PRIORITY_WORK + 70 }
+                    },
+                    PRIORITY_WORK + 70
+                )
             }
         }
 

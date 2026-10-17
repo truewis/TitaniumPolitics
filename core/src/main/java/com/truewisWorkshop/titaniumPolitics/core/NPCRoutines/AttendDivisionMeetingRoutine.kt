@@ -9,6 +9,7 @@ class AttendDivisionMeetingRoutine(override val meetingName: String) : MeetingRo
     var try_support_salary = 0
     private val triedPolicyResponses = hashSetOf<String>()
     private val triedPolicyInterceptions = hashSetOf<String>()
+    private val triedRequestResponses = hashSetOf<String>()
 
     init {
         priority = PRIORITY_MEETING
@@ -34,6 +35,23 @@ class AttendDivisionMeetingRoutine(override val meetingName: String) : MeetingRo
             ) {
                 return AddInfoToAgendaRoutine(
                     support = stance > 0.0,
+                    meetingName = gState.meetingName(meeting)
+                )
+            }
+        }
+
+        val bossRequestAgenda = meeting.currentAgenda?.takeIf {
+            it.type == AgendaType.REQUEST &&
+                it.author == party.leader &&
+                it.attachedRequest?.action !is Salary
+        }
+        if (meeting.currentSpeaker == name && bossRequestAgenda != null) {
+            val relationship = gState.getMutNorm(name, party.leader!!)
+            val agendaKey =
+                "${meeting.ID}:${meeting.agendas.indexOf(bossRequestAgenda)}:${bossRequestAgenda.author}"
+            if (kotlin.math.abs(relationship) > 0.1 && triedRequestResponses.add(agendaKey)) {
+                return AddInfoToAgendaRoutine(
+                    support = relationship > 0.1,
                     meetingName = gState.meetingName(meeting)
                 )
             }

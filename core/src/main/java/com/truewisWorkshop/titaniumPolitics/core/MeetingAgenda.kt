@@ -267,7 +267,7 @@ data class MeetingAgenda(
     }
 
     private fun requestTimeMatches(request: Request, info: Information): Boolean =
-        request.executeTime?.let { abs(it - info.tgtTime) <= ReadOnly.IDTH } ?: true
+        request.matchesExecutionTime(info.tgtTime, ReadOnly.IDTH)
 
     private fun requestEffectivity(
         parent: GameState,

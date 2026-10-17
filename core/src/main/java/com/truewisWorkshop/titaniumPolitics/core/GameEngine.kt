@@ -139,7 +139,7 @@ class GameEngine(val gameState: GameState) {
         }
         //If three days have passed since executeTime, the request fails.
         gameState.requests.filter {
-            it.value.executeTime?.let { gameState.time - it >= 3 * 24 * IDTH } ?: false
+            it.value.isExpiredAt(gameState.time, 3 * 24 * IDTH)
         }
             .forEach {
                 gameState.removeRequest(it.key)

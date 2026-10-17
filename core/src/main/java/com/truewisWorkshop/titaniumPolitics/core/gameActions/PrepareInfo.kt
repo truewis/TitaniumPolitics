@@ -2,6 +2,7 @@ package com.titaniumPolitics.game.core.gameActions
 
 import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.core.InformationType
+import com.titaniumPolitics.game.core.AgendaSupportPlanner
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -51,6 +52,10 @@ data class PrepareInfo(override val sbjCharacter: String, override val tgtPlace:
             .forEach {
                 newSetOfPrepInfoKeys.add(it.key)
             }
+
+        newSetOfPrepInfoKeys.addAll(
+            AgendaSupportPlanner.recommendInformationKeys(parent, sbjCharacter)
+        )
     }
 
     override fun execute() {

@@ -19,6 +19,8 @@ class ExecuteRequestRoutine() : Routine() {
 
 
     override fun newRoutineCondition(name: String, place: String, subroutines: List<Routine>): Routine? {
+        if (executableRequest.completed) return success()
+
         //If there are subroutines, it means that the character is already doing something else, so do not create new subroutines.
         if (subroutines.isEmpty()) {
 

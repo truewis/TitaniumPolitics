@@ -270,13 +270,14 @@ sealed class MeetingRoutine : Routine() {
 
     fun executeRequestInMeeting(name: String, place: String): GameAction? {
         gState.requests.values.firstOrNull {
-            if (name !in it.issuedTo) return@firstOrNull false
+            if (!it.isPendingFor(name)) return@firstOrNull false
             val eta =
                 gState.places[it.action.tgtPlace]!!.shortestPathAndTimeTo(place, name)?.second
                     ?: return@firstOrNull false
-            return@firstOrNull (it.executeTime in gState.time - ReadOnly.constInt("CommandExecuteTolerance") + eta..gState.time + ReadOnly.constInt(
-                "CommandExecuteTolerance"
-            ) + eta || it.executeTime == null) && (it.issuedBy.isEmpty() /*System request must be executed regardless of mutualities.*/ || it.issuedBy.sumOf {
+            return@firstOrNull it.matchesExecutionTime(
+                gState.time + eta,
+                ReadOnly.constInt("CommandExecuteTolerance")
+            ) && (it.issuedBy.isEmpty() /*System request must be executed regardless of mutualities.*/ || it.issuedBy.sumOf {
                 gState.getMutuality(
                     name,
                     it

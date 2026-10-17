@@ -10,7 +10,7 @@ import kotlinx.serialization.Transient
  * @param action This is the action to be executed. IMPORTANT! sbjCharacter param of action is used, as we don't support issuing requests to multiple characters, and sbjCharacter variable is immutable.
  * @param issuedTo If unspecified, anyone can finish this request.
  * @param issuedBy If unspecified, it is a system request.
- * @param executeTime The time the requester want the action to be executed. If 0, it can be executed anytime.
+ * @param executeTime The requested execution time. If null or 0, the action can be executed anytime.
  */
 @Serializable
 class Request(
@@ -23,6 +23,17 @@ class Request(
         private set
 
     var completed = false
+
+    val isAnytime: Boolean
+        get() = executeTime == null || executeTime == 0
+
+    fun isPendingFor(character: String): Boolean = !completed && character in issuedTo
+
+    fun matchesExecutionTime(time: Int, tolerance: Int): Boolean =
+        isAnytime || executeTime?.let { it in time - tolerance..time + tolerance } == true
+
+    fun isExpiredAt(time: Int, lifetime: Int): Boolean =
+        !isAnytime && executeTime?.let { time - it >= lifetime } == true
 
     //This is not serialized, which means that if the game is saved and loaded, onComplete will be lost.
 //    @Transient
@@ -44,10 +55,7 @@ class Request(
 
     val proofOfExecutionInfos = arrayListOf<String>()
     fun onNewInfo(info: Information) {
-        if ((executeTime == null || executeTime in info.tgtTime - IDTH..info.tgtTime + IDTH) && action.isProofOfWork(
-                info
-            )
-        )
+        if (matchesExecutionTime(info.tgtTime, IDTH) && action.isProofOfWork(info))
             proofOfExecutionInfos.add(info.name)
     }
 
@@ -103,7 +111,7 @@ class Request(
     }
 
     fun deltaWill(tgtChar: String, gState: GameState): Double {
-        return if ((executeTime in gState.time - 3..gState.time + 3 || executeTime == null))
+        return if (matchesExecutionTime(gState.time, 3))
             issuedBy.sumOf { gState.getMutNorm(tgtChar, it) * ReadOnly.const("RequestFinishDeltaWill") }
         else
             0.0
