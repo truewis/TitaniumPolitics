@@ -117,6 +117,21 @@ class AgendaTooltipUI(agenda: MeetingAgenda) : Tooltip<Table>(scene2d.table {
                     row()
                     add(BudgetDisplayUI(budget = agenda.attachedBudget)).size(300f, 250f)
                 }
+            } else if (agenda.type == AgendaType.POLICY_CHANGE) {
+                val policy = agenda.subjectParams["policy"].orEmpty()
+                table {
+                    it.size(350f, 300f)
+                    label(ReadOnly.prop("policy-$policy"), "docTitle") {
+                        setFontScale(0.3f)
+                        it.growX()
+                    }
+                    row()
+                    label(ReadOnly.prop("policy-$policy-description"), "docTitle") {
+                        setFontScale(0.25f)
+                        wrap = true
+                        it.growX().top()
+                    }
+                }
             } else {
                 label(agenda.subjectParams.toString()) {
                     it.size(350f, 150f)

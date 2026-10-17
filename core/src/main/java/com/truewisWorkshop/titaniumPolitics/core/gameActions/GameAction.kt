@@ -182,6 +182,9 @@ sealed class GameAction() {
                     AgendaType.FIRE_MANAGER -> text =
                         ReadOnly.scriptForCharacter(sbjCharacter, "NewAgenda-FireManager")
                             .format(ReadOnly.charProp(this.agenda.subjectParams["character"]!!))
+
+                    AgendaType.POLICY_CHANGE -> text = ReadOnly.prop("NewAgenda-PolicyChange")
+                        .format(ReadOnly.prop("policy-${this.agenda.subjectParams["policy"]!!}"))
                 }
             }
 

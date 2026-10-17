@@ -401,6 +401,7 @@ class Character : GameStateElement() {
                     }
 
                     AgendaType.BUDGET_PROPOSAL -> return 0.0 // TODO()
+                    AgendaType.POLICY_CHANGE -> return 0.0
                     AgendaType.APPOINT_MEETING -> return 0.0// TODO()
                     AgendaType.FIRE_MANAGER -> {
                         //If firing me, heavy dislike.

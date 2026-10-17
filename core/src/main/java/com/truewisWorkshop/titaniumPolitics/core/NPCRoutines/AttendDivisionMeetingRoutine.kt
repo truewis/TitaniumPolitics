@@ -7,6 +7,8 @@ import kotlinx.serialization.Serializable
 @Serializable
 class AttendDivisionMeetingRoutine(override val meetingName: String) : MeetingRoutine() {
     var try_support_salary = 0
+    private val triedPolicyResponses = hashSetOf<String>()
+    private val triedPolicyInterceptions = hashSetOf<String>()
 
     init {
         priority = PRIORITY_MEETING
@@ -20,6 +22,22 @@ class AttendDivisionMeetingRoutine(override val meetingName: String) : MeetingRo
         val party = gState.parties[meeting.involvedParty]!!
         supportProofOfWork(name)?.let { return it }
 
+        val policyAgenda = meeting.currentAgenda?.takeIf {
+            it.type == AgendaType.POLICY_CHANGE && it.author != name
+        }
+        if (meeting.currentSpeaker == name && policyAgenda != null) {
+            val policy = policyAgenda.subjectParams["policy"] ?: return null
+            val stance = PolicyCatalog.preferenceScore(party, policy, name, policyAgenda.author)
+            val agendaKey = policyAgendaKey(policyAgenda)
+            if (kotlin.math.abs(stance) >= PolicyCatalog.POLICY_STANCE_THRESHOLD &&
+                triedPolicyResponses.add(agendaKey)
+            ) {
+                return AddInfoToAgendaRoutine(
+                    support = stance > 0.0,
+                    meetingName = gState.meetingName(meeting)
+                )
+            }
+        }
 
         //Try supporting salary request.
         if (meeting.currentSpeaker == name && !party.isSalaryPaid) {
@@ -46,15 +64,34 @@ class AttendDivisionMeetingRoutine(override val meetingName: String) : MeetingRo
 
     override fun executeInMeeting(name: String, place: String): GameAction {
         val character = gState.characters[name]!!
+        val party = gState.parties[meeting.involvedParty]!!
         //If not speaker, wait if the mutuality to the speaker is high. Otherwise, if possible, interrupt the speaker.
         if (meeting.currentSpeaker != name) {
             //If the meeting is not boring, but the mutuality to the speaker is low, intercept the speaker.
             if (sharedMeetingEndCondition())
                 return LeaveMeeting(name, place)
+            val policyAgenda = meeting.currentAgenda?.takeIf {
+                it.type == AgendaType.POLICY_CHANGE && it.author != name
+            }
+            if (policyAgenda != null) {
+                val policy = policyAgenda.subjectParams["policy"]
+                val stance = policy?.let {
+                    PolicyCatalog.preferenceScore(party, it, name, policyAgenda.author)
+                } ?: 0.0
+                val agendaKey = policyAgendaKey(policyAgenda)
+                if (stance <= -PolicyCatalog.POLICY_STANCE_THRESHOLD &&
+                    agendaKey !in triedPolicyInterceptions
+                ) {
+                    Intercept(name, place, gState).also {
+                        if (it.isValid()) {
+                            triedPolicyInterceptions += agendaKey
+                            return it
+                        }
+                    }
+                }
+            }
             return interceptCondition(name, place)
         } else {
-            val party = gState.parties[meeting.involvedParty]!!
-
             //0. Execute a command if there is any. Here, we can move to the place actively if the command is not in the current place.
             //If there is a command that is within the set time window, issued party is trusted enough, and seems to be executable at some place(AvailableActions), start execution routine.
             //Note that the command may not be valid even if it in AvailableActions list. For example, if the character is already at the place, move command is not valid.
@@ -106,4 +143,7 @@ class AttendDivisionMeetingRoutine(override val meetingName: String) : MeetingRo
 
 
     }
+
+    private fun policyAgendaKey(agenda: MeetingAgenda): String =
+        "${meeting.ID}:${meeting.agendas.indexOf(agenda)}:${agenda.author}:${agenda.subjectParams["policy"]}"
 }

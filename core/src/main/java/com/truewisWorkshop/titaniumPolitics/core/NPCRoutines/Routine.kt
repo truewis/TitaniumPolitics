@@ -112,9 +112,13 @@ sealed class Routine() {
 
         fun isPaternityLeaveDay(name: String, gState: GameState): Boolean {
             val character = gState.characters[name] ?: return false
+            val workplaceHasPolicy = gState.parties.values.any {
+                it.type == com.titaniumPolitics.game.core.Party.Type.WORKPLACE &&
+                        name in it.members && "paternityLeave" in it.policies
+            }
             if (character.type == com.titaniumPolitics.game.core.Character.Type.ANON ||
                 character.reliant <= 0 ||
-                character.division?.policies?.contains("paternityLeave") != true
+                (!workplaceHasPolicy && character.division?.policies?.contains("paternityLeave") != true)
             ) return false
 
             val day = ReadOnly.toDays(gState.time)

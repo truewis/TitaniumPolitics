@@ -142,6 +142,7 @@ data class MeetingAgenda(
             AgendaType.REQUEST -> return requestEffectivity(parent, meeting, info, speaker)
             AgendaType.PROMISE -> return promiseEffectivity(parent, meeting, info, speaker)
             AgendaType.BUDGET_PROPOSAL -> return budgetProposalEffectivity(parent, meeting, info, speaker)
+            AgendaType.POLICY_CHANGE -> return policyChangeEffectivity(parent, meeting, info, speaker)
             AgendaType.APPOINT_MEETING -> return Pair(0.0, "")
         }
     }
@@ -219,6 +220,7 @@ data class MeetingAgenda(
         AgendaType.BUDGET_PROPOSAL -> if (info.type == InformationType.RESOURCES)
             "AddInfoEffectivityTooltipUI-BudgetResources"
         else "AddInfoEffectivityTooltipUI-BudgetWorkforce"
+        AgendaType.POLICY_CHANGE -> "AddInfoEffectivityTooltipUI-PolicyChange"
         AgendaType.APPOINT_MEETING -> "AddInfoEffectivityTooltipUI-GeneralEvidence"
     }
 
@@ -658,6 +660,23 @@ data class MeetingAgenda(
         return Pair(evidenceScore * speaker.stats.lScale, "BudgetProposal")
     }
 
+    private fun policyChangeEffectivity(
+        parent: GameState,
+        meeting: Meeting,
+        info: Information,
+        speaker: Character
+    ): Pair<Double, String> {
+        val party = meeting.involvedParty?.let { parent.parties[it] } ?: return Pair(0.0, "")
+        val policy = subjectParams["policy"] ?: return Pair(0.0, "")
+        val evidenceSignal = PolicyCatalog.informationImpact(party, policy, info)
+        if (evidenceSignal == 0.0) return Pair(0.0, "")
+
+        val speakerPreference = PolicyCatalog.preferenceScore(party, policy, speaker.name, author)
+        val agreesWithEvidence = evidenceSignal * speakerPreference >= 0.0
+        val statScale = if (agreesWithEvidence) speaker.stats.eScale else speaker.stats.pScale
+        return Pair(5.0 * evidenceSignal * statScale, "PolicyChange")
+    }
+
     private fun laborBudgetForPlace(
         parent: GameState,
         budget: Budget,
@@ -694,5 +713,5 @@ data class MeetingAgenda(
 
 @Serializable
 enum class AgendaType {
-    PROOF_OF_WORK, NOMINATE, REQUEST, PROMISE, PRAISE, DENOUNCE, PRAISE_PARTY, DENOUNCE_PARTY, BUDGET_PROPOSAL, APPOINT_MEETING, FIRE_MANAGER
+    PROOF_OF_WORK, NOMINATE, REQUEST, PROMISE, PRAISE, DENOUNCE, PRAISE_PARTY, DENOUNCE_PARTY, BUDGET_PROPOSAL, APPOINT_MEETING, FIRE_MANAGER, POLICY_CHANGE
 }

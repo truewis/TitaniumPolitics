@@ -7,8 +7,26 @@ import kotlin.math.max
 
 @Serializable
 class LeadDivisionMeetingRoutine(override val meetingName: String) : MeetingRoutine() {
+    private val triedPolicyEvidence = hashSetOf<String>()
+
     init {
         priority = PRIORITY_MEETING
+    }
+
+    override fun newIMeetingRoutineCondition(
+        name: String,
+        place: String,
+        subroutines: List<Routine>
+    ): IMeetingRoutine? {
+        supportProofOfWork(name)?.let { return it }
+        val agenda = meeting.currentAgenda?.takeIf {
+            it.type == AgendaType.POLICY_CHANGE && it.author == name
+        } ?: return null
+        if (!triedPolicyEvidence.add(policyAgendaKey(agenda))) return null
+        return AddInfoToAgendaRoutine(
+            support = true,
+            meetingName = gState.meetingName(meeting)
+        )
     }
 
     override fun executeInMeeting(name: String, place: String): GameAction {
@@ -43,6 +61,7 @@ class LeadDivisionMeetingRoutine(override val meetingName: String) : MeetingRout
             }
             //2. request information about the commands issued today, by putting ProofOfWork agenda forward.
             proposeProofOfWork(name, place)?.let { return it }
+            proposePolicyAgenda(name, place, party)?.let { return it }
 
             //Warning: Some apparatus info may be missing because this only checks if there is at least one apparatus information about the place.
             fun queryInfo(queryPl: Place, type: InformationType): GameAction? {
@@ -173,6 +192,30 @@ class LeadDivisionMeetingRoutine(override val meetingName: String) : MeetingRout
         //TODO: do something in the meeting. Leave the meeting if nothing to do.
 
     }
+
+    private fun proposePolicyAgenda(name: String, place: String, party: Party): GameAction? {
+        if (party.leader != name ||
+            party.type !in setOf(Party.Type.WORKPLACE, Party.Type.DIVISION) ||
+            meeting.agendas.any { it.type == AgendaType.POLICY_CHANGE } ||
+            (meeting.passedAgendas + meeting.ignoredAgendas).any {
+                it.type == AgendaType.POLICY_CHANGE
+            }
+        ) return null
+
+        val policy = PolicyCatalog.bestProposal(party, name, meeting.currentCharacters) ?: return null
+        val agenda = MeetingAgenda(
+            AgendaType.POLICY_CHANGE,
+            name,
+            subjectParams = hashMapOf("policy" to policy)
+        )
+        return NewAgenda(name, place, gState).also {
+            it.agenda = agenda
+            if (!it.isValid()) return null
+        }
+    }
+
+    private fun policyAgendaKey(agenda: MeetingAgenda): String =
+        "${meeting.ID}:${meeting.agendas.indexOf(agenda)}:${agenda.author}:${agenda.subjectParams["policy"]}"
 
     fun productivity(toWhom: String, apparatus: Apparatus): Double {
         return gState.characters[toWhom]!!.itemValue(apparatus.currentProduction) / apparatus.currentWorker

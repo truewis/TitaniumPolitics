@@ -151,9 +151,11 @@ class MeetingSummaryWindowUI : WindowUI("MeetingSummaryUI-title") {
             AgendaType.BUDGET_PROPOSAL -> ReadOnly.prop("NewAgendaUI-budgetProposal")
             AgendaType.APPOINT_MEETING -> ReadOnly.prop("NewAgendaUI-scheduleMeeting")
             AgendaType.FIRE_MANAGER -> ReadOnly.prop("NewAgendaUI-fireManager")
+            AgendaType.POLICY_CHANGE -> ReadOnly.prop("NewAgendaUI-policyChange")
         }
         val subject = agenda.subjectParams["character"]?.let { " (${ReadOnly.charProp(it)})" }
             ?: agenda.subjectParams["party"]?.let { " (${ReadOnly.prop(it)})" }
+            ?: agenda.subjectParams["policy"]?.let { " (${ReadOnly.prop("policy-$it")})" }
             ?: ""
         return typeTitle + subject
     }

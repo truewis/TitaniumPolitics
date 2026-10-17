@@ -41,7 +41,8 @@ data class SetWorkHours(
     override fun isValid(): Boolean {
         if (!reason(sbjCharacter == tgtPlaceObj.manager, "setWorkHours-notManager")) return false
         val division = tgtPlaceObj.responsibleDivision?.let { parent.parties[it] }
-        if (division?.policies?.contains("workhourLimit") == true &&
+        val workplaceHasLimit = tgtPlaceObj.workplaceParty?.policies?.contains("workhourLimit") == true
+        if ((workplaceHasLimit || division?.policies?.contains("workhourLimit") == true) &&
             !reason(end - start <= PolicyCatalog.WORKHOUR_LIMIT_MAX_HOURS, "setWorkHours-policyLimit")
         ) return false
         val who =

@@ -5,7 +5,9 @@ import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.InputEvent
 import com.badlogic.gdx.scenes.scene2d.ui.Stack
+import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane
 import com.badlogic.gdx.scenes.scene2d.ui.Table
+import com.badlogic.gdx.scenes.scene2d.ui.Tooltip
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.badlogic.gdx.utils.Align
@@ -219,6 +221,30 @@ class NewAgendaUI(val gameState: GameState, actionCallback: (GameAction) -> Unit
                 MeetingAgenda(AgendaType.FIRE_MANAGER, this@NewAgendaUI.subject, hashMapOf("character" to char))
         }).size(180f)
     }
+    private val policyCategoryTabs = scene2d.buttonGroup(1, 1)
+    private val policyOptionsTable = Table()
+    private val policyOptionsPane = ScrollPane(policyOptionsTable)
+    private val policyChangeTable = scene2d.table {
+        add(TitleLabel(ReadOnly.prop("NewAgendaUI-policyChange"))).growX()
+        row()
+        label(ReadOnly.prop("NewAgendaUI-policyChange-desc"), "docTitle") {
+            color = Color.BLACK
+            setFontScale(0.3f)
+            wrap = true
+            it.fill()
+        }
+        row()
+        val categoryTabPane = ScrollPane(this@NewAgendaUI.policyCategoryTabs).apply {
+            setScrollingDisabled(false, true)
+        }
+        add(categoryTabPane).fillX().height(80f)
+        row()
+        add(this@NewAgendaUI.policyOptionsPane).grow()
+    }
+
+    private val meetingParty: Party?
+        get() = sbjChar.currentMeeting?.involvedParty?.let { gameState.parties[it] }
+
     val st = scene2d.stack {
         table {
             this@NewAgendaUI.agendaSelectBox = buttonGroup(1, 1).also {
@@ -238,6 +264,7 @@ class NewAgendaUI(val gameState: GameState, actionCallback: (GameAction) -> Unit
                 add(this@NewAgendaUI.promiseTable)
                 add(this@NewAgendaUI.fireTable)
                 add(this@NewAgendaUI.budgetProposalTable)
+                add(this@NewAgendaUI.policyChangeTable)
                 //TODO: also make changes to NewAgenda.kt.
             }
             row()
@@ -278,6 +305,7 @@ class NewAgendaUI(val gameState: GameState, actionCallback: (GameAction) -> Unit
         promiseTable.isVisible = false
         fireTable.isVisible = false
         budgetProposalTable.isVisible = false
+        policyChangeTable.isVisible = false
         agenda = null
     }
 
@@ -285,6 +313,7 @@ class NewAgendaUI(val gameState: GameState, actionCallback: (GameAction) -> Unit
     fun refresh(gameState: GameState) {
         agendaSelectBox.clear()
         refreshAvailableAgendaList(gameState)
+        refreshPolicyCategories()
         // Maps requestable action names to the progression required to unlock them.
         // "Repair" is intentionally ungated: it is a basic engineering duty always available to request.
         val requestProgressionGates = mapOf(
@@ -454,6 +483,20 @@ class NewAgendaUI(val gameState: GameState, actionCallback: (GameAction) -> Unit
                                 })
                             }
 
+                            AgendaType.POLICY_CHANGE -> {
+                                this.setDrawable(defaultSkin, "icon_app_18")
+                                this@button.addListener(object : ClickListener() {
+                                    override fun clicked(
+                                        event: InputEvent?,
+                                        x: Float,
+                                        y: Float
+                                    ) {
+                                        this@NewAgendaUI.hideAllAgendaDetailsTable()
+                                        this@NewAgendaUI.policyChangeTable.isVisible = true
+                                    }
+                                })
+                            }
+
                             AgendaType.FIRE_MANAGER -> {
                                 this.setDrawable(defaultSkin, "icon_app_7")
                                 this@button.addListener(object : ClickListener() {
@@ -518,11 +561,113 @@ class NewAgendaUI(val gameState: GameState, actionCallback: (GameAction) -> Unit
             availableAgendas += AgendaType.NOMINATE
         if (mt.involvedParty in listOf("cabinet", "division") && !party!!.isBudgetProposed && gameState.progression.contains("Management"))
             availableAgendas += AgendaType.BUDGET_PROPOSAL
+        if (mt.type == Meeting.MeetingType.DIVISION_DAILY_CONFERENCE &&
+            party?.let { it.type in setOf(Party.Type.DIVISION, Party.Type.WORKPLACE) && it.leader == subject } == true &&
+            gameState.progression.contains("NewAgenda")
+        ) {
+            availableAgendas += AgendaType.POLICY_CHANGE
+        }
         //If the player is a division leader, they can fire managers.
         if (mt.type == Meeting.MeetingType.DIVISION_DAILY_CONFERENCE && gameState.parties[mt.involvedParty]!!.leader == subject && gameState.progression.contains("Management"))
             availableAgendas += AgendaType.FIRE_MANAGER
         //TODO: Also update NewAgenda.kt
     }
 
+    private fun refreshPolicyCategories() {
+        policyCategoryTabs.clear()
+        policyOptionsTable.clear()
+        val party = meetingParty ?: return
+        val categories = PolicyCatalog.categoriesFor(party.type)
+        val firstCategory = categories.keys.firstOrNull() ?: return
+        categories.forEach { (category, _) ->
+            policyCategoryTabs.button("check") {
+                isChecked = category == firstCategory
+                label(ReadOnly.prop("policy-category-$category"), "docTitle") {
+                    color = Color.WHITE
+                    setFontScale(0.3f)
+                    setAlignment(Align.center)
+                }
+                addListener(object : ClickListener() {
+                    override fun clicked(event: InputEvent?, x: Float, y: Float) {
+                        this@NewAgendaUI.refreshPolicyOptions(category)
+                    }
+                })
+            }.inCell.size(160f, 60f)
+        }
+        refreshPolicyOptions(firstCategory)
+    }
+
+    private fun refreshPolicyOptions(category: String) {
+        policyOptionsTable.clear()
+        val party = meetingParty ?: return
+        val policies = PolicyCatalog.categoriesFor(party.type)[category] ?: return
+        policyOptionsPane.setScrollingDisabled(true, false)
+        policyOptionsTable.add(buttonGroup(0, 1) {
+            policies.forEach { policy ->
+                button("check") {
+                    it.fillX().height(80f).pad(2f)
+                    isChecked = policy in party.policies
+                    isDisabled = isChecked
+                    label(ReadOnly.prop("policy-$policy"), "docTitle") {
+                        it.growX().padLeft(10f)
+                        color = Color.WHITE
+                        setFontScale(0.3f)
+                        setAlignment(Align.left)
+                    }
+
+                    val (positiveList, negativeList) =
+                        PolicyCatalog.affectedCharacters(party, policy)
+                    val tooltipTable = scene2d.table {
+                        background = Scene2DSkin.defaultSkin.getDrawable("BlackPx")
+                        pad(10f)
+                        label(ReadOnly.prop("policy-$policy-description"), "docTitle") {
+                            it.width(280f).growX()
+                            color = Color.WHITE
+                            setFontScale(0.25f)
+                            wrap = true
+                            setAlignment(Align.topLeft)
+                        }
+                        if (positiveList.isNotEmpty()) {
+                            row()
+                            label(
+                                ReadOnly.prop("policy-tooltip-positive") + ": " +
+                                        positiveList.joinToString(", ") { name -> ReadOnly.charProp(name) },
+                                "docTitle"
+                            ) {
+                                it.width(280f).growX()
+                                color = Color.GREEN
+                                setFontScale(0.25f)
+                                wrap = true
+                            }
+                        }
+                        if (negativeList.isNotEmpty()) {
+                            row()
+                            label(
+                                ReadOnly.prop("policy-tooltip-negative") + ": " +
+                                        negativeList.joinToString(", ") { name -> ReadOnly.charProp(name) },
+                                "docTitle"
+                            ) {
+                                it.width(280f).growX()
+                                color = Color.RED
+                                setFontScale(0.25f)
+                                wrap = true
+                            }
+                        }
+                    }
+                    addListener(Tooltip(tooltipTable))
+                    addListener(object : ClickListener() {
+                        override fun clicked(event: InputEvent?, x: Float, y: Float) {
+                            this@NewAgendaUI.agenda = MeetingAgenda(
+                                AgendaType.POLICY_CHANGE,
+                                this@NewAgendaUI.subject,
+                                hashMapOf("policy" to policy)
+                            )
+                        }
+                    })
+                }
+                row()
+            }
+        }).fillX()
+    }
 
 }

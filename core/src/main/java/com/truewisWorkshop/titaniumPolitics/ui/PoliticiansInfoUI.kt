@@ -497,11 +497,9 @@ class PoliticiansInfoUI(val gameState: GameState) : Table(defaultSkin), KTable {
                         }).fill()
                     }
                     row()
-                    val activePolicies = workplaceParty.workplace.responsibleDivision
-                        ?.let { this@PoliticiansInfoUI.gameState.parties[it]?.policies }
-                        ?.filter(PolicyCatalog::isKnown)
-                        ?.sorted()
-                        .orEmpty()
+                    val activePolicies = workplaceParty.policies
+                        .filter(PolicyCatalog::isKnown)
+                        .sorted()
                     table {
                         it.growX().height(240f)
                         label(ReadOnly.prop("PoliticiansInfoUI-ActivePolicies"), "docTitle") {

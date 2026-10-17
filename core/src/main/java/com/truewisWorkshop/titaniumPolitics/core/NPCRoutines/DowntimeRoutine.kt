@@ -87,6 +87,6 @@ class DowntimeRoutine(var workplace: String? = null) : Routine() {
         if (workplace == null)
             return false //Jobless = downtime forever.
         else
-            return isWorkHourWithETA(gState, name, place, workplace!!)
+            return Routine.isWorkCondition(name, place, workplace!!, gState)
     }
 }

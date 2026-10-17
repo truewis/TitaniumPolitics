@@ -19,6 +19,12 @@ data class NewAgenda(override val sbjCharacter: String, override val tgtPlace: S
 
     override fun execute() {
         val meeting = parent.characters[sbjCharacter]!!.currentMeeting!!
+        if (agenda.type == AgendaType.POLICY_CHANGE) {
+            val party = parent.parties[meeting.involvedParty]!!
+            parent.places[party.home]!!.resources -= Resources(
+                "phosphorus" to ReadOnly.const("ChangePolicyCost")
+            )
+        }
         meeting.agendas.add(agenda)
         meeting.setCurrentAgenda(agenda)
         if (sbjCharacter == parent.playerName) {
@@ -73,6 +79,46 @@ data class NewAgenda(override val sbjCharacter: String, override val tgtPlace: S
                 reason(budgetWithinBand, "newAgenda-BudgetProposal-change") &&
                         reason(validKeys, "newAgenda-BudgetProposal-key") &&
                         reason(hasResources, "newAgenda-BudgetProposal-resources")
+            }
+
+            AgendaType.POLICY_CHANGE -> {
+                val party = mt.involvedParty?.let { parent.parties[it] } ?: return false
+                if (!reason(mt.type == Meeting.MeetingType.DIVISION_DAILY_CONFERENCE, "policyAgenda-wrongMeeting"))
+                    return false
+                if (!reason(
+                        party.type == Party.Type.DIVISION || party.type == Party.Type.WORKPLACE,
+                        "policyAgenda-wrongParty"
+                    )
+                ) return false
+                if (!reason(
+                        party.leader == sbjCharacter && agenda.author == sbjCharacter,
+                        "policyAgenda-notLeader"
+                    )
+                ) return false
+                val policy = agenda.subjectParams["policy"]
+                if (!reason(
+                        policy != null && PolicyCatalog.isAllowed(policy, party.type),
+                        "policyAgenda-unsupportedPolicy"
+                    )
+                ) return false
+                if (!reason(policy !in party.policies, "changePolicy-alreadyActive")) return false
+                val category = PolicyCatalog.categoryOf(policy!!) ?: return false
+                if (mt.agendas.any {
+                        it.type == AgendaType.POLICY_CHANGE &&
+                                PolicyCatalog.categoryOf(it.subjectParams["policy"].orEmpty()) == category
+                    }
+                ) return reason(false, "policyAgenda-categoryExists")
+                if (!reason(
+                        mt.currentAttention >= ReadOnly.constInt("ChangePolicyMinAttention"),
+                        "changePolicy-attention"
+                    )
+                ) return false
+                val partyHome = party.home?.let { parent.places[it] }
+                    ?: return reason(false, "changePolicy-noHome")
+                return reason(
+                    partyHome.resources["phosphorus"] >= ReadOnly.const("ChangePolicyCost"),
+                    "changePolicy-resources"
+                )
             }
 
             //Can't praise or denounce the same character or party more than once in a meeting.
@@ -297,6 +343,10 @@ data class NewAgenda(override val sbjCharacter: String, override val tgtPlace: S
 
                 }
 
+                POLICY_CHANGE -> {
+
+                }
+
                 APPOINT_MEETING -> {
 
                 }
@@ -510,6 +560,21 @@ data class NewAgenda(override val sbjCharacter: String, override val tgtPlace: S
                         parent.addInformation(it)
                     }
 
+                }
+
+                AgendaType.POLICY_CHANGE -> {
+                    val party = meeting.involvedParty?.let { parent.parties[it] }
+                        ?: throw IllegalStateException("Policy agenda has no target party.")
+                    val policy = agenda.subjectParams["policy"]
+                        ?: throw IllegalStateException("Policy agenda has no selected policy.")
+                    val category = PolicyCatalog.categoryOf(policy)
+                        ?: throw IllegalStateException("Policy agenda contains an unknown policy: $policy")
+                    check(PolicyCatalog.isAllowed(policy, party.type)) {
+                        "Policy $policy is not allowed for ${party.type} parties."
+                    }
+                    party.policies.removeAll(PolicyCatalog.categories[category].orEmpty().toSet())
+                    party.policies.add(policy)
+                    if (policy == "workhourLimit") PolicyCatalog.enforceWorkHourLimits(parent)
                 }
 
                 else -> {

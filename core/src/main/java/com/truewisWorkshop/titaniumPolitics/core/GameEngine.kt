@@ -1099,12 +1099,6 @@ class GameEngine(val gameState: GameState) {
                     actions.add("EndMeeting")
                     actions.add("EndSpeech")
                     actions.add("Feast")
-                    if (conf.involvedParty != null &&
-                        gameState.parties[conf.involvedParty]!!.let {
-                            it.type == Party.Type.DIVISION && it.leader == character
-                        }
-                    )
-                        actions.add("ChangePolicy")
                 } else {
                     actions.add("Wait")
                     actions.add("Intercept")
@@ -1241,7 +1235,6 @@ class GameEngine(val gameState: GameState) {
                     "NewAgenda" to "NewAgenda",
                     "AddInfo" to "NewAgenda",
                     "Feast" to "NewAgenda",
-                    "ChangePolicy" to "NewAgenda",
                     "AnnounceInfo" to "NewAgenda",
                     "ConstructionProject" to "ConstructionProject"
                 )

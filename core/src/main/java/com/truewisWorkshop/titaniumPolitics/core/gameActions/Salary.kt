@@ -3,6 +3,7 @@ package com.titaniumPolitics.game.core.gameActions
 import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.core.MutualityMatrix
 import com.titaniumPolitics.game.core.Party
+import com.titaniumPolitics.game.core.PolicyCatalog
 import com.titaniumPolitics.game.core.ReadOnly
 import com.titaniumPolitics.game.core.Resources
 import kotlinx.serialization.Serializable
@@ -83,7 +84,17 @@ data class Salary(override val sbjCharacter: String, override val tgtPlace: Stri
     }
 
     private fun salaryMultiplier(character: com.titaniumPolitics.game.core.Character): Double {
-        val policies = character.division?.policies ?: emptySet()
+        val localPolicies = party.policies
+        val inheritedPolicies = if (party.type == Party.Type.WORKPLACE) {
+            val overriddenCategories = localPolicies.mapNotNull(PolicyCatalog::categoryOf).toSet()
+            party.workplace.responsibleDivision
+                ?.let { parent.parties[it]?.policies }
+                .orEmpty()
+                .filter { PolicyCatalog.categoryOf(it) !in overriddenCategories }
+        } else {
+            emptySet()
+        }
+        val policies = localPolicies + inheritedPolicies
         val incentives = listOf(
             "engineerIncentive" to "engineer",
             "soldierIncentive" to "soldier",
