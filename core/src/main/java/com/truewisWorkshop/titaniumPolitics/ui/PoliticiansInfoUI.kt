@@ -2,13 +2,16 @@ package com.titaniumPolitics.game.ui
 
 
 import com.badlogic.gdx.scenes.scene2d.Actor
+import com.badlogic.gdx.scenes.scene2d.InputEvent
 import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane
 import com.badlogic.gdx.scenes.scene2d.ui.Table
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.badlogic.gdx.utils.Align
 import com.titaniumPolitics.game.core.Character
 import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.core.Party
+import com.titaniumPolitics.game.core.PolicyCatalog
 import com.titaniumPolitics.game.core.ReadOnly
 import com.titaniumPolitics.game.ui.actions.ApparatusSelectUI
 import com.titaniumPolitics.game.ui.widget.BudgetDisplayUI
@@ -194,9 +197,12 @@ class PoliticiansInfoUI(val gameState: GameState) : Table(defaultSkin), KTable {
 //            }
 //            row()
                     label(
-                        ReadOnly.prop("PoliticiansInfoUI-DivisionLeader") + ": " + ReadOnly.charProp(
-                            (division.leader ?: "NotAssigned")
-                        ), "docTitle"
+                        if ("noTitles" in division.policies) {
+                            ReadOnly.charProp(division.leader ?: "NotAssigned")
+                        } else {
+                            ReadOnly.prop("PoliticiansInfoUI-DivisionLeader") + ": " +
+                                    ReadOnly.charProp(division.leader ?: "NotAssigned")
+                        }, "docTitle"
                     ).apply {
                         setFontScale(0.5f)
                         setAlignment(Align.left)
@@ -329,6 +335,10 @@ class PoliticiansInfoUI(val gameState: GameState) : Table(defaultSkin), KTable {
                     workplaceDataTables[workplaceParty.name] =
                         object : Table(defaultSkin), KTable {}.apply { isVisible = false }
                 with(workplaceDataTables[workplaceParty.name]!!) {
+                    val divisionUsesNoTitles =
+                        workplaceParty.workplace.responsibleDivision?.let {
+                            this@PoliticiansInfoUI.gameState.parties[it]?.policies?.contains("noTitles")
+                        } == true
                     this.add(TitleLabel(ReadOnly.prop("PoliticiansInfoUI-WorkplaceInfo"))).colspan(2).pad(10f)
                     (this as Table).row()
                     table {
@@ -341,9 +351,12 @@ class PoliticiansInfoUI(val gameState: GameState) : Table(defaultSkin), KTable {
                             }
                             row()
                             label(
-                                ReadOnly.prop("PoliticiansInfoUI-Director") + ": " + ReadOnly.charProp(
-                                    workplaceParty.leader ?: "NotAssigned"
-                                ), "docTitle"
+                                if (divisionUsesNoTitles) {
+                                    ReadOnly.charProp(workplaceParty.leader ?: "NotAssigned")
+                                } else {
+                                    ReadOnly.prop("PoliticiansInfoUI-Director") + ": " +
+                                            ReadOnly.charProp(workplaceParty.leader ?: "NotAssigned")
+                                }, "docTitle"
                             ).apply {
                                 setFontScale(0.5f)
                                 setAlignment(Align.left)
@@ -358,10 +371,12 @@ class PoliticiansInfoUI(val gameState: GameState) : Table(defaultSkin), KTable {
                         }
                         table {
                             it.grow()
-                            label(ReadOnly.prop("PoliticiansInfoUI-Role"), "docTitle") {
-                                it.left()
-                                setFontScale(0.3f)
-                                setAlignment(Align.left)
+                            if (!divisionUsesNoTitles) {
+                                label(ReadOnly.prop("PoliticiansInfoUI-Role"), "docTitle") {
+                                    it.left()
+                                    setFontScale(0.3f)
+                                    setAlignment(Align.left)
+                                }
                             }
                             label(ReadOnly.prop("PoliticiansInfoUI-Employee"), "docTitle") {
                                 it.left()
@@ -370,11 +385,13 @@ class PoliticiansInfoUI(val gameState: GameState) : Table(defaultSkin), KTable {
                             }
                             row()
                             Party.Role.entries.forEach { role ->
-                                label(ReadOnly.prop(role.toString()), "docTitle") {
-                                    it.left()
-                                    it.padRight(10f)
-                                    setFontScale(0.5f)
-                                    setAlignment(Align.left)
+                                if (!divisionUsesNoTitles) {
+                                    label(ReadOnly.prop(role.toString()), "docTitle") {
+                                        it.left()
+                                        it.padRight(10f)
+                                        setFontScale(0.5f)
+                                        setAlignment(Align.left)
+                                    }
                                 }
 
                                 val char = workplaceParty.getCharByRole(role)
@@ -478,6 +495,65 @@ class PoliticiansInfoUI(val gameState: GameState) : Table(defaultSkin), KTable {
                         }.also {
                             it.refresh(workplaceParty.workplace.name)
                         }).fill()
+                    }
+                    row()
+                    val activePolicies = workplaceParty.workplace.responsibleDivision
+                        ?.let { this@PoliticiansInfoUI.gameState.parties[it]?.policies }
+                        ?.filter(PolicyCatalog::isKnown)
+                        ?.sorted()
+                        .orEmpty()
+                    table {
+                        it.growX().height(240f)
+                        label(ReadOnly.prop("PoliticiansInfoUI-ActivePolicies"), "docTitle") {
+                            it.colspan(2).left()
+                            setFontScale(0.5f)
+                            setAlignment(Align.left)
+                        }
+                        row()
+                        if (activePolicies.isEmpty()) {
+                            label(ReadOnly.prop("PoliticiansInfoUI-NoActivePolicies"), "docTitle") {
+                                it.colspan(2).growX().top()
+                                setFontScale(0.4f)
+                                setAlignment(Align.left)
+                            }
+                        } else {
+                            val policyDetails = Label(
+                                ReadOnly.prop("policy-${activePolicies.first()}-description"),
+                                defaultSkin,
+                                "docTitle"
+                            ).apply {
+                                setFontScale(0.45f)
+                                setAlignment(Align.topLeft)
+                                wrap = true
+                            }
+                            val policyButtons = scene2d.buttonGroup(1, 1) {
+                                activePolicies.forEachIndexed { index, policy ->
+                                    button("check") {
+                                        it.fillX().height(56f).pad(2f)
+                                        isChecked = index == 0
+                                        label(ReadOnly.prop("policy-$policy"), "docTitle") {
+                                            it.growX().padLeft(10f)
+                                            setFontScale(0.3f)
+                                            setAlignment(Align.left)
+                                        }
+                                        addListener(object : ClickListener() {
+                                            override fun clicked(event: InputEvent?, x: Float, y: Float) {
+                                                policyDetails.setText(
+                                                    ReadOnly.prop("policy-$policy-description")
+                                                )
+                                            }
+                                        })
+                                    }
+                                    row()
+                                }
+                            }
+                            add(ScrollPane(policyButtons).apply {
+                                setScrollingDisabled(true, false)
+                            }).width(280f).growY().top()
+                            add(ScrollPane(policyDetails).apply {
+                                setScrollingDisabled(true, false)
+                            }).grow().top().padLeft(20f)
+                        }
                     }
                 }
             }

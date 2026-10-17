@@ -28,48 +28,12 @@ data class Salary(override val sbjCharacter: String, override val tgtPlace: Stri
     }
 
     override fun execute() {
-
         val guildHall = party.home
-
-        who.forEach { character ->
-            var multiplyer = 1.0
-            val charObj = parent.characters[character]!!
-            if ("engineerIncentive" in parent.characters[character]!!.division!!.policies) {
-                if ("engineer" in charObj.trait) {
-                    multiplyer += 0.5
-                } else {
-                    multiplyer -= 0.2
-                }
-            }
-            if ("soldierIncentive" in parent.characters[character]!!.division!!.policies) {
-                if ("soldier" in charObj.trait) {
-                    multiplyer += 0.5
-                } else {
-                    multiplyer -= 0.2
-                }
-            }
-            if ("administratorIncentive" in parent.characters[character]!!.division!!.policies) {
-                if ("administrator" in charObj.trait) {
-                    multiplyer += 0.5
-                } else {
-                    multiplyer -= 0.2
-                }
-            }
-            if ("minerIncentive" in parent.characters[character]!!.division!!.policies) {
-                if ("miner" in charObj.trait) {
-                    multiplyer += 0.5
-                } else {
-                    multiplyer -= 0.2
-                }
-            }
-            if ("seniority" in parent.characters[character]!!.division!!.policies) {
-                multiplyer += 0.1 * (charObj.age - 40) / 10.0
-            }
-            parent.places[guildHall]!!.resources -= standardRate * multiplyer
-            charObj.resources += standardRate * multiplyer
-            //Opinion of the leader of the party increases.
-
-
+        val payments = paymentsForMembers()
+        val totalPayment = totalPayment(payments)
+        parent.places[guildHall]!!.resources -= totalPayment
+        payments.forEach { (character, payment) ->
+            parent.characters[character]!!.resources += payment
         }
         //Party integrity increases
         parent.setPartyMutuality(
@@ -101,10 +65,45 @@ data class Salary(override val sbjCharacter: String, override val tgtPlace: Stri
     override fun isValid(): Boolean {
         if (sbjCharObj.currentMeeting == null) return false
         if (sbjCharObj.currentMeeting!!.involvedParty == null) return false
-        return !party.isSalaryPaid && who.isNotEmpty() && sbjCharacter == party.leader && reason(
-            standardRate.all { (what, amount) -> parent.places[party.home]!!.resources[what] >= amount * who.size },
-            "salary-resources"
+        if (party.isSalaryPaid || who.isEmpty() || sbjCharacter != party.leader) return false
+        val home = party.home?.let { parent.places[it] } ?: return false
+        val requiredResources = totalPayment(paymentsForMembers())
+        return reason(home.resources.contains(requiredResources), "salary-resources")
+    }
+
+    private fun paymentsForMembers(): Map<String, Resources> =
+        who.associateWith { character ->
+            standardRate * salaryMultiplier(parent.characters[character]!!)
+        }
+
+    private fun totalPayment(payments: Map<String, Resources>): Resources {
+        val total = Resources()
+        payments.values.forEach { total += it }
+        return total
+    }
+
+    private fun salaryMultiplier(character: com.titaniumPolitics.game.core.Character): Double {
+        val policies = character.division?.policies ?: emptySet()
+        val incentives = listOf(
+            "engineerIncentive" to "engineer",
+            "soldierIncentive" to "soldier",
+            "administratorIncentive" to "administrator",
+            "minerIncentive" to "miner",
+            "laborerIncentive" to null
         )
+        var multiplier = 1.0
+        incentives.forEach { (policy, trait) ->
+            if (policy in policies) {
+                val qualifies = if (trait == null) {
+                    character.type == com.titaniumPolitics.game.core.Character.Type.ANON
+                } else trait in character.trait
+                multiplier += if (qualifies) 0.5 else -0.2
+            }
+        }
+        if ("seniority" in policies) {
+            multiplier += 0.1 * (character.age - 40) / 10.0
+        }
+        return multiplier
     }
 
     companion object {

@@ -102,11 +102,29 @@ sealed class Routine() {
         }
 
         fun isWorkCondition(name: String, place: String, workplace: String, gState: GameState): Boolean {
-            return (isWorkHourWithETA(gState, name, place, workplace, IDTH)
+            return (!isPaternityLeaveDay(name, gState)
+                && isWorkHourWithETA(gState, name, place, workplace, IDTH)
                 && gState.characters[name]!!.health > ReadOnly.const("CriticalHealth")
                 && gState.characters[name]!!.hunger < ReadOnly.const("hungerThreshold")
                 && gState.characters[name]!!.thirst < ReadOnly.const("thirstThreshold")
                 )
+        }
+
+        fun isPaternityLeaveDay(name: String, gState: GameState): Boolean {
+            val character = gState.characters[name] ?: return false
+            if (character.type == com.titaniumPolitics.game.core.Character.Type.ANON ||
+                character.reliant <= 0 ||
+                character.division?.policies?.contains("paternityLeave") != true
+            ) return false
+
+            val day = ReadOnly.toDays(gState.time)
+            if (day % 7 != Math.floorMod(character.name.hashCode(), 7)) return false
+            if (character.currentMeeting != null) return false
+
+            val hasMeetingToday = (gState.scheduledMeetings.values + gState.ongoingMeetings.values).any {
+                character.name in it.scheduledCharacters && ReadOnly.toDays(it.time) == day
+            }
+            return !hasMeetingToday
         }
     }
 }

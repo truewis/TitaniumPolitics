@@ -1099,7 +1099,11 @@ class GameEngine(val gameState: GameState) {
                     actions.add("EndMeeting")
                     actions.add("EndSpeech")
                     actions.add("Feast")
-                    if (conf.involvedParty != null && gameState.parties[conf.involvedParty]!!.leader == character)
+                    if (conf.involvedParty != null &&
+                        gameState.parties[conf.involvedParty]!!.let {
+                            it.type == Party.Type.DIVISION && it.leader == character
+                        }
+                    )
                         actions.add("ChangePolicy")
                 } else {
                     actions.add("Wait")

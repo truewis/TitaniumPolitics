@@ -988,6 +988,8 @@ class GameState {
             ReadOnly.setCharacterProp(id, displayName)
         }
         parties.forEach { it.value.injectParent(this) }
+        PolicyCatalog.migrateLegacyPolicies(parties.values)
+        PolicyCatalog.enforceWorkHourLimits(this)
         nonPlayerAgents.forEach { it.value.injectParent(this) }
         eventSystem.injectParent(this)
         Logger.write("GameState injected successfully.", Logger.LogLevel.INFO)

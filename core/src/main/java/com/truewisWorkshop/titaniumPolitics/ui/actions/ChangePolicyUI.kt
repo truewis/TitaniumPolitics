@@ -7,8 +7,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.ui.Tooltip
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.badlogic.gdx.utils.Align
-import com.titaniumPolitics.game.core.Character
 import com.titaniumPolitics.game.core.GameState
+import com.titaniumPolitics.game.core.PolicyCatalog
 import com.titaniumPolitics.game.core.ReadOnly
 import com.titaniumPolitics.game.core.gameActions.ChangePolicy
 import com.titaniumPolitics.game.core.gameActions.GameAction
@@ -69,100 +69,7 @@ class ChangePolicyUI(val gameState: GameState, actionCallback: (GameAction) -> U
     }
 
     private fun affectedCharacters(policyName: String): Pair<List<String>, List<String>> {
-        val partyMembers = party?.members ?: return Pair(emptyList(), emptyList())
-        val characters = partyMembers.mapNotNull { gameState.characters[it] }
-
-        val positive = mutableListOf<String>()
-        val negative = mutableListOf<String>()
-
-        when (policyName) {
-            "banReligiousPractices" -> characters.forEach { c ->
-                when {
-                    "atheist" in c.trait -> positive.add(c.name)
-                    "spiritualist" in c.trait || "artificialist" in c.trait -> negative.add(c.name)
-                }
-            }
-
-            "onlyReligiousPracticesArtificialist" -> characters.forEach { c ->
-                when {
-                    "artificialist" in c.trait -> positive.add(c.name)
-                    "spiritualist" in c.trait -> negative.add(c.name)
-                }
-            }
-
-            "onlyReligiousPracticesSpiritualist" -> characters.forEach { c ->
-                when {
-                    "spiritualist" in c.trait -> positive.add(c.name)
-                    "artificialist" in c.trait -> negative.add(c.name)
-                }
-            }
-
-            "banUnion" -> characters.forEach { c ->
-                if (c.type == Character.Type.ANON) negative.add(c.name)
-            }
-
-            "engineerIncentive" -> characters.forEach { c ->
-                if ("engineer" in c.trait) positive.add(c.name) else negative.add(c.name)
-            }
-
-            "administratorIncentive" -> characters.forEach { c ->
-                if ("administrator" in c.trait) positive.add(c.name) else negative.add(c.name)
-            }
-
-            "soldierIncentive" -> characters.forEach { c ->
-                if ("soldier" in c.trait) positive.add(c.name) else negative.add(c.name)
-            }
-
-            "minerIncentive" -> characters.forEach { c ->
-                if ("miner" in c.trait) positive.add(c.name) else negative.add(c.name)
-            }
-
-            "laborerIncentive" -> characters.forEach { c ->
-                if (c.type == Character.Type.ANON) positive.add(c.name) else negative.add(c.name)
-            }
-
-            "workhourLimit" -> characters.forEach { c ->
-                when {
-                    c.stats.riskTaking > 12 -> negative.add(c.name)
-                    c.stats.riskTaking < 8 -> positive.add(c.name)
-                }
-            }
-
-            "lockoutExperiments" -> characters.forEach { c ->
-                when {
-                    c.stats.riskTaking > 12 -> negative.add(c.name)
-                    c.stats.riskTaking < 8 -> positive.add(c.name)
-                }
-            }
-
-            "paternityLeave" -> characters.forEach { c ->
-                if (c.reliant > 0 && c.type != Character.Type.ANON) positive.add(c.name)
-                else negative.add(c.name)
-            }
-
-            "seniority" -> characters.forEach { c ->
-                when {
-                    c.age < 30 -> negative.add(c.name)
-                    c.age > 50 -> positive.add(c.name)
-                }
-            }
-
-            "jobStability" -> characters.forEach { c ->
-                when {
-                    c.stats.riskTaking > 12 -> negative.add(c.name)
-                    c.stats.riskTaking < 8 -> positive.add(c.name)
-                }
-            }
-
-            "noTitles" -> characters.forEach { c ->
-                when {
-                    c.stats.riskTaking > 12 && c.type == Character.Type.ANON -> positive.add(c.name)
-                    c.stats.riskTaking < 8 && c.type != Character.Type.ANON -> negative.add(c.name)
-                }
-            }
-        }
-
-        return Pair(positive, negative)
+        return PolicyCatalog.affectedCharacters(party, policyName)
     }
 
     private fun refreshPolicies(category: String) {
@@ -175,6 +82,7 @@ class ChangePolicyUI(val gameState: GameState, actionCallback: (GameAction) -> U
                 button("check") {
                     it.fillX().height(80f).pad(2f)
                     isChecked = policyName in currentPolicies
+                    isDisabled = isChecked
                     label(ReadOnly.prop("policy-$policyName"), "docTitle") {
                         it.growX().padLeft(10f)
                         color = Color.WHITE

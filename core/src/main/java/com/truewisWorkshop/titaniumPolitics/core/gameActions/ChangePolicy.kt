@@ -1,6 +1,8 @@
 package com.titaniumPolitics.game.core.gameActions
 
 import com.titaniumPolitics.game.core.GameState
+import com.titaniumPolitics.game.core.PolicyCatalog
+import com.titaniumPolitics.game.core.Party
 import com.titaniumPolitics.game.core.ReadOnly
 import com.titaniumPolitics.game.core.Resources
 import kotlinx.serialization.Serializable
@@ -25,11 +27,12 @@ data class ChangePolicy(
 
     override fun execute() {
         // Remove any existing policy in the same category as newPolicy
-        val category = POLICY_CATEGORIES.entries.firstOrNull { (_, policies) -> newPolicy in policies }
+        val category = PolicyCatalog.categoryOf(newPolicy)
         if (category != null) {
-            party.policies.removeAll(category.value.toSet())
+            party.policies.removeAll(PolicyCatalog.categories[category]!!.toSet())
         }
         party.policies.add(newPolicy)
+        if (newPolicy == "workhourLimit") PolicyCatalog.enforceWorkHourLimits(parent)
         meeting.currentAttention -= ReadOnly.constInt("ChangePolicyMinAttention")
         parent.places[party.home]!!.resources -= Resources("phosphorus" to ReadOnly.const("ChangePolicyCost"))
         super.execute()
@@ -38,8 +41,11 @@ data class ChangePolicy(
     override fun isValid(): Boolean {
         if (sbjCharObj.currentMeeting == null) return false
         if (sbjCharObj.currentMeeting!!.involvedParty == null) return false
+        if (!reason(party.type == Party.Type.DIVISION, "changePolicy-divisionOnly")) return false
         if (!reason(party.home != null, "changePolicy-noHome")) return false
         if (!reason(sbjCharacter == party.leader, "changePolicy-notLeader")) return false
+        if (!reason(PolicyCatalog.isKnown(newPolicy), "changePolicy-unknownPolicy")) return false
+        if (!reason(newPolicy !in party.policies, "changePolicy-alreadyActive")) return false
         if (!reason(
                 meeting.currentAttention >= ReadOnly.constInt("ChangePolicyMinAttention"),
                 "changePolicy-attention"
@@ -55,25 +61,9 @@ data class ChangePolicy(
     }
 
     companion object {
-        val POLICY_CATEGORIES = linkedMapOf(
-            "religion" to listOf(
-                "banReligiousPractices",
-                "onlyReligiousPracticesArtificialist",
-                "onlyReligiousPracticesSpiritualist"
-            ),
-            "union" to listOf("banUnion"),
-            "incentive" to listOf(
-                "engineerIncentive",
-                "administratorIncentive",
-                "soldierIncentive",
-                "minerIncentive",
-                "laborerIncentive"
-            ),
-            "safety" to listOf("workhourLimit", "lockoutExperiments", "paternityLeave"),
-            "social" to listOf("seniority", "jobStability", "noTitles")
-        )
+        val POLICY_CATEGORIES = PolicyCatalog.categories
 
         fun categoryOf(policy: String): String? =
-            POLICY_CATEGORIES.entries.firstOrNull { policy in it.value }?.key
+            PolicyCatalog.categoryOf(policy)
     }
 }

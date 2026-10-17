@@ -20,45 +20,20 @@ class Party : GameStateElement() {
     val policies = hashSetOf<String>()
 
     fun policyEffectHourly() {
-        val artificialists = members.filter {
-            "artificialist" in parent.characters[it]!!.trait
-        }.toSet()
-        val spiritualists = members.filter {
-            "spiritualist" in parent.characters[it]!!.trait
-        }.toSet()
-        val atheists = members.filter {
-            "atheist" in parent.characters[it]!!.trait
-        }.toSet()
-        val engineers = members.filter {
-            "engineer" in parent.characters[it]!!.trait
-        }.toSet()
-        val soldiers = members.filter {
-            "soldier" in parent.characters[it]!!.trait
-        }.toSet()
-        val administrators = members.filter {
-            "administrator" in parent.characters[it]!!.trait
-        }.toSet()
-        val miners = members.filter {
-            "miner" in parent.characters[it]!!.trait
-        }.toSet()
-        val laborers = members.filter {
-            parent.characters[it]!!.type == Character.Type.ANON
-        }.toSet()
-        val hasFamily = members.filter {
-            parent.characters[it]!!.reliant > 0 && parent.characters[it]!!.type != Character.Type.ANON
-        }.toSet()
-        val young = members.filter {
-            parent.characters[it]!!.age < 30
-        }.toSet()
-        val old = members.filter {
-            parent.characters[it]!!.age > 50
-        }.toSet()
-        val progressives = members.filter {
-            parent.characters[it]!!.stats.riskTaking > 12
-        }.toSet()
-        val conservatives = members.filter {
-            parent.characters[it]!!.stats.riskTaking < 8
-        }.toSet()
+        val groups = PolicyCatalog.demographics(this)
+        val artificialists = groups.artificialists
+        val spiritualists = groups.spiritualists
+        val atheists = groups.atheists
+        val engineers = groups.engineers
+        val soldiers = groups.soldiers
+        val administrators = groups.administrators
+        val miners = groups.miners
+        val laborers = groups.laborers
+        val hasFamily = groups.hasFamily
+        val young = groups.young
+        val old = groups.old
+        val progressives = groups.progressives
+        val conservatives = groups.conservatives
 
         //1. Religion
         if ("banReligiousPractices" in policies) {

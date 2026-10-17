@@ -3,6 +3,7 @@ package com.titaniumPolitics.game.core.gameActions
 import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.core.Information
 import com.titaniumPolitics.game.core.InformationType
+import com.titaniumPolitics.game.core.PolicyCatalog
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -38,13 +39,17 @@ data class SetWorkHours(
     }
 
     override fun isValid(): Boolean {
-        if (!reason(sbjCharacter == tgtPlaceObj.workplaceParty?.overseer, "setWorkHours-notOverseer")) return false
+        if (!reason(sbjCharacter == tgtPlaceObj.manager, "setWorkHours-notManager")) return false
+        val division = tgtPlaceObj.responsibleDivision?.let { parent.parties[it] }
+        if (division?.policies?.contains("workhourLimit") == true &&
+            !reason(end - start <= PolicyCatalog.WORKHOUR_LIMIT_MAX_HOURS, "setWorkHours-policyLimit")
+        ) return false
         val who =
             (parent.ongoingMeetings.filter { it.value.currentCharacters.contains(sbjCharacter) }
                 .flatMap { it.value.currentCharacters }).toHashSet()
 
         parent.parties.values.find { it.members.containsAll(who + sbjCharacter) }!!
-        return tgtPlaceObj.manager == sbjCharacter
+        return true
     }
 
     override fun isProofOfWork(info: Information): Boolean {
