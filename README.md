@@ -1,6 +1,6 @@
 # TitaniumPolitics
 
-Titanium Politics is a narrative-heavy strategy drama set on a fragile station where every conversation can shift the balance of power: through tense exchanges with officers, workers, and political figures, you uncover fear, loyalty, ambition, and survival instincts in a society that cannot afford collapse, and your choices—whom to trust, support, or oppose—shape how its factions respond and whether order, reform, or conflict defines the station’s future.
+Titanium Politics is a narrative-heavy strategy drama set on a fragile station where every conversation can shift the balance of power: through tense exchanges with officers, workers, and political figures, you uncover fear, loyalty, ambition, and survival instincts in a society that cannot afford collapse. Your choices of whom to trust, support, or oppose shape how its factions respond and whether order, reform, or conflict defines the station’s future.
 
 ## Platforms
 
