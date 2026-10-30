@@ -17,6 +17,7 @@ import com.titaniumPolitics.game.core.Meeting
 import com.titaniumPolitics.game.core.NonPlayerAgent
 import com.titaniumPolitics.game.core.ReadOnly
 import com.titaniumPolitics.game.core.ReadOnly.const
+import com.titaniumPolitics.game.core.gameActions.AddInfo
 import com.titaniumPolitics.game.debugTools.Logger
 import com.titaniumPolitics.game.ui.CapsuleStage
 import com.titaniumPolitics.game.ui.MainMenu
@@ -30,8 +31,21 @@ import java.util.Locale
 
 class TestEntryClass : ApplicationAdapter() {
 
+    private data class MeetingProgress(
+        var informationAdditions: Int = 0,
+        var hadAgendaPass: Boolean = false
+    )
+
+    private data class CompletedMeeting(
+        val type: Meeting.MeetingType,
+        val informationAdditions: Int,
+        val hadAgendaPass: Boolean
+    )
+
     lateinit var gState: GameState
     val directory = "data" + Calendar.getInstance().time.toString("YYYYMMdd_HHmmss")
+    private val meetingProgress = hashMapOf<String, MeetingProgress>()
+    private val completedMeetings = arrayListOf<CompletedMeeting>()
 
     override fun create() {
         runFor2Days()
@@ -60,6 +74,7 @@ class TestEntryClass : ApplicationAdapter() {
         gState.dump(fNameInit)
         gState.onStart.forEach { it() }
         val engine = GameEngine(gState)
+        observeMeetingOutcomes(gState)
         engine.runUntil(2)
 
         val fName = gState.dump()
@@ -72,7 +87,74 @@ class TestEntryClass : ApplicationAdapter() {
             Logger.write("Reloading test complete.", Logger.LogLevel.INFO)
         }
         val engine2 = GameEngine(gState)
-        engine2.runUntilElection()
+        observeMeetingOutcomes(gState)
+        engine2.runUntil(5)
+        reportMeetingOutcomes()
+    }
+
+    private fun meetingMetricKey(meeting: Meeting): String =
+        listOf(
+            meeting.type.name,
+            meeting.involvedParty.orEmpty(),
+            meeting.time.toString(),
+            meeting.place,
+            meeting.scheduledCharacters.sorted().joinToString(",")
+        ).joinToString("|")
+
+    private fun observeMeetingOutcomes(state: GameState) {
+        fun observe(meeting: Meeting) {
+            val key = meetingMetricKey(meeting)
+            val progress = meetingProgress.getOrPut(key) { MeetingProgress() }
+            meeting.onMeetingEnded += {
+                progress.hadAgendaPass = progress.hadAgendaPass || meeting.passedAgendas.isNotEmpty()
+                completedMeetings += CompletedMeeting(
+                    meeting.type,
+                    progress.informationAdditions,
+                    progress.hadAgendaPass
+                )
+                meetingProgress.remove(key)
+            }
+        }
+
+        state.ongoingMeetings.values.forEach(::observe)
+        state.onAddOngoingMeeting += ::observe
+        state.onMeetingAction += { action ->
+            state.ongoingMeetings.values.firstOrNull {
+                action.sbjCharacter in it.currentCharacters
+            }?.let { meeting ->
+                val progress = meetingProgress.getOrPut(meetingMetricKey(meeting)) { MeetingProgress() }
+                if (action is AddInfo) progress.informationAdditions++
+                if (meeting.passedAgendas.isNotEmpty()) progress.hadAgendaPass = true
+            }
+        }
+    }
+
+    private fun reportMeetingOutcomes() {
+        val total = completedMeetings.size
+        if (total == 0) {
+            println("Meeting metrics: no completed meetings.")
+            return
+        }
+
+        val informationAdditions = completedMeetings.sumOf { it.informationAdditions }
+        val meetingsWithInformation = completedMeetings.count { it.informationAdditions > 0 }
+        val meetingsWithoutPassedAgendas = completedMeetings.count { !it.hadAgendaPass }
+        println(
+            "Meeting metrics: completed=$total, AddInfoActions=$informationAdditions, " +
+                "meetingsWithInformation=$meetingsWithInformation " +
+                "(${100.0 * meetingsWithInformation / total}%), " +
+                "averageAddInfoActionsPerMeeting=${informationAdditions.toDouble() / total}, " +
+                "meetingsWithoutAgendaPassing=$meetingsWithoutPassedAgendas " +
+                "(${100.0 * meetingsWithoutPassedAgendas / total}%)."
+        )
+        completedMeetings.groupBy { it.type }.forEach { (type, meetings) ->
+            val noPass = meetings.count { !it.hadAgendaPass }
+            println(
+                "Meeting metrics [$type]: completed=${meetings.size}, " +
+                    "AddInfoActions=${meetings.sumOf { it.informationAdditions }}, " +
+                    "withoutAgendaPassing=$noPass (${100.0 * noPass / meetings.size}%)."
+            )
+        }
     }
 
     fun GameEngine.runUntilElection() {

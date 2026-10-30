@@ -35,7 +35,7 @@
   "mutualityDefault": 50,
   "mutualityMax": 100,
   "AgendaPersuasivenessMin": -50,
-  "AgendaPersuasivenessMax": 100,
+  "AgendaPersuasivenessMax": 5,
   "AgendaResolutionWillDelta": 5,
   "AgendaResolutionAngstDelta": -5,
   "BudgetNotResolvedDeltaPartyIntegrity": -10,

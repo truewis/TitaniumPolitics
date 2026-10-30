@@ -1,8 +1,6 @@
 # TitaniumPolitics
 
-A [libGDX](https://libgdx.com/) project generated with [gdx-liftoff](https://github.com/libgdx/gdx-liftoff).
-
-This project was generated with a template including simple application launchers and an `ApplicationAdapter` extension that draws libGDX logo.
+Titanium Politics is a narrative-heavy strategy drama set on a fragile station where every conversation can shift the balance of power: through tense exchanges with officers, workers, and political figures, you uncover fear, loyalty, ambition, and survival instincts in a society that cannot afford collapse, and your choices—whom to trust, support, or oppose—shape how its factions respond and whether order, reform, or conflict defines the station’s future.
 
 ## Platforms
 

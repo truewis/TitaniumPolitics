@@ -16,6 +16,7 @@ import java.util.Locale
 class MeetingAgendaEffectivityTest {
     @Test
     fun budgetEvidenceProducesSignedPersuasiveness() = withInitializedGameState { state ->
+        assertEquals(5.0, ReadOnly.const("AgendaPersuasivenessMax"))
         resourceEvidenceRewardsBudgetsCloserToExpectedConsumption(state)
         workforceEvidenceRewardsBudgetChangesMatchingStaffingNeeds(state)
         cabinetBudgetEvidenceUsesTheWorkplacesShareOfItsDivisionAllocation(state)
