@@ -35,6 +35,8 @@ public class Lwjgl3Launcher {
         //// You can change these files; they are in lwjgl3/src/main/resources/ .
         //// They can also be loaded from the root of assets/ .
         configuration.setWindowIcon("libgdx128.png", "libgdx64.png", "libgdx32.png", "libgdx16.png");
+        //// 4x MSAA smooths the edges of rotated map sprites such as corridor lines.
+        configuration.setBackBufferConfig(8, 8, 8, 8, 16, 0, 4);
         return configuration;
     }
 }

@@ -104,17 +104,17 @@ class TasksUI(var gameState: GameState) : Table(defaultSkin) {
         quest.onClick?.invoke()
     }
 
-    class QuestMarker(val quest: Quest) : Table(defaultSkin), KTable {
+    class QuestMarker(val quest: Quest, val markerSize: Float = 50f) : Table(defaultSkin), KTable {
         init {
             stack {
-                it.size(50f, 50f)
+                it.size(this@QuestMarker.markerSize, this@QuestMarker.markerSize)
                 image("icon_app_133") {
                     setColor(0.6f, 0.3f, 0.3f, 0.5f) // Semi-transparent red
                 }
                 label((this@QuestMarker.quest.index).toString(), "docTitle") {
                     setColor(Color.WHITE)
                     setAlignment(Align.center)
-                    setFontScale(0.5f)
+                    setFontScale(0.5f * this@QuestMarker.markerSize / 50f)
                 }
                 addListener(object : ClickListener() {
                     override fun clicked(event: com.badlogic.gdx.scenes.scene2d.InputEvent?, x: Float, y: Float) {
