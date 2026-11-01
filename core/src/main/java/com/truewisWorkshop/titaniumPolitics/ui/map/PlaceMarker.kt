@@ -24,6 +24,9 @@ import kotlin.math.cos
 import kotlin.math.max
 import kotlin.math.sin
 import kotlin.math.min
+import kotlin.math.abs
+import kotlin.math.atan2
+import kotlin.math.hypot
 
 /**
  * A node on the map.
@@ -209,6 +212,11 @@ open class PlaceMarker(val gameState: GameState, val owner: MapUI, val place: St
             }
         }
         super.draw(batch, parentAlpha)
+        if (isBuildingVisible && leaders.isNotEmpty()) {
+            val c = TasksUI.QuestMarker.COLOR
+            batch.setColor(c.r, c.g, c.b, 0.9f * parentAlpha * color.a) //color.a carries the blink of the player's marker.
+            leaders.forEach { p -> drawSegment(batch, p[0], p[1], p[2], p[3]) }
+        }
     }
 
     override fun act(delta: Float) {
@@ -229,29 +237,51 @@ open class PlaceMarker(val gameState: GameState, val owner: MapUI, val place: St
         val s = if (isBuildingVisible) 1f / max(owner.currentZoom, 1f) else 1f
         val q = QUEST_SIZE * s
         val gap = 2f * s
+        leaders.clear()
+        val cx = width / 2
+        val cy = height / 2
 
         groups.forEach { (chip, markers) ->
-            val originX: Float
-            val originY: Float
-            val slots: Int
-            if (chip == null) {
-                originX = if (isBuildingVisible) width / 2 + backdropRadius + 4f * s else width + 4f
-                originY = height / 2 - q / 2
-                slots = MAX_QUESTS_SHOWN
-            } else {
-                originX = buildingRing.x + chip.x + chip.width
-                originY = buildingRing.y + chip.y + chip.height - q / 2
-                slots = MAX_QUESTS_PER_CHIP
-            }
+            //Quests of a building go outside the node's perimeter, in the direction of its icon, joined to it by a leader line.
+            val chipX = if (chip != null) buildingRing.x + chip.x + chip.width / 2 else 0f
+            val chipY = if (chip != null) buildingRing.y + chip.y + chip.height / 2 else 0f
+            val outX = chipX - cx
+            val outY = chipY - cy
+            val slots = if (chip == null) MAX_QUESTS_SHOWN else MAX_QUESTS_PER_CHIP
             // With overflow, the last slot is taken by the "+N" label.
             val markerSlots = if (markers.size > slots) slots - 1 else markers.size
+            //Leaders run at 45 degrees only. Pick the diagonals closest to pointing away from the node center first.
+            val diagonals = listOf(1f to 1f, -1f to 1f, -1f to -1f, 1f to -1f)
+                .sortedByDescending { (ux, uy) -> ux * outX + uy * outY }
+            val leaderLength = 2f * (SIZE / 2 + q * 0.9f - ringRadius)
+
+            //Center of slot i: row beside the node for unattached quests, else at the end of a diagonal leader.
+            fun slotCenter(i: Int): Pair<Float, Float> =
+                if (chip == null) {
+                    val ox = if (isBuildingVisible) cx + backdropRadius + 4f * s else width + 4f
+                    Pair(ox + q / 2 + i * (q + gap), cy)
+                } else {
+                    val (ux, uy) = diagonals[i % 4]
+                    val d = leaderLength / SQRT2
+                    Pair(chipX + ux * d, chipY + uy * d)
+                }
+
             markers.forEachIndexed { i, marker ->
                 marker.isVisible = i < markerSlots
                 marker.touchable = Touchable.enabled
                 marker.isTransform = true
                 marker.setOrigin(0f, 0f)
-                marker.setScale(s) //The marker keeps its 24px layout; scaling shrinks it to its on-screen size.
-                marker.setPosition(originX + i * (q + gap), originY)
+                marker.setScale(s) //The marker keeps its layout size; scaling shrinks it to its on-screen size.
+                val (mx, my) = slotCenter(i)
+                marker.setPosition(mx - q / 2, my - q / 2)
+                if (chip != null && i < markerSlots) {
+                    //Trim the line to the edges of the building icon and the quest icon.
+                    val (ux, uy) = diagonals[i % 4]
+                    val k = 1f / SQRT2
+                    val t0 = chip.width / 2
+                    val t1 = leaderLength - q / 2
+                    leaders.add(floatArrayOf(chipX + ux * k * t0, chipY + uy * k * t0, chipX + ux * k * t1, chipY + uy * k * t1))
+                }
             }
             if (markers.size > slots) {
                 val key: Any = chip ?: this
@@ -263,11 +293,29 @@ open class PlaceMarker(val gameState: GameState, val owner: MapUI, val place: St
                 }
                 label.setFontScale(0.25f * s)
                 label.setText("+" + (markers.size - markerSlots))
+                label.setAlignment(Align.left)
                 label.setSize(q, q)
-                label.setPosition(originX + markerSlots * (q + gap), originY)
+                //Right side of the last visible quest marker.
+                val (lx, ly) = slotCenter(max(markerSlots - 1, 0))
+                label.setPosition(lx + q / 2 + gap, ly - q / 2)
                 label.isVisible = true
             }
         }
+        leaderThickness = 1.5f * s
+    }
+
+    private val leaders = mutableListOf<FloatArray>()
+    private var leaderThickness = 1f
+    private val leaderPixel = defaultSkin.getRegion("white-pixel")
+
+    private fun drawSegment(batch: com.badlogic.gdx.graphics.g2d.Batch, x1: Float, y1: Float, x2: Float, y2: Float) {
+        val len = hypot(x2 - x1, y2 - y1)
+        if (len < 0.001f) return
+        val angle = Math.toDegrees(atan2((y2 - y1).toDouble(), (x2 - x1).toDouble())).toFloat()
+        batch.draw(
+            leaderPixel, x + x1, y + y1 - leaderThickness / 2, 0f, leaderThickness / 2,
+            len, leaderThickness, 1f, 1f, angle
+        )
     }
 
     var isBuildingVisible = false
@@ -308,7 +356,8 @@ open class PlaceMarker(val gameState: GameState, val owner: MapUI, val place: St
         const val CORRIDOR_SIZE = 14f // Size of a corridor marker
         const val CHIP_SIZE = 24f // Size of a building icon on the ring
         const val BADGE_SIZE = 16f // Size of the building count badge
-        const val QUEST_SIZE = 24f // Size of a quest marker on the map
+        const val QUEST_SIZE = 48f // Size of a quest marker on the map
+        private const val SQRT2 = 1.41421356f
         const val MAX_QUESTS_SHOWN = 4 // Quest slots in the row beside a node, including the "+N" slot
         const val MAX_QUESTS_PER_CHIP = 2 // Quest slots beside a building icon, including the "+N" slot
     }

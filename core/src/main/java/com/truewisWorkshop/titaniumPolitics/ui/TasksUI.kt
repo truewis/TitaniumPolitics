@@ -105,11 +105,16 @@ class TasksUI(var gameState: GameState) : Table(defaultSkin) {
     }
 
     class QuestMarker(val quest: Quest, val markerSize: Float = 50f) : Table(defaultSkin), KTable {
+        companion object {
+            /** Tint of the quest icon; leader lines on the map use the same color. */
+            val COLOR = Color(0.6f, 0.3f, 0.3f, 0.5f)
+        }
+
         init {
             stack {
                 it.size(this@QuestMarker.markerSize, this@QuestMarker.markerSize)
                 image("icon_app_133") {
-                    setColor(0.6f, 0.3f, 0.3f, 0.5f) // Semi-transparent red
+                    setColor(COLOR) // Semi-transparent red
                 }
                 label((this@QuestMarker.quest.index).toString(), "docTitle") {
                     setColor(Color.WHITE)
