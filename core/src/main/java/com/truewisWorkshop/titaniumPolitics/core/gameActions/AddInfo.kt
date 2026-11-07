@@ -102,7 +102,15 @@ data class AddInfo(
             meeting.currentAttention + (10 * effectivity * newsDegree * sbjCharObj.will / ReadOnly.const("mutualityMax")).toInt() - 20,
             0, 100
         )
-        agenda.applyPersuasivenessDelta(sbjCharacter, effectivity)
+        val targetAgenda = agenda
+        val previousPersuasiveness = targetAgenda.persuasiveness
+        targetAgenda.applyPersuasivenessDelta(sbjCharacter, effectivity)
+        val persuasivenessDelta = targetAgenda.persuasiveness - previousPersuasiveness
+        if (persuasivenessDelta != 0.0) {
+            parent.onAgendaPersuasivenessChanged.forEach {
+                it(meeting, targetAgenda, persuasivenessDelta)
+            }
+        }
         meeting.resolveAgendasByPersuasiveness(parent)
         parent.informations[infoKey]!!.knownTo.addAll(meeting.currentCharacters)
         super.execute()

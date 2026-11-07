@@ -98,6 +98,9 @@ class GameState {
     @Transient
     val updateUI = arrayListOf<(GameState) -> Unit>()
 
+    @Transient
+    val onAgendaPersuasivenessChanged = arrayListOf<(Meeting, MeetingAgenda, Double) -> Unit>()
+
     //This is a list of functions that will be called when the game starts.
     @Transient
     val onStart = arrayListOf<() -> Unit>()

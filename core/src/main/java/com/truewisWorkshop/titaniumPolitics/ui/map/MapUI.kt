@@ -42,6 +42,7 @@ open class MapUI(val gameState: GameState) : Table(defaultSkin) {
     }
     private lateinit var scrollPane: ScrollPane
     val dataTable = Table(skin)
+    private val background by lazy { MapBackground(gameState, this) }
     private val zoomLayer = ZoomLayer(dataTable)
     private var targetZoom = 1f
     val currentZoom: Float get() = zoomLayer.zoom
@@ -101,36 +102,7 @@ open class MapUI(val gameState: GameState) : Table(defaultSkin) {
         add(scrollPane).grow()
 
 
-        val st = scene2d.stack {
-            setSize(this@MapUI.WIDTH, this@MapUI.HEIGHT)
-            name = "background"
-
-            container(
-                image(
-                    TextureRegionDrawable(
-                        CapsuleStage.instance.assetManager.get(
-                            "MapGrid.png", Texture::class.java
-                        )!!
-                    )
-                ) {
-                    addListener(object : ClickListener() {
-                        override fun clicked(event: com.badlogic.gdx.scenes.scene2d.InputEvent?, x: Float, y: Float) {
-                            //Close Place Marker UI?
-                        }
-                    }
-                    )
-                    setColor(1f, 1f, 1f, 0.5f)
-                }) {
-                fill()
-                padRight(-this@MapUI.WIDTH / 4)
-                padLeft(-this@MapUI.WIDTH / 4)
-                padTop(-this@MapUI.WIDTH / 8)
-                padBottom(-this@MapUI.WIDTH / 8 * 3)
-
-            }
-        }
-        dataTable.addActor(st)
-        st.setPosition(PADDING, PADDING)
+        dataTable.addActor(background)
         currentPlaceMarkerWindow.isVisible = true
         add(currentPlaceMarkerWindow).growY().fill().width(400f)
         dataTable.add().grow()
@@ -215,6 +187,7 @@ open class MapUI(val gameState: GameState) : Table(defaultSkin) {
             }
         }
 
+        background.rebuild(currentMarkers.map { it.place })
         currentConnections.forEach { dataTable.removeActor(it) }
         currentConnections.clear()
         //Draw connections between places
@@ -264,7 +237,7 @@ open class MapUI(val gameState: GameState) : Table(defaultSkin) {
 
     /** Draw order, back to front: grid, connections, corridor markers, place markers, the place with open buildings. */
     private fun restack() {
-        dataTable.findActor<com.badlogic.gdx.scenes.scene2d.Actor>("background")?.toBack()
+        background.toBack()
         currentConnections.forEach { it.toFront() }
         currentMarkers.sortedWith(compareBy({ !it.isCorridor }, { it.isBuildingVisible })).forEach { it.toFront() }
     }

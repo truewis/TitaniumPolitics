@@ -2,18 +2,22 @@ package com.titaniumPolitics.game.ui.meeting
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Color
+import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.scenes.scene2d.Action
 import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.actions.Actions
 import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction
 import com.badlogic.gdx.scenes.scene2d.ui.Container
+import com.badlogic.gdx.scenes.scene2d.ui.Image
 import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.Stack
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.utils.Align
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable
 import com.titaniumPolitics.game.core.GameEngine
 import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.core.Meeting
+import com.titaniumPolitics.game.core.MeetingAgenda
 import com.titaniumPolitics.game.core.Party
 import com.titaniumPolitics.game.core.ReadOnly
 import com.titaniumPolitics.game.core.SpeechInterpreter
@@ -30,6 +34,7 @@ import com.titaniumPolitics.game.ui.widget.DivisionBannerUI
 import kotlinx.coroutines.runBlocking
 import ktx.scene2d.*
 import ktx.scene2d.Scene2DSkin.defaultSkin
+import java.util.IdentityHashMap
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
@@ -91,6 +96,9 @@ class MeetingUI(var gameState: GameState) : Table(defaultSkin), KTable {
     val discussionTable: Stack
     val electionUIContainer = Container<ElectionUI>()
     private val registeredMeetingCallbacks = hashSetOf<String>()
+    private val agendaPositions = IdentityHashMap<MeetingAgenda, Pair<Float, Float>>()
+    private val agendaFeedbackActors = arrayListOf<Actor>()
+    private var agendaPositionsMeetingId: String? = null
     private val meetingMutualitySnapshots = hashMapOf<String, Map<Pair<String, String>, Double>>()
     private val meetingKnownInfoSnapshots = hashMapOf<String, Set<String>>()
     val meetingInfoUI = scene2d.table {
@@ -113,6 +121,13 @@ class MeetingUI(var gameState: GameState) : Table(defaultSkin), KTable {
             if (it.player.currentMeeting != null) {
                 Logger.write("MeetingUI: Refreshing meeting ${it.player.currentMeeting!!}", Logger.LogLevel.INFO)
                 refresh(it.player.currentMeeting!!)
+            }
+        }
+        gameState.onAgendaPersuasivenessChanged += { meeting, agenda, delta ->
+            Gdx.app.postRunnable {
+                if (isVisible && gameState.player.currentMeeting === meeting) {
+                    showAgendaPersuasivenessFeedback(agenda, delta)
+                }
             }
         }
         //Listen for mutuality changes between characters in the current meeting.
@@ -169,6 +184,11 @@ class MeetingUI(var gameState: GameState) : Table(defaultSkin), KTable {
     //This function can be used for both meetings and conferences
     fun refresh(meeting: Meeting) {
         Gdx.app.postRunnable {
+            if (agendaPositionsMeetingId != meeting.ID) {
+                clearAgendaPersuasivenessFeedback()
+                agendaPositions.clear()
+                agendaPositionsMeetingId = meeting.ID
+            }
             meetingInfoUI.clear()
             meetingInfoUI.also {
                 it.top()
@@ -223,6 +243,7 @@ class MeetingUI(var gameState: GameState) : Table(defaultSkin), KTable {
                 }
             }
             placeBubbles()
+            bringAgendaPersuasivenessFeedbackToFront()
 
             currentAttention.setText(meeting.currentAttention.toString())
         }
@@ -413,6 +434,7 @@ class MeetingUI(var gameState: GameState) : Table(defaultSkin), KTable {
 
             // Center the agenda at the corner position
             agendaUI.setPosition(agendaX, agendaY, Align.center)
+            agendaPositions[agendaUI.agenda] = agendaX to agendaY
             if (agendaUI.agenda == gameState.player.currentMeeting?.currentAgenda) {
                 currentAgendaMarker.setPosition(agendaX, agendaY, Align.center)
                 currentAgendaMarker.isVisible = true
@@ -542,6 +564,90 @@ class MeetingUI(var gameState: GameState) : Table(defaultSkin), KTable {
         currentAgendaMarker.setScale(1f)
         currentAgendaMarker.color.a = currentAgendaMarkerBaseAlpha
         currentAgendaMarker.isVisible = false
+    }
+
+    private fun showAgendaPersuasivenessFeedback(agenda: MeetingAgenda, delta: Double) {
+        val center = agendaPositions[agenda]
+            ?: currentAgendas.firstOrNull { it.agenda === agenda }?.let {
+                (it.x + it.width / 2f) to (it.y + it.height / 2f)
+            }
+            ?: return
+        val isSupport = delta > 0.0
+        val effectPath = if (isSupport) {
+            "meeting/effects/agenda-support.png"
+        } else {
+            "meeting/effects/agenda-attack.png"
+        }
+        val accentPath = if (isSupport) {
+            "meeting/effects/kenney-spark-01.png"
+        } else {
+            "meeting/effects/kenney-slash-01.png"
+        }
+        val accentColor = if (isSupport) Color(0.42f, 1f, 0.68f, 0f) else Color(1f, 0.38f, 0.28f, 0f)
+        val accent = Image(
+            TextureRegionDrawable(CapsuleStage.instance.assetManager.get(accentPath, Texture::class.java))
+        )
+        accent.setSize(230f, 230f)
+        accent.setPosition(center.first, center.second, Align.center)
+        accent.setOrigin(Align.center)
+        accent.setScale(0.45f)
+        accent.color = accentColor
+        accent.addAction(
+            Actions.sequence(
+                Actions.parallel(Actions.alpha(0.8f, 0.12f), Actions.scaleTo(1f, 1f, 0.2f)),
+                Actions.parallel(Actions.fadeOut(0.62f), Actions.scaleTo(1.2f, 1.2f, 0.62f)),
+                Actions.run { agendaFeedbackActors.remove(accent) },
+                Actions.removeActor()
+            )
+        )
+        addActor(accent)
+        agendaFeedbackActors.add(accent)
+
+        val effect = Image(
+            TextureRegionDrawable(CapsuleStage.instance.assetManager.get(effectPath, Texture::class.java))
+        )
+        effect.setSize(180f, 180f)
+        effect.setPosition(center.first, center.second, Align.center)
+        effect.setOrigin(Align.center)
+        effect.setScale(0.55f)
+        effect.color = Color(1f, 1f, 1f, 0f)
+        effect.addAction(
+            Actions.sequence(
+                Actions.parallel(Actions.fadeIn(0.1f), Actions.scaleTo(1f, 1f, 0.16f)),
+                Actions.delay(0.08f),
+                Actions.parallel(Actions.fadeOut(0.55f), Actions.scaleTo(1.35f, 1.35f, 0.55f)),
+                Actions.run { agendaFeedbackActors.remove(effect) },
+                Actions.removeActor()
+            )
+        )
+        addActor(effect)
+        agendaFeedbackActors.add(effect)
+
+        val feedbackColor = if (isSupport) Color(0.35f, 1f, 0.55f, 1f) else Color(1f, 0.35f, 0.28f, 1f)
+        val deltaLabel = Label(String.format(java.util.Locale.ROOT, "%+.1f", delta), defaultSkin, "docTitle")
+        deltaLabel.setFontScale(0.25f)
+        deltaLabel.color = feedbackColor
+        deltaLabel.setPosition(center.first, center.second + 34f, Align.center)
+        deltaLabel.addAction(
+            Actions.sequence(
+                Actions.parallel(Actions.moveBy(0f, 78f, 0.75f), Actions.fadeOut(0.75f)),
+                Actions.run { agendaFeedbackActors.remove(deltaLabel) },
+                Actions.removeActor()
+            )
+        )
+        addActor(deltaLabel)
+        agendaFeedbackActors.add(deltaLabel)
+    }
+
+    private fun bringAgendaPersuasivenessFeedbackToFront() {
+        agendaFeedbackActors.toList().forEach { actor ->
+            if (actor.parent === this) actor.toFront()
+        }
+    }
+
+    private fun clearAgendaPersuasivenessFeedback() {
+        agendaFeedbackActors.forEach(Actor::remove)
+        agendaFeedbackActors.clear()
     }
 
     private fun registerMeetingCallbacks(meeting: Meeting) {

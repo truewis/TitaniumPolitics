@@ -47,6 +47,10 @@ class CapsuleStage(val gameState: GameState) : Stage(FitViewport(1920F, 1080F)) 
         assetManager.load("document_small_contrast.png", Texture::class.java)
         assetManager.load("idcard_contrast.png", Texture::class.java)
         assetManager.load("MapGrid.png", Texture::class.java)
+        assetManager.load("meeting/effects/agenda-support.png", Texture::class.java)
+        assetManager.load("meeting/effects/agenda-attack.png", Texture::class.java)
+        assetManager.load("meeting/effects/kenney-spark-01.png", Texture::class.java)
+        assetManager.load("meeting/effects/kenney-slash-01.png", Texture::class.java)
         com.titaniumPolitics.game.ui.map.MapArt.allPaths.forEach { assetManager.load(it, Texture::class.java) }
         ReadOnly.charJson.forEach {
             val idleImagePath = it.value.jsonObject["image"]?.jsonPrimitive?.content
