@@ -106,6 +106,7 @@ class AgendaBubbleUI(val agenda: MeetingAgenda) : Table(), KTable {
                     align(Align.bottom)
                 }
             }
+            setSize(80f, 80f)
         }
     }
 

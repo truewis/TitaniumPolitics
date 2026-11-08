@@ -23,8 +23,6 @@ import com.titaniumPolitics.game.core.ReadOnly
 import com.titaniumPolitics.game.debugTools.Logger
 import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.jsonObject
-import kotlinx.serialization.json.jsonPrimitive
 import ktx.scene2d.label
 import ktx.scene2d.scene2d
 import java.text.SimpleDateFormat
@@ -73,15 +71,6 @@ class MainMenu(val entry: EntryClass) : Stage(FitViewport(1920F, 1080F)) {
             Texture::class.java, TextureLoader(resolver)
         )
 
-        ReadOnly.mapJson.forEach {
-            assetManager.load(it.value.jsonObject["image"]!!.jsonPrimitive.content, Texture::class.java)
-            assetManager.load("data/dev/capsuleDevBoxCheck.png", Texture::class.java)
-            assetManager.load("data/dev/capsuleDevBox.png", Texture::class.java)
-
-        }
-        println("Explicit asset imports successful.")
-        assetManager.finishLoading()
-
         rootStack.setFillParent(true)
         rootStack.add(background)
         rootStack.add(menu)
@@ -120,6 +109,7 @@ class MainMenu(val entry: EntryClass) : Stage(FitViewport(1920F, 1080F)) {
     }
 
     fun startGame() {
+        val gameStarted = System.nanoTime()
         music.stop()
         val savedGamePath = System.getenv("SAVED_GAME")
         val initGamePath = System.getenv("INIT_GAME") ?: "json/init.json"
@@ -140,8 +130,12 @@ class MainMenu(val entry: EntryClass) : Stage(FitViewport(1920F, 1080F)) {
                 println("Loading complete.")
                 it.debugDisableProgressionCheck = debugDisableProgressionCheck
                 //ReadOnly.setLocale(Locale.KOREAN)
+                val initializationStarted = System.nanoTime()
                 it.initialize()
-                entry.stage = CapsuleStage(it)
+                entry.logStartupPhase("Game initialization", initializationStarted)
+                val stageStarted = System.nanoTime()
+                entry.stage = CapsuleStage(it, entry::logStartupPhase)
+                entry.logStartupPhase("Game stage", stageStarted)
                 Gdx.input.inputProcessor = entry.stage
             }
             newGame.onStart.forEach { it() }
@@ -155,14 +149,19 @@ class MainMenu(val entry: EntryClass) : Stage(FitViewport(1920F, 1080F)) {
                 Logger.gState = it
                 Logger.init()
                 it.debugDisableProgressionCheck = debugDisableProgressionCheck
+                val initializationStarted = System.nanoTime()
                 it.injectDependency()
+                entry.logStartupPhase("Save dependency injection", initializationStarted)
                 println("Loading complete.")
-                entry.stage = CapsuleStage(it)
+                val stageStarted = System.nanoTime()
+                entry.stage = CapsuleStage(it, entry::logStartupPhase)
+                entry.logStartupPhase("Game stage", stageStarted)
                 Gdx.input.inputProcessor = entry.stage
             }
         }
         println("Starting game engine.")
         GameEngineThreadHandler.startEngine(newGame)
+        entry.logStartupPhase("Start game", gameStarted)
     }
 
     private fun Date.toString(format: String, locale: Locale = Locale.getDefault()): String {

@@ -27,6 +27,7 @@ import java.nio.file.Files
 import java.nio.file.Path
 import java.util.Comparator
 import java.util.Locale
+import org.junit.jupiter.api.Assertions.assertEquals
 
 class AgendaSupportPlannerTest {
     @Test
@@ -57,6 +58,7 @@ class AgendaSupportPlannerTest {
 
             val meeting = upcomingMeeting(state, party)
             state.addScheduledMeeting(meeting)
+            val positivePredictions = AgendaSupportPlanner.predictFor(state, report)
 
             val info = Information(
                 author = report,
@@ -71,7 +73,7 @@ class AgendaSupportPlannerTest {
             }
             state.addInformation(info)
 
-            val positivePrediction = AgendaSupportPlanner.predictFor(state, report)
+            val positivePrediction = positivePredictions
                 .firstOrNull {
                     it.agenda.type == AgendaType.REQUEST &&
                         (it.agenda.attachedRequest?.action as? Examine)?.let { examine ->
@@ -81,6 +83,14 @@ class AgendaSupportPlannerTest {
                 }
             assertNotNull(positivePrediction)
             assertTrue(positivePrediction!!.support)
+            assertEquals(
+                AgendaSupportPlanner.recommendInformationKeys(state, report),
+                AgendaSupportPlanner.recommendInformationKeys(state, report, positivePredictions)
+            )
+            assertEquals(
+                AgendaSupportPlanner.nextInformationNeed(state, report),
+                AgendaSupportPlanner.nextInformationNeed(state, report, positivePredictions)
+            )
             assertTrue(
                 info.name in AgendaSupportPlanner.recommendInformationKeys(state, report),
                 "Known stale workplace evidence should be prepared to support the boss's request."
@@ -96,7 +106,8 @@ class AgendaSupportPlannerTest {
             )
             info.life = ReadOnly.const("InfoLifetime") * 0.9
 
-            val negativePrediction = AgendaSupportPlanner.predictFor(state, report)
+            val negativePredictions = AgendaSupportPlanner.predictFor(state, report)
+            val negativePrediction = negativePredictions
                 .firstOrNull {
                     it.agenda.type == AgendaType.REQUEST &&
                         (it.agenda.attachedRequest?.action as? Examine)?.let { examine ->
@@ -106,6 +117,10 @@ class AgendaSupportPlannerTest {
                 }
             assertNotNull(negativePrediction)
             assertFalse(negativePrediction!!.support)
+            assertEquals(
+                AgendaSupportPlanner.recommendInformationKeys(state, report),
+                AgendaSupportPlanner.recommendInformationKeys(state, report, negativePredictions)
+            )
             assertTrue(
                 info.name in AgendaSupportPlanner.recommendInformationKeys(state, report),
                 "Fresh evidence should be prepared to oppose a boss request the report rejects."

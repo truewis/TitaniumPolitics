@@ -505,10 +505,17 @@ class WorkRoutine(var workplace: String) : Routine() {
         }
 
         //9. Collect evidence that a report can use for a likely upcoming agenda.
-        if (subroutines.none { it is CollectAgendaEvidenceRoutine } &&
+        val shouldCollectAgendaEvidence = subroutines.none { it is CollectAgendaEvidenceRoutine } &&
             !failedSubroutineTypes.contains(CollectAgendaEvidenceRoutine::class.java.simpleName)
-        ) {
-            AgendaSupportPlanner.nextInformationNeed(gState, name)?.let { need ->
+        val shouldEvaluatePreparation = subroutines.none { it is PrepareInfoRoutine }
+        val agendaPredictions = if (shouldCollectAgendaEvidence || shouldEvaluatePreparation) {
+            AgendaSupportPlanner.predictFor(gState, name)
+        } else {
+            emptyList()
+        }
+
+        if (shouldCollectAgendaEvidence) {
+            AgendaSupportPlanner.nextInformationNeed(gState, name, agendaPredictions)?.let { need ->
                 candidates += Pair(
                     {
                         CollectAgendaEvidenceRoutine(need.targetPlace, need.informationType).apply {
@@ -521,8 +528,12 @@ class WorkRoutine(var workplace: String) : Routine() {
         }
 
         //10. Prepare likely agenda evidence before an upcoming meeting.
-        if (subroutines.none { it is PrepareInfoRoutine }) {
-            val predictedInfoKeys = AgendaSupportPlanner.recommendInformationKeys(gState, name)
+        if (shouldEvaluatePreparation) {
+            val predictedInfoKeys = AgendaSupportPlanner.recommendInformationKeys(
+                gState,
+                name,
+                agendaPredictions
+            )
             val agendaEvidenceNeedsPreparation =
                 predictedInfoKeys.any { it !in character.preparedInfoKeys }
             val lastPreparedAt = gState.informations.values

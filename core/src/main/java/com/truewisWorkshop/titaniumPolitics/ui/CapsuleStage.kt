@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions
 import com.badlogic.gdx.scenes.scene2d.ui.Image
 import com.badlogic.gdx.scenes.scene2d.ui.Stack
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable
+import com.badlogic.gdx.utils.GdxRuntimeException
 import com.badlogic.gdx.utils.viewport.FitViewport
 import com.titaniumPolitics.game.core.GameState
 import com.titaniumPolitics.game.core.ReadOnly
@@ -19,7 +20,10 @@ import com.titaniumPolitics.game.debugTools.Logger
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
 
-class CapsuleStage(val gameState: GameState) : Stage(FitViewport(1920F, 1080F)) {
+class CapsuleStage(
+    val gameState: GameState,
+    private val logStartupPhase: (String, Long) -> Unit = { _, _ -> }
+) : Stage(FitViewport(1920F, 1080F)) {
     var background = Image()
 
     //val inputEnabled = ArrayList<(Boolean)->Unit>() Unused
@@ -27,6 +31,7 @@ class CapsuleStage(val gameState: GameState) : Stage(FitViewport(1920F, 1080F)) 
     var hud: InterfaceRoot
     val rootStack = Stack()
     val assetManager = AssetManager()
+    private val renderThreadDispatcher = RenderThreadDispatcher()
     val onMouseClick = ArrayList<(Float, Float) -> Unit>()
     val onMouseDown = ArrayList<(Float, Float) -> Unit>()
     val onKeyDown = ArrayList<(Int) -> Unit>()
@@ -39,6 +44,7 @@ class CapsuleStage(val gameState: GameState) : Stage(FitViewport(1920F, 1080F)) 
             Texture::class.java, TextureLoader(resolver)
         )
 
+        val assetsStarted = System.nanoTime()
         ReadOnly.mapJson.forEach {
             assetManager.load(it.value.jsonObject["image"]!!.jsonPrimitive.content, Texture::class.java)
         }
@@ -52,51 +58,13 @@ class CapsuleStage(val gameState: GameState) : Stage(FitViewport(1920F, 1080F)) 
         assetManager.load("meeting/effects/kenney-spark-01.png", Texture::class.java)
         assetManager.load("meeting/effects/kenney-slash-01.png", Texture::class.java)
         com.titaniumPolitics.game.ui.map.MapArt.allPaths.forEach { assetManager.load(it, Texture::class.java) }
-        ReadOnly.charJson.forEach {
-            val idleImagePath = it.value.jsonObject["image"]?.jsonPrimitive?.content
-            println("Loading character images for ${it.key}, idle image path: $idleImagePath")
-            // If idleImagePath points to idle.png, load all emotion images in the same directory as well.
-            if (idleImagePath != null && idleImagePath.endsWith("idle.png")) {
-                val basePath = idleImagePath.removeSuffix("idle.png")
-                // emotions to load defined by files present in the directory
-                val emotions = listOf(
-                    "idle.png",
-                    //TODO: Add more emotions and corresponding images.
-                    //"happy.png",
-                    "smile.png",
-                    //"sad.png",
-                    "angry.png",
-                    "surprised.png",
-                    "confused.png",
-                    "annoyed.png"
-                    //"determined.png"
-                )
-                emotions.forEach { emotionImage ->
-                    // Check if the file exists before loading
-                    val fullPath = basePath + emotionImage
-                    val fileHandle = Gdx.files.internal(fullPath)
-                    if (fileHandle.exists()) {
-                        assetManager.load(fullPath, Texture::class.java)
-                        println("Loaded emotion image for ${it.key}: $fullPath")
-                    } else {
-                        println("Emotion image not found for ${it.key}: $fullPath")
-                    }
-                }
-            } else {
-                assetManager.load(
-                    it.value.jsonObject["image"]?.jsonPrimitive?.content ?: "portraits/${it.key}.png",
-                    Texture::class.java
-                )
-            }
-            assetManager.load(
-                it.value.jsonObject["headImage"]?.jsonPrimitive?.content ?: "portraits/${it.key}Head.png",
-                Texture::class.java
-            )
-        }
         ReadOnly.appJson.forEach {
             assetManager.load(it.value.jsonObject["image"]!!.jsonPrimitive.content, Texture::class.java)
         }
+        val queuedAt = System.nanoTime()
+        logStartupPhase("Game asset queue", assetsStarted)
         assetManager.finishLoading()
+        logStartupPhase("Game asset loading", queuedAt)
         Logger.write("Explicit asset imports successful.", Logger.LogLevel.INFO)
 
         rootStack.setFillParent(true)
@@ -107,7 +75,9 @@ class CapsuleStage(val gameState: GameState) : Stage(FitViewport(1920F, 1080F)) 
         addActor(logBox)
         logBox.setFillParent(true)
         logBox.isVisible = false
+        val hudStarted = System.nanoTime()
         hud = InterfaceRoot(gameState)
+        logStartupPhase("Game interface", hudStarted)
         addActor(hud)
         hud.setFillParent(true)
 
@@ -136,6 +106,25 @@ class CapsuleStage(val gameState: GameState) : Stage(FitViewport(1920F, 1080F)) 
 
     fun playMusic() {
         SoundEngine.playMusic("Capsule_old_lighthouse_loop.mp3")
+    }
+
+    fun portraitTexture(path: String): Texture =
+        renderThreadDispatcher.execute("loading portrait: $path") { loadPortraitTexture(path) }
+
+    private fun loadPortraitTexture(path: String): Texture {
+        if (!assetManager.isLoaded(path, Texture::class.java)) {
+            if (!Gdx.files.internal(path).exists()) {
+                throw GdxRuntimeException("Portrait image not found: $path")
+            }
+            assetManager.load(path, Texture::class.java)
+            return assetManager.finishLoadingAsset(path)
+        }
+        return assetManager.get(path, Texture::class.java)
+    }
+
+    override fun dispose() {
+        super.dispose()
+        assetManager.dispose()
     }
 
     fun roomChanged(name: String) {

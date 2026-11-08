@@ -79,30 +79,51 @@ object PolicyCatalog {
     }
 
     fun demographics(party: Party): PolicyDemographics {
-        val members = party.members
-        fun withTrait(trait: String) = members.filter {
-            trait in party.parent.characters[it]!!.trait
-        }.toSet()
+        val artificialists = linkedSetOf<String>()
+        val spiritualists = linkedSetOf<String>()
+        val atheists = linkedSetOf<String>()
+        val engineers = linkedSetOf<String>()
+        val soldiers = linkedSetOf<String>()
+        val administrators = linkedSetOf<String>()
+        val miners = linkedSetOf<String>()
+        val laborers = linkedSetOf<String>()
+        val hasFamily = linkedSetOf<String>()
+        val young = linkedSetOf<String>()
+        val old = linkedSetOf<String>()
+        val progressives = linkedSetOf<String>()
+        val conservatives = linkedSetOf<String>()
+
+        party.members.forEach { name ->
+            val character = party.parent.characters[name]!!
+            if ("artificialist" in character.trait) artificialists += name
+            if ("spiritualist" in character.trait) spiritualists += name
+            if ("atheist" in character.trait) atheists += name
+            if ("engineer" in character.trait) engineers += name
+            if ("soldier" in character.trait) soldiers += name
+            if ("administrator" in character.trait) administrators += name
+            if ("miner" in character.trait) miners += name
+            if (character.type == Character.Type.ANON) laborers += name
+            if (character.reliant > 0 && character.type != Character.Type.ANON) hasFamily += name
+            if (character.age < 30) young += name
+            if (character.age > 50) old += name
+            if (character.stats.riskTaking > 12) progressives += name
+            if (character.stats.riskTaking < 8) conservatives += name
+        }
 
         return PolicyDemographics(
-            artificialists = withTrait("artificialist"),
-            spiritualists = withTrait("spiritualist"),
-            atheists = withTrait("atheist"),
-            engineers = withTrait("engineer"),
-            soldiers = withTrait("soldier"),
-            administrators = withTrait("administrator"),
-            miners = withTrait("miner"),
-            laborers = members.filter {
-                party.parent.characters[it]!!.type == Character.Type.ANON
-            }.toSet(),
-            hasFamily = members.filter {
-                val character = party.parent.characters[it]!!
-                character.reliant > 0 && character.type != Character.Type.ANON
-            }.toSet(),
-            young = members.filter { party.parent.characters[it]!!.age < 30 }.toSet(),
-            old = members.filter { party.parent.characters[it]!!.age > 50 }.toSet(),
-            progressives = members.filter { party.parent.characters[it]!!.stats.riskTaking > 12 }.toSet(),
-            conservatives = members.filter { party.parent.characters[it]!!.stats.riskTaking < 8 }.toSet()
+            artificialists = artificialists,
+            spiritualists = spiritualists,
+            atheists = atheists,
+            engineers = engineers,
+            soldiers = soldiers,
+            administrators = administrators,
+            miners = miners,
+            laborers = laborers,
+            hasFamily = hasFamily,
+            young = young,
+            old = old,
+            progressives = progressives,
+            conservatives = conservatives
         )
     }
 
@@ -177,10 +198,26 @@ object PolicyCatalog {
         agendaAuthor: String? = party.leader
     ): Double {
         if (!isAllowed(policy, party.type) || characterName !in party.members) return 0.0
-        val personalPreference = directPreference(party, policy, characterName)
+        return preferenceScore(
+            party,
+            policy,
+            characterName,
+            agendaAuthor,
+            demographics(party)
+        )
+    }
+
+    private fun preferenceScore(
+        party: Party,
+        policy: String,
+        characterName: String,
+        agendaAuthor: String?,
+        groups: PolicyDemographics
+    ): Double {
+        val personalPreference = directPreference(party, policy, characterName, groups)
         val author = agendaAuthor?.takeIf { it != characterName && it in party.members }
             ?: return personalPreference
-        val authorPreference = directPreference(party, policy, author)
+        val authorPreference = directPreference(party, policy, author, groups)
         val relationship = party.parent.getMutNorm(characterName, author)
         return (personalPreference * 0.8 + authorPreference * relationship * 0.2)
             .coerceIn(-1.0, 1.0)
@@ -188,7 +225,15 @@ object PolicyCatalog {
 
     fun situationPriority(party: Party, policy: String): Double {
         if (!isAllowed(policy, party.type)) return 0.0
-        val groups = demographics(party)
+        return situationPriority(party, policy, demographics(party))
+    }
+
+    private fun situationPriority(
+        party: Party,
+        policy: String,
+        groups: PolicyDemographics
+    ): Double {
+        if (!isAllowed(policy, party.type)) return 0.0
         val memberCount = party.members.size
         if (memberCount == 0) return 0.0
         fun share(members: Set<String>) = members.size.toDouble() / memberCount
@@ -244,23 +289,24 @@ object PolicyCatalog {
         reportNames: Collection<String>
     ): String? {
         if (party.leader != leaderName || leaderName !in party.members) return null
+        val groups = demographics(party)
         val activeCategories = party.policies.mapNotNull(::categoryOf).toSet()
         val candidates = categoriesFor(party.type).values.flatten()
             .filter { it !in party.policies && categoryOf(it) !in activeCategories }
             .map { policy ->
-                val leaderPreference = directPreference(party, policy, leaderName)
+                val leaderPreference = directPreference(party, policy, leaderName, groups)
                 val reports = reportNames
                     .filter { it != leaderName && it in party.members }
                     .map { report ->
                         val trust = (party.parent.getMutNorm(leaderName, report) + 1.0) / 2.0
                         val weight = 0.5 + trust * 0.5
-                        preferenceScore(party, policy, report, leaderName) to weight
+                        preferenceScore(party, policy, report, leaderName, groups) to weight
                     }
                 val expectedSupport = if (reports.isEmpty()) 0.0 else
                     reports.sumOf { it.first * it.second } / reports.sumOf { it.second }
                 val score = 0.45 * leaderPreference +
                         0.30 * expectedSupport +
-                        0.25 * situationPriority(party, policy)
+                        0.25 * situationPriority(party, policy, groups)
                 policy to score
             }
             .maxWithOrNull(compareBy<Pair<String, Double>> { it.second }.thenBy { it.first })
@@ -312,14 +358,53 @@ object PolicyCatalog {
         }
     }
 
-    private fun directPreference(party: Party, policy: String, characterName: String): Double {
+    private fun directPreference(
+        party: Party,
+        policy: String,
+        characterName: String,
+        groups: PolicyDemographics
+    ): Double {
         if (policy == "banUnion" &&
             "administrator" in party.parent.characters[characterName]!!.trait
         ) return 0.75
-        val (beneficiaries, harmed) = affectedCharacters(party, policy)
-        return when (characterName) {
-            in beneficiaries -> 1.0
-            in harmed -> -1.0
+        return when (policy) {
+            "banReligiousPractices" -> when {
+                characterName in groups.atheists -> 1.0
+                characterName in groups.spiritualists || characterName in groups.artificialists -> -1.0
+                else -> 0.0
+            }
+            "onlyReligiousPracticesArtificialist" -> when {
+                characterName in groups.artificialists -> 1.0
+                characterName in groups.spiritualists -> -1.0
+                else -> 0.0
+            }
+            "onlyReligiousPracticesSpiritualist" -> when {
+                characterName in groups.spiritualists -> 1.0
+                characterName in groups.artificialists -> -1.0
+                else -> 0.0
+            }
+            "banUnion" -> if (characterName in groups.laborers) -1.0 else 0.0
+            "engineerIncentive" -> if (characterName in groups.engineers) 1.0 else -1.0
+            "administratorIncentive" -> if (characterName in groups.administrators) 1.0 else -1.0
+            "soldierIncentive" -> if (characterName in groups.soldiers) 1.0 else -1.0
+            "minerIncentive" -> if (characterName in groups.miners) 1.0 else -1.0
+            "laborerIncentive" -> if (characterName in groups.laborers) 1.0 else -1.0
+            "workhourLimit", "lockoutExperiments", "jobStability" -> when {
+                characterName in groups.conservatives -> 1.0
+                characterName in groups.progressives -> -1.0
+                else -> 0.0
+            }
+            "paternityLeave" -> if (characterName in groups.hasFamily) 1.0 else -1.0
+            "seniority" -> when {
+                characterName in groups.old -> 1.0
+                characterName in groups.young -> -1.0
+                else -> 0.0
+            }
+            "noTitles" -> when {
+                characterName in groups.laborers && characterName in groups.progressives -> 1.0
+                characterName in groups.conservatives && characterName !in groups.laborers -> -1.0
+                else -> 0.0
+            }
             else -> 0.0
         }
     }

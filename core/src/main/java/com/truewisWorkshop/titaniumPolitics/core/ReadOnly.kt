@@ -8,6 +8,7 @@ import java.io.File
 import java.io.FileReader
 import java.nio.charset.StandardCharsets
 import java.util.*
+import java.util.concurrent.ConcurrentHashMap
 import kotlin.toString
 
 object ReadOnly {
@@ -30,6 +31,7 @@ object ReadOnly {
 
     // Map to hold loaded Properties objects for the current locale (key is the base file name, e.g., "ui")
     private val propertyBundles = mutableMapOf<String, Properties>()
+    private val loggedPropertyWarnings = ConcurrentHashMap.newKeySet<String>()
 
     // List of base names for all property files
     private val PROPERTY_BASE_NAMES = listOf(
@@ -65,7 +67,12 @@ object ReadOnly {
     val charJson get() = generatedCharJson
     val actionJson = loadJson("json/action.json")
     val constJson = loadJson("json/consts.json")
+    private val intConstants = ConcurrentHashMap<String, Int>()
+    private val doubleConstants = ConcurrentHashMap<String, Double>()
     val gasJson = loadJson("json/gas.json")
+    val gasDensities: Map<String, Float> = gasJson.mapValues { (_, value) ->
+        value.jsonObject["density"]!!.jsonPrimitive.float
+    }
     val appJson = loadJson("json/apparatus.json")
     val resJson = loadJson("json/resources.json")
 
@@ -211,6 +218,7 @@ object ReadOnly {
             currentLocale = newLocale
             propertyBundles.clear() // Force reload on next access
             speechStyleBundles.clear()
+            loggedPropertyWarnings.clear()
             ensureBundlesLoaded()
             Logger.write("Locale successfully set to: $newLocale", Logger.LogLevel.INFO)
         }
@@ -257,18 +265,22 @@ object ReadOnly {
             if (bundleName != "ui") {
                 val fallbackValue = propertyBundles["ui"]?.getProperty(key)
                 if (fallbackValue != null) {
-                    Logger.write(
-                        "Warning: Property $key not found in $bundleName, falling back to 'ui' bundle.",
-                        Logger.LogLevel.INFO
-                    )
+                    if (loggedPropertyWarnings.add("$currentLocale|fallback|$bundleName|$key")) {
+                        Logger.write(
+                            "Warning: Property $key not found in $bundleName, falling back to 'ui' bundle.",
+                            Logger.LogLevel.INFO
+                        )
+                    }
                     return fallbackValue.let { if (obj != null) it.replacePlaceholders(obj) else it }
                 }
             }
 
-            Logger.write(
-                "Warning: Could not find property $key in bundle $bundleName for locale $currentLocale",
-                Logger.LogLevel.INFO
-            )
+            if (loggedPropertyWarnings.add("$currentLocale|missing|$bundleName|$key")) {
+                Logger.write(
+                    "Warning: Could not find property $key in bundle $bundleName for locale $currentLocale",
+                    Logger.LogLevel.INFO
+                )
+            }
             return "Unknown property [$key]"
         }
 
@@ -343,13 +355,17 @@ object ReadOnly {
     // --- Constant/Time Utilities (No functional change) ---
 
     fun const(constName: String): Double {
-        return constJson[constName]?.jsonPrimitive?.double
-            ?: .0.also { throw Exception("Could not find constant $constName") }
+        return doubleConstants.computeIfAbsent(constName) { key ->
+            constJson[key]?.jsonPrimitive?.double
+                ?: throw Exception("Could not find constant $key")
+        }
     }
 
     fun constInt(constName: String): Int {
-        return constJson[constName]?.jsonPrimitive?.int
-            ?: 0.also { throw Exception("Could not find constant $constName") }
+        return intConstants.computeIfAbsent(constName) { key ->
+            constJson[key]?.jsonPrimitive?.int
+                ?: throw Exception("Could not find constant $key")
+        }
     }
 
     val DT = (86400 / const("lengthOfDay")).toInt()

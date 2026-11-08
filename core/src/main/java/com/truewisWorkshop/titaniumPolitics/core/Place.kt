@@ -5,6 +5,7 @@ import com.titaniumPolitics.game.core.ReadOnly.DT
 import com.titaniumPolitics.game.core.ReadOnly.S_PER_HR
 import com.titaniumPolitics.game.debugTools.Logger
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.Transient
 import kotlinx.serialization.json.float
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
@@ -101,14 +102,14 @@ class Place : GameStateElement() {
      */
     fun gasPressure(gasName: String): Double =
         try {
-            gasResources[gasName] / ((ReadOnly.gasJson[gasName]!!.jsonObject["density"]!!.jsonPrimitive.float)) * (temperature / 273.15) / volume * 101325
+            gasResources[gasName] / ReadOnly.gasDensities[gasName]!! * (temperature / 273.15) / volume * 101325
         } catch (e: Exception) {
             throw Exception("Gas $gasName density not found in gasJson.")
         }
 
     fun pressureToMass(gasName: String, pressure: Double): Double =
         try {
-            pressure * ((ReadOnly.gasJson[gasName]!!.jsonObject["density"]!!.jsonPrimitive.float)) / (temperature / 273.15) * volume / 101325
+            pressure * ReadOnly.gasDensities[gasName]!! / (temperature / 273.15) * volume / 101325
         } catch (e: Exception) {
             throw Exception("Gas $gasName density not found in gasJson.")
         }
@@ -296,8 +297,13 @@ class Place : GameStateElement() {
     val realCharacters
         get() = characters.filter { !it.contains("Anon") }.toHashSet() //Characters that are not anonymous.
     var responsibleDivision: String? = null //Determines which party is responsible for the place.
+    @Transient
+    private var cachedWorkplacePartyKey: String? = null
     val workplaceParty: Party?
-        get() = parent.parties["workplace_$name"]
+        get() {
+            val key = cachedWorkplacePartyKey ?: "workplace_$name".also { cachedWorkplacePartyKey = it }
+            return parent.parties[key]
+        }
     var isAccidentScene =
         false //If true, the place is closed and no one can enter. Can be cleared by clearAccidentScene.
     var accidentInformationKeys =
@@ -315,7 +321,7 @@ class Place : GameStateElement() {
             //For each gas type, use the coordinates and the density in gasJson to distribute the gas according to the boltzmann distribution.
             gasResources.forEach { (key, _) ->
                 val mass =
-                    (ReadOnly.gasJson[key]!!.jsonObject["density"]!!.jsonPrimitive.float) * 0.0224f / ReadOnly.NA
+                    ReadOnly.gasDensities[key]!! * 0.0224f / ReadOnly.NA
 
                 val potentialDiff = coordinates.z - place.coordinates.z
                 val ratio = exp(

@@ -37,6 +37,8 @@ class QuickLoad() : Table(defaultSkin), KTable {
                         GameState.serializer(),
                         Gdx.files.internal(savedGamePath).readString()
                     ).also {
+                        Logger.gState = it
+                        Logger.init()
                         it.injectDependency()
                         Logger.write("Loading complete.", Logger.LogLevel.INFO)
                         EntryClass.instance.stage = CapsuleStage(it)

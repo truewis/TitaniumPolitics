@@ -5,6 +5,7 @@ import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.assets.AssetManager
 import com.badlogic.gdx.assets.loaders.SkinLoader
 import com.badlogic.gdx.graphics.Texture
+import com.badlogic.gdx.graphics.g2d.BitmapFont
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
@@ -16,11 +17,27 @@ import com.titaniumPolitics.game.ui.MainMenu
 import ktx.scene2d.Scene2DSkin
 import java.util.Locale
 
-class EntryClass : ApplicationAdapter() {
+class EntryClass @JvmOverloads constructor(
+    private val fastGuiFonts: Boolean = false,
+    private val profileStartup: Boolean = false
+) : ApplicationAdapter() {
     lateinit var stage: Stage
     lateinit var skin: Skin
+    private val assetManager = AssetManager()
+    private var startupStarted = 0L
+    private var firstGameFrameLogged = false
 
     fun loadFonts(): ObjectMap<String, Any> {
+        if (fastGuiFonts) {
+            val fontMap = ObjectMap<String, Any>()
+            fastFontSizes.forEach { (key, size) ->
+                val font = BitmapFont()
+                font.data.setScale(size / font.lineHeight)
+                fontMap.put(key, font)
+            }
+            return fontMap
+        }
+
         val fontMap = ObjectMap<String, Any>()
         val targetLocale = Locale("ko") // TODO: Change this to dynamically load the current language locale
 
@@ -67,26 +84,44 @@ class EntryClass : ApplicationAdapter() {
     }
 
     override fun create() {
-        val param = SkinLoader.SkinParameter(loadFonts())
-        val assetManager = AssetManager()
+        startupStarted = System.nanoTime()
+        val fonts = loadFonts()
+        logStartupPhase("Fonts", startupStarted)
+        val skinStarted = System.nanoTime()
+        val param = SkinLoader.SkinParameter(fonts)
         assetManager.load("skin/titaniumSkin.skin", Skin::class.java, param)
         assetManager.finishLoading()
         skin = assetManager.get("skin/titaniumSkin.skin")
+        logStartupPhase("Skin", skinStarted)
         Scene2DSkin.defaultSkin = skin
+        val menuStarted = System.nanoTime()
         stage = MainMenu(this)
+        logStartupPhase("Main menu", menuStarted)
         Gdx.input.inputProcessor = stage
         instance = this
+    }
+
+    fun logStartupPhase(phase: String, started: Long) {
+        if (profileStartup) {
+            val elapsedMs = (System.nanoTime() - started) / 1_000_000
+            Gdx.app.log("STARTUP_PROFILE", "$phase: ${elapsedMs}ms")
+        }
     }
 
     override fun render() {
         ScreenUtils.clear(0f, 0f, 0f, 1f)
         stage.act(Gdx.graphics.deltaTime)
         stage.draw()
+        if (profileStartup && !firstGameFrameLogged && stage is CapsuleStage) {
+            firstGameFrameLogged = true
+            logStartupPhase("First game frame since create", startupStarted)
+        }
     }
 
     override fun dispose() {
         stage.dispose()
         GameEngineThreadHandler.stopEngine()
+        assetManager.dispose()
     }
 
     override fun resize(width: Int, height: Int) {
@@ -94,7 +129,12 @@ class EntryClass : ApplicationAdapter() {
     }
 
     companion object {
-
+        internal val fastFontSizes = mapOf(
+            "fixedsys" to 20f,
+            "GrotleyRegular" to 75f,
+            "Martius" to 75f,
+            "MartiusEnglish" to 75f
+        )
         lateinit var instance: EntryClass
     }
 }

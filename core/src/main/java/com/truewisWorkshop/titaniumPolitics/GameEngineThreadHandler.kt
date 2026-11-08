@@ -16,10 +16,10 @@ class GameEngineThreadHandler {
         var thread: Thread? = null
 
         fun startEngine(gameState: GameState) {
-            engine = GameEngine(gameState)
+            val gameEngine = GameEngine(gameState)
+            engine = gameEngine
             thread = thread(start = true) {
-                val engine = GameEngine(gameState)
-                engine.onObserverCall += {
+                gameEngine.onObserverCall += {
                     runBlocking {
                         suspendCoroutine { cont ->
                             Gdx.app.postRunnable {
@@ -33,7 +33,7 @@ class GameEngineThreadHandler {
 
                 }
                 try {
-                    engine.startGame()
+                    gameEngine.startGame()
                 } catch (e: Exception) {
                     //Error handling
                     Logger.write(

@@ -15,6 +15,18 @@ class EventSystem : GameStateElement() {
     override val name: String
         get() = "EventSystem" //There is only one EventSystem object in the game.
     private val dataBase = arrayListOf<EventObject>()
+    @Transient
+    private val affectionResourceRequests = hashSetOf<Pair<String, String>>()
+    @Transient
+    private val affectionActionRequests = hashSetOf<Pair<String, String>>()
+    @Transient
+    private val affectionPoliticalSupportRequests = hashSetOf<Triple<String, String, String>>()
+    @Transient
+    private val bossThreats = hashSetOf<String>()
+    @Transient
+    private val reportComplaints = hashSetOf<String>()
+    @Transient
+    private val peerThreats = hashSetOf<String>()
 
     /*
     Temporary database to hold newly added events until the next time update is called. This is to avoid concurrent modification exception when events add new events during execution.
@@ -107,6 +119,7 @@ class EventSystem : GameStateElement() {
     override fun injectParent(gameState: GameState) {
         super.injectParent(gameState)
         dataBase.forEach {
+            indexEvent(it)
             it.injectParent(gameState)
             if (it.active)
                 println(
@@ -118,6 +131,7 @@ class EventSystem : GameStateElement() {
             tmpdataBase.forEach {
                 it.injectParent(gameState)
                 dataBase += it
+                indexEvent(it)
             }
             tmpdataBase.clear()
 
@@ -130,31 +144,41 @@ class EventSystem : GameStateElement() {
                 add(Event_GenuineRequest(req.name))
 
             }
-            gameState.scheduledMeetings.filter {
-                it.value.type == Meeting.MeetingType.DIVISION_LEADER_ELECTION && it.value.involvedParty == gameState.player.division?.name
-            }.keys.firstOrNull()?.let { add(Event_ElectionApproaching(it)) }
-            gameState.scheduledMeetings.filter {
-                it.value.type == Meeting.MeetingType.BUDGET_PROPOSAL && gameState.playerName in it.value.scheduledCharacters
-            }.keys.firstOrNull()?.let { add(Event_ProposeBudget(it)) }
+            gameState.scheduledMeetings.values.firstOrNull {
+                it.type == Meeting.MeetingType.DIVISION_LEADER_ELECTION && it.involvedParty == gameState.player.division?.name
+            }?.let { add(Event_ElectionApproaching(it.ID)) }
+            gameState.scheduledMeetings.values.firstOrNull {
+                it.type == Meeting.MeetingType.BUDGET_PROPOSAL && gameState.playerName in it.scheduledCharacters
+            }?.let { add(Event_ProposeBudget(it.ID)) }
             val relevantInfos = parent.player.preparedInfoKeys.map {
                 parent.informations[it]!!
             }.filter { info ->
                 parent.time - info.tgtTime < 168 * IDTH //Has to be recent enough
             }
-            parent.parties.values.filter {
-                it.leader == parent.playerName && it.type == Party.Type.WORKPLACE
-            }.forEach {
-                val place = it.workplace.name
-                if (relevantInfos.none { it.type == InformationType.HUMAN_RESOURCES && it.tgtPlace == place }
-                    || relevantInfos.none { it.type == InformationType.APPARATUS && it.tgtPlace == place }
-                    || relevantInfos.none { it.type == InformationType.RESOURCES && it.tgtPlace == place })
-                    add(Event_ExpiredWorkplaceInformation(place))
-                if (!it.isSalaryPaid)
-                    add(Event_PaySalary(it.name))
+            val infoTypesByPlace = hashMapOf<String?, MutableSet<InformationType>>()
+            relevantInfos.forEach { info ->
+                infoTypesByPlace.getOrPut(info.tgtPlace) { hashSetOf() }.add(info.type)
             }
-            parent.parties.values.filter {
+            val playerLeadingWorkplaces = parent.parties.values.filter {
+                it.leader == parent.playerName && it.type == Party.Type.WORKPLACE
+            }
+            playerLeadingWorkplaces.forEach { party ->
+                val place = party.workplace.name
+                val types = infoTypesByPlace[place]
+                if (types == null ||
+                    InformationType.HUMAN_RESOURCES !in types ||
+                    InformationType.APPARATUS !in types ||
+                    InformationType.RESOURCES !in types
+                ) {
+                    add(Event_ExpiredWorkplaceInformation(place))
+                }
+                if (!party.isSalaryPaid)
+                    add(Event_PaySalary(party.name))
+            }
+            val playerLedParties = parent.parties.values.filter {
                 it.leader == parent.playerName
-            }.forEach {
+            }
+            playerLedParties.forEach {
                 val hatefulMembers = it.members.filter {
                     parent.getMutNorm(it, parent.playerName) < -0.25
                 }
@@ -165,56 +189,50 @@ class EventSystem : GameStateElement() {
 
             }
             // Trigger affection events for characters who like the player
-            parent.characters.values.filter { char ->
+            val likedCharacters = parent.characters.values.filter { char ->
                 parent.getMutNorm(char.name, parent.playerName) > 0.25 &&
                     char.name != parent.playerName
-            }.forEach { char ->
-                // Check for resource-related information
-                parent.informations.values.filter { info ->
-                    info.type == InformationType.RESOURCES &&
-                        info.tgtCharacter != char.name &&
-                        info.tgtCharacter != parent.playerName &&
-                        parent.playerName in info.knownTo &&
-                        parent.time - info.tgtTime < 168 * IDTH
-                }.forEach { info ->
-                    if (!dataBase.any {
-                            it is Event_AffectionResourceRequest &&
-                                it.charName == char.name && it.infoKey == info.name
-                        }
+            }
+            val recentPlayerInfos = parent.informations.values.filter { info ->
+                parent.playerName in info.knownTo &&
+                    parent.time - info.tgtTime < 168 * IDTH
+            }
+            val resourceInfos = recentPlayerInfos.filter {
+                it.type == InformationType.RESOURCES && it.tgtCharacter != parent.playerName
+            }
+            val actionInfos = recentPlayerInfos.filter {
+                it.type == InformationType.ACTION || it.type == InformationType.APPARATUS
+            }
+            val negativeMutualityInfos = recentPlayerInfos.filter {
+                it.type == InformationType.PARTY_MUTUALITY && it.amount < 0
+            }
+            val firstPartyByMember = hashMapOf<String, Party>()
+            parent.parties.values.forEach { party ->
+                party.members.forEach { member ->
+                    firstPartyByMember.putIfAbsent(member, party)
+                }
+            }
+            likedCharacters.forEach { char ->
+                resourceInfos.forEach { info ->
+                    if (info.tgtCharacter != char.name &&
+                        (char.name to info.name) !in affectionResourceRequests
                     ) {
                         add(Event_AffectionResourceRequest(char.name, info.name))
                     }
                 }
 
-                // Check for action-related information
-                parent.informations.values.filter { info ->
-                    (info.type == InformationType.ACTION || info.type == InformationType.APPARATUS) &&
-                        parent.playerName in info.knownTo &&
-                        parent.time - info.tgtTime < 168 * IDTH
-                }.forEach { info ->
-                    if (!dataBase.any {
-                            it is Event_AffectionActionRequest &&
-                                it.charName == char.name && it.infoKey == info.name
-                        }
-                    ) {
+                actionInfos.forEach { info ->
+                    if ((char.name to info.name) !in affectionActionRequests) {
                         add(Event_AffectionActionRequest(char.name, info.name))
                     }
                 }
 
-                // Check for party mutuality information
-                parent.informations.values.filter { info ->
-                    info.type == InformationType.PARTY_MUTUALITY &&
-                        parent.playerName in info.knownTo &&
-                        parent.time - info.tgtTime < 168 * IDTH &&
-                        info.amount < 0 // Only if party relationships are negative
-                }.forEach { info ->
-                    val charParty = parent.parties.values.find { it.members.contains(char.name) }
-                    if (charParty != null && !dataBase.any {
-                            it is Event_AffectionPoliticalSupport &&
-                                it.charName == char.name && it.partyKey == charParty.name && it.infoKey == info.name
+                val charParty = firstPartyByMember[char.name]
+                if (charParty != null) {
+                    negativeMutualityInfos.forEach { info ->
+                        if (Triple(char.name, charParty.name, info.name) !in affectionPoliticalSupportRequests) {
+                            add(Event_AffectionPoliticalSupport(char.name, charParty.name, info.name))
                         }
-                    ) {
-                        add(Event_AffectionPoliticalSupport(char.name, charParty.name, info.name))
                     }
                 }
             }
@@ -235,16 +253,16 @@ class EventSystem : GameStateElement() {
 
                 when {
                     // Boss threatening to fire
-                    isCharBoss && !dataBase.any { it is Event_ThreatFromBoss && it.charName == char.name } -> {
+                    isCharBoss && char.name !in bossThreats -> {
                         add(Event_ThreatFromBoss(char.name))
                     }
                     // Direct report complaining
-                    isCharDirectReport && !dataBase.any { it is Event_ComplaintFromDirectReport && it.charName == char.name } -> {
+                    isCharDirectReport && char.name !in reportComplaints -> {
                         add(Event_ComplaintFromDirectReport(char.name))
                     }
                     // Peer threatening
                     !isCharBoss && !isCharDirectReport &&
-                        !dataBase.any { it is Event_ThreatFromPeer && it.charName == char.name } -> {
+                        char.name !in peerThreats -> {
                         add(Event_ThreatFromPeer(char.name))
                     }
                 }
@@ -265,6 +283,21 @@ class EventSystem : GameStateElement() {
 
     fun add(event: EventObject) {
         tmpdataBase.add(event)
+    }
+
+    private fun indexEvent(event: EventObject) {
+        when (event) {
+            is Event_AffectionResourceRequest ->
+                affectionResourceRequests += (event.charName to event.infoKey)
+            is Event_AffectionActionRequest ->
+                affectionActionRequests += (event.charName to event.infoKey)
+            is Event_AffectionPoliticalSupport ->
+                affectionPoliticalSupportRequests += Triple(event.charName, event.partyKey, event.infoKey)
+            is Event_ThreatFromBoss -> bossThreats += event.charName
+            is Event_ComplaintFromDirectReport -> reportComplaints += event.charName
+            is Event_ThreatFromPeer -> peerThreats += event.charName
+            else -> Unit
+        }
     }
 
     fun displayEmoji(who: String): SpeechUI.EmojiType {

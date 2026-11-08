@@ -166,6 +166,7 @@ class GameState {
         }
     }
 
+    private var meetingDisplayCounter = 0
     private var _scheduledMeetings = hashMapOf<String, Meeting>()
     val scheduledMeetings: Map<String, Meeting> = Collections.unmodifiableMap(_scheduledMeetings)
 
@@ -183,6 +184,7 @@ class GameState {
                 }) {
                 throw Exception("Scheduled meeting ${meeting.type} with party ${meeting.involvedParty} at time ${meeting.time} conflicts with existing meeting.")
             }
+        assignMeetingDisplayIndex(meeting)
         _scheduledMeetings[meeting.ID] = meeting
         onAddScheduledMeeting.forEach { it(meeting) }
     }
@@ -198,6 +200,21 @@ class GameState {
         return mt.ID
     }
 
+    private fun assignMeetingDisplayIndex(meeting: Meeting) {
+        if (meeting.displayIndex <= 0) {
+            val existing = _scheduledMeetings[meeting.ID] ?: _ongoingMeetings[meeting.ID]
+            meeting.displayIndex = existing?.displayIndex?.takeIf { it > 0 } ?: ++meetingDisplayCounter
+        }
+        else meetingDisplayCounter = maxOf(meetingDisplayCounter, meeting.displayIndex)
+    }
+
+    fun meetingDisplayName(meeting: Meeting): String {
+        assignMeetingDisplayIndex(meeting)
+        val type = ReadOnly.prop("meeting-name-${meeting.type.name}")
+        val location = ReadOnly.placeProp(meeting.place)
+        return ReadOnly.prop("meeting-name-format").format(type, meeting.displayIndex, location)
+    }
+
     private var _ongoingMeetings = hashMapOf<String, Meeting>()
     val ongoingMeetings: Map<String, Meeting> = Collections.unmodifiableMap(_ongoingMeetings)
 
@@ -207,6 +224,7 @@ class GameState {
         meeting: Meeting
     ) {
         if (_ongoingMeetings.containsValue(meeting)) throw Exception("Ongoing meeting $meeting already exists.")
+        assignMeetingDisplayIndex(meeting)
         _ongoingMeetings[meeting.ID] = meeting
         onAddOngoingMeeting.forEach { it(meeting) }
     }
@@ -977,6 +995,13 @@ class GameState {
 
     //Injects the parent gameState to all elements in the gameState. This function should be called exactly once after the gameState is created.
     fun injectDependency() {
+        val savedMeetings = (_scheduledMeetings.values + _ongoingMeetings.values).groupBy { it.ID }
+        savedMeetings.values.flatten().filter { it.displayIndex > 0 }.forEach(::assignMeetingDisplayIndex)
+        savedMeetings.values.sortedWith(compareBy({ it.first().time }, { it.first().ID })).forEach { copies ->
+            val existingIndex = copies.firstOrNull { it.displayIndex > 0 }?.displayIndex
+            val index = existingIndex ?: ++meetingDisplayCounter
+            copies.forEach { it.displayIndex = index }
+        }
         gdh = GameDataHandler(workingDirectory)
         gdh.initializeColumns()
         timeChanged += { old, new ->
@@ -996,6 +1021,27 @@ class GameState {
         nonPlayerAgents.forEach { it.value.injectParent(this) }
         eventSystem.injectParent(this)
         Logger.write("GameState injected successfully.", Logger.LogLevel.INFO)
+    }
+
+    internal fun copyForAgentInference(): GameState {
+        val plannedWorkers = places.mapValues { (_, place) ->
+            place.apparatuses.map { it.plannedWorker }
+        }
+        val serialized = Json.encodeToString(serializer(), this)
+        return Json.decodeFromString(serializer(), serialized).also { copy ->
+            copy.places.forEach { (placeName, copiedPlace) ->
+                val sourceWorkers = plannedWorkers[placeName].orEmpty()
+                copiedPlace.apparatuses.zip(sourceWorkers).forEach { (apparatus, workers) ->
+                    apparatus.plannedWorker = workers
+                }
+            }
+            copy.log.parent = copy
+            copy.places.values.forEach { it.parent = copy }
+            copy.characters.values.forEach { it.parent = copy }
+            copy.parties.values.forEach { it.parent = copy }
+            copy.nonPlayerAgents.values.forEach { it.parent = copy }
+            copy.eventSystem.parent = copy
+        }
     }
 
 

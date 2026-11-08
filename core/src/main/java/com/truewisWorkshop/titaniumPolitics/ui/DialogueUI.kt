@@ -245,7 +245,7 @@ class DialogueUI(val gameState: GameState) : Table(defaultSkin), KTable {
         dialogueLines = emptyList()
         dialogueLines = listOf(
             meeting.currentSpeaker!! + ": " + ReadOnly.scriptForCharacter(meeting.currentSpeaker, "MeetingDialogue")
-                .format(gameState.meetingName(meeting))
+                .format(gameState.meetingDisplayName(meeting))
         )
         addPortrait(meeting.currentSpeaker!!)
         playDialogueLines()

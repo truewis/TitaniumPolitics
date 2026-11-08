@@ -133,9 +133,18 @@ object AgendaSupportPlanner {
     }
 
     fun recommendInformationKeys(state: GameState, characterName: String): List<String> {
+        if (state.characters[characterName] == null) return emptyList()
+        return recommendInformationKeys(state, characterName, predictFor(state, characterName))
+    }
+
+    internal fun recommendInformationKeys(
+        state: GameState,
+        characterName: String,
+        predictions: List<PredictedAgendaSupport>
+    ): List<String> {
         val character = state.characters[characterName] ?: return emptyList()
         val recommended = linkedSetOf<String>()
-        predictFor(state, characterName).forEach { prediction ->
+        predictions.forEach { prediction ->
             val candidates = state.informations.filter { (_, info) ->
                 characterName in info.knownTo
             }.mapNotNull { (key, info) ->
@@ -162,10 +171,19 @@ object AgendaSupportPlanner {
     }
 
     fun nextInformationNeed(state: GameState, characterName: String): AgendaEvidenceNeed? {
+        if (state.characters[characterName] == null) return null
+        return nextInformationNeed(state, characterName, predictFor(state, characterName))
+    }
+
+    internal fun nextInformationNeed(
+        state: GameState,
+        characterName: String,
+        predictions: List<PredictedAgendaSupport>
+    ): AgendaEvidenceNeed? {
         val character = state.characters[characterName] ?: return null
         val lifetime = ReadOnly.const("InfoLifetime")
 
-        predictFor(state, characterName).forEach { prediction ->
+        predictions.forEach { prediction ->
             val requestAction = prediction.agenda.attachedRequest?.action
             val needs = when (requestAction) {
                 is Examine -> {

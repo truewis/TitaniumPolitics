@@ -31,6 +31,7 @@ class GameEngine(val gameState: GameState) {
 
     //Let UI or other monitors to come in and read gamestate.
     var onObserverCall = arrayListOf<(GameState) -> Unit>()
+    private val backgroundAgentInference = BackgroundAgentInference()
 
 
     init {
@@ -175,8 +176,11 @@ class GameEngine(val gameState: GameState) {
 
 
         } else {
-            action = gameState.nonPlayerAgents[char.name]?.chooseAction()
+            val agent = gameState.nonPlayerAgents[char.name]
                 ?: throw Exception("Non player character ${char.name} does not have a nonPlayerAgent.")
+            action = backgroundAgentInference.chooseAction(gameState, char.name) {
+                agent.chooseAction()
+            }
             action.injectParent(gameState)
             if (action.javaClass.simpleName !in actionList)
                 Logger.write(
@@ -247,6 +251,9 @@ class GameEngine(val gameState: GameState) {
         // Fire the meeting-action hook if the acting character is in an ongoing meeting.
         if (gameState.ongoingMeetings.values.any { char.name in it.currentCharacters }) {
             gameState.onMeetingAction.forEach { it(action) }
+        }
+        if (char.name == gameState.playerName) {
+            backgroundAgentInference.schedule(gameState)
         }
     }
 
@@ -943,6 +950,7 @@ class GameEngine(val gameState: GameState) {
     }
 
     fun destroy() {
+        backgroundAgentInference.close()
         gameState.destroy()
     }
 

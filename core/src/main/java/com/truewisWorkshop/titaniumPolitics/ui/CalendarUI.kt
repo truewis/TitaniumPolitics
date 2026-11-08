@@ -32,7 +32,7 @@ class CalendarUI(val gameState: GameState) : Table(Scene2DSkin.defaultSkin) {
             if (meeting.scheduledCharacters.contains(gameState.playerName))
                 addEntry(
                     meeting.time,
-                    ReadOnly.prop(meeting.type.toString()),
+                    gameState.meetingDisplayName(meeting),
                     ReadOnly.placeProp(meeting.place),
                     "A new meeting has been scheduled at ${ReadOnly.placeProp(meeting.place)}.",
                     gameState.scheduledMeetings.entries.find { it.value == meeting }?.key

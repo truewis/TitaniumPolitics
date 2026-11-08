@@ -85,6 +85,8 @@ class MeetingUI(var gameState: GameState) : Table(defaultSkin), KTable {
     val speakerPortrait = PortraitUI("", gameState)
     val deployedInfos = arrayListOf<InfoBubbleUI>()
     val currentAgendas = arrayListOf<AgendaBubbleUI>()
+    private val informationArms = InformationArmsLayer()
+    private val informationPositions = hashMapOf<String, Pair<Float, Float>>()
     private var improvisedQuestUI: Table? = null
     val currentAgendaMarker = scene2d.image("BadgeRound") {
         setSize(110f, 110f)
@@ -177,6 +179,7 @@ class MeetingUI(var gameState: GameState) : Table(defaultSkin), KTable {
             }
         }
 
+        addActorAt(0, informationArms)
         addActor(currentAgendaMarker)
 
     }
@@ -187,17 +190,15 @@ class MeetingUI(var gameState: GameState) : Table(defaultSkin), KTable {
             if (agendaPositionsMeetingId != meeting.ID) {
                 clearAgendaPersuasivenessFeedback()
                 agendaPositions.clear()
+                informationPositions.clear()
                 agendaPositionsMeetingId = meeting.ID
             }
             meetingInfoUI.clear()
             meetingInfoUI.also {
                 it.top()
                 it.pad(10f)
+                it.label(this@MeetingUI.gameState.meetingDisplayName(meeting), "docTitle")
                 meeting.involvedParty?.run {
-                    it.label(
-                        this@MeetingUI.gameState.meetingName(this@MeetingUI.gameState.player.currentMeeting!!),
-                        "docTitle"
-                    )
                     val party = this@MeetingUI.gameState.parties[this]!!
                     if (party.type == Party.Type.DIVISION) {
                         it.row()
@@ -231,14 +232,17 @@ class MeetingUI(var gameState: GameState) : Table(defaultSkin), KTable {
                 addActor(agendaUI)
                 it.informationKeys.forEach { key ->
                     val info = gameState.informations[key]!!
-                    val preJoin = key in meeting.infoKeysBeforePlayerJoined
-                    val infoUI = InfoBubbleUI(info, preJoin) {
+                    val preJoin = key in meeting.infoKeysBeforePlayerJoined || gameState.playerName !in info.knownTo
+                    val presenter = meeting.informationPresenters[key]
+                    val infoUI = InfoBubbleUI(info, presenter, preJoin) {
                         if (!preJoin && gameState.playerName in info.knownTo)
                             InformationViewUI.displayInformation(info)
                         else
                             BlockingWarningUI.instance.display("unknownInfo", null)
                     }
                     deployedInfos += infoUI
+                    val arms = InformationArmsUI(this@MeetingUI, infoUI, agendaUI, presenter?.let(::findPortrait), informationArms)
+                    informationArms.addActor(arms)
                     addActor(infoUI)
                 }
             }
@@ -404,12 +408,10 @@ class MeetingUI(var gameState: GameState) : Table(defaultSkin), KTable {
         //Place bubbles in a circle. Agenda bubbles are placed in the inner circle.
         val centerX = discussionTable.x + discussionTable.width / 2
         val centerY = discussionTable.y + discussionTable.height / 2
-        val agendasToPlace = currentAgendas.take(4)//Display maximum of four agendas.
+        val agendasToPlace = currentAgendas
 
         // Define padding and positions relative to the discussion table
         val agendaMargin = 200f
-        val infoSpacingY = InfoBubbleUI.HEIGHT // vertical space between info bubbles
-        val infoSpacingX = InfoBubbleUI.WIDTH
 
         // Corner positions for agendas
         val positions = listOf(
@@ -430,7 +432,11 @@ class MeetingUI(var gameState: GameState) : Table(defaultSkin), KTable {
 
         var markerPlaced = false
         agendasToPlace.forEachIndexed { index, agendaUI ->
-            val (agendaX, agendaY) = positions[index]
+            val (agendaX, agendaY) = if (agendasToPlace.size <= positions.size) positions[index] else {
+                val angle = 2.0 * Math.PI * index / agendasToPlace.size
+                (centerX + 330f * kotlin.math.cos(angle).toFloat()) to
+                        (centerY + 330f * kotlin.math.sin(angle).toFloat())
+            }
 
             // Center the agenda at the corner position
             agendaUI.setPosition(agendaX, agendaY, Align.center)
@@ -443,20 +449,33 @@ class MeetingUI(var gameState: GameState) : Table(defaultSkin), KTable {
                 markerPlaced = true
             }
 
-            // Stack associated info bubbles vertically to the right of the agenda
-            val infoStartX =
-                if (index == 0 || index == 2) agendaUI.x + agendaUI.width + 20f else agendaUI.x - infoSpacingX - 20f
-            var infoStartY = agendaUI.y + agendaUI.height / 2 + agendaUI.agenda.informationKeys.size * infoSpacingY / 2
+        }
 
-            agendaUI.agenda.informationKeys.forEachIndexed information@{ i, key ->
+        val obstacles = agendasToPlace.map {
+            MeetingInfoLayout.Box(it.x, it.y, it.width, it.height)
+        }.toMutableList()
+        val bounds = MeetingInfoLayout.Box(
+            discussionTable.x + 100f, discussionTable.y + 100f,
+            (discussionTable.width - 200f).coerceAtLeast(InfoBubbleUI.WIDTH),
+            (discussionTable.height - 200f).coerceAtLeast(InfoBubbleUI.HEIGHT)
+        )
+        agendasToPlace.forEach { agendaUI ->
+            agendaUI.agenda.informationKeys.forEach information@{ key ->
                 val info = deployedInfos.find { it.info.name == key } ?: return@information
-                info.setPosition(
-                    infoStartX,
-                    infoStartY - i * infoSpacingY
+                val position = MeetingInfoLayout.place(
+                    MeetingInfoLayout.Point(agendaUI.x + agendaUI.width / 2f, agendaUI.y + agendaUI.height / 2f),
+                    bounds, obstacles, InfoBubbleUI.WIDTH, InfoBubbleUI.HEIGHT
                 )
-            }
-            if (!markerPlaced) {
-                currentAgendaMarker.isVisible = false
+                val old = informationPositions[key]
+                info.setPosition(old?.first ?: position.x, old?.second ?: position.y, Align.center)
+                if (old != null) {
+                    info.addAction(Actions.moveToAligned(position.x, position.y, Align.center, 0.25f))
+                }
+                informationPositions[key] = position.x to position.y
+                obstacles.add(MeetingInfoLayout.Box(
+                    position.x - InfoBubbleUI.WIDTH / 2f, position.y - InfoBubbleUI.HEIGHT / 2f,
+                    InfoBubbleUI.WIDTH, InfoBubbleUI.HEIGHT
+                ))
             }
         }
 
@@ -479,6 +498,7 @@ class MeetingUI(var gameState: GameState) : Table(defaultSkin), KTable {
         deployedInfos.forEach {
             it.remove()
         }
+        informationArms.clearChildren()
 
         currentAgendas.clear()
         deployedInfos.clear()
@@ -677,7 +697,7 @@ class MeetingUI(var gameState: GameState) : Table(defaultSkin), KTable {
                     previousMutuality = meetingMutualitySnapshots[meeting.ID].orEmpty(),
                     knownInformationBeforeMeeting = meetingKnownInfoSnapshots[meeting.ID].orEmpty()
                 )
-                AlertUI.instance.addAlert("meetingFinished", gameState.meetingName(meeting)) {
+                AlertUI.instance.addAlert("meetingFinished", gameState.meetingDisplayName(meeting)) {
                     summaryUI.isVisible = true
                 }
                 registeredMeetingCallbacks.remove(meeting.ID)

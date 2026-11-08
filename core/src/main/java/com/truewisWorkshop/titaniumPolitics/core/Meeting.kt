@@ -25,6 +25,7 @@ class Meeting(
     var currentCharacters: HashSet<String> = hashSetOf()
 ) {
     val ID = UUID.randomUUID().toString()
+    var displayIndex: Int = 0
     var startTime = 0 //The time when the meeting actually starts.
     var involvedParty: String? = null
     var currentSpeaker: String? = null
@@ -36,6 +37,7 @@ class Meeting(
             }
         }
     var agendas = arrayListOf<MeetingAgenda>()
+    val informationPresenters = hashMapOf<String, String>()
     var currentAgendaIndex: Int? = null
     var voteResults = hashMapOf<String, Int>()
     @Transient

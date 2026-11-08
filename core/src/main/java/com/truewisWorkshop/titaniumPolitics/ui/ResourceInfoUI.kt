@@ -34,7 +34,7 @@ class ResourceInfoUI : WindowUI("ResourceInfoTitle") {
             row()
             add(InformationSourceUI(information)).fill()
         }
-
+        isVisible = true
     }
 
     companion object {

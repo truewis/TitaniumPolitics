@@ -222,7 +222,7 @@ class InformationViewUI(var gameState: GameState) : Table(defaultSkin) {
                 }
 
                 else -> {
-                    //Do nothing
+                    InformationDetailUI.instance.display(information)
                 }
             }
         }

@@ -4,10 +4,9 @@ import com.titaniumPolitics.game.core.ReadOnly.S_PER_HR
 import com.titaniumPolitics.game.core.ReadOnly.const
 import com.titaniumPolitics.game.debugTools.Logger
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.builtins.MapSerializer
-import kotlinx.serialization.builtins.serializer
 import kotlinx.serialization.json.*
 import java.util.*
+import java.util.concurrent.ConcurrentHashMap
 import kotlin.collections.emptyMap
 import kotlin.math.exp
 import kotlin.math.pow
@@ -50,21 +49,20 @@ class Apparatus {
     var status_danger = ""
 
     val isStorage
-        get() = jsonData.jsonObject["variables"]?.jsonObject?.get("storageType") != null
+        get() = definition.isStorage
     val storageType: Pair<String, Double>
         get() {
             if (!isStorage) {
                 Logger.write("$name is not a storage apparatus.")
                 throw Exception("$name is not a storage apparatus.")
             }
-            return jsonData.jsonObject["variables"]!!.jsonObject["storageType"]!!.jsonPrimitive.toString() to
-                    jsonData.jsonObject["variables"]!!.jsonObject["storageAmount"]!!.jsonPrimitive.double
+            return definition.storageType!!
         }
     val isLogistics
-        get() = jsonData.jsonObject["variables"]?.jsonObject?.get("logisticsCapacity") != null
+        get() = definition.isLogistics
     val logisticsCapacityPerWorker: Double
         get() = if (!isLogistics) 0.0
-        else jsonData.jsonObject["variables"]!!.jsonObject["logisticsCapacity"]!!.jsonPrimitive.double
+        else definition.logisticsCapacityPerWorker
 
     /**
      * Per-instance parameter overrides. Used, for example, to specify which specific resource
@@ -74,15 +72,15 @@ class Apparatus {
 
     /** True if this apparatus is part of the transport infrastructure system. */
     val isTransportInfrastructure: Boolean
-        get() = jsonData.jsonObject["variables"]?.jsonObject?.containsKey("transportType") == true
+        get() = definition.isTransportInfrastructure
 
     /** The transport type string, e.g. "railway", "powerLine", "liquidPipe", "manway". */
     val transportType: String?
-        get() = jsonData.jsonObject["variables"]?.jsonObject?.get("transportType")?.jsonPrimitive?.content
+        get() = definition.transportType
 
     /** Corridor cross-sectional space consumed by this apparatus (metres). */
     val spaceConsumption: Double
-        get() = jsonData.jsonObject["variables"]?.jsonObject?.get("spaceConsumption")?.jsonPrimitive?.double ?: 0.0
+        get() = definition.spaceConsumption
 
     /**
      * The resource this apparatus can transport. For pipes, the instance-level parameter
@@ -91,27 +89,27 @@ class Apparatus {
      */
     val resourceFilter: String?
         get() = parameters["resourceFilter"]
-            ?: jsonData.jsonObject["variables"]?.jsonObject?.get("resourceFilter")?.jsonPrimitive?.content
+            ?: definition.resourceFilter
 
     /** Maximum slope (rise/run) this transport device can operate on. Null = no limit. */
     val maxSlopePct: Double?
-        get() = jsonData.jsonObject["variables"]?.jsonObject?.get("maxSlopePct")?.jsonPrimitive?.double
+        get() = definition.maxSlopePct
 
     /** Corridor radius provided by a manway apparatus (metres). Null if not a manway. */
     val corridorRadius: Double?
-        get() = jsonData.jsonObject["variables"]?.jsonObject?.get("corridorRadius")?.jsonPrimitive?.double
+        get() = definition.corridorRadius
 
     /** True if this transport device works on worker power only (no autonomous throughput). */
     val manpowerOnly: Boolean
-        get() = jsonData.jsonObject["variables"]?.jsonObject?.get("manpowerOnly")?.jsonPrimitive?.boolean ?: false
+        get() = definition.manpowerOnly
 
     /** Throughput per assigned worker for manpower-based transport (units/hr). */
     val throughputPerWorker: Double
-        get() = jsonData.jsonObject["variables"]?.jsonObject?.get("throughputPerWorker")?.jsonPrimitive?.double ?: 0.0
+        get() = definition.throughputPerWorker
 
     /** Autonomous throughput at full efficiency for infrastructure-based transport (units/hr). */
     val baseThroughput: Double
-        get() = jsonData.jsonObject["variables"]?.jsonObject?.get("baseThroughput")?.jsonPrimitive?.double ?: 0.0
+        get() = definition.baseThroughput
 
     /** Actual throughput, accounting for efficiency and worker assignment. */
     val actualThroughput: Double
@@ -143,38 +141,91 @@ class Apparatus {
     }
 
     companion object {
+        private val definitions = ConcurrentHashMap<String, Definition>()
+
+
         /** Liquid resources that can be transported by liquid pipes. */
         val LIQUID_RESOURCE_KEYS = setOf("water", "cleanWater")
         /** Manway apparatus name variants (all tiers plus legacy name). */
         val MANWAY_NAMES = setOf("manway", "manwayI", "manwayII", "manwayIII")
     }
 
+    private class Definition(val data: JsonObject) {
+        private val variables = data["variables"]?.jsonObject
+
+        val isStorage = variables?.get("storageType") != null
+        val storageType = if (isStorage) {
+            variables!!["storageType"]!!.jsonPrimitive.toString() to
+                variables["storageAmount"]!!.jsonPrimitive.double
+        } else {
+            null
+        }
+        val isLogistics = variables?.get("logisticsCapacity") != null
+        val logisticsCapacityPerWorker =
+            variables?.get("logisticsCapacity")?.jsonPrimitive?.double ?: 0.0
+        val isTransportInfrastructure = variables?.containsKey("transportType") == true
+        val transportType = variables?.get("transportType")?.jsonPrimitive?.content
+        val spaceConsumption = variables?.get("spaceConsumption")?.jsonPrimitive?.double ?: 0.0
+        val resourceFilter = variables?.get("resourceFilter")?.jsonPrimitive?.content
+        val maxSlopePct = variables?.get("maxSlopePct")?.jsonPrimitive?.double
+        val corridorRadius = variables?.get("corridorRadius")?.jsonPrimitive?.double
+        val manpowerOnly = variables?.get("manpowerOnly")?.jsonPrimitive?.boolean ?: false
+        val throughputPerWorker = variables?.get("throughputPerWorker")?.jsonPrimitive?.double ?: 0.0
+        val baseThroughput = variables?.get("baseThroughput")?.jsonPrimitive?.double ?: 0.0
+
+        val baseDanger = data["baseDanger"]!!.jsonPrimitive.double
+        val accidentTypes = data["accidentType"]?.jsonArray
+            ?.map { AccidentType.valueOf(it.jsonPrimitive.content) }
+            ?: emptyList()
+        val tempCoef = data["tempCoef"]?.jsonPrimitive?.double ?: 0.0
+        val maxTemp = data["maxTemp"]?.jsonPrimitive?.double ?: 4000.0
+        val minTemp = data["minTemp"]?.jsonPrimitive?.double ?: 4.0
+        val idealGasGeneration = resources("gasGeneration")
+        val leakGas = data["leakGas"]?.jsonPrimitive?.content
+        val idealAbsorption = resources("idealAbsorption")
+        val idealProduction = resources("idealProduction")
+        val idealConsumption = resources("idealConsumption")
+        val idealDistribution = resources("idealDistribution")
+        val idealHeatProduction = data["idealHeatProduction"]?.jsonPrimitive?.double ?: 0.0
+        val idealWorker = data["idealWorker"]?.jsonPrimitive?.int ?: 0
+        val durabilityTau = data["durabilityTau"]?.jsonPrimitive?.double
+
+        private fun resources(key: String) = Resources(
+            data[key]?.jsonObject?.mapValues { (_, value) -> value.jsonPrimitive.double } ?: emptyMap()
+        )
+    }
+
+    private val definition: Definition
+        get() = definitions.computeIfAbsent(name) { apparatusName ->
+            val data = ReadOnly.appJson[apparatusName]
+                ?: throw Exception("$apparatusName not found in apparatus file.")
+            Definition(data.jsonObject)
+        }
+
     private val jsonData
-        get() = ReadOnly.appJson[name] ?: throw Exception("$name not found in apparatus file.")
+        get() = definition.data
     private val baseDanger
-        get() = jsonData.jsonObject["baseDanger"]!!.jsonPrimitive.double
+        get() = definition.baseDanger
     private val accidentTypes
-        get() = jsonData.jsonObject["accidentType"]?.jsonArray?.map { AccidentType.valueOf(it.jsonPrimitive.content) }
-            ?: emptyList<AccidentType>()
+        get() = definition.accidentTypes
 
     /**
      * Efficiency is multiplied by (T/300)^tempCoef.
      */
     private val tempCoef
-        get() = jsonData.jsonObject["tempCoef"]?.jsonPrimitive?.double ?: .0
+        get() = definition.tempCoef
 
     /**
      * When T>Tmax, Efficiency is multiplied by exp[(1-T/Tmax)*30].  Damaged is scaled by 1+(T/Tmax). Danger is scaled by 1+(T/Tmax).
      */
     val maxTemp
-        get() = jsonData.jsonObject["maxTemp"]?.jsonPrimitive?.double
-            ?: 4000.0 //Default is 4000 K, which is the melting point of steel. Do not put infinite value here, as it will cause json parsing error.
+        get() = definition.maxTemp
 
     /**
      * When T<Tmin, Efficiency is multiplied by exp[(1-Tmin/T)*30].  Damaged is scaled by 1+(Tmin/T). Danger is scaled by 1+(Tmin/T).
      */
     val minTemp
-        get() = jsonData.jsonObject["minTemp"]?.jsonPrimitive?.double ?: 4.0
+        get() = definition.minTemp
 
     private val damageTempScale
         get() = if (temperature > maxTemp) 1 + temperature / maxTemp else if (temperature < minTemp) 1 + minTemp / temperature else 1.0
@@ -200,56 +251,21 @@ class Apparatus {
             return res
         }
     private val idealGasGeneration: Resources
-        get() = Resources(
-            HashMap(
-                Json.decodeFromString(
-                    MapSerializer<String, Double>(String.serializer(), Double.serializer()),
-                    (jsonData.jsonObject["gasGeneration"]?.toString() ?: "{}")
-                )
-            )
-        )
+        get() = definition.idealGasGeneration
     private val leakGas: String?
-        get() = jsonData.jsonObject["leakGas"]?.jsonPrimitive?.content
+        get() = definition.leakGas
     private val idealAbsorption: Resources
-        get() = Resources(
-            HashMap(
-                Json.decodeFromString(
-                    MapSerializer<String, Double>(String.serializer(), Double.serializer()),
-                    (jsonData.jsonObject["idealAbsorption"]?.toString() ?: "{}")
-                )
-            )
-        )
+        get() = definition.idealAbsorption
     private val idealProduction: Resources
-        get() = Resources(
-            HashMap(
-                Json.decodeFromString(
-                    MapSerializer<String, Double>(String.serializer(), Double.serializer()),
-                    (jsonData.jsonObject["idealProduction"]?.toString() ?: "{}")
-                )
-            )
-        )
+        get() = definition.idealProduction
     private val idealConsumption: Resources
-        get() = Resources(
-            HashMap(
-                Json.decodeFromString(
-                    MapSerializer<String, Double>(String.serializer(), Double.serializer()),
-                    (jsonData.jsonObject["idealConsumption"]?.toString() ?: "{}")
-                )
-            )
-        )
+        get() = definition.idealConsumption
     private val idealDistribution: Resources
-        get() = Resources(
-            HashMap(
-                Json.decodeFromString(
-                    MapSerializer<String, Double>(String.serializer(), Double.serializer()),
-                    (jsonData.jsonObject["idealDistribution"]?.toString() ?: "{}")
-                )
-            )
-        ) //Converts resources into market resources.
+        get() = definition.idealDistribution //Converts resources into market resources.
     private val idealHeatProduction
-        get() = jsonData.jsonObject["idealHeatProduction"]?.jsonPrimitive?.double ?: .0
+        get() = definition.idealHeatProduction
     val idealWorker
-        get() = jsonData.jsonObject["idealWorker"]?.jsonPrimitive?.int ?: 0
+        get() = definition.idealWorker
     val currentWages get() = currentWorker * laborValuePerHour * const("WorkerWaterConsumptionRate")
 
     val currentProduction: Resources
@@ -402,7 +418,7 @@ class Apparatus {
      * */
     val currentDurabilityTau
         get() =
-            (jsonData.jsonObject["durabilityTau"]?.jsonPrimitive?.double ?: const("DurabilityTau")) / damageTempScale
+            (definition.durabilityTau ?: const("DurabilityTau")) / damageTempScale
 
     fun workHourly(place: Place) {
         temperature = place.temperature //Update the temperature of the apparatus to the ambient temperature.

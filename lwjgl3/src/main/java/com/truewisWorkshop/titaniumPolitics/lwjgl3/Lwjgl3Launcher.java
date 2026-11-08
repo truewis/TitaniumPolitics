@@ -15,7 +15,9 @@ public class Lwjgl3Launcher {
     }
 
     private static Lwjgl3Application createApplication() {
-        return new Lwjgl3Application(new EntryClass(), getDefaultConfiguration());
+        boolean fastGuiFonts = Boolean.parseBoolean(System.getenv("GUI_FAST_FONTS"));
+        boolean profileStartup = Boolean.parseBoolean(System.getenv("GUI_STARTUP_PROFILE"));
+        return new Lwjgl3Application(new EntryClass(fastGuiFonts, profileStartup), getDefaultConfiguration());
     }
 
     private static Lwjgl3ApplicationConfiguration getDefaultConfiguration() {

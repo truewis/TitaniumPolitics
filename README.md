@@ -34,3 +34,18 @@ Useful Gradle tasks and flags:
 
 Note that most tasks that are not specific to a single project can be run with `name:` prefix, where the `name` should be replaced with the ID of a specific project.
 For example, `core:clean` removes `build` folder only from the `core` project.
+
+## Faster GUI testing
+
+Set `GUI_FAST_FONTS=true` when launching the desktop application to replace the generated fonts with LibGDX's default bitmap fonts. For example, in PowerShell:
+
+```powershell
+$env:GUI_FAST_FONTS = "true"
+.\gradlew.bat lwjgl3:run
+```
+
+This mode is for functional GUI testing, not visual or localization testing: font sizes and layout differ, and Korean and other unsupported characters will not render. Unset the variable to restore normal fonts. Skin, game, and asset loading are unchanged, so the improvement depends on which startup phase is slow.
+
+To compare startup phases, set `GUI_STARTUP_PROFILE=true` for both launches and compare the `STARTUP_PROFILE` log entries. Timings cover fonts, skin, game initialization, game-stage asset loading, interface construction, and the first rendered game frame; they exclude Gradle and launcher startup.
+
+Character portraits and emotion images load the first time they are displayed and remain cached for the current game stage. Large images may briefly delay their first appearance.
