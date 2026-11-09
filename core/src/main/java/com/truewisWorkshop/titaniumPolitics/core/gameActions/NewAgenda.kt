@@ -26,6 +26,25 @@ data class NewAgenda(override val sbjCharacter: String, override val tgtPlace: S
             )
         }
         meeting.agendas.add(agenda)
+        if (agenda.type == AgendaType.REQUEST || agenda.type == AgendaType.PROMISE) {
+            agenda.attachedRequest?.let {
+                if (it.origin == "unclassified") {
+                    it.origin = if (sbjCharacter == parent.playerName) {
+                        "player.NewAgenda"
+                    } else {
+                        "routine.unattributed"
+                    }
+                }
+                RequestInstrumentation.record(
+                    "proposed",
+                    parent.time,
+                    it,
+                    actor = sbjCharacter,
+                    agendaType = agenda.type.name,
+                    meeting = meeting
+                )
+            }
+        }
         meeting.setCurrentAgenda(agenda)
         if (sbjCharacter == parent.playerName) {
             parent.eventSystem.registerMeetingObjective(meeting)
@@ -388,12 +407,12 @@ data class NewAgenda(override val sbjCharacter: String, override val tgtPlace: S
                 }
 
                 AgendaType.REQUEST -> {
-                    agenda.attachedRequest!!.also { parent.requests[it.generateName()] = it }
+                    parent.registerRequest(agenda.attachedRequest!!, agenda.type.name, meeting)
                 }
 
                 AgendaType.PROMISE -> {
                     // Register the promise as a request with the author as the one who must fulfill it.
-                    agenda.attachedRequest!!.also { parent.requests[it.generateName()] = it }
+                    parent.registerRequest(agenda.attachedRequest!!, agenda.type.name, meeting)
                 }
 
                 AgendaType.BUDGET_PROPOSAL -> {

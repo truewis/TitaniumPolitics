@@ -81,7 +81,8 @@ class AttendCabinetMeetingRoutine(override val meetingName: String) : MeetingRou
                                             ),
                                             issuedTo = hashSetOf(leader),
                                             issuedBy = hashSetOf(name),
-                                            executeTime = gState.time
+                                            executeTime = gState.time,
+                                            origin = "routine.AttendCabinetMeetingRoutine.resource_transfer"
                                         ) //Created a command to transfer the resource.
                                     }
                                     NewAgenda(name, place, gState).also {

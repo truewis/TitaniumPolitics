@@ -164,6 +164,19 @@ class Meeting(
             }
         }
         resolveAgendasByPersuasiveness(gameState)
+        agendas.filter { it.type == AgendaType.REQUEST || it.type == AgendaType.PROMISE }
+            .forEach { agenda ->
+                agenda.attachedRequest?.let {
+                    RequestInstrumentation.record(
+                        "agenda_unresolved",
+                        gameState.time,
+                        it,
+                        actor = agenda.author,
+                        agendaType = agenda.type.name,
+                        meeting = this
+                    )
+                }
+            }
         gameState.eventSystem.failMeetingObjectivesForMeeting(this)
         //Remove the meeting from the ongoingMeetings.
         if (gameState.ongoingMeetings.containsValue(this)) {
@@ -181,6 +194,18 @@ class Meeting(
         val agendasToResolve = agendas.filter { it.isConstructed() || it.isRejected() }
 
         agendasToResolve.forEach { agenda ->
+            if (agenda.type == AgendaType.REQUEST || agenda.type == AgendaType.PROMISE) {
+                agenda.attachedRequest?.let {
+                    RequestInstrumentation.record(
+                        if (agenda.isConstructed()) "agenda_passed" else "agenda_rejected",
+                        gameState.time,
+                        it,
+                        actor = agenda.author,
+                        agendaType = agenda.type.name,
+                        meeting = this
+                    )
+                }
+            }
             if (agenda.isConstructed()) {
                 NewAgenda.agendaOneShotEffect(this, agenda, agenda.author, gameState)
                 passedAgendas += copyAgendaForSummary(agenda)

@@ -18,8 +18,9 @@ class Event_AlinaResign : EventObject(ReadOnly.questProp("AlinaResign-name"), tr
             Request(
                 action = Resign("Alina", parent.parties["infrastructure"]!!.home!!),
                 issuedTo = hashSetOf("Alina"),
+                origin = "event.Event_AlinaResign"
             ).apply {
-                parent.requests[generateName()] = this
+                parent.registerRequest(this)
             }
             deactivate()
         }

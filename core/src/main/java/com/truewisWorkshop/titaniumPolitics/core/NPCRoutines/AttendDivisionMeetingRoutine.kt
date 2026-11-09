@@ -135,7 +135,8 @@ class AttendDivisionMeetingRoutine(override val meetingName: String) : MeetingRo
                                 }//Created a command to transfer the resource.
                                 ,
                                 issuedTo = hashSetOf(party.leader!!), issuedBy = hashSetOf(name),
-                                executeTime = gState.time
+                                executeTime = gState.time,
+                                origin = "routine.AttendDivisionMeetingRoutine.salary"
                             )
                         }
                         NewAgenda(name, place, gState).also {

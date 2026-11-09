@@ -34,8 +34,9 @@ class Event_DelayRepair1 :
             Request(
                 action = Talk("Agros", "squareSouth", "Rui"),
                 issuedTo = hashSetOf("Agros"),
+                origin = "event.Event_DelayRepair1"
             ).apply {
-                parent.requests[generateName()] = this
+                parent.registerRequest(this)
             }
             requestIssued = true
         }

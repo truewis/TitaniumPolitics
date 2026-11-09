@@ -6,6 +6,7 @@ import com.titaniumPolitics.game.core.MeetingAgenda
 import com.titaniumPolitics.game.core.ReadOnly
 import com.titaniumPolitics.game.core.ReadOnly.IDTH
 import com.titaniumPolitics.game.core.Request
+import com.titaniumPolitics.game.core.RequestInstrumentation
 import com.titaniumPolitics.game.core.Resources
 import com.titaniumPolitics.game.core.gameActions.EndMeeting
 import com.titaniumPolitics.game.core.gameActions.GameAction
@@ -235,7 +236,8 @@ sealed class MeetingRoutine : Routine() {
                                 ),
                                 issuedTo = hashSetOf(bestIssuer),
                                 issuedBy = hashSetOf(name),
-                                executeTime = gState.time
+                                executeTime = gState.time,
+                                origin = "routine.MeetingRoutine.resource_counteroffer"
                             )
                         )
                         if (it.isValid())
@@ -256,7 +258,8 @@ sealed class MeetingRoutine : Routine() {
                             action = action,
                             issuedTo = hashSetOf(bestActionIssuer),
                             issuedBy = hashSetOf(name),
-                            executeTime = gState.time
+                            executeTime = gState.time,
+                            origin = "routine.MeetingRoutine.action_counteroffer"
                         )
                     )
                     if (it.isValid())
@@ -284,9 +287,32 @@ sealed class MeetingRoutine : Routine() {
                 )
             } / it.issuedBy.size > it.difficulty(gState))
         }?.also { request ->
+            RequestInstrumentation.record(
+                "execution_attempt",
+                gState.time,
+                request,
+                actor = name,
+                detail = "meeting execution"
+            )
             request.action.copyRef(name, place).apply {
                 injectParent(gState)
-                if (isValid()) return this
+                if (isValid()) {
+                    RequestInstrumentation.record(
+                        "execution_action_submitted",
+                        gState.time,
+                        request,
+                        actor = name,
+                        detail = "meeting execution"
+                    )
+                    return this
+                }
+                RequestInstrumentation.record(
+                    "execution_action_rejected",
+                    gState.time,
+                    request,
+                    actor = name,
+                    detail = "meeting request action was invalid"
+                )
             }
 
         }

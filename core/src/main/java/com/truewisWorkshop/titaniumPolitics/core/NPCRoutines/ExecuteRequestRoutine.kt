@@ -6,6 +6,7 @@ import com.titaniumPolitics.game.core.Information
 import com.titaniumPolitics.game.core.MeetingAgenda
 import com.titaniumPolitics.game.core.ReadOnly
 import com.titaniumPolitics.game.core.Request
+import com.titaniumPolitics.game.core.RequestInstrumentation
 import com.titaniumPolitics.game.core.gameActions.GameAction
 import com.titaniumPolitics.game.core.gameActions.Wait
 import com.titaniumPolitics.game.debugTools.Logger
@@ -61,7 +62,8 @@ class ExecuteRequestRoutine() : Routine() {
                                         executableRequest.action.copyRef(executor),
                                         issuedTo = hashSetOf(executor),
                                         issuedBy = hashSetOf(name),
-                                        executeTime = gState.time
+                                        executeTime = gState.time,
+                                        origin = "routine.ExecuteRequestRoutine.delegation"
                                     )
                                 )
                             )
@@ -94,12 +96,25 @@ class ExecuteRequestRoutine() : Routine() {
     }
 
     override fun execute(name: String, place: String): GameAction {
+        RequestInstrumentation.record(
+            "execution_attempt",
+            gState.time,
+            executableRequest,
+            actor = name,
+            detail = "routine execution"
+        )
         if (place == executableRequest.action.tgtPlace
             && executableRequest.action.javaClass.simpleName in GameEngine.availableActions(gState, place, name)
         ) {
             val copy = executableRequest.action.copyRef(name, place)
             copy.injectParent(gState)
             if (copy.isValid()) {
+                RequestInstrumentation.record(
+                    "execution_action_submitted",
+                    gState.time,
+                    executableRequest,
+                    actor = name
+                )
                 Logger.write(
                     "$name: The request ${executableRequest.action} is valid. Executing...",
                     Logger.LogLevel.INFO
@@ -107,6 +122,13 @@ class ExecuteRequestRoutine() : Routine() {
                 success()
                 return copy
             } else {
+                RequestInstrumentation.record(
+                    "execution_action_rejected",
+                    gState.time,
+                    executableRequest,
+                    actor = name,
+                    detail = "request action was invalid"
+                )
                 timeout -= 1
                 //Wait a bit to see if the action gets valid
                 if (timeout <= 0) {
@@ -118,6 +140,13 @@ class ExecuteRequestRoutine() : Routine() {
             }
         }
 
+        RequestInstrumentation.record(
+            "execution_unreachable",
+            gState.time,
+            executableRequest,
+            actor = name,
+            detail = "target place or action unavailable"
+        )
         Logger.write(
             "$name: Cannot move to ${executableRequest.action.tgtPlace} to execute the request ${executableRequest.action}. Terminating the routine......",
             Logger.LogLevel.INFO

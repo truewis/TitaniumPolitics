@@ -68,7 +68,8 @@ class BuyRoutine(val buyResource: String, val buyAmount: Double) : Routine() {
                         ,
                         issuedTo = hashSetOf(tradeCharacter),
                         issuedBy = hashSetOf(name),
-                        executeTime = gState.time
+                        executeTime = gState.time,
+                        origin = "routine.BuyRoutine.private_trade"
                     )
                 )
             )

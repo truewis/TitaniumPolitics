@@ -17,7 +17,8 @@ class Request(
     var action: GameAction,
     var issuedTo: HashSet<String>,
     var issuedBy: HashSet<String> = hashSetOf(),
-    var executeTime: Int? = null
+    var executeTime: Int? = null,
+    var origin: String = "unclassified"
 ) {
     var name = ""
         private set
@@ -107,6 +108,12 @@ class Request(
 
             }
             completed = true
+            RequestInstrumentation.record(
+                "completed",
+                gState.time,
+                this,
+                detail = "proof-of-work information shared"
+            )
         }
     }
 

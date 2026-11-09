@@ -388,7 +388,8 @@ class WorkRoutine(var workplace: String) : Routine() {
                                                         ), gState
                                                     ),
                                                     issuedTo = hashSetOf(capturedResplace.manager!!),
-                                                    issuedBy = hashSetOf(name)
+                                                    issuedBy = hashSetOf(name),
+                                                    origin = "routine.WorkRoutine.resource_transfer"
                                                 )
                                             )
                                         )
@@ -441,7 +442,8 @@ class WorkRoutine(var workplace: String) : Routine() {
                                                         capturedApparatus.ID, gState
                                                     ),
                                                     issuedTo = hashSetOf(capturedEngineer.name),
-                                                    issuedBy = hashSetOf(name)
+                                                    issuedBy = hashSetOf(name),
+                                                    origin = "routine.WorkRoutine.repair"
                                                 )
                                             )
                                         )
@@ -489,7 +491,8 @@ class WorkRoutine(var workplace: String) : Routine() {
                                                     AgendaType.REQUEST, name, attachedRequest = Request(
                                                         AnnounceInfo(announcer.name, announcePl, info.name, gState),
                                                         issuedTo = hashSetOf(announcer.name),
-                                                        issuedBy = hashSetOf(name)
+                                                        issuedBy = hashSetOf(name),
+                                                        origin = "routine.WorkRoutine.announce_information"
                                                     )
                                                 )
                                             )

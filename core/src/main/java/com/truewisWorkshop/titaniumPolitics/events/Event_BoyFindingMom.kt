@@ -16,8 +16,9 @@ class Event_BoyFindingMom : EventObject(ReadOnly.questProp("BoyFindingMom-name")
             Request(
                 action = Talk("Yuri", "market", "Rui"),
                 issuedTo = hashSetOf("Yuri"),
+                origin = "event.Event_BoyFindingMom"
             ).apply {
-                parent.requests[generateName()] = this
+                parent.registerRequest(this)
             }
             parent.eventSystem.add(Event_BoyFindingMom2())
             deactivate()

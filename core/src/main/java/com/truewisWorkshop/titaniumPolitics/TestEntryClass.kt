@@ -17,6 +17,7 @@ import com.titaniumPolitics.game.core.Meeting
 import com.titaniumPolitics.game.core.NonPlayerAgent
 import com.titaniumPolitics.game.core.ReadOnly
 import com.titaniumPolitics.game.core.ReadOnly.const
+import com.titaniumPolitics.game.core.RequestInstrumentation
 import com.titaniumPolitics.game.core.gameActions.AddInfo
 import com.titaniumPolitics.game.debugTools.Logger
 import com.titaniumPolitics.game.ui.CapsuleStage
@@ -58,6 +59,7 @@ class TestEntryClass : ApplicationAdapter() {
 
     fun runFor2Days() {
         println("Working Directory = " + System.getProperty("user.dir"))
+        RequestInstrumentation.start()
         gState = Json.Default.decodeFromString(
             GameState.serializer(), File("../assets/json/init.json").readText()
         ).also {
@@ -90,6 +92,7 @@ class TestEntryClass : ApplicationAdapter() {
         observeMeetingOutcomes(gState)
         engine2.runUntil(5)
         reportMeetingOutcomes()
+        RequestInstrumentation.writeReport(File(gState.workingDirectory))
     }
 
     private fun meetingMetricKey(meeting: Meeting): String =

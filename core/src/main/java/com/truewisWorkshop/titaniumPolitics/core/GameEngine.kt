@@ -143,6 +143,12 @@ class GameEngine(val gameState: GameState) {
             it.value.isExpiredAt(gameState.time, 3 * 24 * IDTH)
         }
             .forEach {
+                RequestInstrumentation.record(
+                    if (it.value.completed) "completed_removed" else "expired",
+                    gameState.time,
+                    it.value,
+                    detail = "registry_key=${it.key}"
+                )
                 gameState.removeRequest(it.key)
             }
         onObserverCall.forEach { it(gameState) }

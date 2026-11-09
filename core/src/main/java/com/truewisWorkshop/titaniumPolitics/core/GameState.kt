@@ -158,6 +158,20 @@ class GameState {
     var log = Log()
     val parties = hashMapOf<String, Party>()
     val requests = hashMapOf<String, Request>()
+    fun registerRequest(request: Request, agendaType: String = "", meeting: Meeting? = null) {
+        val key = request.generateName()
+        requests[key] = request
+        RequestInstrumentation.record(
+            "registered",
+            time,
+            request,
+            actor = request.issuedBy.sorted().joinToString("|"),
+            agendaType = agendaType,
+            meeting = meeting,
+            detail = "registry_key=$key"
+        )
+    }
+
     fun removeRequest(key: String) {
         if (!requests.containsKey(key)) throw Exception("Request with key $key does not exist.")
         requests.remove(key)

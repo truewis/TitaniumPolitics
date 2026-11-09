@@ -37,8 +37,9 @@ internal object PartyDramaUtils {
             Request(
                 action = Resign(char, partyHome),
                 issuedTo = hashSetOf(char),
+                origin = "event.PartyDramaUtils.low_morale_resignation"
             ).apply {
-                gameState.requests[generateName()] = this
+                gameState.registerRequest(this)
             }
             Logger.write(
                 "$char has critically low morale and will resign from ${party.name}.",

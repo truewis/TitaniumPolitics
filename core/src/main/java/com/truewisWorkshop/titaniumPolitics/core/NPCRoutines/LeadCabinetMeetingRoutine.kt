@@ -49,7 +49,8 @@ class LeadCabinetMeetingRoutine(override val meetingName: String) : MeetingRouti
                             ),
                             issuedTo = (meeting.currentCharacters - name).toHashSet(),
                             issuedBy = hashSetOf(name),
-                            executeTime = gState.time
+                            executeTime = gState.time,
+                            origin = "routine.LeadCabinetMeetingRoutine.information_request"
                         )
                     }
                     NewAgenda(name, place, gState).also {

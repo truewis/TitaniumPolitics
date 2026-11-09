@@ -77,7 +77,8 @@ class LeadDivisionMeetingRoutine(override val meetingName: String) : MeetingRout
                             ),
                             issuedTo = (meeting.currentCharacters - name).toHashSet(),
                             issuedBy = hashSetOf(name),
-                            executeTime = gState.time
+                            executeTime = gState.time,
+                            origin = "routine.LeadDivisionMeetingRoutine.information_request"
                         )
                     }
                     NewAgenda(name, place, gState).also {
@@ -247,7 +248,8 @@ class LeadDivisionMeetingRoutine(override val meetingName: String) : MeetingRout
                             ),
                             issuedTo = hashSetOf(wantPlace.workplaceParty!!.overseer!!),
                             issuedBy = hashSetOf(name),
-                            executeTime = gState.time
+                            executeTime = gState.time,
+                            origin = "routine.LeadDivisionMeetingRoutine.reduce_workers"
                         )
                     }
                     NewAgenda(name, place, gState).also {
@@ -279,7 +281,8 @@ class LeadDivisionMeetingRoutine(override val meetingName: String) : MeetingRout
                             ),
                             issuedTo = hashSetOf(wantPlace.workplaceParty!!.overseer!!),
                             issuedBy = hashSetOf(name),
-                            executeTime = gState.time
+                            executeTime = gState.time,
+                            origin = "routine.LeadDivisionMeetingRoutine.increase_workers"
                         )
                     }
                     NewAgenda(name, place, gState).also {
